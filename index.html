@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rehaan — Master Integrals</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --cyan-primary: #00e5c8;
+            --cyan-light: #5effe0;
+            --cyan-dark: #00b89f;
+            --cyan-glow: rgba(0, 229, 200, 0.15);
+            --cyan-glow-strong: rgba(0, 229, 200, 0.3);
+            --bg-dark: #0a0f1a;
+            --bg-card: #111827;
+            --bg-card-hover: #162032;
+            --text-primary: #e8edf5;
+            --text-secondary: #8b95a8;
+            --text-muted: #5a6377;
+            --border-color: rgba(0, 229, 200, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--cyan-dark) var(--bg-dark);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(rgba(0, 229, 200, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 200, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 15, 26, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            transition: all 0.3s ease;
+        }
+
+        nav .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        nav .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--cyan-primary), var(--cyan-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 0.25rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        nav .nav-links a:hover {
+            color: var(--cyan-primary);
+            background: var(--cyan-glow);
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            z-index: 1;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .hero .integral-bg {
+            position: absolute;
+            font-size: 20rem;
+            font-weight: 200;
+            color: rgba(0, 229, 200, 0.04);
+            z-index: -1;
+            user-select: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            font-family: serif;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, #fff 0%, var(--cyan-primary) 50%, var(--cyan-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .hero .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero .scroll-indicator .arrow {
+            width: 24px;
+            height: 24px;
+            border-right: 2px solid var(--cyan-primary);
+            border-bottom: 2px solid var(--cyan-primary);
+            transform: rotate(45deg);
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Sections */
+        .section {
+            position: relative;
+            z-index: 1;
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin-bottom: 1rem;
+            padding: 0.4rem 1rem;
+            background: var(--cyan-glow);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+        }
+
+        .section-label .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--cyan-primary);
+            border-radius: 50%;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+
+        .section p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.85;
+        }
+
+        /* Math blocks */
+        .math-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .math-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .math-block:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(0, 229, 200, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 229, 200, 0.08);
+        }
+
+        .math-block:hover::before {
+            opacity: 1;
+        }
+
+        .math-block .label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Example cards */
+        .example {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--cyan-primary), var(--cyan-dark));
+            border-radius: 3px 0 0 3px;
+        }
+
+        .example h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin-bottom: 1rem;
+        }
+
+        .example .step {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .example .step:last-child {
+            border-bottom: none;
+        }
+
+        .example .step strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Formula table */
+        .formula-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .formula-table th {
+            background: rgba(0, 229, 200, 0.06);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .formula-table td {
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            vertical-align: middle;
+        }
+
+        .formula-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .formula-table tr:hover td {
+            background: rgba(0, 229, 200, 0.03);
+        }
+
+        /* Divider */
+        .divider {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .divider hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        footer .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--cyan-primary), var(--cyan-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; letter-spacing: -2px; }
+            .hero .subtitle { font-size: 1rem; letter-spacing: 2px; }
+            .hero .integral-bg { font-size: 12rem; }
+            .section h2 { font-size: 1.8rem; }
+            .section { padding: 4rem 1.5rem; }
+            nav .nav-links { display: none; }
+            .math-block { font-size: 1.05rem; padding: 1.5rem; }
+        }
+
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">Rehaan</div>
+            <ul class="nav-links">
+                <li><a href="#intro">Introduction</a></li>
+                <li><a href="#indefinite">Indefinite</a></li>
+                <li><a href="#definite">Definite</a></li>
+                <li><a href="#usub">U-Substitution</a></li>
+                <li><a href="#formulas">Formulas</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="./game/index.html">Quiz Game</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="integral-bg">&int;</div>
+        <h1>Rehaan</h1>
+        <p class="subtitle">Master Integrals</p>
+        <div class="scroll-indicator">
+            <span>Scroll to begin</span>
+            <div class="arrow"></div>
+        </div>
+    </section>
+
+    <!-- Section 1: What Are Integrals? -->
+    <div class="divider"><hr></div>
+    <section class="section reveal" id="intro">
+        <div class="section-label"><span class="dot"></span> Chapter 01</div>
+        <h2>What Are Integrals?</h2>
+        <p>
+            An integral is one of the two fundamental operations in calculus (the other being the derivative).
+            While derivatives measure the <strong>rate of change</strong> of a function, integrals measure the
+            <strong>accumulation</strong> of quantities. Think of it this way: if a derivative breaks things apart,
+            an integral puts them back together.
+        </p>
+        <p>
+            The most intuitive way to understand an integral is as the <strong>area under a curve</strong>.
+            Given a function \( f(x) \) on an interval \([a, b]\), the integral computes the total area
+            between the curve and the x-axis.
+        </p>
+        <div class="math-block">
+            <span class="label">The Integral Symbol</span>
+            $$\int f(x)\, dx$$
+        </div>
+        <p>
+            The elongated "S" symbol (\(\int\)) stands for <strong>summation</strong> &mdash; it was introduced
+            by Leibniz as a stylized "S" for "summa." The \(dx\) indicates we are integrating with respect to
+            the variable \(x\), and \(f(x)\) is the function being integrated, called the <strong>integrand</strong>.
+        </p>
+    </section>
+
+    <!-- Section 2: Indefinite Integrals -->
+    <div class="divider"><hr></div>
+    <section class="section reveal" id="indefinite">
+        <div class="section-label"><span class="dot"></span> Chapter 02</div>
+        <h2>Indefinite Integrals</h2>
+        <p>
+            An <strong>indefinite integral</strong> represents a family of functions whose derivative equals the
+            integrand. It is written without bounds and always includes a constant of integration \(C\), because
+            the derivative of any constant is zero.
+        </p>
+        <div class="math-block">
+            <span class="label">General Form</span>
+            $$\int f(x)\, dx = F(x) + C$$
+        </div>
+        <p>
+            Here, \(F(x)\) is called an <strong>antiderivative</strong> of \(f(x)\). This means that
+            \(F'(x) = f(x)\). The constant \(C\) accounts for the fact that there are infinitely many
+            antiderivatives that differ only by a constant.
+        </p>
+
+        <div class="example">
+            <h4>Example &mdash; Power Rule</h4>
+            <div class="step">
+                <strong>Problem:</strong> Find \(\displaystyle\int x^3\, dx\)
+            </div>
+            <div class="step">
+                <strong>Power Rule:</strong> \(\displaystyle\int x^n\, dx = \frac{x^{n+1}}{n+1} + C\) &nbsp; (where \(n \neq -1\))
+            </div>
+            <div class="step">
+                <strong>Apply:</strong> \(\displaystyle\int x^3\, dx = \frac{x^{4}}{4} + C\)
+            </div>
+            <div class="step">
+                <strong>Verify:</strong> \(\displaystyle\frac{d}{dx}\left(\frac{x^4}{4} + C\right) = x^3\) &check;
+            </div>
+        </div>
+
+        <div class="example">
+            <h4>Example &mdash; Sum Rule</h4>
+            <div class="step">
+                <strong>Problem:</strong> Find \(\displaystyle\int (3x^2 + 2x - 5)\, dx\)
+            </div>
+            <div class="step">
+                <strong>Split:</strong> \(\displaystyle 3\int x^2\, dx + 2\int x\, dx - 5\int 1\, dx\)
+            </div>
+            <div class="step">
+                <strong>Evaluate:</strong> \(\displaystyle 3 \cdot \frac{x^3}{3} + 2 \cdot \frac{x^2}{2} - 5x + C = x^3 + x^2 - 5x + C\)
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Definite Integrals -->
+    <div class="divider"><hr></div>
+    <section class="section reveal" id="definite">
+        <div class="section-label"><span class="dot"></span> Chapter 03</div>
+        <h2>Definite Integrals</h2>
+        <p>
+            A <strong>definite integral</strong> computes the net area between the curve \(f(x)\) and the x-axis
+            over a specific interval \([a, b]\). Unlike indefinite integrals, the result is a <strong>number</strong>,
+            not a function.
+        </p>
+        <div class="math-block">
+            <span class="label">The Fundamental Theorem of Calculus</span>
+            $$\int_a^b f(x)\, dx = F(b) - F(a)$$
+        </div>
+        <p>
+            This is one of the most important results in all of mathematics. It connects the concept of
+            an antiderivative with the computation of area. To evaluate a definite integral, find the
+            antiderivative \(F(x)\), plug in the upper bound \(b\), plug in the lower bound \(a\), and subtract.
+        </p>
+
+        <div class="example">
+            <h4>Example &mdash; Evaluating a Definite Integral</h4>
+            <div class="step">
+                <strong>Problem:</strong> Evaluate \(\displaystyle\int_1^3 2x\, dx\)
+            </div>
+            <div class="step">
+                <strong>Antiderivative:</strong> \(F(x) = x^2\)
+            </div>
+            <div class="step">
+                <strong>Evaluate:</strong> \(F(3) - F(1) = 9 - 1 = 8\)
+            </div>
+            <div class="step">
+                <strong>Interpretation:</strong> The area under \(2x\) from \(x=1\) to \(x=3\) is <strong>8 square units</strong>.
+            </div>
+        </div>
+
+        <p>
+            <strong>Important note:</strong> Definite integrals measure <em>net</em> area. If \(f(x)\) dips below the x-axis,
+            that region counts as <strong>negative</strong> area. To find total area regardless of sign, integrate
+            \(|f(x)|\) instead.
+        </p>
+    </section>
+
+    <!-- Section 4: U-Substitution -->
+    <div class="divider"><hr></div>
+    <section class="section reveal" id="usub">
+        <div class="section-label"><span class="dot"></span> Chapter 04</div>
+        <h2>U-Substitution</h2>
+        <p>
+            U-substitution is the integration counterpart of the <strong>chain rule</strong> for derivatives.
+            When an integrand is a composition of functions, we can simplify it by substituting a new variable
+            \(u\) for part of the expression.
+        </p>
+        <div class="math-block">
+            <span class="label">The Technique</span>
+            $$\int f(g(x)) \cdot g'(x)\, dx = \int f(u)\, du \quad \text{where } u = g(x)$$
+        </div>
+
+        <div class="example">
+            <h4>Example &mdash; Basic U-Substitution</h4>
+            <div class="step">
+                <strong>Problem:</strong> Find \(\displaystyle\int 2x \cdot e^{x^2}\, dx\)
+            </div>
+            <div class="step">
+                <strong>Choose u:</strong> Let \(u = x^2\), so \(du = 2x\, dx\)
+            </div>
+            <div class="step">
+                <strong>Substitute:</strong> \(\displaystyle\int e^{u}\, du\)
+            </div>
+            <div class="step">
+                <strong>Integrate:</strong> \(e^u + C\)
+            </div>
+            <div class="step">
+                <strong>Back-substitute:</strong> \(e^{x^2} + C\)
+            </div>
+        </div>
+
+        <div class="example">
+            <h4>Example &mdash; Adjusting Constants</h4>
+            <div class="step">
+                <strong>Problem:</strong> Find \(\displaystyle\int x \cos(x^2)\, dx\)
+            </div>
+            <div class="step">
+                <strong>Choose u:</strong> Let \(u = x^2\), so \(du = 2x\, dx\), meaning \(x\, dx = \frac{1}{2}\, du\)
+            </div>
+            <div class="step">
+                <strong>Substitute:</strong> \(\displaystyle\frac{1}{2}\int \cos(u)\, du\)
+            </div>
+            <div class="step">
+                <strong>Integrate:</strong> \(\displaystyle\frac{1}{2}\sin(u) + C\)
+            </div>
+            <div class="step">
+                <strong>Back-substitute:</strong> \(\displaystyle\frac{1}{2}\sin(x^2) + C\)
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Key Formulas -->
+    <div class="divider"><hr></div>
+    <section class="section reveal" id="formulas">
+        <div class="section-label"><span class="dot"></span> Reference</div>
+        <h2>Key Integral Formulas</h2>
+        <p>
+            Keep these fundamental integrals at your fingertips. Every complex integral ultimately
+            reduces to combinations of these building blocks.
+        </p>
+
+        <table class="formula-table">
+            <thead>
+                <tr>
+                    <th>Function</th>
+                    <th>Integral</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>\(\displaystyle x^n\)</td>
+                    <td>\(\displaystyle \frac{x^{n+1}}{n+1} + C \quad (n \neq -1)\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle \frac{1}{x}\)</td>
+                    <td>\(\displaystyle \ln|x| + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle e^x\)</td>
+                    <td>\(\displaystyle e^x + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle a^x\)</td>
+                    <td>\(\displaystyle \frac{a^x}{\ln a} + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle \sin x\)</td>
+                    <td>\(\displaystyle -\cos x + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle \cos x\)</td>
+                    <td>\(\displaystyle \sin x + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle \sec^2 x\)</td>
+                    <td>\(\displaystyle \tan x + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle \frac{1}{1+x^2}\)</td>
+                    <td>\(\displaystyle \arctan x + C\)</td>
+                </tr>
+                <tr>
+                    <td>\(\displaystyle \frac{1}{\sqrt{1-x^2}}\)</td>
+                    <td>\(\displaystyle \arcsin x + C\)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 6: About -->
+    <div class="divider"><hr></div>
+    <section class="section reveal" id="about">
+        <div class="section-label"><span class="dot"></span> About</div>
+        <h2>About Rehaan</h2>
+        <p>
+            This website was inspired by <a href="https://brilliant.org" target="_blank" rel="noopener" style="color: var(--cyan-primary); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--cyan-primary);">Brilliant.org</a> &mdash; an incredible platform that makes learning math, science, and computer science interactive and accessible. We wanted to bring that same energy to mastering calculus, starting with integrals.
+        </p>
+        <p>
+            Built by <strong style="color: #fff;">Rehaan Rashid</strong>. Whether you're prepping for AP exams, tackling college calculus, or just love math &mdash; this site is for you.
+        </p>
+        <div style="margin-top: 2rem;">
+            <a href="https://linktr.ee/Rehaan_rashid" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 2rem; background: linear-gradient(135deg, var(--cyan-primary), var(--cyan-dark)); color: var(--bg-dark); font-weight: 700; font-size: 0.95rem; text-decoration: none; border-radius: 12px; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 4px 24px rgba(0, 229, 200, 0.3);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(0,229,200,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 24px rgba(0,229,200,0.3)'">
+                Connect with Rehaan &rarr;
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">Rehaan</div>
+        <p>Calculus &mdash; Integrals &mdash; Inspired by <a href="https://brilliant.org" target="_blank" rel="noopener" style="color: var(--text-muted); text-decoration: none; border-bottom: 1px solid var(--text-muted);">Brilliant.org</a></p>
+    </footer>
+
+    <script>
+        // Render KaTeX
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
