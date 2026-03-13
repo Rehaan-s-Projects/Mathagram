@@ -1,0 +1,135 @@
+/* ============================================================
+   Mathagram.org — Characters Stylesheet
+   Buddy popup + character picker styles
+   ============================================================ */
+
+/* ----- Buddy Popup ----- */
+.character-buddy {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--color-white, #ffffff);
+  border: 2px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.08));
+  z-index: 1000;
+  max-width: 320px;
+
+  /* Hidden state: slid down + invisible */
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.25s ease;
+}
+
+.character-buddy.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Expression border colors */
+.character-buddy.happy {
+  border-color: #22c55e;
+}
+
+.character-buddy.thinking {
+  border-color: #eab308;
+}
+
+.character-buddy.encouraging {
+  border-color: #f97316;
+}
+
+/* ----- Buddy Image ----- */
+.buddy-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--color-border, #e2e8f0);
+}
+
+/* ----- Buddy Message ----- */
+.buddy-msg {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--color-text, #1a1a2e);
+  margin: 0;
+}
+
+/* ----- Character Picker (signup page) ----- */
+.character-picker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.character-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border: 2px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius, 12px);
+  background: var(--color-white, #ffffff);
+  cursor: pointer;
+  transition: transform 0.15s ease,
+              border-color 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.character-option:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.08));
+}
+
+.character-option.selected {
+  border-color: var(--color-primary, #00e5c8);
+  background: rgba(0, 229, 200, 0.06);
+  box-shadow: 0 0 0 3px rgba(0, 229, 200, 0.15);
+}
+
+.character-option img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--color-border, #e2e8f0);
+}
+
+.character-option .char-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text, #1a1a2e);
+  text-align: center;
+}
+
+.character-option .char-type {
+  font-size: 0.7rem;
+  color: var(--color-text-muted, #94a3b8);
+  text-align: center;
+}
+
+/* ----- Mobile Responsive ----- */
+@media (max-width: 600px) {
+  .character-picker {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .character-buddy {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    max-width: none;
+  }
+}
