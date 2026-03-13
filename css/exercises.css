@@ -1,0 +1,490 @@
+/* ============================================================
+   Mathagram.org — Exercise Engine Styles
+   All 6 exercise types + completion screen
+   ============================================================ */
+
+/* ----- Container & Progress ----- */
+.exercise-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+.exercise-progress {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.exercise-question {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ----- Next / Finish Button ----- */
+.exercise-next-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 24px;
+  font-size: 1rem;
+}
+
+/* ============================================================
+   1. Multiple Choice (.mc-options)
+   ============================================================ */
+.mc-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mc-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s,
+    box-shadow 0.2s;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.mc-option:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.mc-option:disabled {
+  cursor: default;
+}
+
+.mc-option.correct {
+  background: var(--color-science-bg);
+  border-color: var(--color-science);
+  color: var(--color-science);
+}
+
+.mc-option.wrong {
+  background: var(--color-data-bg);
+  border-color: var(--color-data);
+  color: var(--color-data);
+}
+
+/* ============================================================
+   2. Matching (.match-area)
+   ============================================================ */
+.match-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.match-item {
+  padding: 14px 18px;
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.925rem;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  user-select: none;
+}
+
+.match-item:hover:not(.matched) {
+  border-color: var(--color-primary);
+}
+
+.match-item.selected {
+  border-color: var(--color-primary);
+  background: rgba(0, 229, 200, 0.08);
+  transform: scale(1.03);
+}
+
+.match-item.matched {
+  background: var(--color-science-bg);
+  border-color: var(--color-science);
+  color: var(--color-science);
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* Shake animation for wrong match */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-6px);
+  }
+  30% {
+    transform: translateX(6px);
+  }
+  45% {
+    transform: translateX(-4px);
+  }
+  60% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+.match-item.wrong-flash {
+  animation: shake 0.5s ease;
+  border-color: var(--color-data);
+  background: var(--color-data-bg);
+}
+
+/* ============================================================
+   3. Fill in the Blank (.fill-blank-form)
+   ============================================================ */
+.fill-blank-form {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.fill-blank-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.fill-blank-input:focus {
+  border-color: var(--color-primary);
+}
+
+.fill-blank-input.correct {
+  border-color: var(--color-science);
+  background: var(--color-science-bg);
+}
+
+.fill-blank-input.wrong {
+  border-color: var(--color-data);
+  background: var(--color-data-bg);
+}
+
+.fill-blank-btn {
+  white-space: nowrap;
+}
+
+.fill-blank-reveal {
+  margin-top: 12px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-science);
+  background: var(--color-science-bg);
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   4. Ordering (.ordering-list)
+   ============================================================ */
+.ordering-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ordering-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.ordering-item.correct {
+  border-color: var(--color-science);
+  background: var(--color-science-bg);
+}
+
+.ordering-item.wrong {
+  border-color: var(--color-data);
+  background: var(--color-data-bg);
+}
+
+.ordering-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ordering-label {
+  flex: 1;
+  font-size: 0.925rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.ordering-arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.ordering-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 22px;
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ordering-arrow:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-text);
+}
+
+.ordering-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ordering-check-btn {
+  width: 100%;
+}
+
+/* ============================================================
+   5. True / False (.tf-buttons)
+   ============================================================ */
+.tf-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.tf-btn {
+  padding: 20px;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s,
+    box-shadow 0.2s;
+}
+
+.tf-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.tf-btn:disabled {
+  cursor: default;
+}
+
+.tf-btn.correct {
+  background: var(--color-science-bg);
+  border-color: var(--color-science);
+  color: var(--color-science);
+}
+
+.tf-btn.wrong {
+  background: var(--color-data-bg);
+  border-color: var(--color-data);
+  color: var(--color-data);
+}
+
+/* ============================================================
+   6. Visual Diagram (.visual-diagram)
+   ============================================================ */
+.visual-diagram {
+  padding: 24px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.visual-diagram img,
+.visual-diagram svg {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   Lesson Complete Screen (.lesson-complete)
+   ============================================================ */
+.lesson-complete {
+  text-align: center;
+  padding: 40px 24px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  max-width: 480px;
+  margin: 32px auto;
+  box-shadow: var(--shadow-md);
+}
+
+.lesson-complete h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.lesson-complete .grade-display {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 16px 0;
+}
+
+.grade-a {
+  color: var(--color-science);
+}
+
+.grade-b {
+  color: #14b8a6;
+}
+
+.grade-c {
+  color: var(--color-xp);
+}
+
+.grade-d {
+  color: var(--color-logic);
+}
+
+.grade-f {
+  color: var(--color-data);
+}
+
+.lesson-complete .stars {
+  font-size: 2rem;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+}
+
+.lesson-complete .xp-earned {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-xp);
+  background: rgba(234, 179, 8, 0.1);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+
+.lesson-complete .score-text {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+}
+
+/* ============================================================
+   Error state
+   ============================================================ */
+.exercise-error {
+  padding: 16px;
+  color: var(--color-data);
+  font-weight: 500;
+}
+
+/* ============================================================
+   Responsive — Mobile (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  .exercise-container {
+    padding: 16px 0;
+  }
+
+  .exercise-question {
+    font-size: 1.05rem;
+  }
+
+  /* MC: single column */
+  .mc-options {
+    grid-template-columns: 1fr;
+  }
+
+  /* Matching: single column (stacked) */
+  .match-area {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* Fill blank: stack */
+  .fill-blank-form {
+    flex-direction: column;
+  }
+
+  /* TF: single column */
+  .tf-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  /* Lesson complete */
+  .lesson-complete {
+    margin: 24px 16px;
+    padding: 32px 16px;
+  }
+
+  .lesson-complete .grade-display {
+    font-size: 3rem;
+  }
+}
