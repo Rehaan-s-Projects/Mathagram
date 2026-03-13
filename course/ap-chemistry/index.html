@@ -26,6 +26,7 @@
     .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
     .lesson-card:hover { background: rgba(0,0,0,0.03); }
     .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
+    .lesson-dot.available { background: var(--color-science, #22c55e); }
     .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
     .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
     @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
@@ -54,59 +55,56 @@
 
   <div class="unit-map">
 
-    <!-- Unit 1: Atomic Structure -->
+    <!-- Unit 1: Atomic Structure & Properties -->
     <div class="unit open">
       <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="unit-number">1</span>
         <div class="unit-info">
-          <h2>Atomic Structure</h2>
-          <p>Atoms, electrons, and the periodic table</p>
+          <h2>Atomic Structure &amp; Properties</h2>
+          <p>Atomic models, electron configuration, periodic trends</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 1: Atomic Models</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
+        <a href="lesson-1.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
+          <span class="lesson-title">Lesson 1: Atomic Models &amp; Isotopes</span>
+        </a>
+        <a href="lesson-2.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
           <span class="lesson-title">Lesson 2: Electron Configuration</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
+        </a>
+        <a href="lesson-3.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
           <span class="lesson-title">Lesson 3: Periodic Trends</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
+        </a>
       </div>
     </div>
 
-    <!-- Unit 2: Chemical Bonding -->
+    <!-- Unit 2: Molecular & Ionic Bonding -->
     <div class="unit">
       <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="unit-number">2</span>
         <div class="unit-info">
-          <h2>Chemical Bonding</h2>
-          <p>Ionic, covalent, and metallic bonds</p>
+          <h2>Molecular &amp; Ionic Bonding</h2>
+          <p>Lewis structures, VSEPR, bond types</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 4: Ionic Bonds</span>
+          <span class="lesson-title">Lesson 4: Lewis Structures</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 5: Covalent Bonds</span>
+          <span class="lesson-title">Lesson 5: VSEPR &amp; Molecular Geometry</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 6: Lewis Structures</span>
+          <span class="lesson-title">Lesson 6: Ionic vs Covalent Bonding</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
@@ -118,24 +116,24 @@
         <span class="unit-number">3</span>
         <div class="unit-info">
           <h2>Intermolecular Forces</h2>
-          <p>Forces between molecules</p>
+          <p>London dispersion, dipole-dipole, hydrogen bonding</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 7: London Dispersion Forces</span>
+          <span class="lesson-title">Lesson 7: Types of Intermolecular Forces</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 8: Dipole-Dipole Interactions</span>
+          <span class="lesson-title">Lesson 8: States of Matter</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 9: Hydrogen Bonding</span>
+          <span class="lesson-title">Lesson 9: Vapor Pressure &amp; Boiling Point</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
@@ -147,19 +145,19 @@
         <span class="unit-number">4</span>
         <div class="unit-info">
           <h2>Chemical Reactions</h2>
-          <p>Types of reactions and balancing equations</p>
+          <p>Balancing, types of reactions, net ionic</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 10: Types of Reactions</span>
+          <span class="lesson-title">Lesson 10: Balancing Chemical Equations</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 11: Balancing Chemical Equations</span>
+          <span class="lesson-title">Lesson 11: Types of Reactions</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
@@ -170,30 +168,30 @@
       </div>
     </div>
 
-    <!-- Unit 5: Stoichiometry -->
+    <!-- Unit 5: Kinetics -->
     <div class="unit">
       <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="unit-number">5</span>
         <div class="unit-info">
-          <h2>Stoichiometry</h2>
-          <p>Quantitative relationships in reactions</p>
+          <h2>Kinetics</h2>
+          <p>Rate laws, activation energy, catalysts</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 13: Mole Ratios</span>
+          <span class="lesson-title">Lesson 13: Reaction Rates</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 14: Limiting Reagents</span>
+          <span class="lesson-title">Lesson 14: Rate Laws &amp; Order</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 15: Percent Yield</span>
+          <span class="lesson-title">Lesson 15: Catalysts &amp; Mechanisms</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
@@ -205,24 +203,24 @@
         <span class="unit-number">6</span>
         <div class="unit-info">
           <h2>Thermodynamics</h2>
-          <p>Energy changes in chemical processes</p>
+          <p>Enthalpy, Hess's law, entropy</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 16: Enthalpy &amp; Hess&#39;s Law</span>
+          <span class="lesson-title">Lesson 16: Endothermic &amp; Exothermic</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 17: Entropy</span>
+          <span class="lesson-title">Lesson 17: Hess's Law &amp; Enthalpy</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 18: Gibbs Free Energy</span>
+          <span class="lesson-title">Lesson 18: Entropy &amp; Gibbs Free Energy</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
@@ -234,24 +232,24 @@
         <span class="unit-number">7</span>
         <div class="unit-info">
           <h2>Equilibrium</h2>
-          <p>Reversible reactions and Le Chatelier's principle</p>
+          <p>Keq, Le Chatelier's, solubility</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 19: Equilibrium Constants</span>
+          <span class="lesson-title">Lesson 19: Dynamic Equilibrium</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 20: Le Chatelier&#39;s Principle</span>
+          <span class="lesson-title">Lesson 20: Equilibrium Constants</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 21: Solubility Equilibria</span>
+          <span class="lesson-title">Lesson 21: Le Chatelier's Principle</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
@@ -263,53 +261,53 @@
         <span class="unit-number">8</span>
         <div class="unit-info">
           <h2>Acids &amp; Bases</h2>
-          <p>pH, buffers, and titrations</p>
+          <p>pH, buffers, titrations</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 22: Acid-Base Theories</span>
+          <span class="lesson-title">Lesson 22: pH &amp; Strong Acids/Bases</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 23: pH &amp; pOH</span>
+          <span class="lesson-title">Lesson 23: Weak Acids &amp; Buffers</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 24: Buffers &amp; Titrations</span>
+          <span class="lesson-title">Lesson 24: Titrations</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
     </div>
 
-    <!-- Unit 9: Electrochemistry -->
+    <!-- Unit 9: Applications of Thermodynamics -->
     <div class="unit">
       <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="unit-number">9</span>
         <div class="unit-info">
-          <h2>Electrochemistry</h2>
-          <p>Redox reactions and electrochemical cells</p>
+          <h2>Applications of Thermodynamics</h2>
+          <p>Electrochemistry, galvanic cells</p>
         </div>
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 25: Oxidation-Reduction Reactions</span>
+          <span class="lesson-title">Lesson 25: Galvanic Cells</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 26: Galvanic Cells</span>
+          <span class="lesson-title">Lesson 26: Electrolysis</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 27: Electrolysis</span>
+          <span class="lesson-title">Lesson 27: Free Energy &amp; Electrochemistry</span>
           <span class="coming-soon">Coming Soon</span>
         </div>
       </div>
