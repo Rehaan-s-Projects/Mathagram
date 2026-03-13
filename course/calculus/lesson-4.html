@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-Substitution — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .lesson-content h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 28px 0 12px;
+      color: var(--color-text);
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Chapter 04</div>
+    <h1>U-Substitution</h1>
+
+    <p>
+      <strong>U-substitution</strong> is the integration counterpart of the <em>chain rule</em> for derivatives. When you see a composite function inside an integral, u-substitution can simplify it into a form you already know how to integrate.
+    </p>
+
+    <div class="math-block">
+      $$\int f(g(x)) \cdot g'(x)\, dx = \int f(u)\, du$$
+    </div>
+
+    <p>
+      The idea: choose \(u = g(x)\), compute \(du = g'(x)\,dx\), then rewrite the integral entirely in terms of \(u\). After integrating, substitute back to the original variable.
+    </p>
+
+    <h2>Example 1</h2>
+    <p>Evaluate \(\int 2x \cdot e^{x^2}\, dx\):</p>
+    <ul>
+      <li>Let \(u = x^2\), so \(du = 2x\,dx\)</li>
+      <li>The integral becomes \(\int e^u\, du = e^u + C\)</li>
+      <li>Substitute back: \(e^{x^2} + C\)</li>
+    </ul>
+
+    <h2>Example 2: Adjusting Constants</h2>
+    <p>Evaluate \(\int x \cdot \cos(x^2)\, dx\):</p>
+    <ul>
+      <li>Let \(u = x^2\), so \(du = 2x\,dx\), which means \(x\,dx = \tfrac{1}{2}\,du\)</li>
+      <li>The integral becomes \(\tfrac{1}{2}\int \cos(u)\, du = \tfrac{1}{2}\sin(u) + C\)</li>
+      <li>Substitute back: \(\tfrac{1}{2}\sin(x^2) + C\)</li>
+    </ul>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { runExerciseSet } from '../../js/exercises.js';
+    import { showBuddy } from '../../js/characters.js';
+    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+    import { onAuthChange, getUserProfile } from '../../js/auth.js';
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    let userCharacter = 'edam';
+    onAuthChange(async (user) => {
+      if (user) {
+        const profile = await getUserProfile();
+        if (profile) userCharacter = profile.character || 'edam';
+      }
+    });
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'U-substitution is the integration counterpart of which derivative rule?',
+        options: [
+          'Product rule',
+          'Quotient rule',
+          'Chain rule',
+          'Power rule'
+        ],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'If u = x\u00B2, then du = ___',
+        answer: '2x dx'
+      },
+      {
+        type: 'true-false',
+        question: 'After integrating with u, you must substitute back to the original variable.',
+        correctAnswer: true
+      },
+      {
+        type: 'matching',
+        question: 'Match each substitution with the integral it simplifies.',
+        pairs: [
+          { left: 'u = x\u00B2', right: '\u222B2x\u00B7e^(x\u00B2) dx' },
+          { left: 'u = sin x', right: '\u222Bcos x \u00B7 f(sin x) dx' },
+          { left: 'u = 3x+1', right: '\u222Bf(3x+1)\u00B73 dx' },
+          { left: 'u = ln x', right: '\u222Bf(ln x)/x dx' }
+        ]
+      },
+      {
+        type: 'ordering',
+        question: 'Order the steps for u-substitution.',
+        correctOrder: [
+          'Choose u = g(x)',
+          'Find du = g\'(x)dx',
+          'Substitute u and du into integral',
+          'Integrate with respect to u',
+          'Substitute back original variable'
+        ],
+        shuffled: [
+          'Integrate with respect to u',
+          'Choose u = g(x)',
+          'Substitute back original variable',
+          'Substitute u and du into integral',
+          'Find du = g\'(x)dx'
+        ]
+      },
+      {
+        type: 'multiple-choice',
+        question: '\u222B2x\u00B7e^(x\u00B2) dx = ?',
+        options: [
+          'x\u00B2\u00B7e^(x\u00B2) + C',
+          'e^(x\u00B2) + C',
+          '2e^(x\u00B2) + C',
+          'e^(2x) + C'
+        ],
+        correctIndex: 1
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(userCharacter, isCorrect ? 'correct' : 'wrong');
+    });
+
+    const { grade, stars, passed } = calculateGrade(score);
+    const xpEarned = calculateXP(score);
+    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
+    const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
+
+    container.style.display = 'none';
+    completionDiv.style.display = 'block';
+    completionDiv.innerHTML = `
+      <div class="lesson-complete">
+        <h2>Lesson Complete!</h2>
+        <div class="grade-display ${gradeClass}">${grade}</div>
+        <div class="stars">${starStr}</div>
+        <div class="xp-earned">+${xpEarned} XP</div>
+        <p class="score-text">You scored ${score}%</p>
+        <div class="lesson-nav">
+          <a href="index.html" class="btn btn-outline">Back to Course</a>
+        </div>
+      </div>
+    `;
+
+    try {
+      await saveLessonResult('calculus', 'lesson-4', score);
+    } catch (e) { /* not logged in */ }
+  </script>
+
+</body>
+</html>
