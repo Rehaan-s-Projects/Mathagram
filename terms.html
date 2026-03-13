@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .legal-container {
+      max-width: 800px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+    .legal-container h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .legal-updated {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin-bottom: 32px;
+    }
+    .legal-container h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .legal-container p {
+      margin-bottom: 16px;
+      line-height: 1.7;
+      color: var(--color-text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="legal-container">
+    <h1>Terms of Service</h1>
+    <p class="legal-updated">Last updated: <span id="year-updated"></span></p>
+
+    <h2>1. Acceptance of Terms</h2>
+    <p>By accessing or using Mathagram.org, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use our service.</p>
+
+    <h2>2. User Accounts</h2>
+    <p>To access certain features, you must create an account using a valid email address. You are responsible for maintaining the confidentiality of your password and for all activities that occur under your account. You agree to provide accurate and complete information when creating your account.</p>
+
+    <h2>3. Intellectual Property</h2>
+    <p>All content on Mathagram, including but not limited to lessons, exercises, character artwork, animations, and source code, is the intellectual property of Mathagram and its creators. You may not reproduce, distribute, or create derivative works without explicit written permission.</p>
+
+    <h2>4. User Conduct</h2>
+    <p>You agree not to share your account credentials with others, scrape or crawl the website using automated tools, attempt to disrupt or interfere with the service, or use the platform for any unlawful purpose.</p>
+
+    <h2>5. Disclaimer</h2>
+    <p>Educational content on Mathagram is provided "as is" for learning purposes. While we strive for accuracy, we make no guarantees regarding the completeness or correctness of any content. Mathagram is not a substitute for formal education or professional instruction.</p>
+
+    <h2>6. Changes to Terms</h2>
+    <p>We reserve the right to modify these Terms of Service at any time. Changes will be posted on this page with an updated date. Continued use of Mathagram after changes are posted constitutes acceptance of the revised terms.</p>
+
+    <h2>7. Contact</h2>
+    <p>If you have questions about these Terms of Service, please contact Rehaan Rashid at <a href="https://linktr.ee/Rehaan_rashid" style="color: var(--color-primary-dark); text-decoration: underline;">linktr.ee/Rehaan_rashid</a>.</p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script>
+    const yr = new Date().getFullYear();
+    document.getElementById('year').textContent = yr;
+    document.getElementById('year-updated').textContent = yr;
+  </script>
+
+</body>
+</html>

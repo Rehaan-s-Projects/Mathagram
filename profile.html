@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/lighthouse.css">
+  <link rel="stylesheet" href="css/characters.css">
+  <style>
+    .profile-container {
+      max-width: 600px;
+      margin: 48px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .profile-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 32px;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 16px auto;
+      background: var(--color-border);
+      display: block;
+    }
+    .profile-card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .level-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: var(--color-text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 8px 0 20px;
+    }
+    .xp-bar-container {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .xp-bar {
+      width: 100%;
+      height: 14px;
+      background: var(--color-bg);
+      border-radius: 7px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-xp), #facc15);
+      border-radius: 7px;
+      transition: width 0.4s ease;
+    }
+    .xp-text {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 20px;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 28px;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+    .course-progress-section {
+      text-align: left;
+      margin: 28px 0;
+    }
+    .course-progress-section h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .lesson-list {
+      list-style: none;
+      padding: 0;
+    }
+    .lesson-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.9rem;
+    }
+    .lesson-grade {
+      font-weight: 600;
+    }
+    .lesson-stars {
+      color: var(--color-xp);
+    }
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .profile-actions .btn {
+      min-width: 140px;
+    }
+    .no-progress {
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      padding: 16px 0;
+    }
+    /* Character picker modal */
+    .char-picker-section {
+      display: none;
+      margin-top: 24px;
+      text-align: center;
+    }
+    .char-picker-section.show {
+      display: block;
+    }
+    .char-picker-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 600px) {
+      .profile-card {
+        padding: 28px 20px;
+      }
+      .stats {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Courses</a>
+        <a href="profile.html" class="active">Profile</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile -->
+  <div class="profile-container">
+    <div class="profile-card">
+
+      <!-- Lighthouse -->
+      <div class="lighthouse-profile" data-level="1">
+        <div class="glow"></div>
+        <img src="assets/lighthouse/logo.svg" alt="Lighthouse">
+      </div>
+
+      <!-- Avatar -->
+      <img id="profile-avatar" class="profile-avatar" src="" alt="Character">
+
+      <!-- Name & Level -->
+      <h2 id="profile-name">Loading...</h2>
+      <div id="level-badge" class="level-badge">Level 1 — Spark</div>
+
+      <!-- XP Bar -->
+      <div class="xp-bar-container">
+        <div class="xp-bar">
+          <div id="xp-bar-fill" class="xp-bar-fill" style="width: 0%"></div>
+        </div>
+      </div>
+      <p id="xp-text" class="xp-text">0 / 50 XP</p>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div id="stat-xp" class="stat-value">0</div>
+          <div class="stat-label">Total XP</div>
+        </div>
+        <div class="stat">
+          <div id="stat-streak" class="stat-value">0</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+      </div>
+
+      <!-- Course Progress -->
+      <div class="course-progress-section">
+        <h3>Course Progress</h3>
+        <ul id="lesson-list" class="lesson-list">
+          <li class="no-progress">No lessons completed yet. Start learning!</li>
+        </ul>
+      </div>
+
+      <!-- Character Picker -->
+      <div id="char-picker-section" class="char-picker-section">
+        <h3>Choose a New Character</h3>
+        <div id="character-picker" class="character-picker"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="profile-actions">
+        <button id="btn-change-char" class="btn btn-outline">Change Character</button>
+        <button id="btn-signout" class="btn btn-outline">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { onAuthChange, getUserProfile, logOut } from './js/auth.js';
+    import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
+    import { setLighthouseLevel } from './js/lighthouse.js';
+    import { CHARACTERS } from './js/characters.js';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Redirect if not logged in
+    onAuthChange(async (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Load profile
+      const profile = await getUserProfile();
+      if (!profile) return;
+
+      // Character avatar
+      const char = CHARACTERS[profile.character];
+      if (char) {
+        document.getElementById('profile-avatar').src = `assets/characters/${char.file}`;
+        document.getElementById('profile-avatar').alt = `${char.name} the ${char.type}`;
+      }
+
+      // Display name
+      document.getElementById('profile-name').textContent = profile.displayName || 'Learner';
+
+      // Level
+      const xp = profile.xp || profile.totalXP || 0;
+      const levelInfo = calculateLevel(xp);
+      document.getElementById('level-badge').textContent = `Level ${levelInfo.level} — ${levelInfo.title}`;
+
+      // XP bar
+      const fillPct = Math.round(levelInfo.xpProgress * 100);
+      document.getElementById('xp-bar-fill').style.width = `${fillPct}%`;
+
+      const nextLevel = LEVELS[levelInfo.level]; // next level entry
+      const nextXP = nextLevel ? nextLevel.xp : xp;
+      document.getElementById('xp-text').textContent = `${xp} / ${nextXP} XP`;
+
+      // Stats
+      document.getElementById('stat-xp').textContent = xp;
+      document.getElementById('stat-streak').textContent = profile.streak || 0;
+
+      // Lighthouse glow
+      setLighthouseLevel(levelInfo.level);
+
+      // Course progress
+      try {
+        const progress = await getCourseProgress('calculus');
+        const lessonList = document.getElementById('lesson-list');
+        const entries = Object.entries(progress);
+
+        if (entries.length > 0) {
+          lessonList.innerHTML = '';
+          entries.forEach(([lessonId, data]) => {
+            const stars = '★'.repeat(data.stars) + '☆'.repeat(3 - data.stars);
+            const li = document.createElement('li');
+            li.innerHTML = `
+              <span>${lessonId}</span>
+              <span>
+                <span class="lesson-grade">${data.grade}</span>
+                <span class="lesson-stars">${stars}</span>
+              </span>
+            `;
+            lessonList.appendChild(li);
+          });
+        }
+      } catch (err) {
+        // Progress not available yet
+      }
+    });
+
+    // Change character
+    const charPickerSection = document.getElementById('char-picker-section');
+    const picker = document.getElementById('character-picker');
+
+    document.getElementById('btn-change-char').addEventListener('click', () => {
+      charPickerSection.classList.toggle('show');
+      if (charPickerSection.classList.contains('show') && picker.children.length === 0) {
+        Object.entries(CHARACTERS).forEach(([id, char]) => {
+          const option = document.createElement('div');
+          option.className = 'character-option';
+          option.dataset.id = id;
+          option.innerHTML = `
+            <img src="assets/characters/${char.file}" alt="${char.name}">
+            <span class="char-name">${char.name}</span>
+            <span class="char-type">${char.type}</span>
+          `;
+          option.addEventListener('click', () => {
+            picker.querySelectorAll('.character-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            document.getElementById('profile-avatar').src = `assets/characters/${char.file}`;
+          });
+          picker.appendChild(option);
+        });
+      }
+    });
+
+    // Sign out
+    document.getElementById('btn-signout').addEventListener('click', async () => {
+      await logOut();
+      window.location.href = 'login.html';
+    });
+  </script>
+
+</body>
+</html>

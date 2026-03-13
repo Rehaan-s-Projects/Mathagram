@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; connect-src https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.googleapis.com;">
+  <title>Sign In — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/characters.css">
+  <style>
+    .auth-container {
+      max-width: 480px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+    .auth-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 32px;
+    }
+    .auth-card h1 {
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--color-primary-dark);
+    }
+    .tab-switcher {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      background: var(--color-bg);
+      border-radius: var(--radius);
+      padding: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      font-family: var(--font-sans);
+      font-size: 0.925rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-text-secondary);
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--color-white);
+      color: var(--color-text);
+      box-shadow: var(--shadow-sm);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--color-text);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      font-family: var(--font-sans);
+      font-size: 0.925rem;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      background: var(--color-bg);
+      color: var(--color-text);
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+    .auth-card .btn-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+    .error-msg {
+      display: none;
+      color: #ef4444;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .error-msg.show {
+      display: block;
+    }
+    .character-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-align: center;
+      color: var(--color-text);
+    }
+    .character-section {
+      margin-bottom: 20px;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .auth-card {
+        padding: 28px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Auth Form -->
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1>Welcome</h1>
+
+      <!-- Tab Switcher -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" data-tab="signin">Sign In</button>
+        <button class="tab-btn" data-tab="signup">Sign Up</button>
+      </div>
+
+      <!-- Sign In Tab -->
+      <div id="tab-signin" class="tab-content active">
+        <form id="signin-form">
+          <div class="form-group">
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary">Sign In</button>
+          <p id="signin-error" class="error-msg"></p>
+        </form>
+      </div>
+
+      <!-- Sign Up Tab -->
+      <div id="tab-signup" class="tab-content">
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="signup-name">Display Name</label>
+            <input type="text" id="signup-name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="character-section">
+            <h3>Choose Your Character</h3>
+            <div id="character-picker" class="character-picker">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+          <p id="signup-error" class="error-msg"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { signUp, signIn, onAuthChange } from './js/auth.js';
+    import { getAllCharacters } from './js/characters.js';
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // Character picker
+    let selectedCharacter = null;
+    const picker = document.getElementById('character-picker');
+    const characters = getAllCharacters();
+
+    characters.forEach(char => {
+      const option = document.createElement('div');
+      option.className = 'character-option';
+      option.dataset.id = char.id;
+      option.innerHTML = `
+        <img src="assets/characters/${char.file}" alt="${char.name}">
+        <span class="char-name">${char.name}</span>
+        <span class="char-type">${char.type}</span>
+      `;
+      option.addEventListener('click', () => {
+        picker.querySelectorAll('.character-option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedCharacter = char.id;
+      });
+      picker.appendChild(option);
+    });
+
+    // Sign In
+    const signinForm = document.getElementById('signin-form');
+    const signinError = document.getElementById('signin-error');
+
+    signinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      signinError.classList.remove('show');
+
+      const email = document.getElementById('signin-email').value;
+      const password = document.getElementById('signin-password').value;
+
+      try {
+        await signIn(email, password);
+        window.location.href = 'profile.html';
+      } catch (err) {
+        signinError.textContent = err.message;
+        signinError.classList.add('show');
+      }
+    });
+
+    // Sign Up
+    const signupForm = document.getElementById('signup-form');
+    const signupError = document.getElementById('signup-error');
+
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      signupError.classList.remove('show');
+
+      if (!selectedCharacter) {
+        signupError.textContent = 'Please choose a character.';
+        signupError.classList.add('show');
+        return;
+      }
+
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+
+      try {
+        await signUp(email, password, name, selectedCharacter);
+        window.location.href = 'profile.html';
+      } catch (err) {
+        signupError.textContent = err.message;
+        signupError.classList.add('show');
+      }
+    });
+
+    // Redirect if already logged in
+    onAuthChange(user => {
+      if (user) {
+        window.location.href = 'profile.html';
+      }
+    });
+  </script>
+
+</body>
+</html>
