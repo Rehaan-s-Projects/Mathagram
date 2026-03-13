@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regression — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    .course-header { padding: 80px 24px 40px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-data); border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
+    .course-header p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    .unit-map { max-width: 720px; margin: 0 auto 64px; padding: 0 24px; }
+    .unit { margin-bottom: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
+    .unit:hover { box-shadow: var(--shadow-sm); }
+    .unit-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; }
+    .unit-number { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 0.85rem; font-weight: 800; color: #fff; background: var(--color-data); border-radius: 50%; flex-shrink: 0; }
+    .unit-info { flex: 1; }
+    .unit-info h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
+    .unit-info p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
+    .unit-toggle { width: 24px; height: 24px; color: var(--color-text-muted); transition: transform 0.3s; flex-shrink: 0; }
+    .unit.open .unit-toggle { transform: rotate(180deg); }
+    .unit-lessons { display: none; padding: 0 24px 16px; border-top: 1px solid var(--color-border); }
+    .unit.open .unit-lessons { display: block; }
+    .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
+    .lesson-card:hover { background: rgba(0,0,0,0.03); }
+    .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
+    .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
+    .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge">Data</span>
+    <h1>Regression</h1>
+    <p>Master regression analysis — the cornerstone of predictive modeling. From simple linear regression to logistic regression, learn to model relationships in data.</p>
+  </header>
+
+  <div class="unit-map">
+
+    <!-- Unit 1: Correlation -->
+    <div class="unit open">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">1</span>
+        <div class="unit-info">
+          <h2>Correlation</h2>
+          <p>Measuring linear relationships</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 1: Scatter Plots &amp; Correlation</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 2: Pearson&#39;s r</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 3: Correlation vs Causation</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 2: Simple Linear Regression -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">2</span>
+        <div class="unit-info">
+          <h2>Simple Linear Regression</h2>
+          <p>Fitting a line to data</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 4: The Regression Equation</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 5: Slope &amp; Intercept</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 6: Making Predictions</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 3: Least Squares -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">3</span>
+        <div class="unit-info">
+          <h2>Least Squares</h2>
+          <p>Minimizing prediction errors</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 7: The Least Squares Method</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 8: Sum of Squared Errors</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 9: Line of Best Fit</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 4: Residuals -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">4</span>
+        <div class="unit-info">
+          <h2>Residuals</h2>
+          <p>Analyzing prediction errors</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 10: What are Residuals?</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 11: Residual Plots</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 12: Checking Assumptions</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 5: Multiple Regression -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">5</span>
+        <div class="unit-info">
+          <h2>Multiple Regression</h2>
+          <p>Using multiple predictors</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 13: Multiple Regression Model</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 14: Interpreting Coefficients</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 15: Adjusted R-Squared</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 6: Polynomial Regression -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">6</span>
+        <div class="unit-info">
+          <h2>Polynomial Regression</h2>
+          <p>Fitting curves to data</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 16: Quadratic Regression</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 17: Higher-Degree Polynomials</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 18: Overfitting</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 7: Logistic Regression -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">7</span>
+        <div class="unit-info">
+          <h2>Logistic Regression</h2>
+          <p>Predicting binary outcomes</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 19: The Logistic Function</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 20: Odds &amp; Log-Odds</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 21: Classification with Logistic Regression</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 8: Model Selection -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">8</span>
+        <div class="unit-info">
+          <h2>Model Selection</h2>
+          <p>Choosing the best model</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 22: AIC &amp; BIC</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 23: Cross-Validation</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 24: Bias-Variance Tradeoff</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 9: Prediction & Forecasting -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">9</span>
+        <div class="unit-info">
+          <h2>Prediction &amp; Forecasting</h2>
+          <p>Using models to predict the future</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 25: Confidence vs Prediction Intervals</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 26: Extrapolation Risks</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 27: Real-World Forecasting</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AP Statistics — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    .course-header { padding: 80px 24px 40px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-math); border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
+    .course-header p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    .unit-map { max-width: 720px; margin: 0 auto 64px; padding: 0 24px; }
+    .unit { margin-bottom: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
+    .unit:hover { box-shadow: var(--shadow-sm); }
+    .unit-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; }
+    .unit-number { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 0.85rem; font-weight: 800; color: #fff; background: var(--color-math); border-radius: 50%; flex-shrink: 0; }
+    .unit-info { flex: 1; }
+    .unit-info h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
+    .unit-info p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
+    .unit-toggle { width: 24px; height: 24px; color: var(--color-text-muted); transition: transform 0.3s; flex-shrink: 0; }
+    .unit.open .unit-toggle { transform: rotate(180deg); }
+    .unit-lessons { display: none; padding: 0 24px 16px; border-top: 1px solid var(--color-border); }
+    .unit.open .unit-lessons { display: block; }
+    .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
+    .lesson-card:hover { background: rgba(0,0,0,0.03); }
+    .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
+    .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
+    .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge">Math</span>
+    <h1>AP Statistics</h1>
+    <p>Learn to collect, analyze, and draw conclusions from data. Master the concepts tested on the AP Statistics exam through hands-on exploration.</p>
+  </header>
+
+  <div class="unit-map">
+
+    <!-- Unit 1: Exploring Data -->
+    <div class="unit open">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">1</span>
+        <div class="unit-info">
+          <h2>Exploring Data</h2>
+          <p>Types of data and basic summaries</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 1: Categorical vs Quantitative Data</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 2: Frequency Tables</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 3: Measures of Center</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 2: Describing Distributions -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">2</span>
+        <div class="unit-info">
+          <h2>Describing Distributions</h2>
+          <p>Shape, center, spread, outliers</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 4: Histograms &amp; Stemplots</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 5: Mean, Median, Mode</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 6: Standard Deviation &amp; IQR</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 3: Normal Distributions -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">3</span>
+        <div class="unit-info">
+          <h2>Normal Distributions</h2>
+          <p>The bell curve and z-scores</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 7: The Normal Curve</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 8: Z-Scores</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 9: The Empirical Rule</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 4: Designing Studies -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">4</span>
+        <div class="unit-info">
+          <h2>Designing Studies</h2>
+          <p>Sampling, experiments, observational studies</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 10: Sampling Methods</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 11: Observational Studies vs Experiments</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 12: Bias &amp; Confounding</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 5: Probability -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">5</span>
+        <div class="unit-info">
+          <h2>Probability</h2>
+          <p>Rules of probability and counting</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 13: Basic Probability Rules</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 14: Conditional Probability</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 15: Independence</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 6: Random Variables -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">6</span>
+        <div class="unit-info">
+          <h2>Random Variables</h2>
+          <p>Discrete and continuous distributions</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 16: Discrete Random Variables</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 17: Continuous Random Variables</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 18: The Binomial Distribution</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 7: Sampling Distributions -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">7</span>
+        <div class="unit-info">
+          <h2>Sampling Distributions</h2>
+          <p>Distribution of sample statistics</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 19: Sampling Variability</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 20: Central Limit Theorem</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 21: Sampling Distribution of a Proportion</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 8: Confidence Intervals -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">8</span>
+        <div class="unit-info">
+          <h2>Confidence Intervals</h2>
+          <p>Estimating population parameters</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 22: Confidence Interval for a Mean</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 23: Confidence Interval for a Proportion</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 24: Margin of Error</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit 9: Hypothesis Testing -->
+    <div class="unit">
+      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="unit-number">9</span>
+        <div class="unit-info">
+          <h2>Hypothesis Testing</h2>
+          <p>Testing claims about populations</p>
+        </div>
+        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="unit-lessons">
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 25: Null &amp; Alternative Hypotheses</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 26: P-Values &amp; Significance</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+        <div class="lesson-card">
+          <span class="lesson-dot"></span>
+          <span class="lesson-title">Lesson 27: Type I &amp; Type II Errors</span>
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
