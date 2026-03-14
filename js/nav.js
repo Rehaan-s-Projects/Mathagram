@@ -66,7 +66,7 @@ export function initNav(basePath = '') {
       userEl.style.cssText = 'display:flex; align-items:center; gap:8px;';
       userEl.innerHTML = `
         <a href="${basePath}profile.html" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:inherit; padding:4px 12px; border-radius:8px; transition:background 0.2s;">
-          <div style="width:28px; height:28px; border-radius:50%; background:${getColorValue(userColor)}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.75rem; font-weight:700;">${initial}</div>
+          <img src="${basePath}assets/avatars/${userColor}.svg" alt="" style="width:28px; height:28px; border-radius:50%;">
           <span style="font-size:0.85rem; font-weight:600;">${escapeHtml(displayName)}</span>
         </a>
       `;

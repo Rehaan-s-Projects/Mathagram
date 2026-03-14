@@ -169,13 +169,27 @@
           <div class="color-picker">
             <p style="font-weight:600; margin-bottom:12px;">Choose your color</p>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button type="button" class="color-option selected" data-color="blue" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#3b82f6;" onclick="selectColor(this)"></button>
-              <button type="button" class="color-option" data-color="green" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#22c55e;" onclick="selectColor(this)"></button>
-              <button type="button" class="color-option" data-color="orange" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#f97316;" onclick="selectColor(this)"></button>
-              <button type="button" class="color-option" data-color="purple" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#8b5cf6;" onclick="selectColor(this)"></button>
-              <button type="button" class="color-option" data-color="cyan" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#06b6d4;" onclick="selectColor(this)"></button>
-              <button type="button" class="color-option" data-color="pink" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#ec4899;" onclick="selectColor(this)"></button>
-              <button type="button" class="color-option" data-color="gray" style="width:40px; height:40px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:#6b7280;" onclick="selectColor(this)"></button>
+              <button type="button" class="color-option selected" data-color="blue" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/blue.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="green" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/green.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="orange" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/orange.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="purple" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/purple.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="cyan" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/cyan.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="pink" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/pink.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="gray" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/gray.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
             </div>
           </div>
           <button type="submit" class="btn btn-primary">Create Account</button>
@@ -217,7 +231,8 @@
     // Color picker
     let selectedColor = 'blue';
     window.selectColor = function(el) {
-      document.querySelectorAll('.color-option').forEach(b => b.style.borderColor = 'transparent');
+      document.querySelectorAll('.color-option').forEach(b => { b.classList.remove('selected'); b.style.borderColor = 'transparent'; });
+      el.classList.add('selected');
       el.style.borderColor = '#1a1a2e';
       selectedColor = el.dataset.color;
     };

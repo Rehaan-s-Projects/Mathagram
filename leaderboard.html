@@ -51,12 +51,7 @@
       border-radius: 50%;
       border: 3px solid var(--color-border);
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 700;
+      object-fit: cover;
     }
     .podium-spot[data-rank="1"] .podium-avatar {
       width: 80px;
@@ -152,12 +147,7 @@
       border-radius: 50%;
       border: 2px solid var(--color-border);
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
+      object-fit: cover;
     }
 
     .lb-info { flex: 1; }
@@ -339,11 +329,9 @@
           if (users.length >= 3) displayOrder.push(users[2]);
 
           podium.innerHTML = displayOrder.map(u => {
-            const initial = u.displayName.charAt(0).toUpperCase();
-            const color = getColorValue(u.color);
             return `
               <div class="podium-spot" data-rank="${u.rank}">
-                <div class="podium-avatar" style="background:${color};">${initial}</div>
+                <img class="podium-avatar" src="assets/avatars/${u.color || 'blue'}.svg" alt="${escapeHtml(u.displayName)}">
                 <span class="podium-medal">${medals[u.rank] || ''}</span>
                 <span class="podium-name">${escapeHtml(u.displayName)}</span>
                 <span class="podium-xp">${u.xp.toLocaleString()} XP</span>
@@ -359,13 +347,11 @@
         if (remaining.length > 0) {
           lbList.style.display = 'block';
           lbList.innerHTML = remaining.map(u => {
-            const initial = u.displayName.charAt(0).toUpperCase();
-            const color = getColorValue(u.color);
             const isCurrentUser = u.uid === user.uid;
             return `
               <div class="lb-row ${isCurrentUser ? 'current-user' : ''}">
                 <span class="lb-rank">${u.rank}</span>
-                <div class="lb-avatar" style="background:${color};">${initial}</div>
+                <img class="lb-avatar" src="assets/avatars/${u.color || 'blue'}.svg" alt="${escapeHtml(u.displayName)}">
                 <div class="lb-info">
                   <div class="lb-name">${escapeHtml(u.displayName)}${isCurrentUser ? ' (You)' : ''}</div>
                   <div class="lb-level">Level ${u.level} — ${u.title}</div>

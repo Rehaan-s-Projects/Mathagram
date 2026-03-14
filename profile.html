@@ -257,13 +257,11 @@
       const profile = await getUserProfile();
       if (!profile) return;
 
-      // Color circle avatar
+      // Avatar image
       const userColor = profile.color || 'blue';
       const displayName = profile.displayName || 'Learner';
-      const initial = displayName.charAt(0).toUpperCase();
       const avatarEl = document.getElementById('profile-avatar');
-      avatarEl.style.background = getColorValue(userColor);
-      avatarEl.textContent = initial;
+      avatarEl.innerHTML = `<img src="assets/avatars/${userColor}.svg" style="width:80px; height:80px; border-radius:50%;">`;
 
       // Display name
       document.getElementById('profile-name').textContent = displayName;
