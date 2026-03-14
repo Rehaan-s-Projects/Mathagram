@@ -120,7 +120,32 @@ function speak(text) {
 let hideTimer = null;
 
 /**
- * Show the character buddy popup in the bottom-right corner.
+ * Initialize the side character panel for quiz pages.
+ * Creates a character that stands alongside the exercise area (Duolingo-style).
+ * Call this once when the quiz page loads.
+ * @param {string} characterId — key in CHARACTERS (e.g. 'edam')
+ * @param {string} basePath — path to assets (e.g. '../../')
+ */
+export function initSideCharacter(characterId, basePath = '') {
+  const character = CHARACTERS[characterId];
+  if (!character) return;
+
+  let panel = document.getElementById('side-character');
+  if (panel) panel.remove();
+
+  panel = document.createElement('div');
+  panel.id = 'side-character';
+  panel.className = 'side-character';
+  panel.innerHTML = `
+    <img class="side-char-img" src="${basePath}assets/characters/${character.file}" alt="${character.name}">
+    <div class="side-char-name">${character.name}</div>
+    <div class="side-char-speech" id="side-char-speech"></div>
+  `;
+  document.body.appendChild(panel);
+}
+
+/**
+ * Show the character buddy — updates side panel + speaks message.
  * @param {string} characterId — key in CHARACTERS (e.g. 'edam')
  * @param {string} reaction — one of 'correct', 'wrong', 'hint', 'perfect'
  */
@@ -131,7 +156,30 @@ export function showBuddy(characterId, reaction) {
   const message = character.messages[reaction] || character.messages.correct;
   const expression = REACTION_MAP[reaction] || 'happy';
 
-  /* Create popup element if it doesn't exist */
+  /* Update side character panel if it exists */
+  const sidePanel = document.getElementById('side-character');
+  if (sidePanel) {
+    const img = sidePanel.querySelector('.side-char-img');
+    const name = sidePanel.querySelector('.side-char-name');
+    const speech = sidePanel.querySelector('.side-char-speech');
+
+    // Determine base path from current img src
+    const currentSrc = img.src;
+    const basePath = currentSrc.substring(0, currentSrc.lastIndexOf('assets/'));
+
+    img.src = `${basePath}assets/characters/${character.file}`;
+    img.alt = character.name;
+    name.textContent = character.name;
+    speech.textContent = message;
+
+    // Set expression styling
+    sidePanel.classList.remove('happy', 'encouraging', 'thinking');
+    sidePanel.classList.add(expression);
+    sidePanel.classList.add('reacting');
+    setTimeout(() => sidePanel.classList.remove('reacting'), 600);
+  }
+
+  /* Also show the bottom popup for mobile */
   let popup = document.getElementById('character-buddy');
   if (!popup) {
     popup = document.createElement('div');
@@ -144,31 +192,21 @@ export function showBuddy(characterId, reaction) {
     document.body.appendChild(popup);
   }
 
-  /* Set content */
-  const img = popup.querySelector('.buddy-img');
-  const msg = popup.querySelector('.buddy-msg');
-
-  img.src = `assets/characters/${character.file}`;
-  img.alt = `${character.name} the ${character.type}`;
-  msg.textContent = message;
+  const popupImg = popup.querySelector('.buddy-img');
+  const popupMsg = popup.querySelector('.buddy-msg');
+  popupImg.src = `assets/characters/${character.file}`;
+  popupImg.alt = `${character.name} the ${character.type}`;
+  popupMsg.textContent = message;
 
   /* Speak the message out loud */
   speak(message);
 
-  /* Set expression class (remove old ones first) */
   popup.classList.remove('happy', 'encouraging', 'thinking');
   popup.classList.add(expression);
+  requestAnimationFrame(() => popup.classList.add('show'));
 
-  /* Show with animation */
-  requestAnimationFrame(() => {
-    popup.classList.add('show');
-  });
-
-  /* Auto-hide after 3 seconds */
   if (hideTimer) clearTimeout(hideTimer);
-  hideTimer = setTimeout(() => {
-    popup.classList.remove('show');
-  }, 3000);
+  hideTimer = setTimeout(() => popup.classList.remove('show'), 3000);
 }
 
 /**

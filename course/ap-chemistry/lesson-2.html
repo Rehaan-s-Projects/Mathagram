@@ -183,7 +183,7 @@
     import { initNav } from '../../js/nav.js';
     initNav('../../');
     import { runExerciseSet } from '../../js/exercises.js';
-    import { showBuddy, randomCharacterId } from '../../js/characters.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange } from '../../js/auth.js';
 
@@ -201,6 +201,9 @@
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize side character (Duolingo-style)
+    initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
       {
