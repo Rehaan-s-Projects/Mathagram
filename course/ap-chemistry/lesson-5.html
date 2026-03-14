@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photoelectron Spectroscopy — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-science);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">AP Chemistry</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &middot; Lesson 5</div>
+    <h1>Photoelectron Spectroscopy (PES)</h1>
+
+    <p>
+      <strong>Photoelectron spectroscopy</strong> is an experimental technique that provides direct evidence for electron configurations and energy levels within atoms. It works by shooting high-energy photons at atoms and measuring the kinetic energy of the ejected electrons.
+    </p>
+
+    <h2>How PES Works</h2>
+
+    <p>
+      When a photon with known energy hits an atom, it can knock out an electron. The <strong>binding energy</strong> of that electron is calculated using the equation:
+    </p>
+
+    <div class="math-block">
+      $$E_{\text{binding}} = E_{\text{photon}} - E_{\text{kinetic}}$$
+    </div>
+
+    <p>
+      Electrons closer to the nucleus are held more tightly, so they have <strong>higher binding energies</strong>. Valence electrons, being farthest from the nucleus, have the <strong>lowest binding energies</strong>.
+    </p>
+
+    <h2>Reading a PES Spectrum</h2>
+
+    <p>
+      A PES spectrum plots <strong>binding energy</strong> on the x-axis (decreasing from left to right) and the <strong>relative number of electrons</strong> on the y-axis. Each peak corresponds to a subshell:
+    </p>
+    <ul>
+      <li>Peaks on the <strong>left</strong> (high binding energy) represent <strong>inner-shell</strong> (core) electrons</li>
+      <li>Peaks on the <strong>right</strong> (low binding energy) represent <strong>valence</strong> electrons</li>
+      <li>The <strong>height</strong> of a peak tells you how many electrons are in that subshell</li>
+    </ul>
+
+    <h2>Example: Nitrogen</h2>
+
+    <p>
+      Nitrogen has 7 electrons with the configuration \(1s^2\,2s^2\,2p^3\). Its PES spectrum shows three peaks:
+    </p>
+    <ul>
+      <li>A small peak at high binding energy &rarr; <strong>1s&sup2;</strong> (2 electrons)</li>
+      <li>A medium peak &rarr; <strong>2s&sup2;</strong> (2 electrons)</li>
+      <li>A taller peak at low binding energy &rarr; <strong>2p&sup3;</strong> (3 electrons)</li>
+    </ul>
+
+    <p>
+      By analyzing these peaks, we can determine the electron configuration and confirm the identity of the element.
+    </p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { runExerciseSet } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+    import { onAuthChange } from '../../js/auth.js';
+
+    // KaTeX auto-render
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize side character (Duolingo-style)
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'In a PES spectrum, which electrons have the highest binding energy?',
+        options: ['Valence electrons', '1s electrons (closest to nucleus)', '2p electrons', 'Lone pair electrons'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'PES can determine the electron configuration of an element.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'Binding energy = photon energy - ___.',
+        answer: 'kinetic energy'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'A PES spectrum of carbon would show how many peaks?',
+        options: ['2 (1s, 2s)', '3 (1s, 2s, 2p)', '4 (1s, 2s, 2p, 3s)', '6 (one per electron)'],
+        correctIndex: 1
+      },
+      {
+        type: 'matching',
+        question: 'Match each PES feature with what it represents.',
+        pairs: [
+          { left: 'High binding energy', right: 'Inner shell electrons' },
+          { left: 'Low binding energy', right: 'Valence electrons' },
+          { left: 'Peak height', right: 'Number of electrons' },
+          { left: 'Peak position', right: 'Binding energy' }
+        ]
+      },
+      {
+        type: 'true-false',
+        question: 'Valence electrons have higher binding energy than core electrons.',
+        correctAnswer: false
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    // Show completion
+    const { grade, stars, passed } = calculateGrade(score);
+    const xpEarned = calculateXP(score);
+    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
+    const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
+
+    container.style.display = 'none';
+    completionDiv.style.display = 'block';
+    completionDiv.innerHTML = `
+      <div class="lesson-complete">
+        <h2>Lesson Complete!</h2>
+        <div class="grade-display ${gradeClass}">${grade}</div>
+        <div class="stars">${starStr}</div>
+        <div class="xp-earned">+${xpEarned} XP</div>
+        <p class="score-text">You scored ${score}%</p>
+        <div class="lesson-nav">
+          <a href="index.html" class="btn btn-outline">Back to Course</a>
+        </div>
+      </div>
+    `;
+
+    // Save if logged in
+    try {
+      await saveLessonResult('ap-chemistry', 'lesson-5', score);
+    } catch (e) { /* not logged in */ }
+  </script>
+
+</body>
+</html>

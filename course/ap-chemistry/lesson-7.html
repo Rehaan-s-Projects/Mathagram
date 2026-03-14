@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VSEPR &amp; Molecular Geometry — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-science);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">AP Chemistry</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 2 &middot; Lesson 7</div>
+    <h1>VSEPR &amp; Molecular Geometry</h1>
+
+    <p>
+      <strong>VSEPR</strong> stands for <strong>Valence Shell Electron Pair Repulsion</strong>. This model predicts the 3D shape of a molecule by assuming that electron pairs around a central atom repel each other and arrange themselves as far apart as possible.
+    </p>
+
+    <h2>Electron Geometry vs Molecular Geometry</h2>
+
+    <p>
+      <strong>Electron geometry</strong> considers all electron pairs (bonding and lone pairs) around the central atom. <strong>Molecular geometry</strong> only considers the positions of the atoms &mdash; lone pairs are invisible in the molecular shape but still affect it.
+    </p>
+
+    <h2>Key Shapes</h2>
+
+    <p>
+      The number of electron groups around the central atom determines the electron geometry:
+    </p>
+    <ul>
+      <li><strong>2 groups</strong> &rarr; Linear (180&deg;)</li>
+      <li><strong>3 groups</strong> &rarr; Trigonal planar (120&deg;)</li>
+      <li><strong>4 groups</strong> &rarr; Tetrahedral (109.5&deg;)</li>
+      <li><strong>5 groups</strong> &rarr; Trigonal bipyramidal (90&deg; and 120&deg;)</li>
+      <li><strong>6 groups</strong> &rarr; Octahedral (90&deg;)</li>
+    </ul>
+
+    <h2>How Lone Pairs Change Shape</h2>
+
+    <p>
+      When lone pairs replace bonding pairs, the <strong>molecular geometry changes</strong> even though the electron geometry stays the same. For example, with 4 electron groups (tetrahedral electron geometry):
+    </p>
+    <ul>
+      <li><strong>0 lone pairs</strong> &rarr; Tetrahedral (CH&sub4;)</li>
+      <li><strong>1 lone pair</strong> &rarr; Trigonal pyramidal (NH&sub3;)</li>
+      <li><strong>2 lone pairs</strong> &rarr; Bent (H&sub2;O)</li>
+    </ul>
+
+    <p>
+      Lone pairs occupy more space than bonding pairs, which compresses bond angles slightly below the ideal values.
+    </p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { runExerciseSet } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+    import { onAuthChange } from '../../js/auth.js';
+
+    // KaTeX auto-render
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize side character (Duolingo-style)
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'What is the molecular geometry of CH\u2084?',
+        options: ['Linear', 'Trigonal planar', 'Tetrahedral', 'Trigonal pyramidal'],
+        correctIndex: 2
+      },
+      {
+        type: 'matching',
+        question: 'Match each molecule with its molecular geometry.',
+        pairs: [
+          { left: 'CO\u2082', right: 'Linear' },
+          { left: 'H\u2082O', right: 'Bent' },
+          { left: 'NH\u2083', right: 'Trigonal pyramidal' },
+          { left: 'CH\u2084', right: 'Tetrahedral' }
+        ]
+      },
+      {
+        type: 'true-false',
+        question: 'Lone pairs affect molecular geometry.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'VSEPR stands for Valence Shell Electron Pair ___.',
+        answer: 'Repulsion'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the bond angle in a tetrahedral molecule?',
+        options: ['90\u00B0', '109.5\u00B0', '120\u00B0', '180\u00B0'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'BF\u2083 has what molecular geometry?',
+        options: ['Linear', 'Bent', 'Trigonal planar', 'Tetrahedral'],
+        correctIndex: 2
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    // Show completion
+    const { grade, stars, passed } = calculateGrade(score);
+    const xpEarned = calculateXP(score);
+    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
+    const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
+
+    container.style.display = 'none';
+    completionDiv.style.display = 'block';
+    completionDiv.innerHTML = `
+      <div class="lesson-complete">
+        <h2>Lesson Complete!</h2>
+        <div class="grade-display ${gradeClass}">${grade}</div>
+        <div class="stars">${starStr}</div>
+        <div class="xp-earned">+${xpEarned} XP</div>
+        <p class="score-text">You scored ${score}%</p>
+        <div class="lesson-nav">
+          <a href="index.html" class="btn btn-outline">Back to Course</a>
+        </div>
+      </div>
+    `;
+
+    // Save if logged in
+    try {
+      await saveLessonResult('ap-chemistry', 'lesson-7', score);
+    } catch (e) { /* not logged in */ }
+  </script>
+
+</body>
+</html>
