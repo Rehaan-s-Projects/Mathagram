@@ -7,7 +7,6 @@
   <link rel="icon" href="assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/lighthouse.css">
-  <link rel="stylesheet" href="css/characters.css">
   <style>
     .profile-container {
       max-width: 600px;
@@ -21,14 +20,17 @@
       box-shadow: var(--shadow-lg);
       padding: 40px 32px;
     }
-    .profile-avatar {
-      width: 100px;
-      height: 100px;
+    .profile-avatar-circle {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      object-fit: cover;
       margin: 16px auto;
-      background: var(--color-border);
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
     }
     .profile-card h2 {
       font-size: 1.5rem;
@@ -127,19 +129,15 @@
       font-size: 0.9rem;
       padding: 16px 0;
     }
-    /* Character picker modal */
-    .char-picker-section {
-      display: none;
-      margin-top: 24px;
-      text-align: center;
+    .color-option-profile {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
     }
-    .char-picker-section.show {
-      display: block;
-    }
-    .char-picker-section h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 12px;
+    .color-option-profile.selected {
+      border-color: #1a1a2e !important;
     }
     @media (max-width: 600px) {
       .profile-card {
@@ -178,7 +176,7 @@
       </div>
 
       <!-- Avatar -->
-      <img id="profile-avatar" class="profile-avatar" src="" alt="Character">
+      <div id="profile-avatar" class="profile-avatar-circle"></div>
 
       <!-- Name & Level -->
       <h2 id="profile-name">Loading...</h2>
@@ -212,15 +210,8 @@
         </ul>
       </div>
 
-      <!-- Character Picker -->
-      <div id="char-picker-section" class="char-picker-section">
-        <h3>Choose a New Character</h3>
-        <div id="character-picker" class="character-picker"></div>
-      </div>
-
       <!-- Actions -->
       <div class="profile-actions">
-        <button id="btn-change-char" class="btn btn-outline">Change Character</button>
         <button id="btn-signout" class="btn btn-outline">Sign Out</button>
       </div>
     </div>
@@ -240,9 +231,20 @@
     import { onAuthChange, getUserProfile, logOut } from './js/auth.js';
     import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
     import { setLighthouseLevel } from './js/lighthouse.js';
-    import { CHARACTERS } from './js/characters.js';
-
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    function getColorValue(colorName) {
+      const colors = {
+        blue: '#3b82f6',
+        green: '#22c55e',
+        orange: '#f97316',
+        purple: '#8b5cf6',
+        cyan: '#06b6d4',
+        pink: '#ec4899',
+        gray: '#6b7280'
+      };
+      return colors[colorName] || colors.blue;
+    }
 
     // Redirect if not logged in
     onAuthChange(async (user) => {
@@ -255,15 +257,16 @@
       const profile = await getUserProfile();
       if (!profile) return;
 
-      // Character avatar
-      const char = CHARACTERS[profile.character];
-      if (char) {
-        document.getElementById('profile-avatar').src = `assets/characters/${char.file}`;
-        document.getElementById('profile-avatar').alt = `${char.name} the ${char.type}`;
-      }
+      // Color circle avatar
+      const userColor = profile.color || 'blue';
+      const displayName = profile.displayName || 'Learner';
+      const initial = displayName.charAt(0).toUpperCase();
+      const avatarEl = document.getElementById('profile-avatar');
+      avatarEl.style.background = getColorValue(userColor);
+      avatarEl.textContent = initial;
 
       // Display name
-      document.getElementById('profile-name').textContent = profile.displayName || 'Learner';
+      document.getElementById('profile-name').textContent = displayName;
 
       // Level
       const xp = profile.xp || profile.totalXP || 0;
@@ -308,32 +311,6 @@
         }
       } catch (err) {
         // Progress not available yet
-      }
-    });
-
-    // Change character
-    const charPickerSection = document.getElementById('char-picker-section');
-    const picker = document.getElementById('character-picker');
-
-    document.getElementById('btn-change-char').addEventListener('click', () => {
-      charPickerSection.classList.toggle('show');
-      if (charPickerSection.classList.contains('show') && picker.children.length === 0) {
-        Object.entries(CHARACTERS).forEach(([id, char]) => {
-          const option = document.createElement('div');
-          option.className = 'character-option';
-          option.dataset.id = id;
-          option.innerHTML = `
-            <img src="assets/characters/${char.file}" alt="${char.name}">
-            <span class="char-name">${char.name}</span>
-            <span class="char-type">${char.type}</span>
-          `;
-          option.addEventListener('click', () => {
-            picker.querySelectorAll('.character-option').forEach(o => o.classList.remove('selected'));
-            option.classList.add('selected');
-            document.getElementById('profile-avatar').src = `assets/characters/${char.file}`;
-          });
-          picker.appendChild(option);
-        });
       }
     });
 

@@ -6,7 +6,7 @@ import { LEVELS } from './progress.js';
 /**
  * Fetch top users by XP.
  * @param {number} count - number of users to fetch (default 50)
- * @returns {Promise<Array>} array of { rank, displayName, character, xp, level, title }
+ * @returns {Promise<Array>} array of { rank, displayName, color, xp, level, title }
  */
 export async function getLeaderboard(count = 50) {
   const q = query(
@@ -26,7 +26,7 @@ export async function getLeaderboard(count = 50) {
       rank: rank++,
       uid: doc.id,
       displayName: data.displayName || 'Anonymous',
-      character: data.character || 'edam',
+      color: data.color || 'blue',
       xp: data.xp || 0,
       level: levelInfo.level,
       title: levelInfo.title

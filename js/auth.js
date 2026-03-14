@@ -40,10 +40,10 @@ function sanitizeText(str) {
  * @param {string} email
  * @param {string} password
  * @param {string} displayName — will be sanitized before storage
- * @param {string} character  — chosen avatar / character id
+ * @param {string} color  — chosen profile color (e.g. 'blue', 'green')
  * @returns {Promise<import('firebase/auth').User>}
  */
-export async function signUp(email, password, displayName, character) {
+export async function signUp(email, password, displayName, color) {
   const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
   await sendEmailVerification(user);
@@ -51,7 +51,7 @@ export async function signUp(email, password, displayName, character) {
   const now = new Date().toISOString();
   await setDoc(doc(db, 'users', user.uid), {
     displayName: sanitizeText(displayName),
-    character,
+    color: color,
     xp: 0,
     level: 1,
     streak: 0,

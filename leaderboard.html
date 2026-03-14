@@ -51,13 +51,19 @@
       border-radius: 50%;
       border: 3px solid var(--color-border);
       margin-bottom: 8px;
-      background: var(--color-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
     }
     .podium-spot[data-rank="1"] .podium-avatar {
       width: 80px;
       height: 80px;
       border-color: #eab308;
       box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+      font-size: 2rem;
     }
     .podium-spot[data-rank="2"] .podium-avatar {
       border-color: #94a3b8;
@@ -146,6 +152,12 @@
       border-radius: 50%;
       border: 2px solid var(--color-border);
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
     }
 
     .lb-info { flex: 1; }
@@ -274,9 +286,21 @@
     initNav('');
     import { onAuthChange } from './js/auth.js';
     import { getLeaderboard } from './js/leaderboard.js';
-    import { CHARACTERS } from './js/characters.js';
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    function getColorValue(colorName) {
+      const colors = {
+        blue: '#3b82f6',
+        green: '#22c55e',
+        orange: '#f97316',
+        purple: '#8b5cf6',
+        cyan: '#06b6d4',
+        pink: '#ec4899',
+        gray: '#6b7280'
+      };
+      return colors[colorName] || colors.blue;
+    }
 
     const medals = ['', '🥇', '🥈', '🥉'];
 
@@ -315,10 +339,11 @@
           if (users.length >= 3) displayOrder.push(users[2]);
 
           podium.innerHTML = displayOrder.map(u => {
-            const charFile = CHARACTERS[u.character] ? CHARACTERS[u.character].file : 'edam.svg';
+            const initial = u.displayName.charAt(0).toUpperCase();
+            const color = getColorValue(u.color);
             return `
               <div class="podium-spot" data-rank="${u.rank}">
-                <img class="podium-avatar" src="assets/characters/${charFile}" alt="${u.displayName}">
+                <div class="podium-avatar" style="background:${color};">${initial}</div>
                 <span class="podium-medal">${medals[u.rank] || ''}</span>
                 <span class="podium-name">${escapeHtml(u.displayName)}</span>
                 <span class="podium-xp">${u.xp.toLocaleString()} XP</span>
@@ -334,12 +359,13 @@
         if (remaining.length > 0) {
           lbList.style.display = 'block';
           lbList.innerHTML = remaining.map(u => {
-            const charFile = CHARACTERS[u.character] ? CHARACTERS[u.character].file : 'edam.svg';
+            const initial = u.displayName.charAt(0).toUpperCase();
+            const color = getColorValue(u.color);
             const isCurrentUser = u.uid === user.uid;
             return `
               <div class="lb-row ${isCurrentUser ? 'current-user' : ''}">
                 <span class="lb-rank">${u.rank}</span>
-                <img class="lb-avatar" src="assets/characters/${charFile}" alt="${u.displayName}">
+                <div class="lb-avatar" style="background:${color};">${initial}</div>
                 <div class="lb-info">
                   <div class="lb-name">${escapeHtml(u.displayName)}${isCurrentUser ? ' (You)' : ''}</div>
                   <div class="lb-level">Level ${u.level} — ${u.title}</div>

@@ -102,6 +102,21 @@ const REACTION_MAP = {
   perfect: 'happy'
 };
 
+/**
+ * Speak a message using Web Speech API.
+ * @param {string} text - message to speak
+ */
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
+  utterance.volume = 0.8;
+  window.speechSynthesis.speak(utterance);
+}
+
 let hideTimer = null;
 
 /**
@@ -136,6 +151,9 @@ export function showBuddy(characterId, reaction) {
   img.src = `assets/characters/${character.file}`;
   img.alt = `${character.name} the ${character.type}`;
   msg.textContent = message;
+
+  /* Speak the message out loud */
+  speak(message);
 
   /* Set expression class (remove old ones first) */
   popup.classList.remove('happy', 'encouraging', 'thinking');
