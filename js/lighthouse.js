@@ -25,11 +25,16 @@ export function initLoadingAnimation() {
   setTimeout(() => {
     loader.classList.add('fade-out');
 
-    loader.addEventListener('transitionend', () => {
+    // Remove after fade-out completes (fallback timeout in case transitionend doesn't fire)
+    let removed = false;
+    const cleanup = () => {
+      if (removed) return;
+      removed = true;
       loader.remove();
-    }, { once: true });
-
-    sessionStorage.setItem(STORAGE_KEY, '1');
+      sessionStorage.setItem(STORAGE_KEY, '1');
+    };
+    loader.addEventListener('transitionend', cleanup, { once: true });
+    setTimeout(cleanup, 700);
   }, 2000);
 }
 

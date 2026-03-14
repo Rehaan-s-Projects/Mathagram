@@ -12,14 +12,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Replace these placeholder values with your real Firebase project config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyBU3VwkSJDbwBumJoRKz-7b6eHxvgfB_Ho",
+  authDomain: "mathagram-cb526.firebaseapp.com",
+  projectId: "mathagram-cb526",
+  storageBucket: "mathagram-cb526.firebasestorage.app",
+  messagingSenderId: "513288333441",
+  appId: "1:513288333441:web:909c16d06a8ed0b7208580"
 };
 
 const app = initializeApp(firebaseConfig);

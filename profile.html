@@ -235,6 +235,8 @@
 
   <!-- Scripts -->
   <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('');
     import { onAuthChange, getUserProfile, logOut } from './js/auth.js';
     import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
     import { setLighthouseLevel } from './js/lighthouse.js';
