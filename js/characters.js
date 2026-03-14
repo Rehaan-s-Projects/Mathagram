@@ -103,17 +103,51 @@ const REACTION_MAP = {
 };
 
 /**
- * Speak a message using Web Speech API.
- * @param {string} text - message to speak
+ * Voice settings per character — gives each a unique voice personality.
+ * pitch: 0.1 (deep) to 2.0 (high), rate: 0.5 (slow) to 2.0 (fast)
  */
-function speak(text) {
+const VOICE_SETTINGS = {
+  edam:    { pitch: 0.8,  rate: 0.9,  volume: 0.8 },  // Bear: warm, low, steady
+  steve:   { pitch: 1.2,  rate: 1.15, volume: 0.8 },  // Fox: quick, sly
+  james:   { pitch: 0.6,  rate: 0.85, volume: 0.9 },  // Strong man: deep, powerful
+  diego:   { pitch: 1.0,  rate: 1.0,  volume: 0.7 },  // Researcher: calm, measured
+  rita:    { pitch: 1.8,  rate: 1.2,  volume: 0.85 }, // Cat: HIGH pitch, playful
+  sam:     { pitch: 1.6,  rate: 1.3,  volume: 0.85 }, // Kid: high, energetic, fast
+  william: { pitch: 0.5,  rate: 0.75, volume: 0.8 },  // Old man: deep, slow, wise
+  gosia:   { pitch: 1.4,  rate: 1.05, volume: 0.8 }   // Girl: bright, friendly
+};
+
+/**
+ * Speak a message using Web Speech API with character-specific voice.
+ * @param {string} text - message to speak
+ * @param {string} characterId - character key for voice settings
+ */
+function speak(text, characterId) {
   if (!('speechSynthesis' in window)) return;
-  // Cancel any ongoing speech
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 1.0;
-  utterance.pitch = 1.0;
-  utterance.volume = 0.8;
+  const settings = VOICE_SETTINGS[characterId] || { pitch: 1.0, rate: 1.0, volume: 0.8 };
+
+  utterance.pitch = settings.pitch;
+  utterance.rate = settings.rate;
+  utterance.volume = settings.volume;
+
+  // Try to pick a fitting system voice
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    // Prefer female voice for Rita, Gosia, Sam; male for James, William, Edam
+    const preferFemale = ['rita', 'gosia', 'sam'].includes(characterId);
+    const filtered = voices.filter(v => v.lang.startsWith('en'));
+    if (filtered.length > 0) {
+      const match = filtered.find(v =>
+        preferFemale ? /female|samantha|karen|fiona|victoria|tessa/i.test(v.name) :
+                       /male|daniel|alex|tom|fred|ralph/i.test(v.name)
+      );
+      utterance.voice = match || filtered[0];
+    }
+  }
+
   window.speechSynthesis.speak(utterance);
 }
 
@@ -198,8 +232,8 @@ export function showBuddy(characterId, reaction) {
   popupImg.alt = `${character.name} the ${character.type}`;
   popupMsg.textContent = message;
 
-  /* Speak the message out loud */
-  speak(message);
+  /* Speak the message out loud with character-specific voice */
+  speak(message, characterId);
 
   popup.classList.remove('happy', 'encouraging', 'thinking');
   popup.classList.add(expression);
