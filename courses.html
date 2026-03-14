@@ -56,6 +56,7 @@
     .filter-btn[data-filter="science"].active { background: var(--color-science); border-color: var(--color-science); }
     .filter-btn[data-filter="data"].active { background: var(--color-data); border-color: var(--color-data); }
     .filter-btn[data-filter="logic"].active { background: var(--color-logic); border-color: var(--color-logic); }
+    .filter-btn[data-filter="language"].active { background: var(--color-language); border-color: var(--color-language); }
 
     /* Course cards enhanced */
     .courses-grid {
@@ -102,6 +103,7 @@
     .course-item[data-category="science"] .category-badge { background: var(--color-science); }
     .course-item[data-category="data"] .category-badge { background: var(--color-data); }
     .course-item[data-category="logic"] .category-badge { background: var(--color-logic); }
+    .course-item[data-category="language"] .category-badge { background: var(--color-language); }
 
     .course-item h3 {
       font-size: 1.15rem;
@@ -142,6 +144,7 @@
     .course-item[data-category="science"] .accent-bar { background: var(--color-science); }
     .course-item[data-category="data"] .accent-bar { background: var(--color-data); }
     .course-item[data-category="logic"] .accent-bar { background: var(--color-logic); }
+    .course-item[data-category="language"] .accent-bar { background: var(--color-language); }
 
     /* Hidden by filter */
     .course-item.hidden {
@@ -184,6 +187,7 @@
     <button class="filter-btn" data-filter="science">Science</button>
     <button class="filter-btn" data-filter="data">Data Analysis</button>
     <button class="filter-btn" data-filter="logic">Logic</button>
+    <button class="filter-btn" data-filter="language">Language</button>
   </div>
 
   <!-- Course Grid -->
@@ -421,6 +425,18 @@
       <div class="course-meta">
         <span>6 levels</span>
         <span>26 lessons</span>
+      </div>
+    </a>
+
+    <!-- LANGUAGE -->
+    <a href="course/ipa/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>International Phonetic Alphabet</h3>
+      <p>Master the universal system for transcribing speech sounds. Learn consonants, vowels, diacritics, and transcription.</p>
+      <div class="course-meta">
+        <span>9 units</span>
+        <span>36 lessons</span>
       </div>
     </a>
 
