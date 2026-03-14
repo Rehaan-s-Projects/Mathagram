@@ -142,6 +142,7 @@
     import { showBuddy } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange, getUserProfile } from '../../js/auth.js';
+    import { generateExercises } from '../../js/problem-generator.js';
 
     // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
@@ -167,54 +168,7 @@
       }
     });
 
-    const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'What does an integral measure?',
-        options: ['Rate of change', 'Accumulation of quantities', 'The slope of a line', 'The maximum value'],
-        correctIndex: 1
-      },
-      {
-        type: 'true-false',
-        question: 'The integral symbol was introduced by Newton.',
-        correctAnswer: false
-      },
-      {
-        type: 'fill-blank',
-        question: 'The function being integrated is called the ___.',
-        answer: 'integrand'
-      },
-      {
-        type: 'matching',
-        question: 'Match each term with its meaning.',
-        pairs: [
-          { left: 'Integral', right: 'Area under curve' },
-          { left: 'Derivative', right: 'Rate of change' },
-          { left: 'dx', right: 'With respect to x' },
-          { left: 'Integrand', right: 'f(x)' }
-        ]
-      },
-      {
-        type: 'ordering',
-        question: 'Put the parts of integral notation in the correct order.',
-        correctOrder: [
-          'Write the integral sign \u222B',
-          'Write the function f(x)',
-          'Write dx'
-        ],
-        shuffled: [
-          'Write dx',
-          'Write the integral sign \u222B',
-          'Write the function f(x)'
-        ]
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What does dx indicate in \u222Bf(x)dx?',
-        options: ['Multiply by d', 'Integrating with respect to x', 'The derivative of x', 'A constant'],
-        correctIndex: 1
-      }
-    ];
+    const exercises = generateExercises(\'integrals\', 6);
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

@@ -160,6 +160,7 @@
     import { showBuddy } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange, getUserProfile } from '../../js/auth.js';
+    import { generateExercises } from '../../js/problem-generator.js';
 
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
@@ -183,66 +184,7 @@
       }
     });
 
-    const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'What is an antiderivative of f(x)?',
-        options: [
-          'A function F(x) where F\'(x) = f(x)',
-          'The slope of f(x)',
-          'The limit of f(x)',
-          'The maximum of f(x)'
-        ],
-        correctIndex: 0
-      },
-      {
-        type: 'fill-blank',
-        question: '\u222Bx\u00B3 dx = ___',
-        answer: 'x^4/4 + C'
-      },
-      {
-        type: 'true-false',
-        question: 'The constant C is needed because the derivative of any constant is zero.',
-        correctAnswer: true
-      },
-      {
-        type: 'matching',
-        question: 'Match each function with its indefinite integral.',
-        pairs: [
-          { left: 'x\u00B2', right: 'x\u00B3/3 + C' },
-          { left: 'sin x', right: '\u2212cos x + C' },
-          { left: 'e\u02E3', right: 'e\u02E3 + C' },
-          { left: '1/x', right: 'ln|x| + C' }
-        ]
-      },
-      {
-        type: 'ordering',
-        question: 'Put the steps to integrate 3x\u00B2 + 2x \u2212 5 in order.',
-        correctOrder: [
-          'Split into separate integrals',
-          'Apply power rule to each term',
-          'Add constant of integration C',
-          'Simplify'
-        ],
-        shuffled: [
-          'Add constant of integration C',
-          'Simplify',
-          'Split into separate integrals',
-          'Apply power rule to each term'
-        ]
-      },
-      {
-        type: 'multiple-choice',
-        question: 'Why do we add + C to indefinite integrals?',
-        options: [
-          'Because the integral is always positive',
-          'Because infinitely many antiderivatives differ by a constant',
-          'Because C represents the x-intercept',
-          'Because it makes the formula balanced'
-        ],
-        correctIndex: 1
-      }
-    ];
+    const exercises = generateExercises(\'integrals\', 6);
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

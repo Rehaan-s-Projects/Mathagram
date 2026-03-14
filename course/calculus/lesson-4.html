@@ -157,6 +157,7 @@
     import { showBuddy } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange, getUserProfile } from '../../js/auth.js';
+    import { generateExercises } from '../../js/problem-generator.js';
 
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
@@ -180,68 +181,7 @@
       }
     });
 
-    const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'U-substitution is the integration counterpart of which derivative rule?',
-        options: [
-          'Product rule',
-          'Quotient rule',
-          'Chain rule',
-          'Power rule'
-        ],
-        correctIndex: 2
-      },
-      {
-        type: 'fill-blank',
-        question: 'If u = x\u00B2, then du = ___',
-        answer: '2x dx'
-      },
-      {
-        type: 'true-false',
-        question: 'After integrating with u, you must substitute back to the original variable.',
-        correctAnswer: true
-      },
-      {
-        type: 'matching',
-        question: 'Match each substitution with the integral it simplifies.',
-        pairs: [
-          { left: 'u = x\u00B2', right: '\u222B2x\u00B7e^(x\u00B2) dx' },
-          { left: 'u = sin x', right: '\u222Bcos x \u00B7 f(sin x) dx' },
-          { left: 'u = 3x+1', right: '\u222Bf(3x+1)\u00B73 dx' },
-          { left: 'u = ln x', right: '\u222Bf(ln x)/x dx' }
-        ]
-      },
-      {
-        type: 'ordering',
-        question: 'Order the steps for u-substitution.',
-        correctOrder: [
-          'Choose u = g(x)',
-          'Find du = g\'(x)dx',
-          'Substitute u and du into integral',
-          'Integrate with respect to u',
-          'Substitute back original variable'
-        ],
-        shuffled: [
-          'Integrate with respect to u',
-          'Choose u = g(x)',
-          'Substitute back original variable',
-          'Substitute u and du into integral',
-          'Find du = g\'(x)dx'
-        ]
-      },
-      {
-        type: 'multiple-choice',
-        question: '\u222B2x\u00B7e^(x\u00B2) dx = ?',
-        options: [
-          'x\u00B2\u00B7e^(x\u00B2) + C',
-          'e^(x\u00B2) + C',
-          '2e^(x\u00B2) + C',
-          'e^(2x) + C'
-        ],
-        correctIndex: 1
-      }
-    ];
+    const exercises = generateExercises(\'integrals\', 6);
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

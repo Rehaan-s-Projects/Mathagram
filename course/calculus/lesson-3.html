@@ -155,6 +155,7 @@
     import { showBuddy } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange, getUserProfile } from '../../js/auth.js';
+    import { generateExercises } from '../../js/problem-generator.js';
 
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
@@ -178,66 +179,7 @@
       }
     });
 
-    const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'What does a definite integral compute?',
-        options: [
-          'The derivative of a function',
-          'The net area between the curve and x-axis',
-          'The maximum value of a function',
-          'The slope at a point'
-        ],
-        correctIndex: 1
-      },
-      {
-        type: 'fill-blank',
-        question: '\u222B\u2081\u00B3 2x dx = ___',
-        answer: '8'
-      },
-      {
-        type: 'true-false',
-        question: 'Definite integrals always give a positive value.',
-        correctAnswer: false
-      },
-      {
-        type: 'matching',
-        question: 'Match each concept with its description.',
-        pairs: [
-          { left: 'F(b) \u2212 F(a)', right: 'Fundamental Theorem' },
-          { left: 'Net area', right: 'Area above minus below x-axis' },
-          { left: 'Upper bound', right: 'b' },
-          { left: 'Lower bound', right: 'a' }
-        ]
-      },
-      {
-        type: 'ordering',
-        question: 'Order the steps to evaluate a definite integral.',
-        correctOrder: [
-          'Find antiderivative F(x)',
-          'Plug in upper bound b',
-          'Plug in lower bound a',
-          'Subtract F(a) from F(b)'
-        ],
-        shuffled: [
-          'Subtract F(a) from F(b)',
-          'Plug in upper bound b',
-          'Find antiderivative F(x)',
-          'Plug in lower bound a'
-        ]
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What does F(b) \u2212 F(a) represent?',
-        options: [
-          'The derivative of f at b',
-          'The slope between a and b',
-          'The net area under f(x) from a to b',
-          'The average value of f(x)'
-        ],
-        correctIndex: 2
-      }
-    ];
+    const exercises = generateExercises(\'integrals\', 6);
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
