@@ -26,6 +26,7 @@
     .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
     .lesson-card:hover { background: rgba(0,0,0,0.03); }
     .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
+    .lesson-card[data-available="true"] .lesson-dot { background: var(--color-math); }
     .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
     .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
     @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
@@ -65,16 +66,14 @@
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
+        <a href="lesson-1.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
           <span class="lesson-title">Lesson 1: Degree &amp; Radian Measure</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
+        </a>
+        <a href="lesson-2.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
           <span class="lesson-title">Lesson 2: Converting Between Units</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
+        </a>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
           <span class="lesson-title">Lesson 3: Arc Length &amp; Sector Area</span>
@@ -104,11 +103,10 @@
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
+        <a href="lesson-4.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
           <span class="lesson-title">Lesson 6: Types of Triangles</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
+        </a>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
           <span class="lesson-title">Lesson 7: Triangle Angle Sum Theorem</span>
@@ -143,11 +141,10 @@
         <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
+        <a href="lesson-3.html" class="lesson-card" data-available="true">
+          <span class="lesson-dot available"></span>
           <span class="lesson-title">Lesson 11: SOH-CAH-TOA</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
+        </a>
         <div class="lesson-card">
           <span class="lesson-dot"></span>
           <span class="lesson-title">Lesson 12: Finding Missing Sides</span>
