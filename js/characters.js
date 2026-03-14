@@ -184,3 +184,12 @@ export function getAllCharacters() {
     messages: data.messages
   }));
 }
+
+/**
+ * Pick a random character ID from the 8 available characters.
+ * @returns {string} character ID (e.g., 'edam', 'steve', 'rita')
+ */
+export function randomCharacterId() {
+  const ids = Object.keys(CHARACTERS);
+  return ids[Math.floor(Math.random() * ids.length)];
+}

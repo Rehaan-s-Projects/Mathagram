@@ -168,9 +168,9 @@
     import { initNav } from '../../js/nav.js';
     initNav('../../');
     import { runExerciseSet } from '../../js/exercises.js';
-    import { showBuddy } from '../../js/characters.js';
+    import { showBuddy, randomCharacterId } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
-    import { onAuthChange, getUserProfile } from '../../js/auth.js';
+    import { onAuthChange } from '../../js/auth.js';
 
     // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
@@ -186,15 +186,6 @@
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Get user character
-    let userCharacter = 'edam';
-    onAuthChange(async (user) => {
-      if (user) {
-        const profile = await getUserProfile();
-        if (profile) userCharacter = profile.character || 'edam';
-      }
-    });
 
     const exercises = [
       {
@@ -241,7 +232,7 @@
     const completionDiv = document.getElementById('completion');
 
     const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy(userCharacter, isCorrect ? 'correct' : 'wrong');
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
     });
 
     // Show completion
