@@ -5,6 +5,56 @@
 
 import { sanitizeHTML, sanitizeAnswer } from "./sanitize.js";
 
+/**
+ * Speak text aloud using Web Speech API (for question read-aloud).
+ * Uses a neutral voice for questions (not character-specific).
+ */
+function speakQuestion(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  // Strip KaTeX/math notation for cleaner speech
+  const clean = text.replace(/\\\(.*?\\\)/g, 'math expression')
+                     .replace(/\$\$.*?\$\$/g, 'math expression')
+                     .replace(/\\displaystyle/g, '')
+                     .replace(/\\[a-zA-Z]+/g, '')
+                     .replace(/[{}]/g, '')
+                     .replace(/\s+/g, ' ')
+                     .trim();
+  if (!clean) return;
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.volume = 0.7;
+  window.speechSynthesis.speak(utterance);
+}
+
+/**
+ * Show Brilliant-style feedback banner after answering.
+ * @param {HTMLElement} container - exercise container
+ * @param {boolean} isCorrect
+ * @param {string} [correctAnswer] - shown when wrong
+ */
+function showFeedbackBanner(container, isCorrect, correctAnswer) {
+  // Remove any existing banner
+  const old = container.querySelector('.feedback-banner');
+  if (old) old.remove();
+
+  const banner = el('div', `feedback-banner ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`);
+
+  const icon = el('span', 'feedback-icon', isCorrect ? '\u2714' : '\u2718');
+  const msg = el('div', 'feedback-msg');
+
+  if (isCorrect) {
+    msg.innerHTML = '<strong>Correct!</strong> Great work.';
+  } else {
+    msg.innerHTML = '<strong>Incorrect.</strong>' + (correctAnswer ? ' The answer is <strong>' + sanitizeHTML(correctAnswer) + '</strong>.' : ' Try to remember this for next time.');
+  }
+
+  banner.appendChild(icon);
+  banner.appendChild(msg);
+  container.appendChild(banner);
+}
+
 /* ============================================================
    Utility helpers
    ============================================================ */
@@ -291,9 +341,27 @@ export function renderExercise(container, exercise, onAnswer) {
   question.innerHTML = sanitizeHTML(exercise.question);
   container.appendChild(question);
 
+  // Read the question aloud
+  speakQuestion(exercise.question);
+
   const render = renderers[exercise.type];
   if (render) {
-    render(container, exercise, onAnswer);
+    // Wrap onAnswer to add feedback banner
+    const wrappedOnAnswer = (isCorrect) => {
+      let correctAnswer = null;
+      if (!isCorrect) {
+        if (exercise.type === 'multiple-choice' && exercise.options) {
+          correctAnswer = exercise.options[exercise.correctIndex];
+        } else if (exercise.type === 'fill-blank') {
+          correctAnswer = exercise.answer;
+        } else if (exercise.type === 'true-false') {
+          correctAnswer = exercise.correctAnswer ? 'True' : 'False';
+        }
+      }
+      showFeedbackBanner(container, isCorrect, correctAnswer);
+      onAnswer(isCorrect);
+    };
+    render(container, exercise, wrappedOnAnswer);
   } else {
     container.appendChild(
       el("p", "exercise-error", "Unknown exercise type: " + exercise.type)
