@@ -45,7 +45,30 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "ipa-introduction", "title": "IPA Introduction", "unit": "Consonants", "href": "#"}, {"id": "reading-symbols", "title": "Reading Symbols", "unit": "Consonants", "href": "#"}, {"id": "consonants-place", "title": "Consonants Place", "unit": "Consonants", "href": "#"}, {"id": "consonants-manner", "title": "Consonants Manner", "unit": "Consonants", "href": "#"}, {"id": "voicing", "title": "Voicing", "unit": "Consonants", "href": "#", "checkpoint": true}, {"id": "front-vowels", "title": "Front Vowels", "unit": "Vowels", "href": "#"}, {"id": "back-vowels", "title": "Back Vowels", "unit": "Vowels", "href": "#"}, {"id": "diphthongs", "title": "Diphthongs", "unit": "Vowels", "href": "#", "checkpoint": true}, {"id": "stress", "title": "Stress", "unit": "Prosody", "href": "#"}, {"id": "intonation", "title": "Intonation", "unit": "Prosody", "href": "#"}, {"id": "tone", "title": "Tone", "unit": "Prosody", "href": "#", "checkpoint": true}, {"id": "diacritics", "title": "Diacritics", "unit": "Mastery", "href": "#"}, {"id": "english-transcription", "title": "English Transcription", "unit": "Mastery", "href": "#"}, {"id": "accents", "title": "Accents", "unit": "Mastery", "href": "#"}, {"id": "ipa-mastery", "title": "IPA Mastery!", "unit": "Mastery", "href": "#", "checkpoint": true}];
+    const units = [
+      [1, 'IPA Foundations', ['What Is the IPA?', 'History of the International Phonetic Alphabet', 'Why Learn the IPA?', 'Reading IPA Charts', 'Broad vs Narrow Transcription', 'Phonemes vs Allophones', 'Using Square Brackets vs Slashes', 'IPA Foundations Checkpoint']],
+      [2, 'Pulmonic Consonants — Place', ['Bilabial Consonants — p, b, m', 'Labiodental — f, v', 'Dental — θ, ð', 'Alveolar — t, d, n, s, z, l, r', 'Postalveolar — ʃ, ʒ, tʃ, dʒ', 'Retroflex — ʈ, ɖ, ɳ, ɽ', 'Palatal — c, ɟ, ɲ, j', 'Velar — k, ɡ, ŋ, x, ɣ', 'Uvular — q, ɢ, ɴ, ʀ', 'Place of Articulation Checkpoint']],
+      [3, 'Pulmonic Consonants — Manner', ['Plosives (Stops) — p, t, k, b, d, ɡ', 'Nasals — m, n, ŋ, ɲ, ɴ', 'Trills — r, ʀ, ʙ', 'Taps & Flaps — ɾ, ɽ', 'Fricatives — f, v, s, z, ʃ, ʒ, x, h', 'Lateral Fricatives — ɬ, ɮ', 'Approximants — ɹ, j, w, ɰ', 'Lateral Approximants — l, ɭ, ʎ, ʟ', 'Manner of Articulation Checkpoint']],
+      [4, 'Non-Pulmonic Consonants', ['Clicks — ǀ, ǃ, ǂ, ǁ', 'Implosives — ɓ, ɗ, ʄ, ɠ, ʛ', 'Ejectives — p\', t\', k\', s\'', 'Clicks in Zulu & Xhosa', 'Implosives in Sindhi & Hausa', 'Ejectives in Georgian & Amharic', 'Glottal Stop & Pharyngeals', 'Non-Pulmonic Consonants Checkpoint']],
+      [5, 'Voicing & Airstream', ['Voiced vs Voiceless Distinction', 'Aspiration — pʰ, tʰ, kʰ', 'Breathy Voice & Creaky Voice', 'Voice Onset Time (VOT)', 'Prenasalized Stops', 'Geminate Consonants', 'Airstream Mechanisms Overview', 'Voicing & Airstream Checkpoint']],
+      [6, 'Front & Central Vowels', ['Close Front — i, y', 'Near-Close Front — ɪ, ʏ', 'Close-Mid Front — e, ø', 'Open-Mid Front — ɛ, œ', 'Near-Open & Open Front — æ, a, ɶ', 'Central Vowels — ə, ɐ, ɜ, ɨ, ʉ', 'The Schwa — The Most Common Vowel', 'Front & Central Vowels Checkpoint']],
+      [7, 'Back Vowels & Diphthongs', ['Close Back — u, ɯ', 'Near-Close & Close-Mid Back — ʊ, o, ɤ', 'Open-Mid & Open Back — ɔ, ʌ, ɑ, ɒ', 'Rounded vs Unrounded Back Vowels', 'Diphthongs — aɪ, aʊ, eɪ, oʊ, ɔɪ', 'Triphthongs', 'Back Vowels & Diphthongs Checkpoint']],
+      [8, 'Vowel Features', ['The IPA Vowel Trapezoid', 'Tongue Height — Close to Open', 'Tongue Position — Front to Back', 'Lip Rounding', 'Nasalized Vowels — ã, ẽ, õ', 'Long vs Short Vowels — ː', 'Vowel Reduction & Harmony', 'Vowel Features Checkpoint']],
+      [9, 'Suprasegmentals — Stress', ['Primary & Secondary Stress Marks', 'Word Stress in English', 'Stress in Spanish & Italian', 'Stress in Russian — Unpredictable', 'Stress-Timed vs Syllable-Timed Languages', 'Contrastive Stress & Meaning', 'Stress & Vowel Quality Changes', 'Stress Checkpoint']],
+      [10, 'Suprasegmentals — Tone & Intonation', ['Tone Languages Overview', 'Mandarin Tones — 4 + Neutral', 'Cantonese — 6 Tones', 'Thai — 5 Tones', 'African Tone Systems — Yoruba & Igbo', 'Tone Marks in IPA — ˥˦˧˨˩', 'Intonation in English — Rising & Falling', 'Tone & Intonation Checkpoint']],
+      [11, 'Diacritics', ['Voiceless & Voiced Diacritics', 'Aspirated & Dental Marks', 'Nasalization & Syllabicity', 'Rhoticity — ɚ, ɝ', 'Labialization & Palatalization', 'Velarization & Pharyngealization', 'Advanced & Retracted Tongue Root', 'Combining Multiple Diacritics', 'Diacritics Checkpoint']],
+      [12, 'Transcribing English', ['RP (Received Pronunciation) Transcription', 'General American Transcription', 'Australian English Transcription', 'Scottish & Irish English Features', 'South African & Indian English', 'Cockney & Estuary English', 'Comparing English Accents in IPA', 'Transcribing English Checkpoint']],
+      [13, 'Transcribing World Languages', ['French Transcription', 'German Transcription', 'Spanish Transcription', 'Mandarin Chinese Transcription', 'Japanese Transcription', 'Arabic Transcription', 'Hindi & Russian Transcription', 'World Languages Checkpoint']],
+      [14, 'IPA Mastery & Practice', ['Transcription from Audio', 'Reverse Transcription — IPA to Sound', 'Minimal Pair Identification', 'Cross-Language Comparison', 'IPA in Dictionaries & Resources', 'IPA for Singing & Voice Acting', 'IPA in Speech Therapy', 'Cumulative Transcription Challenge', 'IPA Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ipa-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
