@@ -51,36 +51,60 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const lessons = [
+      /* ── Unit 1: Atomic Structure ── */
       { id: 'lesson-1', title: 'Atomic Models & Isotopes', href: 'lesson-1.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
       { id: 'lesson-2', title: 'Electron Configuration', href: 'lesson-2.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
       { id: 'lesson-3', title: 'Periodic Trends', href: 'lesson-3.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
       { id: 'lesson-4', title: 'Quantum Numbers', href: 'lesson-4.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
       { id: 'lesson-5', title: 'Photoelectron Spectroscopy', href: 'lesson-5.html', unit: 1, unitName: 'Atomic Structure', category: 'science', checkpoint: true },
+      /* ── Unit 2: Bonding ── */
       { id: 'lesson-6', title: 'Lewis Structures', href: 'lesson-6.html', unit: 2, unitName: 'Bonding', category: 'science' },
       { id: 'lesson-7', title: 'VSEPR & Geometry', href: 'lesson-7.html', unit: 2, unitName: 'Bonding', category: 'science' },
       { id: 'ch-8', title: 'Ionic vs Covalent', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
       { id: 'ch-9', title: 'Formal Charge', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
       { id: 'ch-10', title: 'Resonance Structures', href: '#', unit: 2, unitName: 'Bonding', category: 'science', checkpoint: true },
+      /* ── Unit 3: Intermolecular Forces ── */
       { id: 'ch-11', title: 'Types of IMFs', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
       { id: 'ch-12', title: 'States of Matter', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
-      { id: 'ch-13', title: 'Solubility Rules', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science', checkpoint: true },
-      { id: 'ch-14', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-15', title: 'Types of Reactions', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-16', title: 'Oxidation-Reduction', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-17', title: 'Stoichiometry', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science', checkpoint: true },
-      { id: 'ch-18', title: 'Reaction Rates', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-19', title: 'Rate Laws', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-20', title: 'Half-Life', href: '#', unit: 5, unitName: 'Kinetics', category: 'science', checkpoint: true },
-      { id: 'ch-21', title: 'Enthalpy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
-      { id: 'ch-22', title: 'Hess\'s Law', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
-      { id: 'ch-23', title: 'Gibbs Free Energy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science', checkpoint: true },
-      { id: 'ch-24', title: 'Equilibrium Constants', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-25', title: 'Le Chatelier\'s Principle', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-26', title: 'ICE Tables', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science', checkpoint: true },
-      { id: 'ch-27', title: 'pH & Strong Acids', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-28', title: 'Weak Acids & Buffers', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-29', title: 'Titrations', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science', checkpoint: true },
-      { id: 'ch-30', title: 'AP Chemistry Mastery!', href: '#', unit: 9, unitName: 'Electrochemistry', category: 'science', checkpoint: true },
+      { id: 'ch-13', title: 'Vapor Pressure & Boiling Point', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
+      { id: 'ch-14', title: 'Chromatography & Separation', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
+      { id: 'ch-15', title: 'Solubility Rules', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science', checkpoint: true },
+      /* ── Unit 4: Chemical Reactions ── */
+      { id: 'ch-16', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-17', title: 'Types of Reactions', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-18', title: 'Net Ionic Equations', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-19', title: 'Oxidation-Reduction', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-20', title: 'Activity Series', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science', checkpoint: true },
+      /* ── Unit 5: Kinetics ── */
+      { id: 'ch-21', title: 'Reaction Rates', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-22', title: 'Rate Laws & Order', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-23', title: 'Catalysts & Mechanisms', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-24', title: 'Integrated Rate Laws', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-25', title: 'Half-Life Calculations', href: '#', unit: 5, unitName: 'Kinetics', category: 'science', checkpoint: true },
+      /* ── Unit 6: Thermodynamics ── */
+      { id: 'ch-26', title: 'Endothermic & Exothermic', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
+      { id: 'ch-27', title: 'Hess\'s Law & Enthalpy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
+      { id: 'ch-28', title: 'Entropy & Gibbs Free Energy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
+      { id: 'ch-29', title: 'Calorimetry', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
+      { id: 'ch-30', title: 'Bond Energies', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science', checkpoint: true },
+      /* ── Unit 7: Equilibrium ── */
+      { id: 'ch-31', title: 'Dynamic Equilibrium', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-32', title: 'Equilibrium Constants', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-33', title: 'Le Chatelier\'s Principle', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-34', title: 'ICE Tables', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-35', title: 'Ksp & Solubility Product', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science', checkpoint: true },
+      /* ── Unit 8: Acids & Bases ── */
+      { id: 'ch-36', title: 'pH & Strong Acids/Bases', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-37', title: 'Weak Acids & Buffers', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-38', title: 'Titrations', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-39', title: 'Ka & Kb Calculations', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-40', title: 'Polyprotic Acids', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science', checkpoint: true },
+      /* ── Unit 9: Applications of Thermo ── */
+      { id: 'ch-41', title: 'Galvanic Cells', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
+      { id: 'ch-42', title: 'Electrolysis', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
+      { id: 'ch-43', title: 'Free Energy & Electrochemistry', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
+      { id: 'ch-44', title: 'Cell Potential & Reduction Potentials', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
+      { id: 'ch-45', title: 'Faraday\'s Law', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science', checkpoint: true },
     ];
 
     async function loadPath() {
