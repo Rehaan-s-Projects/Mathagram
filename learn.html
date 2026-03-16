@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Path — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/learning-path.css">
+  <style>
+    .learn-header {
+      padding: 80px 24px 16px;
+      text-align: center;
+    }
+    .learn-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .learn-header p {
+      font-size: 1.1rem;
+      color: var(--color-text-secondary);
+      max-width: 500px;
+      margin: 0 auto 24px;
+    }
+
+    /* Path selector tabs */
+    .path-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 0 24px 32px;
+    }
+    .path-tab {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 2px solid var(--color-border);
+      border-radius: 999px;
+      background: var(--color-white);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .path-tab:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
+    .path-tab.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="courses.html">Courses</a>
+        <a href="learn.html" style="color: var(--color-primary-dark); font-weight: 600;">Learn</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="login.html" data-auth="login">Login</a>
+        <a href="login.html" data-auth="signup">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="learn-header">
+    <h1>Learning Path</h1>
+    <p>Follow the path, lesson by lesson. Complete each to unlock the next — just like Duolingo.</p>
+  </header>
+
+  <!-- Path selector -->
+  <div class="path-tabs">
+    <button class="path-tab active" data-path="calculus">Calculus</button>
+    <button class="path-tab" data-path="algebra">Algebra</button>
+    <button class="path-tab" data-path="trigonometry">Trigonometry</button>
+    <button class="path-tab" data-path="ap-chemistry">AP Chemistry</button>
+    <button class="path-tab" data-path="ap-statistics">AP Statistics</button>
+  </div>
+
+  <!-- Path container -->
+  <div id="learning-path" class="path-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="24" height="24" style="display:inline-block;vertical-align:middle;margin-right:6px;">
+        <span>Mathagram</span>
+      </div>
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('');
+    import { renderPath, getCompletedLessons } from './js/learning-path.js';
+    import { onAuthChange } from './js/auth.js';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Define learning paths for each course (first 20 lessons as the path)
+    const paths = {
+      calculus: [
+        { id: 'lesson-5', title: 'Limits by Direct Evaluation', href: 'course/calculus/lesson-5.html', unit: 1, unitName: 'Limits', category: 'math' },
+        { id: 'lesson-6', title: 'Jump Discontinuities', href: 'course/calculus/lesson-6.html', unit: 1, unitName: 'Limits', category: 'math' },
+        { id: 'lesson-7', title: 'Squeeze Theorem', href: 'course/calculus/lesson-7.html', unit: 1, unitName: 'Limits', category: 'math' },
+        { id: 'c-4', title: 'Limits at Infinity', href: '#', unit: 1, unitName: 'Limits', category: 'math' },
+        { id: 'c-5', title: 'Continuity', href: '#', unit: 1, unitName: 'Limits', category: 'math', checkpoint: true },
+        { id: 'lesson-8', title: 'Definition of the Derivative', href: 'course/calculus/lesson-8.html', unit: 2, unitName: 'Differentiation', category: 'math' },
+        { id: 'lesson-9', title: 'Power, Constant & Sum Rules', href: 'course/calculus/lesson-9.html', unit: 2, unitName: 'Differentiation', category: 'math' },
+        { id: 'c-8', title: 'Product Rule', href: '#', unit: 2, unitName: 'Differentiation', category: 'math' },
+        { id: 'c-9', title: 'Quotient Rule', href: '#', unit: 2, unitName: 'Differentiation', category: 'math' },
+        { id: 'c-10', title: 'Chain Rule', href: '#', unit: 2, unitName: 'Differentiation', category: 'math', checkpoint: true },
+        { id: 'lesson-1', title: 'What Are Integrals', href: 'course/calculus/lesson-1.html', unit: 3, unitName: 'Integration', category: 'math' },
+        { id: 'lesson-2', title: 'Indefinite Integrals', href: 'course/calculus/lesson-2.html', unit: 3, unitName: 'Integration', category: 'math' },
+        { id: 'lesson-3', title: 'Definite Integrals', href: 'course/calculus/lesson-3.html', unit: 3, unitName: 'Integration', category: 'math' },
+        { id: 'lesson-4', title: 'U-Substitution', href: 'course/calculus/lesson-4.html', unit: 3, unitName: 'Integration', category: 'math' },
+        { id: 'c-15', title: 'Integration by Parts', href: '#', unit: 3, unitName: 'Integration', category: 'math', checkpoint: true },
+        { id: 'c-16', title: 'Area Between Curves', href: '#', unit: 4, unitName: 'Applications', category: 'math' },
+        { id: 'c-17', title: 'Volume — Disk Method', href: '#', unit: 4, unitName: 'Applications', category: 'math' },
+        { id: 'c-18', title: 'Volume — Shell Method', href: '#', unit: 4, unitName: 'Applications', category: 'math' },
+        { id: 'c-19', title: 'Differential Equations', href: '#', unit: 4, unitName: 'Applications', category: 'math' },
+        { id: 'c-20', title: 'Calculus Mastery!', href: '#', unit: 4, unitName: 'Applications', category: 'math', checkpoint: true },
+      ],
+      algebra: [
+        { id: 'a-1', title: 'Variables & Expressions', href: '#', unit: 1, unitName: 'Foundations', category: 'math' },
+        { id: 'a-2', title: 'Order of Operations', href: '#', unit: 1, unitName: 'Foundations', category: 'math' },
+        { id: 'a-3', title: 'Properties of Numbers', href: '#', unit: 1, unitName: 'Foundations', category: 'math' },
+        { id: 'a-4', title: 'Integers Review', href: '#', unit: 1, unitName: 'Foundations', category: 'math' },
+        { id: 'a-5', title: 'Fractions & Decimals', href: '#', unit: 1, unitName: 'Foundations', category: 'math', checkpoint: true },
+        { id: 'a-6', title: 'One-Step Equations', href: '#', unit: 2, unitName: 'Solving Equations', category: 'math' },
+        { id: 'a-7', title: 'Two-Step Equations', href: '#', unit: 2, unitName: 'Solving Equations', category: 'math' },
+        { id: 'a-8', title: 'Multi-Step Equations', href: '#', unit: 2, unitName: 'Solving Equations', category: 'math' },
+        { id: 'a-9', title: 'Variables on Both Sides', href: '#', unit: 2, unitName: 'Solving Equations', category: 'math' },
+        { id: 'a-10', title: 'Word Problems', href: '#', unit: 2, unitName: 'Solving Equations', category: 'math', checkpoint: true },
+        { id: 'a-11', title: 'Slope & Rate of Change', href: '#', unit: 3, unitName: 'Linear Equations', category: 'math' },
+        { id: 'a-12', title: 'Slope-Intercept Form', href: '#', unit: 3, unitName: 'Linear Equations', category: 'math' },
+        { id: 'a-13', title: 'Graphing Linear Equations', href: '#', unit: 3, unitName: 'Linear Equations', category: 'math' },
+        { id: 'a-14', title: 'Systems by Graphing', href: '#', unit: 3, unitName: 'Linear Equations', category: 'math' },
+        { id: 'a-15', title: 'Systems by Substitution', href: '#', unit: 3, unitName: 'Linear Equations', category: 'math', checkpoint: true },
+        { id: 'a-16', title: 'Exponent Rules', href: '#', unit: 4, unitName: 'Polynomials', category: 'math' },
+        { id: 'a-17', title: 'Multiplying Polynomials', href: '#', unit: 4, unitName: 'Polynomials', category: 'math' },
+        { id: 'a-18', title: 'Factoring', href: '#', unit: 4, unitName: 'Polynomials', category: 'math' },
+        { id: 'a-19', title: 'Quadratic Formula', href: '#', unit: 4, unitName: 'Polynomials', category: 'math' },
+        { id: 'a-20', title: 'Algebra Mastery!', href: '#', unit: 4, unitName: 'Polynomials', category: 'math', checkpoint: true },
+      ],
+      trigonometry: [
+        { id: 't-1', title: 'Degrees & Radians', href: 'course/trigonometry/lesson-1.html', unit: 1, unitName: 'Angles', category: 'math' },
+        { id: 't-2', title: 'Angle Types', href: 'course/trigonometry/lesson-2.html', unit: 1, unitName: 'Angles', category: 'math' },
+        { id: 't-3', title: 'Types of Triangles', href: 'course/trigonometry/lesson-4.html', unit: 2, unitName: 'Triangle Geometry', category: 'math' },
+        { id: 't-4', title: 'Triangle Angle Sum', href: '#', unit: 2, unitName: 'Triangle Geometry', category: 'math' },
+        { id: 't-5', title: 'Area of a Triangle', href: '#', unit: 2, unitName: 'Triangle Geometry', category: 'math', checkpoint: true },
+        { id: 't-6', title: 'SOH-CAH-TOA', href: 'course/trigonometry/lesson-3.html', unit: 3, unitName: 'Right Triangle Trig', category: 'math' },
+        { id: 't-7', title: 'Finding Missing Sides', href: '#', unit: 3, unitName: 'Right Triangle Trig', category: 'math' },
+        { id: 't-8', title: 'Cosecant (csc)', href: '#', unit: 3, unitName: 'Right Triangle Trig', category: 'math' },
+        { id: 't-9', title: 'Secant (sec)', href: '#', unit: 3, unitName: 'Right Triangle Trig', category: 'math' },
+        { id: 't-10', title: 'Cotangent (cot)', href: '#', unit: 3, unitName: 'Right Triangle Trig', category: 'math', checkpoint: true },
+        { id: 't-11', title: 'The Unit Circle', href: '#', unit: 4, unitName: 'Unit Circle', category: 'math' },
+        { id: 't-12', title: 'Reference Angles', href: '#', unit: 4, unitName: 'Unit Circle', category: 'math' },
+        { id: 't-13', title: 'Graphing Sin & Cos', href: '#', unit: 5, unitName: 'Graphing', category: 'math' },
+        { id: 't-14', title: 'Amplitude & Period', href: '#', unit: 5, unitName: 'Graphing', category: 'math' },
+        { id: 't-15', title: 'Trig Identities', href: '#', unit: 6, unitName: 'Identities', category: 'math', checkpoint: true },
+        { id: 't-16', title: 'Law of Sines', href: '#', unit: 7, unitName: 'Laws', category: 'math' },
+        { id: 't-17', title: 'Law of Cosines', href: '#', unit: 7, unitName: 'Laws', category: 'math' },
+        { id: 't-18', title: 'Inverse Trig', href: '#', unit: 8, unitName: 'Inverse Functions', category: 'math' },
+        { id: 't-19', title: 'Polar Coordinates', href: '#', unit: 9, unitName: 'Polar', category: 'math' },
+        { id: 't-20', title: 'Trig Mastery!', href: '#', unit: 9, unitName: 'Polar', category: 'math', checkpoint: true },
+      ],
+      'ap-chemistry': [
+        { id: 'lesson-1', title: 'Atomic Models & Isotopes', href: 'course/ap-chemistry/lesson-1.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+        { id: 'lesson-2', title: 'Electron Configuration', href: 'course/ap-chemistry/lesson-2.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+        { id: 'lesson-3', title: 'Periodic Trends', href: 'course/ap-chemistry/lesson-3.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+        { id: 'lesson-4', title: 'Quantum Numbers', href: 'course/ap-chemistry/lesson-4.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+        { id: 'lesson-5', title: 'Photoelectron Spectroscopy', href: 'course/ap-chemistry/lesson-5.html', unit: 1, unitName: 'Atomic Structure', category: 'science', checkpoint: true },
+        { id: 'lesson-6', title: 'Lewis Structures', href: 'course/ap-chemistry/lesson-6.html', unit: 2, unitName: 'Bonding', category: 'science' },
+        { id: 'lesson-7', title: 'VSEPR & Molecular Geometry', href: 'course/ap-chemistry/lesson-7.html', unit: 2, unitName: 'Bonding', category: 'science' },
+        { id: 'ch-8', title: 'Ionic vs Covalent', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
+        { id: 'ch-9', title: 'Formal Charge', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
+        { id: 'ch-10', title: 'Resonance Structures', href: '#', unit: 2, unitName: 'Bonding', category: 'science', checkpoint: true },
+        { id: 'ch-11', title: 'Intermolecular Forces', href: '#', unit: 3, unitName: 'IMFs & States', category: 'science' },
+        { id: 'ch-12', title: 'States of Matter', href: '#', unit: 3, unitName: 'IMFs & States', category: 'science' },
+        { id: 'ch-13', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Reactions', category: 'science' },
+        { id: 'ch-14', title: 'Stoichiometry', href: '#', unit: 4, unitName: 'Reactions', category: 'science' },
+        { id: 'ch-15', title: 'Reaction Types', href: '#', unit: 4, unitName: 'Reactions', category: 'science', checkpoint: true },
+        { id: 'ch-16', title: 'Reaction Rates', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+        { id: 'ch-17', title: 'Equilibrium', href: '#', unit: 6, unitName: 'Equilibrium', category: 'science' },
+        { id: 'ch-18', title: 'Acids & Bases', href: '#', unit: 7, unitName: 'Acids & Bases', category: 'science' },
+        { id: 'ch-19', title: 'Thermodynamics', href: '#', unit: 8, unitName: 'Thermo', category: 'science' },
+        { id: 'ch-20', title: 'AP Chemistry Mastery!', href: '#', unit: 9, unitName: 'Electrochemistry', category: 'science', checkpoint: true },
+      ],
+      'ap-statistics': [
+        { id: 's-1', title: 'Categorical vs Quantitative', href: '#', unit: 1, unitName: 'Exploring Data', category: 'math' },
+        { id: 's-2', title: 'Frequency Tables', href: '#', unit: 1, unitName: 'Exploring Data', category: 'math' },
+        { id: 's-3', title: 'Measures of Center', href: '#', unit: 1, unitName: 'Exploring Data', category: 'math' },
+        { id: 's-4', title: 'Histograms & Stemplots', href: '#', unit: 2, unitName: 'Distributions', category: 'math' },
+        { id: 's-5', title: 'Standard Deviation & IQR', href: '#', unit: 2, unitName: 'Distributions', category: 'math', checkpoint: true },
+        { id: 's-6', title: 'The Normal Curve', href: '#', unit: 3, unitName: 'Normal Distributions', category: 'math' },
+        { id: 's-7', title: 'Z-Scores', href: '#', unit: 3, unitName: 'Normal Distributions', category: 'math' },
+        { id: 's-8', title: 'Sampling Methods', href: '#', unit: 4, unitName: 'Study Design', category: 'math' },
+        { id: 's-9', title: 'Basic Probability', href: '#', unit: 5, unitName: 'Probability', category: 'math' },
+        { id: 's-10', title: 'Conditional Probability', href: '#', unit: 5, unitName: 'Probability', category: 'math', checkpoint: true },
+        { id: 's-11', title: 'Random Variables', href: '#', unit: 6, unitName: 'Random Variables', category: 'math' },
+        { id: 's-12', title: 'Binomial Distribution', href: '#', unit: 6, unitName: 'Random Variables', category: 'math' },
+        { id: 's-13', title: 'Central Limit Theorem', href: '#', unit: 7, unitName: 'Sampling', category: 'math' },
+        { id: 's-14', title: 'Confidence Intervals', href: '#', unit: 8, unitName: 'Inference', category: 'math' },
+        { id: 's-15', title: 'Hypothesis Testing', href: '#', unit: 9, unitName: 'Testing', category: 'math', checkpoint: true },
+        { id: 's-16', title: 'P-Values', href: '#', unit: 9, unitName: 'Testing', category: 'math' },
+        { id: 's-17', title: 'Chi-Square Tests', href: '#', unit: 9, unitName: 'Testing', category: 'math' },
+        { id: 's-18', title: 'AP Exam Practice', href: '#', unit: 10, unitName: 'AP Exam Prep', category: 'math' },
+        { id: 's-19', title: 'Full Practice Exam', href: '#', unit: 10, unitName: 'AP Exam Prep', category: 'math' },
+        { id: 's-20', title: 'AP Stats Mastery!', href: '#', unit: 10, unitName: 'AP Exam Prep', category: 'math', checkpoint: true },
+      ]
+    };
+
+    let currentPath = 'calculus';
+
+    // Tab switching
+    document.querySelectorAll('.path-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.path-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentPath = tab.dataset.path;
+        loadPath();
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      const lessons = paths[currentPath] || [];
+      let completed = new Set();
+
+      if (auth.currentUser) {
+        completed = await getCompletedLessons(currentPath);
+      }
+
+      renderPath(container, lessons, completed);
+    }
+
+    onAuthChange(() => loadPath());
+    loadPath();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+/* ============================================================
+   Mathagram.org — Learning Path (Duolingo-style)
+   Winding road of lesson nodes
+   ============================================================ */
+
+.path-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  position: relative;
+}
+
+/* The winding path line */
+.path-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--color-border);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+/* Each lesson node */
+.path-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* Alternate left and right positioning */
+.path-node:nth-child(odd) {
+  justify-content: flex-start;
+  padding-right: 55%;
+}
+
+.path-node:nth-child(even) {
+  justify-content: flex-end;
+  padding-left: 55%;
+}
+
+/* The circle node */
+.path-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.path-circle:hover {
+  transform: scale(1.1);
+}
+
+/* States */
+.path-circle.completed {
+  background: var(--color-science);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.path-circle.completed::after {
+  content: '✓';
+  font-size: 1.5rem;
+}
+
+.path-circle.current {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(0, 229, 200, 0.2), 0 4px 16px rgba(0, 229, 200, 0.3);
+  animation: pathPulse 2s ease-in-out infinite;
+}
+
+@keyframes pathPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(0, 229, 200, 0.2), 0 4px 16px rgba(0, 229, 200, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 229, 200, 0.15), 0 4px 20px rgba(0, 229, 200, 0.4); }
+}
+
+.path-circle.locked {
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
+.path-circle.locked:hover {
+  transform: none;
+}
+
+/* Connector dots from center line to node */
+.path-node::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 32px);
+  height: 3px;
+  background: var(--color-border);
+  z-index: 0;
+}
+
+.path-node:nth-child(odd)::before {
+  right: 45%;
+}
+
+.path-node:nth-child(even)::before {
+  left: 45%;
+}
+
+.path-node.completed::before {
+  background: var(--color-science);
+}
+
+.path-node.current::before {
+  background: var(--color-primary);
+}
+
+/* Label below the circle */
+.path-label {
+  position: absolute;
+  top: 72px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  text-align: center;
+  width: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.path-node.completed .path-label {
+  color: var(--color-science);
+}
+
+.path-node.current .path-label {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.path-node.locked .path-label {
+  color: var(--color-text-muted);
+}
+
+/* Unit header in the path */
+.path-unit-header {
+  text-align: center;
+  padding: 32px 0 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.path-unit-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  border-radius: 999px;
+  margin-bottom: 4px;
+}
+
+.path-unit-badge.math { background: var(--color-math); }
+.path-unit-badge.science { background: var(--color-science); }
+.path-unit-badge.data { background: var(--color-data); }
+.path-unit-badge.logic { background: var(--color-logic); }
+.path-unit-badge.language { background: var(--color-language); }
+
+.path-unit-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Stars on completed nodes */
+.path-stars {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+/* Checkpoint/boss nodes (every 5th) */
+.path-circle.checkpoint {
+  width: 76px;
+  height: 76px;
+  font-size: 1.4rem;
+}
+
+.path-circle.checkpoint.locked {
+  background: linear-gradient(135deg, var(--color-border), #d1d5db);
+}
+
+.path-circle.checkpoint.current {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+}
+
+/* Crown on completed checkpoints */
+.path-circle.checkpoint.completed::after {
+  content: '👑';
+  font-size: 1.2rem;
+}
+
+/* Progress bar at top */
+.path-progress {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.path-progress-bar {
+  flex: 1;
+  height: 10px;
+  background: var(--color-bg);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.path-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-science));
+  border-radius: 5px;
+  transition: width 0.5s ease;
+}
+
+.path-progress-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .path-circle { width: 52px; height: 52px; font-size: 1rem; }
+  .path-circle.checkpoint { width: 64px; height: 64px; }
+  .path-label { font-size: 0.65rem; top: 60px; width: 100px; }
+  .path-node:nth-child(odd) { padding-right: 50%; }
+  .path-node:nth-child(even) { padding-left: 50%; }
+}
