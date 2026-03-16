@@ -1,5 +1,6 @@
 // js/learning-path.js
-// Renders Duolingo-style learning paths from lesson data.
+// Renders Duolingo-style learning paths with side-by-side nodes,
+// practice sessions, and reading skill nodes.
 
 import { auth } from './firebase-config.js';
 import { db } from './firebase-config.js';
@@ -7,48 +8,51 @@ import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/
 
 /**
  * Render a learning path into a container.
- * @param {HTMLElement} container - element to render path into
- * @param {object[]} lessons - array of { id, title, href, unit, unitName, category, checkpoint }
- * @param {Set<string>} completedIds - set of completed lesson IDs
+ * Lessons are displayed in zigzag rows of 3 with practice & reading nodes.
  */
 export function renderPath(container, lessons, completedIds = new Set()) {
   container.innerHTML = '';
 
   // Progress bar
   const completedCount = lessons.filter(l => completedIds.has(l.id)).length;
-  const progressPct = lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0;
+  const totalCount = lessons.length;
+  const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
-  const progressBar = document.createElement('div');
-  progressBar.className = 'path-progress';
-  progressBar.innerHTML = `
-    <div class="path-progress-bar">
-      <div class="path-progress-fill" style="width:${progressPct}%"></div>
-    </div>
-    <span class="path-progress-text">${completedCount}/${lessons.length}</span>
+  const progress = document.createElement('div');
+  progress.className = 'path-progress';
+  progress.innerHTML = `
+    <div class="path-progress-bar"><div class="path-progress-fill" style="width:${pct}%"></div></div>
+    <span class="path-progress-text">${completedCount}/${totalCount}</span>
   `;
-  container.appendChild(progressBar);
+  container.appendChild(progress);
 
-  // Path line
-  const pathLine = document.createElement('div');
-  pathLine.className = 'path-line';
-  container.appendChild(pathLine);
+  // Inject practice & reading nodes into the lesson list
+  const enriched = injectSkillNodes(lessons);
 
   let currentUnit = null;
   let foundCurrent = false;
+  let rowBuffer = [];
+  let rowIndex = 0;
 
-  lessons.forEach((lesson, i) => {
+  enriched.forEach((lesson, i) => {
     // Unit header
-    if (lesson.unit !== currentUnit) {
+    if (lesson.unit !== currentUnit && lesson.type !== 'practice' && lesson.type !== 'reading') {
+      // Flush any remaining row
+      if (rowBuffer.length > 0) {
+        flushRow(container, rowBuffer, rowIndex++);
+        rowBuffer = [];
+      }
       currentUnit = lesson.unit;
       const header = document.createElement('div');
       header.className = 'path-unit-header';
       header.innerHTML = `
-        <span class="path-unit-badge ${lesson.category}">${lesson.category}</span>
-        <div class="path-unit-name">${lesson.unitName}</div>
+        <span class="path-unit-badge ${lesson.category || ''}">${lesson.category || ''}</span>
+        <div class="path-unit-name">${lesson.unitName || ''}</div>
       `;
       container.appendChild(header);
     }
 
+    // Determine state
     const isCompleted = completedIds.has(lesson.id);
     let isCurrent = false;
     let isLocked = false;
@@ -61,53 +65,126 @@ export function renderPath(container, lessons, completedIds = new Set()) {
     }
 
     const state = isCompleted ? 'completed' : isCurrent ? 'current' : 'locked';
-    const nodeState = isCompleted ? 'completed' : isCurrent ? 'current' : 'locked';
 
-    const node = document.createElement('div');
-    node.className = `path-node ${nodeState}`;
+    rowBuffer.push({ ...lesson, state, index: i });
 
-    const isCheckpoint = lesson.checkpoint || (i > 0 && i % 5 === 4);
-    const circleClass = `path-circle ${state}${isCheckpoint ? ' checkpoint' : ''}`;
+    // Flush row when we have 3 nodes
+    if (rowBuffer.length >= 3) {
+      flushRow(container, rowBuffer, rowIndex++);
+      rowBuffer = [];
+    }
+  });
 
-    if (isLocked) {
-      node.innerHTML = `
-        <div class="${circleClass}">
-          <span style="font-size:1.2rem">🔒</span>
-        </div>
-        <span class="path-label">${lesson.title}</span>
+  // Flush remaining
+  if (rowBuffer.length > 0) {
+    flushRow(container, rowBuffer, rowIndex++);
+  }
+}
+
+/**
+ * Flush a row of 1-3 nodes into the container.
+ */
+function flushRow(container, nodes, rowIndex) {
+  // Add connector
+  if (rowIndex > 0) {
+    const connector = document.createElement('div');
+    connector.className = 'path-connector';
+    const firstState = nodes[0]?.state || 'locked';
+    if (firstState === 'completed') connector.classList.add('completed');
+    else if (firstState === 'current') connector.classList.add('current');
+    container.appendChild(connector);
+  }
+
+  const row = document.createElement('div');
+  row.className = 'path-row';
+
+  nodes.forEach(n => {
+    const nodeEl = document.createElement('div');
+    nodeEl.className = `path-node ${n.state}`;
+
+    const typeClass = n.type === 'practice' ? ' practice' : n.type === 'reading' ? ' reading' : '';
+    const checkpointClass = n.checkpoint ? ' checkpoint' : '';
+    const classes = `path-circle ${n.state}${typeClass}${checkpointClass}`;
+
+    let icon = '';
+    if (n.state === 'locked') {
+      icon = n.type === 'practice' ? '💪' : n.type === 'reading' ? '📖' : '🔒';
+    } else if (n.state === 'current') {
+      icon = n.type === 'practice' ? '💪' : n.type === 'reading' ? '📖' : n.checkpoint ? '⭐' : String(n.index + 1);
+    } else {
+      icon = ''; // completed — CSS ::after handles it
+    }
+
+    if (n.state === 'locked') {
+      nodeEl.innerHTML = `
+        <div class="${classes}">${icon}</div>
+        <span class="path-label">${n.title}</span>
       `;
-    } else if (isCurrent) {
-      node.innerHTML = `
-        <a href="${lesson.href}" class="${circleClass}">
-          ${i + 1}
-        </a>
-        <span class="path-label">${lesson.title}</span>
-      `;
-    } else if (isCompleted) {
-      node.innerHTML = `
-        <a href="${lesson.href}" class="${circleClass}"></a>
-        <span class="path-label">${lesson.title}</span>
-        <span class="path-stars">⭐⭐⭐</span>
+    } else {
+      const href = (n.href && n.href !== '#') ? n.href : '#';
+      nodeEl.innerHTML = `
+        <a href="${href}" class="${classes}">${icon}</a>
+        <span class="path-label">${n.title}</span>
+        ${n.state === 'completed' ? '<span class="path-stars">⭐⭐⭐</span>' : ''}
       `;
     }
 
-    container.appendChild(node);
+    row.appendChild(nodeEl);
   });
+
+  container.appendChild(row);
+}
+
+/**
+ * Inject practice and reading nodes after every 4-5 lessons.
+ * Practice appears after every 4th lesson, reading after every 8th.
+ */
+function injectSkillNodes(lessons) {
+  const result = [];
+  let lessonCount = 0;
+
+  lessons.forEach((lesson, i) => {
+    result.push(lesson);
+    lessonCount++;
+
+    // Add practice node after every 4th lesson
+    if (lessonCount % 4 === 0 && i < lessons.length - 1) {
+      result.push({
+        id: `practice-${lessonCount}`,
+        title: 'Practice',
+        href: '#',
+        unit: lesson.unit,
+        unitName: lesson.unitName,
+        category: lesson.category,
+        type: 'practice'
+      });
+    }
+
+    // Add reading node after every 8th lesson
+    if (lessonCount % 8 === 0 && i < lessons.length - 1) {
+      result.push({
+        id: `reading-${lessonCount}`,
+        title: 'Reading',
+        href: '#',
+        unit: lesson.unit,
+        unitName: lesson.unitName,
+        category: lesson.category,
+        type: 'reading'
+      });
+    }
+  });
+
+  return result;
 }
 
 /**
  * Get completed lesson IDs for a user from Firestore.
- * @param {string} courseId
- * @returns {Promise<Set<string>>}
  */
 export async function getCompletedLessons(courseId) {
   const user = auth.currentUser;
   if (!user) return new Set();
-
   try {
-    const snap = await getDocs(
-      collection(db, 'users', user.uid, 'progress', courseId, 'lessons')
-    );
+    const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
     const ids = new Set();
     snap.forEach(doc => ids.add(doc.id));
     return ids;
