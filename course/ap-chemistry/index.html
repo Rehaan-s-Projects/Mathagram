@@ -6,6 +6,7 @@
   <title>AP Chemistry — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
   <style>
     .course-header { padding: 80px 24px 40px; text-align: center; }
     .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-science); border-radius: 999px; margin-bottom: 12px; }
@@ -53,7 +54,18 @@
     <p>Master the fundamental concepts of chemistry — from atomic structure to electrochemistry. 45 lessons across 9 units to prepare you for the AP exam with deep conceptual understanding.</p>
   </header>
 
-  <div class="unit-map">
+  <!-- Learning Path -->
+  <div style="text-align:center; padding:0 24px 8px;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:4px;">Your Learning Path</h2>
+    <p style="font-size:0.85rem; color:var(--color-text-muted);">Follow the path lesson by lesson</p>
+  </div>
+  <div id="learning-path" class="path-container"></div>
+
+  <div style="text-align:center; padding:16px 0 32px;">
+    <button id="toggle-units" style="background:none; border:none; color:var(--color-text-muted); font-size:0.85rem; cursor:pointer; text-decoration:underline;">Show all units ▼</button>
+  </div>
+
+  <div class="unit-map" id="unit-map-full" style="display:none;">
 
     <!-- Unit 1: Atomic Structure & Properties -->
     <div class="unit open">
@@ -410,9 +422,54 @@
   <script type="module">
     import { initNav } from '../../js/nav.js';
     initNav('../../');
-  </script>
-  <script>
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Toggle unit list visibility
+    const toggleBtn = document.getElementById('toggle-units');
+    const unitMap = document.getElementById('unit-map-full');
+    toggleBtn.addEventListener('click', () => {
+      const visible = unitMap.style.display !== 'none';
+      unitMap.style.display = visible ? 'none' : 'block';
+      toggleBtn.textContent = visible ? 'Show all units ▼' : 'Hide units ▲';
+    });
+
+    // Learning path lessons (first 20 key lessons from the course)
+    const pathLessons = [
+      { id: 'lesson-1', title: 'Atomic Models & Isotopes', href: 'lesson-1.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+      { id: 'lesson-2', title: 'Electron Configuration', href: 'lesson-2.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+      { id: 'lesson-3', title: 'Periodic Trends', href: 'lesson-3.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+      { id: 'lesson-4', title: 'Quantum Numbers', href: 'lesson-4.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
+      { id: 'lesson-5', title: 'Photoelectron Spectroscopy', href: 'lesson-5.html', unit: 1, unitName: 'Atomic Structure', category: 'science', checkpoint: true },
+      { id: 'lesson-6', title: 'Lewis Structures', href: 'lesson-6.html', unit: 2, unitName: 'Bonding', category: 'science' },
+      { id: 'lesson-7', title: 'VSEPR & Geometry', href: 'lesson-7.html', unit: 2, unitName: 'Bonding', category: 'science' },
+      { id: 'ch-8', title: 'Ionic vs Covalent', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
+      { id: 'ch-9', title: 'Formal Charge', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
+      { id: 'ch-10', title: 'Resonance', href: '#', unit: 2, unitName: 'Bonding', category: 'science', checkpoint: true },
+      { id: 'ch-11', title: 'Intermolecular Forces', href: '#', unit: 3, unitName: 'IMFs', category: 'science' },
+      { id: 'ch-12', title: 'States of Matter', href: '#', unit: 3, unitName: 'IMFs', category: 'science' },
+      { id: 'ch-13', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Reactions', category: 'science' },
+      { id: 'ch-14', title: 'Stoichiometry', href: '#', unit: 4, unitName: 'Reactions', category: 'science' },
+      { id: 'ch-15', title: 'Reaction Types', href: '#', unit: 4, unitName: 'Reactions', category: 'science', checkpoint: true },
+      { id: 'ch-16', title: 'Kinetics', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-17', title: 'Equilibrium', href: '#', unit: 6, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-18', title: 'Acids & Bases', href: '#', unit: 7, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-19', title: 'Thermodynamics', href: '#', unit: 8, unitName: 'Thermo', category: 'science' },
+      { id: 'ch-20', title: 'AP Chem Mastery!', href: '#', unit: 9, unitName: 'Electrochemistry', category: 'science', checkpoint: true },
+    ];
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('ap-chemistry');
+        renderPath(container, pathLessons, completed);
+      });
+      renderPath(container, pathLessons, completed);
+    }
+    loadPath();
   </script>
 
 </body>
