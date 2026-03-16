@@ -108,9 +108,9 @@ function flushRow(container, nodes, rowIndex) {
 
     let icon = '';
     if (n.state === 'locked') {
-      icon = n.type === 'practice' ? '💪' : n.type === 'reading' ? '📖' : '🔒';
+      icon = n.type === 'practice' ? '🎧' : n.type === 'reading' ? '📖' : '🔒';
     } else if (n.state === 'current') {
-      icon = n.type === 'practice' ? '💪' : n.type === 'reading' ? '📖' : n.checkpoint ? '⭐' : String(n.index + 1);
+      icon = n.type === 'practice' ? '🎧' : n.type === 'reading' ? '📖' : n.checkpoint ? '⭐' : String(n.index + 1);
     } else {
       icon = ''; // completed — CSS ::after handles it
     }
@@ -151,7 +151,7 @@ function injectSkillNodes(lessons) {
     if (lessonCount % 4 === 0 && i < lessons.length - 1) {
       result.push({
         id: `practice-${lessonCount}`,
-        title: 'Practice',
+        title: 'Listening Practice',
         href: '#',
         unit: lesson.unit,
         unitName: lesson.unitName,

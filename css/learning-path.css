@@ -124,7 +124,7 @@
   color: #58cc02;
   box-shadow: none;
 }
-.path-circle.practice.completed::after { content: '💪'; font-size: 1.1rem; }
+.path-circle.practice.completed::after { content: '🎧'; font-size: 1.1rem; }
 .path-circle.practice.current {
   border-color: #1cb0f6;
   background: rgba(28, 176, 246, 0.08);
