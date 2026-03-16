@@ -43,11 +43,13 @@ export function renderPath(container, lessons, completedIds = new Set()) {
         rowBuffer = [];
       }
       currentUnit = lesson.unit;
+      const categoryLabels = { math: 'Math', science: 'Science', data: 'Data Analysis', logic: 'Logic', language: 'Language' };
+      const categoryLabel = categoryLabels[lesson.category] || lesson.category || '';
       const header = document.createElement('div');
       header.className = 'path-unit-header';
       header.innerHTML = `
-        <span class="path-unit-badge ${lesson.category || ''}">${lesson.category || ''}</span>
-        <div class="path-unit-name">${lesson.unitName || ''}</div>
+        <span class="path-unit-badge ${lesson.category || ''}">${categoryLabel}</span>
+        <div class="path-unit-name">Unit ${lesson.unit}: ${lesson.unitName || ''}</div>
       `;
       container.appendChild(header);
     }
