@@ -8,33 +8,14 @@
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/learning-path.css">
   <style>
-    .course-header { padding: 80px 24px 40px; text-align: center; }
-    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-science); border-radius: 999px; margin-bottom: 12px; }
-    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
-    .course-header p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
-    .unit-map { max-width: 720px; margin: 0 auto 64px; padding: 0 24px; }
-    .unit { margin-bottom: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
-    .unit:hover { box-shadow: var(--shadow-sm); }
-    .unit-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; }
-    .unit-number { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 0.85rem; font-weight: 800; color: #fff; background: var(--color-science); border-radius: 50%; flex-shrink: 0; }
-    .unit-info { flex: 1; }
-    .unit-info h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
-    .unit-info p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
-    .unit-toggle { width: 24px; height: 24px; color: var(--color-text-muted); transition: transform 0.3s; flex-shrink: 0; }
-    .unit.open .unit-toggle { transform: rotate(180deg); }
-    .unit-lessons { display: none; padding: 0 24px 16px; border-top: 1px solid var(--color-border); }
-    .unit.open .unit-lessons { display: block; }
-    .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
-    .lesson-card:hover { background: rgba(0,0,0,0.03); }
-    .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
-    .lesson-dot.available { background: var(--color-science, #22c55e); }
-    .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
-    .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
-    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
   </style>
 </head>
 <body>
-
   <nav class="nav">
     <div class="container">
       <a href="../../index.html" class="nav-logo">
@@ -49,369 +30,12 @@
   </nav>
 
   <header class="course-header">
-    <span class="course-badge">Science</span>
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>AP Chemistry</h1>
-    <p>Master the fundamental concepts of chemistry — from atomic structure to electrochemistry. 45 lessons across 9 units to prepare you for the AP exam with deep conceptual understanding.</p>
+    <p>Master atomic structure, bonding, reactions, kinetics, thermodynamics, equilibrium, and acids &amp; bases. 45 lessons across 9 units.</p>
   </header>
 
-  <!-- Learning Path -->
-  <div style="text-align:center; padding:0 24px 8px;">
-    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:4px;">Your Learning Path</h2>
-    <p style="font-size:0.85rem; color:var(--color-text-muted);">Follow the path lesson by lesson</p>
-  </div>
   <div id="learning-path" class="path-container"></div>
-
-  <div style="text-align:center; padding:16px 0 32px;">
-    <button id="toggle-units" style="background:none; border:none; color:var(--color-text-muted); font-size:0.85rem; cursor:pointer; text-decoration:underline;">Show all units ▼</button>
-  </div>
-
-  <div class="unit-map" id="unit-map-full" style="display:none;">
-
-    <!-- Unit 1: Atomic Structure & Properties -->
-    <div class="unit open">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">1</span>
-        <div class="unit-info">
-          <h2>Atomic Structure &amp; Properties</h2>
-          <p>Atomic models, electron configuration, periodic trends</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <a href="lesson-1.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 1: Atomic Models &amp; Isotopes</span>
-        </a>
-        <a href="lesson-2.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 2: Electron Configuration</span>
-        </a>
-        <a href="lesson-3.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 3: Periodic Trends</span>
-        </a>
-        <a href="lesson-4.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 4: Quantum Numbers</span>
-        </a>
-        <a href="lesson-5.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 5: Photoelectron Spectroscopy (PES)</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Unit 2: Molecular & Ionic Bonding -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">2</span>
-        <div class="unit-info">
-          <h2>Molecular &amp; Ionic Bonding</h2>
-          <p>Lewis structures, VSEPR, bond types</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <a href="lesson-6.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 6: Lewis Structures</span>
-        </a>
-        <a href="lesson-7.html" class="lesson-card" data-available="true">
-          <span class="lesson-dot available"></span>
-          <span class="lesson-title">Lesson 7: VSEPR &amp; Molecular Geometry</span>
-        </a>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 8: Ionic vs Covalent Bonding</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 9: Formal Charge</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 10: Resonance Structures</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 3: Intermolecular Forces -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">3</span>
-        <div class="unit-info">
-          <h2>Intermolecular Forces</h2>
-          <p>London dispersion, dipole-dipole, hydrogen bonding</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 11: Types of Intermolecular Forces</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 12: States of Matter</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 13: Vapor Pressure &amp; Boiling Point</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 14: Chromatography &amp; Separation</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 15: Solubility Rules</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 4: Chemical Reactions -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">4</span>
-        <div class="unit-info">
-          <h2>Chemical Reactions</h2>
-          <p>Balancing, types of reactions, net ionic</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 16: Balancing Chemical Equations</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 17: Types of Reactions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 18: Net Ionic Equations</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 19: Oxidation-Reduction Reactions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 20: Activity Series</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 5: Kinetics -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">5</span>
-        <div class="unit-info">
-          <h2>Kinetics</h2>
-          <p>Rate laws, activation energy, catalysts</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 21: Reaction Rates</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 22: Rate Laws &amp; Order</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 23: Catalysts &amp; Mechanisms</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 24: Integrated Rate Laws</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 25: Half-Life Calculations</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 6: Thermodynamics -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">6</span>
-        <div class="unit-info">
-          <h2>Thermodynamics</h2>
-          <p>Enthalpy, Hess's law, entropy</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 26: Endothermic &amp; Exothermic</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 27: Hess's Law &amp; Enthalpy</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 28: Entropy &amp; Gibbs Free Energy</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 29: Calorimetry</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 30: Bond Energies</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 7: Equilibrium -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">7</span>
-        <div class="unit-info">
-          <h2>Equilibrium</h2>
-          <p>Keq, Le Chatelier's, solubility</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 31: Dynamic Equilibrium</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 32: Equilibrium Constants</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 33: Le Chatelier's Principle</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 34: ICE Tables</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 35: Ksp &amp; Solubility Product</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 8: Acids & Bases -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">8</span>
-        <div class="unit-info">
-          <h2>Acids &amp; Bases</h2>
-          <p>pH, buffers, titrations</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 36: pH &amp; Strong Acids/Bases</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 37: Weak Acids &amp; Buffers</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 38: Titrations</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 39: Ka &amp; Kb Calculations</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 40: Polyprotic Acids</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 9: Applications of Thermodynamics -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">9</span>
-        <div class="unit-info">
-          <h2>Applications of Thermodynamics</h2>
-          <p>Electrochemistry, galvanic cells</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 41: Galvanic Cells</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 42: Electrolysis</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 43: Free Energy &amp; Electrochemistry</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 44: Cell Potential &amp; Standard Reduction Potentials</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 45: Faraday's Law</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
 
   <footer class="footer">
     <div class="container">
@@ -424,20 +48,9 @@
     initNav('../../');
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Toggle unit list visibility
-    const toggleBtn = document.getElementById('toggle-units');
-    const unitMap = document.getElementById('unit-map-full');
-    toggleBtn.addEventListener('click', () => {
-      const visible = unitMap.style.display !== 'none';
-      unitMap.style.display = visible ? 'none' : 'block';
-      toggleBtn.textContent = visible ? 'Show all units ▼' : 'Hide units ▲';
-    });
-
-    // Learning path lessons (first 20 key lessons from the course)
-    const pathLessons = [
+    const lessons = [
       { id: 'lesson-1', title: 'Atomic Models & Isotopes', href: 'lesson-1.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
       { id: 'lesson-2', title: 'Electron Configuration', href: 'lesson-2.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
       { id: 'lesson-3', title: 'Periodic Trends', href: 'lesson-3.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
@@ -447,17 +60,27 @@
       { id: 'lesson-7', title: 'VSEPR & Geometry', href: 'lesson-7.html', unit: 2, unitName: 'Bonding', category: 'science' },
       { id: 'ch-8', title: 'Ionic vs Covalent', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
       { id: 'ch-9', title: 'Formal Charge', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
-      { id: 'ch-10', title: 'Resonance', href: '#', unit: 2, unitName: 'Bonding', category: 'science', checkpoint: true },
-      { id: 'ch-11', title: 'Intermolecular Forces', href: '#', unit: 3, unitName: 'IMFs', category: 'science' },
-      { id: 'ch-12', title: 'States of Matter', href: '#', unit: 3, unitName: 'IMFs', category: 'science' },
-      { id: 'ch-13', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Reactions', category: 'science' },
-      { id: 'ch-14', title: 'Stoichiometry', href: '#', unit: 4, unitName: 'Reactions', category: 'science' },
-      { id: 'ch-15', title: 'Reaction Types', href: '#', unit: 4, unitName: 'Reactions', category: 'science', checkpoint: true },
-      { id: 'ch-16', title: 'Kinetics', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-17', title: 'Equilibrium', href: '#', unit: 6, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-18', title: 'Acids & Bases', href: '#', unit: 7, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-19', title: 'Thermodynamics', href: '#', unit: 8, unitName: 'Thermo', category: 'science' },
-      { id: 'ch-20', title: 'AP Chem Mastery!', href: '#', unit: 9, unitName: 'Electrochemistry', category: 'science', checkpoint: true },
+      { id: 'ch-10', title: 'Resonance Structures', href: '#', unit: 2, unitName: 'Bonding', category: 'science', checkpoint: true },
+      { id: 'ch-11', title: 'Types of IMFs', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
+      { id: 'ch-12', title: 'States of Matter', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
+      { id: 'ch-13', title: 'Solubility Rules', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science', checkpoint: true },
+      { id: 'ch-14', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-15', title: 'Types of Reactions', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-16', title: 'Oxidation-Reduction', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
+      { id: 'ch-17', title: 'Stoichiometry', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science', checkpoint: true },
+      { id: 'ch-18', title: 'Reaction Rates', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-19', title: 'Rate Laws', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
+      { id: 'ch-20', title: 'Half-Life', href: '#', unit: 5, unitName: 'Kinetics', category: 'science', checkpoint: true },
+      { id: 'ch-21', title: 'Enthalpy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
+      { id: 'ch-22', title: 'Hess\'s Law', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
+      { id: 'ch-23', title: 'Gibbs Free Energy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science', checkpoint: true },
+      { id: 'ch-24', title: 'Equilibrium Constants', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-25', title: 'Le Chatelier\'s Principle', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
+      { id: 'ch-26', title: 'ICE Tables', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science', checkpoint: true },
+      { id: 'ch-27', title: 'pH & Strong Acids', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-28', title: 'Weak Acids & Buffers', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
+      { id: 'ch-29', title: 'Titrations', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science', checkpoint: true },
+      { id: 'ch-30', title: 'AP Chemistry Mastery!', href: '#', unit: 9, unitName: 'Electrochemistry', category: 'science', checkpoint: true },
     ];
 
     async function loadPath() {
@@ -465,12 +88,11 @@
       let completed = new Set();
       onAuthChange(async (user) => {
         if (user) completed = await getCompletedLessons('ap-chemistry');
-        renderPath(container, pathLessons, completed);
+        renderPath(container, lessons, completed);
       });
-      renderPath(container, pathLessons, completed);
+      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>
-
 </body>
 </html>
