@@ -51,36 +51,78 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const lessons = [
-      { id: 'trig-1',  title: 'Degrees & Radians',       href: 'lesson-1.html' },
-      { id: 'trig-2',  title: 'Angle Types',              href: 'lesson-2.html' },
-      { id: 'trig-3',  title: 'Types of Triangles',       href: 'lesson-4.html' },
-      { id: 'trig-4',  title: 'Triangle Angle Sum',       href: '#' },
-      { id: 'trig-5',  title: 'Area of a Triangle',       href: '#', checkpoint: true },
-      { id: 'trig-6',  title: 'SOH-CAH-TOA',             href: 'lesson-3.html' },
-      { id: 'trig-7',  title: 'Finding Missing Sides',    href: '#' },
-      { id: 'trig-8',  title: 'Cosecant',                 href: '#' },
-      { id: 'trig-9',  title: 'Secant',                   href: '#' },
-      { id: 'trig-10', title: 'Cotangent',                href: '#', checkpoint: true },
-      { id: 'trig-11', title: 'The Unit Circle',          href: '#' },
-      { id: 'trig-12', title: 'Reference Angles',         href: '#' },
-      { id: 'trig-13', title: 'Coordinates & Trig Values', href: '#', checkpoint: true },
-      { id: 'trig-14', title: 'Graphing Sin & Cos',       href: '#' },
-      { id: 'trig-15', title: 'Amplitude & Period',       href: '#' },
-      { id: 'trig-16', title: 'Phase Shift',              href: '#', checkpoint: true },
-      { id: 'trig-17', title: 'Pythagorean Identities',   href: '#' },
-      { id: 'trig-18', title: 'Reciprocal Identities',    href: '#', checkpoint: true },
-      { id: 'trig-19', title: 'Sum Formulas',             href: '#' },
-      { id: 'trig-20', title: 'Double-Angle',             href: '#', checkpoint: true },
-      { id: 'trig-21', title: 'Inverse Sin & Cos',        href: '#' },
-      { id: 'trig-22', title: 'Solving Trig Equations',   href: '#', checkpoint: true },
-      { id: 'trig-23', title: 'Law of Sines',             href: '#' },
-      { id: 'trig-24', title: 'Law of Cosines',           href: '#' },
-      { id: 'trig-25', title: 'Applications',             href: '#', checkpoint: true },
-      { id: 'trig-26', title: 'Polar vs Cartesian',       href: '#' },
-      { id: 'trig-27', title: 'Graphing Polar',           href: '#' },
-      { id: 'trig-28', title: 'Polar Roses',              href: '#' },
-      { id: 'trig-29', title: 'Complex Numbers Polar',    href: '#' },
-      { id: 'trig-30', title: 'Trig Mastery!',            href: '#', checkpoint: true }
+      /* ── Unit 1: Angles & Measurement (5) ── */
+      { id: 't-1',  title: 'Degrees and Radians',                    href: 'lesson-1.html' },
+      { id: 't-2',  title: 'Angle Measurement and Types',            href: 'lesson-2.html' },
+      { id: 't-3',  title: 'Arc Length & Sector Area',               href: '#' },
+      { id: 't-4',  title: 'Coterminal Angles',                      href: '#' },
+      { id: 't-5',  title: 'Angular & Linear Speed',                 href: '#', checkpoint: true },
+
+      /* ── Unit 2: Triangle Geometry (5) ── */
+      { id: 't-6',  title: 'Types of Triangles',                     href: 'lesson-4.html' },
+      { id: 't-7',  title: 'Triangle Angle Sum Theorem',             href: '#' },
+      { id: 't-8',  title: 'Exterior Angle Theorem',                 href: '#' },
+      { id: 't-9',  title: 'Triangle Inequality Theorem',            href: '#' },
+      { id: 't-10', title: 'Area of a Triangle',                     href: '#', checkpoint: true },
+
+      /* ── Unit 3: Right Triangle Trig (8) ── */
+      { id: 't-11', title: 'SOH-CAH-TOA',                           href: 'lesson-3.html' },
+      { id: 't-12', title: 'Finding Missing Sides',                  href: '#' },
+      { id: 't-13', title: 'Finding Missing Angles',                 href: '#' },
+      { id: 't-14', title: 'Cosecant (csc)',                         href: '#' },
+      { id: 't-15', title: 'Secant (sec)',                           href: '#' },
+      { id: 't-16', title: 'Cotangent (cot)',                        href: '#' },
+      { id: 't-17', title: 'Solving Right Triangles',                href: '#' },
+      { id: 't-18', title: 'Applications of Right Triangle Trig',    href: '#', checkpoint: true },
+
+      /* ── Unit 4: Unit Circle (5) ── */
+      { id: 't-19', title: 'The Unit Circle',                        href: '#' },
+      { id: 't-20', title: 'Reference Angles',                       href: '#' },
+      { id: 't-21', title: 'Coordinates & Trig Values',              href: '#' },
+      { id: 't-22', title: 'Radian-Degree Conversion Mastery',       href: '#' },
+      { id: 't-23', title: 'Evaluating Trig Functions Without Calculator', href: '#', checkpoint: true },
+
+      /* ── Unit 5: Graphing Trig Functions (5) ── */
+      { id: 't-24', title: 'Graphing Sine & Cosine',                 href: '#' },
+      { id: 't-25', title: 'Amplitude & Period',                     href: '#' },
+      { id: 't-26', title: 'Phase Shift & Vertical Shift',           href: '#' },
+      { id: 't-27', title: 'Graphing Tangent & Cotangent',           href: '#' },
+      { id: 't-28', title: 'Graphing Secant & Cosecant',             href: '#', checkpoint: true },
+
+      /* ── Unit 6: Trig Identities (6) ── */
+      { id: 't-29', title: 'Pythagorean Identities',                 href: '#' },
+      { id: 't-30', title: 'Reciprocal & Quotient Identities',       href: '#' },
+      { id: 't-31', title: 'Simplifying Expressions',                href: '#' },
+      { id: 't-32', title: 'Cofunction Identities',                  href: '#' },
+      { id: 't-33', title: 'Even-Odd Identities',                    href: '#' },
+      { id: 't-34', title: 'Verifying Trig Identities',              href: '#', checkpoint: true },
+
+      /* ── Unit 7: Sum & Difference Formulas (5) ── */
+      { id: 't-35', title: 'Sum Formulas',                           href: '#' },
+      { id: 't-36', title: 'Difference Formulas',                    href: '#' },
+      { id: 't-37', title: 'Double-Angle Formulas',                  href: '#' },
+      { id: 't-38', title: 'Half-Angle Formulas',                    href: '#' },
+      { id: 't-39', title: 'Product-to-Sum & Sum-to-Product',        href: '#', checkpoint: true },
+
+      /* ── Unit 8: Inverse Trig Functions (4) ── */
+      { id: 't-40', title: 'Inverse Sine & Cosine',                  href: '#' },
+      { id: 't-41', title: 'Inverse Tangent',                        href: '#' },
+      { id: 't-42', title: 'Compositions of Inverses',               href: '#' },
+      { id: 't-43', title: 'Solving Trig Equations',                 href: '#', checkpoint: true },
+
+      /* ── Unit 9: Law of Sines & Cosines (5) ── */
+      { id: 't-44', title: 'Law of Sines',                           href: '#' },
+      { id: 't-45', title: 'Law of Cosines',                         href: '#' },
+      { id: 't-46', title: 'Applications & Word Problems',           href: '#' },
+      { id: 't-47', title: 'Ambiguous Case (SSA)',                   href: '#' },
+      { id: 't-48', title: 'Area with Trig',                         href: '#', checkpoint: true },
+
+      /* ── Unit 10: Polar Coordinates (5) ── */
+      { id: 't-49', title: 'Polar vs Cartesian',                     href: '#' },
+      { id: 't-50', title: 'Graphing Polar Equations',               href: '#' },
+      { id: 't-51', title: 'Converting Between Systems',             href: '#' },
+      { id: 't-52', title: 'Polar Roses & Limacons',                 href: '#' },
+      { id: 't-53', title: 'Complex Numbers in Polar Form',          href: '#', checkpoint: true }
     ];
 
     async function loadPath() {
