@@ -6,33 +6,16 @@
   <title>Nepali — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
   <style>
-    .course-header { padding: 80px 24px 40px; text-align: center; }
-    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-language); border-radius: 999px; margin-bottom: 12px; }
-    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
-    .course-header p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
-    .unit-map { max-width: 720px; margin: 0 auto 64px; padding: 0 24px; }
-    .unit { margin-bottom: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
-    .unit:hover { box-shadow: var(--shadow-sm); }
-    .unit-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; }
-    .unit-number { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 0.85rem; font-weight: 800; color: #fff; background: var(--color-language); border-radius: 50%; flex-shrink: 0; }
-    .unit-info { flex: 1; }
-    .unit-info h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
-    .unit-info p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
-    .unit-toggle { width: 24px; height: 24px; color: var(--color-text-muted); transition: transform 0.3s; flex-shrink: 0; }
-    .unit.open .unit-toggle { transform: rotate(180deg); }
-    .unit-lessons { display: none; padding: 0 24px 16px; border-top: 1px solid var(--color-border); }
-    .unit.open .unit-lessons { display: block; }
-    .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
-    .lesson-card:hover { background: rgba(0,0,0,0.03); }
-    .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
-    .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
-    .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
-    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
   </style>
 </head>
 <body>
-
   <nav class="nav">
     <div class="container">
       <a href="../../index.html" class="nav-logo">
@@ -45,204 +28,34 @@
       </div>
     </div>
   </nav>
-
   <header class="course-header">
-    <span class="course-badge">Language</span>
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
     <h1>Nepali</h1>
-    <p>The official language of Nepal, also spoken in parts of India, Bhutan, and Myanmar, written in Devanagari script. 18 lessons across 6 units.</p>
+    <p>The official language of Nepal.</p>
   </header>
-
-  <div class="unit-map">
-
-    <!-- Unit 1: Basics -->
-    <div class="unit open">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">1</span>
-        <div class="unit-info">
-          <h2>Basics</h2>
-          <p>Letters, greetings, and counting</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 1: Alphabet &amp; Writing System</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 2: Greetings &amp; Introductions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 3: Numbers 1–20</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 2: Essential Phrases -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">2</span>
-        <div class="unit-info">
-          <h2>Essential Phrases</h2>
-          <p>Everyday expressions and polite language</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 4: Common Phrases</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 5: Questions &amp; Answers</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 6: Polite Expressions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 3: Grammar Foundations -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">3</span>
-        <div class="unit-info">
-          <h2>Grammar Foundations</h2>
-          <p>Core grammar building blocks</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 7: Nouns &amp; Articles</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 8: Pronouns</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 9: Basic Sentence Structure</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 4: Everyday Vocabulary -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">4</span>
-        <div class="unit-info">
-          <h2>Everyday Vocabulary</h2>
-          <p>Words for daily life and description</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 10: Family &amp; People</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 11: Food &amp; Drink</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 12: Colors &amp; Descriptions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 5: Verbs & Tenses -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">5</span>
-        <div class="unit-info">
-          <h2>Verbs &amp; Tenses</h2>
-          <p>Expressing actions in past, present, and future</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 13: Present Tense</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 14: Past Tense</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 15: Future Tense</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unit 6: Conversation & Culture -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">6</span>
-        <div class="unit-info">
-          <h2>Conversation &amp; Culture</h2>
-          <p>Real-world dialogue and cultural context</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 16: At the Market</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 17: Asking for Directions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 18: Cultural Expressions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
+  <div id="learning-path" class="path-container"></div>
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
     </div>
   </footer>
-
   <script type="module">
     import { initNav } from '../../js/nav.js';
     initNav('../../');
-  </script>
-  <script>
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
+    const lessons = [{"id": "alphabet-and-sounds", "title": "Alphabet & Sounds", "unit": "Basics", "href": "#"}, {"id": "greetings", "title": "Greetings", "unit": "Basics", "href": "#"}, {"id": "numbers", "title": "Numbers", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "nouns-and-articles", "title": "Nouns & Articles", "unit": "Grammar", "href": "#"}, {"id": "pronouns", "title": "Pronouns", "unit": "Grammar", "href": "#"}, {"id": "basic-sentences", "title": "Basic Sentences", "unit": "Grammar", "href": "#", "checkpoint": true}, {"id": "present-tense", "title": "Present Tense", "unit": "Verbs", "href": "#"}, {"id": "past-tense", "title": "Past Tense", "unit": "Verbs", "href": "#"}, {"id": "future-tense", "title": "Future Tense", "unit": "Verbs", "href": "#", "checkpoint": true}, {"id": "food-and-drink", "title": "Food & Drink", "unit": "Daily Life", "href": "#"}, {"id": "shopping", "title": "Shopping", "unit": "Daily Life", "href": "#"}, {"id": "travel", "title": "Travel", "unit": "Daily Life", "href": "#", "checkpoint": true}, {"id": "culture", "title": "Culture", "unit": "Fluency", "href": "#"}, {"id": "conversation", "title": "Conversation", "unit": "Fluency", "href": "#"}, {"id": "nepali-mastery", "title": "Nepali Mastery!", "unit": "Fluency", "href": "#", "checkpoint": true}];
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('nepali');
+        renderPath(container, lessons, completed);
+      });
+      renderPath(container, lessons, completed);
+    }
+    loadPath();
   </script>
-
 </body>
 </html>

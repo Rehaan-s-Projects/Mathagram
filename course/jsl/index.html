@@ -3,36 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Japanese Sign Language (JSL) — Mathagram</title>
+  <title>Japanese Sign Language — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
   <style>
-    .course-header { padding: 80px 24px 40px; text-align: center; }
-    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-language); border-radius: 999px; margin-bottom: 12px; }
-    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
-    .course-header p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
-    .unit-map { max-width: 720px; margin: 0 auto 64px; padding: 0 24px; }
-    .unit { margin-bottom: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
-    .unit:hover { box-shadow: var(--shadow-sm); }
-    .unit-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; }
-    .unit-number { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 0.85rem; font-weight: 800; color: #fff; background: var(--color-language); border-radius: 50%; flex-shrink: 0; }
-    .unit-info { flex: 1; }
-    .unit-info h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
-    .unit-info p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
-    .unit-toggle { width: 24px; height: 24px; color: var(--color-text-muted); transition: transform 0.3s; flex-shrink: 0; }
-    .unit.open .unit-toggle { transform: rotate(180deg); }
-    .unit-lessons { display: none; padding: 0 24px 16px; border-top: 1px solid var(--color-border); }
-    .unit.open .unit-lessons { display: block; }
-    .lesson-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; background: var(--color-bg); border-radius: var(--radius); text-decoration: none; color: inherit; transition: background 0.15s; }
-    .lesson-card:hover { background: rgba(0,0,0,0.03); }
-    .lesson-dot { width: 10px; height: 10px; background: var(--color-border); border-radius: 50%; flex-shrink: 0; }
-    .lesson-title { font-size: 0.95rem; font-weight: 600; flex: 1; }
-    .coming-soon { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); background: var(--color-bg); padding: 2px 8px; border-radius: 4px; }
-    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } .unit-header { padding: 16px 18px; } }
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
   </style>
 </head>
 <body>
-
   <nav class="nav">
     <div class="container">
       <a href="../../index.html" class="nav-logo">
@@ -45,283 +28,34 @@
       </div>
     </div>
   </nav>
-
   <header class="course-header">
-    <span class="course-badge">Language</span>
-    <h1>Japanese Sign Language (JSL)</h1>
-    <p>Learn Japanese Sign Language (Nihon Shuwa) — the sign language of Japan&#39;s Deaf community with unique grammar and expression.</p>
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Japanese Sign Language</h1>
+    <p>The sign language of Japan's Deaf community.</p>
   </header>
-
-  <div class="unit-map">
-
-    <!-- Unit 1: Introduction -->
-    <div class="unit open">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">1</span>
-        <div class="unit-info">
-          <h2>Introduction</h2>
-          <p>History, fingerspelling, and numbers</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 1: History &amp; Culture of JSL</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 2: The Manual Alphabet (Fingerspelling)</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 3: Numbers 1–20</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 2: Greetings &amp; Basic Signs -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">2</span>
-        <div class="unit-info">
-          <h2>Greetings &amp; Basic Signs</h2>
-          <p>Essential everyday signs</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 4: Hello, Goodbye, Thank You</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 5: Introducing Yourself</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 6: Common Questions (What, Where, When)</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 3: People &amp; Family -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">3</span>
-        <div class="unit-info">
-          <h2>People &amp; Family</h2>
-          <p>Signing about people and relationships</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 7: Family Members</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 8: Pronouns &amp; Pointing</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 9: Describing People</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 4: Everyday Life -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">4</span>
-        <div class="unit-info">
-          <h2>Everyday Life</h2>
-          <p>Signs for daily activities</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 10: Food &amp; Drink Signs</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 11: Home &amp; Furniture</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 12: Daily Routines</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 5: Feelings &amp; Descriptions -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">5</span>
-        <div class="unit-info">
-          <h2>Feelings &amp; Descriptions</h2>
-          <p>Express emotions and descriptions</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 13: Emotions &amp; Feelings</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 14: Colors &amp; Sizes</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 15: Adjectives &amp; Comparisons</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 6: Actions &amp; Verbs -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">6</span>
-        <div class="unit-info">
-          <h2>Actions &amp; Verbs</h2>
-          <p>Movement and action signs</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 16: Common Action Verbs</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 17: Movement &amp; Direction</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 18: Time &amp; Scheduling</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 7: Places &amp; Travel -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">7</span>
-        <div class="unit-info">
-          <h2>Places &amp; Travel</h2>
-          <p>Navigate the world in sign</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 19: Places in Town</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 20: Transportation</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 21: Asking for Directions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 8: Grammar &amp; Sentence Structure -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">8</span>
-        <div class="unit-info">
-          <h2>Grammar &amp; Sentence Structure</h2>
-          <p>Building proper signed sentences</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 22: Word Order in Sign</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 23: Negation &amp; Questions</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 24: Classifiers &amp; Descriptors</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-    <!-- Unit 9: Conversation &amp; Culture -->
-    <div class="unit">
-      <div class="unit-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="unit-number">9</span>
-        <div class="unit-info">
-          <h2>Conversation &amp; Culture</h2>
-          <p>Real-world practice and Deaf culture</p>
-        </div>
-        <svg class="unit-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </div>
-      <div class="unit-lessons">
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 25: Deaf Culture &amp; Etiquette</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 26: Having a Full Conversation</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-        <div class="lesson-card">
-          <span class="lesson-dot"></span>
-          <span class="lesson-title">Lesson 27: Practice &amp; Review</span>
-          <span class="coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
+  <div id="learning-path" class="path-container"></div>
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
     </div>
   </footer>
-
   <script type="module">
     import { initNav } from '../../js/nav.js';
     initNav('../../');
-  </script>
-  <script>
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
+    const lessons = [{"id": "fingerspelling", "title": "Fingerspelling", "unit": "Basics", "href": "#"}, {"id": "greetings", "title": "Greetings", "unit": "Basics", "href": "#"}, {"id": "numbers", "title": "Numbers", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "nouns-and-articles", "title": "Nouns & Articles", "unit": "Grammar", "href": "#"}, {"id": "pronouns", "title": "Pronouns", "unit": "Grammar", "href": "#"}, {"id": "basic-sentences", "title": "Basic Sentences", "unit": "Grammar", "href": "#", "checkpoint": true}, {"id": "present-tense", "title": "Present Tense", "unit": "Verbs", "href": "#"}, {"id": "past-tense", "title": "Past Tense", "unit": "Verbs", "href": "#"}, {"id": "future-tense", "title": "Future Tense", "unit": "Verbs", "href": "#", "checkpoint": true}, {"id": "food-and-drink", "title": "Food & Drink", "unit": "Daily Life", "href": "#"}, {"id": "shopping", "title": "Shopping", "unit": "Daily Life", "href": "#"}, {"id": "travel", "title": "Travel", "unit": "Daily Life", "href": "#", "checkpoint": true}, {"id": "deaf-culture", "title": "Deaf Culture", "unit": "Fluency", "href": "#"}, {"id": "conversation", "title": "Conversation", "unit": "Fluency", "href": "#"}, {"id": "jsl-mastery", "title": "JSL Mastery!", "unit": "Fluency", "href": "#", "checkpoint": true}];
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('jsl');
+        renderPath(container, lessons, completed);
+      });
+      renderPath(container, lessons, completed);
+    }
+    loadPath();
   </script>
-
 </body>
 </html>
