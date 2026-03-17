@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-language)">Language</span>
     <h1>Pashto</h1>
-    <p>An Iranian language of Afghanistan and Pakistan.</p>
+    <p>Learn Pashto — spoken by 60 million Pashtuns in Afghanistan and Pakistan. Written in Perso-Arabic script. 169 lessons across 13 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,29 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "alphabet-and-sounds", "title": "Alphabet & Sounds", "unit": "Basics", "href": "#"}, {"id": "greetings", "title": "Greetings", "unit": "Basics", "href": "#"}, {"id": "numbers", "title": "Numbers", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "nouns-and-articles", "title": "Nouns & Articles", "unit": "Grammar", "href": "#"}, {"id": "pronouns", "title": "Pronouns", "unit": "Grammar", "href": "#"}, {"id": "basic-sentences", "title": "Basic Sentences", "unit": "Grammar", "href": "#", "checkpoint": true}, {"id": "present-tense", "title": "Present Tense", "unit": "Verbs", "href": "#"}, {"id": "past-tense", "title": "Past Tense", "unit": "Verbs", "href": "#"}, {"id": "future-tense", "title": "Future Tense", "unit": "Verbs", "href": "#", "checkpoint": true}, {"id": "food-and-drink", "title": "Food & Drink", "unit": "Daily Life", "href": "#"}, {"id": "shopping", "title": "Shopping", "unit": "Daily Life", "href": "#"}, {"id": "travel", "title": "Travel", "unit": "Daily Life", "href": "#", "checkpoint": true}, {"id": "culture", "title": "Culture", "unit": "Fluency", "href": "#"}, {"id": "conversation", "title": "Conversation", "unit": "Fluency", "href": "#"}, {"id": "pashto-mastery", "title": "Pashto Mastery!", "unit": "Fluency", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Arabic-Pashto Script',['Pashto Alphabet Overview','Perso-Arabic Base Letters','Unique Pashto Letters (ټ ډ ړ ږ ښ)','Vowel Marks (Zabar Zer Pesh)','Letter Connections (Initial Medial Final)','Numbers in Pashto Script','Writing Direction & Ligatures','Short Vowels vs Long Vowels','Diacritical Marks','Reading Simple Words','Writing Practice: Names','Reading Practice: Signs','Script Review']],
+      [2,'Greetings & Basics',['Assalamu Alaikum (Peace Greeting)','Stare Mashay (Hello)','Pa Khayr (Goodbye)','Tsenga Yey? (How Are You?)','Zama Num ... Dey (My Name Is)','Manana (Thank You)','Wabakhsha (Excuse Me)','Ho / Na (Yes / No)','Numbers 1-20','Numbers 20-100','Days of the Week','Months & Seasons','Greetings Review']],
+      [3,'Pronouns & Grammar',['Za (I)','Ta (You informal)','Taso (You formal)','Haghah (He/She)','Mung (We)','Haghwee (They)','Demonstrative Pronouns (Da Haghah)','Possessive Markers','Word Order (SOV)','Pashto Gender (Masculine Feminine)','Plural Formation','Question Words (Tsok Cherta Wale)','Pronouns Review']],
+      [4,'Present Tense',['Verb Roots in Pashto','Present Tense Endings','Kawul (To Do)','Tlul (To Go)','Raatlul (To Come)','Khorawul (To Eat)','Tskul (To Drink)','Wayul (To Say)','Lidul (To See)','Lwastul (To Read)','Likul (To Write)','Negative Present Tense','Present Tense Review']],
+      [5,'Past Tense',['Simple Past Formation','Split Ergativity in Pashto','Past of Kawul (Did)','Past of Tlul (Went)','Past of Raatlul (Came)','Past of Khorawul (Ate)','Past of Wayul (Said)','Past of Lidul (Saw)','Continuous Past','Perfect Past','Negative Past Forms','Time Expressions (Paroon Nan Sabaa)','Past Tense Review']],
+      [6,'Future & Modal Verbs',['Future Tense Formation (Ba + Present)','Ba Particle Usage','Will Go (Ba Dzee)','Will Do (Ba Kawee)','Want To (Ghwaarul)','Can / Able (Shwul)','Must / Should (Bayad)','Need To (Zaroorat)','Requesting Politely','Giving Advice','Permission & Prohibition','Expressing Wishes','Future & Modal Review']],
+      [7,'Family & People',['Plaar (Father)','Mor (Mother)','Wror (Brother)','Khwar (Sister)','Neekai (Grandfather)','Anaa (Grandmother)','Treh (Uncle Paternal)','Maama (Uncle Maternal)','Tror (Aunt Paternal)','Khaalah (Aunt Maternal)','Khaawand / Merman (Spouse)','Maashoom (Child)','Family Review']],
+      [8,'Food & Cuisine',['Dodai (Bread)','Kabuli Pulao (National Dish)','Mantu (Dumplings)','Bolani (Stuffed Flatbread)','Ashak (Leek Dumplings)','Qorma (Meat Stew)','Chainaki (Tea Pot Kebab)','Sheer Chai (Pink Tea)','Fruits of Afghanistan','Nan & Kebab Culture','At the Restaurant','Ordering & Paying','Food Review']],
+      [9,'Shopping & Numbers',['Large Numbers (Zar Lak Million)','Counting Money (Afghani Rupee)','At the Bazaar','Haggling Phrases','Clothing Vocabulary','Colors in Pashto','Sizes & Measurements','Price & Cost Phrases','Comparing Items','Traditional Crafts Shopping','Grocery Shopping','Online & Modern Shopping','Shopping Review']],
+      [10,'Travel & Afghanistan/Pakistan',['Kabul City Guide','Kandahar Province','Peshawar & KPK','Jalalabad & Nangarhar','Mazar-i-Sharif','Herat City','Bamiyan Valley','Khyber Pass','At the Airport','Hotel & Accommodation','Directions & Transport','Emergency Travel Phrases','Travel Review']],
+      [11,'Culture & Traditions',['Pashtunwali Code of Honor','Melmastia (Hospitality)','Nanawatai (Asylum)','Badal (Justice)','Loya Jirga (Grand Assembly)','Attan Dance','Pashto Poetry (Landay)','Khushal Khan Khattak','Rahman Baba','Wedding Traditions','Eid Celebrations','Tribal Structure','Culture Review']],
+      [12,'Advanced Grammar',['Complex Sentence Structures','Relative Clauses','Passive Voice in Pashto','Causative Verbs','Compound Verbs','Subjunctive Mood','Conditional Sentences','Direct & Indirect Speech','Formal vs Informal Register','Dialectal Differences (Northern Southern)','Idiomatic Expressions','Proverbs & Sayings','Advanced Grammar Review']],
+      [13,'Fluency & Mastery',['Conversation Starters','Small Talk & Weather','Expressing Opinions','Agreeing & Disagreeing','Storytelling in Pashto','Pashto News Reading','Pashto Song Lyrics','Listening Comprehension 1','Listening Comprehension 2','Writing a Paragraph','Debate & Discussion','Role Play Scenarios','Final Pashto Challenge']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pa-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();

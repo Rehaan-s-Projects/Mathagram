@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-language)">Language</span>
     <h1>Persian (Farsi)</h1>
-    <p>The poetic language of Iran, Afghanistan, and Tajikistan.</p>
+    <p>Learn Persian (Farsi) — the language of poetry, spoken by 110 million people in Iran, Afghanistan, and Tajikistan. 104 lessons across 8 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,24 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "alphabet-and-sounds", "title": "Alphabet & Sounds", "unit": "Basics", "href": "#"}, {"id": "greetings", "title": "Greetings", "unit": "Basics", "href": "#"}, {"id": "numbers", "title": "Numbers", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "nouns-and-articles", "title": "Nouns & Articles", "unit": "Grammar", "href": "#"}, {"id": "pronouns", "title": "Pronouns", "unit": "Grammar", "href": "#"}, {"id": "basic-sentences", "title": "Basic Sentences", "unit": "Grammar", "href": "#", "checkpoint": true}, {"id": "present-tense", "title": "Present Tense", "unit": "Verbs", "href": "#"}, {"id": "past-tense", "title": "Past Tense", "unit": "Verbs", "href": "#"}, {"id": "future-tense", "title": "Future Tense", "unit": "Verbs", "href": "#", "checkpoint": true}, {"id": "food-and-drink", "title": "Food & Drink", "unit": "Daily Life", "href": "#"}, {"id": "shopping", "title": "Shopping", "unit": "Daily Life", "href": "#"}, {"id": "travel", "title": "Travel", "unit": "Daily Life", "href": "#", "checkpoint": true}, {"id": "culture", "title": "Culture", "unit": "Fluency", "href": "#"}, {"id": "conversation", "title": "Conversation", "unit": "Fluency", "href": "#"}, {"id": "persian-mastery", "title": "Persian Mastery!", "unit": "Fluency", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Perso-Arabic Script',['Persian Alphabet Overview (32 Letters)','Unique Persian Letters (پ چ ژ گ)','Short Vowels (Fatheh Kasreh Zammeh)','Long Vowels (Alef Vav Ye)','Letter Connections (Initial Medial Final Isolated)','Numbers in Persian Script','Tashdid & Tanvin','Writing Direction & Ligatures','Reading Simple Words','Silent Letters (Hamzeh)','Common Letter Patterns','Writing Practice: Names & Words','Script Review']],
+      [2,'Greetings & Basics',['Salam (Hello)','Dorood (Formal Greeting)','Khodahafez (Goodbye)','Hale shoma chetor ast? (How Are You?)','Esme man ... ast (My Name Is)','Mamnun / Mersi (Thank You)','Lotfan (Please)','Baleh / Na (Yes / No)','Bebakhshid (Excuse Me)','Numbers 1-20','Numbers 20-100','Days & Months (Solar Calendar)','Greetings Review']],
+      [3,'Grammar & Structure',['Nouns & Gender','Ezafe Construction (-e connector)','Plural Formation (-ha -an)','Word Order (SOV)','Ra Marker (Direct Object)','Prepositions (Dar Az Ba Be)','Question Words (Chi Koja Key Chera)','Adjective Placement (After Noun + Ezafe)','Demonstratives (In An)','Possessive with Ezafe','Conjunctions (Va Amma Ya Chon)','Comparing (Tar Tarin)','Grammar Review']],
+      [4,'Present Tense',['Verb Roots (Present Stem)','Personal Endings (am i ad im id and)','Kardan (To Do)','Raftan (To Go)','Amadan (To Come)','Khordan (To Eat)','Nushidan (To Drink)','Goftan (To Say)','Didan (To See)','Khandan (To Read)','Neveshtan (To Write)','Danestan (To Know)','Present Tense Review']],
+      [5,'Past & Future Tenses',['Simple Past Formation','Past of Kardan','Past of Raftan','Past of Amadan','Imperfect Past (Mi + Past)','Present Perfect (Past Participle + Budan)','Past Perfect','Future with Khastan (Will)','Future Plans','Time Expressions (Diruz Emruz Farda)','Negative Past','Negative Future','Tenses Review']],
+      [6,'Food & Cuisine',['Nan (Bread Varieties)','Chelo Kebab (National Dish)','Ghormeh Sabzi (Herb Stew)','Tahdig (Crispy Rice)','Zereshk Polo (Barberry Rice)','Fesenjan (Pomegranate Walnut Stew)','Ash Reshteh (Noodle Soup)','Dizi / Abgoosht (Stone Pot Stew)','Dolmeh (Stuffed Grape Leaves)','Chai & Sweets (Baklava Gaz Sohan)','Fruits & Dried Fruits','At the Restaurant','Food Review']],
+      [7,'Travel & Iran',['Tehran (Capital City)','Isfahan (Nesfe Jahan)','Shiraz (City of Poetry)','Persepolis (Takht-e Jamshid)','Yazd (Desert City)','Kerman & Lut Desert','Tabriz & Azerbaijan Province','Gilan & Caspian Coast','Mashhad & Khorasan','At the Airport','Hotel & Accommodation','Directions & Transport','Travel Review']],
+      [8,'Culture & Heritage',['Nowruz (Persian New Year)','Haft Sin Table','Chaharshanbe Suri (Fire Festival)','Hafez (Poetry Master)','Rumi (Molana)','Ferdowsi & Shahnameh','Sa\'di & Golestan','Persian Calligraphy','Persian Miniature Painting','Iranian Cinema','Traditional Music (Tar Setar Santur)','Persian Carpet Tradition','Culture Review']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pe-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
