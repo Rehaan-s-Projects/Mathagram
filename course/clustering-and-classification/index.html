@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
     <h1>Clustering & Classification</h1>
-    <p>Group and categorize data with ML algorithms.</p>
+    <p>Group and categorize data using ML algorithms. 98 lessons across 7 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,25 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "supervised-vs-unsupervised", "title": "Supervised vs Unsupervised", "unit": "ML Basics", "href": "#"}, {"id": "distance-metrics", "title": "Distance Metrics", "unit": "ML Basics", "href": "#"}, {"id": "feature-scaling", "title": "Feature Scaling", "unit": "ML Basics", "href": "#"}, {"id": "train-test-split", "title": "Train-Test Split", "unit": "ML Basics", "href": "#"}, {"id": "ml-basics-checkpoint", "title": "ML Basics Checkpoint", "unit": "ML Basics", "href": "#", "checkpoint": true}, {"id": "k-means-clustering", "title": "K-Means Clustering", "unit": "Clustering", "href": "#"}, {"id": "hierarchical-clustering", "title": "Hierarchical Clustering", "unit": "Clustering", "href": "#"}, {"id": "dbscan", "title": "DBSCAN", "unit": "Clustering", "href": "#"}, {"id": "evaluating-clusters", "title": "Evaluating Clusters", "unit": "Clustering", "href": "#"}, {"id": "clustering-checkpoint", "title": "Clustering Checkpoint", "unit": "Clustering", "href": "#", "checkpoint": true}, {"id": "k-nearest-neighbors", "title": "K-Nearest Neighbors", "unit": "Classification", "href": "#"}, {"id": "decision-trees", "title": "Decision Trees", "unit": "Classification", "href": "#"}, {"id": "naive-bayes", "title": "Naive Bayes", "unit": "Classification", "href": "#"}, {"id": "confusion-matrix-and-accuracy", "title": "Confusion Matrix & Accuracy", "unit": "Classification", "href": "#"}, {"id": "classification-mastery", "title": "Classification Mastery!", "unit": "Classification", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Introduction to ML',['What is Machine Learning?','Supervised vs Unsupervised','Training & Test Sets','Features & Labels','Overfitting & Underfitting','Cross-Validation','Bias-Variance Tradeoff','Model Evaluation Metrics','Accuracy Precision Recall','F1 Score','Confusion Matrix','ROC Curve','AUC Score','ML Intro Review']],
+      [2,'K-Nearest Neighbors',['What is KNN?','Distance Metrics (Euclidean)','Manhattan Distance','Choosing K','KNN for Classification','KNN for Regression','Weighted KNN','Feature Scaling','Normalization','Standardization','Curse of Dimensionality','KNN Pros & Cons','KNN Applications','KNN Review']],
+      [3,'Decision Trees',['What is a Decision Tree?','Entropy','Information Gain','Gini Impurity','Building a Tree','Pruning','Pre-Pruning vs Post-Pruning','Decision Boundaries','Feature Importance','Handling Missing Data','Categorical Features','Continuous Features','Decision Tree Visualization','Decision Trees Review']],
+      [4,'K-Means Clustering',['What is Clustering?','K-Means Algorithm','Choosing K (Elbow Method)','Silhouette Score','Initialization Methods','K-Means++','Convergence','Limitations of K-Means','Cluster Shapes','Customer Segmentation','Image Compression','Color Quantization','K-Means Variations','K-Means Review']],
+      [5,'Hierarchical Clustering',['Agglomerative Clustering','Divisive Clustering','Linkage Methods (Single Complete Average)','Dendrograms','Cutting Dendrograms','Distance Matrices','Ward Method','DBSCAN Introduction','DBSCAN Parameters','Noise Points','Cluster Density','Comparing Clustering Methods','Hierarchical Applications','Hierarchical Review']],
+      [6,'Naive Bayes & SVM',['Naive Bayes Classifier','Gaussian Naive Bayes','Multinomial Naive Bayes','Text Classification','Spam Detection','Sentiment Analysis','What is SVM?','Linear SVM','Maximum Margin','Support Vectors','Kernel Trick','RBF Kernel','SVM Applications','Naive Bayes & SVM Review']],
+      [7,'Real-World Applications',['Image Classification','Handwriting Recognition','Facial Recognition Basics','Recommendation Systems','Anomaly Detection','Fraud Detection','Medical Diagnosis ML','Natural Language Processing','Topic Modeling','Market Basket Analysis','Ethical AI','Feature Engineering','Model Deployment','Applications Review']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();

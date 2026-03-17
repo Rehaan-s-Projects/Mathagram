@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
     <h1>Probability in Data</h1>
-    <p>Chance, distributions, and quantifying uncertainty.</p>
+    <p>Apply probability to real datasets. 121 lessons across 11 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,29 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "what-is-probability?", "title": "What Is Probability?", "unit": "Basics", "href": "#"}, {"id": "sample-spaces-and-events", "title": "Sample Spaces & Events", "unit": "Basics", "href": "#"}, {"id": "conditional-probability", "title": "Conditional Probability", "unit": "Basics", "href": "#"}, {"id": "bayes-theorem-intro", "title": "Bayes' Theorem Intro", "unit": "Basics", "href": "#"}, {"id": "probability-basics-checkpoint", "title": "Probability Basics Checkpoint", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "discrete-distributions", "title": "Discrete Distributions", "unit": "Distributions", "href": "#"}, {"id": "binomial-distribution", "title": "Binomial Distribution", "unit": "Distributions", "href": "#"}, {"id": "poisson-distribution", "title": "Poisson Distribution", "unit": "Distributions", "href": "#"}, {"id": "normal-distribution", "title": "Normal Distribution", "unit": "Distributions", "href": "#"}, {"id": "distributions-checkpoint", "title": "Distributions Checkpoint", "unit": "Distributions", "href": "#", "checkpoint": true}, {"id": "expected-value", "title": "Expected Value", "unit": "Applications", "href": "#"}, {"id": "variance-and-std-deviation", "title": "Variance & Std Deviation", "unit": "Applications", "href": "#"}, {"id": "law-of-large-numbers", "title": "Law of Large Numbers", "unit": "Applications", "href": "#"}, {"id": "central-limit-theorem", "title": "Central Limit Theorem", "unit": "Applications", "href": "#"}, {"id": "probability-mastery", "title": "Probability Mastery!", "unit": "Applications", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Basic Probability',['What is Probability?','Sample Spaces','Events','Probability Scale 0 to 1','Equally Likely Outcomes','Experimental Probability','Theoretical Probability','Frequency & Probability','Law of Large Numbers','Probability Misconceptions','Basic Probability Review']],
+      [2,'Counting Methods',['Fundamental Counting Principle','Permutations','Permutations with Repetition','Combinations','Combinations with Repetition','Pascal Triangle & Counting','Factorial Notation','Arrangements','Selections','Circular Permutations','Counting Review']],
+      [3,'Conditional Probability',['What is Conditional Probability?','P(A|B) Formula','Tree Diagrams','Two-Way Tables','Independent Events','Dependent Events','Multiplication Rule','Total Probability','False Positives','Medical Testing','Conditional Review']],
+      [4,'Bayes Theorem',['What is Bayes Theorem?','Prior Probability','Likelihood','Posterior Probability','Bayes Formula','Updating Beliefs','Naive Bayes Intro','Spam Filter Example','Medical Diagnosis','Bayesian vs Frequentist','Bayes Review']],
+      [5,'Probability Distributions',['What is a Distribution?','Discrete Distributions','Continuous Distributions','PMF vs PDF','CDF','Uniform Distribution','Bernoulli Distribution','Binomial Distribution','Geometric Distribution','Poisson Distribution','Distributions Review']],
+      [6,'Normal Distribution',['The Bell Curve','Mean & Standard Deviation','68-95-99.7 Rule','Standard Normal Z','Z-Score Calculations','Z-Table Usage','Finding Probabilities','Inverse Normal','Central Limit Theorem','Normal Approximation','Normal Review']],
+      [7,'Expected Value & Variance',['Expected Value Definition','Computing Expected Value','Variance Definition','Standard Deviation','Properties of Expectation','Properties of Variance','Covariance','Correlation Coefficient','Portfolio Risk','Insurance Calculations','EV & Var Review']],
+      [8,'Sampling & Estimation',['Random Sampling','Sampling Distributions','Sample Mean Distribution','Sample Proportion Distribution','Standard Error','Confidence Intervals','Margin of Error','Sample Size Calculation','Bootstrap Methods','Bias in Sampling','Sampling Review']],
+      [9,'Hypothesis Testing',['Null Hypothesis','Alternative Hypothesis','Test Statistics','P-Values','Significance Levels','Type I Errors','Type II Errors','Power of a Test','One-Tailed vs Two-Tailed','Chi-Square Test','Hypothesis Review']],
+      [10,'Monte Carlo Methods',['What is Monte Carlo?','Random Number Generation','Simulating Coin Flips','Simulating Dice','Estimating Pi','Monte Carlo Integration','Risk Simulation','Financial Modeling','Buffon Needle Simulation','Markov Chain Monte Carlo','Monte Carlo Review']],
+      [11,'Probability in Real Life',['Weather Forecasting','Sports Analytics','Gambling Mathematics','Lottery Odds','Insurance Actuarial','Stock Market Probability','Election Predictions','A/B Testing','Quality Control','Epidemiology','Real Life Review']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pid-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();

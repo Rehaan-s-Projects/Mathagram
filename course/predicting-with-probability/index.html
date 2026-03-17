@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
     <h1>Predicting with Probability</h1>
-    <p>Bayesian thinking and predictive modeling.</p>
+    <p>Bayesian thinking and predictive modeling. 63 lessons across 7 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,25 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "prior-and-posterior", "title": "Prior & Posterior", "unit": "Bayesian Thinking", "href": "#"}, {"id": "updating-beliefs", "title": "Updating Beliefs", "unit": "Bayesian Thinking", "href": "#"}, {"id": "likelihood-functions", "title": "Likelihood Functions", "unit": "Bayesian Thinking", "href": "#"}, {"id": "bayesian-vs-frequentist", "title": "Bayesian vs Frequentist", "unit": "Bayesian Thinking", "href": "#"}, {"id": "bayesian-thinking-checkpoint", "title": "Bayesian Thinking Checkpoint", "unit": "Bayesian Thinking", "href": "#", "checkpoint": true}, {"id": "naive-bayes-classifier", "title": "Naive Bayes Classifier", "unit": "Predictive Models", "href": "#"}, {"id": "markov-chains", "title": "Markov Chains", "unit": "Predictive Models", "href": "#"}, {"id": "hidden-markov-models", "title": "Hidden Markov Models", "unit": "Predictive Models", "href": "#"}, {"id": "monte-carlo-simulation", "title": "Monte Carlo Simulation", "unit": "Predictive Models", "href": "#"}, {"id": "predictive-models-checkpoint", "title": "Predictive Models Checkpoint", "unit": "Predictive Models", "href": "#", "checkpoint": true}, {"id": "time-series-basics", "title": "Time Series Basics", "unit": "Forecasting", "href": "#"}, {"id": "trend-and-seasonality", "title": "Trend & Seasonality", "unit": "Forecasting", "href": "#"}, {"id": "forecasting-methods", "title": "Forecasting Methods", "unit": "Forecasting", "href": "#"}, {"id": "evaluating-predictions", "title": "Evaluating Predictions", "unit": "Forecasting", "href": "#"}, {"id": "prediction-mastery", "title": "Prediction Mastery!", "unit": "Forecasting", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Frequentist vs Bayesian',['Two Schools of Thought','Frequentist Interpretation','Bayesian Interpretation','Prior Beliefs','Updating with Evidence','Subjectivity in Priors','Objective Priors','Comparing Approaches','When to Use Which']],
+      [2,'Bayesian Updating',['Prior Distribution','Likelihood Function','Posterior Distribution','Conjugate Priors','Beta-Binomial Model','Normal-Normal Model','Sequential Updating','Multiple Evidence','Bayesian Updating Review']],
+      [3,'Predictive Models',['What is a Predictive Model?','Training Data','Validation Data','Test Data','Overfitting','Underfitting','Bias-Variance Tradeoff','Model Selection','Cross-Validation']],
+      [4,'Decision Theory',['Expected Utility','Loss Functions','Minimax Decisions','Bayesian Decisions','Risk Assessment','Cost-Benefit Analysis','Decision Trees','Sensitivity Analysis','Decision Theory Review']],
+      [5,'Time Series Forecasting',['What is a Time Series?','Trend Analysis','Seasonality','Moving Averages','Exponential Smoothing','ARIMA Introduction','Forecasting Accuracy','MAE & RMSE','Time Series Review']],
+      [6,'Risk & Uncertainty',['Quantifying Uncertainty','Confidence vs Credible Intervals','Prediction Intervals','Scenario Analysis','Monte Carlo Simulation','Value at Risk','Black Swan Events','Tail Risk','Risk Review']],
+      [7,'Real-World Forecasting',['Weather Prediction','Election Forecasting','Economic Forecasting','Sports Predictions','Pandemic Modeling','Stock Market','Demand Forecasting','Insurance Pricing','Forecasting Review']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pp-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();

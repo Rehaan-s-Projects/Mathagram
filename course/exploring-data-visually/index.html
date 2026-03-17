@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
     <h1>Exploring Data Visually</h1>
-    <p>Charts, graphs, and visual storytelling with data.</p>
+    <p>Turn raw numbers into compelling visual stories. 132 lessons across 11 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,29 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "bar-charts-and-histograms", "title": "Bar Charts & Histograms", "unit": "Chart Types", "href": "#"}, {"id": "line-graphs-and-trends", "title": "Line Graphs & Trends", "unit": "Chart Types", "href": "#"}, {"id": "pie-charts-and-proportions", "title": "Pie Charts & Proportions", "unit": "Chart Types", "href": "#"}, {"id": "scatter-plots", "title": "Scatter Plots", "unit": "Chart Types", "href": "#"}, {"id": "chart-types-checkpoint", "title": "Chart Types Checkpoint", "unit": "Chart Types", "href": "#", "checkpoint": true}, {"id": "choosing-the-right-chart", "title": "Choosing the Right Chart", "unit": "Visual Design", "href": "#"}, {"id": "color-and-accessibility", "title": "Color & Accessibility", "unit": "Visual Design", "href": "#"}, {"id": "axes-labels-and-legends", "title": "Axes, Labels & Legends", "unit": "Visual Design", "href": "#"}, {"id": "misleading-graphs", "title": "Misleading Graphs", "unit": "Visual Design", "href": "#"}, {"id": "visual-design-checkpoint", "title": "Visual Design Checkpoint", "unit": "Visual Design", "href": "#", "checkpoint": true}, {"id": "dashboards", "title": "Dashboards", "unit": "Data Storytelling", "href": "#"}, {"id": "interactive-visualizations", "title": "Interactive Visualizations", "unit": "Data Storytelling", "href": "#"}, {"id": "infographics", "title": "Infographics", "unit": "Data Storytelling", "href": "#"}, {"id": "presenting-data", "title": "Presenting Data", "unit": "Data Storytelling", "href": "#"}, {"id": "data-visualization-mastery", "title": "Data Visualization Mastery!", "unit": "Data Storytelling", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Types of Data',['What is Data?','Categorical Data','Quantitative Data','Discrete vs Continuous','Nominal vs Ordinal','Ratio vs Interval','Data Collection Methods','Surveys & Questionnaires','Primary vs Secondary Data','Data Cleaning Basics','Missing Data','Types of Data Review']],
+      [2,'Bar Charts & Histograms',['Simple Bar Charts','Grouped Bar Charts','Stacked Bar Charts','Horizontal Bar Charts','Histograms Introduction','Choosing Bin Width','Frequency Histograms','Relative Frequency Histograms','Comparing Histograms','Misleading Bar Charts','When to Use Each','Bar & Histogram Review']],
+      [3,'Scatter Plots',['What is a Scatter Plot?','Plotting Points','Positive Correlation','Negative Correlation','No Correlation','Outliers in Scatter Plots','Trend Lines','Clusters in Data','Scatter Plot Matrix','Bubble Charts','3D Scatter Plots','Scatter Plot Review']],
+      [4,'Line Graphs & Time Series',['Simple Line Graphs','Multiple Line Graphs','Time Series Data','Trends','Seasonal Patterns','Cyclical Patterns','Moving Averages','Smoothing Data','Stock Market Charts','Temperature Over Time','Population Growth Charts','Line Graph Review']],
+      [5,'Pie Charts & Proportions',['Simple Pie Charts','When to Use Pie Charts','When NOT to Use Pie Charts','Donut Charts','Treemaps','Waffle Charts','Stacked Area Charts','100% Stacked Bar','Proportional Data','Market Share Visualization','Budget Visualization','Proportions Review']],
+      [6,'Box Plots & Distributions',['Box Plot Basics','Quartiles & IQR','Whiskers & Outliers','Comparing Box Plots','Violin Plots','Density Plots','Kernel Density Estimation','Normal Distribution Shape','Skewed Distributions','Bimodal Distributions','QQ Plots','Distribution Review']],
+      [7,'Heatmaps & Matrices',['What is a Heatmap?','Color Scales','Correlation Heatmaps','Calendar Heatmaps','Geographic Heatmaps','Confusion Matrices','Pivot Tables Visualization','Cluster Maps','Annotated Heatmaps','Choosing Color Palettes','Accessibility in Color','Heatmap Review']],
+      [8,'Geographic & Maps',['Choropleth Maps','Point Maps','Flow Maps','Cartograms','GPS Data Visualization','Population Density Maps','Election Maps','Weather Maps','Crime Heat Maps','Migration Patterns','Interactive Maps','Maps Review']],
+      [9,'Interactive Dashboards',['What is a Dashboard?','KPI Selection','Layout & Design','Filters & Slicers','Drill-Down','Linked Charts','Real-Time Data','Dashboard Tools Overview','Google Data Studio','Tableau Basics','Power BI Basics','Dashboard Review']],
+      [10,'Storytelling with Data',['What is Data Storytelling?','Narrative Structure','Choosing the Right Chart','Chart Junk vs Clean Design','Edward Tufte Principles','Color Theory for Data','Typography in Charts','Annotations & Labels','Before/After Comparisons','Presentation Skills','Infographics','Storytelling Review']],
+      [11,'Advanced Visualization',['Small Multiples','Sparklines','Radar Charts','Parallel Coordinates','Sankey Diagrams','Network Graphs','Word Clouds','Sunburst Charts','Gantt Charts','Waterfall Charts','Animation in Data','Advanced Viz Review']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'edv-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();

@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
     <h1>Regression</h1>
-    <p>Fit lines and curves to predict outcomes.</p>
+    <p>Fit lines and curves to predict outcomes. 78 lessons across 6 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,24 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "correlation-and-causation", "title": "Correlation & Causation", "unit": "Foundations", "href": "#"}, {"id": "simple-linear-regression", "title": "Simple Linear Regression", "unit": "Foundations", "href": "#"}, {"id": "least-squares-method", "title": "Least Squares Method", "unit": "Foundations", "href": "#"}, {"id": "residuals-and-fit", "title": "Residuals & Fit", "unit": "Foundations", "href": "#"}, {"id": "linear-regression-checkpoint", "title": "Linear Regression Checkpoint", "unit": "Foundations", "href": "#", "checkpoint": true}, {"id": "multiple-regression", "title": "Multiple Regression", "unit": "Beyond Linear", "href": "#"}, {"id": "polynomial-regression", "title": "Polynomial Regression", "unit": "Beyond Linear", "href": "#"}, {"id": "logistic-regression", "title": "Logistic Regression", "unit": "Beyond Linear", "href": "#"}, {"id": "regularization", "title": "Regularization", "unit": "Beyond Linear", "href": "#"}, {"id": "advanced-regression-checkpoint", "title": "Advanced Regression Checkpoint", "unit": "Beyond Linear", "href": "#", "checkpoint": true}, {"id": "feature-selection", "title": "Feature Selection", "unit": "Model Building", "href": "#"}, {"id": "cross-validation", "title": "Cross-Validation", "unit": "Model Building", "href": "#"}, {"id": "overfitting-and-underfitting", "title": "Overfitting & Underfitting", "unit": "Model Building", "href": "#"}, {"id": "real-world-prediction", "title": "Real-World Prediction", "unit": "Model Building", "href": "#"}, {"id": "regression-mastery", "title": "Regression Mastery!", "unit": "Model Building", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Correlation',['What is Correlation?','Scatter Plot Patterns','Pearson Correlation','Spearman Rank Correlation','Correlation Coefficient r','Interpreting r Values','Correlation vs Causation','Spurious Correlations','Partial Correlation','Autocorrelation','Correlation Matrix','Heatmap of Correlations','Correlation Review']],
+      [2,'Simple Linear Regression',['What is Regression?','Line of Best Fit','Slope & Intercept','Least Squares Method','Residuals','Sum of Squared Errors','R-Squared','Interpreting R-Squared','Predictions','Extrapolation Dangers','Regression Assumptions','Checking Assumptions','Simple LR Review']],
+      [3,'Multiple Regression',['Multiple Predictors','Multiple Regression Equation','Adjusted R-Squared','Multicollinearity','VIF (Variance Inflation)','Feature Selection','Forward Selection','Backward Elimination','Stepwise Regression','Interaction Terms','Dummy Variables','Categorical Predictors','Multiple Regression Review']],
+      [4,'Polynomial & Nonlinear',['Polynomial Regression','Quadratic Fit','Cubic Fit','Choosing Degree','Overfitting Polynomials','Exponential Regression','Logarithmic Regression','Power Regression','Logistic Curve','Sigmoid Function','Spline Regression','Curve Fitting','Nonlinear Review']],
+      [5,'Logistic Regression',['Binary Classification','Odds & Log-Odds','Logistic Function','Maximum Likelihood','Decision Boundary','Threshold Selection','Accuracy','Precision & Recall','ROC Curve','AUC','Multinomial Logistic','Ordinal Logistic','Logistic Regression Review']],
+      [6,'Advanced & Applications',['Ridge Regression','Lasso Regression','Elastic Net','Regularization','Cross-Validation for Regression','Time Series Regression','ARIMA Basics','Prediction Intervals','Confidence Bands','Real Estate Prediction','Sales Forecasting','Medical Outcomes','Advanced Regression Review']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'rg-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
