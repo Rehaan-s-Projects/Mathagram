@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-language)">Language</span>
     <h1>Amharic</h1>
-    <p>Ethiopia's official language, written in Ge'ez script.</p>
+    <p>Learn Amharic — the official language of Ethiopia, written in the beautiful Ge'ez script. 97 lessons across 7 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,23 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "alphabet-and-sounds", "title": "Alphabet & Sounds", "unit": "Basics", "href": "#"}, {"id": "greetings", "title": "Greetings", "unit": "Basics", "href": "#"}, {"id": "numbers", "title": "Numbers", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "nouns-and-articles", "title": "Nouns & Articles", "unit": "Grammar", "href": "#"}, {"id": "pronouns", "title": "Pronouns", "unit": "Grammar", "href": "#"}, {"id": "basic-sentences", "title": "Basic Sentences", "unit": "Grammar", "href": "#", "checkpoint": true}, {"id": "present-tense", "title": "Present Tense", "unit": "Verbs", "href": "#"}, {"id": "past-tense", "title": "Past Tense", "unit": "Verbs", "href": "#"}, {"id": "future-tense", "title": "Future Tense", "unit": "Verbs", "href": "#", "checkpoint": true}, {"id": "food-and-drink", "title": "Food & Drink", "unit": "Daily Life", "href": "#"}, {"id": "shopping", "title": "Shopping", "unit": "Daily Life", "href": "#"}, {"id": "travel", "title": "Travel", "unit": "Daily Life", "href": "#", "checkpoint": true}, {"id": "culture", "title": "Culture", "unit": "Fluency", "href": "#"}, {"id": "conversation", "title": "Conversation", "unit": "Fluency", "href": "#"}, {"id": "amharic-mastery", "title": "Amharic Mastery!", "unit": "Fluency", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,"Ge'ez Script",['Fidel Writing System Overview','First Order (Ge\'ez) ሀ ለ ሐ','Second Order (Ka\'ib) ሁ ሉ ሑ','Third Order (Salis) ሂ ሊ ሒ','Fourth Order (Rabi) ሃ ላ ሓ','Fifth Order (Hamis) ሄ ሌ ሔ','Sixth Order (Sadis) ህ ል ሕ','Seventh Order (Sabi) ሆ ሎ ሖ','Ge\'ez Numerals','Punctuation Marks','Reading Fidel Charts','Writing Practice 1','Writing Practice 2','Script Review']],
+      [2,'Greetings & Basics',['Selam (Hello)','Ameseginalehu (Thank You)','Awo/Aye (Yes/No)','Endemin neh/nesh? (How Are You?)','Sime... new (My Name Is)','Keyet neh/nesh? (Where From?)','Dehna ader/aderi (Good Night)','Yikir ta (Excuse Me)','Ebakih/Ebakish (Please)','Numbers 1-20','Numbers 21-100','Days & Months (Ethiopian Calendar)','Emergency Phrases','Greetings Review']],
+      [3,'Grammar Foundations',['SOV Word Order','Nouns & Gender','Definite Article (-u/-wa)','Plural Formation','Pronouns (I You He She)','Possessives','Adjectives','Demonstratives (This/That)','Prepositions','Question Words','Negation','Conjunctions','Sentence Patterns','Grammar Review']],
+      [4,'Verb System',['Verb Roots (Trilateral)','Present Tense','Past Tense (Simple)','Future Tense','Imperative','Gerund','Infinitive','Negative Verbs','Common Verbs 1 (eat drink go)','Common Verbs 2 (see hear speak)','Compound Verbs','Verb Agreement (Gender/Number)','Verb Practice','Verbs Review']],
+      [5,'Daily Life',['Family (Beteseb)','Injera & Wot','Buna (Coffee Ceremony)','Teff & Ethiopian Grains','Home (Bet)','Clothing (Habesha Kemis)','Market Shopping (Gebya)','Transportation','Health & Body','At the Hospital','School (Timhirt Bet)','Work & Occupations','Daily Conversations','Daily Life Review']],
+      [6,'Culture & Ethiopia',['Ethiopian History Overview','Aksumite Empire','Lalibela Rock Churches','Gondar Castles','Addis Ababa','Timkat Festival','Meskel Festival','Ethiopian Christmas (Genna)','Ethiopian Music (Eskista)','Ethiopian Orthodox Church','Haile Selassie','Ethiopian Cuisine Culture','Proverbs & Sayings','Culture Review']],
+      [7,'Fluency & Mastery',['Conversation Practice 1','Conversation Practice 2','Storytelling','Expressing Opinions','Reading Practice 1','Reading Practice 2','Writing Practice','Listening Practice','Idioms & Expressions','Formal vs Informal Register','News Reading','Comprehensive Test','Amharic Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'am-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
