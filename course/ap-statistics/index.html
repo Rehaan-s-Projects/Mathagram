@@ -50,192 +50,28 @@
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const lessons = [
-      /* ── Unit 1: Exploring Data (12) ── */
-      { id: 's-1',   title: 'Categorical vs Quantitative Data',    href: '#' },
-      { id: 's-2',   title: 'Frequency Tables',                    href: '#' },
-      { id: 's-3',   title: 'Measures of Center',                  href: '#' },
-      { id: 's-4',   title: 'Stem-and-Leaf Plots',                 href: '#' },
-      { id: 's-5',   title: 'Dot Plots',                           href: '#' },
-      { id: 's-6',   title: 'Frequency Tables Practice',           href: '#' },
-      { id: 's-7',   title: 'Relative Frequency',                  href: '#' },
-      { id: 's-8',   title: 'Cumulative Frequency',                href: '#' },
-      { id: 's-9',   title: 'Two-Way Tables',                      href: '#' },
-      { id: 's-10',  title: 'Marginal & Conditional Distributions', href: '#' },
-      { id: 's-11',  title: 'Comparing Distributions',             href: '#' },
-      { id: 's-12',  title: 'Exploring Data Practice',             href: '#', checkpoint: true },
-
-      /* ── Unit 2: Describing Distributions (12) ── */
-      { id: 's-13',  title: 'Histograms & Stemplots',              href: '#' },
-      { id: 's-14',  title: 'Mean Median Mode',                    href: '#' },
-      { id: 's-15',  title: 'Standard Deviation & IQR',            href: '#' },
-      { id: 's-16',  title: 'Skewness & Symmetry',                 href: '#' },
-      { id: 's-17',  title: 'Outliers & IQR Rule',                 href: '#' },
-      { id: 's-18',  title: 'Five-Number Summary',                 href: '#' },
-      { id: 's-19',  title: 'Comparing Box Plots',                 href: '#' },
-      { id: 's-20',  title: 'Standard Deviation Calculation',      href: '#' },
-      { id: 's-21',  title: 'Variance',                            href: '#' },
-      { id: 's-22',  title: "Chebyshev's Theorem",                 href: '#' },
-      { id: 's-23',  title: 'Empirical Rule 68-95-99.7',           href: '#' },
-      { id: 's-24',  title: 'Describing Distributions Practice',   href: '#', checkpoint: true },
-
-      /* ── Unit 3: Normal Distributions (12) ── */
-      { id: 's-25',  title: 'The Normal Curve',                    href: '#' },
-      { id: 's-26',  title: 'Z-Scores',                            href: '#' },
-      { id: 's-27',  title: 'The Empirical Rule',                  href: '#' },
-      { id: 's-28',  title: 'Properties of Normal Curves',         href: '#' },
-      { id: 's-29',  title: 'Standard Normal Distribution',        href: '#' },
-      { id: 's-30',  title: 'Z-Score Calculations',                href: '#' },
-      { id: 's-31',  title: 'Using Z-Tables',                      href: '#' },
-      { id: 's-32',  title: 'Finding Percentiles',                 href: '#' },
-      { id: 's-33',  title: 'Finding Values from Percentiles',     href: '#' },
-      { id: 's-34',  title: 'Normal Probability Plots',            href: '#' },
-      { id: 's-35',  title: 'Assessing Normality',                 href: '#' },
-      { id: 's-36',  title: 'Normal Distributions Practice',       href: '#', checkpoint: true },
-
-      /* ── Unit 4: Designing Studies (12) ── */
-      { id: 's-37',  title: 'Sampling Methods',                    href: '#' },
-      { id: 's-38',  title: 'Observational Studies vs Experiments', href: '#' },
-      { id: 's-39',  title: 'Bias & Confounding',                  href: '#' },
-      { id: 's-40',  title: 'Census vs Sample',                    href: '#' },
-      { id: 's-41',  title: 'Simple Random Sampling',              href: '#' },
-      { id: 's-42',  title: 'Stratified Sampling',                 href: '#' },
-      { id: 's-43',  title: 'Cluster Sampling',                    href: '#' },
-      { id: 's-44',  title: 'Systematic Sampling',                 href: '#' },
-      { id: 's-45',  title: 'Bias in Sampling',                    href: '#' },
-      { id: 's-46',  title: 'Randomized Block Design',             href: '#' },
-      { id: 's-47',  title: 'Matched Pairs Design',                href: '#' },
-      { id: 's-48',  title: 'Designing Studies Practice',          href: '#', checkpoint: true },
-
-      /* ── Unit 5: Probability (12) ── */
-      { id: 's-49',  title: 'Basic Probability Rules',             href: '#' },
-      { id: 's-50',  title: 'Conditional Probability',             href: '#' },
-      { id: 's-51',  title: 'Independence',                        href: '#' },
-      { id: 's-52',  title: 'Sample Spaces & Events',              href: '#' },
-      { id: 's-53',  title: 'Complement Rule',                     href: '#' },
-      { id: 's-54',  title: 'Addition Rule Mutually Exclusive',    href: '#' },
-      { id: 's-55',  title: 'Addition Rule General',               href: '#' },
-      { id: 's-56',  title: 'Multiplication Rule Independent',     href: '#' },
-      { id: 's-57',  title: 'Multiplication Rule General',         href: '#' },
-      { id: 's-58',  title: 'Conditional Probability Formula',     href: '#' },
-      { id: 's-59',  title: "Bayes' Theorem Introduction",         href: '#' },
-      { id: 's-60',  title: 'Probability Practice',                href: '#', checkpoint: true },
-
-      /* ── Unit 6: Random Variables (12) ── */
-      { id: 's-61',  title: 'Discrete Random Variables',           href: '#' },
-      { id: 's-62',  title: 'Continuous Random Variables',         href: '#' },
-      { id: 's-63',  title: 'The Binomial Distribution',           href: '#' },
-      { id: 's-64',  title: 'Probability Distributions',           href: '#' },
-      { id: 's-65',  title: 'Expected Value Mean',                 href: '#' },
-      { id: 's-66',  title: 'Standard Deviation of Random Variable', href: '#' },
-      { id: 's-67',  title: 'Combining Random Variables',          href: '#' },
-      { id: 's-68',  title: 'Binomial Distribution',               href: '#' },
-      { id: 's-69',  title: 'Binomial Probability Formula',        href: '#' },
-      { id: 's-70',  title: 'Geometric Distribution',              href: '#' },
-      { id: 's-71',  title: 'Poisson Distribution',                href: '#' },
-      { id: 's-72',  title: 'Random Variables Practice',           href: '#', checkpoint: true },
-
-      /* ── Unit 7: Sampling Distributions (12) ── */
-      { id: 's-73',  title: 'Sampling Variability',                href: '#' },
-      { id: 's-74',  title: 'Central Limit Theorem',               href: '#' },
-      { id: 's-75',  title: 'Sampling Distribution of Proportion', href: '#' },
-      { id: 's-76',  title: 'What is a Sampling Distribution',     href: '#' },
-      { id: 's-77',  title: 'Sampling Distribution of Sample Mean', href: '#' },
-      { id: 's-78',  title: 'CLT Applications',                    href: '#' },
-      { id: 's-79',  title: 'Sampling Distribution of Sample Proportion', href: '#' },
-      { id: 's-80',  title: 'Standard Error',                      href: '#' },
-      { id: 's-81',  title: 'Effect of Sample Size',               href: '#' },
-      { id: 's-82',  title: 'Simulation of Sampling Distributions', href: '#' },
-      { id: 's-83',  title: 't-Distribution Introduction',         href: '#' },
-      { id: 's-84',  title: 'Sampling Distributions Practice',     href: '#', checkpoint: true },
-
-      /* ── Unit 8: Confidence Intervals (12) ── */
-      { id: 's-85',  title: 'Confidence Interval for a Mean',      href: '#' },
-      { id: 's-86',  title: 'Confidence Interval for a Proportion', href: '#' },
-      { id: 's-87',  title: 'Margin of Error',                     href: '#' },
-      { id: 's-88',  title: 'Interpreting Confidence Level',       href: '#' },
-      { id: 's-89',  title: 'CI for Mean sigma known',             href: '#' },
-      { id: 's-90',  title: 'CI for Mean sigma unknown',           href: '#' },
-      { id: 's-91',  title: 'CI for a Proportion detailed',        href: '#' },
-      { id: 's-92',  title: 'Sample Size Determination',           href: '#' },
-      { id: 's-93',  title: 'CI for Difference of Means',          href: '#' },
-      { id: 's-94',  title: 'CI for Difference of Proportions',    href: '#' },
-      { id: 's-95',  title: 'Choosing the Right CI',               href: '#' },
-      { id: 's-96',  title: 'Confidence Intervals Practice',       href: '#', checkpoint: true },
-
-      /* ── Unit 9: Hypothesis Testing (12) ── */
-      { id: 's-97',  title: 'Null & Alternative Hypotheses',       href: '#' },
-      { id: 's-98',  title: 'P-Values & Significance',             href: '#' },
-      { id: 's-99',  title: 'Type I & Type II Errors',             href: '#' },
-      { id: 's-100', title: 'Steps of a Hypothesis Test',          href: '#' },
-      { id: 's-101', title: 'One-Sample Z-Test',                   href: '#' },
-      { id: 's-102', title: 'One-Sample t-Test',                   href: '#' },
-      { id: 's-103', title: 'Two-Sample t-Test',                   href: '#' },
-      { id: 's-104', title: 'Paired t-Test',                       href: '#' },
-      { id: 's-105', title: 'One-Proportion Z-Test',               href: '#' },
-      { id: 's-106', title: 'Two-Proportion Z-Test',               href: '#' },
-      { id: 's-107', title: 'Chi-Square Goodness of Fit',          href: '#' },
-      { id: 's-108', title: 'Chi-Square Test of Independence',     href: '#', checkpoint: true },
-
-      /* ── Unit 10: AP Exam Final Review (30) ── */
-      { id: 's-109', title: 'AP Exam Format & Strategy',           href: '#' },
-      { id: 's-110', title: 'Hard MC Exploring Data',              href: '#' },
-      { id: 's-111', title: 'Hard MC Distributions',               href: '#' },
-      { id: 's-112', title: 'Hard MC Normal Distributions',        href: '#' },
-      { id: 's-113', title: 'Hard MC Study Design',                href: '#' },
-      { id: 's-114', title: 'Hard MC Probability',                 href: '#' },
-      { id: 's-115', title: 'Hard MC Random Variables',            href: '#' },
-      { id: 's-116', title: 'Hard MC Sampling Distributions',      href: '#' },
-      { id: 's-117', title: 'Hard MC Confidence Intervals',        href: '#' },
-      { id: 's-118', title: 'Hard MC Hypothesis Testing',          href: '#' },
-      { id: 's-119', title: 'Tricky Z-Score Problems',             href: '#' },
-      { id: 's-120', title: 'Tricky Chi-Square Problems',          href: '#' },
-      { id: 's-121', title: 'Tricky Regression & Residual',        href: '#' },
-      { id: 's-122', title: 'Tricky Probability Combinations',     href: '#' },
-      { id: 's-123', title: 'Tricky Inference Problems',           href: '#' },
-      { id: 's-124', title: 'Free Response Investigative Task 1',  href: '#' },
-      { id: 's-125', title: 'Free Response Investigative Task 2',  href: '#' },
-      { id: 's-126', title: 'Free Response Investigative Task 3',  href: '#' },
-      { id: 's-127', title: 'Free Response Collecting Data',       href: '#' },
-      { id: 's-128', title: 'Free Response Exploring Data',        href: '#' },
-      { id: 's-129', title: 'Free Response Probability & Simulation', href: '#' },
-      { id: 's-130', title: 'Free Response Statistical Inference', href: '#' },
-      { id: 's-131', title: 'Common AP Exam Mistakes',             href: '#' },
-      { id: 's-132', title: 'Formula Sheet Mastery',               href: '#' },
-      { id: 's-133', title: 'Calculator Skills for AP Stats',      href: '#' },
-      { id: 's-134', title: 'Full Practice Exam MC 1',             href: '#' },
-      { id: 's-135', title: 'Full Practice Exam MC 2',             href: '#' },
-      { id: 's-136', title: 'Full Practice Exam Free Response',    href: '#' },
-      { id: 's-137', title: 'Score Prediction & Weak Spot Analysis', href: '#' },
-      { id: 's-138', title: 'Final AP Statistics Challenge Get Your 5', href: '#', checkpoint: true },
-
-      /* ── Unit 11: Job Application & Workplace Math (25) ── */
-      { id: 's-139', title: 'Clock In & Clock Out',                href: '#' },
-      { id: 's-140', title: 'Weekly Timesheets',                   href: '#' },
-      { id: 's-141', title: 'Overtime Calculations',               href: '#' },
-      { id: 's-142', title: 'Hourly Wage vs Salary',               href: '#' },
-      { id: 's-143', title: 'Gross Pay vs Net Pay',                href: '#' },
-      { id: 's-144', title: 'Tax Deductions & Withholdings',       href: '#' },
-      { id: 's-145', title: 'Reading a Pay Stub',                  href: '#' },
-      { id: 's-146', title: 'Creating Employee Schedules',         href: '#' },
-      { id: 's-147', title: 'Shift Coverage & Staffing Ratios',    href: '#' },
-      { id: 's-148', title: 'Break Time & Labor Law Math',         href: '#' },
-      { id: 's-149', title: 'Spreadsheet Basics',                  href: '#' },
-      { id: 's-150', title: 'Spreadsheet Formulas',                href: '#' },
-      { id: 's-151', title: 'Making Charts from Spreadsheet Data', href: '#' },
-      { id: 's-152', title: 'Inventory Tracking',                  href: '#' },
-      { id: 's-153', title: 'Sales Reports & Revenue',             href: '#' },
-      { id: 's-154', title: 'Profit Margins & Cost Analysis',      href: '#' },
-      { id: 's-155', title: 'Commission & Bonus Calculations',     href: '#' },
-      { id: 's-156', title: 'Expense Reports & Reimbursements',    href: '#' },
-      { id: 's-157', title: 'Project Budgeting & Cost Estimation', href: '#' },
-      { id: 's-158', title: 'KPIs & Performance Metrics',          href: '#' },
-      { id: 's-159', title: 'Filling Out Job Applications',        href: '#' },
-      { id: 's-160', title: 'Pre-Employment Math Tests',           href: '#' },
-      { id: 's-161', title: 'Resume Numbers',                      href: '#' },
-      { id: 's-162', title: 'Workplace Data Presentation',         href: '#' },
-      { id: 's-163', title: 'Workplace Math Review',               href: '#', checkpoint: true }
+    const units = [
+      [1, 'Exploring Data', ['Categorical vs Quantitative Data','Frequency Tables','Measures of Center','Stem-and-Leaf Plots','Dot Plots','Frequency Tables Practice','Relative Frequency','Cumulative Frequency','Two-Way Tables','Marginal & Conditional Distributions','Comparing Distributions','Exploring Data Practice']],
+      [2, 'Describing Distributions', ['Histograms & Stemplots','Mean Median Mode','Standard Deviation & IQR','Skewness & Symmetry','Outliers & IQR Rule','Five-Number Summary','Comparing Box Plots','Standard Deviation Calculation','Variance','Chebyshev\'s Theorem','Empirical Rule 68-95-99.7','Describing Distributions Practice']],
+      [3, 'Normal Distributions', ['The Normal Curve','Z-Scores','The Empirical Rule','Properties of Normal Curves','Standard Normal Distribution','Z-Score Calculations','Using Z-Tables','Finding Percentiles','Finding Values from Percentiles','Normal Probability Plots','Assessing Normality','Normal Distributions Practice']],
+      [4, 'Designing Studies', ['Sampling Methods','Observational Studies vs Experiments','Bias & Confounding','Census vs Sample','Simple Random Sampling','Stratified Sampling','Cluster Sampling','Systematic Sampling','Bias in Sampling','Randomized Block Design','Matched Pairs Design','Designing Studies Practice']],
+      [5, 'Probability', ['Basic Probability Rules','Conditional Probability','Independence','Sample Spaces & Events','Complement Rule','Addition Rule Mutually Exclusive','Addition Rule General','Multiplication Rule Independent','Multiplication Rule General','Conditional Probability Formula','Bayes\' Theorem Introduction','Probability Practice']],
+      [6, 'Random Variables', ['Discrete Random Variables','Continuous Random Variables','The Binomial Distribution','Probability Distributions','Expected Value Mean','Standard Deviation of Random Variable','Combining Random Variables','Binomial Distribution','Binomial Probability Formula','Geometric Distribution','Poisson Distribution','Random Variables Practice']],
+      [7, 'Sampling Distributions', ['Sampling Variability','Central Limit Theorem','Sampling Distribution of Proportion','What is a Sampling Distribution','Sampling Distribution of Sample Mean','CLT Applications','Sampling Distribution of Sample Proportion','Standard Error','Effect of Sample Size','Simulation of Sampling Distributions','t-Distribution Introduction','Sampling Distributions Practice']],
+      [8, 'Confidence Intervals', ['Confidence Interval for a Mean','Confidence Interval for a Proportion','Margin of Error','Interpreting Confidence Level','CI for Mean sigma known','CI for Mean sigma unknown','CI for a Proportion detailed','Sample Size Determination','CI for Difference of Means','CI for Difference of Proportions','Choosing the Right CI','Confidence Intervals Practice']],
+      [9, 'Hypothesis Testing', ['Null & Alternative Hypotheses','P-Values & Significance','Type I & Type II Errors','Steps of a Hypothesis Test','One-Sample Z-Test','One-Sample t-Test','Two-Sample t-Test','Paired t-Test','One-Proportion Z-Test','Two-Proportion Z-Test','Chi-Square Goodness of Fit','Chi-Square Test of Independence']],
+      [10, 'AP Exam Final Review', ['AP Exam Format & Strategy','Hard MC Exploring Data','Hard MC Distributions','Hard MC Normal Distributions','Hard MC Study Design','Hard MC Probability','Hard MC Random Variables','Hard MC Sampling Distributions','Hard MC Confidence Intervals','Hard MC Hypothesis Testing','Tricky Z-Score Problems','Tricky Chi-Square Problems','Tricky Regression & Residual','Tricky Probability Combinations','Tricky Inference Problems','Free Response Investigative Task 1','Free Response Investigative Task 2','Free Response Investigative Task 3','Free Response Collecting Data','Free Response Exploring Data','Free Response Probability & Simulation','Free Response Statistical Inference','Common AP Exam Mistakes','Formula Sheet Mastery','Calculator Skills for AP Stats','Full Practice Exam MC 1','Full Practice Exam MC 2','Full Practice Exam Free Response','Score Prediction & Weak Spot Analysis','Final AP Statistics Challenge Get Your 5']],
+      [11, 'Job Application & Workplace Math', ['Clock In & Clock Out','Weekly Timesheets','Overtime Calculations','Hourly Wage vs Salary','Gross Pay vs Net Pay','Tax Deductions & Withholdings','Reading a Pay Stub','Creating Employee Schedules','Shift Coverage & Staffing Ratios','Break Time & Labor Law Math','Spreadsheet Basics','Spreadsheet Formulas','Making Charts from Spreadsheet Data','Inventory Tracking','Sales Reports & Revenue','Profit Margins & Cost Analysis','Commission & Bonus Calculations','Expense Reports & Reimbursements','Project Budgeting & Cost Estimation','KPIs & Performance Metrics','Filling Out Job Applications','Pre-Employment Math Tests','Resume Numbers','Workplace Data Presentation','Workplace Math Review']]
     ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 's-'+n, title: t, href: '#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+      });
+    });
 
     async function loadPath() {
       const container = document.getElementById('learning-path');
