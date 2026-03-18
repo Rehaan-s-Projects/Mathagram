@@ -381,42 +381,90 @@ export function runExerciseSet(container, exercises, onEachAnswer) {
     let current = 0;
     let correctCount = 0;
     const total = exercises.length;
+    const mistakes = []; // Track wrong answers to retry
+    let inRetryMode = false;
+    let retryIndex = 0;
+
+    function getCurrentExercise() {
+      if (inRetryMode) return mistakes[retryIndex];
+      return exercises[current];
+    }
+
+    function getProgressText() {
+      if (inRetryMode) {
+        return "Previous Mistakes — " + (retryIndex + 1) + " of " + mistakes.length;
+      }
+      return "Question " + (current + 1) + " of " + total;
+    }
 
     function showExercise() {
       container.innerHTML = "";
       container.classList.add("exercise-container");
 
+      const exercise = getCurrentExercise();
+
       // Progress indicator
-      const progress = el(
-        "div",
-        "exercise-progress",
-        "Question " + (current + 1) + " of " + total
-      );
+      const progress = el("div", "exercise-progress");
+      if (inRetryMode) {
+        progress.innerHTML = '<span style="color:#ef4444;font-weight:700;">🔄 Previous Mistakes</span> — ' + (retryIndex + 1) + ' of ' + mistakes.length;
+      } else {
+        progress.textContent = "Question " + (current + 1) + " of " + total;
+      }
       container.appendChild(progress);
 
       const inner = el("div", "exercise-inner");
       container.appendChild(inner);
 
-      renderExercise(inner, exercises[current], (isCorrect) => {
-        if (isCorrect) correctCount++;
-        if (typeof onEachAnswer === "function") {
-          onEachAnswer(isCorrect, current);
+      renderExercise(inner, exercise, (isCorrect) => {
+        if (!inRetryMode) {
+          if (isCorrect) {
+            correctCount++;
+          } else {
+            mistakes.push(exercise); // Save for retry
+          }
+          if (typeof onEachAnswer === "function") {
+            onEachAnswer(isCorrect, current);
+          }
+        } else {
+          // In retry mode — correct answers remove from mistakes
+          if (typeof onEachAnswer === "function") {
+            onEachAnswer(isCorrect, -1);
+          }
         }
 
-        const isLast = current === total - 1;
-        const nextBtn = el(
-          "button",
-          "btn btn-primary exercise-next-btn",
-          isLast ? "Finish" : "Next"
-        );
+        // Determine what's next
+        let isLast;
+        if (inRetryMode) {
+          isLast = retryIndex >= mistakes.length - 1;
+        } else {
+          isLast = current >= total - 1 && mistakes.length === 0;
+        }
+
+        const nextLabel = isLast ? "Finish" : inRetryMode ? "Next Mistake" : "Next";
+        const nextBtn = el("button", "btn btn-primary exercise-next-btn", nextLabel);
         nextBtn.type = "button";
         nextBtn.addEventListener("click", () => {
-          current++;
-          if (current < total) {
-            showExercise();
+          if (inRetryMode) {
+            retryIndex++;
+            if (retryIndex < mistakes.length) {
+              showExercise();
+            } else {
+              // Done with retries
+              const score = Math.round((correctCount / total) * 100);
+              resolve(score);
+            }
           } else {
-            const score = Math.round((correctCount / total) * 100);
-            resolve(score);
+            current++;
+            if (current < total) {
+              showExercise();
+            } else if (mistakes.length > 0) {
+              // Switch to retry mode
+              inRetryMode = true;
+              retryIndex = 0;
+              showExercise();
+            } else {
+              const score = Math.round((correctCount / total) * 100);
+              resolve(score);
           }
         });
         container.appendChild(nextBtn);
