@@ -214,6 +214,7 @@
 .path-unit-badge.data { background: #ef4444; }
 .path-unit-badge.logic { background: #f97316; }
 .path-unit-badge.language { background: #92400e; }
+.path-unit-badge.others { background: #6b7280; }
 
 .path-unit-name {
   font-size: 1rem;

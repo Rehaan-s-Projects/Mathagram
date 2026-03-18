@@ -26,6 +26,8 @@
   --color-logic-bg:      #fff7ed;
   --color-language:      #92400e;
   --color-language-bg:   #fef3c7;
+  --color-others:        #6b7280;
+  --color-others-bg:     #f3f4f6;
 
   /* XP / Level */
   --color-xp:            #eab308;
@@ -269,6 +271,12 @@ body {
 }
 .category-language .category-title {
   color: var(--color-language);
+}
+.category-others {
+  background: var(--color-others-bg);
+}
+.category-others .category-title {
+  color: var(--color-others);
 }
 
 /* ============================================================
