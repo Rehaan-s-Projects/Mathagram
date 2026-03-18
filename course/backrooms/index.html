@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Backrooms — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>The Backrooms</h1>
+    <p>Explore the infinite labyrinth — every level, entity, object, and survival strategy of the Backrooms universe. From Level 0 to the Frontrooms. 189 lessons across 9 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Introduction to the Backrooms', ['What Are the Backrooms?','The Origin Story (4chan 2019)','How to No-Clip into the Backrooms','The Infinite Office \u2014 Level 0','The Yellow Wallpaper','Fluorescent Lights Buzz','The Smell of Wet Carpet','No Windows No Exits','The Feeling of Being Watched','Survival Rule #1: Keep Moving','Survival Rule #2: Trust No One','Survival Rule #3: Don\'t Run','Almond Water \u2014 Your Best Friend','Sanity & Mental Health','The Hum of the Lights','Time Doesn\'t Work Here','The Backrooms Wiki Overview','Canon vs Fanon','Different Canons Explained','MEG (Major Explorer Group)','Introduction Review']],
+      [2, 'The Main Levels (0-9)', ['Level 0 \u2014 The Lobby','Level 0 Survival Guide','Level 1 \u2014 Habitable Zone','Level 1 Warehouse Corridors','Level 2 \u2014 Pipe Dreams','Level 2 Dark Hallways & Steam','Level 3 \u2014 Electrical Station','Level 3 Power Grid Maze','Level 4 \u2014 Abandoned Office','Level 4 Cubicle Labyrinth','Level 5 \u2014 Terror Hotel','Level 5 Never-Ending Hallways','Level 6 \u2014 Lights Out','Level 6 Total Darkness Survival','Level 7 \u2014 Thalassophobia','Level 7 Ocean of Murky Water','Level 8 \u2014 Cave System','Level 8 Underground Passages','Level 9 \u2014 The Suburbs','Level 9 Abandoned Neighborhood','Main Levels Review']],
+      [3, 'Notable Levels (10-100)', ['Level 10 \u2014 Wheat Field','Level 11 \u2014 The City (Infinite City)','Level 11 Safe Zones','Level 13 \u2014 The Infinite Apartment','Level 14 \u2014 Paradise (Is It Real?)','Level 15 \u2014 Futuristic Facility','Level 18 \u2014 The Courtyard','Level 22 \u2014 The Mall','Level 33 \u2014 The Poolrooms','Level 33 Blue Tiles & Clear Water','Level 37 \u2014 The Windows','Level 52 \u2014 Empty Suburbia','Level 69 \u2014 The Nice Level','Level 74 \u2014 Undeveloped Level','Level 87 \u2014 The Abyss','Level 94 \u2014 Motion','Level 97 \u2014 Neighborhood Watch','Level 100 \u2014 Silent Auditorium','Negative Levels Introduction','Level -1 \u2014 Crimson Forest','Notable Levels Review']],
+      [4, 'Entities', ['What Are Entities?','Entity Classification System','Skin-Stealers','The Smiler','Hounds','Facelings','Clumps','Wretches','Death Moths','Dullers','Bursters','The Beast of Level 5','Jerry','Partygoers (=))','The Partypoopers','Windows Entity','The Thing on Level 7','Neighborhood Watch Entities','Entity Survival Strategies','Entity Encounter Protocol','Entities Review']],
+      [5, 'Objects & Resources', ['Almond Water','Cashew Water','Lucky O\' Milk','Royal Rations','Firesalt','Squirt Guns','Memory Jars','Object 5 \u2014 The Laptop','Object 7 \u2014 The Key','Object 8 \u2014 The Compass','Object 10 \u2014 Liquid Pain','Object 14 \u2014 Backrooms Passport','Object 16 \u2014 The Radio','Bottled Lightning','The Red Book','Healing Herbs','Weaponry in the Backrooms','Building Materials','Trading with Others','Object Crafting','Objects Review']],
+      [6, 'Groups & Organizations', ['MEG (Major Explorer Group)','MEG Structure & Ranks','MEG Base Alpha','B.N.T.G. (Backrooms Nonaligned Trade Group)','The Lost','The Followers of Jerry','The Partiers','U.E.C. (Unbound Emergency Coalition)','The Masked Maidens','Backrooms Robotics','The Survivors','The Visionaries','The Eyes of Argos','The Numidium','The Crimson Guard','Diplomacy Between Groups','Trading Networks','Communication Methods','Group Conflicts & Wars','Joining a Group','Groups Review']],
+      [7, 'Theories & Lore', ['The Nature of the Backrooms','Dimensional Theory','Simulation Theory','Quantum No-Clipping','Why Does It Exist?','Who Built It?','The Backrooms is Alive Theory','Level Generation Mechanics','How New Levels Form','The Connection to Our Reality','Dreams & the Backrooms','Parallel Backrooms','The Frontrooms (Our World)','The True Ending Theory','The Architect Theory','The Bacterial Colony Theory','The Afterlife Theory','The Prison Theory','The Test Theory','Unresolved Mysteries','Theories Review']],
+      [8, 'Survival Guide', ['Essential Supplies Checklist','Navigation Without Landmarks','Marking Your Path','Water Purification','Food Gathering & Rationing','Building a Shelter','Fire in the Backrooms','First Aid & Injuries','Dealing with Isolation','Maintaining Sanity','Sleep Strategies','Entity Avoidance Tactics','When to Fight vs Flee','Level Transition Methods','Finding Exits','Safe Level Bases','Long-Term Survival','Rescue Protocols','Communication Signals','Documenting Your Journey','Survival Mastery']],
+      [9, 'The Backrooms in Media', ['The Original Creepypasta','r/backrooms Subreddit','The Backrooms Wiki Growth','Kane Pixels YouTube Series','Kane Pixels Analysis','Found Footage Style','The Backrooms Game (Steam)','Other Backrooms Games','Backrooms Roblox Experiences','Backrooms in Minecraft','A-24 Movie Announcement','Fan Films & Animations','Backrooms Music & Soundscapes','Liminal Spaces Connection','Kenopsia & Liminal Aesthetics','Nostalgia & Uncanny Valley','The Internet Horror Genre','SCP Foundation Comparison','Analog Horror Connection','Creating Your Own Backrooms Content','Backrooms Mastery!']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'br-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('backrooms');
+        renderPath(container, lessons, completed);
+      });
+      renderPath(container, lessons, completed);
+    }
+    loadPath();
+  </script>
+</body>
+</html>
