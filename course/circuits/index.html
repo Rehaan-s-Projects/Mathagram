@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>Circuits</h1>
-    <p>Build and analyze electrical circuits.</p>
+    <p>Build and analyze electrical circuits — from Ohm's law to microcontrollers. 180 lessons across 12 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,28 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "current-and-voltage", "title": "Current & Voltage", "unit": "Fundamentals", "href": "#"}, {"id": "resistance-and-ohms-law", "title": "Resistance & Ohm's Law", "unit": "Fundamentals", "href": "#"}, {"id": "series-circuits", "title": "Series Circuits", "unit": "Fundamentals", "href": "#"}, {"id": "parallel-circuits", "title": "Parallel Circuits", "unit": "Fundamentals", "href": "#"}, {"id": "circuit-analysis-checkpoint", "title": "Circuit Analysis Checkpoint", "unit": "Fundamentals", "href": "#", "checkpoint": true}, {"id": "capacitors", "title": "Capacitors", "unit": "Components", "href": "#"}, {"id": "inductors", "title": "Inductors", "unit": "Components", "href": "#"}, {"id": "diodes-and-leds", "title": "Diodes & LEDs", "unit": "Components", "href": "#"}, {"id": "transistors", "title": "Transistors", "unit": "Components", "href": "#"}, {"id": "components-checkpoint", "title": "Components Checkpoint", "unit": "Components", "href": "#", "checkpoint": true}, {"id": "ac-vs-dc", "title": "AC vs DC", "unit": "Advanced Circuits", "href": "#"}, {"id": "filters-and-frequency", "title": "Filters & Frequency", "unit": "Advanced Circuits", "href": "#"}, {"id": "power-and-energy", "title": "Power & Energy", "unit": "Advanced Circuits", "href": "#"}, {"id": "circuit-design", "title": "Circuit Design", "unit": "Advanced Circuits", "href": "#"}, {"id": "circuits-mastery", "title": "Circuits Mastery!", "unit": "Advanced Circuits", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Electricity Basics',['What is Electricity?','Electric Charge','Conductors vs Insulators','Current (Amps)','Voltage (Volts)','Resistance (Ohms)','Ohm\'s Law (V=IR)','Ohm\'s Law Calculations','Power (P=IV)','Energy & Kilowatt-Hours','Electrical Safety','Static Electricity','Grounding','Electricity in Nature','Basics Review']],
+      [2,'DC Circuit Fundamentals',['What is a Circuit?','Circuit Diagrams & Symbols','Open vs Closed Circuits','Short Circuits','Series Circuits','Voltage Divider (Series)','Current in Series','Parallel Circuits','Current Divider (Parallel)','Voltage in Parallel','Series-Parallel Combinations','Kirchhoff\'s Current Law (KCL)','Kirchhoff\'s Voltage Law (KVL)','Solving with Kirchhoff','DC Fundamentals Review']],
+      [3,'Resistors & Resistance',['What is a Resistor?','Resistor Color Codes','Reading Color Bands','Standard Resistor Values','Resistors in Series','Resistors in Parallel','Equivalent Resistance','Potentiometers','Thermistors','Photoresistors (LDR)','Varistors','Wire Resistance','Temperature & Resistance','Superconductors','Resistors Review']],
+      [4,'Capacitors & Capacitance',['What is a Capacitor?','How Capacitors Store Energy','Capacitance (Farads)','Capacitor Types (Ceramic Electrolytic Film)','Capacitors in Series','Capacitors in Parallel','RC Charging Curve','RC Discharging Curve','Time Constant (tau)','Capacitor Energy Storage','Decoupling Capacitors','Bypass Capacitors','Supercapacitors','Capacitor Applications','Capacitors Review']],
+      [5,'Inductors & Magnetism',['What is an Inductor?','Electromagnetic Induction','Faraday\'s Law','Lenz\'s Law','Inductance (Henrys)','Inductors in Series','Inductors in Parallel','RL Circuits','RL Time Constant','Energy in Inductors','Transformers','Step-Up & Step-Down','Solenoids','Relays','Inductors Review']],
+      [6,'Diodes & LEDs',['What is a Diode?','PN Junction','Forward Bias','Reverse Bias','Diode Characteristics','LED (Light Emitting Diode)','LED Colors & Wavelengths','Current Limiting Resistors for LEDs','Zener Diodes','Voltage Regulation with Zener','Rectifier Diodes','Half-Wave Rectification','Full-Wave Rectification','Bridge Rectifier','Diodes Review']],
+      [7,'Transistors',['What is a Transistor?','NPN vs PNP','Bipolar Junction Transistor (BJT)','BJT as a Switch','BJT as an Amplifier','Current Gain (hFE/Beta)','MOSFET Introduction','N-Channel MOSFET','P-Channel MOSFET','MOSFET as a Switch','MOSFET vs BJT','Darlington Pair','H-Bridge Motor Control','Transistor Biasing','Transistors Review']],
+      [8,'AC Circuits',['What is AC?','AC vs DC Comparison','Sine Wave Properties','Frequency & Period','Peak vs RMS Values','AC Through Resistors','AC Through Capacitors (Reactance)','AC Through Inductors (Reactance)','Impedance','RLC Series Circuit','RLC Parallel Circuit','Resonance','Bandwidth & Q Factor','AC Power (Real Reactive Apparent)','AC Circuits Review']],
+      [9,'Filters & Signals',['What is a Filter?','Low-Pass RC Filter','High-Pass RC Filter','Band-Pass Filter','Band-Stop (Notch) Filter','Cutoff Frequency','Bode Plots','Decibels (dB)','First-Order vs Second-Order','Active Filters','Op-Amp Basics','Inverting Amplifier','Non-Inverting Amplifier','Summing Amplifier','Filters Review']],
+      [10,'Sensors & Measurement',['Multimeter Usage','Measuring Voltage','Measuring Current','Measuring Resistance','Oscilloscope Basics','Reading Waveforms','Temperature Sensors (Thermocouple NTC)','Light Sensors (Photodiode LDR)','Proximity Sensors','Pressure Sensors','Accelerometers','Hall Effect Sensors','Ultrasonic Sensors','Sensor Interfacing','Sensors Review']],
+      [11,'Digital & Microcontrollers',['Analog vs Digital','Binary Numbers & Logic','Logic Gates (AND OR NOT)','NAND & NOR Gates','Combinational Logic','Flip-Flops','Counters','What is a Microcontroller?','Arduino Introduction','GPIO Pins','Digital Read & Write','Analog Read (ADC)','PWM Output','Serial Communication','Microcontrollers Review']],
+      [12,'Projects & Applications',['LED Blinker Circuit','Traffic Light Controller','Light-Activated Switch','Temperature Monitor','Motor Speed Controller','Audio Amplifier','Power Supply Design','Battery Charger Circuit','Alarm System','Radio Receiver Basics','PCB Design Basics','Soldering Techniques','Troubleshooting Circuits','Circuit Simulation Tools','Circuits Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ci-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
