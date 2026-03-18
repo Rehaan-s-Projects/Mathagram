@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Skills & Learning — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Study Skills &amp; Learning</h1>
+    <p>Master how to learn — from note-taking to digital tools. 120 lessons across 8 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'How to Learn', ['What Is Metacognition?','The Growth Mindset','Fixed vs Growth Thinking','Visual Learning Strategies','Auditory Learning Strategies','Kinesthetic Learning Strategies','Setting Learning Goals','Self-Assessment Techniques','Building Study Habits','The Science of Learning','Active vs Passive Learning','Bloom\'s Taxonomy','Learning from Mistakes','Teaching Others to Learn','How to Learn Review']],
+      [2, 'Note-Taking Methods', ['Why Take Notes?','The Cornell Method','Cornell Method Practice','Mind Mapping Basics','Creating Effective Mind Maps','Sketch Notes Introduction','Visual Note-Taking','Outline Method','Charting Method','Sentence Method','Digital vs Handwritten Notes','Annotating Textbooks','Summarizing Key Ideas','Organizing Your Notes','Note-Taking Review']],
+      [3, 'Memory & Recall', ['How Memory Works','Short-Term vs Long-Term Memory','Spaced Repetition Explained','Building a Spaced Repetition Schedule','Introduction to Mnemonics','Acronym & Acrostic Mnemonics','The Memory Palace Technique','Building Your First Memory Palace','Chunking Information','The Forgetting Curve','Active Recall Practice','Retrieval Practice Strategies','Interleaving Topics','Sleep & Memory','Memory & Recall Review']],
+      [4, 'Focus & Productivity', ['Understanding Attention','The Pomodoro Technique','Customizing Pomodoro Sessions','Deep Work Principles','Creating a Deep Work Environment','Eliminating Distractions','Managing Digital Distractions','Time Blocking','Prioritization with Eisenhower Matrix','The Two-Minute Rule','Batching Similar Tasks','Energy Management','Overcoming Procrastination','Building a Daily Routine','Focus & Productivity Review']],
+      [5, 'Reading & Comprehension', ['Active Reading Strategies','Previewing a Text','The SQ3R Method','Survey & Question Steps','Read & Recite Steps','Review & Reflect','Speed Reading Basics','Skimming & Scanning','Identifying Main Ideas','Making Inferences','Vocabulary in Context','Annotating While Reading','Summarizing What You Read','Critical Reading Skills','Reading & Comprehension Review']],
+      [6, 'Writing & Communication', ['The Writing Process','Brainstorming & Outlining','Writing Strong Thesis Statements','Paragraph Structure','Essay Introduction Techniques','Body Paragraph Development','Writing Conclusions','Revising & Editing','Presentation Skills Basics','Designing Effective Slides','Public Speaking Tips','Professional Email Writing','Peer Review & Feedback','Citation & Avoiding Plagiarism','Writing & Communication Review']],
+      [7, 'Exam Strategies', ['Creating a Study Plan','Reviewing Effectively','Practice Testing','Multiple Choice Strategies','Process of Elimination','True/False Strategies','Short Answer Techniques','Essay Exam Strategies','Managing Test Anxiety','Breathing & Relaxation Techniques','Time Management During Exams','Reading Questions Carefully','Showing Your Work','Post-Exam Reflection','Exam Strategies Review']],
+      [8, 'Digital Learning Tools', ['Introduction to Anki','Building Anki Decks','Spaced Repetition with Anki','Notion for Students','Building a Study Dashboard','Organizing Notes in Notion','Flashcard Apps Compared','Quizlet & Alternatives','Study Timer Apps','Mind Mapping Software','Digital Annotation Tools','Online Study Groups','Video Learning Strategies','Choosing the Right Tools','Digital Learning Tools Review']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ss-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('study-skills');
+        renderPath(container, lessons, completed);
+      });
+      renderPath(container, lessons, completed);
+    }
+    loadPath();
+  </script>
+</body>
+</html>

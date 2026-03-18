@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Literacy — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Financial Literacy</h1>
+    <p>Build real-world money skills — from budgeting to investing. 150 lessons across 10 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Money Basics', ['What Is Money?','History of Currency','How Banks Work','Checking Accounts','Savings Accounts','Online & Mobile Banking','Direct Deposit & Paychecks','Understanding Pay Stubs','Needs vs Wants','Setting Financial Goals','The Time Value of Money','Inflation & Purchasing Power','Currency Exchange Basics','Financial Literacy Mindset','Money Basics Review']],
+      [2, 'Budgeting', ['Why Budget?','Tracking Your Income','Tracking Your Expenses','Fixed vs Variable Expenses','The 50/30/20 Rule','Zero-Based Budgeting','Envelope Budgeting','Creating Your First Budget','Budgeting Apps & Tools','Building an Emergency Fund','How Much to Save','Adjusting Your Budget','Avoiding Lifestyle Creep','Budgeting for Irregular Income','Budgeting Review']],
+      [3, 'Credit & Debt', ['What Is Credit?','Credit Reports Explained','Understanding Credit Scores','Factors That Affect Credit','Building Credit from Scratch','Credit Cards How They Work','Credit Card Interest & APR','Minimum Payments Trap','Paying Off Credit Card Debt','Types of Loans','Student Loans','Auto Loans','Personal Loans','Debt Snowball vs Avalanche','Credit & Debt Review']],
+      [4, 'Investing Basics', ['Why Invest?','Risk vs Return','What Are Stocks?','How the Stock Market Works','Reading Stock Quotes','What Are Bonds?','Government vs Corporate Bonds','Mutual Funds Explained','Index Funds','Exchange-Traded Funds (ETFs)','Diversification','Asset Allocation','Dollar-Cost Averaging','Brokerage Accounts','Investing Basics Review']],
+      [5, 'Retirement Planning', ['Why Plan for Retirement?','The Power of Compound Interest','Starting Early vs Late','401(k) Plans','Employer Matching','Traditional IRA','Roth IRA','IRA vs 401(k)','Target-Date Funds','Social Security Basics','Estimating Retirement Needs','Retirement Savings Calculators','Catch-Up Contributions','Withdrawal Strategies','Retirement Planning Review']],
+      [6, 'Taxes', ['Why We Pay Taxes','Types of Taxes','Federal Income Tax','Tax Brackets & Marginal Rates','Filing Status','W-2 & 1099 Forms','Standard vs Itemized Deductions','Common Tax Deductions','Tax Credits vs Deductions','Filing Your Tax Return','Tax Refunds & Owing','State & Local Taxes','Sales Tax','Self-Employment Taxes','Taxes Review']],
+      [7, 'Insurance', ['What Is Insurance?','How Premiums & Deductibles Work','Health Insurance Basics','HMO vs PPO vs EPO','Auto Insurance Coverage','Liability vs Comprehensive','Life Insurance Term vs Whole','Who Needs Life Insurance?','Homeowners Insurance','Renters Insurance','Disability Insurance','Understanding Claims','Shopping for Insurance','Insurance Scams to Avoid','Insurance Review']],
+      [8, 'Real Estate', ['Renting vs Buying','How Rent Works','Leases & Tenant Rights','Saving for a Down Payment','How Mortgages Work','Fixed vs Adjustable Rate','Pre-Approval Process','Closing Costs','Home Inspection & Appraisal','Property Taxes','Homeowners Association','Home Equity','Refinancing','Real Estate as Investment','Real Estate Review']],
+      [9, 'Entrepreneurship', ['What Is Entrepreneurship?','Finding a Business Idea','Market Research Basics','Writing a Business Plan','Revenue Streams','Cost Structure','Profit & Loss Basics','Pricing Strategies','Funding Your Business','Bootstrapping vs Investors','Legal Structures LLC vs Corp','Basic Accounting','Cash Flow Management','Scaling a Business','Entrepreneurship Review']],
+      [10, 'Wealth Building', ['Calculating Net Worth','Tracking Net Worth Over Time','Active vs Passive Income','Building Passive Income Streams','Dividend Investing','Real Estate Income','Side Hustles','Automating Your Finances','Avoiding Financial Pitfalls','Charitable Giving & Taxes','Estate Planning Basics','Wills & Trusts','Financial Independence (FI)','The FIRE Movement','Wealth Building Review']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'fl-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('financial-literacy');
+        renderPath(container, lessons, completed);
+      });
+      renderPath(container, lessons, completed);
+    }
+    loadPath();
+  </script>
+</body>
+</html>

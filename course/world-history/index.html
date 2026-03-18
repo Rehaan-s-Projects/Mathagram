@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World History — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>World History</h1>
+    <p>Journey through civilization — from ancient Mesopotamia to the modern world. 210 lessons across 14 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Ancient Civilizations', ['The Dawn of Civilization','The Fertile Crescent','Mesopotamia & Sumer','Babylonian Empire','Akkadian Empire & Sargon','Ancient Egypt Overview','Pharaohs & Pyramids','Egyptian Daily Life','Nile River & Agriculture','Indus Valley Civilization','Ancient Hebrews','Phoenicians & the Alphabet','Hittites & Assyrians','Persian Empire','Ancient Civilizations Review']],
+      [2, 'Classical Era — Greece', ['Minoan & Mycenaean Civilizations','Greek City-States','Athens & Democracy','Sparta & Military Society','Persian Wars','The Golden Age of Athens','Greek Philosophy Socrates Plato Aristotle','Greek Art & Architecture','Alexander the Great','Hellenistic World','Greek Theater & Literature','Greek Mythology & Religion','Greek Science & Medicine','Legacy of Ancient Greece','Classical Greece Review']],
+      [3, 'Classical Era — Rome', ['Founding of Rome','Roman Republic Government','Punic Wars & Carthage','Julius Caesar','Fall of the Republic','Roman Empire Augustus','Pax Romana','Roman Engineering & Roads','Roman Law & Government','Christianity in Rome','Roman Culture & Daily Life','Crisis of the Third Century','Fall of Western Rome','Byzantine Empire Begins','Classical Rome Review']],
+      [4, 'Ancient Asia', ['Ancient China Overview','Shang & Zhou Dynasties','Confucianism','Daoism & Legalism','Qin Dynasty & Unification','Han Dynasty Golden Age','Silk Road','Ancient India Overview','Vedic Period & Hinduism','Buddhism & Ashoka','Maurya Empire','Gupta Empire Golden Age','Ancient Japan','Ancient Korea','Ancient Asia Review']],
+      [5, 'Medieval World', ['Fall of Rome & Early Middle Ages','Feudalism & Manorialism','The Catholic Church\'s Role','Monasteries & Education','Charlemagne & the Franks','Vikings & Norse Culture','Anglo-Saxon England','The Crusades','Life in a Medieval Town','Medieval Art & Gothic Cathedrals','The Black Death','Hundred Years\' War','Joan of Arc','Rise of Nation-States','Medieval World Review']],
+      [6, 'Islamic Golden Age', ['Rise of Islam','The Prophet Muhammad','The Quran & Five Pillars','The Caliphates','Umayyad Dynasty','Abbasid Dynasty','Islamic Scholars & Science','Algebra & Mathematics','Medicine & Ibn Sina','Islamic Art & Architecture','Trade & Commerce','Al-Andalus (Islamic Spain)','Interactions with Europe','Mongol Invasions','Islamic Golden Age Review']],
+      [7, 'Renaissance & Reformation', ['What Was the Renaissance?','Italian City-States','Renaissance Art Leonardo & Michelangelo','Renaissance Literature','Humanism','The Printing Press','Scientific Advances','Martin Luther & the 95 Theses','The Protestant Reformation','Counter-Reformation','Henry VIII & the Church of England','Religious Wars in Europe','Renaissance Spreads North','Legacy of the Renaissance','Renaissance & Reformation Review']],
+      [8, 'Age of Exploration', ['Why Explore?','Navigation Technology','Portuguese Explorers','Columbus & the Americas','Spanish Conquistadors','Aztec Empire & Cortes','Inca Empire & Pizarro','The Columbian Exchange','Atlantic Slave Trade','Colonial Latin America','Dutch & English Exploration','French Exploration','Impact on Indigenous Peoples','Global Trade Networks','Age of Exploration Review']],
+      [9, 'Enlightenment & Revolutions', ['What Was the Enlightenment?','John Locke & Natural Rights','Montesquieu & Separation of Powers','Voltaire & Free Speech','Rousseau & Social Contract','Scientific Revolution','American Revolution','Declaration of Independence','French Revolution Begins','Reign of Terror','Napoleon Bonaparte','Haitian Revolution','Latin American Independence','Legacy of Revolutions','Enlightenment & Revolutions Review']],
+      [10, 'Industrial Revolution', ['What Was the Industrial Revolution?','Agricultural Revolution','Textile Industry & Factories','Steam Engine & James Watt','Coal & Iron Industries','Transportation Revolution','Railroads Change the World','Urbanization','Working Conditions','Child Labor','Labor Unions & Reform','Second Industrial Revolution','Electricity & Steel','Capitalism & Socialism','Industrial Revolution Review']],
+      [11, 'Imperialism & Colonialism', ['What Is Imperialism?','Motives for Imperialism','Scramble for Africa','Berlin Conference','British Empire','French Colonial Empire','Belgian Congo','India Under British Rule','Opium Wars & China','Meiji Japan','Resistance to Imperialism','Zulu Wars','Boxer Rebellion','Effects of Colonialism','Imperialism & Colonialism Review']],
+      [12, 'World War I', ['Causes of World War I','Alliance Systems','Assassination of Archduke Franz Ferdinand','War Begins','Trench Warfare','Western Front','Eastern Front','New Weapons & Technology','Life on the Home Front','US Entry into the War','Russian Revolution 1917','End of the War','Treaty of Versailles','League of Nations','World War I Review']],
+      [13, 'World War II', ['Rise of Fascism','Hitler & Nazi Germany','Mussolini\'s Italy','Japanese Expansion','Appeasement & Munich','Invasion of Poland','Blitzkrieg','Battle of Britain','Holocaust','Eastern Front & Stalingrad','D-Day & Allied Advance','Pacific Theater','Atomic Bombs','Aftermath & United Nations','World War II Review']],
+      [14, 'Cold War & Modern World', ['Origins of the Cold War','Iron Curtain & Containment','Korean War','Space Race','Cuban Missile Crisis','Vietnam War','Decolonization in Africa & Asia','Civil Rights Movements','Fall of the Berlin Wall','Collapse of the Soviet Union','Globalization','War on Terror','Rise of China','The Digital Age','Cold War & Modern World Review']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'wh-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = new Set();
+      onAuthChange(async (user) => {
+        if (user) completed = await getCompletedLessons('world-history');
+        renderPath(container, lessons, completed);
+      });
+      renderPath(container, lessons, completed);
+    }
+    loadPath();
+  </script>
+</body>
+</html>
