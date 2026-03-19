@@ -9,16 +9,15 @@
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
   <style>
-    .board { display:grid; grid-template-columns:repeat(8,44px); grid-template-rows:repeat(8,44px); border:3px solid #1a1a1a; width:fit-content; margin:16px auto; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-    .board .sq { width:44px; height:44px; display:flex; align-items:center; justify-content:center; position:relative; }
-    .board .l { background:#edd6b0; }
-    .board .d { background:#b07442; }
-    .board .star { background:#ffd54f; animation:starGlow 1.2s ease-in-out infinite; }
-    .board .star::after { content:'\2B50'; font-size:1.1rem; }
-    @keyframes starGlow { 0%,100% { background:#ffd54f; box-shadow:inset 0 0 8px rgba(255,193,7,0.6); } 50% { background:#ffecb3; box-shadow:inset 0 0 16px rgba(255,193,7,0.9); } }
-    .piece { width:32px; height:32px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 3px 0 rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2); }
-    .piece.king::after { content:'\265B'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.9rem; color:#ffd700; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
-    .coords { position:absolute; bottom:1px; right:3px; font-size:0.5rem; color:rgba(255,255,255,0.5); font-weight:700; }
+    .board-container { text-align:center; margin:20px 0; }
+    .board { display:inline-grid; grid-template-columns:repeat(8,42px); grid-template-rows:repeat(8,42px); border:3px solid #1a1a1a; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+    .sq { width:42px; height:42px; display:flex; align-items:center; justify-content:center; }
+    .lt { background:#edd6b0; }
+    .dk { background:#b07442; }
+    .st { background:#ffd54f; animation:glow 1.2s ease-in-out infinite; font-size:1.2rem; }
+    @keyframes glow { 0%,100% { background:#ffd54f; box-shadow:inset 0 0 8px rgba(255,193,7,0.6); } 50% { background:#ffecb3; box-shadow:inset 0 0 16px rgba(255,193,7,0.9); } }
+    .pc { width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 3px 0 rgba(0,0,0,0.3); }
+    .board-label { font-size:0.85rem; color:var(--color-text-muted); margin-top:8px; }
   </style>
 </head>
 <body>
@@ -29,17 +28,95 @@
 
   <div class="container" style="max-width:760px; padding:80px 24px 32px;">
     <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to Board Games</a>
-    <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">Capture the Stars — Bronze Challenge</h1>
+    <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">⭐ Capture the Stars — Bronze</h1>
 
-    <div style="background:var(--color-surface); border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid var(--color-border);">
-      <p style="font-style:italic; color:var(--color-text-secondary); margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you the noble game of Checkers."</p>
-      <p style="margin-bottom:8px;">In checkers, pieces move <strong>diagonally forward</strong>. That means <strong>Y+1 X+1</strong> (down-right) or <strong>Y+1 X-1</strong> (down-left).</p>
-      <p style="margin-bottom:8px;">Your goal: move the black piece to capture the <strong>star</strong>!</p>
-      <p>Look at the board, find the piece and the star, then choose the correct diagonal move.</p>
+    <div style="background:#fff; border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid #e2e8f0;">
+      <p style="font-style:italic; color:#64748b; margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you to move the checker piece."</p>
+      <p style="margin-bottom:8px;">Pieces move <strong>diagonally forward</strong>:</p>
+      <ul style="margin:0 0 8px 20px;">
+        <li><strong>Y+1 X+1</strong> = down-right diagonal</li>
+        <li><strong>Y+1 X-1</strong> = down-left diagonal</li>
+      </ul>
+      <p>Move the black piece ● to capture the glowing star ⭐!</p>
     </div>
 
-    <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
-    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Capture the Stars</h2>
+    <!-- Board 1: Piece at row 4, Star at row 5 col+1 (down-right) -->
+    <div class="board-container" id="board1">
+      <div class="board">
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+      </div>
+      <p class="board-label">● piece → ⭐ star</p>
+    </div>
+
+    <!-- Board 2: Piece at row 3, Star at down-left -->
+    <div class="board-container" id="board2" style="display:none;">
+      <div class="board">
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+      </div>
+      <p class="board-label">● piece → ⭐ star</p>
+    </div>
+
+    <!-- Board 3: Piece at row 2, Star at down-right -->
+    <div class="board-container" id="board3" style="display:none;">
+      <div class="board">
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+      </div>
+      <p class="board-label">● piece → ⭐ star</p>
+    </div>
+
+    <!-- Board 4: Piece at row 5, Star at down-left -->
+    <div class="board-container" id="board4" style="display:none;">
+      <div class="board">
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+      </div>
+      <p class="board-label">● piece → ⭐ star</p>
+    </div>
+
+    <!-- Board 5: Piece with TWO stars -->
+    <div class="board-container" id="board5" style="display:none;">
+      <div class="board">
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+      </div>
+      <p class="board-label">● piece → ⭐⭐ two stars!</p>
+    </div>
+
+    <hr style="border:none; border-top:1px solid #e2e8f0; margin:32px 0;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Which move captures the star?</h2>
     <div id="exercises"></div>
     <div id="completion"></div>
   </div>
@@ -53,88 +130,70 @@
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // William is ALWAYS the guide for Capture the Stars
     initSideCharacter('william', '../../');
+
+    // Show the correct board for each question
+    const boards = ['board1','board2','board3','board4','board5'];
+    let currentQ = 0;
 
     const exercises = [
       {
-            "type": "visual",
-            "question": "Which move captures the star?",
-            "imageHTML": "<div class=\"board\"><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,7</span></div><div class=\"sq d\"><span class=\"coords\">2,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,7</span></div><div class=\"sq d\"><span class=\"coords\">4,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><div class=\"piece\"></div><span class=\"coords\">4,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,3</span></div><div class=\"sq l\"></div><div class=\"sq star\"><span class=\"coords\">5,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,7</span></div><div class=\"sq d\"><span class=\"coords\">6,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,7</span></div><div class=\"sq d\"><span class=\"coords\">8,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,6</span></div><div class=\"sq l\"></div></div>",
-            "options": [
-                  "Y+1 X+1 (down-right)",
-                  "Y+1 X-1 (down-left)",
-                  "Y-1 X+1 (up-right)",
-                  "Y-1 X-1 (up-left)"
-            ],
-            "correctIndex": 0
+        type: 'multiple-choice',
+        question: 'Look at the board above. Which move captures the star?',
+        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        correctIndex: 0
       },
       {
-            "type": "visual",
-            "question": "Which move captures the star?",
-            "imageHTML": "<div class=\"board\"><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,7</span></div><div class=\"sq d\"><span class=\"coords\">2,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><div class=\"piece\"></div><span class=\"coords\">3,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,7</span></div><div class=\"sq d\"><span class=\"coords\">4,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,2</span></div><div class=\"sq l\"></div><div class=\"sq star\"><span class=\"coords\">4,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,7</span></div><div class=\"sq d\"><span class=\"coords\">6,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,7</span></div><div class=\"sq d\"><span class=\"coords\">8,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,6</span></div><div class=\"sq l\"></div></div>",
-            "options": [
-                  "Y+1 X+1 (down-right)",
-                  "Y+1 X-1 (down-left)",
-                  "Y-1 X+1 (up-right)",
-                  "Y-1 X-1 (up-left)"
-            ],
-            "correctIndex": 1
+        type: 'multiple-choice',
+        question: 'The star is down-left from the piece. Which move?',
+        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        correctIndex: 1
       },
       {
-            "type": "visual",
-            "question": "William asks: Move the piece to the star!",
-            "imageHTML": "<div class=\"board\"><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,7</span></div><div class=\"sq d\"><span class=\"coords\">2,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><div class=\"piece\"></div><span class=\"coords\">2,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,3</span></div><div class=\"sq l\"></div><div class=\"sq star\"><span class=\"coords\">3,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,7</span></div><div class=\"sq d\"><span class=\"coords\">4,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,7</span></div><div class=\"sq d\"><span class=\"coords\">6,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,7</span></div><div class=\"sq d\"><span class=\"coords\">8,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,6</span></div><div class=\"sq l\"></div></div>",
-            "options": [
-                  "Y+1 X+1 (down-right)",
-                  "Y+1 X-1 (down-left)",
-                  "Y-1 X+1 (up-right)",
-                  "Y-1 X-1 (up-left)"
-            ],
-            "correctIndex": 0
+        type: 'multiple-choice',
+        question: 'William asks: Move the piece to capture the star!',
+        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        correctIndex: 0
       },
       {
-            "type": "visual",
-            "question": "Capture the star! Which diagonal?",
-            "imageHTML": "<div class=\"board\"><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,7</span></div><div class=\"sq d\"><span class=\"coords\">2,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,7</span></div><div class=\"sq d\"><span class=\"coords\">4,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><div class=\"piece\"></div><span class=\"coords\">5,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,7</span></div><div class=\"sq d\"><span class=\"coords\">6,0</span></div><div class=\"sq l\"></div><div class=\"sq star\"><span class=\"coords\">6,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,7</span></div><div class=\"sq d\"><span class=\"coords\">8,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,6</span></div><div class=\"sq l\"></div></div>",
-            "options": [
-                  "Y+1 X+1 (down-right)",
-                  "Y+1 X-1 (down-left)",
-                  "Y-1 X+1 (up-right)",
-                  "Y-1 X-1 (up-left)"
-            ],
-            "correctIndex": 1
+        type: 'multiple-choice',
+        question: 'Capture the star! Which diagonal?',
+        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        correctIndex: 1
       },
       {
-            "type": "visual",
-            "question": "Two stars! Which move captures a star?",
-            "imageHTML": "<div class=\"board\"><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><div class=\"piece\"></div><span class=\"coords\">1,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">1,7</span></div><div class=\"sq d\"><span class=\"coords\">2,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">2,2</span></div><div class=\"sq l\"></div><div class=\"sq star\"><span class=\"coords\">2,4</span></div><div class=\"sq l\"></div><div class=\"sq star\"><span class=\"coords\">2,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">3,7</span></div><div class=\"sq d\"><span class=\"coords\">4,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">4,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">5,7</span></div><div class=\"sq d\"><span class=\"coords\">6,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">6,6</span></div><div class=\"sq l\"></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,1</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,3</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,5</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">7,7</span></div><div class=\"sq d\"><span class=\"coords\">8,0</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,2</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,4</span></div><div class=\"sq l\"></div><div class=\"sq d\"><span class=\"coords\">8,6</span></div><div class=\"sq l\"></div></div>",
-            "options": [
-                  "Y+1 X+1 (down-right) \u2014 captures right star",
-                  "Y+1 X-1 (down-left) \u2014 captures left star",
-                  "Both moves capture a star!",
-                  "Neither move works"
-            ],
-            "correctIndex": 2
+        type: 'multiple-choice',
+        question: 'Two stars! Which answer is correct?',
+        options: ['Only Y+1 X+1 works', 'Only Y+1 X-1 works', 'Both moves capture a star!', 'Neither move works'],
+        correctIndex: 2
       }
-];
+    ];
 
     const container = document.getElementById('exercises');
+
     const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
       showBuddy('william', isCorrect ? 'correct' : 'wrong');
+      // Show next board
+      boards.forEach(b => document.getElementById(b).style.display = 'none');
+      const nextBoard = index + 1;
+      if (nextBoard < boards.length) {
+        document.getElementById(boards[nextBoard]).style.display = 'block';
+      }
     });
+
     const { grade, stars } = calculateGrade(score);
     const xpEarned = calculateXP(score);
     const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
     document.getElementById('completion').innerHTML = `
       <div class="lesson-complete">
         <div class="grade ${gradeClass}">${grade}</div>
-        <div class="stars">${'\u2B50'.repeat(stars)}${'\u2606'.repeat(3-stars)}</div>
+        <div class="stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
         <div class="xp-earned">+${xpEarned} XP</div>
         <p>Score: ${score}%</p>
         <a href="index.html" class="btn btn-primary" style="margin-top:16px;">Back to Course</a>
       </div>`;
+    // Hide all boards on completion
+    boards.forEach(b => document.getElementById(b).style.display = 'none');
     onAuthChange(async (user) => { if (user) await saveLessonResult('board-games', 'bg-1', score); });
   </script>
 </body>
