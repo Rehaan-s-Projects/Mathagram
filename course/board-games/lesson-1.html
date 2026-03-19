@@ -6,18 +6,41 @@
   <title>Capture the Stars — Bronze Challenge — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
-  <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
   <style>
-    .board-container { text-align:center; margin:20px 0; padding:16px; background:#fff; border:2px solid #e2e8f0; border-radius:12px; }
-    .board { display:inline-grid !important; grid-template-columns:repeat(8,46px) !important; grid-template-rows:repeat(8,46px) !important; border:4px solid #1a1a1a !important; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); overflow:visible; }
-    .sq { width:46px !important; height:46px !important; min-width:46px; min-height:46px; display:flex !important; align-items:center; justify-content:center; box-sizing:border-box; }
-    .sq.lt { background:#edd6b0 !important; }
-    .sq.dk { background:#b07442 !important; }
-    .sq.st { background:#ffd54f !important; animation:glow 1.2s ease-in-out infinite; font-size:1.3rem; }
-    @keyframes glow { 0%,100% { background:#ffd54f !important; box-shadow:inset 0 0 10px rgba(255,193,7,0.7); } 50% { background:#ffecb3 !important; box-shadow:inset 0 0 18px rgba(255,193,7,1); } }
-    .pc { width:32px; height:32px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 4px 0 rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.3); }
-    .board-label { font-size:0.85rem; color:#64748b; margin-top:10px; font-weight:600; }
+    .game-container { max-width:500px; margin:0 auto; padding:80px 16px 40px; text-align:center; }
+    .game-title { font-size:1.5rem; font-weight:800; margin-bottom:4px; }
+    .game-sub { font-size:0.9rem; color:#64748b; margin-bottom:16px; }
+    .progress-bar { width:100%; height:10px; background:#e5e5e5; border-radius:5px; margin-bottom:20px; overflow:hidden; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#58cc02,#89e219); border-radius:5px; transition:width 0.4s ease; }
+    .board { display:inline-grid; grid-template-columns:repeat(8,44px); grid-template-rows:repeat(8,44px); border:4px solid #1a1a1a; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); margin:12px auto; }
+    .sq { width:44px; height:44px; display:flex; align-items:center; justify-content:center; position:relative; box-sizing:border-box; }
+    .lt { background:#edd6b0; }
+    .dk { background:#b07442; }
+    .star { background:#ffd54f; cursor:pointer; animation:glow 1s ease-in-out infinite; transition:transform 0.15s; }
+    .star:hover { transform:scale(1.15); z-index:2; }
+    .star::after { content:'⭐'; font-size:1.1rem; }
+    @keyframes glow { 0%,100% { box-shadow:inset 0 0 8px rgba(255,193,7,0.6); } 50% { background:#ffecb3; box-shadow:inset 0 0 18px rgba(255,193,7,1); } }
+    .wrong-sq { background:#ff6b6b !important; animation:shake 0.4s ease; }
+    .wrong-sq::after { content:'✗'; font-size:1.2rem; color:#fff; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+    .correct-sq { background:#58cc02 !important; animation:none; }
+    .correct-sq::after { content:'✓'; font-size:1.2rem; color:#fff; }
+    .pc { width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 3px 0 rgba(0,0,0,0.4); transition:all 0.4s ease; }
+    .pc.moving { animation:pieceMove 0.4s ease; }
+    @keyframes pieceMove { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+    .hint { font-size:0.85rem; color:#64748b; margin:12px 0; font-weight:500; }
+    .hint strong { color:#1a1a2e; }
+    .result-banner { padding:16px; border-radius:12px; margin:16px 0; font-weight:700; font-size:1rem; animation:slideUp 0.3s ease; }
+    .result-banner.correct { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
+    .result-banner.wrong { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .next-btn { margin-top:12px; padding:12px 32px; font-size:1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 0 #46a302; }
+    .next-btn:hover { background:#46a302; }
+    .complete { text-align:center; padding:32px; }
+    .complete h2 { font-size:2rem; margin-bottom:8px; }
+    .complete .stars { font-size:2.5rem; margin:12px 0; }
+    .complete .xp { font-size:1.2rem; color:#eab308; font-weight:700; }
   </style>
 </head>
 <body>
@@ -26,176 +49,169 @@
     <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div>
   </div></nav>
 
-  <div class="container" style="max-width:760px; padding:80px 24px 32px;">
-    <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to Board Games</a>
-    <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">⭐ Capture the Stars — Bronze</h1>
+  <div class="game-container">
+    <div class="game-title">⭐ Capture the Stars</div>
+    <div class="game-sub">Bronze Challenge — Tap the star to move!</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
 
-    <div style="background:#fff; border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid #e2e8f0;">
-      <p style="font-style:italic; color:#64748b; margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you to move the checker piece."</p>
-      <p style="margin-bottom:8px;">Your piece is at the <strong>bottom</strong>. It moves <strong>forward = UP</strong> diagonally:</p>
-      <ul style="margin:0 0 8px 20px;">
-        <li><strong>↗ Forward-right</strong> = up and to the right</li>
-        <li><strong>↖ Forward-left</strong> = up and to the left</li>
-      </ul>
-      <p style="margin-bottom:8px;">Regular pieces can <strong>ONLY move forward (up)</strong>. Only Kings can go backward!</p>
-      <p>Move the black piece ● up to capture the glowing star ⭐!</p>
-    </div>
-
-    <!-- Board 1: Piece BOTTOM row 7, Star UP at row 6 (forward-right) -->
-    <div class="board-container" id="board1">
-      <div class="board">
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-      </div>
-      <p class="board-label">Move ● up to capture ⭐</p>
-    </div>
-
-    <!-- Board 2: Piece BOTTOM row 7, Star UP-LEFT at row 6 -->
-    <div class="board-container" id="board2" style="display:none;">
-      <div class="board">
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-      </div>
-      <p class="board-label">Move ● up to capture ⭐</p>
-    </div>
-
-    <!-- Board 3: Piece row 6, Star UP-RIGHT row 5 -->
-    <div class="board-container" id="board3" style="display:none;">
-      <div class="board">
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-      </div>
-      <p class="board-label">Move ● up to capture ⭐</p>
-    </div>
-
-    <!-- Board 4: Piece row 7, Star UP-LEFT row 6 -->
-    <div class="board-container" id="board4" style="display:none;">
-      <div class="board">
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-      </div>
-      <p class="board-label">Move ● up to capture ⭐</p>
-    </div>
-
-    <!-- Board 5: Piece BOTTOM, TWO stars UP -->
-    <div class="board-container" id="board5" style="display:none;">
-      <div class="board">
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-      </div>
-      <p class="board-label">Move ● up to capture ⭐⭐</p>
-    </div>
-
-    <hr style="border:none; border-top:1px solid #e2e8f0; margin:32px 0;">
-    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Which move captures the star?</h2>
-    <div id="exercises"></div>
-    <div id="completion"></div>
+    <div id="hint" class="hint">Tap the ⭐ <strong>star</strong> to move your piece there!</div>
+    <div id="board"></div>
+    <div id="result"></div>
+    <div id="completion" style="display:none"></div>
   </div>
 
   <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
 
   <script type="module">
     import { initNav } from '../../js/nav.js'; initNav('../../');
-    import { runExerciseSet } from '../../js/exercises.js';
     import { showBuddy, initSideCharacter } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter('william', '../../');
 
-    // Show the correct board for each question
-    const boards = ['board1','board2','board3','board4','board5'];
-    let currentQ = 0;
-
-    const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'The star is up-right ↗ from the piece. Which move captures it?',
-        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Move straight up', 'Stay in place'],
-        correctIndex: 0
-      },
-      {
-        type: 'multiple-choice',
-        question: 'The star is up-left ↖ from the piece. Which move?',
-        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Jump two squares', 'Move sideways'],
-        correctIndex: 1
-      },
-      {
-        type: 'multiple-choice',
-        question: 'William asks: The piece moves UP! Which diagonal reaches the star?',
-        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Move backward', 'Move straight'],
-        correctIndex: 0
-      },
-      {
-        type: 'multiple-choice',
-        question: 'Capture the star! The piece can only move UP diagonally.',
-        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Move down-left', 'Skip this turn'],
-        correctIndex: 1
-      },
-      {
-        type: 'multiple-choice',
-        question: 'Two stars — one up-left ↖ and one up-right ↗! Which is true?',
-        options: ['Only ↗ up-right works', 'Only ↖ up-left works', 'Both moves capture a star!', 'The piece cannot move'],
-        correctIndex: 2
-      }
+    // 5 puzzles: each has piece position and star positions
+    // Board is 8x8, row 0=top, row 7=bottom. Piece starts at bottom, stars above.
+    const puzzles = [
+      { piece: [6,5], stars: [[5,6]], hint: 'Move your piece ↗ up-right to the star!' },
+      { piece: [6,3], stars: [[5,2]], hint: 'Move your piece ↖ up-left to the star!' },
+      { piece: [5,4], stars: [[4,5]], hint: 'The star is up-right ↗ — tap it!' },
+      { piece: [6,5], stars: [[5,4]], hint: 'The star is up-left ↖ — go get it!' },
+      { piece: [6,3], stars: [[5,2],[5,4]], hint: 'Two stars! Tap either one to capture it!' }
     ];
 
-    const container = document.getElementById('exercises');
+    let current = 0;
+    let correctCount = 0;
+    const total = puzzles.length;
+    const boardEl = document.getElementById('board');
+    const hintEl = document.getElementById('hint');
+    const resultEl = document.getElementById('result');
+    const progressEl = document.getElementById('progress');
 
-    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy('william', isCorrect ? 'correct' : 'wrong');
-      // Show next board
-      boards.forEach(b => document.getElementById(b).style.display = 'none');
-      const nextBoard = index + 1;
-      if (nextBoard < boards.length) {
-        document.getElementById(boards[nextBoard]).style.display = 'block';
+    function renderBoard(puzzle) {
+      resultEl.innerHTML = '';
+      hintEl.textContent = puzzle.hint;
+      progressEl.style.width = ((current / total) * 100) + '%';
+
+      let html = '<div class="board">';
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const isLight = (r + c) % 2 === 0;
+          const isPiece = puzzle.piece[0] === r && puzzle.piece[1] === c;
+          const isStar = puzzle.stars.some(s => s[0] === r && s[1] === c);
+
+          if (isStar) {
+            html += `<div class="sq star" data-r="${r}" data-c="${c}" id="sq-${r}-${c}"></div>`;
+          } else if (isPiece) {
+            html += `<div class="sq ${isLight ? 'lt' : 'dk'}" id="sq-${r}-${c}"><div class="pc" id="piece"></div></div>`;
+          } else {
+            // Non-star dark squares are wrong answers (clickable)
+            if (!isLight) {
+              html += `<div class="sq dk" data-r="${r}" data-c="${c}" id="sq-${r}-${c}" style="cursor:pointer;"></div>`;
+            } else {
+              html += `<div class="sq lt"></div>`;
+            }
+          }
+        }
       }
-    });
+      html += '</div>';
+      boardEl.innerHTML = html;
 
-    const { grade, stars } = calculateGrade(score);
-    const xpEarned = calculateXP(score);
-    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
-    document.getElementById('completion').innerHTML = `
-      <div class="lesson-complete">
-        <div class="grade ${gradeClass}">${grade}</div>
-        <div class="stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
-        <div class="xp-earned">+${xpEarned} XP</div>
-        <p>Score: ${score}%</p>
-        <a href="index.html" class="btn btn-primary" style="margin-top:16px;">Back to Course</a>
-      </div>`;
-    // Hide all boards on completion
-    boards.forEach(b => document.getElementById(b).style.display = 'none');
-    onAuthChange(async (user) => { if (user) await saveLessonResult('board-games', 'bg-1', score); });
+      // Add click handlers
+      document.querySelectorAll('.star').forEach(sq => {
+        sq.addEventListener('click', () => handleMove(sq, true, puzzle));
+      });
+
+      // Wrong square clicks
+      document.querySelectorAll('.sq.dk:not(.star)').forEach(sq => {
+        if (sq.querySelector('.pc')) return; // skip piece square
+        sq.addEventListener('click', () => handleMove(sq, false, puzzle));
+      });
+    }
+
+    function handleMove(sq, isCorrect, puzzle) {
+      // Disable all clicks
+      document.querySelectorAll('.star, .sq.dk').forEach(s => {
+        s.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        correctCount++;
+        sq.classList.remove('star');
+        sq.classList.add('correct-sq');
+
+        // Move piece to star position
+        const piece = document.getElementById('piece');
+        if (piece) {
+          piece.classList.add('moving');
+          const oldSq = piece.parentElement;
+          setTimeout(() => {
+            sq.innerHTML = '';
+            sq.className = 'sq dk correct-sq';
+            sq.innerHTML = '<div class="pc moving" id="piece"></div>';
+            if (oldSq) oldSq.innerHTML = '';
+          }, 200);
+        }
+
+        showBuddy('william', 'correct');
+        resultEl.innerHTML = '<div class="result-banner correct">✓ Correct! Well done, young scholar.</div>';
+      } else {
+        sq.classList.add('wrong-sq');
+        showBuddy('william', 'wrong');
+        resultEl.innerHTML = '<div class="result-banner wrong">✗ Not there! Tap the glowing ⭐ star.</div>';
+
+        // Re-enable stars after wrong
+        setTimeout(() => {
+          sq.classList.remove('wrong-sq');
+          document.querySelectorAll('.star').forEach(s => s.style.pointerEvents = 'auto');
+        }, 800);
+        return; // don't advance on wrong
+      }
+
+      // Next button
+      const isLast = current >= total - 1;
+      setTimeout(() => {
+        const btn = document.createElement('button');
+        btn.className = 'next-btn';
+        btn.textContent = isLast ? 'Finish!' : 'Next →';
+        btn.addEventListener('click', () => {
+          current++;
+          if (current < total) {
+            renderBoard(puzzles[current]);
+          } else {
+            showComplete();
+          }
+        });
+        resultEl.appendChild(btn);
+      }, 600);
+    }
+
+    function showComplete() {
+      progressEl.style.width = '100%';
+      boardEl.innerHTML = '';
+      hintEl.style.display = 'none';
+      resultEl.innerHTML = '';
+
+      const score = Math.round((correctCount / total) * 100);
+      const { grade, stars } = calculateGrade(score);
+      const xpEarned = calculateXP(score);
+
+      document.getElementById('completion').style.display = 'block';
+      document.getElementById('completion').innerHTML = `
+        <div class="complete">
+          <h2>${grade}</h2>
+          <div class="stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+          <div class="xp">+${xpEarned} XP</div>
+          <p style="margin:12px 0;color:#64748b;">You scored ${score}%</p>
+          <a href="index.html" class="next-btn" style="text-decoration:none;display:inline-block;">Back to Course</a>
+        </div>`;
+
+      showBuddy('william', score === 100 ? 'perfect' : 'correct');
+      onAuthChange(async (user) => { if (user) await saveLessonResult('board-games', 'bg-1', score); });
+    }
+
+    // Start!
+    renderBoard(puzzles[0]);
   </script>
 </body>
 </html>
