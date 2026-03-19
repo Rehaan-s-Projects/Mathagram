@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .board { display:grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #333; width:fit-content; margin:16px auto; border-radius:4px; }
+    .board .sq { width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .board .light { background:#f0d9b5; }
+    .board .dark { background:#b58863; }
+    .board .highlight { background:#ffeb3b; }
+  </style>
 </head>
 <body>
   <nav class="nav"><div class="container">
@@ -47,31 +54,36 @@
 
     const exercises = [
       {
-        type: 'mc',
-        question: 'William asks: How do you capture in checkers?',
-        options: ['Move next to the opponent\'s piece', 'Jump diagonally over the opponent\'s piece', 'Push the opponent\'s piece off the board', 'Land on the same square'],
-        answer: 'Jump diagonally over the opponent\'s piece'
+        type: 'visual',
+        question: 'What happens when black jumps over red?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Red piece is removed', 'Both pieces are removed', 'Nothing happens', 'Red moves away'],
+        correctIndex: 0
       },
       {
-        type: 'tf',
-        question: 'After capturing one piece, you can choose whether to continue jumping.',
-        answer: false
+        type: 'visual',
+        question: 'How many pieces can black capture in this turn?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['0', '1', '2', '3'],
+        correctIndex: 2
       },
       {
-        type: 'mc',
-        question: 'What happens to a captured piece?',
-        options: ['It stays on the board', 'It is removed from the board', 'It switches sides', 'It moves to the corner'],
-        answer: 'It is removed from the board'
+        type: 'true-false',
+        question: 'If you can capture, you must capture (forced captures rule).',
+        correctAnswer: true
       },
       {
-        type: 'fill',
-        question: 'Jumping over multiple pieces in one turn is called a ___ jump.',
-        answer: 'multiple'
+        type: 'visual',
+        question: 'William asks: Which capture should black make first?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['The one that captures more pieces', 'Any capture is fine', 'The shorter one', 'Skip the capture'],
+        correctIndex: 0
       },
       {
-        type: 'tf',
-        question: 'William says: In standard rules, if you can capture, you must capture.',
-        answer: true
+        type: 'multiple-choice',
+        question: 'What is a multiple jump?',
+        options: ['Capturing several pieces in one turn', 'Jumping over your own pieces', 'Moving two squares at once', 'Skipping your turn'],
+        correctIndex: 0
       }
     ];
 

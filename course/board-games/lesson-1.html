@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .board { display:grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #333; width:fit-content; margin:16px auto; border-radius:4px; }
+    .board .sq { width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .board .light { background:#f0d9b5; }
+    .board .dark { background:#b58863; }
+    .board .highlight { background:#ffeb3b; }
+  </style>
 </head>
 <body>
   <nav class="nav"><div class="container">
@@ -23,7 +30,27 @@
       <p style="font-style:italic; color:var(--color-text-secondary); margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you the noble game of Checkers."</p>
       <p style="margin-bottom:8px;">The checkers board is <strong>8&times;8</strong>, giving us <strong>64 squares</strong> total. But here's the key — only the <strong>dark squares</strong> are used for play!</p>
       <p style="margin-bottom:8px;">Each player starts with <strong>12 pieces</strong>, placed on the dark squares of their first 3 rows.</p>
-      <p>Pieces can only move <strong>diagonally forward</strong>, one square at a time. Simple to learn, but difficult to master!</p>
+      <p style="margin-bottom:16px;">Pieces can only move <strong>diagonally forward</strong>, one square at a time. Simple to learn, but difficult to master!</p>
+
+      <div class="board">
+        <!-- Row 1 (top) -->
+        <div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div>
+        <!-- Row 2 -->
+        <div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div>
+        <!-- Row 3 -->
+        <div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div>
+        <!-- Row 4 (empty) -->
+        <div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div>
+        <!-- Row 5 (empty) -->
+        <div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div>
+        <!-- Row 6 -->
+        <div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div>
+        <!-- Row 7 -->
+        <div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div>
+        <!-- Row 8 (bottom) -->
+        <div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div>
+      </div>
+      <p style="text-align:center; font-size:0.85rem; color:var(--color-text-muted);">Starting position: 12 red pieces (top) vs 12 black pieces (bottom)</p>
     </div>
 
     <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
@@ -47,31 +74,36 @@
 
     const exercises = [
       {
-        type: 'mc',
-        question: 'William asks: How many squares are on a checkers board?',
+        type: 'visual',
+        question: 'William asks: How many pieces does each player start with?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div></div>',
+        options: ['8', '10', '12', '16'],
+        correctIndex: 2
+      },
+      {
+        type: 'visual',
+        question: 'Which color squares do pieces sit on?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Light squares', 'Dark squares', 'Both', 'Any square'],
+        correctIndex: 1
+      },
+      {
+        type: 'visual',
+        question: 'Where can this piece move?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Forward diagonally to either star', 'Straight forward', 'Sideways', 'Backward'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'William says: Regular pieces can move backward.',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'How many squares are on a checkers board?',
         options: ['32', '48', '64', '100'],
-        answer: '64'
-      },
-      {
-        type: 'tf',
-        question: 'In checkers, pieces move on the light-colored squares.',
-        answer: false
-      },
-      {
-        type: 'fill',
-        question: 'Each player starts with ___ pieces.',
-        answer: '12'
-      },
-      {
-        type: 'mc',
-        question: 'William asks: Which direction can regular pieces move?',
-        options: ['Straight forward only', 'Diagonally forward only', 'Any direction', 'Sideways only'],
-        answer: 'Diagonally forward only'
-      },
-      {
-        type: 'ordering',
-        question: 'Put these checkers steps in the correct order:',
-        items: ['Set up the board', 'Place 12 pieces on dark squares', 'Decide who goes first', 'Move diagonally forward', 'Try to capture opponent\'s piece']
+        correctIndex: 2
       }
     ];
 

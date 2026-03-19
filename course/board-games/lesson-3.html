@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .board { display:grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #333; width:fit-content; margin:16px auto; border-radius:4px; }
+    .board .sq { width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .board .light { background:#f0d9b5; }
+    .board .dark { background:#b58863; }
+    .board .highlight { background:#ffeb3b; }
+  </style>
 </head>
 <body>
   <nav class="nav"><div class="container">
@@ -47,36 +54,40 @@
 
     const exercises = [
       {
-        type: 'mc',
-        question: 'William asks: When does a piece become a king?',
-        options: ['After capturing 3 pieces', 'When it reaches the opposite end of the board', 'After 10 moves', 'When it is the last piece'],
-        answer: 'When it reaches the opposite end of the board'
+        type: 'visual',
+        question: 'What happens when this piece reaches the star?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['It becomes a King 👑', 'It gets removed', 'Nothing special', 'It captures automatically'],
+        correctIndex: 0
       },
       {
-        type: 'fill',
-        question: 'A king can move both ___ and backward.',
-        answer: 'forward'
+        type: 'visual',
+        question: 'How can a King move?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">👑</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Forward only', 'Backward only', 'Forward and backward diagonally', 'In straight lines'],
+        correctIndex: 2
       },
       {
-        type: 'tf',
-        question: 'Kings can only move forward like regular pieces.',
-        answer: false
-      },
-      {
-        type: 'mc',
-        question: 'How is a king usually shown on the board?',
-        options: ['By painting it gold', 'By stacking two pieces', 'By turning it upside down', 'By removing it temporarily'],
-        answer: 'By stacking two pieces'
+        type: 'true-false',
+        question: 'A King is shown by stacking two pieces.',
+        correctAnswer: true
       },
       {
         type: 'matching',
         question: 'Match each checkers term with its description:',
         pairs: [
-          { left: 'Regular piece', right: 'Moves forward only' },
-          { left: 'King', right: 'Moves forward and backward' },
-          { left: 'Capture', right: 'Jump over opponent' },
-          { left: 'Multiple jump', right: 'Capture several in one turn' }
+          { left: 'Regular piece', right: 'Forward diagonal only' },
+          { left: 'King', right: 'Forward and backward diagonal' },
+          { left: 'Promotion', right: 'Reaching the last row' },
+          { left: 'Capture', right: 'Jumping over opponent' }
         ]
+      },
+      {
+        type: 'visual',
+        question: 'Can this King capture the red piece by jumping backward?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">👑</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq highlight">⭐</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Yes — Kings can capture backward', 'No — captures are forward only', 'Only if no other move exists', 'Only on the first turn'],
+        correctIndex: 0
       }
     ];
 

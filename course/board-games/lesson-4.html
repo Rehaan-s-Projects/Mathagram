@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .board { display:grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #333; width:fit-content; margin:16px auto; border-radius:4px; }
+    .board .sq { width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .board .light { background:#f0d9b5; }
+    .board .dark { background:#b58863; }
+    .board .highlight { background:#ffeb3b; }
+  </style>
 </head>
 <body>
   <nav class="nav"><div class="container">
@@ -48,31 +55,36 @@
 
     const exercises = [
       {
-        type: 'mc',
-        question: 'William asks: What area should you try to control?',
-        options: ['The edges of the board', 'The center of the board', 'Only the back row', 'The corners'],
-        answer: 'The center of the board'
+        type: 'visual',
+        question: 'William asks: Which position is stronger?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Pieces controlling the center', 'Pieces spread on the edges', 'Pieces in a single line', 'Pieces in the corners'],
+        correctIndex: 0
       },
       {
-        type: 'tf',
-        question: 'A lone piece far from others is a strong position.',
-        answer: false
+        type: 'visual',
+        question: 'What\'s wrong with this position?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div></div>',
+        options: ['The isolated piece is easy to capture', 'Nothing, it\'s a good scout', 'It controls more territory', 'It will become a king faster'],
+        correctIndex: 0
       },
       {
-        type: 'fill',
-        question: 'Keep your pieces ___ — don\'t let them get isolated.',
-        answer: 'together'
+        type: 'true-false',
+        question: 'You should trade pieces when you have more than your opponent.',
+        correctAnswer: true
       },
       {
-        type: 'mc',
-        question: 'When should you trade pieces?',
-        options: ['When you have fewer pieces', 'When you have more pieces than your opponent', 'Never trade pieces', 'Only in the opening'],
-        answer: 'When you have more pieces than your opponent'
+        type: 'visual',
+        question: 'This defensive formation is called:',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq dark">⚫</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">⚫</div><div class="sq light"></div></div>',
+        options: ['The double corner', 'The single file', 'The cross guard', 'The wall'],
+        correctIndex: 0
       },
       {
         type: 'ordering',
         question: 'Order these strategic priorities from most to least important:',
-        items: ['Control the center', 'Keep pieces together', 'Advance as a group', 'Force captures when ahead', 'King your pieces']
+        correctOrder: ['Control the center', 'Keep pieces together', 'Advance as a group', 'Force trades when ahead', 'King your pieces'],
+        shuffled: ['King your pieces', 'Control the center', 'Force trades when ahead', 'Keep pieces together', 'Advance as a group']
       }
     ];
 

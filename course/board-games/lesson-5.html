@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .board { display:grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #333; width:fit-content; margin:16px auto; border-radius:4px; }
+    .board .sq { width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .board .light { background:#f0d9b5; }
+    .board .dark { background:#b58863; }
+    .board .highlight { background:#ffeb3b; }
+  </style>
 </head>
 <body>
   <nav class="nav"><div class="container">
@@ -48,26 +55,29 @@
 
     const exercises = [
       {
-        type: 'mc',
-        question: 'William asks: In the endgame, which piece type is most important?',
-        options: ['Regular pieces', 'Kings', 'Both are equal', 'Neither — positioning matters more'],
-        answer: 'Kings'
+        type: 'visual',
+        question: 'In the endgame, which piece type is most important?',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">👑</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">🔴</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">👑</div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Kings', 'Regular pieces', 'The piece closest to promotion', 'Corner pieces'],
+        correctIndex: 0
       },
       {
-        type: 'fill',
-        question: 'Keeping your king directly diagonal to the opponent\'s king is called the ___.',
-        answer: 'opposition'
+        type: 'visual',
+        question: 'This king position is called:',
+        imageHTML: '<div class="board"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">👑</div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark">👑</div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div>',
+        options: ['Opposition', 'Castling', 'Forking', 'Pinning'],
+        correctIndex: 0
       },
       {
-        type: 'tf',
-        question: 'A single king can never draw against two kings.',
-        answer: false
+        type: 'true-false',
+        question: 'A single king can sometimes draw against two kings with perfect play.',
+        correctAnswer: true
       },
       {
-        type: 'mc',
-        question: 'William\'s three P\'s of checkers mastery are:',
-        options: ['Power, pace, and precision', 'Patience, position, and planning', 'Practice, perseverance, and passion', 'Pieces, placement, and promotion'],
-        answer: 'Patience, position, and planning'
+        type: 'multiple-choice',
+        question: 'William\'s three P\'s of checkers mastery:',
+        options: ['Patience, position, planning', 'Power, precision, pace', 'Push, pull, promote', 'Practice, play, perform'],
+        correctIndex: 0
       },
       {
         type: 'matching',
