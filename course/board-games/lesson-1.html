@@ -32,88 +32,88 @@
 
     <div style="background:#fff; border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid #e2e8f0;">
       <p style="font-style:italic; color:#64748b; margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you to move the checker piece."</p>
-      <p style="margin-bottom:8px;">Regular pieces can <strong>ONLY move forward</strong> (never backward!):</p>
+      <p style="margin-bottom:8px;">Your piece is at the <strong>bottom</strong>. It moves <strong>forward = UP</strong> diagonally:</p>
       <ul style="margin:0 0 8px 20px;">
-        <li><strong>Y+1 X+1</strong> = forward-right diagonal ↘</li>
-        <li><strong>Y+1 X-1</strong> = forward-left diagonal ↙</li>
+        <li><strong>↗ Forward-right</strong> = up and to the right</li>
+        <li><strong>↖ Forward-left</strong> = up and to the left</li>
       </ul>
-      <p style="margin-bottom:8px;">Only <strong>Kings</strong> (promoted pieces) can move backward. Regular pieces go forward only!</p>
-      <p>Move the black piece ● to capture the glowing star ⭐!</p>
+      <p style="margin-bottom:8px;">Regular pieces can <strong>ONLY move forward (up)</strong>. Only Kings can go backward!</p>
+      <p>Move the black piece ● up to capture the glowing star ⭐!</p>
     </div>
 
-    <!-- Board 1: Piece at row 4, Star at row 5 col+1 (down-right) -->
+    <!-- Board 1: Piece BOTTOM row 7, Star UP at row 6 (forward-right) -->
     <div class="board-container" id="board1">
       <div class="board">
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
       </div>
-      <p class="board-label">● piece → ⭐ star</p>
+      <p class="board-label">Move ● up to capture ⭐</p>
     </div>
 
-    <!-- Board 2: Piece at row 3, Star at down-left -->
+    <!-- Board 2: Piece BOTTOM row 7, Star UP-LEFT at row 6 -->
     <div class="board-container" id="board2" style="display:none;">
       <div class="board">
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
       </div>
-      <p class="board-label">● piece → ⭐ star</p>
+      <p class="board-label">Move ● up to capture ⭐</p>
     </div>
 
-    <!-- Board 3: Piece at row 2, Star at down-right -->
+    <!-- Board 3: Piece row 6, Star UP-RIGHT row 5 -->
     <div class="board-container" id="board3" style="display:none;">
       <div class="board">
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
       </div>
-      <p class="board-label">● piece → ⭐ star</p>
+      <p class="board-label">Move ● up to capture ⭐</p>
     </div>
 
-    <!-- Board 4: Piece at row 5, Star at down-left -->
+    <!-- Board 4: Piece row 7, Star UP-LEFT row 6 -->
     <div class="board-container" id="board4" style="display:none;">
       <div class="board">
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
       </div>
-      <p class="board-label">● piece → ⭐ star</p>
+      <p class="board-label">Move ● up to capture ⭐</p>
     </div>
 
-    <!-- Board 5: Piece with TWO stars -->
+    <!-- Board 5: Piece BOTTOM, TWO stars UP -->
     <div class="board-container" id="board5" style="display:none;">
       <div class="board">
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
-        <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
-        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
         <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
+        <div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq st">⭐</div><div class="sq lt"></div>
+        <div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><div class="pc"></div></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div>
         <div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div>
       </div>
-      <p class="board-label">● piece → ⭐⭐ two stars!</p>
+      <p class="board-label">Move ● up to capture ⭐⭐</p>
     </div>
 
     <hr style="border:none; border-top:1px solid #e2e8f0; margin:32px 0;">
@@ -140,32 +140,32 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'The star is down-right from the piece. Which forward move captures it?',
-        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Move straight forward', 'Stay in place'],
+        question: 'The star is up-right ↗ from the piece. Which move captures it?',
+        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Move straight up', 'Stay in place'],
         correctIndex: 0
       },
       {
         type: 'multiple-choice',
-        question: 'The star is down-left. Which forward diagonal?',
-        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Jump two squares', 'Move sideways'],
+        question: 'The star is up-left ↖ from the piece. Which move?',
+        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Jump two squares', 'Move sideways'],
         correctIndex: 1
       },
       {
         type: 'multiple-choice',
-        question: 'William asks: The piece can only move forward! Which way to the star?',
-        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Move backward', 'Move straight'],
+        question: 'William asks: The piece moves UP! Which diagonal reaches the star?',
+        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Move backward', 'Move straight'],
         correctIndex: 0
       },
       {
         type: 'multiple-choice',
-        question: 'Capture the star! Remember — regular pieces move forward only.',
-        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Move backward-left', 'Skip this turn'],
+        question: 'Capture the star! The piece can only move UP diagonally.',
+        options: ['↗ Forward-right (up-right)', '↖ Forward-left (up-left)', 'Move down-left', 'Skip this turn'],
         correctIndex: 1
       },
       {
         type: 'multiple-choice',
-        question: 'Two stars — one forward-left, one forward-right! Which is true?',
-        options: ['Only forward-right works', 'Only forward-left works', 'Both forward moves capture a star!', 'The piece cannot move'],
+        question: 'Two stars — one up-left ↖ and one up-right ↗! Which is true?',
+        options: ['Only ↗ up-right works', 'Only ↖ up-left works', 'Both moves capture a star!', 'The piece cannot move'],
         correctIndex: 2
       }
     ];
