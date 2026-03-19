@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capture the Stars — Bronze Challenge — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+</head>
+<body>
+  <nav class="nav"><div class="container">
+    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div>
+  </div></nav>
+
+  <div class="container" style="max-width:760px; padding:80px 24px 32px;">
+    <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to Board Games</a>
+    <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">⭐ Capture the Stars — Bronze Challenge</h1>
+
+    <div style="background:var(--color-surface); border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid var(--color-border);">
+      <p style="font-style:italic; color:var(--color-text-secondary); margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you the noble game of Checkers."</p>
+      <p style="margin-bottom:8px;">The checkers board is <strong>8&times;8</strong>, giving us <strong>64 squares</strong> total. But here's the key — only the <strong>dark squares</strong> are used for play!</p>
+      <p style="margin-bottom:8px;">Each player starts with <strong>12 pieces</strong>, placed on the dark squares of their first 3 rows.</p>
+      <p>Pieces can only move <strong>diagonally forward</strong>, one square at a time. Simple to learn, but difficult to master!</p>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Capture the Stars ⭐</h2>
+    <div id="exercises"></div>
+    <div id="completion"></div>
+  </div>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js'; initNav('../../');
+    import { runExerciseSet } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // William is ALWAYS the guide for Capture the Stars
+    initSideCharacter('william', '../../');
+
+    const exercises = [
+      {
+        type: 'mc',
+        question: 'William asks: How many squares are on a checkers board?',
+        options: ['32', '48', '64', '100'],
+        answer: '64'
+      },
+      {
+        type: 'tf',
+        question: 'In checkers, pieces move on the light-colored squares.',
+        answer: false
+      },
+      {
+        type: 'fill',
+        question: 'Each player starts with ___ pieces.',
+        answer: '12'
+      },
+      {
+        type: 'mc',
+        question: 'William asks: Which direction can regular pieces move?',
+        options: ['Straight forward only', 'Diagonally forward only', 'Any direction', 'Sideways only'],
+        answer: 'Diagonally forward only'
+      },
+      {
+        type: 'ordering',
+        question: 'Put these checkers steps in the correct order:',
+        items: ['Set up the board', 'Place 12 pieces on dark squares', 'Decide who goes first', 'Move diagonally forward', 'Try to capture opponent\'s piece']
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy('william', isCorrect ? 'correct' : 'wrong');
+    });
+    const { grade, stars } = calculateGrade(score);
+    const xpEarned = calculateXP(score);
+    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
+    document.getElementById('completion').innerHTML = `
+      <div class="lesson-complete">
+        <div class="grade ${gradeClass}">${grade}</div>
+        <div class="stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+        <div class="xp-earned">+${xpEarned} XP</div>
+        <p>Score: ${score}%</p>
+        <a href="index.html" class="btn btn-primary" style="margin-top:16px;">Back to Course</a>
+      </div>`;
+    onAuthChange(async (user) => { if (user) await saveLessonResult('board-games', 'bg-1', score); });
+  </script>
+</body>
+</html>

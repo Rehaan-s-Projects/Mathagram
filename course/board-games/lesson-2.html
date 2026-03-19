@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capture the Stars — Silver Challenge — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+</head>
+<body>
+  <nav class="nav"><div class="container">
+    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div>
+  </div></nav>
+
+  <div class="container" style="max-width:760px; padding:80px 24px 32px;">
+    <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to Board Games</a>
+    <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">⭐ Capture the Stars — Silver Challenge</h1>
+
+    <div style="background:var(--color-surface); border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid var(--color-border);">
+      <p style="font-style:italic; color:var(--color-text-secondary); margin-bottom:12px;">"To capture, young scholar, you jump over your opponent's piece diagonally."</p>
+      <p style="margin-bottom:8px;">The captured piece is <strong>removed from the board</strong> entirely.</p>
+      <p style="margin-bottom:8px;">If after a capture you can capture again, you <strong>MUST</strong> continue jumping — this is called a <strong>multiple jump</strong>.</p>
+      <p>In most rules, captures are <strong>forced</strong> — if you can capture, you must!</p>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Capture the Stars ⭐</h2>
+    <div id="exercises"></div>
+    <div id="completion"></div>
+  </div>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js'; initNav('../../');
+    import { runExerciseSet } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // William is ALWAYS the guide for Capture the Stars
+    initSideCharacter('william', '../../');
+
+    const exercises = [
+      {
+        type: 'mc',
+        question: 'William asks: How do you capture in checkers?',
+        options: ['Move next to the opponent\'s piece', 'Jump diagonally over the opponent\'s piece', 'Push the opponent\'s piece off the board', 'Land on the same square'],
+        answer: 'Jump diagonally over the opponent\'s piece'
+      },
+      {
+        type: 'tf',
+        question: 'After capturing one piece, you can choose whether to continue jumping.',
+        answer: false
+      },
+      {
+        type: 'mc',
+        question: 'What happens to a captured piece?',
+        options: ['It stays on the board', 'It is removed from the board', 'It switches sides', 'It moves to the corner'],
+        answer: 'It is removed from the board'
+      },
+      {
+        type: 'fill',
+        question: 'Jumping over multiple pieces in one turn is called a ___ jump.',
+        answer: 'multiple'
+      },
+      {
+        type: 'tf',
+        question: 'William says: In standard rules, if you can capture, you must capture.',
+        answer: true
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy('william', isCorrect ? 'correct' : 'wrong');
+    });
+    const { grade, stars } = calculateGrade(score);
+    const xpEarned = calculateXP(score);
+    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
+    document.getElementById('completion').innerHTML = `
+      <div class="lesson-complete">
+        <div class="grade ${gradeClass}">${grade}</div>
+        <div class="stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+        <div class="xp-earned">+${xpEarned} XP</div>
+        <p>Score: ${score}%</p>
+        <a href="index.html" class="btn btn-primary" style="margin-top:16px;">Back to Course</a>
+      </div>`;
+    onAuthChange(async (user) => { if (user) await saveLessonResult('board-games', 'bg-2', score); });
+  </script>
+</body>
+</html>
