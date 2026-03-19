@@ -32,11 +32,12 @@
 
     <div style="background:#fff; border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid #e2e8f0;">
       <p style="font-style:italic; color:#64748b; margin-bottom:12px;">"Welcome, young scholar. I am William, and I will teach you to move the checker piece."</p>
-      <p style="margin-bottom:8px;">Pieces move <strong>diagonally forward</strong>:</p>
+      <p style="margin-bottom:8px;">Regular pieces can <strong>ONLY move forward</strong> (never backward!):</p>
       <ul style="margin:0 0 8px 20px;">
-        <li><strong>Y+1 X+1</strong> = down-right diagonal</li>
-        <li><strong>Y+1 X-1</strong> = down-left diagonal</li>
+        <li><strong>Y+1 X+1</strong> = forward-right diagonal ↘</li>
+        <li><strong>Y+1 X-1</strong> = forward-left diagonal ↙</li>
       </ul>
+      <p style="margin-bottom:8px;">Only <strong>Kings</strong> (promoted pieces) can move backward. Regular pieces go forward only!</p>
       <p>Move the black piece ● to capture the glowing star ⭐!</p>
     </div>
 
@@ -139,32 +140,32 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'Look at the board above. Which move captures the star?',
-        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        question: 'The star is down-right from the piece. Which forward move captures it?',
+        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Move straight forward', 'Stay in place'],
         correctIndex: 0
       },
       {
         type: 'multiple-choice',
-        question: 'The star is down-left from the piece. Which move?',
-        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        question: 'The star is down-left. Which forward diagonal?',
+        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Jump two squares', 'Move sideways'],
         correctIndex: 1
       },
       {
         type: 'multiple-choice',
-        question: 'William asks: Move the piece to capture the star!',
-        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        question: 'William asks: The piece can only move forward! Which way to the star?',
+        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Move backward', 'Move straight'],
         correctIndex: 0
       },
       {
         type: 'multiple-choice',
-        question: 'Capture the star! Which diagonal?',
-        options: ['Y+1 X+1 (down-right)', 'Y+1 X-1 (down-left)', 'Y-1 X+1 (up-right)', 'Y-1 X-1 (up-left)'],
+        question: 'Capture the star! Remember — regular pieces move forward only.',
+        options: ['Y+1 X+1 (forward-right)', 'Y+1 X-1 (forward-left)', 'Move backward-left', 'Skip this turn'],
         correctIndex: 1
       },
       {
         type: 'multiple-choice',
-        question: 'Two stars! Which answer is correct?',
-        options: ['Only Y+1 X+1 works', 'Only Y+1 X-1 works', 'Both moves capture a star!', 'Neither move works'],
+        question: 'Two stars — one forward-left, one forward-right! Which is true?',
+        options: ['Only forward-right works', 'Only forward-left works', 'Both forward moves capture a star!', 'The piece cannot move'],
         correctIndex: 2
       }
     ];
