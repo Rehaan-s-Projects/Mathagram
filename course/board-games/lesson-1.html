@@ -9,15 +9,15 @@
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
   <style>
-    .board-container { text-align:center; margin:20px 0; }
-    .board { display:inline-grid; grid-template-columns:repeat(8,42px); grid-template-rows:repeat(8,42px); border:3px solid #1a1a1a; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-    .sq { width:42px; height:42px; display:flex; align-items:center; justify-content:center; }
-    .lt { background:#edd6b0; }
-    .dk { background:#b07442; }
-    .st { background:#ffd54f; animation:glow 1.2s ease-in-out infinite; font-size:1.2rem; }
-    @keyframes glow { 0%,100% { background:#ffd54f; box-shadow:inset 0 0 8px rgba(255,193,7,0.6); } 50% { background:#ffecb3; box-shadow:inset 0 0 16px rgba(255,193,7,0.9); } }
-    .pc { width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 3px 0 rgba(0,0,0,0.3); }
-    .board-label { font-size:0.85rem; color:var(--color-text-muted); margin-top:8px; }
+    .board-container { text-align:center; margin:20px 0; padding:16px; background:#fff; border:2px solid #e2e8f0; border-radius:12px; }
+    .board { display:inline-grid !important; grid-template-columns:repeat(8,46px) !important; grid-template-rows:repeat(8,46px) !important; border:4px solid #1a1a1a !important; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); overflow:visible; }
+    .sq { width:46px !important; height:46px !important; min-width:46px; min-height:46px; display:flex !important; align-items:center; justify-content:center; box-sizing:border-box; }
+    .sq.lt { background:#edd6b0 !important; }
+    .sq.dk { background:#b07442 !important; }
+    .sq.st { background:#ffd54f !important; animation:glow 1.2s ease-in-out infinite; font-size:1.3rem; }
+    @keyframes glow { 0%,100% { background:#ffd54f !important; box-shadow:inset 0 0 10px rgba(255,193,7,0.7); } 50% { background:#ffecb3 !important; box-shadow:inset 0 0 18px rgba(255,193,7,1); } }
+    .pc { width:32px; height:32px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 4px 0 rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.3); }
+    .board-label { font-size:0.85rem; color:#64748b; margin-top:10px; font-weight:600; }
   </style>
 </head>
 <body>
