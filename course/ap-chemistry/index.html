@@ -32,7 +32,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>AP Chemistry</h1>
-    <p>Master atomic structure, bonding, reactions, kinetics, thermodynamics, equilibrium, and acids &amp; bases. 45 lessons across 9 units.</p>
+    <p>Master atomic structure, bonding, reactions, kinetics, thermodynamics, equilibrium, and electrochemistry. 231 lessons across 14 units.</p>
   </header>
 
   <div id="learning-path" class="path-container"></div>
@@ -50,62 +50,34 @@
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const lessons = [
-      /* ── Unit 1: Atomic Structure ── */
-      { id: 'lesson-1', title: 'Atomic Models & Isotopes', href: 'lesson-1.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
-      { id: 'lesson-2', title: 'Electron Configuration', href: 'lesson-2.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
-      { id: 'lesson-3', title: 'Periodic Trends', href: 'lesson-3.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
-      { id: 'lesson-4', title: 'Quantum Numbers', href: 'lesson-4.html', unit: 1, unitName: 'Atomic Structure', category: 'science' },
-      { id: 'lesson-5', title: 'Photoelectron Spectroscopy', href: 'lesson-5.html', unit: 1, unitName: 'Atomic Structure', category: 'science', checkpoint: true },
-      /* ── Unit 2: Bonding ── */
-      { id: 'lesson-6', title: 'Lewis Structures', href: 'lesson-6.html', unit: 2, unitName: 'Bonding', category: 'science' },
-      { id: 'lesson-7', title: 'VSEPR & Geometry', href: 'lesson-7.html', unit: 2, unitName: 'Bonding', category: 'science' },
-      { id: 'ch-8', title: 'Ionic vs Covalent', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
-      { id: 'ch-9', title: 'Formal Charge', href: '#', unit: 2, unitName: 'Bonding', category: 'science' },
-      { id: 'ch-10', title: 'Resonance Structures', href: '#', unit: 2, unitName: 'Bonding', category: 'science', checkpoint: true },
-      /* ── Unit 3: Intermolecular Forces ── */
-      { id: 'ch-11', title: 'Types of IMFs', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
-      { id: 'ch-12', title: 'States of Matter', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
-      { id: 'ch-13', title: 'Vapor Pressure & Boiling Point', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
-      { id: 'ch-14', title: 'Chromatography & Separation', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science' },
-      { id: 'ch-15', title: 'Solubility Rules', href: '#', unit: 3, unitName: 'Intermolecular Forces', category: 'science', checkpoint: true },
-      /* ── Unit 4: Chemical Reactions ── */
-      { id: 'ch-16', title: 'Balancing Equations', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-17', title: 'Types of Reactions', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-18', title: 'Net Ionic Equations', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-19', title: 'Oxidation-Reduction', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science' },
-      { id: 'ch-20', title: 'Activity Series', href: '#', unit: 4, unitName: 'Chemical Reactions', category: 'science', checkpoint: true },
-      /* ── Unit 5: Kinetics ── */
-      { id: 'ch-21', title: 'Reaction Rates', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-22', title: 'Rate Laws & Order', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-23', title: 'Catalysts & Mechanisms', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-24', title: 'Integrated Rate Laws', href: '#', unit: 5, unitName: 'Kinetics', category: 'science' },
-      { id: 'ch-25', title: 'Half-Life Calculations', href: '#', unit: 5, unitName: 'Kinetics', category: 'science', checkpoint: true },
-      /* ── Unit 6: Thermodynamics ── */
-      { id: 'ch-26', title: 'Endothermic & Exothermic', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
-      { id: 'ch-27', title: 'Hess\'s Law & Enthalpy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
-      { id: 'ch-28', title: 'Entropy & Gibbs Free Energy', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
-      { id: 'ch-29', title: 'Calorimetry', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science' },
-      { id: 'ch-30', title: 'Bond Energies', href: '#', unit: 6, unitName: 'Thermodynamics', category: 'science', checkpoint: true },
-      /* ── Unit 7: Equilibrium ── */
-      { id: 'ch-31', title: 'Dynamic Equilibrium', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-32', title: 'Equilibrium Constants', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-33', title: 'Le Chatelier\'s Principle', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-34', title: 'ICE Tables', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science' },
-      { id: 'ch-35', title: 'Ksp & Solubility Product', href: '#', unit: 7, unitName: 'Equilibrium', category: 'science', checkpoint: true },
-      /* ── Unit 8: Acids & Bases ── */
-      { id: 'ch-36', title: 'pH & Strong Acids/Bases', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-37', title: 'Weak Acids & Buffers', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-38', title: 'Titrations', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-39', title: 'Ka & Kb Calculations', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science' },
-      { id: 'ch-40', title: 'Polyprotic Acids', href: '#', unit: 8, unitName: 'Acids & Bases', category: 'science', checkpoint: true },
-      /* ── Unit 9: Applications of Thermo ── */
-      { id: 'ch-41', title: 'Galvanic Cells', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
-      { id: 'ch-42', title: 'Electrolysis', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
-      { id: 'ch-43', title: 'Free Energy & Electrochemistry', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
-      { id: 'ch-44', title: 'Cell Potential & Reduction Potentials', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science' },
-      { id: 'ch-45', title: 'Faraday\'s Law', href: '#', unit: 9, unitName: 'Applications of Thermo', category: 'science', checkpoint: true },
+    const units = [
+      [1,'Atomic Structure & Properties',['Atomic Models & Isotopes','Electron Configuration','Periodic Trends','Quantum Numbers','Photoelectron Spectroscopy','Atomic Radius Trends','Ionization Energy Trends','Electron Affinity','Electronegativity','Coulombs Law & Atomic Properties','Effective Nuclear Charge','Shielding Effect','Isoelectronic Species','Ions & Ionic Radii','Allotropes of Elements','Mass Spectrometry','Average Atomic Mass','Atomic Structure Review']],
+      [2,'Molecular & Ionic Bonding',['Lewis Structures','VSEPR & Molecular Geometry','Ionic vs Covalent Bonding','Formal Charge','Resonance Structures','Bond Order','Bond Length & Bond Energy','Metallic Bonding','Lattice Energy','Born-Haber Cycle','Polar vs Nonpolar Molecules','Dipole Moment','Sigma & Pi Bonds','Hybridization sp sp2 sp3','Expanded Octets','Incomplete Octets','Molecular Orbital Theory','Bonding Review']],
+      [3,'Intermolecular Forces & Properties',['London Dispersion Forces','Dipole-Dipole Forces','Hydrogen Bonding','Ion-Dipole Forces','Relative Strength of IMFs','Boiling Point & IMFs','Melting Point & IMFs','Vapor Pressure','Surface Tension & Viscosity','Capillary Action','Phase Diagrams','Heating & Cooling Curves','Clausius-Clapeyron Equation','Solubility & IMFs','Chromatography','Distillation','IMFs Review']],
+      [4,'Chemical Reactions',['Physical vs Chemical Changes','Balancing Chemical Equations','Types of Reactions (Synthesis)','Types of Reactions (Decomposition)','Types of Reactions (Single Replacement)','Types of Reactions (Double Replacement)','Combustion Reactions','Net Ionic Equations','Spectator Ions','Oxidation-Reduction Basics','Oxidation Numbers','Balancing Redox Equations (Half-Reaction)','Activity Series','Precipitation Reactions','Acid-Base Neutralization','Stoichiometry Introduction','Mole Concept','Molar Mass','Reactions Review']],
+      [5,'Stoichiometry',['Mole-to-Mole Conversions','Mass-to-Mole Conversions','Mass-to-Mass Conversions','Limiting Reactant','Excess Reactant','Theoretical Yield','Actual Yield & Percent Yield','Molarity','Dilution (M1V1=M2V2)','Solution Stoichiometry','Titration Calculations','Empirical Formula','Molecular Formula','Combustion Analysis','Gas Stoichiometry','Stoichiometry Review']],
+      [6,'Kinetics',['Reaction Rates','Factors Affecting Rate','Rate Laws','Determining Rate Law from Data','Integrated Rate Laws (Zero Order)','Integrated Rate Laws (First Order)','Integrated Rate Laws (Second Order)','Half-Life (First Order)','Half-Life (Zero & Second Order)','Arrhenius Equation','Activation Energy','Catalysts & Mechanisms','Elementary Steps','Rate-Determining Step','Reaction Energy Diagrams','Collision Theory','Transition State Theory','Kinetics Review']],
+      [7,'Thermodynamics',['Energy & Heat','Endothermic vs Exothermic','Enthalpy (\u0394H)','Calorimetry (q=mc\u0394T)','Coffee Cup Calorimetry','Bomb Calorimetry','Hess\u2019s Law','Standard Enthalpy of Formation','Bond Energies & \u0394H','Entropy (\u0394S)','Predicting Entropy Changes','Second Law of Thermodynamics','Third Law of Thermodynamics','Gibbs Free Energy (\u0394G)','\u0394G = \u0394H - T\u0394S','Spontaneity','Standard Free Energy','Thermodynamics Review']],
+      [8,'Equilibrium',['Dynamic Equilibrium','Equilibrium Expressions (Keq)','Kc vs Kp','Calculating Equilibrium Constants','ICE Tables','ICE Tables with Quadratic','Reaction Quotient (Q)','Q vs K','Le Chateliers Principle (Concentration)','Le Chateliers Principle (Pressure)','Le Chateliers Principle (Temperature)','Solubility Product (Ksp)','Calculating Molar Solubility','Common Ion Effect','Selective Precipitation','Equilibrium & Free Energy','Equilibrium Review']],
+      [9,'Acids & Bases',['Arrhenius Definition','Bronsted-Lowry Definition','Lewis Definition','Strong Acids','Strong Bases','Weak Acids & Ka','Weak Bases & Kb','pH Calculations (Strong)','pH Calculations (Weak)','pOH & pKa & pKb','Conjugate Acid-Base Pairs','Autoionization of Water (Kw)','Percent Ionization','Polyprotic Acids','Buffers','Henderson-Hasselbalch Equation','Buffer Capacity','Titration Curves (Strong-Strong)','Titration Curves (Weak-Strong)','Indicators','Acids & Bases Review']],
+      [10,'Electrochemistry',['Oxidation & Reduction Review','Galvanic Cells','Cell Notation','Standard Reduction Potentials','Calculating Cell Potential (E\u00b0)','Spontaneity & Cell Potential','Electrolytic Cells','Electrolysis of Molten Salts','Electrolysis of Aqueous Solutions','Faradays Law','Calculating Mass from Current','Nernst Equation','Concentration Cells','Batteries & Fuel Cells','Corrosion','Electrochemistry Review']],
+      [11,'Nuclear Chemistry',['Nuclear Stability','Types of Radioactive Decay (Alpha)','Types of Radioactive Decay (Beta)','Types of Radioactive Decay (Gamma)','Positron Emission','Electron Capture','Half-Life Calculations','Radioactive Dating (Carbon-14)','Nuclear Fission','Nuclear Fusion','Mass Defect & Binding Energy','E=mc\u00b2','Nuclear Power Plants','Nuclear Medicine','Nuclear Chemistry Review']],
+      [12,'Organic Chemistry Introduction',['Carbon Bonding','Alkanes & Nomenclature','Alkenes & Alkynes','Isomers (Structural)','Isomers (Geometric cis/trans)','Functional Groups Overview','Alcohols','Aldehydes & Ketones','Carboxylic Acids','Esters','Amines','Polymers (Addition)','Polymers (Condensation)','Organic Reactions Overview','Organic Chemistry Review']],
+      [13,'Laboratory Skills',['Lab Safety','Significant Figures','Accuracy vs Precision','Percent Error','Volumetric Glassware','Spectrophotometry','Beers Law','Gravimetric Analysis','Flame Tests','Gas Collection','Titration Technique','pH Meters & Indicators','Data Analysis & Graphing','Sources of Error','Lab Skills Review']],
+      [14,'AP Exam Review & Practice',['AP Exam Format Overview','Multiple Choice Strategy','Free Response Strategy','Unit 1 Review','Unit 2 Review','Unit 3 Review','Unit 4 Review','Unit 5 Review','Unit 6 Review','Unit 7 Review','Unit 8 Review','Unit 9 Review','Practice Exam MC Set 1','Practice Exam MC Set 2','Practice Exam FRQ Set 1','Practice Exam FRQ Set 2','Score Your Practice Exam','AP Chemistry Final Challenge']]
     ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ch-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    // Make first 7 lessons playable
+    const playable = {1:'lesson-1.html',2:'lesson-2.html',3:'lesson-3.html',4:'lesson-4.html',5:'lesson-5.html',6:'lesson-6.html',7:'lesson-7.html'};
+    lessons.forEach((l,i) => { if (playable[i+1]) l.href = playable[i+1]; });
 
     async function loadPath() {
       const container = document.getElementById('learning-path');
