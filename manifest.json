@@ -1,7 +1,8 @@
 {
   "name": "Mathagram — Learn Math & Science",
   "short_name": "Mathagram",
-  "description": "Free interactive learning platform for math, science, languages, and more. Duolingo-style lessons with AI voice characters.",
+  "version": "0.1.0",
+  "description": "Free interactive learning platform for math, science, languages, and more. Duolingo-style lessons with AI voice characters. Early Prototype.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f9fa",
