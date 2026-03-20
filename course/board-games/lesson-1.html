@@ -17,19 +17,29 @@
     .sq { width:44px; height:44px; display:flex; align-items:center; justify-content:center; position:relative; box-sizing:border-box; }
     .lt { background:#edd6b0; }
     .dk { background:#b07442; }
+
+    /* Star = correct move */
     .star { background:#ffd54f; cursor:pointer; animation:glow 1s ease-in-out infinite; transition:transform 0.15s; }
     .star:hover { transform:scale(1.15); z-index:2; }
     .star::after { content:'⭐'; font-size:1.1rem; }
     @keyframes glow { 0%,100% { box-shadow:inset 0 0 8px rgba(255,193,7,0.6); } 50% { background:#ffecb3; box-shadow:inset 0 0 18px rgba(255,193,7,1); } }
-    .wrong-sq { background:#ff6b6b !important; animation:shake 0.4s ease; }
-    .wrong-sq::after { content:'✗'; font-size:1.2rem; color:#fff; }
+
+    /* Move option = wrong move (the other diagonal) */
+    .move-option { background:#a0d2db; cursor:pointer; transition:transform 0.15s; border:2px dashed rgba(255,255,255,0.5); }
+    .move-option:hover { transform:scale(1.1); z-index:2; background:#7ec8d8; }
+    .move-option::after { content:'•'; font-size:1.5rem; color:rgba(255,255,255,0.7); }
+
+    .wrong-sq { background:#ff6b6b !important; animation:shake 0.4s ease; border:none !important; }
+    .wrong-sq::after { content:'✗' !important; font-size:1.2rem; color:#fff; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-    .correct-sq { background:#58cc02 !important; animation:none; }
-    .correct-sq::after { content:'✓'; font-size:1.2rem; color:#fff; }
-    .pc { width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 3px 0 rgba(0,0,0,0.4); transition:all 0.4s ease; }
+    .correct-sq { background:#58cc02 !important; animation:none !important; border:none !important; }
+    .correct-sq::after { content:'✓' !important; font-size:1.2rem; color:#fff; }
+
+    .pc { width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #555, #1a1a1a); border:3px solid #000; box-shadow:0 3px 0 rgba(0,0,0,0.4); transition:all 0.3s ease; }
     .pc.moving { animation:pieceMove 0.4s ease; }
-    @keyframes pieceMove { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
-    .hint { font-size:0.85rem; color:#64748b; margin:12px 0; font-weight:500; }
+    @keyframes pieceMove { 0%{transform:scale(1)} 50%{transform:scale(1.3)} 100%{transform:scale(1)} }
+
+    .hint { font-size:0.9rem; color:#64748b; margin:12px 0; font-weight:500; }
     .hint strong { color:#1a1a2e; }
     .result-banner { padding:16px; border-radius:12px; margin:16px 0; font-weight:700; font-size:1rem; animation:slideUp 0.3s ease; }
     .result-banner.correct { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
@@ -39,7 +49,7 @@
     .next-btn:hover { background:#46a302; }
     .complete { text-align:center; padding:32px; }
     .complete h2 { font-size:2rem; margin-bottom:8px; }
-    .complete .stars { font-size:2.5rem; margin:12px 0; }
+    .complete .stars-display { font-size:2.5rem; margin:12px 0; }
     .complete .xp { font-size:1.2rem; color:#eab308; font-weight:700; }
   </style>
 </head>
@@ -51,10 +61,9 @@
 
   <div class="game-container">
     <div class="game-title">⭐ Capture the Stars</div>
-    <div class="game-sub">Bronze Challenge — Tap the star to move!</div>
+    <div class="game-sub">Bronze Challenge — Tap the correct square!</div>
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-
-    <div id="hint" class="hint">Tap the ⭐ <strong>star</strong> to move your piece there!</div>
+    <div id="hint" class="hint">Two moves available — tap the ⭐ <strong>star</strong>!</div>
     <div id="board"></div>
     <div id="result"></div>
     <div id="completion" style="display:none"></div>
@@ -70,14 +79,13 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter('william', '../../');
 
-    // 5 puzzles: each has piece position and star positions
-    // Board is 8x8, row 0=top, row 7=bottom. Piece starts at bottom, stars above.
+    // Each puzzle: piece position, star (correct move), wrong (other diagonal)
     const puzzles = [
-      { piece: [6,5], stars: [[5,6]], hint: 'Move your piece ↗ up-right to the star!' },
-      { piece: [6,3], stars: [[5,2]], hint: 'Move your piece ↖ up-left to the star!' },
-      { piece: [5,4], stars: [[4,5]], hint: 'The star is up-right ↗ — tap it!' },
-      { piece: [6,5], stars: [[5,4]], hint: 'The star is up-left ↖ — go get it!' },
-      { piece: [6,3], stars: [[5,2],[5,4]], hint: 'Two stars! Tap either one to capture it!' }
+      { piece:[6,5], star:[5,6], wrong:[5,4], hint:'Two squares lit up — tap the ⭐ star!' },
+      { piece:[6,3], star:[5,2], wrong:[5,4], hint:'Which diagonal has the star? Tap it!' },
+      { piece:[5,4], star:[4,5], wrong:[4,3], hint:'Up-right or up-left? Find the ⭐!' },
+      { piece:[6,1], star:[5,2], wrong:[5,0], hint:'Only one has a star — choose wisely!' },
+      { piece:[5,6], star:[4,5], wrong:[4,7], hint:'Last one! Tap the ⭐ to finish!' }
     ];
 
     let current = 0;
@@ -98,92 +106,82 @@
         for (let c = 0; c < 8; c++) {
           const isLight = (r + c) % 2 === 0;
           const isPiece = puzzle.piece[0] === r && puzzle.piece[1] === c;
-          const isStar = puzzle.stars.some(s => s[0] === r && s[1] === c);
+          const isStar = puzzle.star[0] === r && puzzle.star[1] === c;
+          const isWrong = puzzle.wrong[0] === r && puzzle.wrong[1] === c;
 
           if (isStar) {
-            html += `<div class="sq star" data-r="${r}" data-c="${c}" id="sq-${r}-${c}"></div>`;
+            html += '<div class="sq star" id="sq-star"></div>';
+          } else if (isWrong) {
+            html += '<div class="sq move-option" id="sq-wrong"></div>';
           } else if (isPiece) {
-            html += `<div class="sq ${isLight ? 'lt' : 'dk'}" id="sq-${r}-${c}"><div class="pc" id="piece"></div></div>`;
+            html += '<div class="sq ' + (isLight ? 'lt' : 'dk') + '" id="sq-piece"><div class="pc" id="piece"></div></div>';
           } else {
-            // Non-star dark squares are wrong answers (clickable)
-            if (!isLight) {
-              html += `<div class="sq dk" data-r="${r}" data-c="${c}" id="sq-${r}-${c}" style="cursor:pointer;"></div>`;
-            } else {
-              html += `<div class="sq lt"></div>`;
-            }
+            html += '<div class="sq ' + (isLight ? 'lt' : 'dk') + '"></div>';
           }
         }
       }
       html += '</div>';
       boardEl.innerHTML = html;
 
-      // Add click handlers
-      document.querySelectorAll('.star').forEach(sq => {
-        sq.addEventListener('click', () => handleMove(sq, true, puzzle));
-      });
-
-      // Wrong square clicks
-      document.querySelectorAll('.sq.dk:not(.star)').forEach(sq => {
-        if (sq.querySelector('.pc')) return; // skip piece square
-        sq.addEventListener('click', () => handleMove(sq, false, puzzle));
-      });
+      // Click star = correct
+      document.getElementById('sq-star').addEventListener('click', function() { handleMove(this, true); });
+      // Click wrong = incorrect
+      document.getElementById('sq-wrong').addEventListener('click', function() { handleMove(this, false); });
     }
 
-    function handleMove(sq, isCorrect, puzzle) {
-      // Disable all clicks
-      document.querySelectorAll('.star, .sq.dk').forEach(s => {
-        s.style.pointerEvents = 'none';
-      });
+    function handleMove(sq, isCorrect) {
+      const starSq = document.getElementById('sq-star');
+      const wrongSq = document.getElementById('sq-wrong');
+      starSq.style.pointerEvents = 'none';
+      wrongSq.style.pointerEvents = 'none';
 
       if (isCorrect) {
         correctCount++;
-        sq.classList.remove('star');
-        sq.classList.add('correct-sq');
+        sq.className = 'sq correct-sq';
 
-        // Move piece to star position
-        const piece = document.getElementById('piece');
-        if (piece) {
-          piece.classList.add('moving');
-          const oldSq = piece.parentElement;
-          setTimeout(() => {
-            sq.innerHTML = '';
-            sq.className = 'sq dk correct-sq';
-            sq.innerHTML = '<div class="pc moving" id="piece"></div>';
-            if (oldSq) oldSq.innerHTML = '';
-          }, 200);
-        }
+        // Move piece to star
+        const pieceSq = document.getElementById('sq-piece');
+        setTimeout(function() {
+          sq.innerHTML = '<div class="pc moving" id="piece"></div>';
+          if (pieceSq) pieceSq.innerHTML = '';
+          wrongSq.className = 'sq dk';
+          wrongSq.innerHTML = '';
+        }, 200);
 
         showBuddy('william', 'correct');
         resultEl.innerHTML = '<div class="result-banner correct">✓ Correct! Well done, young scholar.</div>';
+
+        // Next button
+        setTimeout(function() {
+          var isLast = current >= total - 1;
+          var btn = document.createElement('button');
+          btn.className = 'next-btn';
+          btn.textContent = isLast ? 'Finish!' : 'Next →';
+          btn.addEventListener('click', function() {
+            current++;
+            if (current < total) {
+              renderBoard(puzzles[current]);
+            } else {
+              showComplete();
+            }
+          });
+          resultEl.appendChild(btn);
+        }, 500);
+
       } else {
-        sq.classList.add('wrong-sq');
+        sq.className = 'sq wrong-sq';
         showBuddy('william', 'wrong');
-        resultEl.innerHTML = '<div class="result-banner wrong">✗ Not there! Tap the glowing ⭐ star.</div>';
+        resultEl.innerHTML = '<div class="result-banner wrong">✗ Wrong square! Tap the ⭐ star.</div>';
 
-        // Re-enable stars after wrong
-        setTimeout(() => {
-          sq.classList.remove('wrong-sq');
-          document.querySelectorAll('.star').forEach(s => s.style.pointerEvents = 'auto');
-        }, 800);
-        return; // don't advance on wrong
+        // Re-enable after shake
+        setTimeout(function() {
+          sq.className = 'sq move-option';
+          sq.innerHTML = '';
+          starSq.style.pointerEvents = 'auto';
+          wrongSq.style.pointerEvents = 'auto';
+          resultEl.innerHTML = '';
+        }, 1000);
       }
-
-      // Next button
-      const isLast = current >= total - 1;
-      setTimeout(() => {
-        const btn = document.createElement('button');
-        btn.className = 'next-btn';
-        btn.textContent = isLast ? 'Finish!' : 'Next →';
-        btn.addEventListener('click', () => {
-          current++;
-          if (current < total) {
-            renderBoard(puzzles[current]);
-          } else {
-            showComplete();
-          }
-        });
-        resultEl.appendChild(btn);
-      }, 600);
     }
 
     function showComplete() {
@@ -192,22 +190,22 @@
       hintEl.style.display = 'none';
       resultEl.innerHTML = '';
 
-      const score = Math.round((correctCount / total) * 100);
-      const { grade, stars } = calculateGrade(score);
-      const xpEarned = calculateXP(score);
+      var score = Math.round((correctCount / total) * 100);
+      var result = calculateGrade(score);
+      var xpEarned = calculateXP(score);
 
       document.getElementById('completion').style.display = 'block';
-      document.getElementById('completion').innerHTML = `
-        <div class="complete">
-          <h2>${grade}</h2>
-          <div class="stars">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
-          <div class="xp">+${xpEarned} XP</div>
-          <p style="margin:12px 0;color:#64748b;">You scored ${score}%</p>
-          <a href="index.html" class="next-btn" style="text-decoration:none;display:inline-block;">Back to Course</a>
-        </div>`;
+      document.getElementById('completion').innerHTML =
+        '<div class="complete">' +
+        '<h2>' + result.grade + '</h2>' +
+        '<div class="stars-display">' + '⭐'.repeat(result.stars) + '☆'.repeat(3-result.stars) + '</div>' +
+        '<div class="xp">+' + xpEarned + ' XP</div>' +
+        '<p style="margin:12px 0;color:#64748b;">You scored ' + score + '%</p>' +
+        '<a href="index.html" class="next-btn" style="text-decoration:none;display:inline-block;">Back to Course</a>' +
+        '</div>';
 
       showBuddy('william', score === 100 ? 'perfect' : 'correct');
-      onAuthChange(async (user) => { if (user) await saveLessonResult('board-games', 'bg-1', score); });
+      onAuthChange(async function(user) { if (user) await saveLessonResult('board-games', 'bg-1', score); });
     }
 
     // Start!
