@@ -138,12 +138,16 @@ function speak(text, characterId) {
   if (voices.length > 0) {
     // Prefer female voice for Rita, Gosia, Sam; male for James, William, Edam
     const preferFemale = ['rita', 'gosia', 'sam'].includes(characterId);
+    const preferMale = ['william', 'james', 'edam', 'steve', 'diego'].includes(characterId);
     const filtered = voices.filter(v => v.lang.startsWith('en'));
     if (filtered.length > 0) {
-      const match = filtered.find(v =>
-        preferFemale ? /female|samantha|karen|fiona|victoria|tessa/i.test(v.name) :
-                       /male|daniel|alex|tom|fred|ralph/i.test(v.name)
-      );
+      let match = null;
+      if (preferMale) {
+        // Try male voices first
+        match = filtered.find(v => /\bmale\b|daniel|alex|tom|fred|ralph|aaron|arthur|gordon|lee|rishi|oliver/i.test(v.name) && !/female/i.test(v.name));
+      } else if (preferFemale) {
+        match = filtered.find(v => /female|samantha|karen|fiona|victoria|tessa|moira|susan|kate|zoe/i.test(v.name));
+      }
       utterance.voice = match || filtered[0];
     }
   }
