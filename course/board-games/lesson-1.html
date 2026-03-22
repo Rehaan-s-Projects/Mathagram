@@ -1,157 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capture the Stars — Mathagram v3</title>
-  <link rel="icon" href="../../assets/lighthouse/logo.svg">
-  <link rel="stylesheet" href="../../css/global.css">
-  <link rel="stylesheet" href="../../css/characters.css">
-  <style>
-    body { background:#f8f9fa; }
-    .gc { max-width:420px; margin:0 auto; padding:72px 12px 40px; text-align:center; }
-    .gt { font-size:1.4rem; font-weight:800; margin-bottom:2px; }
-    .gs { font-size:0.85rem; color:#64748b; margin-bottom:12px; }
-    .pb { width:100%; height:8px; background:#e5e5e5; border-radius:4px; margin-bottom:14px; overflow:hidden; }
-    .pf { height:100%; background:#58cc02; border-radius:4px; transition:width 0.3s; }
-    .b { display:inline-grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #222; border-radius:4px; }
-    .s { width:40px; height:40px; display:flex; align-items:center; justify-content:center; overflow:hidden; box-sizing:border-box; }
-    .l { background:#f0d9b5; }
-    .d { background:#b58863; }
-    /* Piece */
-    .p { width:26px; height:26px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e); border:2px solid #3e1a00; box-shadow:none; flex-shrink:0; }
-    /* Star to capture */
-    .st { width:26px; height:26px; border-radius:50%; background:#ffd54f; border:2px solid #f59e0b; box-shadow:none; animation:glow 1s infinite; flex-shrink:0; }
-    @keyframes glow { 50% { background:#ffecb3; } }
-    /* Landing dot */
-    .ld { width:14px; height:14px; border-radius:50%; background:rgba(88,204,2,0.6); cursor:pointer; flex-shrink:0; }
-    .ld:hover { transform:scale(1.3); background:rgba(88,204,2,0.9); }
-    .h { font-size:0.85rem; color:#64748b; margin:10px 0; }
-    .rb { padding:12px; border-radius:10px; margin:12px 0; font-weight:700; font-size:0.9rem; }
-    .rb.ok { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
-    .rb.no { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
-    .nb { margin-top:8px; padding:10px 28px; font-size:0.95rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:10px; cursor:pointer; box-shadow:0 3px 0 #46a302; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkers — Capture the Stars</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+.wrap { max-width:400px; margin:60px auto 40px; text-align:center; padding:16px; }
+h1 { font-size:1.3rem; margin-bottom:4px; }
+.sub { color:#888; font-size:0.85rem; margin-bottom:12px; }
+.bar { height:8px; background:#ddd; border-radius:4px; margin-bottom:16px; }
+.fill { height:100%; background:#58cc02; border-radius:4px; transition:width 0.3s; }
+table { border-collapse:collapse; margin:0 auto 12px; border:3px solid #222; }
+td { width:44px; height:44px; text-align:center; vertical-align:middle; padding:0; }
+.light { background:#f0d9b5; }
+.dark { background:#b58863; }
+.piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e); border:2px solid #3e1a00; }
+.star-piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:#ffd54f; border:2px solid #f59e0b; }
+.land-dot { display:inline-block; width:16px; height:16px; border-radius:50%; cursor:pointer; }
+.land-good { background:rgba(88,204,2,0.6); }
+.land-good:hover { background:rgba(88,204,2,1); transform:scale(1.3); }
+.land-bad { background:rgba(88,204,2,0.6); }
+.land-bad:hover { background:rgba(88,204,2,1); transform:scale(1.3); }
+.msg { padding:12px; border-radius:8px; margin:8px 0; font-weight:700; }
+.msg-ok { background:#dcfce7; color:#166534; border:1px solid #22c55e; }
+.msg-no { background:#fef2f2; color:#991b1b; border:1px solid #ef4444; }
+.btn { padding:10px 28px; font-size:1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:10px; cursor:pointer; margin-top:8px; }
+</style>
 </head>
 <body>
-  <nav class="nav"><div class="container">
-    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
-    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div>
-  </div></nav>
-  <div class="gc">
-    <div class="gt">⭐ Capture the Stars</div>
-    <div class="gs">Jump OVER the star to capture it!</div>
-    <div class="pb"><div class="pf" id="prog"></div></div>
-    <div id="hint" class="h"></div>
-    <div id="brd"></div>
-    <div id="res"></div>
-    <div id="done" style="display:none"></div>
-  </div>
-  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="yr"></span> Mathagram.org</p></div></footer>
-  <script type="module">
-    import { initNav } from '../../js/nav.js'; initNav('../../');
-    import { showBuddy, initSideCharacter } from '../../js/characters.js';
-    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
-    import { onAuthChange } from '../../js/auth.js';
-    document.getElementById('yr').textContent = new Date().getFullYear();
-    initSideCharacter('william', '../../');
+<div class="wrap">
+<h1>⭐ Capture the Stars</h1>
+<p class="sub">Jump OVER the star to capture it!</p>
+<div class="bar"><div class="fill" id="bar"></div></div>
+<div id="game"></div>
+<div id="msg"></div>
+</div>
+<script>
+var puzzles = [
+  {pr:7,pc:2, sr:6,sc:3, gr:5,gc:4, br:5,bc:0},
+  {pr:7,pc:4, sr:6,sc:3, gr:5,gc:2, br:5,bc:6},
+  {pr:7,pc:4, sr:6,sc:5, gr:5,gc:6, br:5,bc:2},
+  {pr:7,pc:2, sr:6,sc:1, gr:5,gc:0, br:5,bc:4},
+  {pr:7,pc:6, sr:6,sc:5, gr:5,gc:4, br:5,bc:2}
+];
+var cur=0, score=0, total=puzzles.length;
 
-    // Each puzzle: piece at bottom, star in middle, 2 landing spots past star
-    // piece=[row,col] star=[row,col] land=[row,col](correct) bad=[row,col](wrong)
-    var P = [
-      {p:[7,2], s:[6,3], g:[5,4], b:[5,0]},
-      {p:[7,4], s:[6,3], g:[5,2], b:[5,6]},
-      {p:[7,4], s:[6,5], g:[5,6], b:[5,2]},
-      {p:[7,2], s:[6,1], g:[5,0], b:[5,4]},
-      {p:[7,6], s:[6,5], g:[5,4], b:[5,2]}
-    ];
-    var cur=0, ok=0, tot=P.length;
+function render() {
+  var q = puzzles[cur];
+  document.getElementById('bar').style.width = (cur/total*100)+'%';
+  document.getElementById('msg').innerHTML = '';
+  var html = '<table>';
+  for (var r=0; r<8; r++) {
+    html += '<tr>';
+    for (var c=0; c<8; c++) {
+      var cls = (r+c)%2===0 ? 'light' : 'dark';
+      var content = '';
+      if (r===q.pr && c===q.pc) content = '<div class="piece"></div>';
+      else if (r===q.sr && c===q.sc) content = '<div class="star-piece"></div>';
+      else if (r===q.gr && c===q.gc) content = '<div class="land-dot land-good" onclick="tap(1)"></div>';
+      else if (r===q.br && c===q.bc) content = '<div class="land-dot land-bad" onclick="tap(0)"></div>';
+      html += '<td class="'+cls+'">'+content+'</td>';
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+  document.getElementById('game').innerHTML = html;
+}
 
-    function draw(q) {
-      document.getElementById('res').innerHTML = '';
-      document.getElementById('hint').textContent = 'Tap where to land after jumping over ⭐';
-      document.getElementById('prog').style.width = (cur/tot*100)+'%';
-      var h = '<div class="b">';
-      for(var r=0;r<8;r++) for(var c=0;c<8;c++) {
-        var lt = (r+c)%2===0;
-        var id = 'c'+r+'_'+c;
-        // What goes in this square?
-        var inner = '';
-        if(r===q.p[0]&&c===q.p[1]) inner = '<div class="p" id="piece"></div>';
-        else if(r===q.s[0]&&c===q.s[1]) inner = '<div class="st" id="star"></div>';
-        else if(r===q.g[0]&&c===q.g[1]) inner = '<div class="ld" id="good"></div>';
-        else if(r===q.b[0]&&c===q.b[1]) inner = '<div class="ld" id="bad"></div>';
-        h += '<div class="s '+(lt?'l':'d')+'" id="'+id+'">'+inner+'</div>';
+function tap(good) {
+  var q = puzzles[cur];
+  if (good) {
+    score++;
+    // Move piece to landing, remove star
+    var html = '<table>';
+    for (var r=0; r<8; r++) {
+      html += '<tr>';
+      for (var c=0; c<8; c++) {
+        var cls = (r+c)%2===0 ? 'light' : 'dark';
+        var content = '';
+        // Piece is now at landing position
+        if (r===q.gr && c===q.gc) content = '<div class="piece"></div>';
+        // Star is GONE (captured), old position empty, wrong dot gone
+        html += '<td class="'+cls+'">'+content+'</td>';
       }
-      h += '</div>';
-      document.getElementById('brd').innerHTML = h;
-      // Handlers
-      document.getElementById('good').onclick = function(){ tap(true,q); };
-      document.getElementById('bad').onclick = function(){ tap(false,q); };
+      html += '</tr>';
     }
+    html += '</table>';
+    document.getElementById('game').innerHTML = html;
+    document.getElementById('msg').innerHTML = '<div class="msg msg-ok">✓ Captured!</div>' +
+      '<button class="btn" onclick="next()">'+(cur>=total-1?'Finish!':'Next →')+'</button>';
+  } else {
+    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong! Tap the other dot.</div>';
+    setTimeout(function(){ document.getElementById('msg').innerHTML=''; }, 700);
+  }
+}
 
-    function tap(correct, q) {
-      var good = document.getElementById('good');
-      var bad = document.getElementById('bad');
-      if(good) good.onclick = null;
-      if(bad) bad.onclick = null;
+function next() {
+  cur++;
+  if (cur < total) render();
+  else {
+    document.getElementById('bar').style.width = '100%';
+    var pct = Math.round(score/total*100);
+    var stars = pct>=95?3:pct>=80?2:pct>=60?1:0;
+    document.getElementById('game').innerHTML = '';
+    document.getElementById('msg').innerHTML =
+      '<h2 style="font-size:2rem;margin:16px 0">'+pct+'%</h2>' +
+      '<div style="font-size:2rem">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div>' +
+      '<p style="margin:12px 0;color:#888">You got '+score+'/'+total+' correct</p>' +
+      '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block">Back to Course</a>';
+  }
+}
 
-      if(correct) {
-        ok++;
-        // Remove both landing dots
-        if(good) good.remove();
-        if(bad) bad.remove();
-        // Remove star (captured!)
-        var star = document.getElementById('star');
-        if(star) star.remove();
-        // Move piece to landing square
-        var piece = document.getElementById('piece');
-        var fromSq = document.getElementById('c'+q.p[0]+'_'+q.p[1]);
-        var toSq = document.getElementById('c'+q.g[0]+'_'+q.g[1]);
-        if(piece && fromSq && toSq) {
-          fromSq.removeChild(piece);
-          toSq.appendChild(piece);
-        }
-        showBuddy('william','correct');
-        document.getElementById('res').innerHTML = '<div class="rb ok">✓ Captured! Well done.</div>';
-        setTimeout(function(){
-          var btn = document.createElement('button');
-          btn.className = 'nb';
-          btn.textContent = cur>=tot-1 ? 'Finish!' : 'Next →';
-          btn.onclick = function(){ cur++; cur<tot ? draw(P[cur]) : fin(); };
-          document.getElementById('res').appendChild(btn);
-        },400);
-      } else {
-        bad.style.background = '#ff6b6b';
-        bad.style.pointerEvents = 'none';
-        showBuddy('william','wrong');
-        document.getElementById('res').innerHTML = '<div class="rb no">✗ Wrong! Tap the other square.</div>';
-        setTimeout(function(){
-          bad.style.background = 'rgba(88,204,2,0.5)';
-          bad.style.pointerEvents = '';
-          bad.onclick = function(){ tap(false,q); };
-          good.onclick = function(){ tap(true,q); };
-          document.getElementById('res').innerHTML = '';
-        },700);
-      }
-    }
-
-    function fin() {
-      document.getElementById('prog').style.width = '100%';
-      document.getElementById('brd').innerHTML = '';
-      document.getElementById('hint').style.display = 'none';
-      document.getElementById('res').innerHTML = '';
-      var sc = Math.round(ok/tot*100);
-      var g = calculateGrade(sc);
-      var xp = calculateXP(sc);
-      var d = document.getElementById('done');
-      d.style.display = 'block';
-      d.innerHTML = '<h2 style="font-size:2rem">'+g.grade+'</h2><div style="font-size:2.5rem;margin:8px 0">'+'⭐'.repeat(g.stars)+'☆'.repeat(3-g.stars)+'</div><div style="font-size:1.2rem;color:#eab308;font-weight:700">+'+xp+' XP</div><p style="margin:10px 0;color:#64748b">Score: '+sc+'%</p><a href="index.html" class="nb" style="text-decoration:none;display:inline-block">Back to Course</a>';
-      showBuddy('william',sc===100?'perfect':'correct');
-      onAuthChange(async function(u){if(u) await saveLessonResult('board-games','bg-1',sc);});
-    }
-
-    draw(P[0]);
-  </script>
+render();
+</script>
 </body>
 </html>
