@@ -13,30 +13,18 @@
     .game-sub { font-size:0.9rem; color:#64748b; margin-bottom:16px; }
     .progress-bar { width:100%; height:10px; background:#e5e5e5; border-radius:5px; margin-bottom:20px; overflow:hidden; }
     .progress-fill { height:100%; background:linear-gradient(90deg,#58cc02,#89e219); border-radius:5px; transition:width 0.4s; }
-
-    /* Board */
     .board-wrap { position:relative; display:inline-block; margin:12px auto; }
     .board { display:grid; grid-template-columns:repeat(8,44px); grid-template-rows:repeat(8,44px); border:4px solid #1a1a1a; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); }
-    .sq { width:44px; height:44px; display:flex; align-items:center; justify-content:center; position:relative; }
+    .sq { width:44px; height:44px; }
     .lt { background:#edd6b0; }
     .dk { background:#b07442; }
-
-    /* Move dots — small circles on normal dark squares */
-    .move-dot { cursor:pointer; position:relative; background:#b07442 !important; }
-    .move-dot::after { content:''; width:14px; height:14px; border-radius:50%; background:rgba(88,204,2,0.5); position:absolute; transition:transform 0.15s; }
-    .move-dot:hover::after { background:rgba(88,204,2,0.85); transform:scale(1.4); }
-    .move-dot.star { background:#b07442 !important; }
-    .move-dot.star::after { background:#ffd54f; width:18px; height:18px; box-shadow:0 0 10px rgba(255,193,7,0.7); animation:dotPulse 1s infinite; }
-    @keyframes dotPulse { 0%,100%{box-shadow:0 0 6px rgba(255,193,7,0.5)} 50%{box-shadow:0 0 16px rgba(255,193,7,1)} }
-
-    .wrong-flash { background:#ff6b6b !important; }
-    .wrong-flash::after { content:'✗' !important; width:auto !important; height:auto !important; background:none !important; font-size:1.2rem; color:#fff; box-shadow:none !important; animation:shake 0.4s !important; }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-
-    /* Piece — slides across board */
     .piece-layer { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10; }
     .checker { width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #a0522d, #5c2d0e); border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5); position:absolute; transition:top 0.35s ease-in-out, left 0.35s ease-in-out; }
-
+    .dot { width:16px; height:16px; border-radius:50%; position:absolute; z-index:5; cursor:pointer; transition:transform 0.15s; }
+    .dot:hover { transform:scale(1.4); }
+    .dot-star { background:#ffd54f; box-shadow:0 0 10px rgba(255,193,7,0.7); animation:dotPulse 1s infinite; width:20px; height:20px; }
+    .dot-wrong { background:rgba(88,204,2,0.5); }
+    @keyframes dotPulse { 0%,100%{box-shadow:0 0 6px rgba(255,193,7,0.5)} 50%{box-shadow:0 0 16px rgba(255,193,7,1)} }
     .hint { font-size:0.9rem; color:#64748b; margin:12px 0; }
     .result-banner { padding:14px; border-radius:12px; margin:14px 0; font-weight:700; font-size:0.95rem; }
     .result-banner.correct { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
@@ -59,7 +47,7 @@
     <div class="game-title">⭐ Capture the Stars</div>
     <div class="game-sub">Bronze Challenge</div>
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div id="hint" class="hint">Tap the glowing dot to move your piece!</div>
+    <div id="hint" class="hint">Tap the gold dot to jump your piece!</div>
     <div id="board"></div>
     <div id="result"></div>
     <div id="completion" style="display:none"></div>
@@ -75,81 +63,85 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter('william', '../../');
 
-    const SQ = 44; // square size in px
-    // Piece at BOTTOM row 7, jump targets 2 rows up at row 5
-    const puzzles = [
+    var SQ = 44;
+    // Piece at bottom row 7, dots at row 5 (2 squares up)
+    var puzzles = [
       { piece:[7,2], star:[5,4], wrong:[5,0] },
       { piece:[7,4], star:[5,2], wrong:[5,6] },
       { piece:[7,4], star:[5,6], wrong:[5,2] },
       { piece:[7,2], star:[5,0], wrong:[5,4] },
-      { piece:[7,4], star:[5,6], wrong:[5,2] }
+      { piece:[7,6], star:[5,4], wrong:[5,8] }
     ];
+    // Fix: clamp column 8 to 6
+    puzzles[4].wrong = [5,4];
+    puzzles[4].star = [5,4];
+    // Actually fix puzzle 5 properly
+    puzzles[4] = { piece:[7,6], star:[5,4], wrong:[5,8] };
+    // column 8 is off board, fix:
+    puzzles[4] = { piece:[7,4], star:[5,2], wrong:[5,6] };
 
-    let current = 0, correctCount = 0;
-    const total = puzzles.length;
-    const boardEl = document.getElementById('board');
-    const hintEl = document.getElementById('hint');
-    const resultEl = document.getElementById('result');
-    const progressEl = document.getElementById('progress');
+    var current = 0, correctCount = 0;
+    var total = puzzles.length;
+    var boardEl = document.getElementById('board');
+    var hintEl = document.getElementById('hint');
+    var resultEl = document.getElementById('result');
+    var progressEl = document.getElementById('progress');
+
+    function centerPos(row, col) {
+      // Center a 16-20px dot in a 44px square, plus 4px board border
+      return { top: row * SQ + 4 + 12, left: col * SQ + 4 + 12 };
+    }
+    function piecePos(row, col) {
+      return { top: row * SQ + 4 + 5, left: col * SQ + 4 + 5 };
+    }
 
     function renderPuzzle(p) {
       resultEl.innerHTML = '';
-      hintEl.textContent = 'Tap the glowing dot to jump your piece!';
+      hintEl.textContent = 'Tap the gold dot to jump!';
       progressEl.style.width = ((current/total)*100)+'%';
 
-      // Build board + piece overlay
-      let html = '<div class="board-wrap"><div class="board">';
-      for (let r=0; r<8; r++) {
-        for (let c=0; c<8; c++) {
-          const light = (r+c)%2===0;
-          const isStar = p.star[0]===r && p.star[1]===c;
-          const isWrong = p.wrong[0]===r && p.wrong[1]===c;
-
-          if (isStar) {
-            html += '<div class="sq dk move-dot star" data-correct="1" data-r="'+r+'" data-c="'+c+'"></div>';
-          } else if (isWrong) {
-            html += '<div class="sq dk move-dot" data-correct="0" data-r="'+r+'" data-c="'+c+'"></div>';
-          } else {
-            html += '<div class="sq '+(light?'lt':'dk')+'"></div>';
-          }
+      // Build clean board — just squares, no dots in the grid
+      var html = '<div class="board-wrap"><div class="board">';
+      for (var r=0; r<8; r++) {
+        for (var c=0; c<8; c++) {
+          html += '<div class="sq '+((r+c)%2===0?'lt':'dk')+'"></div>';
         }
       }
       html += '</div>';
-      // Piece overlay — absolutely positioned so it can slide
-      html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+(p.piece[0]*SQ+6)+'px;left:'+(p.piece[1]*SQ+6)+'px;"></div></div>';
+      // Piece layer
+      var pp = piecePos(p.piece[0], p.piece[1]);
+      html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+pp.top+'px;left:'+pp.left+'px;"></div></div>';
+      // Dot layer — separate from board so they can be fully removed
+      html += '<div id="dot-layer" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;">';
+      // Star dot
+      var sp = centerPos(p.star[0], p.star[1]);
+      html += '<div class="dot dot-star" id="dot-star" style="position:absolute;top:'+sp.top+'px;left:'+sp.left+'px;"></div>';
+      // Wrong dot
+      var wp = centerPos(p.wrong[0], p.wrong[1]);
+      html += '<div class="dot dot-wrong" id="dot-wrong" style="position:absolute;top:'+wp.top+'px;left:'+wp.left+'px;"></div>';
+      html += '</div>';
       html += '</div>';
       boardEl.innerHTML = html;
 
-      // Click handlers on dots
-      document.querySelectorAll('.move-dot').forEach(function(dot) {
-        dot.addEventListener('click', function() {
-          var correct = dot.getAttribute('data-correct')==='1';
-          var tr = parseInt(dot.getAttribute('data-r'));
-          var tc = parseInt(dot.getAttribute('data-c'));
-          handleTap(dot, correct, tr, tc, p);
-        });
-      });
+      // Click handlers
+      document.getElementById('dot-star').addEventListener('click', function(){ handleTap(true, p); });
+      document.getElementById('dot-wrong').addEventListener('click', function(){ handleTap(false, p); });
     }
 
-    function handleTap(dot, correct, tr, tc, p) {
-      // Disable all dots
-      document.querySelectorAll('.move-dot').forEach(function(d){ d.style.pointerEvents='none'; });
-
+    function handleTap(correct, p) {
       if (correct) {
         correctCount++;
-        // Slide piece to target
+        // Slide piece to star position
         var checker = document.getElementById('checker');
-        checker.style.top = (tr*SQ+6)+'px';
-        checker.style.left = (tc*SQ+6)+'px';
+        var pp = piecePos(p.star[0], p.star[1]);
+        checker.style.top = pp.top + 'px';
+        checker.style.left = pp.left + 'px';
 
-        // Remove ALL dots — reset to normal dark squares
-        document.querySelectorAll('.move-dot').forEach(function(d){
-          d.className = 'sq dk';
-          d.removeAttribute('style');
-          d.removeAttribute('data-correct');
-          d.removeAttribute('data-r');
-          d.removeAttribute('data-c');
-        });
+        // REMOVE dot layer completely — dots gone, no green, no leftover
+        setTimeout(function() {
+          var dotLayer = document.getElementById('dot-layer');
+          if (dotLayer) dotLayer.remove();
+        }, 300);
 
         showBuddy('william', 'correct');
         resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
@@ -168,13 +160,14 @@
         }, 500);
 
       } else {
-        dot.classList.add('wrong-flash');
+        var wrongDot = document.getElementById('dot-wrong');
+        wrongDot.style.background = '#ff6b6b';
+        wrongDot.style.pointerEvents = 'none';
         showBuddy('william', 'wrong');
         resultEl.innerHTML = '<div class="result-banner wrong">✗ Try the other dot!</div>';
         setTimeout(function() {
-          dot.classList.remove('wrong-flash');
-          dot.className = 'sq dk move-dot';
-          document.querySelectorAll('.move-dot').forEach(function(d){ d.style.pointerEvents='auto'; });
+          wrongDot.style.background = 'rgba(88,204,2,0.5)';
+          wrongDot.style.pointerEvents = 'auto';
           resultEl.innerHTML = '';
         }, 800);
       }
