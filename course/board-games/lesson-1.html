@@ -18,12 +18,12 @@ td { width:44px; height:44px; text-align:center; vertical-align:middle; padding:
 .light { background:#f0d9b5; }
 .dark { background:#b58863; }
 .piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e); border:2px solid #3e1a00; }
-.star-piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:#ffd54f; border:2px solid #f59e0b; }
-.land-dot { display:inline-block; width:16px; height:16px; border-radius:50%; cursor:pointer; }
-.land-good { background:rgba(88,204,2,0.6); }
-.land-good:hover { background:rgba(88,204,2,1); transform:scale(1.3); }
-.land-bad { background:rgba(88,204,2,0.6); }
-.land-bad:hover { background:rgba(88,204,2,1); transform:scale(1.3); }
+.star-piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:#ffd54f; border:2px solid #f59e0b; pointer-events:none; }
+.land-dot { display:inline-block; width:20px; height:20px; border-radius:50%; cursor:pointer; border:3px solid rgba(88,204,2,0.8); animation:pulse 1s infinite; }
+.land-dot:hover { transform:scale(1.3); }
+@keyframes pulse { 0%,100%{background:rgba(88,204,2,0.3)} 50%{background:rgba(88,204,2,0.7)} }
+.land-good { }
+.land-bad { }
 .msg { padding:12px; border-radius:8px; margin:8px 0; font-weight:700; }
 .msg-ok { background:#dcfce7; color:#166534; border:1px solid #22c55e; }
 .msg-no { background:#fef2f2; color:#991b1b; border:1px solid #ef4444; }
@@ -33,7 +33,7 @@ td { width:44px; height:44px; text-align:center; vertical-align:middle; padding:
 <body>
 <div class="wrap">
 <h1>⭐ Capture the Stars</h1>
-<p class="sub">Jump OVER the star to capture it!</p>
+<p class="sub">Tap the green circle — that's where your piece lands after jumping OVER the star!</p>
 <div class="bar"><div class="fill" id="bar"></div></div>
 <div id="game"></div>
 <div id="msg"></div>
