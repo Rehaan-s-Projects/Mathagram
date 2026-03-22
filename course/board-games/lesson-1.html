@@ -131,17 +131,14 @@
     function handleTap(correct, p) {
       if (correct) {
         correctCount++;
+        // REMOVE dots INSTANTLY
+        var dotLayer = document.getElementById('dot-layer');
+        if (dotLayer) dotLayer.remove();
         // Slide piece to star position
         var checker = document.getElementById('checker');
         var pp = piecePos(p.star[0], p.star[1]);
         checker.style.top = pp.top + 'px';
         checker.style.left = pp.left + 'px';
-
-        // REMOVE dot layer completely — dots gone, no green, no leftover
-        setTimeout(function() {
-          var dotLayer = document.getElementById('dot-layer');
-          if (dotLayer) dotLayer.remove();
-        }, 300);
 
         showBuddy('william', 'correct');
         resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
