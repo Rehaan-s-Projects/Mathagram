@@ -56,11 +56,45 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
+/* Tabs */
+.calc-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.calc-tab {
+  flex: 1;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: #2d2d44;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.calc-tab.active {
+  background: #00e5c8;
+  color: #1a1a2e;
+}
+
 .calc-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
+.calc-pad-wide {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Calculus symbol buttons */
+.cb.calc-sym {
+  background: #1e1e3a;
+  color: #00e5c8;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.cb.calc-sym:hover { background: #2d2d55; }
 
 .cb {
   padding: 12px 4px;
