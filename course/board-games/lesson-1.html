@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkers — Capture the Stars v5</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<title>Checkers — Capture the Stars — Bronze</title>
 <link rel="icon" href="../../assets/lighthouse/logo.svg">
 <link rel="stylesheet" href="../../css/global.css">
 <link rel="stylesheet" href="../../css/characters.css">
@@ -54,26 +54,16 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
 </div></nav>
 
 <div class="wrap">
-<h1>⭐ Capture the Stars</h1>
-<p class="sub">Tap the <span style="color:#4caf50;font-weight:800">GREEN CIRCLE</span> to land there.<br>Your piece jumps OVER the gold star!</p>
+<h1>Capture the Stars — Bronze</h1>
+<p class="sub">Tap the <span style="color:#4caf50;font-weight:800">GREEN CIRCLE</span> to land there.<br>Your piece jumps OVER the ⭐ star!</p>
 <div class="bar"><div class="fill" id="bar"></div></div>
 <div id="game"></div>
 <div id="msg"></div>
 </div>
 
 <script>
-// Clear ALL caches on load
-if ('caches' in window) {
-  caches.keys().then(function(names) {
-    names.forEach(function(name) { caches.delete(name); });
-  });
-}
-// Unregister service workers
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(regs) {
-    regs.forEach(function(reg) { reg.unregister(); });
-  });
-}
+if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})}); }
+if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}); }
 </script>
 <script type="module">
 import { initNav } from '../../js/nav.js'; initNav('../../');
