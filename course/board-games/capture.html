@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkers — Capture the Stars</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+.wrap { max-width:400px; margin:60px auto 40px; text-align:center; padding:16px; }
+h1 { font-size:1.3rem; margin-bottom:4px; }
+.sub { color:#888; font-size:0.85rem; margin-bottom:12px; }
+.bar { height:8px; background:#ddd; border-radius:4px; margin-bottom:16px; }
+.fill { height:100%; background:#58cc02; border-radius:4px; transition:width 0.3s; }
+table { border-collapse:collapse; margin:0 auto 12px; border:3px solid #222; }
+td { width:44px; height:44px; text-align:center; vertical-align:middle; padding:0; }
+.light { background:#f0d9b5; }
+.dark { background:#b58863; }
+.piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e); border:2px solid #3e1a00; }
+.star-piece { display:inline-block; width:30px; height:30px; border-radius:50%; background:#ffd54f; border:2px solid #f59e0b; pointer-events:none; }
+.land-dot { display:inline-block; width:20px; height:20px; border-radius:50%; cursor:pointer; border:3px solid rgba(88,204,2,0.8); animation:pulse 1s infinite; }
+.land-dot:hover { transform:scale(1.3); }
+@keyframes pulse { 0%,100%{background:rgba(88,204,2,0.3)} 50%{background:rgba(88,204,2,0.7)} }
+.land-good { }
+.land-bad { }
+.msg { padding:12px; border-radius:8px; margin:8px 0; font-weight:700; }
+.msg-ok { background:#dcfce7; color:#166534; border:1px solid #22c55e; }
+.msg-no { background:#fef2f2; color:#991b1b; border:1px solid #ef4444; }
+.btn { padding:10px 28px; font-size:1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:10px; cursor:pointer; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>⭐ Capture the Stars</h1>
+<p class="sub">Tap the green circle — that's where your piece lands after jumping OVER the star!</p>
+<div class="bar"><div class="fill" id="bar"></div></div>
+<div id="game"></div>
+<div id="msg"></div>
+</div>
+<script>
+var puzzles = [
+  {pr:7,pc:2, sr:6,sc:3, gr:5,gc:4, br:5,bc:0},
+  {pr:7,pc:4, sr:6,sc:3, gr:5,gc:2, br:5,bc:6},
+  {pr:7,pc:4, sr:6,sc:5, gr:5,gc:6, br:5,bc:2},
+  {pr:7,pc:2, sr:6,sc:1, gr:5,gc:0, br:5,bc:4},
+  {pr:7,pc:6, sr:6,sc:5, gr:5,gc:4, br:5,bc:2}
+];
+var cur=0, score=0, total=puzzles.length;
+
+function render() {
+  var q = puzzles[cur];
+  document.getElementById('bar').style.width = (cur/total*100)+'%';
+  document.getElementById('msg').innerHTML = '';
+  var html = '<table>';
+  for (var r=0; r<8; r++) {
+    html += '<tr>';
+    for (var c=0; c<8; c++) {
+      var cls = (r+c)%2===0 ? 'light' : 'dark';
+      var content = '';
+      if (r===q.pr && c===q.pc) content = '<div class="piece"></div>';
+      else if (r===q.sr && c===q.sc) content = '<div class="star-piece"></div>';
+      else if (r===q.gr && c===q.gc) content = '<div class="land-dot land-good" onclick="tap(1)"></div>';
+      else if (r===q.br && c===q.bc) content = '<div class="land-dot land-bad" onclick="tap(0)"></div>';
+      html += '<td class="'+cls+'">'+content+'</td>';
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+  document.getElementById('game').innerHTML = html;
+}
+
+function tap(good) {
+  var q = puzzles[cur];
+  if (good) {
+    score++;
+    // Move piece to landing, remove star
+    var html = '<table>';
+    for (var r=0; r<8; r++) {
+      html += '<tr>';
+      for (var c=0; c<8; c++) {
+        var cls = (r+c)%2===0 ? 'light' : 'dark';
+        var content = '';
+        // Piece is now at landing position
+        if (r===q.gr && c===q.gc) content = '<div class="piece"></div>';
+        // Star is GONE (captured), old position empty, wrong dot gone
+        html += '<td class="'+cls+'">'+content+'</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</table>';
+    document.getElementById('game').innerHTML = html;
+    document.getElementById('msg').innerHTML = '<div class="msg msg-ok">✓ Captured!</div>' +
+      '<button class="btn" onclick="next()">'+(cur>=total-1?'Finish!':'Next →')+'</button>';
+  } else {
+    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong! Tap the other dot.</div>';
+    setTimeout(function(){ document.getElementById('msg').innerHTML=''; }, 700);
+  }
+}
+
+function next() {
+  cur++;
+  if (cur < total) render();
+  else {
+    document.getElementById('bar').style.width = '100%';
+    var pct = Math.round(score/total*100);
+    var stars = pct>=95?3:pct>=80?2:pct>=60?1:0;
+    document.getElementById('game').innerHTML = '';
+    document.getElementById('msg').innerHTML =
+      '<h2 style="font-size:2rem;margin:16px 0">'+pct+'%</h2>' +
+      '<div style="font-size:2rem">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div>' +
+      '<p style="margin:12px 0;color:#888">You got '+score+'/'+total+' correct</p>' +
+      '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block">Back to Course</a>';
+  }
+}
+
+render();
+</script>
+</body>
+</html>
