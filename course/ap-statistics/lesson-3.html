@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Measures of Center — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/exercises.css">
+<link rel="stylesheet" href="../../css/characters.css">
+<link rel="stylesheet" href="../../css/calculator.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+
+<div class="container" style="max-width:760px; padding:80px 24px 32px;">
+  <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to AP Statistics</a>
+  <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">Measures of Center</h1>
+
+  <section style="line-height:1.8; font-size:1.05rem;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:12px;">Finding the "Middle" of Data</h2>
+    <p>Measures of center describe where the "middle" or "typical" value of a data set lies. The three main measures are <strong>mean</strong>, <strong>median</strong>, and <strong>mode</strong>.</p>
+
+    <h3 style="font-size:1.1rem; font-weight:600; margin:20px 0 8px;">Mean (Average)</h3>
+    <p>The mean is the sum of all values divided by the number of values:</p>
+    <p style="text-align:center; margin:12px 0;">$$\bar{x} = \frac{\sum x_i}{n}$$</p>
+
+    <h3 style="font-size:1.1rem; font-weight:600; margin:20px 0 8px;">Median</h3>
+    <p>The median is the <strong>middle value</strong> when the data is sorted from smallest to largest. If there's an even number of values, the median is the average of the two middle values.</p>
+
+    <h3 style="font-size:1.1rem; font-weight:600; margin:20px 0 8px;">Mode</h3>
+    <p>The mode is the value that appears <strong>most frequently</strong>. A data set can have no mode, one mode, or multiple modes.</p>
+
+    <h3 style="font-size:1.1rem; font-weight:600; margin:20px 0 8px;">Example</h3>
+    <p>Data: 2, 3, 3, 5, 7</p>
+    <ul style="margin:8px 0 16px 24px;">
+      <li><strong>Mean</strong> = (2 + 3 + 3 + 5 + 7) / 5 = 20 / 5 = <strong>4</strong></li>
+      <li><strong>Median</strong> = <strong>3</strong> (the middle value)</li>
+      <li><strong>Mode</strong> = <strong>3</strong> (appears twice)</li>
+    </ul>
+
+    <div style="background:var(--color-surface); border-radius:12px; padding:20px; margin:20px 0;">
+      <strong>Key Insight:</strong> The mean is pulled toward outliers (extreme values), while the median is <strong>resistant</strong> — it stays stable even when outliers are present. This is why median home price is often more useful than mean home price.
+    </div>
+  </section>
+
+  <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
+  <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Practice</h2>
+  <div id="exercises"></div>
+  <div id="completion"></div>
+</div>
+
+<footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+<script type="module">
+  import { initNav } from '../../js/nav.js'; initNav('../../');
+  import { runExerciseSet } from '../../js/exercises.js';
+  import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+  import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+  import { onAuthChange } from '../../js/auth.js';
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body, {
+        delimiters: [{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}],
+        throwOnError: false
+      });
+    }
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+  initSideCharacter(randomCharacterId(), '../../');
+
+  const exercises = [
+    {
+      type: 'multiple-choice',
+      question: 'The mean of 4, 6, 8, 10, 12 is:',
+      options: ['6', '8', '10', '12'],
+      correctIndex: 1
+    },
+    {
+      type: 'fill-blank',
+      question: 'The median of 3, 5, 7, 9, 11 is ___.',
+      answer: '7'
+    },
+    {
+      type: 'multiple-choice',
+      question: 'The mode of 2, 3, 3, 5, 7, 7, 7, 9 is:',
+      options: ['2', '3', '5', '7'],
+      correctIndex: 3
+    },
+    {
+      type: 'true-false',
+      question: 'The mean is resistant to outliers.',
+      correctAnswer: false
+    },
+    {
+      type: 'fill-blank',
+      question: 'The median of 4, 8, 12, 16 is ___ (average of the two middle values).',
+      answer: '10'
+    },
+    {
+      type: 'matching',
+      question: 'Match each term with its definition.',
+      pairs: [
+        { left: 'Mean', right: 'Sum divided by count' },
+        { left: 'Median', right: 'Middle value when sorted' },
+        { left: 'Mode', right: 'Most frequent value' },
+        { left: 'Resistant', right: 'Not affected by outliers' }
+      ]
+    },
+    {
+      type: 'multiple-choice',
+      question: 'Diego asks: Data set: 1, 2, 3, 100. Which measure of center is most affected by the outlier 100?',
+      options: ['Mean', 'Median', 'Mode', 'All equally affected'],
+      correctIndex: 0
+    },
+    {
+      type: 'multiple-choice',
+      question: 'A data set has values 5, 5, 5, 5, 5. The mean, median, and mode are all:',
+      options: ['0', '1', '5', '25'],
+      correctIndex: 2
+    }
+  ];
+
+  const container = document.getElementById('exercises');
+  const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+    showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+  });
+  const { grade, stars } = calculateGrade(score);
+  const xpEarned = calculateXP(score);
+  const gradeClass = grade.startsWith('A')?'grade-a':grade.startsWith('B')?'grade-b':grade.startsWith('C')?'grade-c':grade.startsWith('D')?'grade-d':'grade-f';
+  document.getElementById('completion').innerHTML = '<div class="lesson-complete"><div class="grade '+gradeClass+'">'+grade+'</div><div class="stars">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div><div class="xp-earned">+'+xpEarned+' XP</div><p>Score: '+score+'%</p><a href="index.html" class="btn btn-primary" style="margin-top:16px;">Back to Course</a></div>';
+  onAuthChange(async (user) => { if (user) await saveLessonResult('ap-statistics', 's-3', score); });
+</script>
+<script type="module">import{createCalculator}from"../../js/calculator.js";createCalculator();</script>
+</body>
+</html>

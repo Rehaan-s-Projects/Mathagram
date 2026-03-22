@@ -73,6 +73,11 @@
       });
     });
 
+    // Make first 5 lessons playable
+    for (var i = 0; i < 5 && i < lessons.length; i++) {
+      lessons[i].href = 'lesson-' + (i + 1) + '.html';
+    }
+
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
