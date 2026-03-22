@@ -65,20 +65,17 @@
 
     var SQ = 44;
     // Piece at bottom row 7, dots at row 5 (2 squares up)
+    // star = piece being JUMPED OVER (middle square, gets captured)
+    // land = where piece LANDS (past the star)
+    // wrongLand = other possible landing spot (wrong)
     var puzzles = [
-      { piece:[7,2], star:[5,4], wrong:[5,0] },
-      { piece:[7,4], star:[5,2], wrong:[5,6] },
-      { piece:[7,4], star:[5,6], wrong:[5,2] },
-      { piece:[7,2], star:[5,0], wrong:[5,4] },
-      { piece:[7,6], star:[5,4], wrong:[5,8] }
+      { piece:[7,2], star:[6,3], land:[5,4], wrongLand:[5,0] },
+      { piece:[7,4], star:[6,3], land:[5,2], wrongLand:[5,6] },
+      { piece:[7,4], star:[6,5], land:[5,6], wrongLand:[5,2] },
+      { piece:[7,2], star:[6,1], land:[5,0], wrongLand:[5,4] },
+      { piece:[7,6], star:[6,5], land:[5,4], wrongLand:[5,8] }
     ];
-    // Fix: clamp column 8 to 6
-    puzzles[4].wrong = [5,4];
-    puzzles[4].star = [5,4];
-    // Actually fix puzzle 5 properly
-    puzzles[4] = { piece:[7,6], star:[5,4], wrong:[5,8] };
-    // column 8 is off board, fix:
-    puzzles[4] = { piece:[7,4], star:[5,2], wrong:[5,6] };
+    puzzles[4] = { piece:[7,4], star:[6,5], land:[5,6], wrongLand:[5,2] };
 
     var current = 0, correctCount = 0;
     var total = puzzles.length;
@@ -97,10 +94,10 @@
 
     function renderPuzzle(p) {
       resultEl.innerHTML = '';
-      hintEl.textContent = 'Tap the gold dot to jump!';
+      hintEl.textContent = 'Jump OVER the ⭐ star! Tap where to land.';
       progressEl.style.width = ((current/total)*100)+'%';
 
-      // Build clean board — just squares, no dots in the grid
+      // Build board
       var html = '<div class="board-wrap"><div class="board">';
       for (var r=0; r<8; r++) {
         for (var c=0; c<8; c++) {
@@ -111,34 +108,43 @@
       // Piece layer
       var pp = piecePos(p.piece[0], p.piece[1]);
       html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+pp.top+'px;left:'+pp.left+'px;"></div></div>';
-      // Dot layer — separate from board so they can be fully removed
+      // Star (piece to jump over) — shown in the MIDDLE
+      html += '<div id="star-layer" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:3;pointer-events:none;">';
+      var starPos = centerPos(p.star[0], p.star[1]);
+      html += '<div class="dot dot-star" style="position:absolute;top:'+(starPos.top-2)+'px;left:'+(starPos.left-2)+'px;width:20px;height:20px;pointer-events:none;"></div>';
+      html += '</div>';
+      // Landing dots — 2 options past the star
       html += '<div id="dot-layer" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;">';
-      // Star dot
-      var sp = centerPos(p.star[0], p.star[1]);
-      html += '<div class="dot dot-star" id="dot-star" style="position:absolute;top:'+sp.top+'px;left:'+sp.left+'px;"></div>';
-      // Wrong dot
-      var wp = centerPos(p.wrong[0], p.wrong[1]);
-      html += '<div class="dot dot-wrong" id="dot-wrong" style="position:absolute;top:'+wp.top+'px;left:'+wp.left+'px;"></div>';
+      var lp = centerPos(p.land[0], p.land[1]);
+      html += '<div class="dot dot-wrong" id="dot-land" style="position:absolute;top:'+lp.top+'px;left:'+lp.left+'px;cursor:pointer;"></div>';
+      var wlp = centerPos(p.wrongLand[0], p.wrongLand[1]);
+      html += '<div class="dot dot-wrong" id="dot-wrong" style="position:absolute;top:'+wlp.top+'px;left:'+wlp.left+'px;cursor:pointer;"></div>';
       html += '</div>';
       html += '</div>';
       boardEl.innerHTML = html;
 
-      // Click handlers
-      document.getElementById('dot-star').addEventListener('click', function(){ handleTap(true, p); });
+      // Tap correct landing = jump over star
+      document.getElementById('dot-land').addEventListener('click', function(){ handleTap(true, p); });
+      // Tap wrong landing
       document.getElementById('dot-wrong').addEventListener('click', function(){ handleTap(false, p); });
     }
 
     function handleTap(correct, p) {
       if (correct) {
         correctCount++;
-        // REMOVE dots INSTANTLY
+        // REMOVE landing dots instantly
         var dotLayer = document.getElementById('dot-layer');
         if (dotLayer) dotLayer.remove();
-        // Slide piece to star position
+        // Slide piece to LANDING position (past the star)
         var checker = document.getElementById('checker');
-        var pp = piecePos(p.star[0], p.star[1]);
+        var pp = piecePos(p.land[0], p.land[1]);
         checker.style.top = pp.top + 'px';
         checker.style.left = pp.left + 'px';
+        // Remove star (captured!) after piece passes over it
+        setTimeout(function() {
+          var starLayer = document.getElementById('star-layer');
+          if (starLayer) starLayer.remove();
+        }, 200);
 
         showBuddy('william', 'correct');
         resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
