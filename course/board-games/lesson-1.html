@@ -138,15 +138,23 @@
 
       if (isCorrect) {
         correctCount++;
-        sq.className = 'sq correct-sq';
 
-        // Move piece to star
+        // Move piece to star position
         const pieceSq = document.getElementById('sq-piece');
         setTimeout(function() {
-          sq.innerHTML = '<div class="pc moving" id="piece"></div>';
+          // Clear old piece position
           if (pieceSq) pieceSq.innerHTML = '';
+          // Clear wrong option
           wrongSq.className = 'sq dk';
           wrongSq.innerHTML = '';
+          // Place piece on star square with green flash
+          sq.className = 'sq dk';
+          sq.style.background = '#58cc02';
+          sq.innerHTML = '<div class="pc" id="piece"></div>';
+          // Fade back to dark square
+          setTimeout(function() {
+            sq.style.background = '';
+          }, 600);
         }, 200);
 
         showBuddy('william', 'correct');
