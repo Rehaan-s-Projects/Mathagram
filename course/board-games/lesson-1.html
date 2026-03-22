@@ -76,12 +76,13 @@
     initSideCharacter('william', '../../');
 
     const SQ = 44; // square size in px
+    // Piece at BOTTOM row 7, jump targets 2 rows up at row 5
     const puzzles = [
-      { piece:[6,3], star:[4,5], wrong:[4,1] },
-      { piece:[6,5], star:[4,3], wrong:[4,7] },
-      { piece:[7,4], star:[5,6], wrong:[5,2] },
       { piece:[7,2], star:[5,4], wrong:[5,0] },
-      { piece:[5,4], star:[3,2], wrong:[3,6] }
+      { piece:[7,4], star:[5,2], wrong:[5,6] },
+      { piece:[7,4], star:[5,6], wrong:[5,2] },
+      { piece:[7,2], star:[5,0], wrong:[5,4] },
+      { piece:[7,4], star:[5,6], wrong:[5,2] }
     ];
 
     let current = 0, correctCount = 0;
@@ -141,16 +142,14 @@
         checker.style.top = (tr*SQ+6)+'px';
         checker.style.left = (tc*SQ+6)+'px';
 
-        // Remove ALL dots immediately — star disappears
-        setTimeout(function() {
-          document.querySelectorAll('.move-dot, .star').forEach(function(d){
-            d.className = 'sq dk';
-            d.style.cssText = 'background:#b07442;';
-          });
-          // Flash where piece landed green briefly
-          dot.style.background = '#58cc02';
-          setTimeout(function(){ dot.style.background = '#b07442'; }, 600);
-        }, 350);
+        // Remove ALL dots — reset to normal dark squares
+        document.querySelectorAll('.move-dot').forEach(function(d){
+          d.className = 'sq dk';
+          d.removeAttribute('style');
+          d.removeAttribute('data-correct');
+          d.removeAttribute('data-r');
+          d.removeAttribute('data-c');
+        });
 
         showBuddy('william', 'correct');
         resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
