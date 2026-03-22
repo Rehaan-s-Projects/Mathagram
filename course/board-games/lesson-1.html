@@ -79,18 +79,14 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter('william', '../../');
 
-    // Puzzles: piece position, star (correct), wrong (other option)
-    // Move 1 square: up-left [r-1,c-1] or up-right [r-1,c+1]
-    // Jump 2 squares: up-left [r-2,c-2] or up-right [r-2,c+2] (capture!)
+    // Puzzles: piece jumps 2 squares diagonally (capture moves only)
+    // Jump up-right: [r-2, c+2] | Jump up-left: [r-2, c-2]
     const puzzles = [
-      // 1-square moves
-      { piece:[6,3], star:[5,4], wrong:[5,2], hint:'Move 1 square ↗ or ↖? Tap the ⭐!' },
-      { piece:[6,5], star:[5,4], wrong:[5,6], hint:'Which diagonal? Tap the ⭐!' },
-      // 2-square jumps (captures!)
-      { piece:[6,3], star:[4,5], wrong:[4,1], hint:'Jump 2 squares! ↗↗ Capture the ⭐!' },
-      { piece:[6,5], star:[4,3], wrong:[4,7], hint:'Jump 2 squares! ↖↖ Capture the ⭐!' },
-      // Mixed — 1 square vs 2 square
-      { piece:[6,1], star:[4,3], wrong:[5,2], hint:'1 square or 2 square jump? Find the ⭐!' }
+      { piece:[6,3], star:[4,5], wrong:[4,1], hint:'Jump 2 squares! ↗↗ or ↖↖? Tap the ⭐!' },
+      { piece:[6,5], star:[4,3], wrong:[4,7], hint:'Jump 2 squares! Which way? Tap the ⭐!' },
+      { piece:[7,4], star:[5,6], wrong:[5,2], hint:'Capture jump! Find the ⭐!' },
+      { piece:[7,2], star:[5,4], wrong:[5,0], hint:'Jump ↗↗ to capture the ⭐!' },
+      { piece:[5,4], star:[3,2], wrong:[3,6], hint:'Last one! Jump 2 squares to the ⭐!' }
     ];
 
     let current = 0;
