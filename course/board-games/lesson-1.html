@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capture the Stars — Bronze Challenge — Mathagram</title>
+  <title>Capture the Stars — Bronze — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/characters.css">
@@ -12,42 +12,37 @@
     .game-title { font-size:1.5rem; font-weight:800; margin-bottom:4px; }
     .game-sub { font-size:0.9rem; color:#64748b; margin-bottom:16px; }
     .progress-bar { width:100%; height:10px; background:#e5e5e5; border-radius:5px; margin-bottom:20px; overflow:hidden; }
-    .progress-fill { height:100%; background:linear-gradient(90deg,#58cc02,#89e219); border-radius:5px; transition:width 0.4s ease; }
-    .board { display:inline-grid; grid-template-columns:repeat(8,44px); grid-template-rows:repeat(8,44px); border:4px solid #1a1a1a; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); margin:12px auto; }
-    .sq { width:44px; height:44px; display:flex; align-items:center; justify-content:center; position:relative; box-sizing:border-box; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#58cc02,#89e219); border-radius:5px; transition:width 0.4s; }
+
+    /* Board */
+    .board-wrap { position:relative; display:inline-block; margin:12px auto; }
+    .board { display:grid; grid-template-columns:repeat(8,44px); grid-template-rows:repeat(8,44px); border:4px solid #1a1a1a; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); }
+    .sq { width:44px; height:44px; display:flex; align-items:center; justify-content:center; position:relative; }
     .lt { background:#edd6b0; }
     .dk { background:#b07442; }
 
-    /* Star = correct move */
-    .star { background:#ffd54f; cursor:pointer; animation:glow 1s ease-in-out infinite; transition:transform 0.15s; }
-    .star:hover { transform:scale(1.15); z-index:2; }
-    .star::after { content:'⭐'; font-size:1.1rem; }
-    @keyframes glow { 0%,100% { box-shadow:inset 0 0 8px rgba(255,193,7,0.6); } 50% { background:#ffecb3; box-shadow:inset 0 0 18px rgba(255,193,7,1); } }
+    /* Move dots — green circles like Duolingo Chess */
+    .move-dot { cursor:pointer; position:relative; }
+    .move-dot::after { content:''; width:16px; height:16px; border-radius:50%; background:rgba(88,204,2,0.6); position:absolute; }
+    .move-dot:hover::after { background:rgba(88,204,2,0.9); transform:scale(1.3); }
+    .move-dot.star::after { background:#ffd54f; width:20px; height:20px; box-shadow:0 0 12px rgba(255,193,7,0.8); animation:dotPulse 1s infinite; }
+    @keyframes dotPulse { 0%,100%{box-shadow:0 0 8px rgba(255,193,7,0.6)} 50%{box-shadow:0 0 20px rgba(255,193,7,1)} }
 
-    /* Move option = wrong move (the other diagonal) */
-    .move-option { background:#a0d2db; cursor:pointer; transition:transform 0.15s; border:2px dashed rgba(255,255,255,0.5); }
-    .move-option:hover { transform:scale(1.1); z-index:2; background:#7ec8d8; }
-    .move-option::after { content:'•'; font-size:1.5rem; color:rgba(255,255,255,0.7); }
-
-    .wrong-sq { background:#ff6b6b !important; animation:shake 0.4s ease; border:none !important; }
-    .wrong-sq::after { content:'✗' !important; font-size:1.2rem; color:#fff; }
+    .wrong-flash { background:#ff6b6b !important; }
+    .wrong-flash::after { content:'✗' !important; width:auto !important; height:auto !important; background:none !important; font-size:1.2rem; color:#fff; box-shadow:none !important; animation:shake 0.4s !important; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-    .correct-sq { background:#58cc02 !important; animation:none !important; border:none !important; }
-    .correct-sq::after { content:'✓' !important; font-size:1.2rem; color:#fff; }
 
-    .pc { width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #a0522d, #5c2d0e); border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5); transition:all 0.3s ease; }
-    .pc.moving { animation:pieceMove 0.4s ease; }
-    @keyframes pieceMove { 0%{transform:scale(1)} 50%{transform:scale(1.3)} 100%{transform:scale(1)} }
+    /* Piece — slides across board */
+    .piece-layer { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10; }
+    .checker { width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #a0522d, #5c2d0e); border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5); position:absolute; transition:top 0.4s ease, left 0.4s ease; }
 
-    .hint { font-size:0.9rem; color:#64748b; margin:12px 0; font-weight:500; }
-    .hint strong { color:#1a1a2e; }
-    .result-banner { padding:16px; border-radius:12px; margin:16px 0; font-weight:700; font-size:1rem; animation:slideUp 0.3s ease; }
+    .hint { font-size:0.9rem; color:#64748b; margin:12px 0; }
+    .result-banner { padding:14px; border-radius:12px; margin:14px 0; font-weight:700; font-size:0.95rem; }
     .result-banner.correct { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
     .result-banner.wrong { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
-    @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-    .next-btn { margin-top:12px; padding:12px 32px; font-size:1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 0 #46a302; }
+    .next-btn { margin-top:10px; padding:12px 32px; font-size:1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 0 #46a302; }
     .next-btn:hover { background:#46a302; }
-    .complete { text-align:center; padding:32px; }
+    .complete { padding:32px; }
     .complete h2 { font-size:2rem; margin-bottom:8px; }
     .complete .stars-display { font-size:2.5rem; margin:12px 0; }
     .complete .xp { font-size:1.2rem; color:#eab308; font-weight:700; }
@@ -61,9 +56,9 @@
 
   <div class="game-container">
     <div class="game-title">⭐ Capture the Stars</div>
-    <div class="game-sub">Bronze Challenge — Tap the correct square!</div>
+    <div class="game-sub">Bronze Challenge</div>
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div id="hint" class="hint">Two moves available — tap the ⭐ <strong>star</strong>!</div>
+    <div id="hint" class="hint">Tap the glowing dot to move your piece!</div>
     <div id="board"></div>
     <div id="result"></div>
     <div id="completion" style="display:none"></div>
@@ -79,121 +74,110 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter('william', '../../');
 
-    // Puzzles: piece jumps 2 squares diagonally (capture moves only)
-    // Jump up-right: [r-2, c+2] | Jump up-left: [r-2, c-2]
+    const SQ = 44; // square size in px
     const puzzles = [
-      { piece:[6,3], star:[4,5], wrong:[4,1], hint:'Jump 2 squares! ↗↗ or ↖↖? Tap the ⭐!' },
-      { piece:[6,5], star:[4,3], wrong:[4,7], hint:'Jump 2 squares! Which way? Tap the ⭐!' },
-      { piece:[7,4], star:[5,6], wrong:[5,2], hint:'Capture jump! Find the ⭐!' },
-      { piece:[7,2], star:[5,4], wrong:[5,0], hint:'Jump ↗↗ to capture the ⭐!' },
-      { piece:[5,4], star:[3,2], wrong:[3,6], hint:'Last one! Jump 2 squares to the ⭐!' }
+      { piece:[6,3], star:[4,5], wrong:[4,1] },
+      { piece:[6,5], star:[4,3], wrong:[4,7] },
+      { piece:[7,4], star:[5,6], wrong:[5,2] },
+      { piece:[7,2], star:[5,4], wrong:[5,0] },
+      { piece:[5,4], star:[3,2], wrong:[3,6] }
     ];
 
-    let current = 0;
-    let correctCount = 0;
+    let current = 0, correctCount = 0;
     const total = puzzles.length;
     const boardEl = document.getElementById('board');
     const hintEl = document.getElementById('hint');
     const resultEl = document.getElementById('result');
     const progressEl = document.getElementById('progress');
 
-    function renderBoard(puzzle) {
+    function renderPuzzle(p) {
       resultEl.innerHTML = '';
-      hintEl.textContent = puzzle.hint;
-      progressEl.style.width = ((current / total) * 100) + '%';
+      hintEl.textContent = 'Tap the glowing dot to jump your piece!';
+      progressEl.style.width = ((current/total)*100)+'%';
 
-      let html = '<div class="board">';
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const isLight = (r + c) % 2 === 0;
-          const isPiece = puzzle.piece[0] === r && puzzle.piece[1] === c;
-          const isStar = puzzle.star[0] === r && puzzle.star[1] === c;
-          const isWrong = puzzle.wrong[0] === r && puzzle.wrong[1] === c;
+      // Build board + piece overlay
+      let html = '<div class="board-wrap"><div class="board">';
+      for (let r=0; r<8; r++) {
+        for (let c=0; c<8; c++) {
+          const light = (r+c)%2===0;
+          const isStar = p.star[0]===r && p.star[1]===c;
+          const isWrong = p.wrong[0]===r && p.wrong[1]===c;
 
           if (isStar) {
-            html += '<div class="sq star" id="sq-star"></div>';
+            html += '<div class="sq dk move-dot star" data-correct="1" data-r="'+r+'" data-c="'+c+'"></div>';
           } else if (isWrong) {
-            html += '<div class="sq move-option" id="sq-wrong"></div>';
-          } else if (isPiece) {
-            html += '<div class="sq ' + (isLight ? 'lt' : 'dk') + '" id="sq-piece"><div class="pc" id="piece"></div></div>';
+            html += '<div class="sq dk move-dot" data-correct="0" data-r="'+r+'" data-c="'+c+'"></div>';
           } else {
-            html += '<div class="sq ' + (isLight ? 'lt' : 'dk') + '"></div>';
+            html += '<div class="sq '+(light?'lt':'dk')+'"></div>';
           }
         }
       }
       html += '</div>';
+      // Piece overlay — absolutely positioned so it can slide
+      html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+(p.piece[0]*SQ+5)+'px;left:'+(p.piece[1]*SQ+5)+'px;"></div></div>';
+      html += '</div>';
       boardEl.innerHTML = html;
 
-      // Click star = correct
-      document.getElementById('sq-star').addEventListener('click', function() { handleMove(this, true); });
-      // Click wrong = incorrect
-      document.getElementById('sq-wrong').addEventListener('click', function() { handleMove(this, false); });
+      // Click handlers on dots
+      document.querySelectorAll('.move-dot').forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          var correct = dot.getAttribute('data-correct')==='1';
+          var tr = parseInt(dot.getAttribute('data-r'));
+          var tc = parseInt(dot.getAttribute('data-c'));
+          handleTap(dot, correct, tr, tc, p);
+        });
+      });
     }
 
-    function handleMove(sq, isCorrect) {
-      const starSq = document.getElementById('sq-star');
-      const wrongSq = document.getElementById('sq-wrong');
-      starSq.style.pointerEvents = 'none';
-      wrongSq.style.pointerEvents = 'none';
+    function handleTap(dot, correct, tr, tc, p) {
+      // Disable all dots
+      document.querySelectorAll('.move-dot').forEach(function(d){ d.style.pointerEvents='none'; });
 
-      if (isCorrect) {
+      if (correct) {
         correctCount++;
+        // Slide piece to target
+        var checker = document.getElementById('checker');
+        checker.style.top = (tr*SQ+5)+'px';
+        checker.style.left = (tc*SQ+5)+'px';
 
-        // Move piece to star position
-        const pieceSq = document.getElementById('sq-piece');
-        // Immediately clear old piece
-        if (pieceSq) {
-          pieceSq.innerHTML = '';
-          pieceSq.className = 'sq dk';
-          pieceSq.removeAttribute('id');
-        }
-        // Clear wrong option immediately
-        wrongSq.className = 'sq dk';
-        wrongSq.innerHTML = '';
-        wrongSq.removeAttribute('id');
-        // Place piece on star square with green flash
-        sq.className = 'sq dk';
-        sq.style.background = '#58cc02';
-        sq.style.transition = 'background 0.5s ease';
-        sq.innerHTML = '<div class="pc" id="piece"></div>';
-        // Fade back to dark square
-        setTimeout(function() {
-          sq.style.background = '';
-        }, 800);
+        // Flash the target green
+        dot.style.background = '#58cc02';
+        dot.classList.remove('move-dot','star');
+
+        // Remove wrong dot
+        document.querySelectorAll('.move-dot').forEach(function(d){
+          d.classList.remove('move-dot');
+          d.style.cssText = '';
+        });
+
+        setTimeout(function(){ dot.style.background = ''; dot.className = 'sq dk'; }, 800);
 
         showBuddy('william', 'correct');
-        resultEl.innerHTML = '<div class="result-banner correct">✓ Correct! Well done, young scholar.</div>';
+        resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
 
-        // Next button
         setTimeout(function() {
-          var isLast = current >= total - 1;
+          var isLast = current >= total-1;
           var btn = document.createElement('button');
           btn.className = 'next-btn';
           btn.textContent = isLast ? 'Finish!' : 'Next →';
-          btn.addEventListener('click', function() {
+          btn.onclick = function() {
             current++;
-            if (current < total) {
-              renderBoard(puzzles[current]);
-            } else {
-              showComplete();
-            }
-          });
+            if (current < total) renderPuzzle(puzzles[current]);
+            else showComplete();
+          };
           resultEl.appendChild(btn);
         }, 500);
 
       } else {
-        sq.className = 'sq wrong-sq';
+        dot.classList.add('wrong-flash');
         showBuddy('william', 'wrong');
-        resultEl.innerHTML = '<div class="result-banner wrong">✗ Wrong square! Tap the ⭐ star.</div>';
-
-        // Re-enable after shake
+        resultEl.innerHTML = '<div class="result-banner wrong">✗ Try the other dot!</div>';
         setTimeout(function() {
-          sq.className = 'sq move-option';
-          sq.innerHTML = '';
-          starSq.style.pointerEvents = 'auto';
-          wrongSq.style.pointerEvents = 'auto';
+          dot.classList.remove('wrong-flash');
+          dot.className = 'sq dk move-dot';
+          document.querySelectorAll('.move-dot').forEach(function(d){ d.style.pointerEvents='auto'; });
           resultEl.innerHTML = '';
-        }, 1000);
+        }, 800);
       }
     }
 
@@ -202,27 +186,21 @@
       boardEl.innerHTML = '';
       hintEl.style.display = 'none';
       resultEl.innerHTML = '';
-
-      var score = Math.round((correctCount / total) * 100);
-      var result = calculateGrade(score);
-      var xpEarned = calculateXP(score);
-
+      var score = Math.round((correctCount/total)*100);
+      var r = calculateGrade(score);
+      var xp = calculateXP(score);
       document.getElementById('completion').style.display = 'block';
       document.getElementById('completion').innerHTML =
-        '<div class="complete">' +
-        '<h2>' + result.grade + '</h2>' +
-        '<div class="stars-display">' + '⭐'.repeat(result.stars) + '☆'.repeat(3-result.stars) + '</div>' +
-        '<div class="xp">+' + xpEarned + ' XP</div>' +
-        '<p style="margin:12px 0;color:#64748b;">You scored ' + score + '%</p>' +
-        '<a href="index.html" class="next-btn" style="text-decoration:none;display:inline-block;">Back to Course</a>' +
-        '</div>';
-
-      showBuddy('william', score === 100 ? 'perfect' : 'correct');
-      onAuthChange(async function(user) { if (user) await saveLessonResult('board-games', 'bg-1', score); });
+        '<div class="complete"><h2>'+r.grade+'</h2>' +
+        '<div class="stars-display">'+'⭐'.repeat(r.stars)+'☆'.repeat(3-r.stars)+'</div>' +
+        '<div class="xp">+'+xp+' XP</div>' +
+        '<p style="margin:12px 0;color:#64748b;">You scored '+score+'%</p>' +
+        '<a href="index.html" class="next-btn" style="text-decoration:none;display:inline-block;">Back to Course</a></div>';
+      showBuddy('william', score===100 ? 'perfect' : 'correct');
+      onAuthChange(async function(u){ if(u) await saveLessonResult('board-games','bg-1',score); });
     }
 
-    // Start!
-    renderBoard(puzzles[0]);
+    renderPuzzle(puzzles[0]);
   </script>
 </body>
 </html>
