@@ -24,9 +24,8 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
   border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5);
 }
 .star-piece {
-  display:inline-block; width:38px; height:38px; border-radius:50%;
-  background:radial-gradient(circle at 40% 40%,#ffe082,#ffc107);
-  border:3px solid #f59e0b; pointer-events:none;
+  display:inline-block; width:38px; height:38px;
+  line-height:38px; font-size:28px; pointer-events:none;
 }
 .land-dot {
   display:inline-block; width:30px; height:30px; border-radius:50%;
@@ -108,7 +107,7 @@ function makeBoard(q, jumped) {
         if (r===q.g[0]&&c===q.g[1]) inner = '<div class="piece"></div>';
       } else {
         if (r===q.p[0]&&c===q.p[1]) inner = '<div class="piece"></div>';
-        else if (r===q.s[0]&&c===q.s[1]) inner = '<div class="star-piece"></div>';
+        else if (r===q.s[0]&&c===q.s[1]) inner = '<div class="star-piece">⭐</div>';
         else if (r===q.g[0]&&c===q.g[1]) inner = '<div class="land-dot" onclick="tap(1)"></div>';
         else if (r===q.b[0]&&c===q.b[1]) inner = '<div class="land-dot" onclick="tap(0)"></div>';
       }
