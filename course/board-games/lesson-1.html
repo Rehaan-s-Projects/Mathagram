@@ -61,6 +61,20 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
 <div id="msg"></div>
 </div>
 
+<script>
+// Clear ALL caches on load
+if ('caches' in window) {
+  caches.keys().then(function(names) {
+    names.forEach(function(name) { caches.delete(name); });
+  });
+}
+// Unregister service workers
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(reg) { reg.unregister(); });
+  });
+}
+</script>
 <script type="module">
 import { initNav } from '../../js/nav.js'; initNav('../../');
 import { showBuddy, initSideCharacter } from '../../js/characters.js';

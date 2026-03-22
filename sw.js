@@ -1,5 +1,5 @@
 // Mathagram Service Worker — enables offline and PWA install
-const CACHE_NAME = 'mathagram-v1';
+const CACHE_NAME = 'mathagram-v2';
 const OFFLINE_URL = '/';
 
 // Files to cache for offline
