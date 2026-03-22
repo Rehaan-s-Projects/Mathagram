@@ -34,7 +34,7 @@
 
     /* Piece — slides across board */
     .piece-layer { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10; }
-    .checker { width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #a0522d, #5c2d0e); border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5); position:absolute; transition:top 0.4s ease, left 0.4s ease; }
+    .checker { width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #a0522d, #5c2d0e); border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5); position:absolute; transition:top 0.35s ease-in-out, left 0.35s ease-in-out; }
 
     .hint { font-size:0.9rem; color:#64748b; margin:12px 0; }
     .result-banner { padding:14px; border-radius:12px; margin:14px 0; font-weight:700; font-size:0.95rem; }
@@ -114,7 +114,7 @@
       }
       html += '</div>';
       // Piece overlay — absolutely positioned so it can slide
-      html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+(p.piece[0]*SQ+5)+'px;left:'+(p.piece[1]*SQ+5)+'px;"></div></div>';
+      html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+(p.piece[0]*SQ+6)+'px;left:'+(p.piece[1]*SQ+6)+'px;"></div></div>';
       html += '</div>';
       boardEl.innerHTML = html;
 
@@ -137,8 +137,8 @@
         correctCount++;
         // Slide piece to target
         var checker = document.getElementById('checker');
-        checker.style.top = (tr*SQ+5)+'px';
-        checker.style.left = (tc*SQ+5)+'px';
+        checker.style.top = (tr*SQ+6)+'px';
+        checker.style.left = (tc*SQ+6)+'px';
 
         // Flash the target green
         dot.style.background = '#58cc02';
