@@ -3,38 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capture the Stars — Bronze — Mathagram</title>
+  <title>Capture the Stars — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/characters.css">
   <style>
-    .game-container { max-width:500px; margin:0 auto; padding:80px 16px 40px; text-align:center; }
-    .game-title { font-size:1.5rem; font-weight:800; margin-bottom:4px; }
-    .game-sub { font-size:0.9rem; color:#64748b; margin-bottom:16px; }
-    .progress-bar { width:100%; height:10px; background:#e5e5e5; border-radius:5px; margin-bottom:20px; overflow:hidden; }
-    .progress-fill { height:100%; background:linear-gradient(90deg,#58cc02,#89e219); border-radius:5px; transition:width 0.4s; }
-    .board-wrap { position:relative; display:inline-block; margin:12px auto; }
-    .board { display:grid; grid-template-columns:repeat(8,44px); grid-template-rows:repeat(8,44px); border:4px solid #1a1a1a; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,0.25); }
-    .sq { width:44px; height:44px; }
-    .lt { background:#edd6b0; }
-    .dk { background:#b07442; }
-    .piece-layer { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10; }
-    .checker { width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #a0522d, #5c2d0e); border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5); position:absolute; transition:top 0.35s ease-in-out, left 0.35s ease-in-out; }
-    .dot { width:16px; height:16px; border-radius:50%; position:absolute; z-index:5; cursor:pointer; transition:transform 0.15s; }
-    .dot:hover { transform:scale(1.4); }
-    .dot-star { background:#ffd54f; box-shadow:0 0 10px rgba(255,193,7,0.7); animation:dotPulse 1s infinite; width:20px; height:20px; }
-    .dot-wrong { background:rgba(88,204,2,0.5); }
-    @keyframes dotPulse { 0%,100%{box-shadow:0 0 6px rgba(255,193,7,0.5)} 50%{box-shadow:0 0 16px rgba(255,193,7,1)} }
-    .hint { font-size:0.9rem; color:#64748b; margin:12px 0; }
-    .result-banner { padding:14px; border-radius:12px; margin:14px 0; font-weight:700; font-size:0.95rem; }
-    .result-banner.correct { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
-    .result-banner.wrong { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
-    .next-btn { margin-top:10px; padding:12px 32px; font-size:1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 0 #46a302; }
-    .next-btn:hover { background:#46a302; }
-    .complete { padding:32px; }
-    .complete h2 { font-size:2rem; margin-bottom:8px; }
-    .complete .stars-display { font-size:2.5rem; margin:12px 0; }
-    .complete .xp { font-size:1.2rem; color:#eab308; font-weight:700; }
+    body { background:#f8f9fa; }
+    .gc { max-width:420px; margin:0 auto; padding:72px 12px 40px; text-align:center; }
+    .gt { font-size:1.4rem; font-weight:800; margin-bottom:2px; }
+    .gs { font-size:0.85rem; color:#64748b; margin-bottom:12px; }
+    .pb { width:100%; height:8px; background:#e5e5e5; border-radius:4px; margin-bottom:14px; overflow:hidden; }
+    .pf { height:100%; background:#58cc02; border-radius:4px; transition:width 0.3s; }
+    .b { display:inline-grid; grid-template-columns:repeat(8,40px); grid-template-rows:repeat(8,40px); border:3px solid #222; border-radius:4px; }
+    .s { width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
+    .l { background:#f0d9b5; }
+    .d { background:#b58863; }
+    /* Piece */
+    .p { width:28px; height:28px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e); border:2px solid #3e1a00; box-shadow:0 2px 0 rgba(60,20,0,0.5); }
+    /* Star to capture */
+    .st { width:28px; height:28px; border-radius:50%; background:#ffd54f; box-shadow:0 0 8px rgba(255,193,7,0.8); animation:glow 1s infinite; }
+    @keyframes glow { 50% { box-shadow:0 0 16px rgba(255,193,7,1); } }
+    /* Landing dot */
+    .ld { width:14px; height:14px; border-radius:50%; background:rgba(88,204,2,0.5); cursor:pointer; }
+    .ld:hover { transform:scale(1.5); background:rgba(88,204,2,0.8); }
+    .h { font-size:0.85rem; color:#64748b; margin:10px 0; }
+    .rb { padding:12px; border-radius:10px; margin:12px 0; font-weight:700; font-size:0.9rem; }
+    .rb.ok { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
+    .rb.no { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
+    .nb { margin-top:8px; padding:10px 28px; font-size:0.95rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:10px; cursor:pointer; box-shadow:0 3px 0 #46a302; }
   </style>
 </head>
 <body>
@@ -42,160 +38,120 @@
     <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
     <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div>
   </div></nav>
-
-  <div class="game-container">
-    <div class="game-title">⭐ Capture the Stars</div>
-    <div class="game-sub">Bronze Challenge</div>
-    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div id="hint" class="hint">Tap the gold dot to jump your piece!</div>
-    <div id="board"></div>
-    <div id="result"></div>
-    <div id="completion" style="display:none"></div>
+  <div class="gc">
+    <div class="gt">⭐ Capture the Stars</div>
+    <div class="gs">Jump OVER the star to capture it!</div>
+    <div class="pb"><div class="pf" id="prog"></div></div>
+    <div id="hint" class="h"></div>
+    <div id="brd"></div>
+    <div id="res"></div>
+    <div id="done" style="display:none"></div>
   </div>
-
-  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
-
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="yr"></span> Mathagram.org</p></div></footer>
   <script type="module">
     import { initNav } from '../../js/nav.js'; initNav('../../');
     import { showBuddy, initSideCharacter } from '../../js/characters.js';
     import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
     import { onAuthChange } from '../../js/auth.js';
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('yr').textContent = new Date().getFullYear();
     initSideCharacter('william', '../../');
 
-    var SQ = 44;
-    // Piece at bottom row 7, dots at row 5 (2 squares up)
-    // star = piece being JUMPED OVER (middle square, gets captured)
-    // land = where piece LANDS (past the star)
-    // wrongLand = other possible landing spot (wrong)
-    var puzzles = [
-      { piece:[7,2], star:[6,3], land:[5,4], wrongLand:[5,0] },
-      { piece:[7,4], star:[6,3], land:[5,2], wrongLand:[5,6] },
-      { piece:[7,4], star:[6,5], land:[5,6], wrongLand:[5,2] },
-      { piece:[7,2], star:[6,1], land:[5,0], wrongLand:[5,4] },
-      { piece:[7,6], star:[6,5], land:[5,4], wrongLand:[5,8] }
+    // Each puzzle: piece at bottom, star in middle, 2 landing spots past star
+    // piece=[row,col] star=[row,col] land=[row,col](correct) bad=[row,col](wrong)
+    var P = [
+      {p:[7,2], s:[6,3], g:[5,4], b:[5,0]},
+      {p:[7,4], s:[6,3], g:[5,2], b:[5,6]},
+      {p:[7,4], s:[6,5], g:[5,6], b:[5,2]},
+      {p:[7,2], s:[6,1], g:[5,0], b:[5,4]},
+      {p:[7,6], s:[6,5], g:[5,4], b:[5,2]}
     ];
-    puzzles[4] = { piece:[7,4], star:[6,5], land:[5,6], wrongLand:[5,2] };
+    var cur=0, ok=0, tot=P.length;
 
-    var current = 0, correctCount = 0;
-    var total = puzzles.length;
-    var boardEl = document.getElementById('board');
-    var hintEl = document.getElementById('hint');
-    var resultEl = document.getElementById('result');
-    var progressEl = document.getElementById('progress');
-
-    function centerPos(row, col) {
-      // Center a 16-20px dot in a 44px square, plus 4px board border
-      return { top: row * SQ + 4 + 12, left: col * SQ + 4 + 12 };
+    function draw(q) {
+      document.getElementById('res').innerHTML = '';
+      document.getElementById('hint').textContent = 'Tap where to land after jumping over ⭐';
+      document.getElementById('prog').style.width = (cur/tot*100)+'%';
+      var h = '<div class="b">';
+      for(var r=0;r<8;r++) for(var c=0;c<8;c++) {
+        var lt = (r+c)%2===0;
+        var id = 'c'+r+'_'+c;
+        // What goes in this square?
+        var inner = '';
+        if(r===q.p[0]&&c===q.p[1]) inner = '<div class="p" id="piece"></div>';
+        else if(r===q.s[0]&&c===q.s[1]) inner = '<div class="st" id="star"></div>';
+        else if(r===q.g[0]&&c===q.g[1]) inner = '<div class="ld" id="good"></div>';
+        else if(r===q.b[0]&&c===q.b[1]) inner = '<div class="ld" id="bad"></div>';
+        h += '<div class="s '+(lt?'l':'d')+'" id="'+id+'">'+inner+'</div>';
+      }
+      h += '</div>';
+      document.getElementById('brd').innerHTML = h;
+      // Handlers
+      document.getElementById('good').onclick = function(){ tap(true,q); };
+      document.getElementById('bad').onclick = function(){ tap(false,q); };
     }
-    function piecePos(row, col) {
-      return { top: row * SQ + 4 + 5, left: col * SQ + 4 + 5 };
-    }
 
-    function renderPuzzle(p) {
-      resultEl.innerHTML = '';
-      hintEl.textContent = 'Jump OVER the ⭐ star! Tap where to land.';
-      progressEl.style.width = ((current/total)*100)+'%';
+    function tap(correct, q) {
+      var good = document.getElementById('good');
+      var bad = document.getElementById('bad');
+      if(good) good.onclick = null;
+      if(bad) bad.onclick = null;
 
-      // Build board
-      var html = '<div class="board-wrap"><div class="board">';
-      for (var r=0; r<8; r++) {
-        for (var c=0; c<8; c++) {
-          html += '<div class="sq '+((r+c)%2===0?'lt':'dk')+'"></div>';
+      if(correct) {
+        ok++;
+        // Remove both landing dots
+        if(good) good.remove();
+        if(bad) bad.remove();
+        // Remove star (captured!)
+        var star = document.getElementById('star');
+        if(star) star.remove();
+        // Move piece to landing square
+        var piece = document.getElementById('piece');
+        var fromSq = document.getElementById('c'+q.p[0]+'_'+q.p[1]);
+        var toSq = document.getElementById('c'+q.g[0]+'_'+q.g[1]);
+        if(piece && fromSq && toSq) {
+          fromSq.removeChild(piece);
+          toSq.appendChild(piece);
         }
-      }
-      html += '</div>';
-      // Piece layer
-      var pp = piecePos(p.piece[0], p.piece[1]);
-      html += '<div class="piece-layer"><div class="checker" id="checker" style="top:'+pp.top+'px;left:'+pp.left+'px;"></div></div>';
-      // Star (piece to jump over) — shown in the MIDDLE
-      html += '<div id="star-layer" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:3;pointer-events:none;">';
-      var starPos = centerPos(p.star[0], p.star[1]);
-      html += '<div class="dot dot-star" style="position:absolute;top:'+(starPos.top-2)+'px;left:'+(starPos.left-2)+'px;width:20px;height:20px;pointer-events:none;"></div>';
-      html += '</div>';
-      // Landing dots — 2 options past the star
-      html += '<div id="dot-layer" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;">';
-      var lp = centerPos(p.land[0], p.land[1]);
-      html += '<div class="dot dot-wrong" id="dot-land" style="position:absolute;top:'+lp.top+'px;left:'+lp.left+'px;cursor:pointer;"></div>';
-      var wlp = centerPos(p.wrongLand[0], p.wrongLand[1]);
-      html += '<div class="dot dot-wrong" id="dot-wrong" style="position:absolute;top:'+wlp.top+'px;left:'+wlp.left+'px;cursor:pointer;"></div>';
-      html += '</div>';
-      html += '</div>';
-      boardEl.innerHTML = html;
-
-      // Tap correct landing = jump over star
-      document.getElementById('dot-land').addEventListener('click', function(){ handleTap(true, p); });
-      // Tap wrong landing
-      document.getElementById('dot-wrong').addEventListener('click', function(){ handleTap(false, p); });
-    }
-
-    function handleTap(correct, p) {
-      if (correct) {
-        correctCount++;
-        // REMOVE landing dots instantly
-        var dotLayer = document.getElementById('dot-layer');
-        if (dotLayer) dotLayer.remove();
-        // Slide piece to LANDING position (past the star)
-        var checker = document.getElementById('checker');
-        var pp = piecePos(p.land[0], p.land[1]);
-        checker.style.top = pp.top + 'px';
-        checker.style.left = pp.left + 'px';
-        // Remove star (captured!) after piece passes over it
-        setTimeout(function() {
-          var starLayer = document.getElementById('star-layer');
-          if (starLayer) starLayer.remove();
-        }, 200);
-
-        showBuddy('william', 'correct');
-        resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
-
-        setTimeout(function() {
-          var isLast = current >= total-1;
+        showBuddy('william','correct');
+        document.getElementById('res').innerHTML = '<div class="rb ok">✓ Captured! Well done.</div>';
+        setTimeout(function(){
           var btn = document.createElement('button');
-          btn.className = 'next-btn';
-          btn.textContent = isLast ? 'Finish!' : 'Next →';
-          btn.onclick = function() {
-            current++;
-            if (current < total) renderPuzzle(puzzles[current]);
-            else showComplete();
-          };
-          resultEl.appendChild(btn);
-        }, 500);
-
+          btn.className = 'nb';
+          btn.textContent = cur>=tot-1 ? 'Finish!' : 'Next →';
+          btn.onclick = function(){ cur++; cur<tot ? draw(P[cur]) : fin(); };
+          document.getElementById('res').appendChild(btn);
+        },400);
       } else {
-        var wrongDot = document.getElementById('dot-wrong');
-        wrongDot.style.background = '#ff6b6b';
-        wrongDot.style.pointerEvents = 'none';
-        showBuddy('william', 'wrong');
-        resultEl.innerHTML = '<div class="result-banner wrong">✗ Try the other dot!</div>';
-        setTimeout(function() {
-          wrongDot.style.background = 'rgba(88,204,2,0.5)';
-          wrongDot.style.pointerEvents = 'auto';
-          resultEl.innerHTML = '';
-        }, 800);
+        bad.style.background = '#ff6b6b';
+        bad.style.pointerEvents = 'none';
+        showBuddy('william','wrong');
+        document.getElementById('res').innerHTML = '<div class="rb no">✗ Wrong! Tap the other square.</div>';
+        setTimeout(function(){
+          bad.style.background = 'rgba(88,204,2,0.5)';
+          bad.style.pointerEvents = '';
+          bad.onclick = function(){ tap(false,q); };
+          good.onclick = function(){ tap(true,q); };
+          document.getElementById('res').innerHTML = '';
+        },700);
       }
     }
 
-    function showComplete() {
-      progressEl.style.width = '100%';
-      boardEl.innerHTML = '';
-      hintEl.style.display = 'none';
-      resultEl.innerHTML = '';
-      var score = Math.round((correctCount/total)*100);
-      var r = calculateGrade(score);
-      var xp = calculateXP(score);
-      document.getElementById('completion').style.display = 'block';
-      document.getElementById('completion').innerHTML =
-        '<div class="complete"><h2>'+r.grade+'</h2>' +
-        '<div class="stars-display">'+'⭐'.repeat(r.stars)+'☆'.repeat(3-r.stars)+'</div>' +
-        '<div class="xp">+'+xp+' XP</div>' +
-        '<p style="margin:12px 0;color:#64748b;">You scored '+score+'%</p>' +
-        '<a href="index.html" class="next-btn" style="text-decoration:none;display:inline-block;">Back to Course</a></div>';
-      showBuddy('william', score===100 ? 'perfect' : 'correct');
-      onAuthChange(async function(u){ if(u) await saveLessonResult('board-games','bg-1',score); });
+    function fin() {
+      document.getElementById('prog').style.width = '100%';
+      document.getElementById('brd').innerHTML = '';
+      document.getElementById('hint').style.display = 'none';
+      document.getElementById('res').innerHTML = '';
+      var sc = Math.round(ok/tot*100);
+      var g = calculateGrade(sc);
+      var xp = calculateXP(sc);
+      var d = document.getElementById('done');
+      d.style.display = 'block';
+      d.innerHTML = '<h2 style="font-size:2rem">'+g.grade+'</h2><div style="font-size:2.5rem;margin:8px 0">'+'⭐'.repeat(g.stars)+'☆'.repeat(3-g.stars)+'</div><div style="font-size:1.2rem;color:#eab308;font-weight:700">+'+xp+' XP</div><p style="margin:10px 0;color:#64748b">Score: '+sc+'%</p><a href="index.html" class="nb" style="text-decoration:none;display:inline-block">Back to Course</a>';
+      showBuddy('william',sc===100?'perfect':'correct');
+      onAuthChange(async function(u){if(u) await saveLessonResult('board-games','bg-1',sc);});
     }
 
-    renderPuzzle(puzzles[0]);
+    draw(P[0]);
   </script>
 </body>
 </html>
