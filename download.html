@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Mathagram — Android APK</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .dl-header { padding:80px 24px 32px; text-align:center; }
+    .dl-header h1 { font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .dl-header p { font-size:1.1rem; color:var(--color-text-secondary); max-width:500px; margin:0 auto; }
+    .dl-container { max-width:600px; margin:0 auto; padding:0 24px 64px; }
+    .dl-card { background:#fff; border:2px solid #e2e8f0; border-radius:16px; padding:32px; margin-bottom:24px; text-align:center; }
+    .dl-card h2 { font-size:1.3rem; font-weight:700; margin-bottom:12px; }
+    .dl-card p { font-size:0.95rem; color:#64748b; line-height:1.6; margin-bottom:16px; }
+    .dl-btn { display:inline-block; padding:14px 36px; font-size:1.1rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:14px; text-decoration:none; box-shadow:0 4px 0 #46a302; cursor:pointer; }
+    .dl-btn:hover { background:#46a302; color:#fff; }
+    .dl-btn-outline { display:inline-block; padding:12px 28px; font-size:1rem; font-weight:600; background:transparent; color:var(--color-text); border:2px solid #e2e8f0; border-radius:12px; text-decoration:none; margin-top:8px; }
+    .dl-btn-outline:hover { border-color:var(--color-primary); color:var(--color-primary); }
+    .steps { text-align:left; }
+    .steps ol { padding-left:24px; }
+    .steps li { font-size:0.95rem; color:#333; line-height:1.8; margin-bottom:8px; }
+    .steps li strong { color:#1a1a2e; }
+    .badge { display:inline-block; padding:4px 12px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#fff; background:#58cc02; border-radius:999px; margin-bottom:12px; }
+    .version { font-size:0.8rem; color:#94a3b8; margin-top:8px; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container">
+    <a href="index.html" class="nav-logo"><img src="assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links">
+      <a href="courses.html">Courses</a>
+      <a href="login.html" data-auth="login">Login</a>
+    </div>
+  </div></nav>
+
+  <header class="dl-header">
+    <h1>Download Mathagram</h1>
+    <p>Get Mathagram on your Android phone — learn math, science, and languages anywhere!</p>
+  </header>
+
+  <div class="dl-container">
+
+    <!-- Android APK -->
+    <div class="dl-card">
+      <span class="badge">Android</span>
+      <h2>Download APK for Android</h2>
+      <p>Install Mathagram directly on your Android phone. No Google Play Store needed.</p>
+      <a href="mathagram.apk" class="dl-btn">Download APK</a>
+      <p class="version">v0.1.0 — Early Prototype — 5MB</p>
+    </div>
+
+    <!-- Install as PWA -->
+    <div class="dl-card">
+      <span class="badge" style="background:#1cb0f6;">Any Device</span>
+      <h2>Install from Browser</h2>
+      <p>You can also install Mathagram directly from your browser — works on Android, iPhone, and desktop!</p>
+      <div class="steps">
+        <ol>
+          <li>Open <strong>mathagram.org</strong> in Chrome (Android) or Safari (iPhone)</li>
+          <li>Tap the <strong>menu</strong> (3 dots on Chrome, share button on Safari)</li>
+          <li>Tap <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong></li>
+          <li>Mathagram appears as an app on your home screen!</li>
+        </ol>
+      </div>
+      <a href="index.html" class="dl-btn-outline">Go to Mathagram.org</a>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="dl-card" style="opacity:0.7;">
+      <span class="badge" style="background:#94a3b8;">Coming Soon</span>
+      <h2>Google Play Store</h2>
+      <p>We're working on getting Mathagram on the Google Play Store. Stay tuned!</p>
+    </div>
+
+    <div class="dl-card" style="opacity:0.7;">
+      <span class="badge" style="background:#94a3b8;">Coming Soon</span>
+      <h2>Apple App Store</h2>
+      <p>An iOS version is planned for the future.</p>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js'; initNav('');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
