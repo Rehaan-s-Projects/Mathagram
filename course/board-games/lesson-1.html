@@ -140,17 +140,16 @@
         checker.style.top = (tr*SQ+6)+'px';
         checker.style.left = (tc*SQ+6)+'px';
 
-        // Flash the target green
-        dot.style.background = '#58cc02';
-        dot.classList.remove('move-dot','star');
-
-        // Remove wrong dot
-        document.querySelectorAll('.move-dot').forEach(function(d){
-          d.classList.remove('move-dot');
-          d.style.cssText = '';
-        });
-
-        setTimeout(function(){ dot.style.background = ''; dot.className = 'sq dk'; }, 800);
+        // Remove ALL dots immediately — star disappears
+        setTimeout(function() {
+          document.querySelectorAll('.move-dot, .star').forEach(function(d){
+            d.className = 'sq dk';
+            d.style.cssText = 'background:#b07442;';
+          });
+          // Flash where piece landed green briefly
+          dot.style.background = '#58cc02';
+          setTimeout(function(){ dot.style.background = '#b07442'; }, 600);
+        }, 350);
 
         showBuddy('william', 'correct');
         resultEl.innerHTML = '<div class="result-banner correct">✓ Well done, young scholar!</div>';
