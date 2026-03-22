@@ -1,0 +1,121 @@
+/* Mathagram Scientific Calculator */
+#mathagram-calc {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 999;
+  font-family: 'Inter', sans-serif;
+}
+
+.calc-toggle {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  text-align: center;
+}
+.calc-toggle:hover { background: #2d2d44; }
+
+.calc-body {
+  background: #1a1a2e;
+  border-radius: 16px;
+  padding: 12px;
+  margin-top: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  width: 280px;
+}
+
+.calc-display {
+  background: #0f0f1a;
+  color: #00e5c8;
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 14px 16px;
+  border-radius: 10px;
+  text-align: right;
+  margin-bottom: 4px;
+  overflow-x: auto;
+  white-space: nowrap;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.calc-history {
+  color: #64748b;
+  font-size: 0.75rem;
+  text-align: right;
+  padding: 0 8px 8px;
+  min-height: 16px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.calc-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.cb {
+  padding: 12px 4px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  font-family: 'Inter', sans-serif;
+}
+.cb:hover { transform: scale(1.05); }
+.cb:active { transform: scale(0.95); }
+
+.cb.num {
+  background: #2d2d44;
+  color: #fff;
+}
+.cb.num:hover { background: #3d3d55; }
+
+.cb.op {
+  background: #334155;
+  color: #00e5c8;
+}
+.cb.op:hover { background: #475569; }
+
+.cb.func {
+  background: #1e293b;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+.cb.func:hover { background: #334155; color: #fff; }
+
+.cb.equals {
+  background: #00e5c8;
+  color: #1a1a2e;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+.cb.equals:hover { background: #00b89f; }
+
+.cb.clear {
+  background: #ef4444;
+  color: #fff;
+}
+.cb.clear:hover { background: #dc2626; }
+
+.cb.del {
+  background: #f97316;
+  color: #fff;
+}
+.cb.del:hover { background: #ea580c; }
+
+@media (max-width: 500px) {
+  .calc-body { width: 260px; }
+  #mathagram-calc { bottom: 10px; right: 10px; }
+  .cb { padding: 10px 2px; font-size: 0.85rem; }
+}

@@ -10,8 +10,10 @@
   <link rel="stylesheet" href="../../css/characters.css">
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
   <style>
     .lesson-content {
       max-width: 700px;
@@ -79,6 +81,7 @@
     .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
     .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
   </style>
+<link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
 
@@ -252,7 +255,8 @@
     try {
       await saveLessonResult('calculus', 'lesson-9', score);
     } catch (e) { /* not logged in */ }
-  </script>
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
 
 </body>
 </html>
