@@ -21,12 +21,13 @@
     .lt { background:#edd6b0; }
     .dk { background:#b07442; }
 
-    /* Move dots — green circles like Duolingo Chess */
-    .move-dot { cursor:pointer; position:relative; }
-    .move-dot::after { content:''; width:16px; height:16px; border-radius:50%; background:rgba(88,204,2,0.6); position:absolute; }
-    .move-dot:hover::after { background:rgba(88,204,2,0.9); transform:scale(1.3); }
-    .move-dot.star::after { background:#ffd54f; width:20px; height:20px; box-shadow:0 0 12px rgba(255,193,7,0.8); animation:dotPulse 1s infinite; }
-    @keyframes dotPulse { 0%,100%{box-shadow:0 0 8px rgba(255,193,7,0.6)} 50%{box-shadow:0 0 20px rgba(255,193,7,1)} }
+    /* Move dots — small circles on normal dark squares */
+    .move-dot { cursor:pointer; position:relative; background:#b07442 !important; }
+    .move-dot::after { content:''; width:14px; height:14px; border-radius:50%; background:rgba(88,204,2,0.5); position:absolute; transition:transform 0.15s; }
+    .move-dot:hover::after { background:rgba(88,204,2,0.85); transform:scale(1.4); }
+    .move-dot.star { background:#b07442 !important; }
+    .move-dot.star::after { background:#ffd54f; width:18px; height:18px; box-shadow:0 0 10px rgba(255,193,7,0.7); animation:dotPulse 1s infinite; }
+    @keyframes dotPulse { 0%,100%{box-shadow:0 0 6px rgba(255,193,7,0.5)} 50%{box-shadow:0 0 16px rgba(255,193,7,1)} }
 
     .wrong-flash { background:#ff6b6b !important; }
     .wrong-flash::after { content:'✗' !important; width:auto !important; height:auto !important; background:none !important; font-size:1.2rem; color:#fff; box-shadow:none !important; animation:shake 0.4s !important; }
