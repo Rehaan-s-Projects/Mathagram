@@ -219,6 +219,10 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
+
+    // Auto-update: refresh when new version is deployed
+    import { startAutoUpdate } from './js/auto-update.js';
+    startAutoUpdate();
   </script>
 
 </body>
