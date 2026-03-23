@@ -1,0 +1,10 @@
+/course/ap-statistics/*
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/js/learning-path.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/js/*
+  Cache-Control: no-cache, max-age=0

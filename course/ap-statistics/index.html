@@ -46,11 +46,16 @@
     </div>
   </footer>
 
+  <script>
+    // Force clear ALL caches
+    if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}); }
+  </script>
   <script type="module">
-    import { initNav } from '../../js/nav.js';
+    import { initNav } from '../../js/nav.js?v=3';
     initNav('../../');
-    import { renderPath, getCompletedLessons } from '../../js/learning-path.js?v=2';
-    import { onAuthChange } from '../../js/auth.js';
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js?v=3';
+    import { onAuthChange } from '../../js/auth.js?v=3';
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const units = [
