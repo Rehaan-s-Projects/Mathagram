@@ -2,9 +2,7 @@
 // Renders Duolingo-style learning paths with side-by-side nodes,
 // practice sessions, and reading skill nodes.
 
-import { auth } from './firebase-config.js';
-import { db } from './firebase-config.js';
-import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+// Firebase imports moved into getCompletedLessons() so renderPath works even if Firebase fails
 
 /**
  * Render a learning path into a container.
@@ -183,9 +181,12 @@ function injectSkillNodes(lessons) {
  * Get completed lesson IDs for a user from Firestore.
  */
 export async function getCompletedLessons(courseId) {
-  const user = auth.currentUser;
-  if (!user) return new Set();
   try {
+    const { auth } = await import('./firebase-config.js');
+    const { db } = await import('./firebase-config.js');
+    const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const user = auth.currentUser;
+    if (!user) return new Set();
     const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
     const ids = new Set();
     snap.forEach(doc => ids.add(doc.id));
