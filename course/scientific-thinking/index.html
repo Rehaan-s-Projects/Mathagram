@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>Scientific Thinking</h1>
-    <p>Hypothesize, experiment, and reason like a scientist.</p>
+    <p>Hypothesize, experiment, and reason like a scientist. 157 lessons across 12 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,17 +45,38 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "observation-skills", "title": "Observation Skills", "unit": "Foundations", "href": "#"}, {"id": "asking-questions", "title": "Asking Questions", "unit": "Foundations", "href": "#"}, {"id": "forming-hypotheses", "title": "Forming Hypotheses", "unit": "Foundations", "href": "#"}, {"id": "variables-and-controls", "title": "Variables & Controls", "unit": "Foundations", "href": "#"}, {"id": "scientific-method-checkpoint", "title": "Scientific Method Checkpoint", "unit": "Foundations", "href": "#", "checkpoint": true}, {"id": "designing-experiments", "title": "Designing Experiments", "unit": "Experimentation", "href": "#"}, {"id": "collecting-data", "title": "Collecting Data", "unit": "Experimentation", "href": "#"}, {"id": "measurement-and-precision", "title": "Measurement & Precision", "unit": "Experimentation", "href": "#"}, {"id": "bias-and-error", "title": "Bias & Error", "unit": "Experimentation", "href": "#"}, {"id": "experimentation-checkpoint", "title": "Experimentation Checkpoint", "unit": "Experimentation", "href": "#", "checkpoint": true}, {"id": "analyzing-results", "title": "Analyzing Results", "unit": "Reasoning", "href": "#"}, {"id": "drawing-conclusions", "title": "Drawing Conclusions", "unit": "Reasoning", "href": "#"}, {"id": "peer-review", "title": "Peer Review", "unit": "Reasoning", "href": "#"}, {"id": "communicating-findings", "title": "Communicating Findings", "unit": "Reasoning", "href": "#"}, {"id": "scientific-thinking-mastery", "title": "Scientific Thinking Mastery!", "unit": "Reasoning", "href": "#", "checkpoint": true}];
-    async function loadPath() {
-      const container = document.getElementById('learning-path');
-      let completed = new Set();
-      onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('scientific-thinking');
-        renderPath(container, lessons, completed);
+    const units = [
+      [1,'Observation & Curiosity',['What is Science?','What is Scientific Thinking?','Observation vs Inference','Qualitative Observations','Quantitative Observations','Using Your 5 Senses','Asking Good Questions','Testable vs Non-Testable Questions','Curiosity as a Skill','Science in Everyday Life','Famous Scientific Observations','Pattern Recognition','Observation Review']],
+      [2,'The Scientific Method',['Steps of the Scientific Method','Identifying a Problem','Background Research','Forming a Hypothesis','If-Then Hypotheses','Null Hypothesis','Designing an Experiment','Independent Variables','Dependent Variables','Controlled Variables','Control Groups','Experimental Groups','Scientific Method Review']],
+      [3,'Experimental Design',['Randomization','Sample Size Matters','Blinding & Double-Blinding','Placebo Effect','Replication','Reproducibility','Field Experiments vs Lab Experiments','Natural Experiments','Quasi-Experiments','Longitudinal Studies','Cross-Sectional Studies','Case Studies','Experimental Design Review']],
+      [4,'Measurement & Data Collection',['Units of Measurement','SI System (Metric)','Converting Units','Significant Figures','Accuracy vs Precision','Systematic Error','Random Error','Calibration','Data Tables','Data Recording Best Practices','Digital vs Analog Instruments','Measurement Uncertainty','Measurement Review']],
+      [5,'Data Analysis & Statistics',['Mean Median Mode in Science','Range & Standard Deviation','Graphing Data (Bar Charts)','Graphing Data (Line Graphs)','Graphing Data (Scatter Plots)','Best Fit Lines','Correlation vs Causation','Percent Error Calculations','Statistical Significance','P-Values in Science','T-Tests Basics','Chi-Square Basics','Data Analysis Review']],
+      [6,'Drawing Conclusions',['Interpreting Results','Supporting or Rejecting Hypotheses','Unexpected Results','Sources of Error','Confounding Variables','Bias in Science','Confirmation Bias','Selection Bias','Publication Bias','Overgeneralization','Anecdotal Evidence vs Data','Conclusions Review']],
+      [7,'Communication & Peer Review',['Writing a Lab Report','Abstract Writing','Introduction & Background','Methods Section','Results Section','Discussion Section','Scientific Papers','Peer Review Process','How Peer Review Works','Responding to Criticism','Presenting at Conferences','Scientific Posters','Communication Review']],
+      [8,'Critical Evaluation of Science',['Reading Scientific Papers','Evaluating Sources','Primary vs Secondary Sources','Credible vs Non-Credible','Spotting Pseudoscience','Logical Fallacies in Science','Appeal to Authority','Cherry-Picking Data','Correlation Implies Causation Fallacy','Survivorship Bias','Replication Crisis','Evaluating Media Science Headlines','Critical Evaluation Review']],
+      [9,'Ethics in Science',['What are Research Ethics?','Informed Consent','Animal Testing Ethics','Human Subjects Research','IRB (Institutional Review Board)','Data Fabrication & Falsification','Plagiarism in Science','Conflicts of Interest','Whistleblowing in Science','Dual-Use Research','Environmental Ethics in Research','Scientific Integrity','Ethics Review']],
+      [10,'History of Scientific Discoveries',['Ancient Greek Science','The Scientific Revolution','Galileo & the Telescope','Newton & Gravity','Darwin & Evolution','Mendel & Genetics','Pasteur & Germ Theory','Marie Curie & Radioactivity','Einstein & Relativity','Watson Crick & DNA','The Human Genome Project','Recent Breakthroughs','History Review']],
+      [11,'Science in Society',['Science & Public Policy','Climate Science & Policy','Vaccine Science','GMO Debate','Nuclear Energy Debate','Science Funding','Science Literacy','Citizen Science','Open Access Science','Science Communication to Public','Misinformation & Science','Trust in Science','Society Review']],
+      [12,'Applied Scientific Thinking',['Scientific Thinking at Work','Problem Solving with Science','Decision Making with Evidence','Design Thinking','Engineering Design Process','Medical Diagnosis as Science','Forensic Science','Environmental Science Methods','Space Exploration Methods','Science in Cooking','Science in Sports','Science in Technology','Scientific Thinking Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'st-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
       });
-      renderPath(container, lessons, completed);
-    }
-    loadPath();
+    });
+    const container = document.getElementById('learning-path');
+    renderPath(container, lessons, new Set());
+    try {
+      onAuthChange(async (user) => {
+        if (user) {
+          const completed = await getCompletedLessons('scientific-thinking');
+          renderPath(container, lessons, completed);
+        }
+      });
+    } catch(e) {}
   </script>
 </body>
 </html>
