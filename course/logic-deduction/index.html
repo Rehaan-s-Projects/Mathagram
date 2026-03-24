@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-logic)">Logic</span>
     <h1>Logic Deduction</h1>
-    <p>Puzzles from ordering to optimization.</p>
+    <p>Master logical reasoning through puzzles — ordering, negation, rearrangement, and optimization. 63 lessons across 7 levels.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,17 +45,33 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "grid-logic-puzzles", "title": "Grid Logic Puzzles", "unit": "Puzzle Basics", "href": "#"}, {"id": "ordering-and-sequencing", "title": "Ordering & Sequencing", "unit": "Puzzle Basics", "href": "#"}, {"id": "matching-problems", "title": "Matching Problems", "unit": "Puzzle Basics", "href": "#"}, {"id": "truth-tellers-and-liars", "title": "Truth-Tellers & Liars", "unit": "Puzzle Basics", "href": "#"}, {"id": "puzzle-basics-checkpoint", "title": "Puzzle Basics Checkpoint", "unit": "Puzzle Basics", "href": "#", "checkpoint": true}, {"id": "constraint-satisfaction", "title": "Constraint Satisfaction", "unit": "Intermediate", "href": "#"}, {"id": "process-of-elimination", "title": "Process of Elimination", "unit": "Intermediate", "href": "#"}, {"id": "multi-variable-deduction", "title": "Multi-Variable Deduction", "unit": "Intermediate", "href": "#"}, {"id": "knights-and-knaves", "title": "Knights & Knaves", "unit": "Intermediate", "href": "#"}, {"id": "intermediate-checkpoint", "title": "Intermediate Checkpoint", "unit": "Intermediate", "href": "#", "checkpoint": true}, {"id": "river-crossing-puzzles", "title": "River Crossing Puzzles", "unit": "Advanced", "href": "#"}, {"id": "scheduling-problems", "title": "Scheduling Problems", "unit": "Advanced", "href": "#"}, {"id": "optimization-puzzles", "title": "Optimization Puzzles", "unit": "Advanced", "href": "#"}, {"id": "competition-level-logic", "title": "Competition-Level Logic", "unit": "Advanced", "href": "#"}, {"id": "logic-deduction-mastery", "title": "Logic Deduction Mastery!", "unit": "Advanced", "href": "#", "checkpoint": true}];
-    async function loadPath() {
-      const container = document.getElementById('learning-path');
-      let completed = new Set();
-      onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('logic-deduction');
-        renderPath(container, lessons, completed);
+    const units = [
+      [1,'Order Logic',['Order Logic Introduction','Ordering by Size','Ordering by Time','Neighbors','Heights & Comparisons','Relative Positions','Greater Than & Less Than','Sequential Ordering','Circular Ordering']],
+      [2,'Negation & Value Logic',['Relative Comparisons','Value Logic Introduction','Negation Rules','Between Two Values','Not & Neither','De Morgans in Puzzles','Contradictions','Process of Elimination','Negation Review']],
+      [3,'Rearrangement & Either/Or',['Shuffling Positions','Swapping Elements','Rearrangement Puzzles','Either/Or Constraints','At Least One','At Most One','Exactly One','Multiple Constraints','Rearrangement Review']],
+      [4,'Handling Cases',['At Least Problems','At Most Problems','Sum Constraints','Difference Constraints','Range Constraints','Combining Multiple Cases','Case Analysis Strategy','Exhaustive Search','Handling Cases Review']],
+      [5,'Assignment & Properties',['Assigning Sizes','Even and Odd Properties','Bigger and Smaller','Multiple Properties','Property Matching','Grid Logic Puzzles','Truth-Tellers & Liars','Knights & Knaves','Assignment Review']],
+      [6,'Quantifiers & Optimization',['More Than / Fewer Than','Mixing Quantifiers','Not & No Quantifiers','Universal Statements','Existential Statements','Minimizing Values','Maximizing Values','Optimal Solutions','Quantifiers Review']],
+      [7,'Advanced Deduction & Mastery',['Multi-Variable Deduction','Constraint Satisfaction','River Crossing Puzzles','Scheduling Problems','Seating Arrangements','Tournament Logic','Cryptarithmetic','Competition-Level Logic','Logic Deduction Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ld-'+n, title: t, href: '#', unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
       });
-      renderPath(container, lessons, completed);
-    }
-    loadPath();
+    });
+    const container = document.getElementById('learning-path');
+    renderPath(container, lessons, new Set());
+    try {
+      onAuthChange(async (user) => {
+        if (user) {
+          const completed = await getCompletedLessons('logic-deduction');
+          renderPath(container, lessons, completed);
+        }
+      });
+    } catch(e) {}
   </script>
 </body>
 </html>
