@@ -147,10 +147,8 @@
   <script type="module">
     import { initNav } from '../../js/nav.js';
     initNav('../../');
-    import { runExerciseSet } from '../../js/exercises.js';
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-    import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
-    import { onAuthChange } from '../../js/auth.js';
 
     // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
@@ -217,32 +215,12 @@
       showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
     });
 
-    // Show completion
-    const { grade, stars, passed } = calculateGrade(score);
-    const xpEarned = calculateXP(score);
-    const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
-    const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
-
-    container.style.display = 'none';
-    completionDiv.style.display = 'block';
-    completionDiv.innerHTML = `
-      <div class="lesson-complete">
-        <h2>Lesson Complete!</h2>
-        <div class="grade-display ${gradeClass}">${grade}</div>
-        <div class="stars">${starStr}</div>
-        <div class="xp-earned">+${xpEarned} XP</div>
-        <p class="score-text">You scored ${score}%</p>
-        <div class="lesson-nav">
-          <a href="index.html" class="btn btn-outline">Back to Course</a>
-          <a href="lesson-2.html" class="btn btn-primary">Next Lesson</a>
-        </div>
-      </div>
-    `;
-
-    // Save if logged in
-    try {
-      await saveLessonResult('trigonometry', 'lesson-1', score);
-    } catch (e) { /* not logged in */ }
+    await showLessonComplete(container, completionDiv, score, {
+      courseId: 'trigonometry',
+      lessonId: 'lesson-1',
+      nextHref: 'lesson-2.html',
+      backHref: 'index.html'
+    });
   </script>
 
 </body>

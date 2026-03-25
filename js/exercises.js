@@ -6,6 +6,92 @@
 import { sanitizeHTML, sanitizeAnswer } from "./sanitize.js";
 
 /**
+ * Show Brilliant-style lesson completion screen.
+ * Works in Incognito — shows sign-up prompt instead of XP when not logged in.
+ *
+ * @param {HTMLElement} exerciseContainer - the exercises div (will be hidden)
+ * @param {HTMLElement} completionDiv     - the completion div (will be shown)
+ * @param {number}      score             - 0-100
+ * @param {object}      options
+ * @param {string}      options.courseId   - e.g. 'calculus'
+ * @param {string}      options.lessonId  - e.g. 'lesson-5'
+ * @param {string}      options.nextHref  - href for next lesson button
+ * @param {string}      options.backHref  - href for back to course (default 'index.html')
+ * @param {string}      options.basePath  - relative path to root (default '../../')
+ */
+export async function showLessonComplete(exerciseContainer, completionDiv, score, options = {}) {
+  const { courseId, lessonId, nextHref, backHref = 'index.html', basePath = '../../' } = options;
+
+  // Calculate grade locally (no Firebase needed)
+  let grade, stars;
+  if (score >= 97) { grade = 'A+'; stars = 3; }
+  else if (score >= 93) { grade = 'A'; stars = 3; }
+  else if (score >= 90) { grade = 'A-'; stars = 3; }
+  else if (score >= 87) { grade = 'B+'; stars = 2; }
+  else if (score >= 83) { grade = 'B'; stars = 2; }
+  else if (score >= 80) { grade = 'B-'; stars = 2; }
+  else if (score >= 77) { grade = 'C+'; stars = 1; }
+  else if (score >= 73) { grade = 'C'; stars = 1; }
+  else if (score >= 70) { grade = 'C-'; stars = 1; }
+  else if (score >= 67) { grade = 'D+'; stars = 0; }
+  else if (score >= 60) { grade = 'D'; stars = 0; }
+  else { grade = 'F'; stars = 0; }
+
+  const xpEarned = score >= 70 ? Math.round(score / 10) * 5 : 0;
+  const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
+  const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
+
+  // Check if user is logged in
+  let isLoggedIn = false;
+  try {
+    const { auth } = await import('./firebase-config.js');
+    isLoggedIn = !!auth.currentUser;
+  } catch(e) {}
+
+  exerciseContainer.style.display = 'none';
+  completionDiv.style.display = 'block';
+
+  if (isLoggedIn) {
+    // Logged in — show full results with XP
+    completionDiv.innerHTML = `
+      <div class="lesson-complete">
+        <h2>Lesson Complete!</h2>
+        <div class="grade-display ${gradeClass}">${grade}</div>
+        <div class="stars">${starStr}</div>
+        <div class="xp-earned">+${xpEarned} XP</div>
+        <p class="score-text">You scored ${score}%</p>
+        <div class="lesson-nav">
+          <a href="${sanitizeHTML(backHref)}" class="btn btn-outline">Back to Course</a>
+          ${nextHref ? `<a href="${sanitizeHTML(nextHref)}" class="btn btn-primary">Next Lesson</a>` : ''}
+        </div>
+      </div>`;
+    // Save progress
+    try {
+      const { saveLessonResult } = await import('./progress.js');
+      await saveLessonResult(courseId, lessonId, score);
+    } catch(e) {}
+  } else {
+    // Incognito / not logged in — Brilliant-style prompt
+    completionDiv.innerHTML = `
+      <div class="lesson-complete">
+        <h2>Lesson Complete!</h2>
+        <div class="grade-display ${gradeClass}">${grade}</div>
+        <div class="stars">${starStr}</div>
+        <p class="score-text">You scored ${score}%</p>
+        <div style="background:linear-gradient(135deg,#f0fdf4,#ecfdf5); border:1px solid #bbf7d0; border-radius:12px; padding:20px; margin:20px 0; text-align:center;">
+          <p style="font-size:1rem; font-weight:700; color:#166534; margin-bottom:4px;">Sign up to save your progress!</p>
+          <p style="font-size:0.85rem; color:#15803d; margin-bottom:14px;">Create a free account to earn XP, track your level, and continue where you left off.</p>
+          <a href="${basePath}login.html" class="btn btn-primary" style="display:inline-block; padding:10px 28px;">Sign Up Free</a>
+        </div>
+        <div class="lesson-nav">
+          <a href="${sanitizeHTML(backHref)}" class="btn btn-outline">Back to Course</a>
+          ${nextHref ? `<a href="${sanitizeHTML(nextHref)}" class="btn btn-primary">Next Lesson</a>` : ''}
+        </div>
+      </div>`;
+  }
+}
+
+/**
  * Speak text aloud using Web Speech API (for question read-aloud).
  * Uses a neutral voice for questions (not character-specific).
  */

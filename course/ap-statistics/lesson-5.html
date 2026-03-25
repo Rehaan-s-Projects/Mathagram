@@ -63,10 +63,8 @@
 
 <script type="module">
   import { initNav } from '../../js/nav.js'; initNav('../../');
-  import { runExerciseSet } from '../../js/exercises.js';
+  import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
   import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-  import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
-  import { onAuthChange } from '../../js/auth.js';
   document.addEventListener("DOMContentLoaded", function() {
     if (typeof renderMathInElement !== 'undefined') {
       renderMathInElement(document.body, {
@@ -134,11 +132,12 @@
   const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
     showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
   });
-  const { grade, stars } = calculateGrade(score);
-  const xpEarned = calculateXP(score);
-  const gradeClass = grade.startsWith('A')?'grade-a':grade.startsWith('B')?'grade-b':grade.startsWith('C')?'grade-c':grade.startsWith('D')?'grade-d':'grade-f';
-  document.getElementById('completion').innerHTML = '<div class="lesson-complete"><div class="grade '+gradeClass+'">'+grade+'</div><div class="stars">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div><div class="xp-earned">+'+xpEarned+' XP</div><p>Score: '+score+'%</p><a href="index.html" class="btn btn-primary" style="margin-top:16px;">Back to Course</a></div>';
-  onAuthChange(async (user) => { if (user) await saveLessonResult('ap-statistics', 's-5', score); });
+
+    await showLessonComplete(container, document.getElementById('completion'), score, {
+      courseId: 'ap-statistics',
+      lessonId: 's-5',
+      backHref: 'index.html'
+    });
 </script>
 <script type="module">import{createCalculator}from"../../js/calculator.js";createCalculator();</script>
 </body>
