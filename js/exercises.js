@@ -371,6 +371,9 @@ export function renderExercise(container, exercise, onAnswer) {
 
 /**
  * Run through an array of exercises one at a time.
+ * Wrong answers get re-queued to appear again later (Duolingo-style).
+ * Works in Incognito — no login needed, all state is in-memory.
+ *
  * @param {HTMLElement} container
  * @param {object[]}   exercises
  * @param {function}    [onEachAnswer] — optional (isCorrect, index) callback
@@ -378,94 +381,93 @@ export function renderExercise(container, exercise, onAnswer) {
  */
 export function runExerciseSet(container, exercises, onEachAnswer) {
   return new Promise((resolve) => {
-    let current = 0;
-    let correctCount = 0;
-    const total = exercises.length;
-    const mistakes = []; // Track wrong answers to retry
-    let inRetryMode = false;
-    let retryIndex = 0;
+    // Build a queue: all original exercises + wrong ones get re-added
+    const queue = [...exercises];
+    const originalTotal = exercises.length;
+    let pos = 0;            // position in queue
+    let correctOnFirst = 0; // correct on first attempt (for scoring)
+    let answered = 0;       // how many original questions answered so far
+    const mistakeSet = new Set(); // track which questions were wrong (by index in queue)
 
-    function getCurrentExercise() {
-      if (inRetryMode) return mistakes[retryIndex];
-      return exercises[current];
-    }
+    // Progress bar element
+    function buildProgressBar() {
+      const wrap = el('div', 'exercise-progress-bar-wrap');
+      const barBg = el('div', 'exercise-progress-bar-bg');
+      const barFill = el('div', 'exercise-progress-bar-fill');
+      const pct = Math.min(100, Math.round((answered / originalTotal) * 100));
+      barFill.style.width = pct + '%';
+      barBg.appendChild(barFill);
 
-    function getProgressText() {
-      if (inRetryMode) {
-        return "Previous Mistakes — " + (retryIndex + 1) + " of " + mistakes.length;
+      const label = el('div', 'exercise-progress-label');
+      const isRetry = pos >= originalTotal;
+      if (isRetry) {
+        label.innerHTML = '<span style="color:#ef4444;font-weight:700;">Past Mistakes</span> — Keep going!';
+      } else {
+        label.textContent = 'Question ' + (answered + 1) + ' of ' + originalTotal;
       }
-      return "Question " + (current + 1) + " of " + total;
+
+      wrap.appendChild(label);
+      wrap.appendChild(barBg);
+      return wrap;
     }
 
     function showExercise() {
-      container.innerHTML = "";
-      container.classList.add("exercise-container");
-
-      const exercise = getCurrentExercise();
-
-      // Progress indicator
-      const progress = el("div", "exercise-progress");
-      if (inRetryMode) {
-        progress.innerHTML = '<span style="color:#ef4444;font-weight:700;">🔄 Previous Mistakes</span> — ' + (retryIndex + 1) + ' of ' + mistakes.length;
-      } else {
-        progress.textContent = "Question " + (current + 1) + " of " + total;
+      if (pos >= queue.length) {
+        // All done — score based on first-attempt correct
+        const score = Math.round((correctOnFirst / originalTotal) * 100);
+        resolve(score);
+        return;
       }
-      container.appendChild(progress);
 
-      const inner = el("div", "exercise-inner");
+      container.innerHTML = '';
+      container.classList.add('exercise-container');
+
+      const exercise = queue[pos];
+      const isRetry = pos >= originalTotal;
+
+      // Progress
+      container.appendChild(buildProgressBar());
+
+      // Retry badge
+      if (isRetry) {
+        const badge = el('div', 'exercise-retry-badge');
+        badge.innerHTML = '&#128260; You got this wrong before — try again!';
+        container.appendChild(badge);
+      }
+
+      const inner = el('div', 'exercise-inner');
       container.appendChild(inner);
 
       renderExercise(inner, exercise, (isCorrect) => {
-        if (!inRetryMode) {
+        if (!isRetry) {
+          answered++;
           if (isCorrect) {
-            correctCount++;
+            correctOnFirst++;
           } else {
-            mistakes.push(exercise); // Save for retry
-          }
-          if (typeof onEachAnswer === "function") {
-            onEachAnswer(isCorrect, current);
+            // Re-queue this exercise to appear again later
+            queue.push(exercise);
           }
         } else {
-          // In retry mode — correct answers remove from mistakes
-          if (typeof onEachAnswer === "function") {
-            onEachAnswer(isCorrect, -1);
+          // Retry attempt
+          if (!isCorrect) {
+            // Still wrong — re-queue again
+            queue.push(exercise);
           }
+          // If correct on retry, just move on (don't add to score)
         }
 
-        // Determine what's next
-        let isLast;
-        if (inRetryMode) {
-          isLast = retryIndex >= mistakes.length - 1;
-        } else {
-          isLast = current >= total - 1 && mistakes.length === 0;
+        if (typeof onEachAnswer === 'function') {
+          onEachAnswer(isCorrect, isRetry ? -1 : pos);
         }
 
-        const nextLabel = isLast ? "Finish" : inRetryMode ? "Next Mistake" : "Next";
-        const nextBtn = el("button", "btn btn-primary exercise-next-btn", nextLabel);
-        nextBtn.type = "button";
-        nextBtn.addEventListener("click", () => {
-          if (inRetryMode) {
-            retryIndex++;
-            if (retryIndex < mistakes.length) {
-              showExercise();
-            } else {
-              // Done with retries
-              const score = Math.round((correctCount / total) * 100);
-              resolve(score);
-            }
-          } else {
-            current++;
-            if (current < total) {
-              showExercise();
-            } else if (mistakes.length > 0) {
-              // Switch to retry mode
-              inRetryMode = true;
-              retryIndex = 0;
-              showExercise();
-            } else {
-              const score = Math.round((correctCount / total) * 100);
-              resolve(score);
-          }
+        // Next button
+        const remaining = queue.length - pos - 1;
+        const nextLabel = remaining === 0 ? 'Finish' : 'Continue';
+        const nextBtn = el('button', 'btn btn-primary exercise-next-btn', nextLabel);
+        nextBtn.type = 'button';
+        nextBtn.addEventListener('click', () => {
+          pos++;
+          showExercise();
         });
         container.appendChild(nextBtn);
       });
