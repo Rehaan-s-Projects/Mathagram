@@ -32,7 +32,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-math)">Math</span>
     <h1>Calculus</h1>
-    <p>A complete calculus course — limits, differentiation, integration, sequences &amp; series, vectors, and multivariable calculus. 494 lessons across 22 units.</p>
+    <p>A complete calculus course — limits, differentiation, integration, sequences &amp; series, vectors, and multivariable calculus. 531 lessons across 24 units.</p>
   </header>
 
   <div id="learning-path" class="path-container"></div>
@@ -53,7 +53,7 @@
     /* ── Compact unit definitions ──
        Each entry: [unitNumber, 'Unit Name', ['Lesson Title', ...]]
        Playable lessons are mapped by their global lesson number below.
-       22 units, 494 lessons total. */
+       24 units, 531 lessons total. */
     const units = [
       [1,'Limits',[ // 21 lessons
         'Limits by Direct Evaluation','Limits at Jump Discontinuities',
@@ -319,15 +319,38 @@
         'Helmholtz Decomposition Preview','Integral Theorems Summary',
         'Vector Calculus Summary'
       ]],
-      [21,'Advanced Topics',[ // 28 lessons
+      [21,'Laplace Transforms',[ // 20 lessons
+        'What Is the Laplace Transform?','Definition & Notation',
+        'Laplace Transform of Basic Functions','Laplace of Polynomials',
+        'Laplace of Exponentials','Laplace of Sine & Cosine',
+        'Laplace of Hyperbolic Functions','Linearity Property',
+        'First Shifting Theorem (s-Shifting)','Second Shifting Theorem (t-Shifting)',
+        'Laplace of Derivatives','Laplace of Integrals',
+        'Inverse Laplace Transform','Partial Fractions for Inverse Laplace',
+        'Convolution Theorem','Solving ODEs with Laplace',
+        'Solving Systems of ODEs with Laplace','Unit Step Function (Heaviside)',
+        'Dirac Delta Function','Laplace Transforms Review'
+      ]],
+      [22,'Fourier Series & Transforms',[ // 25 lessons
+        'What Is a Fourier Series?','Periodic Functions',
+        'Trigonometric Fourier Series','Fourier Coefficients a0 an bn',
+        'Computing Fourier Coefficients','Even & Odd Functions in Fourier',
+        'Half-Range Expansions','Convergence of Fourier Series',
+        'Gibbs Phenomenon','Parsevals Theorem',
+        'Complex Fourier Series','Fourier Series of Square Wave',
+        'Fourier Series of Sawtooth Wave','Fourier Series of Triangle Wave',
+        'Fourier Series Applications in Heat','Fourier Series Applications in Vibration',
+        'What Is the Fourier Transform?','Fourier Transform Definition',
+        'Fourier Transform Properties','Inverse Fourier Transform',
+        'Fourier Transform of Gaussian','Convolution & Fourier Transform',
+        'Fourier Transform in Signal Processing','Discrete Fourier Transform (DFT) Preview',
+        'Fourier Series & Transforms Review'
+      ]],
+      [23,'Advanced Topics',[ // 20 lessons
         'Sequences in Rn','Series of Functions',
         'Power Series Two Variables','Taylor Series Two Variables',
         'Taylor Polynomials Multivariable','Linearization Review',
         'Quadratic Approximation','Error Estimation',
-        'Fourier Series Intro','Fourier Coefficients',
-        'Convergence Fourier','Fourier Applications',
-        'Laplace Transform Intro','Laplace Transform Properties',
-        'Inverse Laplace','Laplace Applications',
         'Systems of DiffEq','Phase Portraits',
         'Eigenvalue Method','Stability of Equilibria',
         'Nonlinear Systems','Complex Analysis Preview',
@@ -335,18 +358,18 @@
         'Euler-Lagrange Equation Preview','Functional Analysis Preview',
         'Tensors Preview','Advanced Topics Review'
       ]],
-      [22,'Partial Differential Equations',[ // 22 lessons
+      [24,'Partial Differential Equations',[ // 22 lessons
         'PDE Introduction','Separation of Variables PDE',
         'Heat Equation Intro','Heat Equation 1D',
         'Wave Equation Intro','Wave Equation 1D',
         'Laplace\'s Equation','Laplace Equation 2D',
-        'Boundary Value Problems','Fourier Series Solutions',
+        'Boundary Value Problems','Fourier Series Solutions to PDEs',
         'Numerical Methods PDE','Finite Difference Methods',
         'Applications Physics','Applications Engineering',
         'PDE in Polar Coordinates','Classification of PDEs',
         'Well-Posed Problems','Characteristics Method',
         'Green\'s Functions Preview','Sturm-Liouville Problems',
-        'Spectral Methods Preview','Multivariable Calculus Review'
+        'Spectral Methods Preview','Calculus Mastery!'
       ]]
     ];
 
