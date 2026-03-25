@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>Soil Science</h1>
-    <p>Sand, clay, loam — their properties and role in life.</p>
+    <p>Explore soil formation, texture, chemistry, biology, and the role soil plays in agriculture, ecosystems, and climate. 93 lessons across 9 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,25 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "what-is-soil?", "title": "What Is Soil?", "unit": "Soil Basics", "href": "#"}, {"id": "soil-layers-and-horizons", "title": "Soil Layers & Horizons", "unit": "Soil Basics", "href": "#"}, {"id": "sand-silt-and-clay", "title": "Sand, Silt & Clay", "unit": "Soil Basics", "href": "#"}, {"id": "soil-texture-triangle", "title": "Soil Texture Triangle", "unit": "Soil Basics", "href": "#"}, {"id": "soil-basics-checkpoint", "title": "Soil Basics Checkpoint", "unit": "Soil Basics", "href": "#", "checkpoint": true}, {"id": "soil-water-and-drainage", "title": "Soil Water & Drainage", "unit": "Soil Properties", "href": "#"}, {"id": "nutrients-and-ph", "title": "Nutrients & pH", "unit": "Soil Properties", "href": "#"}, {"id": "organic-matter-and-humus", "title": "Organic Matter & Humus", "unit": "Soil Properties", "href": "#"}, {"id": "soil-color-and-structure", "title": "Soil Color & Structure", "unit": "Soil Properties", "href": "#"}, {"id": "properties-checkpoint", "title": "Properties Checkpoint", "unit": "Soil Properties", "href": "#", "checkpoint": true}, {"id": "soil-and-plant-growth", "title": "Soil & Plant Growth", "unit": "Soil & Life", "href": "#"}, {"id": "erosion-and-conservation", "title": "Erosion & Conservation", "unit": "Soil & Life", "href": "#"}, {"id": "soil-ecosystems", "title": "Soil Ecosystems", "unit": "Soil & Life", "href": "#"}, {"id": "climate-and-soil", "title": "Climate & Soil", "unit": "Soil & Life", "href": "#"}, {"id": "soil-science-mastery", "title": "Soil Science Mastery!", "unit": "Soil & Life", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'What Is Soil?',['What Is Soil?','Why Soil Matters','Soil vs Dirt','Components of Soil','How Soil Forms','Weathering — Physical Chemical Biological','Parent Material','Soil Formation Factors (CLORPT)','Soil Basics Review']],
+      [2,'Soil Layers & Profiles',['Soil Horizons Overview','O Horizon (Organic Layer)','A Horizon (Topsoil)','E Horizon (Eluviation)','B Horizon (Subsoil)','C Horizon (Parent Material)','R Horizon (Bedrock)','Reading a Soil Profile','Soil Depth & Root Growth','Digging a Soil Pit','Soil Layers Review']],
+      [3,'Soil Texture & Classification',['Sand Silt & Clay','Particle Size Differences','Feel Test for Texture','Soil Texture Triangle','Sandy Soils — Properties','Clay Soils — Properties','Loam — The Ideal Soil','Sandy Loam Clay Loam & More','Soil Taxonomy — 12 Orders','Soil Texture Review']],
+      [4,'Soil Physical Properties',['Soil Structure — Granular Blocky Platy','Soil Aggregates','Soil Porosity','Soil Permeability','Soil Compaction','Bulk Density','Soil Color & Munsell Chart','Soil Temperature','Soil Aeration','Soil Physical Properties Review']],
+      [5,'Soil Water & Chemistry',['Water in Soil','Gravitational Capillary & Hygroscopic Water','Field Capacity & Wilting Point','Soil Drainage','Soil pH Scale','Acidic vs Alkaline Soils','Cation Exchange Capacity (CEC)','Soil Buffering','Soil Salinity','Soil Water & Chemistry Review']],
+      [6,'Soil Nutrients & Fertility',['Essential Plant Nutrients','Macronutrients — N P K','Nitrogen Cycle in Soil','Phosphorus & Potassium in Soil','Secondary & Micronutrients','Nutrient Deficiency Symptoms','Fertilizers — Organic vs Synthetic','Composting','Soil Testing & Lab Analysis','Soil Fertility Review']],
+      [7,'Soil Biology & Ecosystems',['Soil as a Living Ecosystem','Bacteria in Soil','Fungi & Mycorrhizae','Earthworms — Natures Plows','Nematodes & Soil Arthropods','Decomposition Process','Humus Formation','Organic Matter & Carbon','Soil Food Web','Soil Biology Review']],
+      [8,'Soil & Agriculture',['Soil for Crop Production','Tillage vs No-Till Farming','Crop Rotation','Cover Crops','Mulching','Irrigation & Soil','Raised Bed Gardening','Hydroponics vs Soil','Soil Erosion — Wind & Water','Erosion Control Methods','Terracing & Contour Farming','Soil & Agriculture Review']],
+      [9,'Soil & the Environment',['Soil & Climate Change','Carbon Sequestration in Soil','Soil & the Water Cycle','Wetland Soils','Desert Soils','Tropical Soils','Permafrost & Frozen Soils','Soil Pollution & Contamination','Soil Remediation','Land Degradation & Desertification','Soil Science Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ss-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
