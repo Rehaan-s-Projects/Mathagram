@@ -31,7 +31,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>Quantum Computing</h1>
-    <p>Qubits, superposition, entanglement, and quantum algorithms.</p>
+    <p>Master qubits, superposition, entanglement, quantum gates, algorithms, and real quantum hardware. 175 lessons across 14 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -45,7 +45,30 @@
     import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    const lessons = [{"id": "classical-vs-quantum", "title": "Classical vs Quantum", "unit": "Quantum Basics", "href": "#"}, {"id": "qubits-and-states", "title": "Qubits & States", "unit": "Quantum Basics", "href": "#"}, {"id": "superposition", "title": "Superposition", "unit": "Quantum Basics", "href": "#"}, {"id": "measurement", "title": "Measurement", "unit": "Quantum Basics", "href": "#"}, {"id": "quantum-basics-checkpoint", "title": "Quantum Basics Checkpoint", "unit": "Quantum Basics", "href": "#", "checkpoint": true}, {"id": "entanglement", "title": "Entanglement", "unit": "Quantum Phenomena", "href": "#"}, {"id": "quantum-gates", "title": "Quantum Gates", "unit": "Quantum Phenomena", "href": "#"}, {"id": "quantum-circuits", "title": "Quantum Circuits", "unit": "Quantum Phenomena", "href": "#"}, {"id": "no-cloning-theorem", "title": "No-Cloning Theorem", "unit": "Quantum Phenomena", "href": "#"}, {"id": "phenomena-checkpoint", "title": "Phenomena Checkpoint", "unit": "Quantum Phenomena", "href": "#", "checkpoint": true}, {"id": "deutschs-algorithm", "title": "Deutsch's Algorithm", "unit": "Quantum Algorithms", "href": "#"}, {"id": "grovers-search", "title": "Grover's Search", "unit": "Quantum Algorithms", "href": "#"}, {"id": "shors-factoring", "title": "Shor's Factoring", "unit": "Quantum Algorithms", "href": "#"}, {"id": "quantum-error-correction", "title": "Quantum Error Correction", "unit": "Quantum Algorithms", "href": "#"}, {"id": "quantum-computing-mastery", "title": "Quantum Computing Mastery!", "unit": "Quantum Algorithms", "href": "#", "checkpoint": true}];
+    const units = [
+      [1,'Classical Computing Review',['Bits & Binary','Logic Gates (AND OR NOT)','NAND & NOR — Universal Gates','Truth Tables','Boolean Algebra','Combinational Circuits','Flip-Flops & Memory','CPU Architecture Basics','Moores Law & Its Limits','Why Classical Computers Struggle','P vs NP Problem','Computational Complexity','Classical Computing Review']],
+      [2,'Quantum Physics Foundations',['Wave-Particle Duality','The Double-Slit Experiment','Heisenbergs Uncertainty Principle','Schrodingers Cat','Quantum States & Wavefunctions','Probability Amplitudes','Dirac Notation (Bra-Ket)','Complex Numbers in Quantum Mechanics','Linear Algebra for Quantum','Matrices & Eigenvalues','Quantum Physics Review']],
+      [3,'Qubits & Superposition',['What Is a Qubit?','Classical Bit vs Qubit','The Bloch Sphere','Superposition Explained','Ket 0 and Ket 1','Alpha & Beta Amplitudes','Probability of Measurement','Measurement Collapses Superposition','Multiple Qubits','Two-Qubit States','Three-Qubit States','Tensor Products','Superposition Review']],
+      [4,'Quantum Entanglement',['What Is Entanglement?','EPR Paradox','Bells Theorem','Bell States','Creating Entangled Pairs','Spooky Action at a Distance','Entanglement vs Classical Correlation','Quantum Teleportation','Superdense Coding','GHZ States','W States','Entanglement as a Resource','Entanglement Review']],
+      [5,'Single-Qubit Gates',['What Are Quantum Gates?','Pauli-X Gate (NOT)','Pauli-Y Gate','Pauli-Z Gate','Hadamard Gate','Phase Gate (S Gate)','T Gate (Pi/8 Gate)','Rotation Gates (Rx Ry Rz)','Gate Matrices','Visualizing Gates on Bloch Sphere','Combining Single-Qubit Gates','Universal Single-Qubit Gates','Single-Qubit Gates Review']],
+      [6,'Multi-Qubit Gates & Circuits',['CNOT Gate (Controlled-NOT)','Controlled-Z Gate','SWAP Gate','Toffoli Gate (CCNOT)','Fredkin Gate (CSWAP)','Building Circuits from Gates','Circuit Diagrams & Notation','Quantum Circuit Depth','Quantum Circuit Width','Reversibility of Quantum Gates','No-Cloning Theorem','Quantum Parallelism','Multi-Qubit Gates Review']],
+      [7,'Quantum Algorithms — Basics',['What Is a Quantum Algorithm?','Quantum Speedup','Deutschs Algorithm','Deutsch-Jozsa Algorithm','Bernstein-Vazirani Algorithm','Simons Algorithm','Quantum Fourier Transform','Phase Estimation','Quantum Walk','Quantum Counting','Oracle-Based Algorithms','Quantum vs Classical Complexity','Basic Algorithms Review']],
+      [8,'Grovers Search Algorithm',['The Search Problem','Unstructured Search','Classical Search O(N)','Quantum Search O(sqrt N)','Grovers Algorithm Overview','The Oracle','Amplitude Amplification','Grover Diffusion Operator','Step-by-Step Grover Example','Optimal Number of Iterations','Grover for Database Search','Grover for Optimization','Grovers Algorithm Review']],
+      [9,'Shors Factoring Algorithm',['Why Factoring Matters','RSA Encryption Basics','Classical Factoring Difficulty','Shors Algorithm Overview','Period Finding','Quantum Fourier Transform in Shor','Modular Exponentiation','Step-by-Step Shor Example','Factoring 15 with Shor','Factoring Larger Numbers','Implications for Cryptography','Post-Quantum Cryptography','Shors Algorithm Review']],
+      [10,'Quantum Error Correction',['Why Quantum Errors Happen','Decoherence','Bit-Flip Errors','Phase-Flip Errors','The 3-Qubit Bit-Flip Code','The 3-Qubit Phase-Flip Code','Shor 9-Qubit Code','Steane Code','Surface Codes','Logical vs Physical Qubits','Fault-Tolerant Quantum Computing','Threshold Theorem','Error Correction Review']],
+      [11,'Quantum Hardware',['Superconducting Qubits','Ion Trap Quantum Computers','Photonic Quantum Computing','Topological Qubits','Neutral Atom Quantum Computers','Quantum Dots','Dilution Refrigerators & Cryogenics','Qubit Connectivity & Gate Fidelity','Quantum Hardware Review']],
+      [12,'Quantum Software & Programming',['Qiskit (IBM)','Cirq (Google)','Amazon Braket','Microsoft Q#','PennyLane','Writing Your First Quantum Circuit','Simulating Quantum Circuits','Running on Real Hardware','IBM Quantum Experience','Quantum Cloud Services','Hybrid Classical-Quantum Algorithms','Variational Quantum Eigensolver (VQE)','Quantum Software Review']],
+      [13,'Quantum Applications',['Quantum Chemistry Simulation','Drug Discovery','Materials Science','Optimization Problems','Quantum Machine Learning','Quantum Neural Networks','Quantum Finance','Portfolio Optimization','Supply Chain Optimization','Quantum Cryptography (QKD)','BB84 Protocol','Quantum Internet','Quantum Applications Review']],
+      [14,'Future of Quantum Computing',['Quantum Supremacy & Advantage','Googles Sycamore Experiment','IBMs Quantum Roadmap','Quantum Volume','NISQ Era (Noisy Intermediate Scale)','Road to Fault Tolerance','Quantum vs Classical — When to Use Which','Careers in Quantum Computing','Quantum Computing Timeline','Open Problems in Quantum','Learning Quantum — Next Steps','Quantum Computing Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'qc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = new Set();
