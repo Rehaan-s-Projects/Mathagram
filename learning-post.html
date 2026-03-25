@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Post — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .page-header { padding: 80px 24px 24px; text-align: center; }
+    .page-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .page-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .page-header h1 { font-size: 2rem; } }
+
+    /* Safety rules overlay */
+    .safety-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .safety-overlay.hidden { display: none; }
+    .safety-card {
+      background: var(--color-white); border-radius: var(--radius-lg);
+      max-width: 560px; width: 100%; padding: 40px 32px;
+      box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto;
+    }
+    .safety-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
+    .safety-card .safety-subtitle { text-align: center; color: var(--color-text-secondary); font-size: 0.95rem; margin-bottom: 24px; }
+    .safety-card .shield { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
+    .rule-list { list-style: none; padding: 0; margin: 0 0 24px; }
+    .rule-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid var(--color-border);
+      font-size: 0.92rem; line-height: 1.5;
+    }
+    .rule-list li:last-child { border-bottom: none; }
+    .rule-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+    .rule-list strong { color: var(--color-text); }
+    .safety-agree-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; padding: 12px 16px;
+      background: #f0fdf4; border-radius: var(--radius); border: 1px solid #bbf7d0;
+    }
+    .safety-agree-row input[type="checkbox"] { width: 20px; height: 20px; accent-color: #22c55e; cursor: pointer; }
+    .safety-agree-row label { font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+    .safety-btn {
+      width: 100%; padding: 14px; font-size: 1rem; font-weight: 700;
+      border: none; border-radius: var(--radius); cursor: pointer;
+      background: var(--color-primary); color: #fff; transition: all 0.2s;
+    }
+    .safety-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .safety-btn:not(:disabled):hover { background: var(--color-primary-dark); transform: translateY(-1px); }
+
+    /* Main content */
+    .posts-container { max-width: 680px; margin: 0 auto; padding: 0 24px 64px; }
+
+    /* New post form */
+    .new-post-card {
+      background: var(--color-white); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: 24px; margin-bottom: 32px;
+    }
+    .new-post-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .post-category-select {
+      width: 100%; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--color-border);
+      border-radius: var(--radius); background: var(--color-bg); margin-bottom: 12px;
+      font-family: inherit;
+    }
+    .post-textarea {
+      width: 100%; min-height: 100px; padding: 14px; font-size: 0.95rem;
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      resize: vertical; font-family: inherit; line-height: 1.5;
+      background: var(--color-bg); box-sizing: border-box;
+    }
+    .post-textarea:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(0,229,200,0.15); }
+    .post-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px; }
+    .post-submit {
+      padding: 10px 24px; font-size: 0.85rem; font-weight: 700;
+      border: none; border-radius: var(--radius); cursor: pointer;
+      background: var(--color-primary); color: #fff; transition: all 0.2s;
+    }
+    .post-submit:hover { background: var(--color-primary-dark); }
+    .post-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .char-count { font-size: 0.8rem; color: var(--color-text-muted); align-self: center; }
+
+    /* Login prompt */
+    .login-prompt {
+      background: var(--color-white); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: 32px; margin-bottom: 32px;
+      text-align: center;
+    }
+    .login-prompt p { color: var(--color-text-secondary); margin-bottom: 16px; }
+    .login-prompt a {
+      display: inline-block; padding: 10px 28px; background: var(--color-primary);
+      color: #fff; font-weight: 700; border-radius: var(--radius); text-decoration: none;
+    }
+
+    /* Posts feed */
+    .posts-feed { display: flex; flex-direction: column; gap: 16px; }
+    .post-item {
+      background: var(--color-white); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: 20px 24px; transition: box-shadow 0.2s;
+    }
+    .post-item:hover { box-shadow: var(--shadow-sm); }
+    .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .post-avatar { width: 36px; height: 36px; border-radius: 50%; }
+    .post-meta { flex: 1; }
+    .post-author { font-weight: 700; font-size: 0.9rem; }
+    .post-time { font-size: 0.75rem; color: var(--color-text-muted); }
+    .post-category-tag {
+      display: inline-block; padding: 2px 10px; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; color: #fff;
+      border-radius: 999px;
+    }
+    .post-body { font-size: 0.95rem; line-height: 1.65; color: var(--color-text); white-space: pre-wrap; word-wrap: break-word; }
+    .post-footer { display: flex; gap: 16px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border); }
+    .post-action-btn {
+      background: none; border: none; cursor: pointer; font-size: 0.82rem;
+      color: var(--color-text-muted); font-weight: 600; display: flex; align-items: center; gap: 4px;
+      transition: color 0.2s; padding: 4px 8px; border-radius: 6px;
+    }
+    .post-action-btn:hover { color: var(--color-primary-dark); background: var(--color-bg); }
+    .post-action-btn.liked { color: #ef4444; }
+
+    .empty-state { text-align: center; padding: 48px 24px; color: var(--color-text-muted); }
+    .empty-state p { font-size: 1rem; margin-bottom: 8px; }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+      justify-content: center;
+    }
+    .filter-tab {
+      padding: 6px 16px; font-size: 0.8rem; font-weight: 600;
+      border: 2px solid var(--color-border); border-radius: 999px;
+      background: var(--color-white); color: var(--color-text-secondary);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .filter-tab:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
+    .filter-tab.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="courses.html">Courses</a>
+        <a href="learning-post.html" style="color: var(--color-primary-dark); font-weight: 600;">Posts</a>
+        <a href="login.html" data-auth="login">Login</a>
+        <a href="login.html" data-auth="signup">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Safety Rules Overlay -->
+  <div class="safety-overlay hidden" id="safetyOverlay">
+    <div class="safety-card">
+      <div class="shield">&#128737;</div>
+      <h2>Community Safety Rules</h2>
+      <p class="safety-subtitle">Please read and agree before using Learning Post.</p>
+      <ul class="rule-list">
+        <li><span class="rule-icon">&#9989;</span><div><strong>Be Respectful</strong> — Treat everyone with kindness. No bullying, harassment, or hate speech of any kind.</div></li>
+        <li><span class="rule-icon">&#128272;</span><div><strong>Protect Your Privacy</strong> — Never share personal information like your full name, address, phone number, school name, or passwords.</div></li>
+        <li><span class="rule-icon">&#128218;</span><div><strong>Keep It Educational</strong> — Posts should be about learning, courses, study tips, or questions. This is not a social media chat room.</div></li>
+        <li><span class="rule-icon">&#128683;</span><div><strong>No Inappropriate Content</strong> — No profanity, violent content, sexual content, or anything unsuitable for all ages.</div></li>
+        <li><span class="rule-icon">&#128226;</span><div><strong>No Spam or Advertising</strong> — Do not post links, promotions, or repetitive messages.</div></li>
+        <li><span class="rule-icon">&#9878;</span><div><strong>No Cheating or Sharing Answers</strong> — Help others understand, don't just give away answers.</div></li>
+        <li><span class="rule-icon">&#127919;</span><div><strong>Stay On Topic</strong> — Use the correct category for your post. Off-topic posts may be removed.</div></li>
+        <li><span class="rule-icon">&#128680;</span><div><strong>Report, Don't Retaliate</strong> — If you see something wrong, report it. Do not argue or fight back.</div></li>
+      </ul>
+      <div class="safety-agree-row">
+        <input type="checkbox" id="agreeCheck">
+        <label for="agreeCheck">I have read and agree to follow the safety rules.</label>
+      </div>
+      <button class="safety-btn" id="agreeBtn" disabled>Enter Learning Post</button>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <h1>Learning Post</h1>
+    <p>Share what you're learning, ask questions, and help fellow students on their journey.</p>
+  </header>
+
+  <div class="posts-container">
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="question">Questions</button>
+      <button class="filter-tab" data-filter="tip">Study Tips</button>
+      <button class="filter-tab" data-filter="progress">Progress</button>
+      <button class="filter-tab" data-filter="discussion">Discussion</button>
+    </div>
+
+    <!-- New post (shown if logged in) -->
+    <div id="newPostSection"></div>
+
+    <!-- Posts feed -->
+    <div class="posts-feed" id="postsFeed">
+      <div class="empty-state">
+        <p>Loading posts...</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="24" height="24" style="display:inline-block;vertical-align:middle;margin-right:6px;">
+        <span>Mathagram</span>
+      </div>
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('');
+    import { onAuthChange, getUserProfile } from './js/auth.js';
+    import { sanitizeHTML } from './js/sanitize.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const SAFETY_KEY = 'mathagram_safety_agreed';
+    const overlay = document.getElementById('safetyOverlay');
+    const agreeCheck = document.getElementById('agreeCheck');
+    const agreeBtn = document.getElementById('agreeBtn');
+
+    // Show safety rules if not agreed yet
+    if (!localStorage.getItem(SAFETY_KEY)) {
+      overlay.classList.remove('hidden');
+    }
+    agreeCheck.addEventListener('change', () => {
+      agreeBtn.disabled = !agreeCheck.checked;
+    });
+    agreeBtn.addEventListener('click', () => {
+      if (agreeCheck.checked) {
+        localStorage.setItem(SAFETY_KEY, 'true');
+        overlay.classList.add('hidden');
+      }
+    });
+
+    const categoryColors = {
+      question: '#3b82f6',
+      tip: '#22c55e',
+      progress: '#f97316',
+      discussion: '#8b5cf6'
+    };
+    const categoryLabels = {
+      question: 'Question',
+      tip: 'Study Tip',
+      progress: 'Progress',
+      discussion: 'Discussion'
+    };
+
+    let currentUser = null;
+    let userProfile = null;
+    let allPosts = [];
+    let currentFilter = 'all';
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        renderPosts();
+      });
+    });
+
+    onAuthChange(async (user) => {
+      currentUser = user;
+      const section = document.getElementById('newPostSection');
+      if (user) {
+        try { userProfile = await getUserProfile(); } catch(e) { userProfile = null; }
+        section.innerHTML = `
+          <div class="new-post-card">
+            <h3>Share with the community</h3>
+            <select class="post-category-select" id="postCategory">
+              <option value="question">Question</option>
+              <option value="tip">Study Tip</option>
+              <option value="progress">Progress Update</option>
+              <option value="discussion">Discussion</option>
+            </select>
+            <textarea class="post-textarea" id="postText" placeholder="What are you learning today?" maxlength="500"></textarea>
+            <div class="post-actions">
+              <span class="char-count"><span id="charCount">0</span>/500</span>
+              <button class="post-submit" id="postSubmit">Post</button>
+            </div>
+          </div>`;
+        const textarea = document.getElementById('postText');
+        const charCount = document.getElementById('charCount');
+        textarea.addEventListener('input', () => {
+          charCount.textContent = textarea.value.length;
+        });
+        document.getElementById('postSubmit').addEventListener('click', submitPost);
+      } else {
+        section.innerHTML = `
+          <div class="login-prompt">
+            <p>Log in to share your learning journey with the community.</p>
+            <a href="login.html">Login or Sign Up</a>
+          </div>`;
+      }
+      loadPosts();
+    });
+
+    async function submitPost() {
+      const text = document.getElementById('postText').value.trim();
+      const category = document.getElementById('postCategory').value;
+      if (!text || !currentUser) return;
+      const btn = document.getElementById('postSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Posting...';
+      try {
+        const { db } = await import('./js/firebase-config.js');
+        const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        await addDoc(collection(db, 'posts'), {
+          uid: currentUser.uid,
+          displayName: userProfile?.displayName || 'Anonymous',
+          color: userProfile?.color || 'blue',
+          category: category,
+          text: text,
+          likes: 0,
+          likedBy: [],
+          createdAt: serverTimestamp()
+        });
+        document.getElementById('postText').value = '';
+        document.getElementById('charCount').textContent = '0';
+        loadPosts();
+      } catch(e) {
+        console.error('Post failed:', e);
+      }
+      btn.disabled = false;
+      btn.textContent = 'Post';
+    }
+
+    async function loadPosts() {
+      try {
+        const { db } = await import('./js/firebase-config.js');
+        const { collection, getDocs, query, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(50));
+        const snap = await getDocs(q);
+        allPosts = [];
+        snap.forEach(doc => { allPosts.push({ id: doc.id, ...doc.data() }); });
+        renderPosts();
+      } catch(e) {
+        document.getElementById('postsFeed').innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
+      }
+    }
+
+    function renderPosts() {
+      const feed = document.getElementById('postsFeed');
+      const filtered = currentFilter === 'all' ? allPosts : allPosts.filter(p => p.category === currentFilter);
+      if (filtered.length === 0) {
+        feed.innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
+        return;
+      }
+      feed.innerHTML = filtered.map(post => {
+        const time = post.createdAt ? timeAgo(post.createdAt.toDate ? post.createdAt.toDate() : new Date(post.createdAt.seconds * 1000)) : 'just now';
+        const color = post.color || 'blue';
+        const catColor = categoryColors[post.category] || '#6b7280';
+        const catLabel = categoryLabels[post.category] || post.category;
+        const liked = currentUser && post.likedBy && post.likedBy.includes(currentUser.uid);
+        return `
+          <div class="post-item" data-category="${sanitizeHTML(post.category)}">
+            <div class="post-header">
+              <img class="post-avatar" src="assets/avatars/${sanitizeHTML(color)}.svg" alt="">
+              <div class="post-meta">
+                <div class="post-author">${sanitizeHTML(post.displayName)}</div>
+                <div class="post-time">${time}</div>
+              </div>
+              <span class="post-category-tag" style="background:${catColor}">${catLabel}</span>
+            </div>
+            <div class="post-body">${sanitizeHTML(post.text)}</div>
+            <div class="post-footer">
+              <button class="post-action-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+                ${liked ? '&#10084;' : '&#9825;'} ${post.likes || 0}
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    window.toggleLike = async function(postId) {
+      if (!currentUser) return;
+      try {
+        const { db } = await import('./js/firebase-config.js');
+        const { doc, updateDoc, arrayUnion, arrayRemove, increment } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const postRef = doc(db, 'posts', postId);
+        const post = allPosts.find(p => p.id === postId);
+        if (!post) return;
+        const alreadyLiked = post.likedBy && post.likedBy.includes(currentUser.uid);
+        if (alreadyLiked) {
+          await updateDoc(postRef, { likes: increment(-1), likedBy: arrayRemove(currentUser.uid) });
+          post.likes = (post.likes || 1) - 1;
+          post.likedBy = post.likedBy.filter(id => id !== currentUser.uid);
+        } else {
+          await updateDoc(postRef, { likes: increment(1), likedBy: arrayUnion(currentUser.uid) });
+          post.likes = (post.likes || 0) + 1;
+          if (!post.likedBy) post.likedBy = [];
+          post.likedBy.push(currentUser.uid);
+        }
+        renderPosts();
+      } catch(e) { console.error('Like failed:', e); }
+    };
+
+    function timeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      if (seconds < 60) return 'just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return minutes + 'm ago';
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours + 'h ago';
+      const days = Math.floor(hours / 24);
+      if (days < 30) return days + 'd ago';
+      const months = Math.floor(days / 30);
+      return months + 'mo ago';
+    }
+  </script>
+</body>
+</html>
