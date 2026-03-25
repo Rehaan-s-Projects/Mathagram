@@ -83,6 +83,35 @@
     .post-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
     .char-count { font-size: 0.8rem; color: var(--color-text-muted); align-self: center; }
 
+    /* Image upload */
+    .image-upload-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+    .image-upload-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; font-size: 0.82rem; font-weight: 600;
+      border: 2px dashed var(--color-border); border-radius: var(--radius);
+      color: var(--color-text-secondary); cursor: pointer; transition: all 0.2s;
+    }
+    .image-upload-label:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
+    .image-upload-label input { display: none; }
+    .image-hint { font-size: 0.72rem; color: var(--color-text-muted); }
+    .image-preview-wrap {
+      position: relative; display: inline-block; margin-top: 10px;
+      border-radius: var(--radius); overflow: hidden; border: 1px solid var(--color-border);
+    }
+    .image-preview-wrap img { display: block; max-width: 100%; max-height: 280px; object-fit: contain; background: var(--color-bg); }
+    .image-remove {
+      position: absolute; top: 6px; right: 6px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); color: #fff; border: none;
+      font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .image-remove:hover { background: rgba(220,38,38,0.8); }
+    .image-error { color: #ef4444; font-size: 0.8rem; margin-top: 6px; font-weight: 600; }
+
+    /* Post image */
+    .post-image { margin-top: 12px; border-radius: var(--radius); overflow: hidden; }
+    .post-image img { display: block; max-width: 100%; max-height: 400px; object-fit: contain; background: var(--color-bg); border-radius: var(--radius); }
+
     /* Login prompt */
     .login-prompt {
       background: var(--color-white); border: 1px solid var(--color-border);
@@ -168,6 +197,7 @@
         <li><span class="rule-icon">&#128272;</span><div><strong>Protect Your Privacy</strong> — Never share personal information like your full name, address, phone number, school name, or passwords.</div></li>
         <li><span class="rule-icon">&#128218;</span><div><strong>Keep It Educational</strong> — Posts should be about learning, courses, study tips, or questions. This is not a social media chat room.</div></li>
         <li><span class="rule-icon">&#128683;</span><div><strong>No Inappropriate Content</strong> — No profanity, violent content, sexual content, or anything unsuitable for all ages.</div></li>
+        <li><span class="rule-icon">&#128247;</span><div><strong>Education-Only Images</strong> — Only upload screenshots of your work, notes, diagrams, math problems, or study materials. No selfies, pets, memes, or non-educational photos.</div></li>
         <li><span class="rule-icon">&#128226;</span><div><strong>No Spam or Advertising</strong> — Do not post links, promotions, or repetitive messages.</div></li>
         <li><span class="rule-icon">&#9878;</span><div><strong>No Cheating or Sharing Answers</strong> — Help others understand, don't just give away answers.</div></li>
         <li><span class="rule-icon">&#127919;</span><div><strong>Stay On Topic</strong> — Use the correct category for your post. Off-topic posts may be removed.</div></li>
@@ -291,6 +321,15 @@
               <option value="discussion">Discussion</option>
             </select>
             <textarea class="post-textarea" id="postText" placeholder="What are you learning today?" maxlength="500"></textarea>
+            <div class="image-upload-row">
+              <label class="image-upload-label">
+                &#128247; Add Image
+                <input type="file" id="postImage" accept="image/png,image/jpeg,image/webp">
+              </label>
+              <span class="image-hint">Screenshots, notes, diagrams only (max 2 MB)</span>
+            </div>
+            <div id="imagePreview"></div>
+            <div id="imageError"></div>
             <div class="post-actions">
               <span class="char-count"><span id="charCount">0</span>/500</span>
               <button class="post-submit" id="postSubmit">Post</button>
@@ -301,6 +340,7 @@
         textarea.addEventListener('input', () => {
           charCount.textContent = textarea.value.length;
         });
+        document.getElementById('postImage').addEventListener('change', handleImageSelect);
         document.getElementById('postSubmit').addEventListener('click', submitPost);
       } else {
         section.innerHTML = `
@@ -312,6 +352,62 @@
       loadPosts();
     });
 
+    let pendingImageData = null;
+
+    function handleImageSelect(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('imagePreview');
+      const error = document.getElementById('imageError');
+      error.innerHTML = '';
+      preview.innerHTML = '';
+      pendingImageData = null;
+      if (!file) return;
+
+      // Validate file type
+      const allowed = ['image/png', 'image/jpeg', 'image/webp'];
+      if (!allowed.includes(file.type)) {
+        error.innerHTML = '<p class="image-error">Only PNG, JPG, and WebP images are allowed.</p>';
+        e.target.value = '';
+        return;
+      }
+      // Validate file size (2 MB max)
+      if (file.size > 2 * 1024 * 1024) {
+        error.innerHTML = '<p class="image-error">Image must be under 2 MB.</p>';
+        e.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        // Resize image to max 800px wide to keep Firestore doc small
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height;
+          if (w > 800) { h = Math.round(h * 800 / w); w = 800; }
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          pendingImageData = canvas.toDataURL('image/jpeg', 0.7);
+          preview.innerHTML = `
+            <div class="image-preview-wrap">
+              <img src="${pendingImageData}" alt="Preview">
+              <button class="image-remove" onclick="removeImage()" title="Remove">&times;</button>
+            </div>`;
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    window.removeImage = function() {
+      pendingImageData = null;
+      const preview = document.getElementById('imagePreview');
+      if (preview) preview.innerHTML = '';
+      const input = document.getElementById('postImage');
+      if (input) input.value = '';
+    };
+
     async function submitPost() {
       const text = document.getElementById('postText').value.trim();
       const category = document.getElementById('postCategory').value;
@@ -322,7 +418,7 @@
       try {
         const { db } = await import('./js/firebase-config.js');
         const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        await addDoc(collection(db, 'posts'), {
+        const postData = {
           uid: currentUser.uid,
           displayName: userProfile?.displayName || 'Anonymous',
           color: userProfile?.color || 'blue',
@@ -331,9 +427,17 @@
           likes: 0,
           likedBy: [],
           createdAt: serverTimestamp()
-        });
+        };
+        if (pendingImageData) {
+          postData.image = pendingImageData;
+        }
+        await addDoc(collection(db, 'posts'), postData);
         document.getElementById('postText').value = '';
         document.getElementById('charCount').textContent = '0';
+        pendingImageData = null;
+        document.getElementById('imagePreview').innerHTML = '';
+        const input = document.getElementById('postImage');
+        if (input) input.value = '';
         loadPosts();
       } catch(e) {
         console.error('Post failed:', e);
@@ -380,6 +484,7 @@
               <span class="post-category-tag" style="background:${catColor}">${catLabel}</span>
             </div>
             <div class="post-body">${sanitizeHTML(post.text)}</div>
+            ${post.image ? `<div class="post-image"><img src="${post.image}" alt="Study image" loading="lazy"></div>` : ''}
             <div class="post-footer">
               <button class="post-action-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
                 ${liked ? '&#10084;' : '&#9825;'} ${post.likes || 0}
