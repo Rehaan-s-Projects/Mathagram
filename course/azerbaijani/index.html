@@ -68,12 +68,12 @@
     });
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = new Set();
+      let completed = await getCompletedLessons('azerbaijani');
+      renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('azerbaijani');
+        completed = await getCompletedLessons('azerbaijani');
         renderPath(container, lessons, completed);
       });
-      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>

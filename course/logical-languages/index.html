@@ -48,12 +48,12 @@
     const lessons = [{"id": "sets-and-members", "title": "Sets & Members", "unit": "Set Theory", "href": "#"}, {"id": "venn-diagrams", "title": "Venn Diagrams", "unit": "Set Theory", "href": "#"}, {"id": "union-and-intersection", "title": "Union & Intersection", "unit": "Set Theory", "href": "#"}, {"id": "complement-and-difference", "title": "Complement & Difference", "unit": "Set Theory", "href": "#"}, {"id": "set-theory-checkpoint", "title": "Set Theory Checkpoint", "unit": "Set Theory", "href": "#", "checkpoint": true}, {"id": "propositional-logic", "title": "Propositional Logic", "unit": "Formal Logic", "href": "#"}, {"id": "truth-tables", "title": "Truth Tables", "unit": "Formal Logic", "href": "#"}, {"id": "logical-connectives", "title": "Logical Connectives", "unit": "Formal Logic", "href": "#"}, {"id": "quantifiers", "title": "Quantifiers", "unit": "Formal Logic", "href": "#"}, {"id": "formal-logic-checkpoint", "title": "Formal Logic Checkpoint", "unit": "Formal Logic", "href": "#", "checkpoint": true}, {"id": "argument-structure", "title": "Argument Structure", "unit": "Argumentation", "href": "#"}, {"id": "valid-vs-sound", "title": "Valid vs Sound", "unit": "Argumentation", "href": "#"}, {"id": "proof-techniques", "title": "Proof Techniques", "unit": "Argumentation", "href": "#"}, {"id": "symbolic-reasoning", "title": "Symbolic Reasoning", "unit": "Argumentation", "href": "#"}, {"id": "logical-languages-mastery", "title": "Logical Languages Mastery!", "unit": "Argumentation", "href": "#", "checkpoint": true}];
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = new Set();
+      let completed = await getCompletedLessons('logical-languages');
+      renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('logical-languages');
+        completed = await getCompletedLessons('logical-languages');
         renderPath(container, lessons, completed);
       });
-      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>

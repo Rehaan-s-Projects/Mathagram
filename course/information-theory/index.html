@@ -48,12 +48,12 @@
     const lessons = [{"id": "what-is-information?", "title": "What Is Information?", "unit": "Foundations", "href": "#"}, {"id": "bits-and-binary", "title": "Bits & Binary", "unit": "Foundations", "href": "#"}, {"id": "entropy", "title": "Entropy", "unit": "Foundations", "href": "#"}, {"id": "information-content", "title": "Information Content", "unit": "Foundations", "href": "#"}, {"id": "foundations-checkpoint", "title": "Foundations Checkpoint", "unit": "Foundations", "href": "#", "checkpoint": true}, {"id": "huffman-coding", "title": "Huffman Coding", "unit": "Compression", "href": "#"}, {"id": "lossless-vs-lossy", "title": "Lossless vs Lossy", "unit": "Compression", "href": "#"}, {"id": "run-length-and-lzw", "title": "Run-Length & LZW", "unit": "Compression", "href": "#"}, {"id": "data-compression-limits", "title": "Data Compression Limits", "unit": "Compression", "href": "#"}, {"id": "compression-checkpoint", "title": "Compression Checkpoint", "unit": "Compression", "href": "#", "checkpoint": true}, {"id": "error-detection", "title": "Error Detection", "unit": "Error Correction", "href": "#"}, {"id": "hamming-codes", "title": "Hamming Codes", "unit": "Error Correction", "href": "#"}, {"id": "channel-capacity", "title": "Channel Capacity", "unit": "Error Correction", "href": "#"}, {"id": "shannons-theorems", "title": "Shannon's Theorems", "unit": "Error Correction", "href": "#"}, {"id": "information-theory-mastery", "title": "Information Theory Mastery!", "unit": "Error Correction", "href": "#", "checkpoint": true}];
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = new Set();
+      let completed = await getCompletedLessons('information-theory');
+      renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('information-theory');
+        completed = await getCompletedLessons('information-theory');
         renderPath(container, lessons, completed);
       });
-      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>

@@ -178,20 +178,44 @@ function injectSkillNodes(lessons) {
 }
 
 /**
- * Get completed lesson IDs for a user from Firestore.
+ * Get completed lesson IDs for a user from Firestore + local session.
+ * Merges Firebase progress (logged in) with sessionStorage (Incognito).
  */
 export async function getCompletedLessons(courseId) {
+  const ids = new Set();
+
+  // Always check local session completions (works in Incognito)
+  try {
+    const local = JSON.parse(sessionStorage.getItem('mathagram_completed_' + courseId) || '[]');
+    local.forEach(id => ids.add(id));
+  } catch(e) {}
+
+  // Also check Firebase if logged in
   try {
     const { auth } = await import('./firebase-config.js');
     const { db } = await import('./firebase-config.js');
     const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const user = auth.currentUser;
-    if (!user) return new Set();
-    const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
-    const ids = new Set();
-    snap.forEach(doc => ids.add(doc.id));
-    return ids;
-  } catch (e) {
-    return new Set();
-  }
+    if (user) {
+      const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
+      snap.forEach(doc => ids.add(doc.id));
+    }
+  } catch (e) {}
+
+  return ids;
+}
+
+/**
+ * Mark a lesson as completed in sessionStorage (for Incognito / no-login).
+ * Called from showLessonComplete in exercises.js.
+ */
+export function markLessonLocalComplete(courseId, lessonId) {
+  try {
+    const key = 'mathagram_completed_' + courseId;
+    const local = JSON.parse(sessionStorage.getItem(key) || '[]');
+    if (!local.includes(lessonId)) {
+      local.push(lessonId);
+      sessionStorage.setItem(key, JSON.stringify(local));
+    }
+  } catch(e) {}
 }

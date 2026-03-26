@@ -48,12 +48,12 @@
     const lessons = [{"id": "fingerspelling", "title": "Fingerspelling", "unit": "Basics", "href": "#"}, {"id": "greetings", "title": "Greetings", "unit": "Basics", "href": "#"}, {"id": "numbers", "title": "Numbers", "unit": "Basics", "href": "#", "checkpoint": true}, {"id": "nouns-and-articles", "title": "Nouns & Articles", "unit": "Grammar", "href": "#"}, {"id": "pronouns", "title": "Pronouns", "unit": "Grammar", "href": "#"}, {"id": "basic-sentences", "title": "Basic Sentences", "unit": "Grammar", "href": "#", "checkpoint": true}, {"id": "present-tense", "title": "Present Tense", "unit": "Verbs", "href": "#"}, {"id": "past-tense", "title": "Past Tense", "unit": "Verbs", "href": "#"}, {"id": "future-tense", "title": "Future Tense", "unit": "Verbs", "href": "#", "checkpoint": true}, {"id": "food-and-drink", "title": "Food & Drink", "unit": "Daily Life", "href": "#"}, {"id": "shopping", "title": "Shopping", "unit": "Daily Life", "href": "#"}, {"id": "travel", "title": "Travel", "unit": "Daily Life", "href": "#", "checkpoint": true}, {"id": "deaf-culture", "title": "Deaf Culture", "unit": "Fluency", "href": "#"}, {"id": "conversation", "title": "Conversation", "unit": "Fluency", "href": "#"}, {"id": "arabic-sign-language-mastery", "title": "Arabic Sign Language Mastery!", "unit": "Fluency", "href": "#", "checkpoint": true}];
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = new Set();
+      let completed = await getCompletedLessons('arabic-sign-language');
+      renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('arabic-sign-language');
+        completed = await getCompletedLessons('arabic-sign-language');
         renderPath(container, lessons, completed);
       });
-      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>

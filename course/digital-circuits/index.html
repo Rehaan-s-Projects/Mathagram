@@ -48,12 +48,12 @@
     const lessons = [{"id": "binary-numbers", "title": "Binary Numbers", "unit": "Binary Basics", "href": "#"}, {"id": "boolean-logic", "title": "Boolean Logic", "unit": "Binary Basics", "href": "#"}, {"id": "and-or-not-gates", "title": "AND, OR, NOT Gates", "unit": "Binary Basics", "href": "#"}, {"id": "xor-and-nand-gates", "title": "XOR & NAND Gates", "unit": "Binary Basics", "href": "#"}, {"id": "logic-gates-checkpoint", "title": "Logic Gates Checkpoint", "unit": "Binary Basics", "href": "#", "checkpoint": true}, {"id": "binary-addition", "title": "Binary Addition", "unit": "Arithmetic", "href": "#"}, {"id": "half-and-full-adders", "title": "Half & Full Adders", "unit": "Arithmetic", "href": "#"}, {"id": "subtraction-and-complements", "title": "Subtraction & Complements", "unit": "Arithmetic", "href": "#"}, {"id": "multiplexers", "title": "Multiplexers", "unit": "Arithmetic", "href": "#"}, {"id": "arithmetic-checkpoint", "title": "Arithmetic Checkpoint", "unit": "Arithmetic", "href": "#", "checkpoint": true}, {"id": "flip-flops-and-latches", "title": "Flip-Flops & Latches", "unit": "Sequential Logic", "href": "#"}, {"id": "counters-and-registers", "title": "Counters & Registers", "unit": "Sequential Logic", "href": "#"}, {"id": "memory-and-storage", "title": "Memory & Storage", "unit": "Sequential Logic", "href": "#"}, {"id": "cpu-fundamentals", "title": "CPU Fundamentals", "unit": "Sequential Logic", "href": "#"}, {"id": "digital-circuits-mastery", "title": "Digital Circuits Mastery!", "unit": "Sequential Logic", "href": "#", "checkpoint": true}];
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = new Set();
+      let completed = await getCompletedLessons('digital-circuits');
+      renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('digital-circuits');
+        completed = await getCompletedLessons('digital-circuits');
         renderPath(container, lessons, completed);
       });
-      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>

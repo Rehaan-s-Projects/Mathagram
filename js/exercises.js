@@ -41,6 +41,14 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
   const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
   const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
 
+  // Always mark locally so next lesson unlocks (works in Incognito)
+  if (courseId && lessonId) {
+    try {
+      const { markLessonLocalComplete } = await import('./learning-path.js');
+      markLessonLocalComplete(courseId, lessonId);
+    } catch(e) {}
+  }
+
   // Check if user is logged in
   let isLoggedIn = false;
   try {

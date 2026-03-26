@@ -63,13 +63,12 @@
       });
     });
     const container = document.getElementById('learning-path');
-    renderPath(container, lessons, new Set());
+    const initialCompleted = await getCompletedLessons('logic-deduction');
+    renderPath(container, lessons, initialCompleted);
     try {
       onAuthChange(async (user) => {
-        if (user) {
-          const completed = await getCompletedLessons('logic-deduction');
-          renderPath(container, lessons, completed);
-        }
+        const completed = await getCompletedLessons('logic-deduction');
+        renderPath(container, lessons, completed);
       });
     } catch(e) {}
   </script>

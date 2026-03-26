@@ -48,12 +48,12 @@
     const lessons = [{"id": "physics-brain-teasers", "title": "Physics Brain Teasers", "unit": "Physics Puzzles", "href": "#"}, {"id": "motion-and-forces", "title": "Motion & Forces", "unit": "Physics Puzzles", "href": "#"}, {"id": "energy-riddles", "title": "Energy Riddles", "unit": "Physics Puzzles", "href": "#"}, {"id": "wave-puzzles", "title": "Wave Puzzles", "unit": "Physics Puzzles", "href": "#"}, {"id": "physics-checkpoint", "title": "Physics Checkpoint", "unit": "Physics Puzzles", "href": "#", "checkpoint": true}, {"id": "element-mysteries", "title": "Element Mysteries", "unit": "Chemistry Puzzles", "href": "#"}, {"id": "reaction-challenges", "title": "Reaction Challenges", "unit": "Chemistry Puzzles", "href": "#"}, {"id": "molecular-puzzles", "title": "Molecular Puzzles", "unit": "Chemistry Puzzles", "href": "#"}, {"id": "ph-and-solutions", "title": "pH & Solutions", "unit": "Chemistry Puzzles", "href": "#"}, {"id": "chemistry-checkpoint", "title": "Chemistry Checkpoint", "unit": "Chemistry Puzzles", "href": "#", "checkpoint": true}, {"id": "cell-challenges", "title": "Cell Challenges", "unit": "Biology Puzzles", "href": "#"}, {"id": "genetics-riddles", "title": "Genetics Riddles", "unit": "Biology Puzzles", "href": "#"}, {"id": "ecology-puzzles", "title": "Ecology Puzzles", "unit": "Biology Puzzles", "href": "#"}, {"id": "evolution-brain-teasers", "title": "Evolution Brain Teasers", "unit": "Biology Puzzles", "href": "#"}, {"id": "science-puzzles-mastery", "title": "Science Puzzles Mastery!", "unit": "Biology Puzzles", "href": "#", "checkpoint": true}];
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = new Set();
+      let completed = await getCompletedLessons('science-puzzles');
+      renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        if (user) completed = await getCompletedLessons('science-puzzles');
+        completed = await getCompletedLessons('science-puzzles');
         renderPath(container, lessons, completed);
       });
-      renderPath(container, lessons, completed);
     }
     loadPath();
   </script>

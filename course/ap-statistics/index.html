@@ -88,15 +88,13 @@
 
     // Render path immediately (don't wait for auth)
     const container = document.getElementById('learning-path');
-    renderPath(container, lessons, new Set());
-
+    const initialCompleted = await getCompletedLessons('ap-statistics');
+    renderPath(container, lessons, initialCompleted);
     // Then try to load progress if logged in
     try {
       onAuthChange(async (user) => {
-        if (user) {
-          const completed = await getCompletedLessons('ap-statistics');
-          renderPath(container, lessons, completed);
-        }
+        const completed = await getCompletedLessons('ap-statistics');
+        renderPath(container, lessons, completed);
       });
     } catch(e) {
       // Auth failed — path already rendered, just continue

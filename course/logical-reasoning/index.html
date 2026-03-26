@@ -57,13 +57,12 @@ units.forEach(([u, name, titles]) => {
   });
 });
 const container = document.getElementById('learning-path');
-renderPath(container, lessons, new Set());
+const initialCompleted = await getCompletedLessons('logical-reasoning');
+renderPath(container, lessons, initialCompleted);
 try {
   onAuthChange(async (user) => {
-    if (user) {
-      const completed = await getCompletedLessons('logical-reasoning');
-      renderPath(container, lessons, completed);
-    }
+    const completed = await getCompletedLessons('logical-reasoning');
+    renderPath(container, lessons, completed);
   });
 } catch(e) {}
 </script>
