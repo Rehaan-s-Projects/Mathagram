@@ -259,11 +259,26 @@
 
         if (auth.currentUser) {
           const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
-          if (userDoc.exists() && userDoc.data().banned) {
-            await signOut(auth);
-            signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Terminated</strong><br>This account has been permanently banned for violating our Community Safety Rules. You cannot sign in.';
-            signinError.classList.add('show');
-            return;
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            // Strike 3 — permanent ban
+            if (data.banned) {
+              await signOut(auth);
+              signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Terminated</strong><br>This account has been permanently banned for violating our Community Safety Rules. You cannot sign in.';
+              signinError.classList.add('show');
+              return;
+            }
+            // Strike 2 — suspended
+            if (data.suspended && data.suspendedUntil) {
+              const until = new Date(data.suspendedUntil.seconds ? data.suspendedUntil.seconds * 1000 : data.suspendedUntil);
+              if (until > new Date()) {
+                await signOut(auth);
+                const days = Math.ceil((until - new Date()) / 86400000);
+                signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Suspended</strong><br>Your account is suspended for ' + days + ' more day' + (days === 1 ? '' : 's') + ' due to a second violation. You cannot sign in until the suspension ends.';
+                signinError.classList.add('show');
+                return;
+              }
+            }
           }
         }
 

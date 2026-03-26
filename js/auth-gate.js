@@ -65,13 +65,32 @@ import('./firebase-config.js').then(({ auth, db }) => {
   ]).then(([authMod, fireMod]) => {
     authMod.onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Check if user is banned
+        // Check if user is banned or suspended
         try {
           const userDoc = await fireMod.getDoc(fireMod.doc(db, 'users', user.uid));
-          if (userDoc.exists() && userDoc.data().banned) {
-            const reason = userDoc.data().banReason || 'Violation of Community Safety Rules';
-            window.location.href = basePath + 'banned.html?reason=' + encodeURIComponent(reason);
-            return;
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            const reason = data.banReason || 'Violation of Community Safety Rules';
+            // Strike 3 — permanent ban
+            if (data.banned) {
+              window.location.href = basePath + 'violation.html?strike=3&reason=' + encodeURIComponent(reason);
+              return;
+            }
+            // Strike 2 — suspended for 1 week
+            if (data.suspended && data.suspendedUntil) {
+              const until = new Date(data.suspendedUntil.seconds ? data.suspendedUntil.seconds * 1000 : data.suspendedUntil);
+              if (until > new Date()) {
+                window.location.href = basePath + 'violation.html?strike=2&reason=' + encodeURIComponent(reason) + '&until=' + encodeURIComponent(until.toISOString());
+                return;
+              }
+            }
+            // Strike 1 — check if user needs to see warning (unseenWarning flag)
+            if (data.strikes >= 1 && data.unseenWarning) {
+              window.location.href = basePath + 'violation.html?strike=1&reason=' + encodeURIComponent(reason);
+              // Clear the unseen flag
+              try { await fireMod.updateDoc(fireMod.doc(db, 'users', user.uid), { unseenWarning: false }); } catch(e) {}
+              return;
+            }
           }
         } catch(e) {}
         overlay.classList.add('hidden');

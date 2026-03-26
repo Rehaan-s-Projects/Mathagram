@@ -36,15 +36,30 @@ export function initNav(basePath = '') {
     const userNav = navLinks.querySelector('[data-auth="user"]');
 
     if (user) {
-      // Check if user is banned
+      // Check if user is banned or suspended
       try {
         const { db } = await import('./firebase-config.js');
-        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const { doc, getDoc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
         const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists() && userDoc.data().banned) {
-          const reason = userDoc.data().banReason || 'Violation of Community Safety Rules';
-          window.location.href = basePath + 'banned.html?reason=' + encodeURIComponent(reason);
-          return;
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          const reason = data.banReason || 'Violation of Community Safety Rules';
+          if (data.banned) {
+            window.location.href = basePath + 'violation.html?strike=3&reason=' + encodeURIComponent(reason);
+            return;
+          }
+          if (data.suspended && data.suspendedUntil) {
+            const until = new Date(data.suspendedUntil.seconds ? data.suspendedUntil.seconds * 1000 : data.suspendedUntil);
+            if (until > new Date()) {
+              window.location.href = basePath + 'violation.html?strike=2&reason=' + encodeURIComponent(reason) + '&until=' + encodeURIComponent(until.toISOString());
+              return;
+            }
+          }
+          if (data.strikes >= 1 && data.unseenWarning) {
+            try { await updateDoc(doc(db, 'users', user.uid), { unseenWarning: false }); } catch(e) {}
+            window.location.href = basePath + 'violation.html?strike=1&reason=' + encodeURIComponent(reason);
+            return;
+          }
         }
       } catch(e) {}
 
