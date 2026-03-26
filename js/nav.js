@@ -36,6 +36,18 @@ export function initNav(basePath = '') {
     const userNav = navLinks.querySelector('[data-auth="user"]');
 
     if (user) {
+      // Check if user is banned
+      try {
+        const { db } = await import('./firebase-config.js');
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists() && userDoc.data().banned) {
+          const reason = userDoc.data().banReason || 'Violation of Community Safety Rules';
+          window.location.href = basePath + 'banned.html?reason=' + encodeURIComponent(reason);
+          return;
+        }
+      } catch(e) {}
+
       // Hide login/signup
       if (loginLink) loginLink.style.display = 'none';
       if (signupLink) signupLink.style.display = 'none';

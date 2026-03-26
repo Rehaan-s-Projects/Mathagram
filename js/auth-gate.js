@@ -57,11 +57,23 @@ overlay.innerHTML = `
 `;
 document.body.appendChild(overlay);
 
-// Check auth state
-import('./firebase-config.js').then(({ auth }) => {
-  import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({ onAuthStateChanged }) => {
-    onAuthStateChanged(auth, (user) => {
+// Check auth state and ban status
+import('./firebase-config.js').then(({ auth, db }) => {
+  Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
+  ]).then(([authMod, fireMod]) => {
+    authMod.onAuthStateChanged(auth, async (user) => {
       if (user) {
+        // Check if user is banned
+        try {
+          const userDoc = await fireMod.getDoc(fireMod.doc(db, 'users', user.uid));
+          if (userDoc.exists() && userDoc.data().banned) {
+            const reason = userDoc.data().banReason || 'Violation of Community Safety Rules';
+            window.location.href = basePath + 'banned.html?reason=' + encodeURIComponent(reason);
+            return;
+          }
+        } catch(e) {}
         overlay.classList.add('hidden');
       } else {
         overlay.classList.remove('hidden');
@@ -69,6 +81,5 @@ import('./firebase-config.js').then(({ auth }) => {
     });
   });
 }).catch(() => {
-  // Firebase failed — show gate
   overlay.classList.remove('hidden');
 });
