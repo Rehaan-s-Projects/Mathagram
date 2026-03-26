@@ -250,6 +250,23 @@
 
       try {
         await signIn(email, password);
+
+        // Check if account is banned before allowing access
+        const { db } = await import('./js/firebase-config.js');
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const { auth } = await import('./js/firebase-config.js');
+        const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+
+        if (auth.currentUser) {
+          const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
+          if (userDoc.exists() && userDoc.data().banned) {
+            await signOut(auth);
+            signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Terminated</strong><br>This account has been permanently banned for violating our Community Safety Rules. You cannot sign in.';
+            signinError.classList.add('show');
+            return;
+          }
+        }
+
         window.location.href = 'profile.html';
       } catch (err) {
         signinError.textContent = err.message;
@@ -278,9 +295,20 @@
       }
     });
 
-    // Redirect if already logged in
-    onAuthChange(user => {
+    // Redirect if already logged in (but not if banned)
+    onAuthChange(async (user) => {
       if (user) {
+        try {
+          const { db } = await import('./js/firebase-config.js');
+          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists() && userDoc.data().banned) {
+            const { auth } = await import('./js/firebase-config.js');
+            const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+            await signOut(auth);
+            return;
+          }
+        } catch(e) {}
         window.location.href = 'profile.html';
       }
     });
