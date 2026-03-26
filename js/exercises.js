@@ -139,6 +139,7 @@ function showFeedbackBanner(container, isCorrect, correctAnswer) {
   banner.appendChild(icon);
   banner.appendChild(msg);
   container.appendChild(banner);
+  renderMath(banner);
 }
 
 /* ============================================================
@@ -153,6 +154,30 @@ function el(tag, className, text) {
   return e;
 }
 
+/** Create an element with innerHTML (for content that may contain math). */
+function elHtml(tag, className, html) {
+  const e = document.createElement(tag);
+  if (className) e.className = className;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+}
+
+/** Render KaTeX math in a container (call after dynamic content is added). */
+function renderMath(container) {
+  if (typeof renderMathInElement === 'function') {
+    try {
+      renderMathInElement(container, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '\\[', right: '\\]', display: true }
+        ],
+        throwOnError: false
+      });
+    } catch(e) {}
+  }
+}
+
 /* ============================================================
    Type-specific renderers
    ============================================================ */
@@ -164,7 +189,7 @@ function el(tag, className, text) {
 function renderMultipleChoice(container, exercise, onAnswer) {
   const grid = el("div", "mc-options");
   exercise.options.forEach((option, i) => {
-    const btn = el("button", "mc-option", option);
+    const btn = elHtml("button", "mc-option", sanitizeHTML(option));
     btn.type = "button";
     btn.addEventListener("click", () => {
       // Disable all buttons
@@ -206,7 +231,7 @@ function renderMatching(container, exercise, onAnswer) {
     .sort(() => Math.random() - 0.5);
 
   exercise.pairs.forEach((pair, i) => {
-    const leftItem = el("div", "match-item", pair.left);
+    const leftItem = elHtml("div", "match-item", sanitizeHTML(pair.left));
     leftItem.dataset.index = i;
     leftItem.addEventListener("click", () => {
       if (leftItem.classList.contains("matched")) return;
@@ -219,7 +244,7 @@ function renderMatching(container, exercise, onAnswer) {
   });
 
   shuffledRight.forEach((right) => {
-    const rightItem = el("div", "match-item", right);
+    const rightItem = elHtml("div", "match-item", sanitizeHTML(right));
     rightItem.addEventListener("click", () => {
       if (!selectedLeft || rightItem.classList.contains("matched")) return;
       const leftIdx = Number(selectedLeft.dataset.index);
@@ -269,12 +294,13 @@ function renderFillBlank(container, exercise, onAnswer) {
     input.disabled = true;
     btn.disabled = true;
     if (!correct) {
-      const reveal = el(
+      const reveal = elHtml(
         "div",
         "fill-blank-reveal",
-        "Correct answer: " + exercise.answer
+        "Correct answer: " + sanitizeHTML(exercise.answer)
       );
       container.appendChild(reveal);
+      renderMath(reveal);
     }
     onAnswer(correct);
   }
@@ -305,7 +331,7 @@ function renderOrdering(container, exercise, onAnswer) {
     items.forEach((text, i) => {
       const row = el("div", "ordering-item");
       const num = el("span", "ordering-num", String(i + 1));
-      const label = el("span", "ordering-label", text);
+      const label = elHtml("span", "ordering-label", sanitizeHTML(text));
       const arrows = el("span", "ordering-arrows");
 
       const up = el("button", "ordering-arrow", "\u25B2");
@@ -331,6 +357,7 @@ function renderOrdering(container, exercise, onAnswer) {
       row.appendChild(arrows);
       list.appendChild(row);
     });
+    renderMath(list);
   }
 
   rebuild();
@@ -453,6 +480,9 @@ export function renderExercise(container, exercise, onAnswer) {
       el("p", "exercise-error", "Unknown exercise type: " + exercise.type)
     );
   }
+
+  // Render KaTeX math in all dynamic content
+  renderMath(container);
 }
 
 /**
