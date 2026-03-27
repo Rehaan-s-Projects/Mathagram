@@ -151,7 +151,6 @@
   <script type="module">
     import { initNav } from '../../js/nav.js';
     initNav('../../');
-    import { initLessonReader } from '../../js/lesson-reader.js';
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
@@ -170,13 +169,18 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Initialize Duolingo-style character readers
-    initLessonReader('../../');
 
     // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
+      {
+        type: 'listening',
+        spokenText: 'What is the limit of 3 x squared minus 1, as x approaches 2?',
+        character: 'diego',
+        options: ['11', '5', '12', '9'],
+        correctIndex: 0
+      },
       {
         type: 'multiple-choice',
         question: 'What is \\(\\displaystyle\\lim_{x \\to 2} (3x^2 - 1)\\)?',
@@ -184,18 +188,34 @@
         correctIndex: 0
       },
       {
+        type: 'listening',
+        spokenText: 'The limit of the square root of x, as x approaches 4. What is the answer?',
+        character: 'gosia',
+        answerType: 'fill-blank',
+        answer: '2'
+      },
+      {
         type: 'fill-blank',
         question: '\\(\\displaystyle\\lim_{x \\to 4} \\sqrt{x} = \\) ___',
         answer: '2'
       },
       {
-        type: 'true-false',
-        question: 'You can always evaluate a limit by direct substitution.',
+        type: 'listening',
+        spokenText: 'True or false: You can always evaluate a limit by direct substitution.',
+        character: 'william',
+        answerType: 'true-false',
         correctAnswer: false
       },
       {
         type: 'multiple-choice',
         question: 'What is \\(\\displaystyle\\lim_{x \\to 0} e^x\\)?',
+        options: ['0', '1', 'e', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        spokenText: 'What is the limit of e to the x, as x approaches zero? Choose from: zero, one, e, or undefined.',
+        character: 'edam',
         options: ['0', '1', 'e', 'undefined'],
         correctIndex: 1
       },
@@ -210,8 +230,10 @@
         ]
       },
       {
-        type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to -1} (x^2 + 2x + 1) = \\) ___',
+        type: 'listening',
+        spokenText: 'The limit as x approaches negative 1 of x squared plus 2 x plus 1. What does it equal?',
+        character: 'rita',
+        answerType: 'fill-blank',
         answer: '0'
       }
     ];

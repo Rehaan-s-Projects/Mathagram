@@ -423,6 +423,113 @@ function renderVisual(container, exercise, onAnswer) {
   renderMultipleChoice(container, exercise, onAnswer);
 }
 
+/**
+ * 7. Listening (Duolingo-style)
+ * A character speaks the question — student must answer without reading it.
+ * exercise.spokenText: string (what the character says)
+ * exercise.character: string (character id, e.g. 'edam')
+ * exercise.options: string[] (answer choices)
+ * exercise.correctIndex: number
+ * Optional: exercise.answerType: 'fill-blank' | 'true-false' (defaults to multiple-choice)
+ */
+function renderListening(container, exercise, onAnswer) {
+  const charIds = ['edam','steve','james','diego','rita','sam','william','gosia'];
+  const charId = exercise.character || charIds[Math.floor(Math.random() * charIds.length)];
+  const charNames = { edam:'Edam', steve:'Steve', james:'James', diego:'Diego', rita:'Rita', sam:'Sam', william:'William', gosia:'Gosia' };
+  const charFiles = { edam:'edam.svg', steve:'steve.svg', james:'james.svg', diego:'diego.svg', rita:'rita.svg', sam:'sam.svg', william:'william.svg', gosia:'gosia.svg' };
+  const voiceSettings = {
+    edam:{pitch:0.8,rate:0.9}, steve:{pitch:1.2,rate:1.15}, james:{pitch:0.6,rate:0.85},
+    diego:{pitch:1.0,rate:1.0}, rita:{pitch:1.8,rate:1.2}, sam:{pitch:1.6,rate:1.3},
+    william:{pitch:0.5,rate:0.75}, gosia:{pitch:1.4,rate:1.05}
+  };
+
+  // Figure out basePath from current URL
+  let basePath = '../../';
+  try {
+    const path = window.location.pathname;
+    const depth = (path.match(/\//g) || []).length - 1;
+    basePath = depth >= 3 ? '../../' : depth >= 2 ? '../' : '';
+  } catch(e) {}
+
+  // Character + play area
+  const listenArea = document.createElement('div');
+  listenArea.className = 'listening-area';
+  listenArea.innerHTML = `
+    <div class="listening-character">
+      <img src="${basePath}assets/characters/${charFiles[charId]}" alt="${charNames[charId]}" class="listening-avatar" id="listen-avatar">
+      <span class="listening-name">${charNames[charId]}</span>
+    </div>
+    <button type="button" class="listening-play-btn" id="listen-play">
+      <span class="play-icon">&#9654;</span> Tap to listen
+    </button>
+    <p class="listening-hint">Listen carefully, then answer below.</p>
+  `;
+  container.appendChild(listenArea);
+
+  const spokenText = exercise.spokenText || exercise.question;
+
+  function speakChar() {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const clean = spokenText
+      .replace(/\\\(.*?\\\)/g, 'math expression')
+      .replace(/\$\$.*?\$\$/g, 'math expression')
+      .replace(/\\displaystyle/g, '')
+      .replace(/\\[a-zA-Z]+/g, '')
+      .replace(/[{}]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (!clean) return;
+
+    const utterance = new SpeechSynthesisUtterance(clean);
+    const vs = voiceSettings[charId] || { pitch: 1.0, rate: 1.0 };
+    utterance.pitch = vs.pitch;
+    utterance.rate = vs.rate;
+    utterance.volume = 0.85;
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      const pref = voices.find(v => v.lang.startsWith('en')) || voices[0];
+      if (pref) utterance.voice = pref;
+    }
+
+    const avatar = document.getElementById('listen-avatar');
+    const playBtn = document.getElementById('listen-play');
+    if (avatar) avatar.classList.add('speaking');
+    if (playBtn) { playBtn.innerHTML = '<span class="play-icon">&#9208;</span> Speaking...'; playBtn.classList.add('active'); }
+
+    utterance.onend = () => {
+      if (avatar) avatar.classList.remove('speaking');
+      if (playBtn) { playBtn.innerHTML = '<span class="play-icon">&#128260;</span> Tap to replay'; playBtn.classList.remove('active'); }
+    };
+    utterance.onerror = () => {
+      if (avatar) avatar.classList.remove('speaking');
+      if (playBtn) { playBtn.innerHTML = '<span class="play-icon">&#128260;</span> Tap to replay'; playBtn.classList.remove('active'); }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Auto-play on load
+  setTimeout(speakChar, 500);
+
+  // Play button
+  const playBtn = document.getElementById('listen-play');
+  if (playBtn) playBtn.addEventListener('click', speakChar);
+  const avatar = document.getElementById('listen-avatar');
+  if (avatar) avatar.addEventListener('click', speakChar);
+
+  // Render answer options based on type
+  const answerType = exercise.answerType || 'multiple-choice';
+  if (answerType === 'fill-blank') {
+    renderFillBlank(container, exercise, onAnswer);
+  } else if (answerType === 'true-false') {
+    renderTrueFalse(container, exercise, onAnswer);
+  } else {
+    renderMultipleChoice(container, exercise, onAnswer);
+  }
+}
+
 /* ============================================================
    Renderer dispatch
    ============================================================ */
@@ -434,6 +541,7 @@ const renderers = {
   ordering: renderOrdering,
   "true-false": renderTrueFalse,
   visual: renderVisual,
+  listening: renderListening,
 };
 
 /* ============================================================
@@ -450,12 +558,15 @@ export function renderExercise(container, exercise, onAnswer) {
   container.innerHTML = "";
   container.classList.add("exercise-container");
 
-  const question = el("div", "exercise-question");
-  question.innerHTML = sanitizeHTML(exercise.question);
-  container.appendChild(question);
+  // For listening exercises, hide the question text — student must listen
+  if (exercise.type !== 'listening') {
+    const question = el("div", "exercise-question");
+    question.innerHTML = sanitizeHTML(exercise.question);
+    container.appendChild(question);
 
-  // Read the question aloud
-  speakQuestion(exercise.question);
+    // Read the question aloud
+    speakQuestion(exercise.question);
+  }
 
   const render = renderers[exercise.type];
   if (render) {
