@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limits at Removable Discontinuities — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+<link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits at Removable Discontinuities</h1>
+
+    <p>
+      Sometimes when you try direct substitution, you get \(\frac{0}{0}\). This is called an <strong>indeterminate form</strong>, and it usually signals a <strong>removable discontinuity</strong> &mdash; a "hole" in the graph.
+    </p>
+
+    <p>
+      A removable discontinuity occurs when a factor cancels from both the numerator and denominator. The function is undefined at that point, but the <strong>limit still exists</strong>.
+    </p>
+
+    <p><strong>Strategy:</strong> Factor, cancel the common factor, then use direct substitution on the simplified expression.</p>
+
+    <p><strong>Example 1:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to 2} \frac{x^2 - 4}{x - 2}$$
+    </div>
+
+    <p>
+      Direct substitution gives \(\frac{0}{0}\). Factor the numerator:
+    </p>
+
+    <div class="math-block">
+      $$\frac{x^2 - 4}{x - 2} = \frac{(x-2)(x+2)}{x-2} = x + 2 \quad (x \neq 2)$$
+    </div>
+
+    <p>
+      Now substitute:
+    </p>
+
+    <div class="math-block">
+      $$\lim_{x \to 2} (x + 2) = 4$$
+    </div>
+
+    <p><strong>Example 2:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to 3} \frac{x^2 - 9}{x - 3} = \lim_{x \to 3} \frac{(x-3)(x+3)}{x-3} = \lim_{x \to 3}(x+3) = 6$$
+    </div>
+
+    <p>
+      The key insight: the limit describes what value the function <strong>approaches</strong>, not what value it equals at that point. Even though \(f(2)\) is undefined, the limit as \(x \to 2\) is perfectly well-defined.
+    </p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    // KaTeX auto-render
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+
+    // Initialize side character
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}\\)?',
+        options: ['2', '4', '0', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to -1} \\frac{x^2 - 1}{x + 1}\\)?',
+        options: ['-2', '0', '2', 'undefined'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3} = \\) ___',
+        answer: '6'
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 5} \\frac{x^2 - 25}{x - 5} = \\) ___',
+        answer: '10'
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f(a)\\) is undefined, then \\(\\displaystyle\\lim_{x \\to a} f(x)\\) must also be undefined.',
+        correctAnswer: false
+      },
+      {
+        type: 'matching',
+        question: 'Match each limit with its value after factoring and canceling.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}\\)', right: '2' },
+          { left: '\\(\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4}\\)', right: '8' },
+          { left: '\\(\\lim_{x \\to -3} \\frac{x^2 - 9}{x + 3}\\)', right: '-6' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{x^2 + 3x}{x}\\)', right: '3' }
+        ]
+      },
+      {
+        type: 'listening',
+        spokenText: 'What is the limit of x squared minus sixteen, divided by x minus four, as x approaches four? Choose from: four, eight, zero, or undefined.',
+        options: ['4', '8', '0', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'When direct substitution gives \\(\\frac{0}{0}\\), this is called:',
+        options: ['An infinite limit', 'An indeterminate form', 'A divergent limit', 'A continuous function'],
+        correctIndex: 1
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, {
+      courseId: 'calculus',
+      lessonId: 'lesson-10',
+      nextHref: 'lesson-11.html',
+      backHref: 'index.html'
+    });
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
+
+</body>
+</html>
