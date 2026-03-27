@@ -52,8 +52,9 @@ export function renderPath(container, lessons, completedIds = new Set()) {
       container.appendChild(header);
     }
 
-    // Determine state
-    const isCompleted = completedIds.has(lesson.id);
+    // Determine state — check by lesson id, href filename, or lesson-N pattern
+    const hrefName = lesson.href && lesson.href !== '#' ? lesson.href.replace('.html','') : '';
+    const isCompleted = completedIds.has(lesson.id) || (hrefName && completedIds.has(hrefName));
     let isCurrent = false;
     let isLocked = false;
 
@@ -125,7 +126,7 @@ function flushRow(container, nodes, rowIndex) {
       nodeEl.innerHTML = `
         <a href="${href}" class="${classes}">${icon}</a>
         <span class="path-label">${n.title}</span>
-        ${n.state === 'completed' ? '<span class="path-stars">⭐⭐⭐</span>' : ''}
+        ${n.state === 'completed' ? '<span class="path-stars">⭐⭐⭐⭐⭐</span>' : ''}
       `;
     }
 
