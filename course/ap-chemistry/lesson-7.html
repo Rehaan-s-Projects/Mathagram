@@ -164,6 +164,7 @@
   <script type="module">
     import { initNav } from '../../js/nav.js';
     initNav('../../');
+    import { initLessonReader } from '../../js/lesson-reader.js';
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
@@ -181,6 +182,9 @@
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize Duolingo-style character readers
+    initLessonReader('../../');
 
     // Initialize side character (Duolingo-style)
     initSideCharacter(randomCharacterId(), '../../');

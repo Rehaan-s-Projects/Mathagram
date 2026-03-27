@@ -60,7 +60,8 @@
 
 <script type="module">
   import { initNav } from '../../js/nav.js'; initNav('../../');
-  import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+  import { initLessonReader } from '../../js/lesson-reader.js';
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
   import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
   document.addEventListener("DOMContentLoaded", function() {
     if (typeof renderMathInElement !== 'undefined') {
@@ -71,6 +72,9 @@
     }
   });
   document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize Duolingo-style character readers
+    initLessonReader('../../');
   initSideCharacter(randomCharacterId(), '../../');
 
   const exercises = [
