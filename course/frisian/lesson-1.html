@@ -78,7 +78,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Goeie! Ik bin Edam. Hoe giet it?</div>
           <div class="dialogue-english">Hello! I am Edam. How's it going?</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Goeie! Ik bin Edam. Hoe giet it?')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Goeie! Ik bin Edam. Hoe giet it?', 'edam')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -90,7 +90,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">It giet goed, tankewol! En mei dy?</div>
           <div class="dialogue-english">It's going well, thank you! And with you?</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'It giet goed, tankewol! En mei dy?')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'It giet goed, tankewol! En mei dy?', 'gosia')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -102,7 +102,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Moarn! Ik bin Steve. Lit ús Frysk leare!</div>
           <div class="dialogue-english">Morning! I'm Steve. Let's learn Frisian!</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Moarn! Ik bin Steve. Lit ús Frysk leare!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Moarn! Ik bin Steve. Lit ús Frysk leare!', 'steve')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -114,7 +114,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Miau! Ik bin Rita. Noflik om kennis te meitsjen!</div>
           <div class="dialogue-english">Meow! I'm Rita. Nice to meet you!</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Miau! Ik bin Rita. Noflik om kennis te meitsjen!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Miau! Ik bin Rita. Noflik om kennis te meitsjen!', 'rita')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -126,7 +126,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Kom op! Ik bin James. Ik bin hiel sterk!</div>
           <div class="dialogue-english">Come on! I'm James. I'm very strong!</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Kom op! Ik bin James. Ik bin hiel sterk!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Kom op! Ik bin James. Ik bin hiel sterk!', 'james')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -138,7 +138,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Bysûnder! Ik bin Diego. Ik hâld fan ûndersykjen.</div>
           <div class="dialogue-english">Remarkable! I'm Diego. I love researching.</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Bysûnder! Ik bin Diego. Ik hâld fan ûndersykjen.')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Bysûnder! Ik bin Diego. Ik hâld fan ûndersykjen.', 'diego')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -150,7 +150,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Wauw! Ik bin Sam. Ik wol sa graach leare!</div>
           <div class="dialogue-english">Wow! I'm Sam. I really want to learn!</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Wauw! Ik bin Sam. Ik wol sa graach leare!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Wauw! Ik bin Sam. Ik wol sa graach leare!', 'sam')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -162,7 +162,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-frisian">Goedemiddei. Ik bin William. Kennis is macht.</div>
           <div class="dialogue-english">Good afternoon. I'm William. Knowledge is power.</div>
-          <button class="dialogue-listen" onclick="speakFrisian(this, 'Goedemiddei. Ik bin William. Kennis is macht.')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Goedemiddei. Ik bin William. Kennis is macht.', 'william')">&#128264; Listen</button>
         </div>
       </div>
     </div>
@@ -219,14 +219,27 @@
     setCharacterLang('fy');
     initSideCharacter(randomCharacterId(), '../../');
 
-    // Speak Frisian (use Dutch voice as closest available)
-    window.speakFrisian = function(btn, text) {
+    // Character voice settings — each has a unique pitch/rate
+    const charVoices = {
+      edam:    { pitch: 0.8,  rate: 0.85 },
+      steve:   { pitch: 1.15, rate: 1.1  },
+      james:   { pitch: 0.55, rate: 0.8  },
+      diego:   { pitch: 0.95, rate: 0.95 },
+      rita:    { pitch: 1.7,  rate: 1.15 },
+      sam:     { pitch: 1.5,  rate: 1.25 },
+      william: { pitch: 0.45, rate: 0.7  },
+      gosia:   { pitch: 1.35, rate: 1.0  }
+    };
+
+    // Speak Frisian with character-specific voice (Dutch voice as closest)
+    window.speakFrisian = function(btn, text, charId) {
       if (!('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
       document.querySelectorAll('.dialogue-listen').forEach(b => { b.classList.remove('speaking'); b.innerHTML = '&#128264; Listen'; });
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.85;
-      utterance.pitch = 1.0;
+      const vs = charVoices[charId] || { pitch: 1.0, rate: 0.9 };
+      utterance.pitch = vs.pitch;
+      utterance.rate = vs.rate;
       utterance.volume = 0.85;
       const voices = window.speechSynthesis.getVoices();
       const voice = voices.find(v => v.lang.startsWith('nl')) || voices.find(v => v.lang.startsWith('de')) || voices.find(v => v.lang.startsWith('en')) || voices[0];

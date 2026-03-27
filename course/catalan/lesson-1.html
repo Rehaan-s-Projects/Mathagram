@@ -225,7 +225,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Hola! Em dic Edam. Com estàs?</div>
           <div class="dialogue-english">Hello! My name is Edam. How are you?</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Hola! Em dic Edam. Com estàs?')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Hola! Em dic Edam. Com estàs?', 'edam')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -237,7 +237,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Estic molt bé, gràcies! I tu?</div>
           <div class="dialogue-english">I'm very well, thanks! And you?</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Estic molt bé, gràcies! I tu?')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Estic molt bé, gràcies! I tu?', 'gosia')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -249,7 +249,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Bon dia! Soc l'Steve. Aprenem català!</div>
           <div class="dialogue-english">Good morning! I'm Steve. Let's learn Catalan!</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Bon dia! Soc l Steve. Aprenem català!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Bon dia! Soc l Steve. Aprenem català!', 'steve')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -261,7 +261,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Miau! Soc la Rita. Encantada!</div>
           <div class="dialogue-english">Meow! I'm Rita. Nice to meet you!</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Miau! Soc la Rita. Encantada!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Miau! Soc la Rita. Encantada!', 'rita')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -273,7 +273,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Endavant! Jo soc en James. Soc molt fort!</div>
           <div class="dialogue-english">Let's go! I'm James. I'm very strong!</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Endavant! Jo soc en James. Soc molt fort!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Endavant! Jo soc en James. Soc molt fort!', 'james')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -285,7 +285,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Fascinant! Soc en Diego. M'agrada investigar.</div>
           <div class="dialogue-english">Fascinating! I'm Diego. I like to investigate.</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Fascinant! Soc en Diego. Magrada investigar.')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Fascinant! Soc en Diego. Magrada investigar.', 'diego')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -297,7 +297,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Uau! Em dic Sam. Tinc moltes ganes d'aprendre!</div>
           <div class="dialogue-english">Wow! My name is Sam. I really want to learn!</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Uau! Em dic Sam. Tinc moltes ganes daprendre!')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Uau! Em dic Sam. Tinc moltes ganes daprendre!', 'sam')">&#128264; Listen</button>
         </div>
       </div>
 
@@ -309,7 +309,7 @@
         <div class="dialogue-bubble">
           <div class="dialogue-catalan">Bona tarda. Soc en William. El coneixement és poder.</div>
           <div class="dialogue-english">Good afternoon. I'm William. Knowledge is power.</div>
-          <button class="dialogue-listen" onclick="speakCatalan(this, 'Bona tarda. Soc en William. El coneixement és poder.')">&#128264; Listen</button>
+          <button class="dialogue-listen" onclick="speakCatalan(this, 'Bona tarda. Soc en William. El coneixement és poder.', 'william')">&#128264; Listen</button>
         </div>
       </div>
     </div>
@@ -371,19 +371,31 @@
     setCharacterLang('ca');
     initSideCharacter(randomCharacterId(), '../../');
 
-    // Speak Catalan text with Catalan voice if available
-    window.speakCatalan = function(btn, text) {
+    // Character voice settings — each has a unique pitch/rate
+    const charVoices = {
+      edam:    { pitch: 0.8,  rate: 0.85 },  // Bear: warm, low
+      steve:   { pitch: 1.15, rate: 1.1  },  // Fox: quick, sly
+      james:   { pitch: 0.55, rate: 0.8  },  // Strong man: deep, powerful
+      diego:   { pitch: 0.95, rate: 0.95 },  // Researcher: calm, measured
+      rita:    { pitch: 1.7,  rate: 1.15 },  // Cat: high, playful
+      sam:     { pitch: 1.5,  rate: 1.25 },  // Kid: high, energetic
+      william: { pitch: 0.45, rate: 0.7  },  // Old man: deep, slow
+      gosia:   { pitch: 1.35, rate: 1.0  }   // Girl: bright, friendly
+    };
+
+    // Speak Catalan text with character-specific voice
+    window.speakCatalan = function(btn, text, charId) {
       if (!('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
-      // Reset all buttons
       document.querySelectorAll('.dialogue-listen').forEach(b => { b.classList.remove('speaking'); b.innerHTML = '&#128264; Listen'; });
 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.85;
-      utterance.pitch = 1.0;
+      const vs = charVoices[charId] || { pitch: 1.0, rate: 0.9 };
+      utterance.pitch = vs.pitch;
+      utterance.rate = vs.rate;
       utterance.volume = 0.85;
 
-      // Try Catalan voice, fallback to Spanish, then any
+      // Try Catalan voice, fallback to Spanish, then English
       const voices = window.speechSynthesis.getVoices();
       const catVoice = voices.find(v => v.lang.startsWith('ca')) ||
                        voices.find(v => v.lang.startsWith('es')) ||
