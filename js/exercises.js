@@ -22,24 +22,18 @@ import { sanitizeHTML, sanitizeAnswer } from "./sanitize.js";
 export async function showLessonComplete(exerciseContainer, completionDiv, score, options = {}) {
   const { courseId, lessonId, nextHref, backHref = 'index.html', basePath = '../../' } = options;
 
-  // Calculate grade locally (no Firebase needed)
-  let grade, stars;
-  if (score >= 97) { grade = 'A+'; stars = 3; }
-  else if (score >= 93) { grade = 'A'; stars = 3; }
-  else if (score >= 90) { grade = 'A-'; stars = 3; }
-  else if (score >= 87) { grade = 'B+'; stars = 2; }
-  else if (score >= 83) { grade = 'B'; stars = 2; }
-  else if (score >= 80) { grade = 'B-'; stars = 2; }
-  else if (score >= 77) { grade = 'C+'; stars = 1; }
-  else if (score >= 73) { grade = 'C'; stars = 1; }
-  else if (score >= 70) { grade = 'C-'; stars = 1; }
-  else if (score >= 67) { grade = 'D+'; stars = 0; }
-  else if (score >= 60) { grade = 'D'; stars = 0; }
-  else { grade = 'F'; stars = 0; }
+  // Calculate stars (5-star system) and XP
+  let stars;
+  if (score >= 95) { stars = 5; }
+  else if (score >= 80) { stars = 4; }
+  else if (score >= 60) { stars = 3; }
+  else if (score >= 40) { stars = 2; }
+  else if (score >= 20) { stars = 1; }
+  else { stars = 0; }
 
-  const xpEarned = score >= 70 ? Math.round(score / 10) * 5 : 0;
-  const gradeClass = grade.startsWith('A') ? 'grade-a' : grade.startsWith('B') ? 'grade-b' : grade.startsWith('C') ? 'grade-c' : grade.startsWith('D') ? 'grade-d' : 'grade-f';
-  const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(3 - stars);
+  // Minimum 25 XP even if all wrong, scales up to 50 XP for perfect
+  const xpEarned = Math.max(25, Math.round(25 + (score / 100) * 25));
+  const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(5 - stars);
 
   // Always mark locally so next lesson unlocks (works in Incognito)
   if (courseId && lessonId) {
@@ -64,8 +58,7 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
     completionDiv.innerHTML = `
       <div class="lesson-complete">
         <h2>Lesson Complete!</h2>
-        <div class="grade-display ${gradeClass}">${grade}</div>
-        <div class="stars">${starStr}</div>
+        <div class="stars" style="font-size:2.5rem; letter-spacing:6px; margin:16px 0;">${starStr}</div>
         <div class="xp-earned">+${xpEarned} XP</div>
         <p class="score-text">You scored ${score}%</p>
         <div class="lesson-nav">
@@ -83,8 +76,7 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
     completionDiv.innerHTML = `
       <div class="lesson-complete">
         <h2>Lesson Complete!</h2>
-        <div class="grade-display ${gradeClass}">${grade}</div>
-        <div class="stars">${starStr}</div>
+        <div class="stars" style="font-size:2.5rem; letter-spacing:6px; margin:16px 0;">${starStr}</div>
         <p class="score-text">You scored ${score}%</p>
         <div style="background:linear-gradient(135deg,#f0fdf4,#ecfdf5); border:1px solid #bbf7d0; border-radius:12px; padding:20px; margin:20px 0; text-align:center;">
           <p style="font-size:1rem; font-weight:700; color:#166534; margin-bottom:4px;">Sign up to save your progress!</p>
