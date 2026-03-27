@@ -67,7 +67,9 @@ if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){c
 if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}); }
 </script>
 <script type="module">
-import { initNav } from '../../js/nav.js'; initNav('../../');
+import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js'; initNav('../../');
+    initRitaChat('../../');
 import { showBuddy, initSideCharacter } from '../../js/characters.js';
 import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
 import { onAuthChange } from '../../js/auth.js';

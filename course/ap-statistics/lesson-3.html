@@ -61,7 +61,9 @@
 <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
 
 <script type="module">
-  import { initNav } from '../../js/nav.js'; initNav('../../');
+  import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js'; initNav('../../');
+    initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
   import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
   document.addEventListener("DOMContentLoaded", function() {
