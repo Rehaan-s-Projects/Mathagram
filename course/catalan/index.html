@@ -101,7 +101,8 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'cat-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+        const playable = {1:'lesson-1.html'};
+        lessons.push({ id: 'cat-'+n, title: t, href: playable[n]||'#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {

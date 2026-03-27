@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Catalan Alphabet — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-language);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .char-intro {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .char-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .char-card img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin-bottom: 8px;
+    }
+    .char-card .cat-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .char-card .cat-says {
+      font-size: 0.82rem;
+      color: var(--color-language);
+      font-style: italic;
+      margin-top: 4px;
+    }
+    .char-card .cat-trans {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+    .vocab-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .vocab-table th, .vocab-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .vocab-table th {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+    }
+    .vocab-table td {
+      font-size: 0.95rem;
+    }
+    .vocab-table .catalan {
+      font-weight: 700;
+      color: var(--color-language);
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Catalan</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Alphabet & Pronunciation</div>
+    <h1>The Catalan Alphabet</h1>
+
+    <p>
+      <strong>Benvingut!</strong> (Welcome!) Catalan is a Romance language spoken by over 10 million people in Catalonia, Valencia, the Balearic Islands, and Andorra. Let's start with the basics.
+    </p>
+
+    <h2>Meet Your Catalan Buddies</h2>
+    <p>Your 8 Mathagram characters will help you learn. Here they are introducing themselves <strong>in Catalan</strong>:</p>
+
+    <div class="char-intro">
+      <div class="char-card">
+        <img src="../../assets/characters/edam.svg" alt="Edam">
+        <div class="cat-name">Edam</div>
+        <div class="cat-says">"Hola! Em dic Edam."</div>
+        <div class="cat-trans">Hi! My name is Edam.</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/steve.svg" alt="Steve">
+        <div class="cat-name">Steve</div>
+        <div class="cat-says">"Bon dia! Soc l'Steve."</div>
+        <div class="cat-trans">Good morning! I'm Steve.</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/james.svg" alt="James">
+        <div class="cat-name">James</div>
+        <div class="cat-says">"Endavant! Soc fort!"</div>
+        <div class="cat-trans">Let's go! I'm strong!</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/diego.svg" alt="Diego">
+        <div class="cat-name">Diego</div>
+        <div class="cat-says">"Fascinant! Investiguem."</div>
+        <div class="cat-trans">Fascinating! Let's investigate.</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/rita.svg" alt="Rita">
+        <div class="cat-name">Rita</div>
+        <div class="cat-says">"Miau! Soc la Rita."</div>
+        <div class="cat-trans">Meow! I'm Rita.</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/sam.svg" alt="Sam">
+        <div class="cat-name">Sam</div>
+        <div class="cat-says">"Uau! Aprenem català!"</div>
+        <div class="cat-trans">Wow! Let's learn Catalan!</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/william.svg" alt="William">
+        <div class="cat-name">William</div>
+        <div class="cat-says">"Bona tarda, jove estudiant."</div>
+        <div class="cat-trans">Good afternoon, young student.</div>
+      </div>
+      <div class="char-card">
+        <img src="../../assets/characters/gosia.svg" alt="Gosia">
+        <div class="cat-name">Gosia</div>
+        <div class="cat-says">"Hola! Estic molt contenta!"</div>
+        <div class="cat-trans">Hello! I'm very happy!</div>
+      </div>
+    </div>
+
+    <h2>Essential Greetings</h2>
+    <table class="vocab-table">
+      <thead>
+        <tr><th>Catalan</th><th>English</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="catalan">Hola</td><td>Hello</td></tr>
+        <tr><td class="catalan">Bon dia</td><td>Good morning</td></tr>
+        <tr><td class="catalan">Bona tarda</td><td>Good afternoon</td></tr>
+        <tr><td class="catalan">Bona nit</td><td>Good night</td></tr>
+        <tr><td class="catalan">Adéu</td><td>Goodbye</td></tr>
+        <tr><td class="catalan">Si us plau</td><td>Please</td></tr>
+        <tr><td class="catalan">Gràcies</td><td>Thank you</td></tr>
+        <tr><td class="catalan">Em dic...</td><td>My name is...</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The Catalan Alphabet</h2>
+    <p>
+      The Catalan alphabet has <strong>26 letters</strong>, just like English. Most letters sound similar, but a few are different:
+    </p>
+    <ul>
+      <li><strong>C</strong> before e/i sounds like "s" (cel = sky)</li>
+      <li><strong>Ç</strong> (c trencada) always sounds like "s" (plaça = square)</li>
+      <li><strong>G</strong> before e/i sounds like "zh" (gent = people)</li>
+      <li><strong>J</strong> sounds like "zh" in "measure" (jardí = garden)</li>
+      <li><strong>NY</strong> sounds like "ñ" in Spanish (any = year)</li>
+      <li><strong>LL</strong> sounds like "y" in some dialects (lluna = moon)</li>
+      <li><strong>X</strong> sounds like "sh" (xocolata = chocolate)</li>
+    </ul>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'How does Edam say "My name is Edam" in Catalan?',
+        options: ['Em dic Edam', 'Jo soc Edam', 'Hola Edam', 'Bon dia Edam'],
+        correctIndex: 0
+      },
+      {
+        type: 'matching',
+        question: 'Match the Catalan greetings with their English meanings.',
+        pairs: [
+          { left: 'Hola', right: 'Hello' },
+          { left: 'Bon dia', right: 'Good morning' },
+          { left: 'Adéu', right: 'Goodbye' },
+          { left: 'Gràcies', right: 'Thank you' }
+        ]
+      },
+      {
+        type: 'fill-blank',
+        question: 'Translate to Catalan: "Please" = ___',
+        answer: 'Si us plau'
+      },
+      {
+        type: 'listening',
+        spokenText: 'Bona tarda. What does bona tarda mean in English? Choose: good morning, good afternoon, good night, or goodbye.',
+        options: ['Good morning', 'Good afternoon', 'Good night', 'Goodbye'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What does the Catalan letter X sound like?',
+        options: ['Like "sh" in "shoe"', 'Like "x" in "box"', 'Like "z" in "zoo"', 'Like "k" in "king"'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'Gosia says "Estic molt contenta" which means "I\'m very sad."',
+        correctAnswer: false
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, {
+      courseId: 'catalan',
+      lessonId: 'lesson-1',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>
