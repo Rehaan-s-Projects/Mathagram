@@ -13,6 +13,12 @@ export const CHARACTERS = {
       wrong: 'No worries, try again!',
       hint: 'Think about it...',
       perfect: 'Absolutely perfect!'
+    },
+    messagesCa: {
+      correct: 'Molt bé! Bona feina!',
+      wrong: 'No passa res, torna-ho a provar!',
+      hint: 'Pensa-hi bé...',
+      perfect: 'Absolutament perfecte!'
     }
   },
   steve: {
@@ -24,6 +30,12 @@ export const CHARACTERS = {
       wrong: 'Tricky one! Give it another shot.',
       hint: 'Hmm, what if you tried...',
       perfect: 'Brilliant! Outsmarted it!'
+    },
+    messagesCa: {
+      correct: 'Jugada astuta, correcte!',
+      wrong: 'Complicat! Prova-ho una altra vegada.',
+      hint: 'Hmm, i si probessis...',
+      perfect: 'Brillant! L\'has superat!'
     }
   },
   james: {
@@ -35,6 +47,12 @@ export const CHARACTERS = {
       wrong: 'Shake it off, try again!',
       hint: 'Power through this one...',
       perfect: 'BEAST MODE! Flawless!'
+    },
+    messagesCa: {
+      correct: 'Endavant! Correcte!',
+      wrong: 'Amunt! Torna-ho a intentar!',
+      hint: 'Força! Tu pots...',
+      perfect: 'MODE BÈSTIA! Impecable!'
     }
   },
   diego: {
@@ -46,6 +64,12 @@ export const CHARACTERS = {
       wrong: 'Interesting... not quite. Retry?',
       hint: 'Consider the data...',
       perfect: 'Remarkable precision!'
+    },
+    messagesCa: {
+      correct: 'Fascinant! Correcte!',
+      wrong: 'Interessant... no del tot. Reintenta?',
+      hint: 'Considera les dades...',
+      perfect: 'Precisió extraordinària!'
     }
   },
   rita: {
@@ -57,6 +81,12 @@ export const CHARACTERS = {
       wrong: 'Nah, try again.',
       hint: 'Hmm, curious...',
       perfect: 'Purrfectly flawless!'
+    },
+    messagesCa: {
+      correct: 'Ronc! Resposta purr-fecta!',
+      wrong: 'Miau... torna-ho a provar.',
+      hint: 'Hmm, curiós...',
+      perfect: 'Purr-fectament impecable!'
     }
   },
   sam: {
@@ -68,6 +98,12 @@ export const CHARACTERS = {
       wrong: 'Oops! One more try!',
       hint: 'Ooh, what about...',
       perfect: 'YESSS! Perfect score!'
+    },
+    messagesCa: {
+      correct: 'Uau! L\'has encertat!',
+      wrong: 'Ui! Un intent més!',
+      hint: 'Oh, i si...',
+      perfect: 'SÍIII! Puntuació perfecta!'
     }
   },
   william: {
@@ -79,6 +115,12 @@ export const CHARACTERS = {
       wrong: 'Patience. Try once more.',
       hint: 'In my experience...',
       perfect: 'Exemplary work, truly.'
+    },
+    messagesCa: {
+      correct: 'Ben fet, jove estudiant.',
+      wrong: 'Paciència. Prova una vegada més.',
+      hint: 'Segons la meva experiència...',
+      perfect: 'Treball exemplar, de veritat.'
     }
   },
   gosia: {
@@ -90,9 +132,18 @@ export const CHARACTERS = {
       wrong: "Almost! You've got this!",
       hint: "Here's a thought...",
       perfect: 'Absolutely stunning!'
+    },
+    messagesCa: {
+      correct: 'Treball increïble!',
+      wrong: 'Gairebé! Tu pots!',
+      hint: 'Una idea...',
+      perfect: 'Absolutament impressionant!'
     }
   }
 };
+
+/** Current language for character messages (default: English) */
+let _charLang = 'en';
 
 /* Map reactions to expression classes */
 const REACTION_MAP = {
@@ -136,10 +187,14 @@ function speak(text, characterId) {
   // Try to pick a fitting system voice
   const voices = window.speechSynthesis.getVoices();
   if (voices.length > 0) {
-    // Prefer female voice for Rita, Gosia, Sam; male for James, William, Edam
+    // Use Catalan/Spanish voice if in Catalan mode
+    const voiceLang = _charLang === 'ca' ? 'ca' : 'en';
     const preferFemale = ['rita', 'gosia', 'sam'].includes(characterId);
     const preferMale = ['william', 'james', 'edam', 'steve', 'diego'].includes(characterId);
-    const filtered = voices.filter(v => v.lang.startsWith('en'));
+    let filtered = voices.filter(v => v.lang.startsWith(voiceLang));
+    // Fallback to Spanish for Catalan, then English
+    if (filtered.length === 0 && voiceLang === 'ca') filtered = voices.filter(v => v.lang.startsWith('es'));
+    if (filtered.length === 0) filtered = voices.filter(v => v.lang.startsWith('en'));
     if (filtered.length > 0) {
       let match = null;
       if (preferMale) {
@@ -183,7 +238,16 @@ export function initSideCharacter(characterId, basePath = '') {
 }
 
 /**
+ * Set the language for character messages.
+ * @param {string} lang — 'en', 'ca', etc.
+ */
+export function setCharacterLang(lang) {
+  _charLang = lang;
+}
+
+/**
  * Show the character buddy — updates side panel + speaks message.
+ * Uses the current language set by setCharacterLang().
  * @param {string} characterId — key in CHARACTERS (e.g. 'edam')
  * @param {string} reaction — one of 'correct', 'wrong', 'hint', 'perfect'
  */
@@ -191,7 +255,10 @@ export function showBuddy(characterId, reaction) {
   const character = CHARACTERS[characterId];
   if (!character) return;
 
-  const message = character.messages[reaction] || character.messages.correct;
+  // Pick messages based on current language
+  const langKey = 'messages' + (_charLang === 'ca' ? 'Ca' : '');
+  const msgs = character[langKey] || character.messages;
+  const message = msgs[reaction] || msgs.correct;
   const expression = REACTION_MAP[reaction] || 'happy';
 
   /* Update side character panel if it exists */

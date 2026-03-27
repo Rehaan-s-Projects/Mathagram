@@ -363,9 +363,10 @@
     import { initNav } from '../../js/nav.js';
     initNav('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
-    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+    import { showBuddy, randomCharacterId, initSideCharacter, setCharacterLang } from '../../js/characters.js';
 
     document.getElementById('year').textContent = new Date().getFullYear();
+    setCharacterLang('ca');
     initSideCharacter(randomCharacterId(), '../../');
 
     // Speak Catalan text with Catalan voice if available
