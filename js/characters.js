@@ -142,6 +142,58 @@ export const CHARACTERS = {
   }
 };
 
+// Frisian messages for all characters
+const FRISIAN_MESSAGES = {
+  edam: {
+    correct: 'Hiel goed! Goed dien!',
+    wrong: 'Gjin soargen, besykje it nochris!',
+    hint: 'Tink der oer nei...',
+    perfect: 'Absolút perfekt!'
+  },
+  steve: {
+    correct: 'Tûk! Dat is goed!',
+    wrong: 'Lestich! Besykje it nochris.',
+    hint: 'Hmm, wat as do...',
+    perfect: 'Briljant! Goed dien!'
+  },
+  james: {
+    correct: 'Kom op! Goed!',
+    wrong: 'Skodzje it ôf, besykje it nochris!',
+    hint: 'Krêft troch...',
+    perfect: 'BIST MODUS! Flekkenleas!'
+  },
+  diego: {
+    correct: 'Bysûnder! Goed!',
+    wrong: 'Ynteressant... net hielendal. Nochris?',
+    hint: 'Beskôgje de gegevens...',
+    perfect: 'Opfallende presyzje!'
+  },
+  rita: {
+    correct: 'Miau! Purr-fekt antwurd!',
+    wrong: 'Miau... besykje it nochris.',
+    hint: 'Hmm, nijsgjirrich...',
+    perfect: 'Purr-fekt flekkenleas!'
+  },
+  sam: {
+    correct: 'Wauw! Do hast it!',
+    wrong: 'Oeps! Noch ien kear!',
+    hint: 'Oh, wat as...',
+    perfect: 'JAAAA! Perfekte skoare!'
+  },
+  william: {
+    correct: 'Goed dien, jonge studint.',
+    wrong: 'Geduld. Besykje it nochris.',
+    hint: 'Neffens myn ûnderfining...',
+    perfect: 'Foarbyldich wurk, echt wier.'
+  },
+  gosia: {
+    correct: 'Geweldich wurk!',
+    wrong: 'Hast! Do kinst it!',
+    hint: 'In idee...',
+    perfect: 'Absolút prachtich!'
+  }
+};
+
 /** Current language for character messages (default: English) */
 let _charLang = 'en';
 
@@ -187,13 +239,14 @@ function speak(text, characterId) {
   // Try to pick a fitting system voice
   const voices = window.speechSynthesis.getVoices();
   if (voices.length > 0) {
-    // Use Catalan/Spanish voice if in Catalan mode
-    const voiceLang = _charLang === 'ca' ? 'ca' : 'en';
+    // Use target language voice when in language mode
+    const voiceLang = _charLang === 'ca' ? 'ca' : _charLang === 'fy' ? 'nl' : 'en';
     const preferFemale = ['rita', 'gosia', 'sam'].includes(characterId);
     const preferMale = ['william', 'james', 'edam', 'steve', 'diego'].includes(characterId);
     let filtered = voices.filter(v => v.lang.startsWith(voiceLang));
-    // Fallback to Spanish for Catalan, then English
-    if (filtered.length === 0 && voiceLang === 'ca') filtered = voices.filter(v => v.lang.startsWith('es'));
+    // Fallback chains: Catalan→Spanish, Frisian→Dutch→German, then English
+    if (filtered.length === 0 && _charLang === 'ca') filtered = voices.filter(v => v.lang.startsWith('es'));
+    if (filtered.length === 0 && _charLang === 'fy') filtered = voices.filter(v => v.lang.startsWith('de'));
     if (filtered.length === 0) filtered = voices.filter(v => v.lang.startsWith('en'));
     if (filtered.length > 0) {
       let match = null;
@@ -256,8 +309,9 @@ export function showBuddy(characterId, reaction) {
   if (!character) return;
 
   // Pick messages based on current language
-  const langKey = 'messages' + (_charLang === 'ca' ? 'Ca' : '');
-  const msgs = character[langKey] || character.messages;
+  let msgs = character.messages;
+  if (_charLang === 'ca' && character.messagesCa) msgs = character.messagesCa;
+  if (_charLang === 'fy' && FRISIAN_MESSAGES[characterId]) msgs = FRISIAN_MESSAGES[characterId];
   const message = msgs[reaction] || msgs.correct;
   const expression = REACTION_MAP[reaction] || 'happy';
 
