@@ -425,50 +425,27 @@ function renderVisual(container, exercise, onAnswer) {
 
 /**
  * 7. Listening (Duolingo-style)
- * A character speaks the question — student must answer without reading it.
- * exercise.spokenText: string (what the character says)
- * exercise.character: string (character id, e.g. 'edam')
+ * Question is spoken aloud automatically — student answers without reading.
+ * Just a volume button to replay, no character avatar.
+ * exercise.spokenText: string (what is spoken aloud)
  * exercise.options: string[] (answer choices)
  * exercise.correctIndex: number
  * Optional: exercise.answerType: 'fill-blank' | 'true-false' (defaults to multiple-choice)
  */
 function renderListening(container, exercise, onAnswer) {
-  const charIds = ['edam','steve','james','diego','rita','sam','william','gosia'];
-  const charId = exercise.character || charIds[Math.floor(Math.random() * charIds.length)];
-  const charNames = { edam:'Edam', steve:'Steve', james:'James', diego:'Diego', rita:'Rita', sam:'Sam', william:'William', gosia:'Gosia' };
-  const charFiles = { edam:'edam.svg', steve:'steve.svg', james:'james.svg', diego:'diego.svg', rita:'rita.svg', sam:'sam.svg', william:'william.svg', gosia:'gosia.svg' };
-  const voiceSettings = {
-    edam:{pitch:0.8,rate:0.9}, steve:{pitch:1.2,rate:1.15}, james:{pitch:0.6,rate:0.85},
-    diego:{pitch:1.0,rate:1.0}, rita:{pitch:1.8,rate:1.2}, sam:{pitch:1.6,rate:1.3},
-    william:{pitch:0.5,rate:0.75}, gosia:{pitch:1.4,rate:1.05}
-  };
-
-  // Figure out basePath from current URL
-  let basePath = '../../';
-  try {
-    const path = window.location.pathname;
-    const depth = (path.match(/\//g) || []).length - 1;
-    basePath = depth >= 3 ? '../../' : depth >= 2 ? '../' : '';
-  } catch(e) {}
-
-  // Character + play area
   const listenArea = document.createElement('div');
   listenArea.className = 'listening-area';
   listenArea.innerHTML = `
-    <div class="listening-character">
-      <img src="${basePath}assets/characters/${charFiles[charId]}" alt="${charNames[charId]}" class="listening-avatar" id="listen-avatar">
-      <span class="listening-name">${charNames[charId]}</span>
-    </div>
-    <button type="button" class="listening-play-btn" id="listen-play">
-      <span class="play-icon">&#9654;</span> Tap to listen
+    <button type="button" class="listening-volume-btn" id="listen-vol" title="Tap to replay">
+      <span class="volume-icon">&#128264;</span>
     </button>
-    <p class="listening-hint">Listen carefully, then answer below.</p>
+    <p class="listening-hint">Listen and answer below</p>
   `;
   container.appendChild(listenArea);
 
   const spokenText = exercise.spokenText || exercise.question;
 
-  function speakChar() {
+  function speakNow() {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const clean = spokenText
@@ -482,9 +459,8 @@ function renderListening(container, exercise, onAnswer) {
     if (!clean) return;
 
     const utterance = new SpeechSynthesisUtterance(clean);
-    const vs = voiceSettings[charId] || { pitch: 1.0, rate: 1.0 };
-    utterance.pitch = vs.pitch;
-    utterance.rate = vs.rate;
+    utterance.pitch = 1.0;
+    utterance.rate = 0.9;
     utterance.volume = 0.85;
 
     const voices = window.speechSynthesis.getVoices();
@@ -493,33 +469,26 @@ function renderListening(container, exercise, onAnswer) {
       if (pref) utterance.voice = pref;
     }
 
-    const avatar = document.getElementById('listen-avatar');
-    const playBtn = document.getElementById('listen-play');
-    if (avatar) avatar.classList.add('speaking');
-    if (playBtn) { playBtn.innerHTML = '<span class="play-icon">&#9208;</span> Speaking...'; playBtn.classList.add('active'); }
+    const volBtn = document.getElementById('listen-vol');
+    if (volBtn) { volBtn.classList.add('active'); volBtn.querySelector('.volume-icon').innerHTML = '&#128266;'; }
 
     utterance.onend = () => {
-      if (avatar) avatar.classList.remove('speaking');
-      if (playBtn) { playBtn.innerHTML = '<span class="play-icon">&#128260;</span> Tap to replay'; playBtn.classList.remove('active'); }
+      if (volBtn) { volBtn.classList.remove('active'); volBtn.querySelector('.volume-icon').innerHTML = '&#128264;'; }
     };
     utterance.onerror = () => {
-      if (avatar) avatar.classList.remove('speaking');
-      if (playBtn) { playBtn.innerHTML = '<span class="play-icon">&#128260;</span> Tap to replay'; playBtn.classList.remove('active'); }
+      if (volBtn) { volBtn.classList.remove('active'); volBtn.querySelector('.volume-icon').innerHTML = '&#128264;'; }
     };
 
     window.speechSynthesis.speak(utterance);
   }
 
-  // Auto-play on load
-  setTimeout(speakChar, 500);
+  // Auto-play once
+  setTimeout(speakNow, 400);
 
-  // Play button
-  const playBtn = document.getElementById('listen-play');
-  if (playBtn) playBtn.addEventListener('click', speakChar);
-  const avatar = document.getElementById('listen-avatar');
-  if (avatar) avatar.addEventListener('click', speakChar);
+  // Volume button to replay
+  document.getElementById('listen-vol').addEventListener('click', speakNow);
 
-  // Render answer options based on type
+  // Render answer options
   const answerType = exercise.answerType || 'multiple-choice';
   if (answerType === 'fill-blank') {
     renderFillBlank(container, exercise, onAnswer);
