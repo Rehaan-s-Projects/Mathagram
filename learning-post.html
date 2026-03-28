@@ -243,15 +243,6 @@
       </div>
     </div>
 
-    <!-- Meet the Creator -->
-    <div style="background:#fff; border:1px solid #e2e8f0; border-radius:20px; overflow:hidden; box-shadow:0 4px 6px -1px rgba(0,0,0,0.08); margin-top:32px;">
-      <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/617e2548-08ff-468a-87f2-402647797bcd/dlnv9c9-db145714-17f2-4b96-bf15-4bd27949d925.png/v1/fill/w_1084,h_737,q_70,strp/happy_pi_day__2026__by_rehaanrashid_dlnv9c9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQ3OSIsInBhdGgiOiIvZi82MTdlMjU0OC0wOGZmLTQ2OGEtODdmMi00MDI2NDc3OTdiY2QvZGxudjljOS1kYjE0NTcxNC0xN2YyLTRiOTYtYmYxNS00YmQyNzk0OWQ5MjUucG5nIiwid2lkdGgiOiI8PTIxNzYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.WHxJRJpSbPOkmZb1rLuEIX-1aDXc7A3-xx35Xnvg6ek" alt="Happy Pi Day 2026 by Rehaan Rashid" style="width:100%; display:block;">
-      <div style="padding:24px; text-align:center;">
-        <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:8px;">Meet the Creator</h3>
-        <p style="font-size:0.95rem; color:#64748b; line-height:1.6; margin-bottom:16px;">Mathagram is built by <strong>Rehaan Rashid</strong> — a student, artist, and developer passionate about making education fun and accessible for everyone.</p>
-        <a href="https://linktr.ee/Rehaan_rashid" style="display:inline-block; padding:10px 24px; background:#00e5c8; color:#fff; font-weight:700; border-radius:12px; text-decoration:none;">More About Rehaan</a>
-      </div>
-    </div>
   </div>
 
   <footer class="footer">
@@ -479,14 +470,31 @@
       }
     }
 
+    // Rehaan's pinned first post
+    const PINNED_POST = `
+      <div class="post-item" style="border:2px solid var(--color-primary); position:relative;">
+        <div style="position:absolute; top:12px; right:14px; background:var(--color-primary); color:#fff; font-size:0.6rem; font-weight:800; padding:3px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Pinned</div>
+        <div class="post-header">
+          <img class="post-avatar" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/617e2548-08ff-468a-87f2-402647797bcd/dlnv9c9-db145714-17f2-4b96-bf15-4bd27949d925.png/v1/fill/w_1084,h_737,q_70,strp/happy_pi_day__2026__by_rehaanrashid_dlnv9c9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQ3OSIsInBhdGgiOiIvZi82MTdlMjU0OC0wOGZmLTQ2OGEtODdmMi00MDI2NDc3OTdiY2QvZGxudjljOS1kYjE0NTcxNC0xN2YyLTRiOTYtYmYxNS00YmQyNzk0OWQ5MjUucG5nIiwid2lkdGgiOiI8PTIxNzYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.WHxJRJpSbPOkmZb1rLuEIX-1aDXc7A3-xx35Xnvg6ek" alt="Rehaan Rashid" style="object-fit:cover;">
+          <div class="post-meta">
+            <div class="post-author">Rehaan Rashid <span style="font-size:0.7rem; color:var(--color-primary); font-weight:800;">CREATOR</span></div>
+            <div class="post-time">Founder of Mathagram</div>
+          </div>
+          <span class="post-category-tag" style="background:#8b5cf6">Discussion</span>
+        </div>
+        <div class="post-body">Welcome to Mathagram Learning Post! I'm Rehaan Rashid, the creator of Mathagram. This community is for learning ONLY — share your study progress, ask questions about courses, post your notes, and help each other learn.\n\nRemember: this is NOT social media. Keep it educational, follow the rules, and let's build something amazing together. Happy learning!</div>
+        <div class="post-image"><img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/617e2548-08ff-468a-87f2-402647797bcd/dlnv9c9-db145714-17f2-4b96-bf15-4bd27949d925.png/v1/fill/w_1084,h_737,q_70,strp/happy_pi_day__2026__by_rehaanrashid_dlnv9c9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQ3OSIsInBhdGgiOiIvZi82MTdlMjU0OC0wOGZmLTQ2OGEtODdmMi00MDI2NDc3OTdiY2QvZGxudjljOS1kYjE0NTcxNC0xN2YyLTRiOTYtYmYxNS00YmQyNzk0OWQ5MjUucG5nIiwid2lkdGgiOiI8PTIxNzYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.WHxJRJpSbPOkmZb1rLuEIX-1aDXc7A3-xx35Xnvg6ek" alt="Happy Pi Day 2026 — Art by Rehaan Rashid" loading="lazy" style="border-radius:12px;"></div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--color-border); text-align:center;">
+          <a href="https://linktr.ee/Rehaan_rashid" style="font-size:0.85rem; font-weight:700; color:var(--color-primary-dark); text-decoration:none;">Learn more about Rehaan Rashid &rarr;</a>
+        </div>
+      </div>`;
+
     function renderPosts() {
       const feed = document.getElementById('postsFeed');
       const filtered = currentFilter === 'all' ? allPosts : allPosts.filter(p => p.category === currentFilter);
-      if (filtered.length === 0) {
-        feed.innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
-        return;
-      }
-      feed.innerHTML = filtered.map(post => {
+      // Always show Rehaan's pinned post first (on 'all' or 'discussion' filter)
+      const showPinned = currentFilter === 'all' || currentFilter === 'discussion';
+      const postsHtml = filtered.map(post => {
         const time = post.createdAt ? timeAgo(post.createdAt.toDate ? post.createdAt.toDate() : new Date(post.createdAt.seconds * 1000)) : 'just now';
         const color = post.color || 'blue';
         const catColor = categoryColors[post.category] || '#6b7280';
@@ -511,6 +519,11 @@
             </div>
           </div>`;
       }).join('');
+      if (postsHtml || showPinned) {
+        feed.innerHTML = (showPinned ? PINNED_POST : '') + postsHtml;
+      } else {
+        feed.innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
+      }
     }
 
     window.toggleLike = async function(postId) {
