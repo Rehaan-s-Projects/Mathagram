@@ -89,17 +89,17 @@ const RITA_RESPONSES = {
     "Purr... Here's how it works: First time you break a rule, Edam gives you a warning. Second time, your account is LOCKED for 7 days. Third time? Gone. Forever. No coming back. Please be careful! 🐾⚠️"
   ],
   harassment_warn: [
-    "🚨 STOP. That kind of language is NOT okay here. Mathagram is a safe learning space. Bullying, harassment, and hate speech are serious violations. This is your warning — next time it's a strike from Edam. 🐱⚠️",
-    "😾 Miau! I'm not happy right now. What you said is hurtful and breaks our Community Safety Rules. Harassment and hate speech can lead to account suspension or permanent ban. Please be respectful. ⚠️",
-    "🐱🚫 Rita says NO. Disrespectful, hateful, or harassing language is a violation of our Terms of Service. Strike 1 = Warning. Strike 2 = 1-week ban. Strike 3 = Account terminated. Choose your words carefully."
+    "🚨 STOP. That kind of language is NOT okay here. Mathagram is a safe learning space. Bullying, harassment, and hate speech are serious violations. This is your warning — next time it's a strike from Edam. 🐱⚠️\n\n📋 Read our Terms of Service: mathagram.org/terms.html",
+    "😾 Miau! I'm not happy right now. What you said is hurtful and breaks our Community Safety Rules. Harassment and hate speech can lead to account suspension or permanent ban. Please be respectful. ⚠️\n\n📋 Terms of Service: mathagram.org/terms.html",
+    "🐱🚫 Rita says NO. Disrespectful, hateful, or harassing language is a violation of our Terms of Service. Strike 1 = Warning. Strike 2 = 1-week ban. Strike 3 = Account terminated. Choose your words carefully.\n\n📋 Full rules: mathagram.org/terms.html"
   ],
   inappropriate_warn: [
-    "😾 That's inappropriate content. Mathagram is for education ONLY. Inappropriate, sexual, or offensive content is strictly forbidden. Please keep it clean and educational. This has been noted. ⚠️🐱",
-    "🚨 Miau! That's NOT appropriate for Mathagram. We have students of all ages here. Inappropriate content can result in strikes on your account. Please be respectful. 🐾⚠️"
+    "😾 That's inappropriate content. Mathagram is for education ONLY. Inappropriate, sexual, or offensive content is strictly forbidden. Please keep it clean and educational. This has been noted. ⚠️🐱\n\n📋 Terms of Service: mathagram.org/terms.html",
+    "🚨 Miau! That's NOT appropriate for Mathagram. We have students of all ages here. Inappropriate content can result in strikes on your account. Please be respectful. 🐾⚠️\n\n📋 Read our rules: mathagram.org/terms.html"
   ],
   termination_warn: [
-    "🚨🚨🚨 SERIOUS VIOLATION DETECTED. 🚨🚨🚨\n\n😾 Rita is FURIOUS. What you just typed contains extremely inappropriate content that IMMEDIATELY violates our Terms of Service.\n\n🐻 Edam the Bear says: This type of content — racial slurs, pornographic content, or extreme hate speech — results in IMMEDIATE ACCOUNT TERMINATION. No warnings. No second chances. Permanent ban.\n\nYour message has been flagged. If you continue, your account WILL be terminated and you will be permanently blocked from Mathagram.\n\n📋 See our Terms of Service for details.",
-    "🚫🚫🚫 ZERO TOLERANCE VIOLATION 🚫🚫🚫\n\n😾 This is Rita. I'm not being cute right now. What you typed is a SEVERE violation — racial slurs and pornographic content result in IMMEDIATE permanent ban. No Strike 1. No Strike 2. Straight to account termination.\n\n🐻 Edam the Bear will terminate your account. All XP, progress, and data will be permanently deleted. You will never be able to sign in again.\n\nThis message has been flagged. Stop immediately."
+    "🚨🚨🚨 SERIOUS VIOLATION DETECTED. 🚨🚨🚨\n\n😾 Rita is FURIOUS. What you just typed contains extremely inappropriate content that IMMEDIATELY violates our Terms of Service.\n\n🐻 Edam the Bear says: This type of content — racial slurs, pornographic content, or extreme hate speech — results in IMMEDIATE ACCOUNT TERMINATION. No warnings. No second chances. Permanent ban.\n\nYour message has been flagged. If you continue, your account WILL be terminated and you will be permanently blocked from Mathagram.\n\n📋 Terms of Service: mathagram.org/terms.html",
+    "🚫🚫🚫 ZERO TOLERANCE VIOLATION 🚫🚫🚫\n\n😾 This is Rita. I'm not being cute right now. What you typed is a SEVERE violation — racial slurs and pornographic content result in IMMEDIATE permanent ban. No Strike 1. No Strike 2. Straight to account termination.\n\n🐻 Edam the Bear will terminate your account. All XP, progress, and data will be permanently deleted. You will never be able to sign in again.\n\nThis message has been flagged. Stop immediately.\n\n📋 Terms of Service: mathagram.org/terms.html"
   ],
   default: [
     "Hmm, interesting question! I'm still learning too. Try asking about math, study tips, or a specific topic! Purr! 🐱",
@@ -174,9 +174,10 @@ function getRitaResponse(input) {
     return pickRandom(RITA_RESPONSES.inappropriate_warn) + "\n\n📧 This message has been logged.";
   }
 
-  // === RULES & STRIKES questions ===
-  if (/rule|safety|community|guideline|terms|policy/.test(lower)) return pickRandom(RITA_RESPONSES.rules);
-  if (/strike|ban|suspend|terminat|violat|warning|punish/.test(lower)) return pickRandom(RITA_RESPONSES.strike_info);
+  // === RULES, STRIKES & TERMS questions ===
+  if (/terms\s*of\s*service|tos\b|terms\s*and\s*condition/.test(lower)) return "📋 Miau! You can read the full Terms of Service here: mathagram.org/terms.html\n\nKey sections:\n• Age Requirement (11+ only)\n• User Accounts & Conduct\n• Learning Post Rules\n• 3-Strike Enforcement System\n• No Cheating or Content Sharing\n• Account Termination Policy\n\nPlease read and follow them! Purr! 🐱";
+  if (/rule|safety|community|guideline|policy/.test(lower)) return pickRandom(RITA_RESPONSES.rules) + "\n\n📋 Full rules: mathagram.org/terms.html";
+  if (/strike|ban|suspend|terminat|violat|warning|punish/.test(lower)) return pickRandom(RITA_RESPONSES.strike_info) + "\n\n📋 See full Terms of Service: mathagram.org/terms.html";
 
   // === Self-harm / crisis response ===
   if (/suicid|kill\s*myself|want\s*to\s*die|self.?harm|cutting|end\s*my\s*life/.test(lower)) {
