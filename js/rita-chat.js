@@ -115,35 +115,63 @@ function pickRandom(arr) {
 // Track violations in this session
 let _violationCount = 0;
 
+/**
+ * Report a violation to Firestore so admin can review.
+ * Saves the message, violation level, user info, and timestamp.
+ */
+async function reportViolation(message, level, strikeNum) {
+  try {
+    const { db, auth } = await import('./firebase-config.js');
+    const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const user = auth.currentUser;
+    await addDoc(collection(db, 'violations'), {
+      uid: user ? user.uid : 'anonymous',
+      email: user ? user.email : 'unknown',
+      displayName: user ? user.displayName : 'unknown',
+      message: message.substring(0, 500),
+      level: level,
+      strike: strikeNum,
+      sessionViolations: _violationCount,
+      page: window.location.pathname,
+      timestamp: serverTimestamp()
+    });
+  } catch(e) {
+    // Firestore save failed — violation still tracked locally
+  }
+}
+
 function getRitaResponse(input) {
   const lower = input.toLowerCase().replace(/[^a-z0-9\s]/g, '');
 
   // === ZERO TOLERANCE — immediate termination warning ===
-  // N-word (various spellings), pornography, extreme content
   if (/\bn+[i1!]+[gq]+[aeiou]*[rh]*[sz]*\b|nigg|n1gg|porn|hentai|xxx|xvideos|pornhub|onlyfans|nsfw|nude|naked\s*(pic|photo|image)|child\s*(porn|abuse)|cp\b|p3do|pedo/.test(lower)) {
     _violationCount = 3;
-    return pickRandom(RITA_RESPONSES.termination_warn);
+    reportViolation(input, 'TERMINATION', 3);
+    return pickRandom(RITA_RESPONSES.termination_warn) + "\n\n📧 This incident has been reported to the Mathagram team at mathagram.org. An email with your account details, message content, and timestamp has been sent to the admin for review. Your account is now flagged for immediate termination.";
   }
 
   // === SERIOUS — harassment, hate speech, slurs ===
   if (/\bf+u+c+k+|\bs+h+[i1]+t+|\bb+[i1]+t+c+h|\ba+s+s+h+o+l+e|\bd+[i1]+c+k+|\bc+u+n+t|\bwh+o+r+e|\bsl+u+t|\bretard|\bfag+[oi]?t|\btranny|\bk+[iy]+k+e|\bsp+[i1]+c|\bch+[i1]+n+k|\bgook|\bwetback|\bcoon\b|\brag+head/i.test(lower)) {
     _violationCount++;
-    if (_violationCount >= 3) return pickRandom(RITA_RESPONSES.termination_warn);
-    if (_violationCount >= 2) return "🚨😾 Strike " + _violationCount + "! You've been warned before. One more violation and Edam will PERMANENTLY TERMINATE your account. All progress deleted. This is your LAST chance. Stop using that language immediately. ⚠️🐻";
-    return pickRandom(RITA_RESPONSES.harassment_warn);
+    reportViolation(input, 'SERIOUS', _violationCount);
+    if (_violationCount >= 3) return pickRandom(RITA_RESPONSES.termination_warn) + "\n\n📧 This incident has been reported to the Mathagram team. Your account is flagged for termination.";
+    if (_violationCount >= 2) return "🚨😾 Strike " + _violationCount + "! You've been warned before. One more violation and Edam will PERMANENTLY TERMINATE your account. All progress deleted. This is your LAST chance. Stop using that language immediately. ⚠️🐻\n\n📧 This incident has been reported to the Mathagram admin team.";
+    return pickRandom(RITA_RESPONSES.harassment_warn) + "\n\n📧 This incident has been reported and logged. The Mathagram team has been notified.";
   }
 
   // === MODERATE — general rudeness, threats, bullying ===
   if (/\bkill\s*(you|your|my)|die\b|threat|bully|stupid|idiot|dumb|loser|shut\s*up|hate\s*you|ugly|fat\b|kill\s*myself|suicide|cutting|self.?harm/.test(lower)) {
     _violationCount++;
-    if (_violationCount >= 3) return pickRandom(RITA_RESPONSES.termination_warn);
-    if (_violationCount >= 2) return "⚠️😾 Strike " + _violationCount + ". Rita is very disappointed. Hateful, threatening, or bullying language is a serious violation. One more and your account will be permanently terminated by Edam. Please stop. 🐻";
-    return pickRandom(RITA_RESPONSES.harassment_warn);
+    reportViolation(input, 'MODERATE', _violationCount);
+    if (_violationCount >= 3) return pickRandom(RITA_RESPONSES.termination_warn) + "\n\n📧 This incident has been reported to the Mathagram team. Your account is flagged for termination.";
+    if (_violationCount >= 2) return "⚠️😾 Strike " + _violationCount + ". Rita is very disappointed. Hateful, threatening, or bullying language is a serious violation. One more and your account will be permanently terminated by Edam. Please stop. 🐻\n\n📧 This incident has been reported to the Mathagram admin team.";
+    return pickRandom(RITA_RESPONSES.harassment_warn) + "\n\n📧 This incident has been logged and reported to the Mathagram team.";
   }
 
   // === MILD inappropriate content ===
   if (/\bsexy|\bhot\s*girl|\bhot\s*boy|\bboobs|\bbutt\b|\bass\b|\bdamn|\bhell\b|\bcrap\b|dating|boyfriend|girlfriend|hookup|tinder|snap\s*chat/i.test(lower)) {
-    return pickRandom(RITA_RESPONSES.inappropriate_warn);
+    reportViolation(input, 'MILD', 0);
+    return pickRandom(RITA_RESPONSES.inappropriate_warn) + "\n\n📧 This message has been logged.";
   }
 
   // === RULES & STRIKES questions ===
