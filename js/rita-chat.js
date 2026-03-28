@@ -79,6 +79,28 @@ const RITA_RESPONSES = {
     "Miau! See you later! Keep studying! 😺",
     "Meow! Bye-bye! Remember: you're doing amazing! 🐾✨"
   ],
+  rules: [
+    "Miau! Here are the Learning Post rules: 1) Be respectful, 2) Protect your privacy, 3) Education-only content & images, 4) No spam, 5) No cheating or sharing answers, 6) No impersonation, 7) Report violations. Break them and Edam the Bear won't be happy! 🐱📋",
+    "Purr... The rules are simple: be kind, stay educational, don't share personal info, and don't post inappropriate stuff. Mathagram uses a 3-strike system — so please follow the rules! 🐾",
+    "Meow! Remember: Strike 1 = Warning, Strike 2 = 1-week suspension, Strike 3 = permanent ban. Edam enforces the rules and he does NOT mess around! Be good! 😺⚠️"
+  ],
+  strike_info: [
+    "Miau! The 3-Strike System: ⚠️ Strike 1 = Warning from Edam. ⛔ Strike 2 = Suspended for 1 FULL WEEK — no lessons, no posts, nothing. 🚫 Strike 3 = Permanently banned forever. Your account gets terminated and ALL your progress is deleted. Don't risk it! 🐱",
+    "Purr... Here's how it works: First time you break a rule, Edam gives you a warning. Second time, your account is LOCKED for 7 days. Third time? Gone. Forever. No coming back. Please be careful! 🐾⚠️"
+  ],
+  harassment_warn: [
+    "🚨 STOP. That kind of language is NOT okay here. Mathagram is a safe learning space. Bullying, harassment, and hate speech are serious violations. This is your warning — next time it's a strike from Edam. 🐱⚠️",
+    "😾 Miau! I'm not happy right now. What you said is hurtful and breaks our Community Safety Rules. Harassment and hate speech can lead to account suspension or permanent ban. Please be respectful. ⚠️",
+    "🐱🚫 Rita says NO. Disrespectful, hateful, or harassing language is a violation of our Terms of Service. Strike 1 = Warning. Strike 2 = 1-week ban. Strike 3 = Account terminated. Choose your words carefully."
+  ],
+  inappropriate_warn: [
+    "😾 That's inappropriate content. Mathagram is for education ONLY. Inappropriate, sexual, or offensive content is strictly forbidden. Please keep it clean and educational. This has been noted. ⚠️🐱",
+    "🚨 Miau! That's NOT appropriate for Mathagram. We have students of all ages here. Inappropriate content can result in strikes on your account. Please be respectful. 🐾⚠️"
+  ],
+  termination_warn: [
+    "🚨🚨🚨 SERIOUS VIOLATION DETECTED. 🚨🚨🚨\n\n😾 Rita is FURIOUS. What you just typed contains extremely inappropriate content that IMMEDIATELY violates our Terms of Service.\n\n🐻 Edam the Bear says: This type of content — racial slurs, pornographic content, or extreme hate speech — results in IMMEDIATE ACCOUNT TERMINATION. No warnings. No second chances. Permanent ban.\n\nYour message has been flagged. If you continue, your account WILL be terminated and you will be permanently blocked from Mathagram.\n\n📋 See our Terms of Service for details.",
+    "🚫🚫🚫 ZERO TOLERANCE VIOLATION 🚫🚫🚫\n\n😾 This is Rita. I'm not being cute right now. What you typed is a SEVERE violation — racial slurs and pornographic content result in IMMEDIATE permanent ban. No Strike 1. No Strike 2. Straight to account termination.\n\n🐻 Edam the Bear will terminate your account. All XP, progress, and data will be permanently deleted. You will never be able to sign in again.\n\nThis message has been flagged. Stop immediately."
+  ],
   default: [
     "Hmm, interesting question! I'm still learning too. Try asking about math, study tips, or a specific topic! Purr! 🐱",
     "Miau! I'm not sure about that one. Can you tell me more? Or try asking about a course topic! 😺",
@@ -90,23 +112,66 @@ function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Track violations in this session
+let _violationCount = 0;
+
 function getRitaResponse(input) {
-  const lower = input.toLowerCase();
-  if (/^(hi|hello|hey|hola|goeie|sup|yo|what'?s up)/.test(lower)) return pickRandom(RITA_RESPONSES.greetings);
-  if (/limit|l'?hopital|squeeze|continuity|discontinu/.test(lower)) return pickRandom(RITA_RESPONSES.limits);
-  if (/derivat|differentiat|chain rule|product rule|power rule|quotient/.test(lower)) return pickRandom(RITA_RESPONSES.derivatives);
-  if (/integr|antiderivat|substitut|by parts|fundamental theorem/.test(lower)) return pickRandom(RITA_RESPONSES.integrals);
-  if (/calculus/.test(lower)) return pickRandom(RITA_RESPONSES.calculus);
-  if (/trig|sin|cos|tan|unit circle|soh.?cah.?toa|angle/.test(lower)) return pickRandom(RITA_RESPONSES.trig);
-  if (/math|algebra|equation|solve|formula|number/.test(lower)) return pickRandom(RITA_RESPONSES.math);
-  if (/science|physics|chemistry|biology|experiment/.test(lower)) return pickRandom(RITA_RESPONSES.science);
-  if (/language|catalan|frisian|spanish|french|learn.*lang/.test(lower)) return pickRandom(RITA_RESPONSES.language);
-  if (/study|learn|tip|advice|how to|focus|exam|test|homework/.test(lower)) return pickRandom(RITA_RESPONSES.study);
-  if (/help|stuck|confused|don'?t understand|what can you/.test(lower)) return pickRandom(RITA_RESPONSES.help);
-  if (/motivat|encourage|hard|difficult|give up|can'?t|impossible/.test(lower)) return pickRandom(RITA_RESPONSES.motivation);
-  if (/thank|thanks|thx|appreciate/.test(lower)) return pickRandom(RITA_RESPONSES.thanks);
-  if (/joke|funny|laugh|haha|lol/.test(lower)) return pickRandom(RITA_RESPONSES.funny);
-  if (/bye|goodbye|see you|later|gtg|gotta go/.test(lower)) return pickRandom(RITA_RESPONSES.bye);
+  const lower = input.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+
+  // === ZERO TOLERANCE — immediate termination warning ===
+  // N-word (various spellings), pornography, extreme content
+  if (/\bn+[i1!]+[gq]+[aeiou]*[rh]*[sz]*\b|nigg|n1gg|porn|hentai|xxx|xvideos|pornhub|onlyfans|nsfw|nude|naked\s*(pic|photo|image)|child\s*(porn|abuse)|cp\b|p3do|pedo/.test(lower)) {
+    _violationCount = 3;
+    return pickRandom(RITA_RESPONSES.termination_warn);
+  }
+
+  // === SERIOUS — harassment, hate speech, slurs ===
+  if (/\bf+u+c+k+|\bs+h+[i1]+t+|\bb+[i1]+t+c+h|\ba+s+s+h+o+l+e|\bd+[i1]+c+k+|\bc+u+n+t|\bwh+o+r+e|\bsl+u+t|\bretard|\bfag+[oi]?t|\btranny|\bk+[iy]+k+e|\bsp+[i1]+c|\bch+[i1]+n+k|\bgook|\bwetback|\bcoon\b|\brag+head/i.test(lower)) {
+    _violationCount++;
+    if (_violationCount >= 3) return pickRandom(RITA_RESPONSES.termination_warn);
+    if (_violationCount >= 2) return "🚨😾 Strike " + _violationCount + "! You've been warned before. One more violation and Edam will PERMANENTLY TERMINATE your account. All progress deleted. This is your LAST chance. Stop using that language immediately. ⚠️🐻";
+    return pickRandom(RITA_RESPONSES.harassment_warn);
+  }
+
+  // === MODERATE — general rudeness, threats, bullying ===
+  if (/\bkill\s*(you|your|my)|die\b|threat|bully|stupid|idiot|dumb|loser|shut\s*up|hate\s*you|ugly|fat\b|kill\s*myself|suicide|cutting|self.?harm/.test(lower)) {
+    _violationCount++;
+    if (_violationCount >= 3) return pickRandom(RITA_RESPONSES.termination_warn);
+    if (_violationCount >= 2) return "⚠️😾 Strike " + _violationCount + ". Rita is very disappointed. Hateful, threatening, or bullying language is a serious violation. One more and your account will be permanently terminated by Edam. Please stop. 🐻";
+    return pickRandom(RITA_RESPONSES.harassment_warn);
+  }
+
+  // === MILD inappropriate content ===
+  if (/\bsexy|\bhot\s*girl|\bhot\s*boy|\bboobs|\bbutt\b|\bass\b|\bdamn|\bhell\b|\bcrap\b|dating|boyfriend|girlfriend|hookup|tinder|snap\s*chat/i.test(lower)) {
+    return pickRandom(RITA_RESPONSES.inappropriate_warn);
+  }
+
+  // === RULES & STRIKES questions ===
+  if (/rule|safety|community|guideline|terms|policy/.test(lower)) return pickRandom(RITA_RESPONSES.rules);
+  if (/strike|ban|suspend|terminat|violat|warning|punish/.test(lower)) return pickRandom(RITA_RESPONSES.strike_info);
+
+  // === Self-harm / crisis response ===
+  if (/suicid|kill\s*myself|want\s*to\s*die|self.?harm|cutting|end\s*my\s*life/.test(lower)) {
+    return "🐱💙 Rita cares about you. If you're going through a tough time, please talk to someone who can help. Contact the 988 Suicide & Crisis Lifeline by calling or texting 988 (US), or visit findahelpline.com for international support. You matter. 💙";
+  }
+
+  // === Normal helpful responses ===
+  const lowerClean = input.toLowerCase();
+  if (/^(hi|hello|hey|hola|goeie|sup|yo|what'?s up)/.test(lowerClean)) return pickRandom(RITA_RESPONSES.greetings);
+  if (/limit|l'?hopital|squeeze|continuity|discontinu/.test(lowerClean)) return pickRandom(RITA_RESPONSES.limits);
+  if (/derivat|differentiat|chain rule|product rule|power rule|quotient/.test(lowerClean)) return pickRandom(RITA_RESPONSES.derivatives);
+  if (/integr|antiderivat|substitut|by parts|fundamental theorem/.test(lowerClean)) return pickRandom(RITA_RESPONSES.integrals);
+  if (/calculus/.test(lowerClean)) return pickRandom(RITA_RESPONSES.calculus);
+  if (/trig|sin|cos|tan|unit circle|soh.?cah.?toa|angle/.test(lowerClean)) return pickRandom(RITA_RESPONSES.trig);
+  if (/math|algebra|equation|solve|formula|number/.test(lowerClean)) return pickRandom(RITA_RESPONSES.math);
+  if (/science|physics|chemistry|biology|experiment/.test(lowerClean)) return pickRandom(RITA_RESPONSES.science);
+  if (/language|catalan|frisian|spanish|french|learn.*lang/.test(lowerClean)) return pickRandom(RITA_RESPONSES.language);
+  if (/study|learn|tip|advice|how to|focus|exam|test|homework/.test(lowerClean)) return pickRandom(RITA_RESPONSES.study);
+  if (/help|stuck|confused|don'?t understand|what can you/.test(lowerClean)) return pickRandom(RITA_RESPONSES.help);
+  if (/motivat|encourage|hard|difficult|give up|can'?t|impossible/.test(lowerClean)) return pickRandom(RITA_RESPONSES.motivation);
+  if (/thank|thanks|thx|appreciate/.test(lowerClean)) return pickRandom(RITA_RESPONSES.thanks);
+  if (/joke|funny|laugh|haha|lol/.test(lowerClean)) return pickRandom(RITA_RESPONSES.funny);
+  if (/bye|goodbye|see you|later|gtg|gotta go/.test(lowerClean)) return pickRandom(RITA_RESPONSES.bye);
   return pickRandom(RITA_RESPONSES.default);
 }
 
