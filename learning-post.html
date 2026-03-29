@@ -167,6 +167,17 @@
     }
     .filter-tab:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
     .filter-tab.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+
+    /* Daily Quiz */
+    .quiz-option {
+      padding: 12px 16px; border: 2px solid var(--color-border); border-radius: 12px;
+      background: var(--color-white); font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; text-align: left;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--color-primary); background: rgba(0,229,200,0.05); }
+    .quiz-option:disabled { cursor: default; opacity: 0.8; }
+    .quiz-option.correct { border-color: #22c55e; background: #f0fdf4; color: #166534; }
+    .quiz-option.wrong { border-color: #ef4444; background: #fef2f2; color: #dc2626; }
   </style>
 </head>
 <body>
@@ -233,6 +244,21 @@
       <button class="filter-tab" data-filter="discussion">Discussion</button>
     </div>
 
+    <!-- Daily Quiz -->
+    <div id="dailyQuiz" style="background:#fff; border:2px solid var(--color-primary); border-radius:16px; padding:24px; margin-bottom:24px; display:none;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+        <img src="assets/lighthouse/logo.svg" alt="" width="28" height="28">
+        <div>
+          <div style="font-size:1rem; font-weight:800;">Daily Quiz</div>
+          <div style="font-size:0.75rem; color:var(--color-text-muted);">Test your knowledge!</div>
+        </div>
+        <span style="margin-left:auto; background:var(--color-primary); color:#fff; font-size:0.65rem; font-weight:800; padding:3px 10px; border-radius:999px;">+10 XP</span>
+      </div>
+      <div id="quizQuestion" style="font-size:1.05rem; font-weight:700; margin-bottom:16px; line-height:1.5;"></div>
+      <div id="quizOptions" style="display:flex; flex-direction:column; gap:8px;"></div>
+      <div id="quizResult" style="display:none; margin-top:14px; padding:12px 16px; border-radius:12px; font-size:0.9rem; font-weight:700;"></div>
+    </div>
+
     <!-- New post (shown if logged in) -->
     <div id="newPostSection"></div>
 
@@ -268,6 +294,81 @@
     import { onAuthChange, getUserProfile } from './js/auth.js';
     import { sanitizeHTML } from './js/sanitize.js';
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Daily Quiz
+    const QUIZ_POOL = [
+      { q: 'What is the derivative of x²?', opts: ['2x', 'x', '2x²', 'x³'], ans: 0 },
+      { q: 'What is the limit of sin(x)/x as x→0?', opts: ['0', '1', '∞', 'undefined'], ans: 1 },
+      { q: 'What is ∫x dx?', opts: ['x²/2 + C', 'x² + C', '2x + C', '1 + C'], ans: 0 },
+      { q: 'What is the chemical symbol for gold?', opts: ['Go', 'Gd', 'Au', 'Ag'], ans: 2 },
+      { q: 'What is the powerhouse of the cell?', opts: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi body'], ans: 2 },
+      { q: 'What is 15% of 200?', opts: ['25', '30', '35', '40'], ans: 1 },
+      { q: 'What is the Pythagorean theorem?', opts: ['a² + b² = c²', 'a + b = c', 'a² - b² = c²', 'a × b = c²'], ans: 0 },
+      { q: 'How do you say "hello" in Catalan?', opts: ['Bonjour', 'Hola', 'Goeie', 'Ciao'], ans: 1 },
+      { q: 'How do you say "thank you" in Frisian?', opts: ['Danke', 'Gràcies', 'Tankewol', 'Merci'], ans: 2 },
+      { q: 'What is the area of a circle?', opts: ['πr²', '2πr', 'πd', 'r²'], ans: 0 },
+      { q: 'What does DNA stand for?', opts: ['Deoxyribonucleic acid', 'Dinitrogen acid', 'Dynamic nuclear acid', 'Dual nucleotide array'], ans: 0 },
+      { q: 'What is the speed of light?', opts: ['300,000 km/s', '150,000 km/s', '1,000,000 km/s', '30,000 km/s'], ans: 0 },
+      { q: 'What is the slope-intercept form?', opts: ['y = mx + b', 'ax + by = c', 'y - y₁ = m(x - x₁)', 'x = -b/2a'], ans: 0 },
+      { q: 'What planet is closest to the Sun?', opts: ['Venus', 'Mars', 'Mercury', 'Earth'], ans: 2 },
+      { q: 'What is Newton\'s second law?', opts: ['F = ma', 'E = mc²', 'F = mv', 'P = IV'], ans: 0 },
+      { q: 'What is the SI unit of electric current?', opts: ['Volt', 'Watt', 'Ampere', 'Ohm'], ans: 2 },
+      { q: 'What is log₁₀(1000)?', opts: ['2', '3', '4', '10'], ans: 1 },
+      { q: 'What is the sum of angles in a triangle?', opts: ['90°', '180°', '270°', '360°'], ans: 1 },
+      { q: 'Which element has atomic number 1?', opts: ['Helium', 'Oxygen', 'Carbon', 'Hydrogen'], ans: 3 },
+      { q: 'What is the quadratic formula?', opts: ['x = (-b ± √(b²-4ac)) / 2a', 'x = -b/a', 'x = b² - 4ac', 'x = a + b + c'], ans: 0 },
+    ];
+
+    function loadDailyQuiz() {
+      const quizDiv = document.getElementById('dailyQuiz');
+      const todayKey = 'mathagram_quiz_' + new Date().toISOString().slice(0, 10);
+      // Don't show if already answered today
+      if (sessionStorage.getItem(todayKey)) { quizDiv.style.display = 'none'; return; }
+      // Pick question based on day
+      const dayIndex = Math.floor(Date.now() / 86400000) % QUIZ_POOL.length;
+      const quiz = QUIZ_POOL[dayIndex];
+      quizDiv.style.display = '';
+      document.getElementById('quizQuestion').textContent = quiz.q;
+      const optsDiv = document.getElementById('quizOptions');
+      optsDiv.innerHTML = '';
+      quiz.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = opt;
+        btn.type = 'button';
+        btn.addEventListener('click', () => {
+          // Disable all
+          optsDiv.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
+          const isCorrect = i === quiz.ans;
+          btn.classList.add(isCorrect ? 'correct' : 'wrong');
+          if (!isCorrect) optsDiv.querySelectorAll('.quiz-option')[quiz.ans].classList.add('correct');
+          const result = document.getElementById('quizResult');
+          result.style.display = '';
+          if (isCorrect) {
+            result.style.background = '#f0fdf4';
+            result.style.color = '#166534';
+            result.textContent = 'Correct! +10 XP earned!';
+          } else {
+            result.style.background = '#fef2f2';
+            result.style.color = '#dc2626';
+            result.textContent = 'Not quite! The correct answer is: ' + quiz.opts[quiz.ans];
+          }
+          sessionStorage.setItem(todayKey, 'done');
+          // Try to save XP if logged in and correct
+          if (isCorrect) {
+            import('./js/firebase-config.js').then(({ auth, db }) => {
+              if (auth.currentUser) {
+                import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({ doc, updateDoc, increment }) => {
+                  updateDoc(doc(db, 'users', auth.currentUser.uid), { xp: increment(10) }).catch(() => {});
+                });
+              }
+            }).catch(() => {});
+          }
+        });
+        optsDiv.appendChild(btn);
+      });
+    }
+    loadDailyQuiz();
 
     const SAFETY_KEY = 'mathagram_safety_agreed';
     const overlay = document.getElementById('safetyOverlay');
