@@ -471,19 +471,20 @@
     }
 
     // Rehaan's pinned first post
+    const PI_DAY_IMG = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/617e2548-08ff-468a-87f2-402647797bcd/dlnv9c9-db145714-17f2-4b96-bf15-4bd27949d925.png/v1/fill/w_1084,h_737,q_70,strp/happy_pi_day__2026__by_rehaanrashid_dlnv9c9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQ3OSIsInBhdGgiOiIvZi82MTdlMjU0OC0wOGZmLTQ2OGEtODdmMi00MDI2NDc3OTdiY2QvZGxudjljOS1kYjE0NTcxNC0xN2YyLTRiOTYtYmYxNS00YmQyNzk0OWQ5MjUucG5nIiwid2lkdGgiOiI8PTIxNzYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.WHxJRJpSbPOkmZb1rLuEIX-1aDXc7A3-xx35Xnvg6ek';
     const PINNED_POST = `
       <div class="post-item" style="border:2px solid var(--color-primary); position:relative;">
         <div style="position:absolute; top:12px; right:14px; background:var(--color-primary); color:#fff; font-size:0.6rem; font-weight:800; padding:3px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Pinned</div>
         <div class="post-header">
-          <img class="post-avatar" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/617e2548-08ff-468a-87f2-402647797bcd/dlnv9c9-db145714-17f2-4b96-bf15-4bd27949d925.png/v1/fill/w_1084,h_737,q_70,strp/happy_pi_day__2026__by_rehaanrashid_dlnv9c9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQ3OSIsInBhdGgiOiIvZi82MTdlMjU0OC0wOGZmLTQ2OGEtODdmMi00MDI2NDc3OTdiY2QvZGxudjljOS1kYjE0NTcxNC0xN2YyLTRiOTYtYmYxNS00YmQyNzk0OWQ5MjUucG5nIiwid2lkdGgiOiI8PTIxNzYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.WHxJRJpSbPOkmZb1rLuEIX-1aDXc7A3-xx35Xnvg6ek" alt="Rehaan Rashid" style="object-fit:cover;">
+          <div class="post-avatar" style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#00e5c8,#00b89f); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1rem; flex-shrink:0;">R</div>
           <div class="post-meta">
-            <div class="post-author">Rehaan Rashid <span style="font-size:0.7rem; color:var(--color-primary); font-weight:800;">CREATOR</span></div>
+            <div class="post-author">Rehaan Rashid <span style="font-size:0.65rem; color:#fff; background:var(--color-primary); padding:2px 8px; border-radius:999px; font-weight:800; margin-left:4px;">CREATOR</span></div>
             <div class="post-time">Founder of Mathagram</div>
           </div>
           <span class="post-category-tag" style="background:#8b5cf6">Discussion</span>
         </div>
-        <div class="post-body">Welcome to Mathagram Learning Post! I'm Rehaan Rashid, the creator of Mathagram. This community is for learning ONLY — share your study progress, ask questions about courses, post your notes, and help each other learn.\n\nRemember: this is NOT social media. Keep it educational, follow the rules, and let's build something amazing together. Happy learning!</div>
-        <div class="post-image"><img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/617e2548-08ff-468a-87f2-402647797bcd/dlnv9c9-db145714-17f2-4b96-bf15-4bd27949d925.png/v1/fill/w_1084,h_737,q_70,strp/happy_pi_day__2026__by_rehaanrashid_dlnv9c9-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQ3OSIsInBhdGgiOiIvZi82MTdlMjU0OC0wOGZmLTQ2OGEtODdmMi00MDI2NDc3OTdiY2QvZGxudjljOS1kYjE0NTcxNC0xN2YyLTRiOTYtYmYxNS00YmQyNzk0OWQ5MjUucG5nIiwid2lkdGgiOiI8PTIxNzYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.WHxJRJpSbPOkmZb1rLuEIX-1aDXc7A3-xx35Xnvg6ek" alt="Happy Pi Day 2026 — Art by Rehaan Rashid" loading="lazy" style="border-radius:12px;"></div>
+        <div class="post-body">Welcome to Mathagram Learning Post! I'm Rehaan Rashid, the creator of Mathagram.<br><br>This community is for learning ONLY — share your study progress, ask questions about courses, post your notes, and help each other learn.<br><br>Remember: this is NOT social media. Keep it educational, follow the rules, and let's build something amazing together. Happy learning!</div>
+        <div class="post-image"><img src="${PI_DAY_IMG}" alt="Happy Pi Day 2026 — Art by Rehaan Rashid" loading="lazy" style="border-radius:12px; width:100%;"></div>
         <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--color-border); text-align:center;">
           <a href="https://linktr.ee/Rehaan_rashid" style="font-size:0.85rem; font-weight:700; color:var(--color-primary-dark); text-decoration:none;">Learn more about Rehaan Rashid &rarr;</a>
         </div>
