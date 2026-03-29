@@ -244,21 +244,6 @@
       <button class="filter-tab" data-filter="discussion">Discussion</button>
     </div>
 
-    <!-- Daily Quiz -->
-    <div id="dailyQuiz" style="background:#fff; border:2px solid var(--color-primary); border-radius:16px; padding:24px; margin-bottom:24px; display:none;">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
-        <img src="assets/lighthouse/logo.svg" alt="" width="28" height="28">
-        <div>
-          <div style="font-size:1rem; font-weight:800;">Daily Quiz</div>
-          <div style="font-size:0.75rem; color:var(--color-text-muted);">Test your knowledge!</div>
-        </div>
-        <span style="margin-left:auto; background:var(--color-primary); color:#fff; font-size:0.65rem; font-weight:800; padding:3px 10px; border-radius:999px;">+10 XP</span>
-      </div>
-      <div id="quizQuestion" style="font-size:1.05rem; font-weight:700; margin-bottom:16px; line-height:1.5;"></div>
-      <div id="quizOptions" style="display:flex; flex-direction:column; gap:8px;"></div>
-      <div id="quizResult" style="display:none; margin-top:14px; padding:12px 16px; border-radius:12px; font-size:0.9rem; font-weight:700;"></div>
-    </div>
-
     <!-- New post (shown if logged in) -->
     <div id="newPostSection"></div>
 
@@ -295,80 +280,6 @@
     import { sanitizeHTML } from './js/sanitize.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Daily Quiz
-    const QUIZ_POOL = [
-      { q: 'What is the derivative of x²?', opts: ['2x', 'x', '2x²', 'x³'], ans: 0 },
-      { q: 'What is the limit of sin(x)/x as x→0?', opts: ['0', '1', '∞', 'undefined'], ans: 1 },
-      { q: 'What is ∫x dx?', opts: ['x²/2 + C', 'x² + C', '2x + C', '1 + C'], ans: 0 },
-      { q: 'What is the chemical symbol for gold?', opts: ['Go', 'Gd', 'Au', 'Ag'], ans: 2 },
-      { q: 'What is the powerhouse of the cell?', opts: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi body'], ans: 2 },
-      { q: 'What is 15% of 200?', opts: ['25', '30', '35', '40'], ans: 1 },
-      { q: 'What is the Pythagorean theorem?', opts: ['a² + b² = c²', 'a + b = c', 'a² - b² = c²', 'a × b = c²'], ans: 0 },
-      { q: 'How do you say "hello" in Catalan?', opts: ['Bonjour', 'Hola', 'Goeie', 'Ciao'], ans: 1 },
-      { q: 'How do you say "thank you" in Frisian?', opts: ['Danke', 'Gràcies', 'Tankewol', 'Merci'], ans: 2 },
-      { q: 'What is the area of a circle?', opts: ['πr²', '2πr', 'πd', 'r²'], ans: 0 },
-      { q: 'What does DNA stand for?', opts: ['Deoxyribonucleic acid', 'Dinitrogen acid', 'Dynamic nuclear acid', 'Dual nucleotide array'], ans: 0 },
-      { q: 'What is the speed of light?', opts: ['300,000 km/s', '150,000 km/s', '1,000,000 km/s', '30,000 km/s'], ans: 0 },
-      { q: 'What is the slope-intercept form?', opts: ['y = mx + b', 'ax + by = c', 'y - y₁ = m(x - x₁)', 'x = -b/2a'], ans: 0 },
-      { q: 'What planet is closest to the Sun?', opts: ['Venus', 'Mars', 'Mercury', 'Earth'], ans: 2 },
-      { q: 'What is Newton\'s second law?', opts: ['F = ma', 'E = mc²', 'F = mv', 'P = IV'], ans: 0 },
-      { q: 'What is the SI unit of electric current?', opts: ['Volt', 'Watt', 'Ampere', 'Ohm'], ans: 2 },
-      { q: 'What is log₁₀(1000)?', opts: ['2', '3', '4', '10'], ans: 1 },
-      { q: 'What is the sum of angles in a triangle?', opts: ['90°', '180°', '270°', '360°'], ans: 1 },
-      { q: 'Which element has atomic number 1?', opts: ['Helium', 'Oxygen', 'Carbon', 'Hydrogen'], ans: 3 },
-      { q: 'What is the quadratic formula?', opts: ['x = (-b ± √(b²-4ac)) / 2a', 'x = -b/a', 'x = b² - 4ac', 'x = a + b + c'], ans: 0 },
-    ];
-
-    function loadDailyQuiz() {
-      const quizDiv = document.getElementById('dailyQuiz');
-      const todayKey = 'mathagram_quiz_' + new Date().toISOString().slice(0, 10);
-      // Don't show if already answered today
-      if (sessionStorage.getItem(todayKey)) { quizDiv.style.display = 'none'; return; }
-      // Pick question based on day
-      const dayIndex = Math.floor(Date.now() / 86400000) % QUIZ_POOL.length;
-      const quiz = QUIZ_POOL[dayIndex];
-      quizDiv.style.display = '';
-      document.getElementById('quizQuestion').textContent = quiz.q;
-      const optsDiv = document.getElementById('quizOptions');
-      optsDiv.innerHTML = '';
-      quiz.opts.forEach((opt, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-option';
-        btn.textContent = opt;
-        btn.type = 'button';
-        btn.addEventListener('click', () => {
-          // Disable all
-          optsDiv.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
-          const isCorrect = i === quiz.ans;
-          btn.classList.add(isCorrect ? 'correct' : 'wrong');
-          if (!isCorrect) optsDiv.querySelectorAll('.quiz-option')[quiz.ans].classList.add('correct');
-          const result = document.getElementById('quizResult');
-          result.style.display = '';
-          if (isCorrect) {
-            result.style.background = '#f0fdf4';
-            result.style.color = '#166534';
-            result.textContent = 'Correct! +10 XP earned!';
-          } else {
-            result.style.background = '#fef2f2';
-            result.style.color = '#dc2626';
-            result.textContent = 'Not quite! The correct answer is: ' + quiz.opts[quiz.ans];
-          }
-          sessionStorage.setItem(todayKey, 'done');
-          // Try to save XP if logged in and correct
-          if (isCorrect) {
-            import('./js/firebase-config.js').then(({ auth, db }) => {
-              if (auth.currentUser) {
-                import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({ doc, updateDoc, increment }) => {
-                  updateDoc(doc(db, 'users', auth.currentUser.uid), { xp: increment(10) }).catch(() => {});
-                });
-              }
-            }).catch(() => {});
-          }
-        });
-        optsDiv.appendChild(btn);
-      });
-    }
-    loadDailyQuiz();
 
     const SAFETY_KEY = 'mathagram_safety_agreed';
     const overlay = document.getElementById('safetyOverlay');
@@ -426,12 +337,22 @@
           <div class="new-post-card">
             <h3>Share with the community</h3>
             <select class="post-category-select" id="postCategory">
-              <option value="question">Question</option>
+              <option value="question">Question (Quiz)</option>
               <option value="tip">Study Tip</option>
               <option value="progress">Progress Update</option>
               <option value="discussion">Discussion</option>
             </select>
             <textarea class="post-textarea" id="postText" placeholder="What are you learning today?" maxlength="500"></textarea>
+            <div id="quizBuilder" style="display:none; margin-top:12px; padding:16px; background:var(--color-bg); border-radius:12px; border:1px solid var(--color-border);">
+              <p style="font-size:0.82rem; font-weight:700; color:var(--color-text-secondary); margin-bottom:10px;">Add 4 answer choices (mark the correct one):</p>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="display:flex; align-items:center; gap:8px;"><input type="radio" name="correctAnswer" value="0" checked style="accent-color:#22c55e;"> <input type="text" class="quiz-choice-input" placeholder="Choice A" maxlength="100" style="flex:1; padding:8px 12px; border:1px solid var(--color-border); border-radius:8px; font-size:0.88rem; font-family:inherit;"></label>
+                <label style="display:flex; align-items:center; gap:8px;"><input type="radio" name="correctAnswer" value="1" style="accent-color:#22c55e;"> <input type="text" class="quiz-choice-input" placeholder="Choice B" maxlength="100" style="flex:1; padding:8px 12px; border:1px solid var(--color-border); border-radius:8px; font-size:0.88rem; font-family:inherit;"></label>
+                <label style="display:flex; align-items:center; gap:8px;"><input type="radio" name="correctAnswer" value="2" style="accent-color:#22c55e;"> <input type="text" class="quiz-choice-input" placeholder="Choice C" maxlength="100" style="flex:1; padding:8px 12px; border:1px solid var(--color-border); border-radius:8px; font-size:0.88rem; font-family:inherit;"></label>
+                <label style="display:flex; align-items:center; gap:8px;"><input type="radio" name="correctAnswer" value="3" style="accent-color:#22c55e;"> <input type="text" class="quiz-choice-input" placeholder="Choice D" maxlength="100" style="flex:1; padding:8px 12px; border:1px solid var(--color-border); border-radius:8px; font-size:0.88rem; font-family:inherit;"></label>
+              </div>
+              <p style="font-size:0.72rem; color:var(--color-text-muted); margin-top:8px;">Select the radio button next to the correct answer.</p>
+            </div>
             <div class="image-upload-row">
               <label class="image-upload-label">
                 &#128247; Add Image
@@ -453,6 +374,14 @@
         });
         document.getElementById('postImage').addEventListener('change', handleImageSelect);
         document.getElementById('postSubmit').addEventListener('click', submitPost);
+        // Show quiz builder when Question selected
+        document.getElementById('postCategory').addEventListener('change', (e) => {
+          document.getElementById('quizBuilder').style.display = e.target.value === 'question' ? '' : 'none';
+          document.getElementById('postText').placeholder = e.target.value === 'question' ? 'Write your question here...' : 'What are you learning today?';
+        });
+        // Show by default since Question is first option
+        document.getElementById('quizBuilder').style.display = '';
+        document.getElementById('postText').placeholder = 'Write your question here...';
       } else {
         section.innerHTML = `
           <div class="login-prompt">
@@ -542,6 +471,19 @@
         if (pendingImageData) {
           postData.image = pendingImageData;
         }
+        // Add quiz choices if Question category
+        if (category === 'question') {
+          const choiceInputs = document.querySelectorAll('.quiz-choice-input');
+          const choices = Array.from(choiceInputs).map(c => c.value.trim());
+          const correctRadio = document.querySelector('input[name="correctAnswer"]:checked');
+          const correctIndex = correctRadio ? parseInt(correctRadio.value) : 0;
+          // Only save quiz if at least 2 choices filled
+          const filledChoices = choices.filter(c => c.length > 0);
+          if (filledChoices.length >= 2) {
+            postData.quizChoices = choices;
+            postData.quizCorrect = correctIndex;
+          }
+        }
         await addDoc(collection(db, 'posts'), postData);
         document.getElementById('postText').value = '';
         document.getElementById('charCount').textContent = '0';
@@ -549,6 +491,8 @@
         document.getElementById('imagePreview').innerHTML = '';
         const input = document.getElementById('postImage');
         if (input) input.value = '';
+        // Reset quiz builder
+        document.querySelectorAll('.quiz-choice-input').forEach(c => c.value = '');
         loadPosts();
       } catch(e) {
         console.error('Post failed:', e);
@@ -613,6 +557,7 @@
               <span class="post-category-tag" style="background:${catColor}">${catLabel}</span>
             </div>
             <div class="post-body">${sanitizeHTML(post.text)}</div>
+            ${post.quizChoices ? `<div class="post-quiz" id="quiz-${post.id}" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">${post.quizChoices.map((c, ci) => c ? `<button class="quiz-option" data-post="${post.id}" data-idx="${ci}" onclick="answerQuiz('${post.id}',${ci},${post.quizCorrect})">${sanitizeHTML(c)}</button>` : '').join('')}</div>` : ''}
             ${post.image ? `<div class="post-image"><img src="${post.image}" alt="Study image" loading="lazy"></div>` : ''}
             <div class="post-footer">
               <button class="post-action-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
@@ -627,6 +572,29 @@
         feed.innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
       }
     }
+
+    window.answerQuiz = function(postId, chosenIdx, correctIdx) {
+      const quizDiv = document.getElementById('quiz-' + postId);
+      if (!quizDiv) return;
+      const btns = quizDiv.querySelectorAll('.quiz-option');
+      btns.forEach(b => b.disabled = true);
+      const isCorrect = chosenIdx === correctIdx;
+      btns[chosenIdx].classList.add(isCorrect ? 'correct' : 'wrong');
+      if (!isCorrect && btns[correctIdx]) btns[correctIdx].classList.add('correct');
+      // Show result
+      const result = document.createElement('div');
+      result.style.cssText = 'margin-top:8px; padding:10px 14px; border-radius:10px; font-size:0.85rem; font-weight:700;';
+      if (isCorrect) {
+        result.style.background = '#f0fdf4';
+        result.style.color = '#166534';
+        result.textContent = 'Correct! Nice work!';
+      } else {
+        result.style.background = '#fef2f2';
+        result.style.color = '#dc2626';
+        result.textContent = 'Not quite! The correct answer is highlighted in green.';
+      }
+      quizDiv.appendChild(result);
+    };
 
     window.toggleLike = async function(postId) {
       if (!currentUser) return;
