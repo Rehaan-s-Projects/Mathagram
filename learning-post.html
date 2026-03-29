@@ -132,7 +132,8 @@
     }
     .post-item:hover { box-shadow: var(--shadow-sm); }
     .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .post-avatar { width: 36px; height: 36px; border-radius: 50%; }
+    .post-avatar { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; transition: transform 0.15s; }
+    .post-avatar:hover { transform: scale(1.1); }
     .post-meta { flex: 1; }
     .post-author { font-weight: 700; font-size: 0.9rem; }
     .post-time { font-size: 0.75rem; color: var(--color-text-muted); }
@@ -150,6 +151,48 @@
     }
     .post-action-btn:hover { color: var(--color-primary-dark); background: var(--color-bg); }
     .post-action-btn.liked { color: #ef4444; }
+
+    /* Focus button */
+    .focus-btn {
+      padding: 4px 14px; font-size: 0.7rem; font-weight: 700; border-radius: 999px;
+      border: 2px solid var(--color-primary); background: transparent;
+      color: var(--color-primary); cursor: pointer; transition: all 0.2s;
+      white-space: nowrap; letter-spacing: 0.02em;
+    }
+    .focus-btn:hover { background: var(--color-primary); color: #fff; }
+    .focus-btn.focused {
+      background: var(--color-primary); color: #fff; border-color: var(--color-primary);
+    }
+    .focus-btn.focused:hover { background: transparent; color: var(--color-primary); }
+    .focuser-count {
+      font-size: 0.7rem; color: var(--color-text-muted); font-weight: 600; margin-left: 2px;
+    }
+
+    /* Profile popup */
+    .profile-popup-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .profile-popup-overlay.visible { opacity: 1; pointer-events: auto; }
+    .profile-popup {
+      background: var(--color-white); border-radius: var(--radius-lg); padding: 28px 32px;
+      width: 280px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      transform: scale(0.9); transition: transform 0.2s;
+    }
+    .profile-popup-overlay.visible .profile-popup { transform: scale(1); }
+    .profile-popup-avatar { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px; }
+    .profile-popup-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+    .profile-popup-level { font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; margin-bottom: 16px; }
+    .profile-popup-stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 18px; }
+    .profile-popup-stat-value { font-weight: 800; font-size: 1.2rem; color: var(--color-text); }
+    .profile-popup-stat-label { font-size: 0.65rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .profile-popup-close {
+      background: none; border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 6px 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      color: var(--color-text-secondary); transition: all 0.2s;
+    }
+    .profile-popup-close:hover { background: var(--color-bg); }
 
     .empty-state { text-align: center; padding: 48px 24px; color: var(--color-text-muted); }
     .empty-state p { font-size: 1rem; margin-bottom: 8px; }
@@ -269,6 +312,31 @@
     </div>
   </div>
 
+  <!-- Profile Popup -->
+  <div class="profile-popup-overlay" id="profilePopup" onclick="if(event.target===this)closeProfilePopup()">
+    <div class="profile-popup">
+      <img class="profile-popup-avatar" id="popupAvatar" src="" alt="">
+      <div class="profile-popup-name" id="popupName"></div>
+      <div class="profile-popup-level" id="popupLevel"></div>
+      <div class="profile-popup-stats">
+        <div>
+          <div class="profile-popup-stat-value" id="popupXP">0</div>
+          <div class="profile-popup-stat-label">XP</div>
+        </div>
+        <div>
+          <div class="profile-popup-stat-value" id="popupFocusers">0</div>
+          <div class="profile-popup-stat-label">Focusers</div>
+        </div>
+        <div>
+          <div class="profile-popup-stat-value" id="popupStreak">0</div>
+          <div class="profile-popup-stat-label">Streak</div>
+        </div>
+      </div>
+      <div id="popupFocusBtn"></div>
+      <button class="profile-popup-close" onclick="closeProfilePopup()" style="margin-top:10px">Close</button>
+    </div>
+  </div>
+
   <!-- Report Modal -->
   <div class="report-overlay hidden" id="reportOverlay">
     <div class="report-card">
@@ -339,6 +407,7 @@
     initRitaChat('');
     import { onAuthChange, getUserProfile } from './js/auth.js';
     import { sanitizeHTML } from './js/sanitize.js';
+    import { calculateLevel } from './js/progress.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
 
@@ -378,6 +447,7 @@
     let userProfile = null;
     let allPosts = [];
     let currentFilter = 'all';
+    let focusedUsers = new Set(); // UIDs the current user is focusing
 
     // Filter tabs
     document.querySelectorAll('.filter-tab').forEach(tab => {
@@ -394,6 +464,15 @@
       const section = document.getElementById('newPostSection');
       if (user) {
         try { userProfile = await getUserProfile(); } catch(e) { userProfile = null; }
+        // Load who this user is focusing
+        try {
+          const { db } = await import('./js/firebase-config.js');
+          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          if (snap.exists() && snap.data().focusing) {
+            focusedUsers = new Set(snap.data().focusing);
+          }
+        } catch(e) {}
         section.innerHTML = `
           <div class="new-post-card">
             <h3>Share with the community</h3>
@@ -567,9 +646,20 @@
         const { db } = await import('./js/firebase-config.js');
         const { collection, getDocs, query, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
         const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(50));
+        const { doc: docRef, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
         const snap = await getDocs(q);
         allPosts = [];
-        snap.forEach(doc => { allPosts.push({ id: doc.id, ...doc.data() }); });
+        snap.forEach(d => { allPosts.push({ id: d.id, ...d.data() }); });
+        // Load focuser counts for post authors
+        const authorUids = [...new Set(allPosts.map(p => p.uid).filter(Boolean))];
+        const authorData = {};
+        await Promise.all(authorUids.map(async uid => {
+          try {
+            const uSnap = await getDoc(docRef(db, 'users', uid));
+            if (uSnap.exists()) authorData[uid] = uSnap.data().focusers || 0;
+          } catch(e) {}
+        }));
+        allPosts.forEach(p => { if (p.uid) p.focusers = authorData[p.uid] || 0; });
         renderPosts();
       } catch(e) {
         document.getElementById('postsFeed').innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
@@ -611,14 +701,19 @@ Remember: this is NOT social media. Keep it educational, follow the rules, and l
         const catColor = categoryColors[post.category] || '#6b7280';
         const catLabel = categoryLabels[post.category] || post.category;
         const liked = currentUser && post.likedBy && post.likedBy.includes(currentUser.uid);
+        const isOwnPost = currentUser && post.uid === currentUser.uid;
+        const isFocused = currentUser && focusedUsers.has(post.uid);
+        const focuserCount = post.focusers || 0;
+        const focusBtn = (!isOwnPost && currentUser) ? `<button class="focus-btn ${isFocused ? 'focused' : ''}" onclick="toggleFocus('${post.uid}')">${isFocused ? 'Focused' : 'Focus'}</button><span class="focuser-count">${focuserCount > 0 ? focuserCount : ''}</span>` : '';
         return `
           <div class="post-item" data-category="${sanitizeHTML(post.category)}">
             <div class="post-header">
-              <img class="post-avatar" src="assets/avatars/${sanitizeHTML(color)}.svg" alt="">
+              <img class="post-avatar" src="assets/avatars/${sanitizeHTML(color)}.svg" alt="" onclick="openProfilePopup('${post.uid}')">
               <div class="post-meta">
-                <div class="post-author">${sanitizeHTML(post.displayName)}</div>
+                <div class="post-author" style="cursor:pointer" onclick="openProfilePopup('${post.uid}')">${sanitizeHTML(post.displayName)}</div>
                 <div class="post-time">${time}</div>
               </div>
+              ${focusBtn}
               <span class="post-category-tag" style="background:${catColor}">${catLabel}</span>
             </div>
             <div class="post-body">${sanitizeHTML(post.text)}</div>
@@ -741,6 +836,68 @@ Remember: this is NOT social media. Keep it educational, follow the rules, and l
         }
         renderPosts();
       } catch(e) { console.error('Like failed:', e); }
+    };
+
+    window.toggleFocus = async function(targetUid) {
+      if (!currentUser || targetUid === currentUser.uid) return;
+      try {
+        const { db } = await import('./js/firebase-config.js');
+        const { doc, updateDoc, arrayUnion, arrayRemove, increment } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const myRef = doc(db, 'users', currentUser.uid);
+        const targetRef = doc(db, 'users', targetUid);
+        const alreadyFocused = focusedUsers.has(targetUid);
+        if (alreadyFocused) {
+          // Unfocus
+          await updateDoc(myRef, { focusing: arrayRemove(targetUid) });
+          await updateDoc(targetRef, { focusers: increment(-1) });
+          focusedUsers.delete(targetUid);
+          // Update local post data
+          allPosts.forEach(p => { if (p.uid === targetUid) p.focusers = Math.max(0, (p.focusers || 1) - 1); });
+        } else {
+          // Focus
+          await updateDoc(myRef, { focusing: arrayUnion(targetUid) });
+          await updateDoc(targetRef, { focusers: increment(1) });
+          focusedUsers.add(targetUid);
+          allPosts.forEach(p => { if (p.uid === targetUid) p.focusers = (p.focusers || 0) + 1; });
+        }
+        renderPosts();
+      } catch(e) { console.error('Focus failed:', e); }
+    };
+
+    window.openProfilePopup = async function(uid) {
+      if (!uid) return;
+      try {
+        const { db } = await import('./js/firebase-config.js');
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const snap = await getDoc(doc(db, 'users', uid));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const color = data.color || 'blue';
+        const xp = data.xp || data.totalXP || 0;
+        const levelInfo = calculateLevel(xp);
+
+        document.getElementById('popupAvatar').src = `assets/avatars/${color}.svg`;
+        document.getElementById('popupName').textContent = data.displayName || 'Learner';
+        document.getElementById('popupLevel').textContent = `Level ${levelInfo.level} — ${levelInfo.title}`;
+        document.getElementById('popupXP').textContent = xp;
+        document.getElementById('popupFocusers').textContent = data.focusers || 0;
+        document.getElementById('popupStreak').textContent = data.streak || 0;
+
+        // Focus button inside popup (not for own profile)
+        const focusBtnDiv = document.getElementById('popupFocusBtn');
+        if (currentUser && uid !== currentUser.uid) {
+          const isFocused = focusedUsers.has(uid);
+          focusBtnDiv.innerHTML = `<button class="focus-btn ${isFocused ? 'focused' : ''}" onclick="toggleFocus('${uid}');closeProfilePopup();" style="padding:8px 24px; font-size:0.85rem;">${isFocused ? 'Focused' : 'Focus'}</button>`;
+        } else {
+          focusBtnDiv.innerHTML = '';
+        }
+
+        document.getElementById('profilePopup').classList.add('visible');
+      } catch(e) { console.error('Profile popup failed:', e); }
+    };
+
+    window.closeProfilePopup = function() {
+      document.getElementById('profilePopup').classList.remove('visible');
     };
 
     function timeAgo(date) {

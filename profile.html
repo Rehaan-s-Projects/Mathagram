@@ -201,6 +201,10 @@
           <div id="stat-streak" class="stat-value">0</div>
           <div class="stat-label">Day Streak</div>
         </div>
+        <div class="stat">
+          <div id="stat-focusers" class="stat-value">0</div>
+          <div class="stat-label">Focusers</div>
+        </div>
       </div>
 
       <!-- Course Progress -->
@@ -232,6 +236,8 @@
     import { onAuthChange, getUserProfile, logOut } from './js/auth.js';
     import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
     import { setLighthouseLevel } from './js/lighthouse.js';
+    import { doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { db, auth as fbAuth } from './js/firebase-config.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
     function getColorValue(colorName) {
@@ -268,7 +274,15 @@
       document.getElementById('profile-name').textContent = displayName;
 
       // Level
-      const xp = profile.xp || profile.totalXP || 0;
+      // Migrate legacy totalXP → xp on profile load
+      let xp = profile.xp || 0;
+      if (!xp && profile.totalXP) {
+        xp = profile.totalXP;
+        try {
+          const userRef = doc(db, 'users', fbAuth.currentUser.uid);
+          await updateDoc(userRef, { xp: profile.totalXP, totalXP: 0 });
+        } catch (e) {}
+      }
       const levelInfo = calculateLevel(xp);
       document.getElementById('level-badge').textContent = `Level ${levelInfo.level} — ${levelInfo.title}`;
 
@@ -283,6 +297,7 @@
       // Stats
       document.getElementById('stat-xp').textContent = xp;
       document.getElementById('stat-streak').textContent = profile.streak || 0;
+      document.getElementById('stat-focusers').textContent = profile.focusers || 0;
 
       // Lighthouse glow
       setLighthouseLevel(levelInfo.level);

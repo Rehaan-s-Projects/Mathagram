@@ -70,7 +70,7 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
     // Save progress
     try {
       const { saveLessonResult } = await import('./progress.js');
-      await saveLessonResult(courseId, lessonId, score);
+      await saveLessonResult(courseId, lessonId, score, xpEarned);
     } catch(e) {}
   } else {
     // Incognito / not logged in — Brilliant-style prompt

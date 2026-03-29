@@ -113,12 +113,12 @@ export function calculateXP(score) {
  * @param {number} score – 0 to 100
  * @returns {Promise<{ grade: string, stars: number, xpEarned: number }|null>}
  */
-export async function saveLessonResult(courseId, lessonId, score) {
+export async function saveLessonResult(courseId, lessonId, score, quizXP) {
   const user = auth.currentUser;
   if (!user) return null;
 
   const { grade, stars, passed } = calculateGrade(score);
-  const xpEarned = calculateXP(score);
+  const xpEarned = quizXP != null ? quizXP : calculateXP(score);
 
   // Persist lesson result
   const lessonRef = doc(db, 'users', user.uid, 'progress', courseId, 'lessons', lessonId);
@@ -133,11 +133,42 @@ export async function saveLessonResult(courseId, lessonId, score) {
 
   // Update total XP on user document
   const userRef = doc(db, 'users', user.uid);
-  await updateDoc(userRef, { totalXP: increment(xpEarned) });
+
+  // Migrate any legacy totalXP into xp field
+  const prevSnap = await getDoc(userRef);
+  if (prevSnap.exists()) {
+    const data = prevSnap.data();
+    if (data.totalXP && !data.xp) {
+      await updateDoc(userRef, { xp: data.totalXP, totalXP: 0 });
+    }
+  }
+
+  await updateDoc(userRef, { xp: increment(xpEarned) });
+
+  // Update streak
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  const snapAfterXP = await getDoc(userRef);
+  const userData = snapAfterXP.exists() ? snapAfterXP.data() : {};
+  const lastActive = userData.lastActive ? userData.lastActive.slice(0, 10) : null;
+
+  let newStreak = userData.streak || 0;
+  if (lastActive !== todayStr) {
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    if (lastActive === yesterdayStr) {
+      newStreak += 1; // consecutive day
+    } else if (lastActive !== todayStr) {
+      newStreak = 1; // streak broken, start fresh
+    }
+    await updateDoc(userRef, { streak: newStreak, lastActive: now.toISOString() });
+  }
 
   // Recalculate level from new total and persist
   const userSnap = await getDoc(userRef);
-  const totalXP = userSnap.exists() ? (userSnap.data().totalXP || 0) : 0;
+  const totalXP = userSnap.exists() ? (userSnap.data().xp || 0) : 0;
   const { level, title } = calculateLevel(totalXP);
   await updateDoc(userRef, { level, levelTitle: title });
 
