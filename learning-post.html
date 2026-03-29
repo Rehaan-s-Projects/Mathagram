@@ -178,6 +178,46 @@
     .quiz-option:disabled { cursor: default; opacity: 0.8; }
     .quiz-option.correct { border-color: #22c55e; background: #f0fdf4; color: #166534; }
     .quiz-option.wrong { border-color: #ef4444; background: #fef2f2; color: #dc2626; }
+
+    /* Report button */
+    .report-btn { color: var(--color-text-muted); margin-left: auto; }
+    .report-btn:hover { color: #ef4444 !important; background: #fef2f2 !important; }
+
+    /* Report modal */
+    .report-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .report-overlay.hidden { display: none; }
+    .report-card {
+      background: #fff; border-radius: 16px; max-width: 400px; width: 100%;
+      padding: 32px 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    }
+    .report-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+    .report-card .report-sub { font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 16px; }
+    .report-reason {
+      display: block; width: 100%; padding: 12px 14px; margin-bottom: 8px;
+      border: 2px solid var(--color-border); border-radius: 10px;
+      background: #fff; font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; text-align: left; transition: all 0.2s;
+      font-family: inherit; color: var(--color-text);
+    }
+    .report-reason:hover { border-color: #ef4444; background: #fef2f2; }
+    .report-reason.selected { border-color: #ef4444; background: #fef2f2; color: #dc2626; }
+    .report-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .report-cancel {
+      flex: 1; padding: 10px; border: 2px solid var(--color-border); border-radius: 10px;
+      background: #fff; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 0.88rem;
+    }
+    .report-submit {
+      flex: 1; padding: 10px; border: none; border-radius: 10px;
+      background: #ef4444; color: #fff; font-weight: 700; cursor: pointer;
+      font-family: inherit; font-size: 0.88rem; transition: background 0.2s;
+    }
+    .report-submit:hover { background: #dc2626; }
+    .report-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -226,6 +266,27 @@
         <label for="agreeCheck">I have read and agree to follow the safety rules.</label>
       </div>
       <button class="safety-btn" id="agreeBtn" disabled>Enter Learning Post</button>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div class="report-overlay hidden" id="reportOverlay">
+    <div class="report-card">
+      <h3>Report this post</h3>
+      <p class="report-sub">Why are you reporting this? Select a reason below.</p>
+      <button class="report-reason" data-reason="spoiler">Ruining answers / Spoilers</button>
+      <button class="report-reason" data-reason="inappropriate">Inappropriate or sexual content</button>
+      <button class="report-reason" data-reason="harassment">Harassment or bullying</button>
+      <button class="report-reason" data-reason="hate">Hate speech or slurs</button>
+      <button class="report-reason" data-reason="spam">Spam or advertising</button>
+      <button class="report-reason" data-reason="personal">Sharing personal information</button>
+      <button class="report-reason" data-reason="offtopic">Off-topic / Not educational</button>
+      <button class="report-reason" data-reason="cheating">Cheating or sharing answers</button>
+      <button class="report-reason" data-reason="other">Other</button>
+      <div class="report-actions">
+        <button class="report-cancel" id="reportCancel">Cancel</button>
+        <button class="report-submit" id="reportSubmit" disabled>Report</button>
+      </div>
     </div>
   </div>
 
@@ -567,6 +628,9 @@ Remember: this is NOT social media. Keep it educational, follow the rules, and l
               <button class="post-action-btn ${liked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
                 ${liked ? '&#10084;' : '&#9825;'} ${post.likes || 0}
               </button>
+              <button class="post-action-btn report-btn" onclick="openReport('${post.id}','${sanitizeHTML(post.displayName)}')">
+                &#9873; Report
+              </button>
             </div>
           </div>`;
       }).join('');
@@ -576,6 +640,62 @@ Remember: this is NOT social media. Keep it educational, follow the rules, and l
         feed.innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to share!</p></div>';
       }
     }
+
+    // Report system
+    let _reportPostId = null;
+    let _reportPostAuthor = null;
+    let _reportReason = null;
+
+    window.openReport = function(postId, author) {
+      if (!currentUser) return;
+      _reportPostId = postId;
+      _reportPostAuthor = author;
+      _reportReason = null;
+      document.querySelectorAll('.report-reason').forEach(b => b.classList.remove('selected'));
+      document.getElementById('reportSubmit').disabled = true;
+      document.getElementById('reportOverlay').classList.remove('hidden');
+    };
+
+    document.querySelectorAll('.report-reason').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.report-reason').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        _reportReason = btn.dataset.reason;
+        document.getElementById('reportSubmit').disabled = false;
+      });
+    });
+
+    document.getElementById('reportCancel').addEventListener('click', () => {
+      document.getElementById('reportOverlay').classList.add('hidden');
+    });
+
+    document.getElementById('reportSubmit').addEventListener('click', async () => {
+      if (!_reportPostId || !_reportReason || !currentUser) return;
+      const submitBtn = document.getElementById('reportSubmit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Reporting...';
+      try {
+        const { db } = await import('./js/firebase-config.js');
+        const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        await addDoc(collection(db, 'reports'), {
+          postId: _reportPostId,
+          postAuthor: _reportPostAuthor,
+          reason: _reportReason,
+          reportedBy: currentUser.uid,
+          reporterName: userProfile?.displayName || 'Unknown',
+          timestamp: serverTimestamp()
+        });
+      } catch(e) {}
+      // Show confirmation
+      const card = document.querySelector('.report-card');
+      card.innerHTML = `
+        <div style="text-align:center; padding:16px 0;">
+          <div style="font-size:2.5rem; margin-bottom:12px;">&#9873;</div>
+          <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Report Submitted</h3>
+          <p style="font-size:0.88rem; color:#64748b; line-height:1.5; margin-bottom:20px;">Thank you for keeping Mathagram safe. The Mathagram team will review this post and take action if it violates our Community Safety Rules.</p>
+          <button onclick="document.getElementById('reportOverlay').classList.add('hidden')" style="padding:10px 28px; background:var(--color-primary); color:#fff; font-weight:700; border:none; border-radius:10px; cursor:pointer; font-family:inherit; font-size:0.9rem;">Done</button>
+        </div>`;
+    });
 
     window.answerQuiz = function(postId, chosenIdx, correctIdx) {
       const quizDiv = document.getElementById('quiz-' + postId);
