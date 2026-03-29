@@ -214,11 +214,11 @@
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
-    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
     });
 
-    await showLessonComplete(container, completionDiv, score, {
+    await showLessonComplete(container, completionDiv, score, { xp,
       courseId: 'trigonometry',
       lessonId: 'lesson-2',
       nextHref: 'lesson-3.html',

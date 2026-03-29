@@ -243,11 +243,11 @@
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
-    const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
     });
 
-    await showLessonComplete(container, completionDiv, score, {
+    await showLessonComplete(container, completionDiv, score, { xp,
       courseId: 'calculus',
       lessonId: 'lesson-11',
       nextHref: 'lesson-12.html',

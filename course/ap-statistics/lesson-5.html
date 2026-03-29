@@ -133,7 +133,7 @@
   ];
 
   const container = document.getElementById('exercises');
-  const score = await runExerciseSet(container, exercises, (isCorrect, index) => {
+  const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
     showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
   });
 

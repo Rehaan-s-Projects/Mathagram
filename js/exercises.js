@@ -20,9 +20,9 @@ import { sanitizeHTML, sanitizeAnswer } from "./sanitize.js";
  * @param {string}      options.basePath  - relative path to root (default '../../')
  */
 export async function showLessonComplete(exerciseContainer, completionDiv, score, options = {}) {
-  const { courseId, lessonId, nextHref, backHref = 'index.html', basePath = '../../' } = options;
+  const { courseId, lessonId, nextHref, backHref = 'index.html', basePath = '../../', xp } = options;
 
-  // Calculate stars (5-star system) and XP
+  // Calculate stars (5-star system)
   let stars;
   if (score >= 95) { stars = 5; }
   else if (score >= 80) { stars = 4; }
@@ -31,8 +31,8 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
   else if (score >= 20) { stars = 1; }
   else { stars = 0; }
 
-  // Minimum 25 XP even if all wrong, scales up to 50 XP for perfect
-  const xpEarned = Math.max(25, Math.round(25 + (score / 100) * 25));
+  // Use XP from quiz if provided, otherwise calculate
+  const xpEarned = xp || Math.max(25, Math.round(25 + (score / 100) * 25));
   const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(5 - stars);
 
   // Always mark locally so next lesson unlocks (works in Incognito)
@@ -61,6 +61,7 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
         <div class="stars" style="font-size:2.5rem; letter-spacing:6px; margin:16px 0;">${starStr}</div>
         <div class="xp-earned">+${xpEarned} XP</div>
         <p class="score-text">You scored ${score}%</p>
+        <p style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:16px;">Correct = 10 XP (double) | Past mistakes = 5 XP</p>
         <div class="lesson-nav">
           <a href="${sanitizeHTML(backHref)}" class="btn btn-outline">Back to Course</a>
           ${nextHref ? `<a href="${sanitizeHTML(nextHref)}" class="btn btn-primary">Next Lesson</a>` : ''}
@@ -573,7 +574,7 @@ export function renderExercise(container, exercise, onAnswer) {
  * @param {HTMLElement} container
  * @param {object[]}   exercises
  * @param {function}    [onEachAnswer] — optional (isCorrect, index) callback
- * @returns {Promise<number>} resolves with score 0-100
+ * @returns {Promise<{score:number, xp:number}>} resolves with score 0-100 and XP earned
  */
 export function runExerciseSet(container, exercises, onEachAnswer) {
   return new Promise((resolve) => {
@@ -583,7 +584,7 @@ export function runExerciseSet(container, exercises, onEachAnswer) {
     let pos = 0;            // position in queue
     let correctOnFirst = 0; // correct on first attempt (for scoring)
     let answered = 0;       // how many original questions answered so far
-    const mistakeSet = new Set(); // track which questions were wrong (by index in queue)
+    let xpEarned = 0;       // total XP (double for first correct, normal for retry correct)
 
     // Progress bar element
     function buildProgressBar() {
@@ -611,7 +612,9 @@ export function runExerciseSet(container, exercises, onEachAnswer) {
       if (pos >= queue.length) {
         // All done — score based on first-attempt correct
         const score = Math.round((correctOnFirst / originalTotal) * 100);
-        resolve(score);
+        // Minimum 25 XP even if all wrong
+        xpEarned = Math.max(25, xpEarned);
+        resolve({ score, xp: xpEarned });
         return;
       }
 
@@ -639,17 +642,19 @@ export function runExerciseSet(container, exercises, onEachAnswer) {
           answered++;
           if (isCorrect) {
             correctOnFirst++;
+            xpEarned += 10; // Double XP for first-attempt correct
           } else {
             // Re-queue this exercise to appear again later
             queue.push(exercise);
           }
         } else {
           // Retry attempt
-          if (!isCorrect) {
+          if (isCorrect) {
+            xpEarned += 5; // Normal XP for retry correct
+          } else {
             // Still wrong — re-queue again
             queue.push(exercise);
           }
-          // If correct on retry, just move on (don't add to score)
         }
 
         if (typeof onEachAnswer === 'function') {
