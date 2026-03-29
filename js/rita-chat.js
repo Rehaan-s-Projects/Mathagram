@@ -316,8 +316,14 @@ export function initRitaChat(basePath = '') {
         </div>
         <button class="rita-chat-close" id="rita-close">&times;</button>
       </div>
+      <div id="rita-login-gate" style="display:none; padding:32px 24px; text-align:center;">
+        <img src="${basePath}assets/characters/rita.svg" alt="Rita" style="width:64px; height:64px; border-radius:50%; border:3px solid #ec4899; margin-bottom:12px;">
+        <p style="font-size:0.95rem; font-weight:700; color:#1a1a2e; margin-bottom:6px;">Sign in to chat with Rita!</p>
+        <p style="font-size:0.82rem; color:#64748b; margin-bottom:16px; line-height:1.5;">Create a free account or log in to ask Rita questions about math, science, study tips, and more.</p>
+        <a href="${basePath}login.html" style="display:inline-block; padding:10px 24px; background:#ec4899; color:#fff; font-weight:700; border-radius:12px; text-decoration:none; font-size:0.9rem;">Sign In or Sign Up</a>
+      </div>
       <div class="rita-chat-messages" id="rita-messages"></div>
-      <div class="rita-chat-input">
+      <div class="rita-chat-input" id="rita-input-area">
         <input type="text" id="rita-input" placeholder="Ask Rita anything..." maxlength="200" autocomplete="off">
         <button id="rita-send">&#10148;</button>
       </div>
@@ -332,17 +338,38 @@ export function initRitaChat(basePath = '') {
   const sendBtn = document.getElementById('rita-send');
   const messages = document.getElementById('rita-messages');
 
+  const loginGate = document.getElementById('rita-login-gate');
+  const inputArea = document.getElementById('rita-input-area');
   let isOpen = false;
   let firstOpen = true;
+  let isLoggedIn = false;
+
+  // Check auth state
+  import('./firebase-config.js').then(({ auth }) => {
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({ onAuthStateChanged }) => {
+      onAuthStateChanged(auth, (user) => {
+        isLoggedIn = !!user;
+        if (isLoggedIn) {
+          loginGate.style.display = 'none';
+          messages.style.display = '';
+          inputArea.style.display = '';
+        } else {
+          loginGate.style.display = '';
+          messages.style.display = 'none';
+          inputArea.style.display = 'none';
+        }
+      });
+    });
+  }).catch(() => {});
 
   btn.addEventListener('click', () => {
     isOpen = !isOpen;
     popup.classList.toggle('open', isOpen);
-    if (isOpen && firstOpen) {
+    if (isOpen && firstOpen && isLoggedIn) {
       firstOpen = false;
       addRitaMsg(pickRandom(RITA_RESPONSES.greetings));
     }
-    if (isOpen) input.focus();
+    if (isOpen && isLoggedIn) input.focus();
   });
 
   closeBtn.addEventListener('click', () => {
