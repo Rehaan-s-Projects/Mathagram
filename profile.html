@@ -242,7 +242,7 @@
     initNav('');
     import { onAuthChange, getUserProfile, logOut } from './js/auth.js';
     import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
-    import { doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { doc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
     import { db, auth as fbAuth } from './js/firebase-config.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -269,19 +269,15 @@
       try {
       // Load profile
       const profile = await getUserProfile();
-      // Set default avatar immediately
-      const avatarEl = document.getElementById('profile-avatar');
-      avatarEl.innerHTML = `<img src="assets/avatars/blue.svg" alt="">`;
-
-      if (!profile) {
-        document.getElementById('profile-name-input').value = user.displayName || 'New Learner';
-        return;
-      }
+      const userColor = (profile && profile.color) || 'blue';
+      const displayName = (profile && profile.displayName) || user.displayName || 'New Learner';
 
       // Avatar image
-      const userColor = profile.color || 'blue';
-      const displayName = profile.displayName || 'Learner';
+      const avatarEl = document.getElementById('profile-avatar');
       avatarEl.innerHTML = `<img src="assets/avatars/${userColor}.svg" alt="">`;
+
+      // Track pending color
+      let pendingColor = userColor;
 
       // Color picker — highlight current and handle clicks
       const colorMap = { blue:'#3b82f6', green:'#22c55e', orange:'#f97316', purple:'#8b5cf6', cyan:'#06b6d4', pink:'#ec4899', gray:'#6b7280' };
@@ -321,9 +317,6 @@
         nameInput.style.borderColor = 'var(--color-border)';
       });
 
-      // Track pending color
-      let pendingColor = userColor;
-
       // Save button handler
       const saveBtn = document.getElementById('btn-save-profile');
       const saveStatus = document.getElementById('save-profile-status');
@@ -343,7 +336,7 @@
           saveBtn.textContent = 'Saving...';
           saveStatus.textContent = '';
           const userRef = doc(db, 'users', fbAuth.currentUser.uid);
-          await updateDoc(userRef, { displayName: newName, color: pendingColor });
+          await setDoc(userRef, { displayName: newName, color: pendingColor }, { merge: true });
           saveBtn.textContent = 'Save Changes';
           saveBtn.disabled = false;
           saveStatus.textContent = 'Saved!';
@@ -361,47 +354,49 @@
 
       nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); nameInput.blur(); } });
 
-      // Level
-      // Migrate legacy totalXP → xp on profile load
-      let xp = profile.xp || 0;
-      if (!xp && profile.totalXP) {
-        xp = profile.totalXP;
-        try {
-          const userRef = doc(db, 'users', fbAuth.currentUser.uid);
-          await updateDoc(userRef, { xp: profile.totalXP, totalXP: 0 });
-        } catch (e) {}
-      }
-      const levelInfo = calculateLevel(xp);
-      document.getElementById('level-badge').textContent = `Level ${levelInfo.level} — ${levelInfo.title}`;
-
-      // Stats
-      document.getElementById('stat-xp').textContent = xp;
-      document.getElementById('stat-streak').textContent = profile.streak || 0;
-      document.getElementById('stat-focusers').textContent = profile.focusers || 0;
-
-      // Course progress
-      try {
-        const progress = await getCourseProgress('calculus');
-        const lessonList = document.getElementById('lesson-list');
-        const entries = Object.entries(progress);
-
-        if (entries.length > 0) {
-          lessonList.innerHTML = '';
-          entries.forEach(([lessonId, data]) => {
-            const stars = '★'.repeat(data.stars) + '☆'.repeat(3 - data.stars);
-            const li = document.createElement('li');
-            li.innerHTML = `
-              <span>${lessonId}</span>
-              <span>
-                <span class="lesson-grade">${data.grade}</span>
-                <span class="lesson-stars">${stars}</span>
-              </span>
-            `;
-            lessonList.appendChild(li);
-          });
+      // Level & Stats (only if profile exists)
+      if (profile) {
+        // Migrate legacy totalXP → xp on profile load
+        let xp = profile.xp || 0;
+        if (!xp && profile.totalXP) {
+          xp = profile.totalXP;
+          try {
+            const userRef = doc(db, 'users', fbAuth.currentUser.uid);
+            await updateDoc(userRef, { xp: profile.totalXP, totalXP: 0 });
+          } catch (e) {}
         }
-      } catch (err) {
-        // Progress not available yet
+        const levelInfo = calculateLevel(xp);
+        document.getElementById('level-badge').textContent = `Level ${levelInfo.level} — ${levelInfo.title}`;
+
+        // Stats
+        document.getElementById('stat-xp').textContent = xp;
+        document.getElementById('stat-streak').textContent = profile.streak || 0;
+        document.getElementById('stat-focusers').textContent = profile.focusers || 0;
+
+        // Course progress
+        try {
+          const progress = await getCourseProgress('calculus');
+          const lessonList = document.getElementById('lesson-list');
+          const entries = Object.entries(progress);
+
+          if (entries.length > 0) {
+            lessonList.innerHTML = '';
+            entries.forEach(([lessonId, data]) => {
+              const stars = '★'.repeat(data.stars) + '☆'.repeat(3 - data.stars);
+              const li = document.createElement('li');
+              li.innerHTML = `
+                <span>${lessonId}</span>
+                <span>
+                  <span class="lesson-grade">${data.grade}</span>
+                  <span class="lesson-stars">${stars}</span>
+                </span>
+              `;
+              lessonList.appendChild(li);
+            });
+          }
+        } catch (err) {
+          // Progress not available yet
+        }
       }
 
       } catch(profileError) {
