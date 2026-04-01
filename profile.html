@@ -383,26 +383,44 @@
         document.getElementById('stat-streak').textContent = profile.streak || 0;
         document.getElementById('stat-focusers').textContent = profile.focusers || 0;
 
-        // Course progress
+        // Course progress — all courses
         try {
-          const progress = await getCourseProgress('calculus');
+          const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const progressCol = collection(db, 'users', fbAuth.currentUser.uid, 'progress');
+          const coursesSnap = await getDocs(progressCol);
           const lessonList = document.getElementById('lesson-list');
-          const entries = Object.entries(progress);
+          let totalCompleted = 0;
+          const courseEntries = [];
 
-          if (entries.length > 0) {
+          for (const courseDoc of coursesSnap.docs) {
+            const courseId = courseDoc.id;
+            const lessonsSnap = await getDocs(collection(db, 'users', fbAuth.currentUser.uid, 'progress', courseId, 'lessons'));
+            if (lessonsSnap.size > 0) {
+              const courseName = courseId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+              courseEntries.push({ name: courseName, id: courseId, count: lessonsSnap.size });
+              totalCompleted += lessonsSnap.size;
+            }
+          }
+
+          if (courseEntries.length > 0) {
             lessonList.innerHTML = '';
-            entries.forEach(([lessonId, data]) => {
-              const stars = '★'.repeat(data.stars) + '☆'.repeat(3 - data.stars);
+            courseEntries.sort((a, b) => b.count - a.count);
+            courseEntries.forEach(({ name, id, count }) => {
               const li = document.createElement('li');
               li.innerHTML = `
-                <span>${lessonId}</span>
-                <span>
-                  <span class="lesson-grade">${data.grade}</span>
-                  <span class="lesson-stars">${stars}</span>
-                </span>
+                <a href="course/${id}/index.html" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; width:100%;">
+                  <span>${name}</span>
+                  <span class="lesson-grade">${count} lesson${count !== 1 ? 's' : ''}</span>
+                </a>
               `;
               lessonList.appendChild(li);
             });
+            // Total row
+            const totalLi = document.createElement('li');
+            totalLi.style.borderTop = '2px solid var(--color-border)';
+            totalLi.style.fontWeight = '700';
+            totalLi.innerHTML = `<span>Total</span><span>${totalCompleted} lessons completed</span>`;
+            lessonList.appendChild(totalLi);
           }
         } catch (err) {
           // Progress not available yet
