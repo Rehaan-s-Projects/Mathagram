@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math History — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>Math History</h1>
+    <p>Travel through 5,000 years of mathematical discovery — from Babylonian tablets to modern breakthroughs. Meet the brilliant minds who shaped the language of the universe. 525 lessons across 35 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Mathematics Before Writing',['Tally Marks & Counting','The Ishango Bone (20,000 BC)','Counting with Fingers & Stones','Prehistoric Geometry','Megalithic Structures & Math','Stonehenge & Astronomy','Cave Paintings & Patterns','Early Trade & Number Need','Oral Counting Systems','Base-5 & Base-10 Origins','Body-Part Counting Systems','Knot Records (Quipu Preview)','Proto-Writing & Numbers','Why Humans Needed Math','Before Writing Review']],
+      [2,'Babylonian Mathematics',['Mesopotamia — Cradle of Math','Cuneiform Number System','Base-60 (Sexagesimal) System','Why 60? Divisibility','Babylonian Place Value','Babylonian Multiplication Tables','Babylonian Division','Babylonian Fractions','Plimpton 322 Tablet','Pythagorean Triples in Babylon','Babylonian Algebra','Quadratic Equations in Clay','Babylonian Geometry','Square Root of 2 Tablet (YBC 7289)','Babylonian Math Review']],
+      [3,'Egyptian Mathematics',['Ancient Egypt & the Nile','Egyptian Hieroglyphic Numerals','Base-10 Without Place Value','The Rhind Mathematical Papyrus','Ahmes — The First Named Mathematician','Egyptian Multiplication (Doubling)','Egyptian Division','Egyptian Fractions (Unit Fractions)','The Eye of Horus Fractions','Moscow Mathematical Papyrus','Area of a Circle (π ≈ 3.16)','Volume of a Truncated Pyramid','Egyptian Geometry for Land Survey','Mathematics & the Pyramids','Egyptian Math Review']],
+      [4,'Ancient Chinese Mathematics',['Early Chinese Number Systems','Rod Numerals','The Counting Board (Suanpan)','The Nine Chapters on Mathematical Art','Liu Hui — Commentator Genius','Chinese Remainder Theorem (Sun Zi)','Gaussian Elimination in China','Chinese Method of Double False Position','Magic Squares in China (Lo Shu)','Zu Chongzhi & Pi (355/113)','The Sea Island Manual','Chinese Polynomial Equations','Pascal Triangle in China (Yang Hui)','Horner Method in China','Chinese Math Review']],
+      [5,'Ancient Indian Mathematics',['Vedic Mathematics & the Sulbasutras','Baudhayana & the Pythagorean Theorem','Jain Mathematics & Large Numbers','Pingala & Binary-Like Sequences','Aryabhata — Astronomer-Mathematician','Aryabhata & Pi (3.1416)','Brahmagupta & Zero','Brahmagupta & Negative Numbers','Brahmagupta Formula for Cyclic Quadrilaterals','Mahavira & Combinatorics','Bhaskara II & Lilavati','Bhaskara II & Calculus Ideas','Kerala School of Mathematics','Madhava Series for Pi & Sine','Indian Math Review']],
+      [6,'Greek Mathematics — The Revolution',['Why Greece Changed Everything','Thales of Miletus — First Proofs','Thales Theorem','Pythagoras & the Pythagoreans','Pythagorean Theorem Proofs','Discovery of Irrationals (√2)','The Pythagorean Crisis','Hippasus & the Legend','Hippocrates of Chios & Lunes','Zeno of Elea & His Paradoxes','Achilles & the Tortoise','The Arrow Paradox','Plato & Mathematics','The Academy & Geometry','Greek Revolution Review']],
+      [7,'Euclid & The Elements',['Who Was Euclid?','Alexandria — Center of Learning','The Elements — Most Influential Textbook','Book I — Plane Geometry','The Five Postulates','The Parallel Postulate Problem','Book II — Geometric Algebra','Book III — Circles','Book V — Ratios (Eudoxus)','Book VII — Number Theory','Euclid & Prime Numbers','Proof: Infinitely Many Primes','Euclidean Algorithm (GCD)','Legacy of The Elements','Euclid Review']],
+      [8,'Archimedes — The Greatest?',['Archimedes of Syracuse','Archimedes & the King\'s Crown','Method of Exhaustion','Archimedes & Pi (22/7)','Squeezing Pi with Polygons','Area of a Parabola','Volume of a Sphere','The Archimedes Palimpsest','Archimedes & Infinitesimals','The Sand Reckoner (Large Numbers)','Archimedean Spiral','Archimedes War Machines','The Death of Archimedes','Legacy of Archimedes','Archimedes Review']],
+      [9,'Later Greek & Hellenistic Math',['Apollonius & Conic Sections','Ellipses, Parabolas, Hyperbolas','Eratosthenes & Earth\'s Circumference','The Sieve of Eratosthenes','Hipparchus & Trigonometry','Heron of Alexandria & His Formula','Diophantus — Father of Algebra','Arithmetica & Diophantine Equations','Hypatia of Alexandria','The Burning of the Library','Pappus & Mathematical Collections','Ptolemy & the Almagest','Greek Astronomy & Math','The Decline of Greek Math','Later Greek Math Review']],
+      [10,'Islamic Golden Age',['The House of Wisdom (Baghdad)','Al-Khwarizmi — Father of Algebra','Al-Jabr (The Compendious Book)','Origin of the Word "Algorithm"','Al-Khwarizmi & Hindu-Arabic Numerals','Thabit ibn Qurra — Translator & Innovator','Al-Karaji & Polynomial Arithmetic','Omar Khayyam & Cubic Equations','Khayyam & the Calendar','Al-Haytham (Alhazen) & Optics','Al-Biruni — Polymath','Al-Tusi & the Tusi Couple','Nasir al-Din al-Tusi & Trigonometry','Transmission to Europe','Islamic Golden Age Review']],
+      [11,'Medieval European Mathematics',['The Dark Ages & Math Decline','Boethius & Roman Math','Alcuin of York & Puzzle Problems','Gerbert of Aurillac (Pope Sylvester II)','Introduction of Hindu-Arabic Numerals to Europe','Fibonacci — Leonardo of Pisa','Liber Abaci (1202)','The Fibonacci Sequence','Fibonacci & the Golden Ratio','Jordanus de Nemore','Nicole Oresme & Graphing','Oresme & Infinite Series','Medieval Universities','Scholastic Mathematics','Medieval Math Review']],
+      [12,'Mathematics in Africa, Americas & Pacific',['African Mathematics Overview','Yoruba Base-20 System','Ethiopian Multiplication','Ishango Bone Revisited','Fractal Patterns in African Villages','Mayan Mathematics','Mayan Vigesimal (Base-20)','Mayan Zero','Mayan Calendar Mathematics','Aztec Mathematics & Land Measurement','Inca Quipu — Knot Records','Polynesian Navigation Mathematics','Australian Aboriginal Counting','African & Americas Math Connections','Global Math Review']],
+      [13,'Japanese & Korean Mathematics',['Wasan — Japanese Mathematics','Seki Takakazu — Japan\'s Greatest Mathematician','Sangaku — Temple Geometry Tablets','Japanese Matrix Determinants','Bernoulli Numbers in Japan','Korean Mathematics Overview','Korean Counting Systems','Chosun Dynasty Mathematics','Hong Jeong-ha & Gu-il-jip','East Asian Counting Rods','The Abacus (Soroban & Jupan)','Comparison with European Math','Isolation & Independent Discovery','Meiji Restoration & Western Math','Japanese & Korean Math Review']],
+      [14,'Renaissance Mathematics',['The Renaissance Awakening','Printing Press & Math Books','Luca Pacioli & Double-Entry Bookkeeping','Pacioli & the Golden Ratio (Divina Proportione)','Scipione del Ferro & the Cubic','Tartaglia & the Cubic Formula','Cardano & Ars Magna (1545)','The Cubic Solution','Ferrari & the Quartic','The Story of the Mathematical Duel','Rafael Bombelli & Complex Numbers','François Viète & Symbolic Algebra','Simon Stevin & Decimals','John Napier & Logarithms','Renaissance Math Review']],
+      [15,'The Birth of Calculus',['The Problem of Motion','Cavalieri & Indivisibles','Fermat & Tangent Lines','Descartes & Coordinate Geometry','The Cartesian Plane','Analytic Geometry Revolution','Isaac Newton — Life & Times','Newton & Fluxions','The Principia Mathematica (1687)','Gottfried Leibniz — Life & Times','Leibniz & the Calculus Notation','dx, dy, ∫ — Leibniz\'s Gifts','The Priority Dispute','Newton vs Leibniz — Who Won?','Birth of Calculus Review']],
+      [16,'The Bernoulli Dynasty',['The Bernoulli Family','Jacob Bernoulli & Probability','Ars Conjectandi','The Law of Large Numbers','Jacob & the Brachistochrone','Johann Bernoulli — Rival Brother','Johann & L\'Hôpital\'s Rule','The Catenary Curve','Daniel Bernoulli & Fluid Dynamics','Bernoulli\'s Principle','The Bernoulli Numbers','Euler — Student of Johann','The Bernoulli Legacy','Sibling Rivalry in Math','Bernoulli Dynasty Review']],
+      [17,'Leonhard Euler — The Master',['Euler\'s Life (1707-1783)','Euler\'s Blindness & Productivity','Euler\'s Notation (e, i, π, Σ, f(x))','e — The Natural Base','Euler\'s Identity: e^(iπ)+1=0','Euler\'s Formula for Polyhedra (V-E+F=2)','The Bridges of Königsberg','Birth of Graph Theory','Euler & Number Theory','Euler\'s Totient Function','Euler & Infinite Series','Basel Problem (π²/6)','Euler & Mechanics','800 Papers — Most Prolific Ever','Euler Review']],
+      [18,'Gauss — Prince of Mathematics',['Carl Friedrich Gauss (1777-1855)','The Child Prodigy (1+2+...+100)','Disquisitiones Arithmeticae (1801)','Gauss & Modular Arithmetic','Constructing the 17-gon','Gauss & the Normal Distribution','The Bell Curve','Gauss & Least Squares','Gauss & Astronomy (Ceres)','Gauss & Non-Euclidean Geometry (Secret)','Gauss & Magnetism','Gauss & Geodesy','Gauss & Complex Numbers','Fundamental Theorem of Algebra','Gauss Review']],
+      [19,'Non-Euclidean Geometry',['2000 Years of the Parallel Postulate','Attempts to Prove the Fifth Postulate','Saccheri & the "Flawed" Proof','Lobachevsky — First to Publish (1829)','Hyperbolic Geometry','Bolyai — Independent Discovery','Gauss Knew But Never Published','Riemann & Elliptic Geometry','Riemannian Manifolds','Curvature of Space','Beltrami & Models of Hyperbolic Space','Poincaré Disk Model','Klein Model','Non-Euclidean Geometry & Reality','Non-Euclidean Review']],
+      [20,'Galois & Abel — Tragic Geniuses',['Niels Henrik Abel (1802-1829)','Abel & the Quintic — No General Formula','Abel\'s Poverty & Rejection','Abel\'s Theorem','Évariste Galois (1811-1832)','Galois — Rejected Twice','The Night Before the Duel','Galois Theory — Born in One Night','Groups, Symmetry & Solvability','Why the Quintic Cannot Be Solved','Galois & Abstract Algebra','Impact on Modern Mathematics','Two Lives Cut Short','Recognition After Death','Galois & Abel Review']],
+      [21,'Cantor & the Infinite',['Georg Cantor (1845-1918)','Cantor\'s Early Work on Series','The 1874 Paper — Uncountability','The Diagonal Argument (1891)','Countable vs Uncountable Infinity','Aleph Numbers','Cantor\'s Theorem (Power Sets)','The Continuum Hypothesis','Cantor & Kronecker — The Feud','Kronecker: "God Made the Integers"','Cantor\'s Mental Health Struggles','Cantor & Transfinite Numbers','Set Theory Foundations','Cantor\'s Legacy','Cantor Review']],
+      [22,'Hilbert & the 20th Century Dawn',['David Hilbert (1862-1943)','Hilbert\'s 23 Problems (1900)','Problem 1: Continuum Hypothesis','Problem 2: Consistency of Arithmetic','Problem 3: Scissors Congruence (Solved)','Problem 7: Transcendence (Solved)','Problem 8: Riemann Hypothesis (Open)','Problem 10: Diophantine Solvability (Unsolvable)','Hilbert\'s Program — Formalize Everything','Hilbert Spaces','Hilbert & Einstein (General Relativity Race)','Hilbert\'s Axioms for Geometry','"We Must Know, We Will Know"','Hilbert\'s Influence','Hilbert Review']],
+      [23,'Gödel — The Limits of Logic',['Kurt Gödel (1906-1978)','Vienna Circle & Logical Positivism','The Completeness Theorem (1929)','First Incompleteness Theorem (1931)','True Statements That Cannot Be Proved','Second Incompleteness Theorem','Consistency Cannot Prove Itself','Impact on Hilbert\'s Program','Gödel Numbering','Gödel & Einstein — Best Friends','Gödel\'s Rotating Universe','Gödel & the Continuum Hypothesis','Gödel\'s Later Years & Paranoia','Legacy of Incompleteness','Gödel Review']],
+      [24,'Turing & the Computer Age',['Alan Turing (1912-1954)','The Decision Problem (Entscheidungsproblem)','Turing Machines (1936)','Universal Turing Machine','Church-Turing Thesis','The Halting Problem','Turing at Bletchley Park','Breaking Enigma','The Bombe Machine','Turing & ACE Computer','The Turing Test','Turing & Morphogenesis','Turing\'s Tragic End','Posthumous Pardon & Legacy','Turing Review']],
+      [25,'Emmy Noether & Women in Math',['Emmy Noether (1882-1935)','Fighting for Education as a Woman','Noether\'s Theorem (Physics & Symmetry)','Abstract Algebra Revolution','Noether Rings','Einstein: "Most Significant Creative Mathematical Genius"','Fleeing Nazi Germany','Sophie Germain & Number Theory','Sofia Kovalevskaya & Differential Equations','Ada Lovelace — First Programmer','Florence Nightingale & Statistics','Mary Cartwright & Chaos Theory','Julia Robinson & Hilbert\'s 10th','Maryam Mirzakhani — Fields Medal','Women in Math Review']],
+      [26,'The Bourbaki Movement',['Who Was Nicolas Bourbaki?','Bourbaki Was Not a Person','The French Mathematicians Collective','Éléments de Mathématique','Bourbaki\'s Mission: Rebuild Math','The Axiomatic Approach','Structures: Groups, Rings, Topologies','Influence on University Teaching','The "New Math" Movement','Bourbaki Seminars','Criticism of Bourbaki','André Weil & the Founders','Grothendieck & Bourbaki','Bourbaki\'s Decline & Legacy','Bourbaki Review']],
+      [27,'Alexander Grothendieck',['Grothendieck (1928-2014)','Childhood as a Stateless Refugee','Functional Analysis (Early Work)','Algebraic Geometry Revolution','Schemes & Sheaves','Grothendieck\'s EGA & SGA','Category Theory & Topoi','Weil Conjectures','Grothendieck\'s Students','Leaving Mathematics (1970)','Political Activism','Récoltes et Semailles','Hermit Years','The Greatest Mathematician of the 20th Century?','Grothendieck Review']],
+      [28,'Ramanujan — The Man Who Knew Infinity',['Srinivasa Ramanujan (1887-1920)','Self-Taught Genius in India','The Notebooks','The Letter to Hardy (1913)','Hardy & Ramanujan — The Partnership','Ramanujan in Cambridge','Partition Function','Ramanujan\'s Tau Function','Mock Theta Functions','1729 — The Hardy-Ramanujan Number','Ramanujan & Continued Fractions','Illness & Return to India','Lost Notebook (Discovered 1976)','Ramanujan\'s Legacy','Ramanujan Review']],
+      [29,'John Nash & Modern Applied Math',['John Nash (1928-2015)','Nash Equilibrium','Game Theory Revolution','A Beautiful Mind','Nash & Algebraic Geometry','Nash Embedding Theorem','Nash\'s Struggle with Schizophrenia','The Nobel Prize (1994)','Abel Prize (2015)','Von Neumann & Game Theory Origins','John Conway — Games & Surreals','Conway\'s Game of Life','Benoit Mandelbrot & Fractals','Stephen Smale & Topology','Modern Applied Math Review']],
+      [30,'Andrew Wiles & Fermat\'s Last Theorem',['Fermat\'s Marginal Note (1637)','350 Years of Attempts','Euler & the Case n=3','Lamé & Kummer — Ideal Numbers','Taniyama-Shimura Conjecture','Frey Curve & Ribet\'s Theorem','Andrew Wiles — A Childhood Dream','Seven Years of Secret Work','The 1993 Announcement','The Gap in the Proof','Wiles & Taylor — Fixing the Gap','The Complete Proof (1995)','Impact on Number Theory','Modularity Theorem','Fermat\'s Last Theorem Review']],
+      [31,'Perelman & the Poincaré Conjecture',['Henri Poincaré & the Conjecture (1904)','What Is the Poincaré Conjecture?','Topology of 3-Spheres','100 Years of Failed Attempts','Thurston\'s Geometrization Conjecture','Richard Hamilton & Ricci Flow','Grigori Perelman — The Recluse','The ArXiv Papers (2002-2003)','Verification by the Math Community','Declining the Fields Medal (2006)','Declining the Millennium Prize ($1M)','Perelman\'s Disappearance','The Solved Millennium Problem','Legacy for Topology','Perelman Review']],
+      [32,'The Millennium Problems',['Clay Mathematics Institute (2000)','The Seven $1M Problems','P vs NP — Can Every Problem Be Checked Fast?','Riemann Hypothesis — Primes & Zeros','Yang-Mills & Mass Gap','Navier-Stokes — Fluid Equations','Hodge Conjecture — Algebraic Geometry','Birch & Swinnerton-Dyer — Elliptic Curves','Poincaré Conjecture (Solved!)','Current Progress on Each','Why These Seven?','Other Famous Open Problems','Collatz, Goldbach, Twin Primes','The Future of Problem Solving','Millennium Problems Review']],
+      [33,'Mathematics & Physics',['Newton — Math for Physics','Fourier & Heat Equation','Maxwell & Electromagnetism','Riemann & Einstein — Curved Spacetime','General Relativity & Differential Geometry','Quantum Mechanics & Linear Algebra','Hilbert Spaces in Quantum Theory','Dirac & Mathematical Beauty','Feynman Path Integrals','Yang-Mills Theory','String Theory & Calabi-Yau Manifolds','Witten & Mathematical Physics','The Unreasonable Effectiveness of Mathematics','Wigner\'s Question','Math & Physics Review']],
+      [34,'Mathematics Today & Tomorrow',['The Proof Revolution (Computer-Assisted Proofs)','Four Color Theorem — First Computer Proof','Kepler Conjecture — Hales\' Proof','Lean & Formal Verification','AI & Mathematics','Machine Learning in Math Discovery','The Langlands Program','Langlands as Grand Unified Theory','Terence Tao — Living Legend','Peter Scholze & Perfectoid Spaces','June Huh & Combinatorics','The Future of Pure Math','The Future of Applied Math','Unsolved Questions','Math Today Review']],
+      [35,'Math History — Final Mastery',['Prehistoric & Ancient Math Recap','Egyptian & Babylonian Recap','Greek Mathematics Recap','Asian Mathematics Recap','Islamic Golden Age Recap','Medieval & Renaissance Recap','Calculus Revolution Recap','18th & 19th Century Giants Recap','Non-Euclidean & Abstract Algebra Recap','Cantor, Hilbert, Gödel Recap','Turing & Computing Recap','Women in Mathematics Recap','20th Century Breakthroughs Recap','The Timeline of Math — 5000 Years','Math History Mastery!']]
+    ];
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'mh-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'math',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('math-history');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('math-history');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
