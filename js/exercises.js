@@ -289,8 +289,8 @@ function renderFillBlank(container, exercise, onAnswer) {
 
   function check() {
     const raw = sanitizeAnswer(input.value);
-    // Normalize "pi" → "π" so users can type either
-    const normalize = (s) => s.trim().toLowerCase().replace(/\bpi\b/g, 'π');
+    // Normalize "pi" → "π" so users can type either, strip spaces
+    const normalize = (s) => s.trim().toLowerCase().replace(/\s+/g, '').replace(/pi/g, 'π');
     const correct =
       normalize(raw) === normalize(exercise.answer);
     input.classList.add(correct ? "correct" : "wrong");
