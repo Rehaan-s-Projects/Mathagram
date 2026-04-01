@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening Practice: Exploring Data — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .diego-intro { display: flex; align-items: center; gap: 16px; background: var(--color-bg); border: 2px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px; }
+    .diego-intro img { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--color-primary); flex-shrink: 0; }
+    .diego-intro .diego-name { font-weight: 700; color: var(--color-primary-dark); display: block; margin-bottom: 4px; }
+    .diego-intro .diego-speech { font-size: 0.95rem; line-height: 1.6; color: var(--color-text); }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .headphones-icon { font-size: 1.5rem; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">AP Statistics</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Listening Practice</div>
+    <h1>Listening Practice: Exploring Data</h1>
+    <div class="diego-intro">
+      <img src="../../assets/characters/diego.svg" alt="Diego">
+      <div>
+        <span class="diego-name">Diego</span>
+        <span class="diego-speech">"Stats time! Put your headphones on and listen carefully. I'll ask you questions about data types, measures of center, and how to read graphs. Let's go!"</span>
+      </div>
+    </div>
+    <p>Diego will read statistics questions aloud. Listen and answer without seeing the question. Tap the speaker to replay.</p>
+  </section>
+
+  <section class="exercise-section">
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
+    <h2><span class="headphones-icon">&#127911;</span> Listening Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter('diego', '../../');
+
+    const exercises = [
+      {
+        type: 'listening',
+        question: 'Is "favorite color" a categorical or quantitative variable?',
+        spokenText: 'Is favorite color a categorical variable or a quantitative variable?',
+        options: ['Categorical', 'Quantitative', 'Both', 'Neither'],
+        correctIndex: 0
+      },
+      {
+        type: 'listening',
+        question: 'What is the mean of the numbers 4, 8, and 12?',
+        spokenText: 'What is the mean of the numbers 4, 8, and 12?',
+        answerType: 'fill-blank',
+        answer: '8'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: The median is always affected by outliers.',
+        spokenText: 'True or false. The median is always affected by outliers.',
+        answerType: 'true-false',
+        correctAnswer: false
+      },
+      {
+        type: 'listening',
+        question: 'What measure of center is most resistant to outliers?',
+        spokenText: 'What measure of center is most resistant to outliers?',
+        options: ['Mean', 'Median', 'Range', 'Standard deviation'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'What is the mode of the data set: 3, 5, 5, 7, 9?',
+        spokenText: 'What is the mode of the data set: 3, 5, 5, 7, 9?',
+        answerType: 'fill-blank',
+        answer: '5'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: A bar graph is used for quantitative data.',
+        spokenText: 'True or false. A bar graph is used for quantitative data.',
+        answerType: 'true-false',
+        correctAnswer: false
+      },
+      {
+        type: 'listening',
+        question: 'What type of graph uses slices to show proportions of a whole?',
+        spokenText: 'What type of graph uses slices to show proportions of a whole?',
+        options: ['Histogram', 'Scatter plot', 'Pie chart', 'Stem-and-leaf plot'],
+        correctIndex: 2
+      },
+      {
+        type: 'listening',
+        question: 'What is the range of the data set: 2, 5, 8, 11, 14?',
+        spokenText: 'What is the range of the data set: 2, 5, 8, 11, 14?',
+        answerType: 'fill-blank',
+        answer: '12'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: A frequency table shows how often each value occurs in a data set.',
+        spokenText: 'True or false. A frequency table shows how often each value occurs in a data set.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'Which type of data can be measured on a number line?',
+        spokenText: 'Which type of data can be measured on a number line? Categorical or quantitative?',
+        options: ['Categorical', 'Quantitative', 'Both', 'Neither'],
+        correctIndex: 1
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy('diego', isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'ap-statistics', lessonId: 'lesson-6', nextHref: 'index.html', backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

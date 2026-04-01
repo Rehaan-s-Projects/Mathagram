@@ -60,7 +60,7 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const units = [
-      [1, 'Exploring Data', ['Categorical vs Quantitative Data','Frequency Tables','Measures of Center','Stem-and-Leaf Plots','Dot Plots','Frequency Tables Practice','Relative Frequency','Cumulative Frequency','Two-Way Tables','Marginal & Conditional Distributions','Comparing Distributions','Bar Graphs & Pie Charts','Pareto Charts','Pictographs','Time Series Plots','Misleading Graphs','Data Collection Methods','Exploring Data Practice']],
+      [1, 'Exploring Data', ['Categorical vs Quantitative Data','Frequency Tables','Measures of Center','Stem-and-Leaf Plots','Dot Plots','Frequency Tables Practice','Relative Frequency','Cumulative Frequency','Two-Way Tables','Marginal & Conditional Distributions','Comparing Distributions','Bar Graphs & Pie Charts','Pareto Charts','Pictographs','Time Series Plots','Misleading Graphs','Data Collection Methods','Listening Practice: Exploring Data','Exploring Data Practice']],
       [2, 'Describing Distributions', ['Histograms & Stemplots','Mean Median Mode','Standard Deviation & IQR','Skewness & Symmetry','Outliers & IQR Rule','Five-Number Summary','Comparing Box Plots','Standard Deviation Calculation','Variance','Chebyshev\'s Theorem','Empirical Rule 68-95-99.7','Range & Interquartile Range','Percentiles & Quartiles','Modified Box Plots','Comparing Two Distributions','Describing Shape Center Spread','Describing Distributions Practice']],
       [3, 'Normal Distributions', ['The Normal Curve','Z-Scores','The Empirical Rule','Properties of Normal Curves','Standard Normal Distribution','Z-Score Calculations','Using Z-Tables','Finding Percentiles','Finding Values from Percentiles','Normal Probability Plots','Assessing Normality','Comparing Z-Scores Across Distributions','Transforming Data','Normal Approximation to Binomial','When Normal Model Fails','Normal Distributions Practice']],
       [4, 'Designing Studies', ['Sampling Methods','Observational Studies vs Experiments','Bias & Confounding','Census vs Sample','Simple Random Sampling','Stratified Sampling','Cluster Sampling','Systematic Sampling','Bias in Sampling','Randomized Block Design','Matched Pairs Design','Convenience & Voluntary Response Sampling','Nonresponse & Undercoverage Bias','Blinding & Double-Blinding','Placebo Effect','Control Groups','Replication in Experiments','Scope of Inference','Designing Studies Practice']],
@@ -86,6 +86,8 @@
     for (var i = 0; i < 5 && i < lessons.length; i++) {
       lessons[i].href = 'lesson-' + (i + 1) + '.html';
     }
+    // Listening practice lesson
+    if (lessons[17]) lessons[17].href = 'lesson-6.html';
 
     // Render path immediately (don't wait for auth)
     const container = document.getElementById('learning-path');

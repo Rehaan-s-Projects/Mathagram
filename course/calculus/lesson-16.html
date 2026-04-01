@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening Practice: Limits — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .diego-intro { display: flex; align-items: center; gap: 16px; background: var(--color-bg); border: 2px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px; }
+    .diego-intro img { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--color-primary); flex-shrink: 0; }
+    .diego-intro .diego-name { font-weight: 700; color: var(--color-primary-dark); display: block; margin-bottom: 4px; }
+    .diego-intro .diego-speech { font-size: 0.95rem; line-height: 1.6; color: var(--color-text); }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .headphones-icon { font-size: 1.5rem; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Listening Practice</div>
+    <h1>Listening Practice: Limits</h1>
+    <div class="diego-intro">
+      <img src="../../assets/characters/diego.svg" alt="Diego">
+      <div>
+        <span class="diego-name">Diego</span>
+        <span class="diego-speech">"Alright, put your headphones on! I'll read you some limit problems and you have to figure out the answer just by listening. Focus up &mdash; calculus by ear!"</span>
+      </div>
+    </div>
+    <p>Diego will read limit questions aloud. Listen carefully and choose or type the correct answer. Tap the speaker button to hear the question again.</p>
+  </section>
+
+  <section class="exercise-section">
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
+    <h2><span class="headphones-icon">&#127911;</span> Listening Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter('diego', '../../');
+
+    const exercises = [
+      {
+        type: 'listening',
+        question: 'What is the limit of x squared as x approaches 3?',
+        spokenText: 'What is the limit of x squared as x approaches 3?',
+        options: ['6', '9', '12', '27'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'True or false: The limit of 1 over x as x approaches infinity is zero.',
+        spokenText: 'True or false. The limit of 1 over x as x approaches infinity is zero.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'What is the limit of sine x over x as x approaches zero?',
+        spokenText: 'What is the limit of sine x over x as x approaches zero?',
+        options: ['0', '1', 'infinity', 'does not exist'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'What is the limit of 2x plus 5 as x approaches 4?',
+        spokenText: 'What is the limit of 2x plus 5 as x approaches 4?',
+        answerType: 'fill-blank',
+        answer: '13'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: If a function is continuous at a point, the limit equals the function value.',
+        spokenText: 'True or false. If a function is continuous at a point, the limit equals the function value.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'What is the limit of x squared minus 9 over x minus 3 as x approaches 3?',
+        spokenText: 'What is the limit of x squared minus 9, over x minus 3, as x approaches 3?',
+        options: ['0', '3', '6', 'does not exist'],
+        correctIndex: 2
+      },
+      {
+        type: 'listening',
+        question: 'What is the limit of 1 over x as x approaches zero from the right?',
+        spokenText: 'What is the limit of 1 over x as x approaches zero from the right?',
+        options: ['0', '1', 'positive infinity', 'negative infinity'],
+        correctIndex: 2
+      },
+      {
+        type: 'listening',
+        question: 'What is the limit of 3x squared minus 2x plus 1 as x approaches 1?',
+        spokenText: 'What is the limit of 3x squared minus 2x plus 1, as x approaches 1?',
+        answerType: 'fill-blank',
+        answer: '2'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: The limit of x over the absolute value of x as x approaches zero exists.',
+        spokenText: 'True or false. The limit of x over the absolute value of x, as x approaches zero, exists.',
+        answerType: 'true-false',
+        correctAnswer: false
+      },
+      {
+        type: 'listening',
+        question: 'What type of discontinuity does the function x squared minus 4 over x minus 2 have at x equals 2?',
+        spokenText: 'What type of discontinuity does the function x squared minus 4 over x minus 2 have at x equals 2?',
+        options: ['Jump', 'Removable', 'Infinite', 'No discontinuity'],
+        correctIndex: 1
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy('diego', isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'calculus', lessonId: 'lesson-16', nextHref: 'index.html', backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>
