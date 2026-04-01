@@ -269,6 +269,10 @@
       try {
       // Load profile
       const profile = await getUserProfile();
+      // Set default avatar immediately
+      const avatarEl = document.getElementById('profile-avatar');
+      avatarEl.innerHTML = `<img src="assets/avatars/blue.svg" alt="">`;
+
       if (!profile) {
         document.getElementById('profile-name-input').value = user.displayName || 'New Learner';
         return;
@@ -277,7 +281,6 @@
       // Avatar image
       const userColor = profile.color || 'blue';
       const displayName = profile.displayName || 'Learner';
-      const avatarEl = document.getElementById('profile-avatar');
       avatarEl.innerHTML = `<img src="assets/avatars/${userColor}.svg" alt="">`;
 
       // Color picker — highlight current and handle clicks
