@@ -392,25 +392,30 @@
           let totalCompleted = 0;
           const courseEntries = [];
 
+          let totalXPAll = 0;
+
           for (const courseDoc of coursesSnap.docs) {
             const courseId = courseDoc.id;
             const lessonsSnap = await getDocs(collection(db, 'users', fbAuth.currentUser.uid, 'progress', courseId, 'lessons'));
             if (lessonsSnap.size > 0) {
               const courseName = courseId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-              courseEntries.push({ name: courseName, id: courseId, count: lessonsSnap.size });
+              let courseXP = 0;
+              lessonsSnap.forEach(d => { courseXP += (d.data().xpEarned || 0); });
+              courseEntries.push({ name: courseName, id: courseId, count: lessonsSnap.size, xp: courseXP });
               totalCompleted += lessonsSnap.size;
+              totalXPAll += courseXP;
             }
           }
 
           if (courseEntries.length > 0) {
             lessonList.innerHTML = '';
             courseEntries.sort((a, b) => b.count - a.count);
-            courseEntries.forEach(({ name, id, count }) => {
+            courseEntries.forEach(({ name, id, count, xp: cxp }) => {
               const li = document.createElement('li');
               li.innerHTML = `
                 <a href="course/${id}/index.html" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; width:100%;">
                   <span>${name}</span>
-                  <span class="lesson-grade">${count} lesson${count !== 1 ? 's' : ''}</span>
+                  <span><span class="lesson-grade">${count} lesson${count !== 1 ? 's' : ''}</span> <span class="lesson-stars" style="margin-left:8px;">${cxp} XP</span></span>
                 </a>
               `;
               lessonList.appendChild(li);
@@ -419,7 +424,7 @@
             const totalLi = document.createElement('li');
             totalLi.style.borderTop = '2px solid var(--color-border)';
             totalLi.style.fontWeight = '700';
-            totalLi.innerHTML = `<span>Total</span><span>${totalCompleted} lessons completed</span>`;
+            totalLi.innerHTML = `<span>Total</span><span>${totalCompleted} lessons &middot; ${totalXPAll} XP</span>`;
             lessonList.appendChild(totalLi);
           }
         } catch (err) {
