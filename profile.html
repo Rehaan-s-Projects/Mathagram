@@ -175,7 +175,6 @@
       <div id="name-box" style="margin-bottom:12px;">
         <input type="text" id="profile-name-input" maxlength="13" minlength="13" pattern="[A-Za-z]{13}" placeholder="Your Name" title="Only characters A-Z and a-z, exactly 13 characters" style="width:100%; max-width:320px; padding:14px 20px; font-size:1.3rem; font-weight:800; text-align:center; border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-bg); color:var(--color-text); font-family:inherit; outline:none; transition:border-color 0.2s;">
         <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:6px;">
-          <span id="nameCharCount" style="font-size:0.72rem; color:var(--color-text-muted);">0/13</span>
           <span id="nameSaveStatus" style="font-size:0.72rem; color:var(--color-text-muted);"></span>
         </div>
       </div>
@@ -272,7 +271,6 @@
       const profile = await getUserProfile();
       if (!profile) {
         document.getElementById('profile-name-input').value = user.displayName || 'New Learner';
-        document.getElementById('nameCharCount').textContent = `${(user.displayName || 'New Learner').length}/13`;
         return;
       }
 
@@ -300,18 +298,13 @@
 
       // Display name input
       const nameInput = document.getElementById('profile-name-input');
-      const nameCount = document.getElementById('nameCharCount');
       const nameSave = document.getElementById('nameSaveStatus');
       nameInput.value = displayName;
-      nameCount.textContent = `${displayName.length}/13`;
 
       // Filter to A-Z a-z only, max 13
       function updateNameCount() {
         nameInput.value = nameInput.value.replace(/[^A-Za-z]/g, '');
         if (nameInput.value.length > 13) nameInput.value = nameInput.value.slice(0, 13);
-        const len = nameInput.value.length;
-        nameCount.textContent = `${len}/13`;
-        nameCount.style.color = len < 13 ? '#ef4444' : '#22c55e';
       }
       nameInput.addEventListener('input', updateNameCount);
       nameInput.addEventListener('keyup', updateNameCount);
@@ -411,7 +404,7 @@
       } catch(profileError) {
         console.error('Profile error:', profileError);
         document.getElementById('profile-name-input').value = 'Error';
-        document.getElementById('nameCharCount').textContent = profileError.message;
+        document.getElementById('nameSaveStatus').textContent = profileError.message;
       }
     });
 
