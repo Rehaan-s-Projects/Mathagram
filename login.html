@@ -155,8 +155,8 @@
       <div id="tab-signup" class="tab-content">
         <form id="signup-form">
           <div class="form-group">
-            <label for="signup-name">Display Name</label>
-            <input type="text" id="signup-name" required autocomplete="name">
+            <label for="signup-name">Display Name <span id="nameCharCount" style="font-size:0.75rem; font-weight:400; color:var(--color-text-muted);">(0/13)</span></label>
+            <input type="text" id="signup-name" required autocomplete="name" maxlength="13" minlength="13" pattern="[A-Za-z]{13}" title="Only characters A-Z and a-z, exactly 13 characters">
           </div>
           <div class="form-group">
             <label for="signup-email">Email</label>
@@ -293,11 +293,27 @@
     const signupForm = document.getElementById('signup-form');
     const signupError = document.getElementById('signup-error');
 
+    // Name input: A-Z a-z only, max 13 chars, live counter
+    const nameInput = document.getElementById('signup-name');
+    const nameCharCount = document.getElementById('nameCharCount');
+    nameInput.addEventListener('input', () => {
+      nameInput.value = nameInput.value.replace(/[^A-Za-z]/g, '');
+      if (nameInput.value.length > 13) nameInput.value = nameInput.value.slice(0, 13);
+      const len = nameInput.value.length;
+      nameCharCount.textContent = `(${len}/13)`;
+      nameCharCount.style.color = len < 13 ? '#ef4444' : '#22c55e';
+    });
+
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       signupError.classList.remove('show');
 
-      const name = document.getElementById('signup-name').value;
+      const name = document.getElementById('signup-name').value.trim();
+      if (!name || name.length !== 13 || !/^[A-Za-z]{13}$/.test(name)) {
+        signupError.textContent = 'Name must be exactly 13 characters, only A-Z and a-z.';
+        signupError.classList.add('show');
+        return;
+      }
       const email = document.getElementById('signup-email').value;
       const password = document.getElementById('signup-password').value;
 

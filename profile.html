@@ -6,31 +6,45 @@
   <title>Profile — Mathagram</title>
   <link rel="icon" href="assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/lighthouse.css">
   <style>
+    .profile-header {
+      background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+      padding: 48px 24px 80px;
+      width: 100%;
+    }
     .profile-container {
       max-width: 600px;
-      margin: 48px auto;
-      padding: 0 24px;
+      margin: -60px auto 0;
+      padding: 0 24px 48px;
       text-align: center;
+      position: relative;
     }
     .profile-card {
       background: var(--color-white);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
-      padding: 40px 32px;
+      padding: 90px 32px 40px;
+      position: relative;
     }
     .profile-avatar-circle {
-      width: 80px;
-      height: 80px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
-      margin: 16px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 2rem;
-      font-weight: 700;
+      overflow: hidden;
+      position: absolute;
+      top: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid var(--color-white);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      background: var(--color-white);
+      z-index: 2;
+    }
+    .profile-avatar-circle img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: block;
     }
     .profile-card h2 {
       font-size: 1.5rem;
@@ -38,37 +52,7 @@
       margin-bottom: 4px;
     }
     .level-badge {
-      display: inline-block;
-      padding: 4px 14px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-      color: var(--color-text);
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin: 8px 0 20px;
-    }
-    .xp-bar-container {
-      width: 100%;
-      margin-bottom: 8px;
-    }
-    .xp-bar {
-      width: 100%;
-      height: 14px;
-      background: var(--color-bg);
-      border-radius: 7px;
-      overflow: hidden;
-      border: 1px solid var(--color-border);
-    }
-    .xp-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-xp), #facc15);
-      border-radius: 7px;
-      transition: width 0.4s ease;
-    }
-    .xp-text {
-      font-size: 0.8rem;
-      color: var(--color-text-secondary);
-      margin-bottom: 20px;
+      display: none;
     }
     .stats {
       display: flex;
@@ -140,8 +124,19 @@
       border-color: #1a1a2e !important;
     }
     @media (max-width: 600px) {
+      .profile-header {
+        padding: 36px 24px 70px;
+      }
+      .profile-container {
+        margin-top: -50px;
+      }
       .profile-card {
-        padding: 28px 20px;
+        padding: 80px 20px 28px;
+      }
+      .profile-avatar-circle {
+        width: 120px;
+        height: 120px;
+        top: -60px;
       }
       .stats {
         gap: 20px;
@@ -166,30 +161,43 @@
     </div>
   </nav>
 
+  <!-- Big Profile Header -->
+  <div class="profile-header"></div>
+
   <!-- Profile -->
   <div class="profile-container">
     <div class="profile-card">
 
-      <!-- Lighthouse -->
-      <div class="lighthouse-profile" data-level="1">
-        <div class="glow"></div>
-        <img src="assets/lighthouse/logo.svg" alt="Lighthouse">
-      </div>
-
-      <!-- Avatar -->
+      <!-- Avatar (overlaps header) -->
       <div id="profile-avatar" class="profile-avatar-circle"></div>
 
       <!-- Name & Level -->
-      <h2 id="profile-name">Loading...</h2>
-      <div id="level-badge" class="level-badge">Level 1 — Spark</div>
-
-      <!-- XP Bar -->
-      <div class="xp-bar-container">
-        <div class="xp-bar">
-          <div id="xp-bar-fill" class="xp-bar-fill" style="width: 0%"></div>
+      <div id="name-box" style="margin-bottom:12px;">
+        <input type="text" id="profile-name-input" maxlength="13" minlength="13" pattern="[A-Za-z]{13}" placeholder="Your Name" title="Only characters A-Z and a-z, exactly 13 characters" style="width:100%; max-width:320px; padding:14px 20px; font-size:1.3rem; font-weight:800; text-align:center; border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-bg); color:var(--color-text); font-family:inherit; outline:none; transition:border-color 0.2s;">
+        <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:6px;">
+          <span id="nameCharCount" style="font-size:0.72rem; color:var(--color-text-muted);">0/13</span>
+          <span id="nameSaveStatus" style="font-size:0.72rem; color:var(--color-text-muted);"></span>
         </div>
       </div>
-      <p id="xp-text" class="xp-text">0 / 50 XP</p>
+      <div id="level-badge" class="level-badge"></div>
+
+      <!-- Color Picker -->
+      <div id="color-picker" style="margin-bottom:20px;">
+        <p style="font-weight:600; font-size:0.85rem; margin-bottom:10px; color:var(--color-text-secondary);">Change your color</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+          <button type="button" class="color-option" data-color="blue" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/blue.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+          <button type="button" class="color-option" data-color="green" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/green.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+          <button type="button" class="color-option" data-color="orange" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/orange.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+          <button type="button" class="color-option" data-color="purple" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/purple.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+          <button type="button" class="color-option" data-color="cyan" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/cyan.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+          <button type="button" class="color-option" data-color="pink" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/pink.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+          <button type="button" class="color-option" data-color="gray" style="width:44px; height:44px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0; transition:border-color 0.2s;"><img src="assets/avatars/gray.svg" style="width:44px; height:44px; border-radius:50%;"></button>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <button id="btn-save-profile" class="btn btn-primary" style="width:100%; max-width:320px; padding:12px; font-size:1rem; margin-bottom:24px;">Save Changes</button>
+      <p id="save-profile-status" style="font-size:0.8rem; color:var(--color-text-muted); margin-top:-16px; margin-bottom:20px;"></p>
 
       <!-- Stats -->
       <div class="stats">
@@ -235,7 +243,6 @@
     initNav('');
     import { onAuthChange, getUserProfile, logOut } from './js/auth.js';
     import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
-    import { setLighthouseLevel } from './js/lighthouse.js';
     import { doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
     import { db, auth as fbAuth } from './js/firebase-config.js';
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -260,18 +267,103 @@
         return;
       }
 
+      try {
       // Load profile
       const profile = await getUserProfile();
-      if (!profile) return;
+      if (!profile) {
+        document.getElementById('profile-name-input').value = user.displayName || 'New Learner';
+        document.getElementById('nameCharCount').textContent = `${(user.displayName || 'New Learner').length}/13`;
+        return;
+      }
 
       // Avatar image
       const userColor = profile.color || 'blue';
       const displayName = profile.displayName || 'Learner';
       const avatarEl = document.getElementById('profile-avatar');
-      avatarEl.innerHTML = `<img src="assets/avatars/${userColor}.svg" style="width:80px; height:80px; border-radius:50%;">`;
+      avatarEl.innerHTML = `<img src="assets/avatars/${userColor}.svg" alt="">`;
 
-      // Display name
-      document.getElementById('profile-name').textContent = displayName;
+      // Color picker — highlight current and handle clicks
+      const colorMap = { blue:'#3b82f6', green:'#22c55e', orange:'#f97316', purple:'#8b5cf6', cyan:'#06b6d4', pink:'#ec4899', gray:'#6b7280' };
+      document.querySelectorAll('#color-picker .color-option').forEach(btn => {
+        if (btn.dataset.color === userColor) {
+          btn.style.borderColor = colorMap[userColor] || '#3b82f6';
+        }
+        btn.addEventListener('click', () => {
+          const newColor = btn.dataset.color;
+          // Update UI immediately (not saved until Save button)
+          document.querySelectorAll('#color-picker .color-option').forEach(b => b.style.borderColor = 'transparent');
+          btn.style.borderColor = colorMap[newColor] || '#3b82f6';
+          avatarEl.innerHTML = `<img src="assets/avatars/${newColor}.svg" alt="">`;
+          pendingColor = newColor;
+        });
+      });
+
+      // Display name input
+      const nameInput = document.getElementById('profile-name-input');
+      const nameCount = document.getElementById('nameCharCount');
+      const nameSave = document.getElementById('nameSaveStatus');
+      nameInput.value = displayName;
+      nameCount.textContent = `${displayName.length}/13`;
+
+      // Filter to A-Z a-z only, max 13
+      function updateNameCount() {
+        nameInput.value = nameInput.value.replace(/[^A-Za-z]/g, '');
+        if (nameInput.value.length > 13) nameInput.value = nameInput.value.slice(0, 13);
+        const len = nameInput.value.length;
+        nameCount.textContent = `${len}/13`;
+        nameCount.style.color = len < 13 ? '#ef4444' : '#22c55e';
+      }
+      nameInput.addEventListener('input', updateNameCount);
+      nameInput.addEventListener('keyup', updateNameCount);
+      nameInput.addEventListener('change', updateNameCount);
+      nameInput.addEventListener('search', updateNameCount);
+
+      nameInput.addEventListener('focus', () => {
+        nameInput.style.borderColor = 'var(--color-primary)';
+      });
+      nameInput.addEventListener('blur', () => {
+        nameInput.style.borderColor = 'var(--color-border)';
+      });
+
+      // Track pending color
+      let pendingColor = userColor;
+
+      // Save button handler
+      const saveBtn = document.getElementById('btn-save-profile');
+      const saveStatus = document.getElementById('save-profile-status');
+      let statusTimeout = null;
+
+      saveBtn.addEventListener('click', async () => {
+        const newName = nameInput.value.trim();
+        if (!newName || newName.length !== 13 || !/^[A-Za-z]{13}$/.test(newName)) {
+          saveStatus.textContent = 'Name must be exactly 13 characters, only A-Z and a-z.';
+          saveStatus.style.color = '#ef4444';
+          clearTimeout(statusTimeout);
+          statusTimeout = setTimeout(() => { saveStatus.textContent = ''; }, 3000);
+          return;
+        }
+        try {
+          saveBtn.disabled = true;
+          saveBtn.textContent = 'Saving...';
+          saveStatus.textContent = '';
+          const userRef = doc(db, 'users', fbAuth.currentUser.uid);
+          await updateDoc(userRef, { displayName: newName, color: pendingColor });
+          saveBtn.textContent = 'Save Changes';
+          saveBtn.disabled = false;
+          saveStatus.textContent = 'Saved!';
+          saveStatus.style.color = '#22c55e';
+          clearTimeout(statusTimeout);
+          statusTimeout = setTimeout(() => { saveStatus.textContent = ''; }, 2000);
+        } catch(e) {
+          saveBtn.textContent = 'Save Changes';
+          saveBtn.disabled = false;
+          saveStatus.textContent = 'Error saving';
+          saveStatus.style.color = '#ef4444';
+          console.error('Save failed:', e);
+        }
+      });
+
+      nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); nameInput.blur(); } });
 
       // Level
       // Migrate legacy totalXP → xp on profile load
@@ -286,21 +378,10 @@
       const levelInfo = calculateLevel(xp);
       document.getElementById('level-badge').textContent = `Level ${levelInfo.level} — ${levelInfo.title}`;
 
-      // XP bar
-      const fillPct = Math.round(levelInfo.xpProgress * 100);
-      document.getElementById('xp-bar-fill').style.width = `${fillPct}%`;
-
-      const nextLevel = LEVELS[levelInfo.level]; // next level entry
-      const nextXP = nextLevel ? nextLevel.xp : xp;
-      document.getElementById('xp-text').textContent = `${xp} / ${nextXP} XP`;
-
       // Stats
       document.getElementById('stat-xp').textContent = xp;
       document.getElementById('stat-streak').textContent = profile.streak || 0;
       document.getElementById('stat-focusers').textContent = profile.focusers || 0;
-
-      // Lighthouse glow
-      setLighthouseLevel(levelInfo.level);
 
       // Course progress
       try {
@@ -325,6 +406,12 @@
         }
       } catch (err) {
         // Progress not available yet
+      }
+
+      } catch(profileError) {
+        console.error('Profile error:', profileError);
+        document.getElementById('profile-name-input').value = 'Error';
+        document.getElementById('nameCharCount').textContent = profileError.message;
       }
     });
 

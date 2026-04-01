@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numbers 0 to Absolute Infinity — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Numbers: 0 to Absolute Infinity</h1>
+    <p>Journey through every number ever named — from zero to absolute infinity. Small numbers, big numbers, googology, transfinite ordinals, large cardinals, and beyond. 750 lessons across 50 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Zero & the First Numbers',['The Concept of Zero','History of Zero','Zero in Different Cultures','One — The Unit','Two — Pairs & Duality','Three — The First Odd Prime','Four — The First Composite','Five — The Hand Number','Six — The First Perfect Number','Seven — Luck & Primes','Eight — The First Cube','Nine — The Last Single Digit','Ten — The Base of Our System','Negative Numbers','Zero & First Numbers Review']],
+      [2,'Small Numbers & Special Numbers',['Eleven & Twelve — Dozen System','Thirteen — Unlucky Number','Pi (3.14159...)','Euler Number e (2.71828...)','The Golden Ratio Phi (1.618...)','Square Root of 2 (1.414...)','Imaginary Unit i','Twenty-Four — Hours in a Day','Twenty-Eight — Second Perfect Number','Thirty-Six — Square & Triangular','Forty-Two — Answer to Everything','Sixty — Babylonian Base','One Hundred — The Century','One Hundred Twenty-Eight — Powers of 2','Small Numbers Review']],
+      [3,'Hundreds & Thousands',['One Hundred Forty-Four — A Gross','Two Hundred Fifty-Six — 2^8','Three Hundred Sixty — Degrees in Circle','Four Hundred Ninety-Six — Third Perfect Number','Five Hundred Twelve — 2^9','One Thousand — Kilo','One Thousand Twenty-Four — 2^10','Two Thousand & Twenty-Five — Current Year','Four Thousand Ninety-Six — 2^12','Eight Thousand One Hundred Ninety-One — Mersenne Prime','Eight Thousand One Hundred Twenty-Eight — Fourth Perfect Number','Nine Thousand Nine Hundred Ninety-Nine','Ten Thousand — Myriad','Sixty-Five Thousand Five Hundred Thirty-Six — 2^16','Hundreds & Thousands Review']],
+      [4,'Large Standard Numbers',['One Hundred Thousand — Lakh','One Million (10^6)','Ten Million — Crore','One Hundred Million','One Billion (10^9)','One Trillion (10^12)','One Quadrillion (10^15)','One Quintillion (10^18)','One Sextillion (10^21)','One Septillion (10^24)','One Octillion (10^27)','One Nonillion (10^30)','One Decillion (10^33)','Short Scale vs Long Scale','Large Standard Numbers Review']],
+      [5,'Named Large Numbers',['Undecillion (10^36)','Duodecillion (10^39)','Tredecillion (10^42)','Quattuordecillion (10^45)','Quindecillion (10^48)','Sexdecillion (10^51)','Septendecillion (10^54)','Octodecillion (10^57)','Novemdecillion (10^60)','Vigintillion (10^63)','Centillion (10^303)','Millillion (10^3003)','Myrillion','Latin Naming System','Named Numbers Review']],
+      [6,'Numbers in Science',['Avogadro Number (6.022×10^23)','Speed of Light (3×10^8)','Age of Universe (4.35×10^17 seconds)','Atoms in Observable Universe (~10^80)','Planck Length (1.6×10^-35)','Planck Time (5.4×10^-44)','Shannon Number (Chess ~10^120)','Number of Go Games (~10^170)','Eddington Number (~10^80)','Skewes Number','Number of Particles in Universe','Poincare Recurrence Time','Boltzmann Brain Time','Black Hole Evaporation Time','Science Numbers Review']],
+      [7,'Googol & Googolplex',['What Is a Googol? (10^100)','Who Named It? (Milton Sirotta)','Edward Kasner & Mathematics','Googol in Context','Things Smaller Than a Googol','Things Larger Than a Googol','Google — Named After Googol','Googolplex (10^Googol)','How Big Is a Googolplex?','Writing Out a Googolplex','Googolplex Physical Size','Googolplexian (10^Googolplex)','Googolplexianth','Tower of Googols','Googol Review']],
+      [8,'Power Towers & Tetration',['Exponentiation Review','Stacking Exponents','Power Tower Notation','2^^2 2^^3 2^^4','3^^3 (7.6 Trillion Digits)','10^^10','Tetration Definition','Left vs Right Association','Iterated Tetration','Pentation','Hexation','Heptation','Hyperoperators','Knuth Up-Arrow Notation','Power Towers Review']],
+      [9,'Knuth Up-Arrow Notation',['Single Arrow (Exponentiation)','Double Arrow (Tetration)','Triple Arrow (Pentation)','Quadruple Arrow','N-tuple Arrows','3↑↑3 = 7,625,597,484,987','3↑↑↑3 — A Power Tower of 3s','3↑↑↑↑3 — Beyond Comprehension','Comparing Arrow Expressions','Arrow Arithmetic','Chains of Arrows','Notation Shortcuts','Up-Arrow in Computer Science','Connecting to Graham Number','Knuth Arrows Review']],
+      [10,'Graham Number',['Ronald Graham — The Mathematician','Graham Problem (Ramsey Theory)','What Is Graham Number?','Building Graham Number Step by Step','G1 = 3↑↑↑↑3','G2 = 3↑^(G1) 3','G3 Through G63','G64 = Graham Number','How Big Is Graham Number?','Graham Number vs Googolplex','Last Digits of Graham Number','Graham Number in Ramsey Theory','Is Graham Number the Biggest?','Numbers Larger Than Graham','Graham Number Review']],
+      [11,'Conway Chained Arrow Notation',['Limitations of Knuth Arrows','Conway Chain Basics','Two-Element Chains','Three-Element Chains','Four-Element Chains','Chain Rules','a→b→c Evaluation','a→b→c→d Evaluation','Comparing Chains to Arrows','Chain Growth Rate','Conway vs Knuth','Large Chain Examples','Graham Number in Chain Notation','Chains Beyond Graham','Conway Chains Review']],
+      [12,'Steinhaus-Moser Notation',['Mega — Triangle Notation','Megiston','Moser — Square Notation','Moser Number','Triangle in Triangle','Square in Square','Pentagon Notation','Hexagon Notation','Polygon Notation General','Steinhaus Polygon Growth','Comparing to Knuth Arrows','Comparing to Graham Number','Historical Context','Notation Limitations','Steinhaus-Moser Review']],
+      [13,'Fast-Growing Hierarchy',['What Is the Fast-Growing Hierarchy?','f_0(n) = n+1','f_1(n) = 2n','f_2(n) = 2^n × n','f_3(n) — Tetration Level','f_ω(n) — Diagonalization','f_ω+1(n)','f_ω×2(n)','f_ω^2(n)','f_ω^ω(n)','f_ε₀(n)','Hardy Hierarchy','Slow-Growing Hierarchy','Comparing Hierarchies','Fast-Growing Review']],
+      [14,'Googology — The Study of Large Numbers',['What Is Googology?','Googologists & Community','Large Number Garden','Sbiis Saibian Contributions','Jonathan Bowers Contributions','Array Notation Introduction','BEAF — Bowers Exploding Array','Linear Array Notation','Dimensional Array Notation','Tetrational Arrays','Pentational Arrays','Legional Arrays','Corporal & Generals','Fish Number','Googology Review']],
+      [15,'BEAF — Bowers Exploding Array',['Linear Arrays {a,b,c}','Three-Entry Arrays','Four-Entry Arrays','Five-Entry Arryas','Dimensional Arrays {a,b (1) 2}','Tetrational Arrays','Pentational Arrays','Legions {a,b,c,d,...}','Lugions','Tridecal','Big Hoss','Meameamealokkapoowa Oompa','BEAF Limits','Beyond BEAF','BEAF Review']],
+      [16,'Named Googological Numbers',['Tritri (3^^^3)','Boogol','Corporal','Grand Tridecal','Giggol (10↑↑100)','Gaggol (10↑↑↑100)','Geegol (10↑↑↑↑100)','Goggol','Tridecatillion','Bowers Oblivion','Utter Oblivion','Meameamealokkapoowa','Meameamealokkapoowa Oompa','BIG FOOT','Named Numbers Review']],
+      [17,'Busy Beaver Function',['What Is a Turing Machine?','Halting Problem','Busy Beaver Game','BB(1) = 1','BB(2) = 4','BB(3) = 6','BB(4) = 13','BB(5) ≥ 47,176,870','BB(6) — Unknown','BB(7) & Beyond','Busy Beaver Growth Rate','BB vs Fast-Growing Hierarchy','Uncomputable Functions','BB & Gödel Incompleteness','Busy Beaver Review']],
+      [18,'Rayo Number & Largest Named Numbers',['What Is Rayo Number?','Rayo Function','First-Order Set Theory','Rayo vs Busy Beaver','Rayo vs BIG FOOT','Fish Number 7','Oblivion','Utter Oblivion','Sam Number','Sasquatch','Bigfoot vs BIG FOOT','Largest Named Finite Numbers','Naming Even Bigger Numbers','The Competition for Biggest','Rayo Number Review']],
+      [19,'TREE(3) & Graph Theory Numbers',['Graph Theory Basics','Trees in Graph Theory','Kruskal Tree Theorem','TREE Function','TREE(1) = 1','TREE(2) = 3','TREE(3) — Incomprehensibly Large','TREE(3) vs Graham Number','TREE(3) in Fast-Growing Hierarchy','Friedman SSCG Function','SSCG(3)','SCG(13)','Subcubic Graph Numbers','Ramsey Theory Numbers','TREE Review']],
+      [20,'Infinity — The Concept',['What Is Infinity?','Infinity Is Not a Number','Potential vs Actual Infinity','Zeno Paradoxes','Achilles & the Tortoise','Hilbert Hotel','Infinity + 1','Infinity × 2','Infinity × Infinity','Different Sizes of Infinity','Cantor & Set Theory','Countable vs Uncountable','Galileo Paradox','Infinity in Philosophy','Infinity Concept Review']],
+      [21,'Countable Infinity — Aleph-Null (ℵ₀)',['Natural Numbers Are Infinite','What Is Aleph-Null?','Counting to Infinity','Even Numbers Same Size as All','Odd Numbers Same Size','Integers Same Size as Naturals','Rationals Are Countable','Cantor Pairing Function','Listing All Fractions','Algebraic Numbers Are Countable','Computables Are Countable','ℵ₀ + ℵ₀ = ℵ₀','ℵ₀ × ℵ₀ = ℵ₀','ℵ₀^n = ℵ₀','Aleph-Null Review']],
+      [22,'Uncountable Infinity & The Continuum',['Cantor Diagonal Argument','Real Numbers Are Uncountable','Cardinality of the Continuum (c)','c = 2^ℵ₀','Power Set & Larger Infinities','|P(N)| = c','Continuum Hypothesis','Aleph-One (ℵ₁)','Is c = ℵ₁?','Gödel & Cohen — Independence','Beth Numbers','Beth-Zero Beth-One Beth-Two','Cantor Theorem','No Largest Cardinal','Continuum Review']],
+      [23,'Transfinite Ordinals — Omega (ω)',['What Are Ordinal Numbers?','Finite Ordinals (0 1 2 3...)','The First Transfinite Ordinal ω','ω Is the Order Type of N','ω + 1','ω + 2','ω + ω = ω×2','ω×3 ω×4 ω×n','ω×ω = ω²','ω³','ω^ω','ω^ω^ω','Ordinal Arithmetic','Ordinals Are Well-Ordered','Omega Review']],
+      [24,'Epsilon Numbers',['What Is Epsilon-Zero (ε₀)?','ε₀ = ω^ω^ω^... (Stack)','ε₀ Is a Fixed Point','ε₀ + 1','ε₀ × 2','ε₀^ε₀','ε₁ — Next Epsilon Number','ε₂ ε₃ ... ε_ω','ε_ε₀','Epsilon Fixed Points','Veblen Function','φ(1,0) = ε₀','φ(2,0) = Gamma-Zero','Veblen Hierarchy','Epsilon Review']],
+      [25,'Veblen Hierarchy & Gamma Numbers',['Veblen Functions φ_α','φ(0,β) = ω^β','φ(1,β) = Epsilon Numbers','φ(2,β) = Gamma Numbers','Gamma-Zero (Γ₀)','Feferman-Schütte Ordinal','φ(3,0)','φ(ω,0)','φ(φ(0,0),0)','Multi-Variable Veblen','Veblen φ(α₁,α₂,...,αₙ,0)','Small Veblen Ordinal (SVO)','Large Veblen Ordinal (LVO)','Beyond Veblen','Veblen Review']],
+      [26,'Ordinal Collapsing Functions',['Why We Need Collapsing','Bachmann-Howard Ordinal','Ordinal Collapsing Function ψ','ψ(0) = 1','ψ(ω) ','ψ(Ω)','ψ(Ω_2)','ψ(Ω_ω)','Buchholz Function','Madore Function','Takeuti-Feferman-Buchholz Ordinal','ψ of Uncountable Ordinals','Admissible Ordinals','Church-Kleene ω₁^CK','Collapsing Review']],
+      [27,'Large Countable Ordinals',['Bachmann-Howard Ordinal','Takeuti-Feferman-Buchholz','Rathjen Ordinal','Stegert Ordinal','Proof-Theoretic Ordinals','Π₁¹-CA₀ Ordinal','Kripke-Platek Ordinal','Ordinal Analysis','Recursive Ordinals','Church-Kleene ω₁^CK','Admissible Ordinals','Recursively Inaccessible','Recursively Mahlo','Reflecting Ordinals','Large Countable Review']],
+      [28,'First Uncountable Ordinal (ω₁)',['What Is ω₁?','ω₁ Is Not Countable','Every Countable Ordinal < ω₁','Cofinality of ω₁','ω₁ Is a Cardinal','Aleph-One = ω₁ (with AC)','ω₁ + 1','ω₁ × 2','ω₁²','ω₁^ω₁','Initial Ordinals','ω₂ ω₃ ω_α','Ordinals vs Cardinals','Hartogs Number','First Uncountable Review']],
+      [29,'Aleph Numbers',['Aleph-Zero ℵ₀ Review','Aleph-One ℵ₁','Aleph-Two ℵ₂','Aleph-Omega ℵ_ω','Aleph-Aleph-Null','Fixed Point Alephs','Cardinal Arithmetic','ℵ_α + ℵ_α = ℵ_α','ℵ_α × ℵ_α = ℵ_α','Cardinal Exponentiation','König Theorem','GCH — Generalized Continuum Hypothesis','Easton Theorem','Singular Cardinals','Aleph Numbers Review']],
+      [30,'Beth Numbers & Power Sets',['Beth-Zero (ℶ₀) = ℵ₀','Beth-One (ℶ₁) = 2^ℵ₀','Beth-Two (ℶ₂) = 2^2^ℵ₀','Beth-Omega','Beth Fixed Points','Power Set Operation','Cantor Theorem Generalized','Continuum Hypothesis & Beths','GCH Says ℶ_α = ℵ_α','Stronger Assertions','Beth vs Aleph','Cardinal Characteristics','Consistency Results','Independence Results','Beth Numbers Review']],
+      [31,'Inaccessible Cardinals',['What Makes a Cardinal Large?','Regular Cardinals','Strong Limit Cardinals','Weakly Inaccessible Cardinals','Strongly Inaccessible Cardinals','The First Inaccessible κ','κ Is Uncountable','κ Is Regular','κ Is a Strong Limit','V_κ Is a Model of ZFC','Universes in Mathematics','Grothendieck Universes','Can We Prove They Exist?','ZFC Cannot Prove Inaccessibles','Inaccessible Review']],
+      [32,'Mahlo Cardinals',['Beyond Inaccessible','What Is a Mahlo Cardinal?','Stationary Sets','The Set of Inaccessibles Below Mahlo','Mahlo Is Inaccessible','Greatly Mahlo','Hyper-Mahlo','Mahlo Hierarchy','α-Mahlo','Mahlo vs Inaccessible','Reflecting Mahlo','Consistency Strength','Mahlo in Set Theory','Applications of Mahlo','Mahlo Review']],
+      [33,'Measurable Cardinals',['Ultrafilters','Non-Principal Ultrafilters','What Is a Measurable Cardinal?','κ-Complete Ultrafilters','Measurable Implies Inaccessible','Measurable Implies Mahlo','Elementary Embeddings','Critical Point','Ultrapower Construction','Scott Theorem','Measurables & V=L','0-Sharp (0#)','Kunen Inconsistency','Measurable Hierarchy','Measurable Review']],
+      [34,'Strong & Woodin Cardinals',['Strong Cardinals','λ-Strong Cardinals','Extenders','Superstrong Cardinals','Woodin Cardinals','Proper Class of Woodin','AD — Axiom of Determinacy','Projective Determinacy','Woodin & Determinacy Connection','Inner Model Program','Core Models','Mitchell Order','Covering Lemma','Steel Core Model','Strong & Woodin Review']],
+      [35,'Supercompact & Beyond',['Compact Cardinals','Supercompact Cardinals','Normal Measures','Elementary Embeddings j:V→M','Supercompact Implies Strong','Strongly Compact vs Supercompact','Laver Indestructibility','Supercompact & Forcing','Vopěnka Principle','Extendible Cardinals','C(n)-Cardinals','Shelah Cardinals','High Jump Cardinals','Almost Huge Cardinals','Supercompact Review']],
+      [36,'Huge & Rank-into-Rank',['Huge Cardinals','1-Huge 2-Huge n-Huge','ω-Huge','Superhuge Cardinals','Rank-into-Rank Axioms','I3 Axiom','I2 Axiom','I1 Axiom','I0 Axiom','Elementary Embeddings j:Vλ→Vλ','Algebra of Embeddings','Laver Tables','Very Large Cardinals','Near the Edge of Consistency','Huge Review']],
+      [37,'Reinhardt & Berkeley Cardinals',['Reinhardt Cardinals','j:V→V — Moving the Universe','Kunen Theorem — No Reinhardt in ZFC','Reinhardt Without Choice','Berkeley Cardinals','Super Reinhardt','Club Berkeley','HOD Conjecture','Choiceless Cardinals','Consistency Questions','Woodin HOD Conjecture','Ultimate L','Are These Consistent?','The Edge of Mathematics','Reinhardt & Berkeley Review']],
+      [38,'The Large Cardinal Hierarchy',['Small Large Cardinals (Inaccessible)','Medium (Measurable Woodin)','Large (Supercompact Huge)','Very Large (Rank-into-Rank)','Inconsistent Region','Consistency Strength Ordering','Equiconsistency Results','Inner Models','Forcing Axioms','Proper Forcing Axiom','Martin Maximum','Forcing & Large Cardinals','The Landscape of Set Theory','Open Problems','Hierarchy Review']],
+      [39,'Ordinal Notations & Systems',['Cantor Normal Form','Veblen Notation','Bachmann Notation','Ordinal Diagrams','Ordinal Notation Systems','Recursive Ordinal Notations','Turing Jump','Hyperarithmetical Hierarchy','Π₁¹-CA','Σ₁¹-CA','Second-Order Arithmetic','Reverse Mathematics','Proof Theory & Ordinals','Cut-Elimination','Notations Review']],
+      [40,'Surreal Numbers',['John Conway & Surreal Numbers','Day 0 — {|}  = 0','Day 1 — {|0} = -1 {0|} = 1','Day 2 — Halves Appear','Day 3 — Quarters','Day ω — All Reals','Infinitesimals (ε)','ω in Surreals','ω-1 ω/2 √ω','Surreal Arithmetic','Surreals Include Ordinals','Surreals Include Reals','Surreal Number Games','Nimbers & Game Theory','Surreal Numbers Review']],
+      [41,'Hyperreal & Nonstandard Numbers',['What Are Hyperreals?','Infinitesimals','Infinite Hyperreals','Transfer Principle','Nonstandard Analysis','Robinson Nonstandard Analysis','Hyperreal Arithmetic','Applications in Calculus','Internal Sets','Saturation','Ultrapower Construction','Hyperreals vs Surreals','Nonstandard Integers','Applications in Physics','Hyperreal Review']],
+      [42,'The Absolute Infinite (Ω)',['What Is the Absolute Infinite?','Cantor & the Absolute','Ω Contains All Cardinals','Ω Contains All Ordinals','The Class of All Sets V','Proper Classes','V Is Not a Set','Burali-Forti Paradox','Russell Paradox','Cantor Paradox','Why Ω Cannot Be a Number','Ω in Philosophy','Ω in Theology (Cantor)','Reflection Principles','Absolute Infinite Review']],
+      [43,'Set Theory Foundations',['Zermelo-Fraenkel Axioms','Axiom of Extensionality','Axiom of Pairing','Axiom of Union','Axiom of Power Set','Axiom of Infinity','Axiom of Replacement','Axiom of Regularity','Axiom of Choice','ZF vs ZFC','Von Neumann Universe V','Cumulative Hierarchy','V_α for Ordinals α','Gödel Constructible Universe L','Set Theory Review']],
+      [44,'Gödel & Incompleteness',['Gödel First Incompleteness Theorem','Self-Reference & Diagonalization','True But Unprovable Statements','Gödel Second Incompleteness Theorem','Consistency Cannot Prove Itself','Gödel Numbering','Recursive Functions','Undecidable Statements','Continuum Hypothesis Independence','Paris-Harrington Theorem','Goodstein Theorem','Harvey Friedman Results','Limits of Mathematics','Gödel & Large Cardinals','Gödel Review']],
+      [45,'Philosophy of Infinity',['Aristotle — Potential Infinity','Aquinas — Actual Infinity','Cantor — Transfinite Paradise','Hilbert — No One Shall Expel Us','Brouwer — Intuitionism','Finitism','Ultrafinitism','Constructivism','Platonism in Mathematics','Formalism','Logicism','Multiverse of Sets','Does Infinity Exist?','Infinity in Physics','Philosophy Review']],
+      [46,'Infinity in Physics & Cosmology',['Infinite Universe?','Observable Universe Boundary','Multiverse Theories','Infinite Density (Singularities)','Black Hole Infinity','Big Bang Singularity','Infinity in Quantum Mechanics','Renormalization','Hilbert Space','Infinite Dimensions','Boltzmann Brains','Eternal Inflation','Poincare Recurrence','Heat Death & Infinity','Physics Infinity Review']],
+      [47,'Number Systems Overview',['Natural Numbers ℕ','Integers ℤ','Rationals ℚ','Reals ℝ','Complex Numbers ℂ','Quaternions ℍ','Octonions 𝕆','Sedenions','p-Adic Numbers','Surreal Numbers Recap','Hyperreals Recap','Ordinal Numbers Recap','Cardinal Numbers Recap','Number Systems Connections','Number Systems Review']],
+      [48,'Famous Unsolved Problems',['Riemann Hypothesis','P vs NP','Goldbach Conjecture','Twin Prime Conjecture','Collatz Conjecture','Birch & Swinnerton-Dyer','Hodge Conjecture','Navier-Stokes','Yang-Mills Mass Gap','Continuum Hypothesis Status','Large Cardinal Questions','Busy Beaver Frontiers','Is Mathematics Consistent?','The Future of Numbers','Unsolved Problems Review']],
+      [49,'Numbers in Culture',['Lucky & Unlucky Numbers','Sacred Numbers','Numbers in Religion','Numerology','Numbers in Music','Fibonacci in Nature','Golden Ratio in Art','Pi Day','Googol in Pop Culture','Infinity Symbol ∞','Numbers in Literature','Numbers in Film','Large Numbers in Media','Vsauce & Numberphile','Numbers in Culture Review']],
+      [50,'Numbers 0 to Absolute Infinity — Final Mastery',['The Complete Number Line','Finite Numbers Recap','Named Large Numbers Recap','Googological Functions Recap','Graham & TREE Recap','Infinity Concept Recap','Aleph & Beth Recap','Ordinal Numbers Recap','Large Cardinals Recap','Absolute Infinite Recap','Surreal & Hyperreal Recap','Set Theory Recap','Gödel & Incompleteness Recap','Comprehensive Final Exam','Numbers to Infinity Mastery!']]
+    ];
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'nti-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('numbers-to-infinity');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('numbers-to-infinity');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
