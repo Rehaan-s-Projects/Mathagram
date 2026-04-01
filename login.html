@@ -155,7 +155,7 @@
       <div id="tab-signup" class="tab-content">
         <form id="signup-form">
           <div class="form-group">
-            <label for="signup-name">Display Name <span id="nameCharCount" style="font-size:0.75rem; font-weight:400; color:var(--color-text-muted);">(0/13)</span></label>
+            <label for="signup-name">Display Name <span id="nameCharCount" style="font-size:0.75rem; font-weight:400; color:var(--color-text-muted);">(3-13 chars)</span></label>
             <input type="text" id="signup-name" required autocomplete="name" maxlength="13" minlength="3" pattern="[A-Za-z]{3,13}" title="Only characters A-Z and a-z, 3-13 characters">
           </div>
           <div class="form-group">
@@ -301,7 +301,7 @@
       if (nameInput.value.length > 13) nameInput.value = nameInput.value.slice(0, 13);
       const len = nameInput.value.length;
       nameCharCount.textContent = `(${len}/13)`;
-      nameCharCount.style.color = len < 3 ? '#ef4444' : len >= 13 ? '#ef4444' : '#22c55e';
+      nameCharCount.style.color = (len >= 3 && len <= 13) ? '#22c55e' : '#ef4444';
     });
 
     signupForm.addEventListener('submit', async (e) => {
