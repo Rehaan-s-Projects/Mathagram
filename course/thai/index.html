@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thai — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Thai</h1>
+    <p>The official language of Thailand — tones, script, culture, and conversation. 45 units, 685 lessons — from สวัสดี to fluency.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Thai Consonants I',['Introduction to Thai Script','Mid-Class Consonants — ก จ ด ต บ ป อ','High-Class Consonants — ข ฉ ฐ ถ ผ ฝ ศ ษ ส ห','Low-Class Consonants — ค ฆ ง ช ซ ฌ ญ ฑ ฒ ณ','Low-Class Consonants — ท ธ น พ ฟ ภ ม ย ร ล ว ฬ ฮ','Consonant Classes & Tone Rules','Writing Consonants by Hand','Consonant Clusters — กร กล กว','Leading ห — Silent Leader Rule','Obsolete & Rare Consonants','Reading Consonants in Words','Consonant Recognition Drills','Typing Thai Consonants','Consonant Flashcard Review','Thai Consonants I Checkpoint']],
+      [2,'Thai Vowels',['Short Vowels — อะ อิ อึ อุ','Long Vowels — อา อี อื อู','Front Vowels — เอ เเอ','Back Vowels — โอ เอาะ ออ','Complex Vowels — เอีย เอือ อัว','Special Vowels — ไอ ใอ เอา','Vowel Shortening Rules','Silent Vowels — อำ ฤ ฤๅ','Sara Am — อำ','Vowel Placement — Above Below Left Right','Reading Vowels in Context','Short vs Long Vowel Pairs','Vowel Recognition Drills','Typing Thai Vowels','Thai Vowels Checkpoint']],
+      [3,'Thai Tones',['The 5 Thai Tones','Mid Tone — เสียงสามัญ','Low Tone — เสียงเอก','Falling Tone — เสียงโท','High Tone — เสียงตรี','Rising Tone — เสียงจัตวา','Tone Marks — ่ ้ ๊ ๋','Tone Rules for Mid-Class','Tone Rules for High-Class','Tone Rules for Low-Class','Live vs Dead Syllables','Tone Practice with Minimal Pairs','Common Tone Mistakes','Tone Drills — Listening','Thai Tones Checkpoint']],
+      [4,'Thai Numbers & Basics',['Thai Numerals ๐-๙','Numbers 1-10 — หนึ่งถึงสิบ','Numbers 11-100','Numbers 100-1,000,000','Ordinal Numbers — ที่หนึ่ง ที่สอง','Counting & Classifiers','Common Classifiers — คน ตัว อัน','Time — กี่โมง','Days of the Week — วันจันทร์ to วันอาทิตย์','Months — มกราคม to ธันวาคม','Seasons in Thailand','Thai Calendar & Buddhist Era','Currency — บาท','Telling Your Age','Thai Numbers Checkpoint']],
+      [5,'Greetings & Polite Particles',['สวัสดี — Hello & Goodbye','ครับ & ค่ะ — Polite Particles','ขอบคุณ — Thank You','ขอโทษ — Sorry & Excuse Me','ไม่เป็นไร — It\'s Okay','สบายดีไหม — How Are You?','ชื่ออะไร — What\'s Your Name?','ผม & ฉัน — I/Me (Male & Female)','คุณ — You (Polite)','Formal vs Informal Greetings','Wai — Thai Greeting Gesture','Phone Greetings','Saying Goodbye Variations','Meeting Someone New','Greetings Checkpoint']],
+      [6,'Basic Sentences',['Thai Word Order — SVO','Subject Pronouns — ผม ฉัน เขา เธอ','This & That — นี่ นั่น โน่น','To Be — เป็น คือ อยู่','Yes & No — ใช่ ไม่ใช่ ครับ/ค่ะ','Questions with ไหม','Questions with อะไร — What','Questions with ใคร — Who','Questions with ที่ไหน — Where','Questions with เมื่อไหร่ — When','Questions with ทำไม — Why','Questions with อย่างไร — How','Negation — ไม่','Simple Sentence Practice','Basic Sentences Checkpoint']],
+      [7,'Family & People',['Family — ครอบครัว','Father & Mother — พ่อ แม่','Older & Younger Siblings — พี่ น้อง','Grandparents — ปู่ ย่า ตา ยาย','Aunts & Uncles — ลุง ป้า น้า อา','Children — ลูกชาย ลูกสาว','Husband & Wife — สามี ภรรยา','Friends — เพื่อน','Describing People — Tall Short Fat Thin','Age & Appearance','Personality Adjectives','Nicknames in Thai Culture','Family Titles & Respect','Describing Your Family','Family Checkpoint']],
+      [8,'Food & Eating',['Thai Food — อาหารไทย','Rice — ข้าว (ข้าวสวย ข้าวเหนียว)','Pad Thai — ผัดไทย','Tom Yum — ต้มยำ','Green Curry — แกงเขียวหวาน','Som Tam — ส้มตำ','Mango Sticky Rice — ข้าวเหนียวมะม่วง','Ordering Food — สั่งอาหาร','Spicy Levels — เผ็ด ไม่เผ็ด','Flavors — เปรี้ยว หวาน เค็ม ขม','Fruits — ผลไม้','Vegetables — ผัก','Drinks — เครื่องดื่ม','Street Food Vocabulary','Food Checkpoint']],
+      [9,'Shopping & Money',['Shopping — ช้อปปิ้ง','How Much? — เท่าไหร่','Too Expensive — แพงไป','Bargaining — ต่อราคา','Cheap & Expensive — ถูก แพง','Sizes — ใหญ่ กลาง เล็ก','Colors — สี','At the Market — ตลาด','At the Mall — ห้างสรรพสินค้า','Paying — จ่ายเงิน','Credit Card & Cash','Getting Change','Comparing Prices','Online Shopping Terms','Shopping Checkpoint']],
+      [10,'Directions & Transport',['Where Is...? — ...อยู่ที่ไหน','Left & Right — ซ้าย ขวา','Straight Ahead — ตรงไป','Near & Far — ใกล้ ไกล','Turn — เลี้ยว','Taxi — แท็กซี่','Tuk-Tuk — ตุ๊กตุ๊ก','BTS & MRT — รถไฟฟ้า','Bus — รถเมล์','Motorbike Taxi — วินมอเตอร์ไซค์','Boat — เรือ','Airport Vocabulary — สนามบิน','Train — รถไฟ','Giving Directions Practice','Directions Checkpoint']],
+      [11,'Home & Daily Life',['House & Rooms — บ้าน ห้อง','Bedroom — ห้องนอน','Bathroom — ห้องน้ำ','Kitchen — ห้องครัว','Living Room — ห้องนั่งเล่น','Furniture — เฟอร์นิเจอร์','Daily Routine — กิจวัตรประจำวัน','Wake Up & Sleep — ตื่น นอน','Eating Meals — กินข้าว','Shower & Get Dressed','Household Chores — ทำความสะอาด','Cooking at Home','Watching TV — ดูทีวี','Describing Your Home','Home Checkpoint']],
+      [12,'Present Tense & Actions',['Thai Has No Conjugation','Present Actions — กำลัง...อยู่','Common Verbs — กิน ดื่ม ไป มา','To Go & To Come — ไป มา','To Eat & To Drink — กิน ดื่ม','To Want — อยาก ต้องการ','To Like — ชอบ','To Love — รัก','To Know — รู้ รู้จัก','To Have — มี','To Can — ได้ เป็น','To Must — ต้อง','To Give — ให้','Action Verb Practice','Present Tense Checkpoint']],
+      [13,'Past & Future',['Past Tense — แล้ว ได้...แล้ว','Experience Past — เคย','Just Now — เพิ่ง','Already — แล้ว','Not Yet — ยัง...ไม่','Future Tense — จะ','Going To — จะไป','Planning — วางแผน','Tomorrow & Yesterday — พรุ่งนี้ เมื่อวาน','Last Week & Next Week','Past Narrative Practice','Future Plans Practice','Time Expressions','Mixing Tenses in Context','Past & Future Checkpoint']],
+      [14,'Adjectives & Descriptions',['Adjectives Come After Nouns','Big & Small — ใหญ่ เล็ก','Hot & Cold — ร้อน เย็น หนาว','Beautiful & Ugly — สวย น่าเกลียด','Good & Bad — ดี ไม่ดี','Fast & Slow — เร็ว ช้า','New & Old — ใหม่ เก่า','Long & Short — ยาว สั้น','Clean & Dirty — สะอาด สกปรก','Delicious — อร่อย','Fun & Boring — สนุก น่าเบื่อ','Comparisons — กว่า','Superlatives — ที่สุด','Very — มาก','Adjectives Checkpoint']],
+      [15,'Classifiers Deep Dive',['What Are Classifiers?','คน — People Classifier','ตัว — Animals & Things','อัน — General Objects','ใบ — Flat Things & Containers','เล่ม — Books & Long Objects','คัน — Vehicles','หลัง — Buildings & Houses','ชิ้น — Pieces & Slices','แก้ว & ขวด — Glasses & Bottles','จาน — Plates of Food','ห้อง — Rooms','ที่ — Places','Classifier Practice Sentences','Classifiers Checkpoint']],
+      [16,'Weather & Seasons',['Weather — อากาศ','Hot Season — ร้อน','Rainy Season — ฝน','Cool Season — หนาว','Rain — ฝนตก','Sun & Sunshine — แดด','Cloud — เมฆ','Wind — ลม','Storm & Thunder — พายุ ฟ้าร้อง','Flood — น้ำท่วม','Temperature — อุณหภูมิ','Today\'s Weather','Weather Forecast — พยากรณ์อากาศ','Climate in Thailand','Weather Checkpoint']],
+      [17,'Body & Health',['Body Parts — ร่างกาย','Head & Face — หัว หน้า','Arms & Legs — แขน ขา','Internal Organs — อวัยวะ','Feeling Sick — ไม่สบาย','Headache — ปวดหัว','Stomachache — ปวดท้อง','Fever — มีไข้','Cold & Flu — เป็นหวัด','At the Hospital — โรงพยาบาล','At the Pharmacy — ร้านขายยา','Medicine — ยา','Doctor — หมอ','Emergency — ฉุกเฉิน','Health Checkpoint']],
+      [18,'School & Education',['School — โรงเรียน','University — มหาวิทยาลัย','Teacher — ครู อาจารย์','Student — นักเรียน นักศึกษา','Classroom — ห้องเรียน','Subjects — วิชา','Math — คณิตศาสตร์','Science — วิทยาศาสตร์','Thai Language — ภาษาไทย','English — ภาษาอังกฤษ','Homework — การบ้าน','Test & Exam — สอบ','Grade — เกรด','Study Vocabulary — อ่านหนังสือ','Education Checkpoint']],
+      [19,'Work & Careers',['Jobs — อาชีพ','Office — ออฟฟิศ','Boss — เจ้านาย หัวหน้า','Employee — พนักงาน','Salary — เงินเดือน','Meeting — ประชุม','Computer — คอมพิวเตอร์','Phone Call — โทรศัพท์','Email — อีเมล','Business Card — นามบัตร','Resume — ประวัติย่อ','Job Interview — สัมภาษณ์','Schedule — ตารางงาน','Common Thai Jobs','Work Checkpoint']],
+      [20,'Thai Culture & Customs',['The King & Royal Family','Buddhism in Thailand — พุทธศาสนา','Temples — วัด','Monks — พระ','Making Merit — ทำบุญ','Wai Greeting — ไหว้','Respect for Elders','Thai New Year — สงกรานต์','Loy Krathong — ลอยกระทง','Thai Boxing — มวยไทย','Thai Dance — รำไทย','Thai Silk & Crafts','Face & Social Harmony','Thai Etiquette — Do\'s & Don\'ts','Culture Checkpoint']],
+      [21,'Travel in Thailand',['Bangkok — กรุงเทพ','Chiang Mai — เชียงใหม่','Phuket — ภูเก็ต','Pattaya — พัทยา','Krabi & Phi Phi Islands','Ayutthaya — อยุธยา','Sukhothai — สุโขทัย','Koh Samui — เกาะสมุย','Hotel Vocabulary — โรงแรม','Booking & Reservations','At the Beach — ชายหาด','Island Hopping','Night Market — ตลาดกลางคืน','Travel Phrases & Tips','Travel Checkpoint']],
+      [22,'Intermediate Grammar I',['Serial Verbs — ไปกิน ไปดู','Verb Compounds','Resultative Verbs — ได้ เป็น','Auxiliary Verbs — จะ คง น่าจะ','Passive Voice — ถูก โดน','Causative — ให้','Comparative — กว่า เท่ากับ','Superlative — ที่สุด','Relative Clauses — ที่','Conjunction — และ แต่ หรือ','Because — เพราะ','So — เลย จึง','If — ถ้า','Although — ถึงแม้ว่า','Intermediate Grammar I Checkpoint']],
+      [23,'Intermediate Grammar II',['Noun Phrases & Modifiers','Verb Phrase Structure','Aspect Markers — กำลัง อยู่ แล้ว','Frequency — บ่อย เสมอ ไม่ค่อย','Duration — นาน เท่าไหร่','Since & For — ตั้งแต่','Each & Every — ทุก แต่ละ','Some & Any — บาง','All & None — ทั้งหมด ไม่มี','Quantifiers — มาก น้อย หลาย','Reported Speech','Emphasis & Focus','Sentence Connectors','Complex Sentence Practice','Intermediate Grammar II Checkpoint']],
+      [24,'Thai Idioms & Proverbs',['Thai Proverbs — สุภาษิต','Water Idioms — น้ำ','Animal Idioms — สัตว์','Rice Idioms — ข้าว','Body Part Idioms','Heart Idioms — ใจ','Face Idioms — หน้า','Hand & Foot Idioms','Elephant Proverbs — ช้าง','Food-Related Sayings','Buddhist Sayings','Slang & Modern Expressions','Social Media Thai','Youth Slang','Idioms Checkpoint']],
+      [25,'Reading Thai',['Reading Signs & Labels','Reading Menus','Reading Simple Stories','Reading News Headlines','Reading Short Articles','Reading Advertisements','Reading Official Forms','Reading Song Lyrics','Reading Children\'s Books','Reading Social Media Posts','Reading Recipes','Reading Travel Guides','Speed Reading Practice','Reading Comprehension Strategies','Reading Checkpoint']],
+      [26,'Writing Thai',['Thai Handwriting Practice','Writing Short Sentences','Writing Paragraphs','Writing a Personal Letter','Writing an Email','Writing a Diary Entry','Writing Descriptions','Writing Opinions','Writing a Simple Essay','Writing Messages & Texts','Formal vs Informal Writing','Common Spelling Mistakes','Punctuation in Thai','Proofreading Practice','Writing Checkpoint']],
+      [27,'Listening & Speaking',['Listening to Conversations','Listening to Announcements','Listening to Songs','Listening to News','Listening to Podcasts','Shadowing Practice','Pronunciation Drills','Tone Production Practice','Speaking About Yourself','Speaking About Daily Life','Ordering & Shopping Dialogues','Giving Directions Practice','Making Small Talk','Phone Conversation Practice','Listening & Speaking Checkpoint']],
+      [28,'Thai Cooking Vocabulary',['Kitchen — ห้องครัว','Cooking Verbs — ผัด ต้ม ทอด ย่าง','Ingredients — เครื่องปรุง','Herbs & Spices — สมุนไพร','Fish Sauce — น้ำปลา','Chili — พริก','Coconut Milk — กะทิ','Lemongrass — ตะไคร้','Galangal — ข่า','Kaffir Lime — มะกรูด','Making Pad Thai','Making Tom Yum','Making Green Curry','Making Mango Sticky Rice','Cooking Checkpoint']],
+      [29,'Thai Music & Entertainment',['Thai Pop — เพลงไทยสากล','Luk Thung — ลูกทุ่ง','Mor Lam — หมอลำ','Thai Classical Music','Traditional Instruments','Thai TV Dramas — ละคร','Thai Film Industry','Thai Comedy — ตลก','Thai Literature','Ramakien — รามเกียรติ์','Muay Thai — มวยไทย','Thai Festivals & Shows','Karaoke Culture','Entertainment Vocabulary','Entertainment Checkpoint']],
+      [30,'Thai History',['Ancient Kingdoms — ทวารวดี ศรีวิชัย','Sukhothai Kingdom — อาณาจักรสุโขทัย','King Ramkhamhaeng & Thai Script','Ayutthaya Kingdom — กรุงศรีอยุธยา','Fall of Ayutthaya 1767','Thonburi Period — King Taksin','Rattanakosin — Bangkok Founded 1782','King Rama V — Modernization','Avoiding Colonization','1932 Revolution — Constitutional Monarchy','World War II & Thailand','Modern Political History','King Bhumibol — Rama IX','Current Thailand','History Checkpoint']],
+      [31,'Business Thai',['Business Greetings — สวัสดีครับ/ค่ะ','Office Communication','Meeting Vocabulary — ประชุม','Presentation Phrases','Negotiation Language','Contract Terms — สัญญา','Banking — ธนาคาร','Investment — การลงทุน','Marketing — การตลาด','Customer Service — บริการ','Business Email Writing','Phone Etiquette','Thai Business Culture','Networking Phrases','Business Thai Checkpoint']],
+      [32,'Thai for Tourism Professionals',['Welcoming Tourists','Hotel Reception Phrases','Tour Guide Language','Explaining Thai Culture','Describing Attractions','Restaurant Service','Transportation Assistance','Handling Complaints','Emergency Assistance','Medical Tourism Vocabulary','Spa & Wellness Terms','Shopping Guide Language','Airport Assistance','Farewell & Follow-Up','Tourism Checkpoint']],
+      [33,'Advanced Tones & Pronunciation',['Tone Sandhi — Tone Changes','Cluster Pronunciation','Final Consonant Sounds','Unreleased Finals — ก ด บ','Vowel Length Distinction','Homophones in Thai','Regional Accent Differences','Bangkok Thai vs Standard','Northern Thai — คำเมือง','Northeastern Thai — อีสาน','Southern Thai — ปักษ์ใต้','Formal Pronunciation','Rapid Speech Patterns','Pronunciation Self-Assessment','Advanced Pronunciation Checkpoint']],
+      [34,'Thai Religion & Philosophy',['Theravada Buddhism — เถรวาท','The Four Noble Truths','The Eightfold Path','Karma — กรรม','Merit Making — ทำบุญ','Meditation — สมาธิ','Temple Vocabulary — วัด','Monk Ordination — บวช','Buddhist Holidays','Spirit Houses — ศาลพระภูมิ','Animism in Thailand','Hindu Influence','Islam in Southern Thailand','Religious Tolerance','Religion Checkpoint']],
+      [35,'Thai Nature & Geography',['Geography of Thailand — ภูมิศาสตร์','Northern Mountains — ภูเขา','Central Plains — ที่ราบ','Northeastern Plateau — อีสาน','Southern Peninsula — ภาคใต้','Rivers — แม่น้ำ','Chao Phraya River — แม่น้ำเจ้าพระยา','Mekong River — แม่น้ำโขง','National Parks — อุทยานแห่งชาติ','Thai Wildlife — สัตว์ป่า','Elephants in Thailand — ช้าง','Marine Life — สัตว์ทะเล','Tropical Weather','Environmental Issues','Nature Checkpoint']],
+      [36,'Advanced Reading',['Reading Newspapers — หนังสือพิมพ์','Reading Magazine Articles','Reading Short Stories','Reading Academic Texts','Reading Legal Documents','Reading Business Reports','Reading Poetry — กวี','Reading Historical Texts','Reading Medical Information','Reading Online News','Inferring Meaning from Context','Critical Reading Skills','Summarizing Thai Texts','Speed Reading Advanced','Advanced Reading Checkpoint']],
+      [37,'Advanced Writing',['Essay Writing — เรียงความ','Formal Letter Writing — จดหมาย','Business Report Writing','Academic Writing','Narrative Writing','Descriptive Writing','Persuasive Writing','Opinion Pieces','Creative Writing — Poetry','Creative Writing — Short Story','Note-Taking in Thai','Editing & Proofreading','Register & Formality','Common Advanced Errors','Advanced Writing Checkpoint']],
+      [38,'Advanced Conversation',['Debating in Thai','Expressing Complex Opinions','Discussing Current Events','Storytelling Techniques','Humor & Jokes in Thai','Conflict Resolution Language','Formal Speech & Presentations','Impromptu Speaking','Group Discussion','Interview Skills','Phone Negotiations','Cultural Sensitivity Topics','Emotional Expression','Public Speaking Practice','Advanced Conversation Checkpoint']],
+      [39,'Royal Thai & Formal Language',['Royal Vocabulary — ราชาศัพท์','Royal Pronouns','Royal Verbs — เสวย ทรง ประทับ','Addressing Royalty','Monks\' Language — คำศัพท์สงฆ์','Formal Written Thai','Legal Language','Academic Register','News Broadcast Language','Official Announcements','Ceremonial Language','Parliamentary Thai','Diplomatic Phrases','Formal vs Informal Comparison','Royal Thai Checkpoint']],
+      [40,'Thai Script Advanced',['Rare Characters & Symbols','Thai Punctuation — ๆ ฯ','Abbreviations in Thai','Ancient Thai Script','Khom Script Influence','Lanna Script — อักษรล้านนา','Reading Old Documents','Typography & Font Styles','Calligraphy Practice','Thai in Unicode','Transliteration Systems','RTGS Romanization','Thai Braille — อักษรเบรลล์ไทย','Script History Timeline','Advanced Script Checkpoint']],
+      [41,'Regional Thai',['Central Thai — ภาษากลาง','Northern Thai — คำเมือง','Isaan — ภาษาอีสาน','Southern Thai — ภาษาปักษ์ใต้','Bangkok Slang','Chiang Mai Dialect','Korat Dialect','Phuket Dialect','Hill Tribe Languages Overview','Malay Influence in South','Lao vs Isaan','Khmer Loanwords','Chinese Loanwords','English Loanwords — คำทับศัพท์','Regional Thai Checkpoint']],
+      [42,'Thai Technology & Modern Life',['Smartphone — สมาร์ทโฟน','Social Media — โซเชียลมีเดีย','LINE App — ไลน์','Facebook in Thailand','Instagram & TikTok Thai','Online Shopping — ช้อปออนไลน์','Food Delivery — สั่งอาหาร','Grab & Bolt','Digital Banking — ธนาคารออนไลน์','Coding Terms in Thai','AI & Technology — ปัญญาประดิษฐ์','Startup Culture — สตาร์ทอัพ','Gaming Vocabulary','Digital Literacy','Technology Checkpoint']],
+      [43,'Thai Arts & Crafts',['Thai Silk — ผ้าไหม','Thai Pottery — เครื่องปั้นดินเผา','Wood Carving — แกะสลัก','Thai Painting — จิตรกรรม','Temple Murals — จิตรกรรมฝาผนัง','Lacquerware — เครื่องเขิน','Nielloware — เครื่องถม','Thai Puppetry — หุ่นกระบอก','Khon Masks — หน้ากากโขน','Flower Garlands — พวงมาลัย','Fruit Carving — แกะสลักผลไม้','Thai Architecture — สถาปัตยกรรม','Contemporary Thai Art','Art Vocabulary','Arts & Crafts Checkpoint']],
+      [44,'Translation & Interpretation',['English to Thai Translation','Thai to English Translation','Common Translation Errors','False Friends — คำที่สับสน','Cultural Adaptation','Subtitle Translation','Technical Translation','Business Document Translation','Literary Translation','Interpreting Basics','Sight Translation Practice','Translation Tools','Building a Thai-English Glossary','Professional Standards','Translation Checkpoint']],
+      [45,'Thai Mastery',['Comprehensive Grammar Review','Vocabulary Mastery Test 1','Vocabulary Mastery Test 2','Vocabulary Mastery Test 3','Reading Comprehension Final 1','Reading Comprehension Final 2','Listening Comprehension Final','Writing Skills Assessment','Tone & Pronunciation Final','Speaking Assessment','Cultural Knowledge Exam','Translation Final','Conversation Final','Thai Script Writing Final','Thai Mastery Certification!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'th-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('thai');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('thai');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
