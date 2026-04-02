@@ -288,6 +288,20 @@
                 <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:0%; background:#67e8f9; border-radius:2px; transition:width 1s ease;" id="creativity-fill"></div></div>
               </div>
             </div>
+            <!-- IQ Estimate -->
+            <div id="iq-section" style="margin-top:16px; background:rgba(255,255,255,0.05); border:1px solid rgba(34,211,238,0.2); border-radius:14px; padding:20px; text-align:center;">
+              <div style="color:#94a3b8; font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Estimated IQ</div>
+              <div id="iq-number" style="font-size:3rem; font-weight:900; color:#fff; line-height:1; text-shadow:0 0 20px rgba(34,211,238,0.4);">—</div>
+              <div id="iq-label" style="color:#22d3ee; font-size:0.85rem; font-weight:700; margin-top:4px;">—</div>
+              <div id="iq-bar-container" style="margin-top:12px; position:relative; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:visible;">
+                <div id="iq-bar-fill" style="height:100%; width:0%; border-radius:4px; transition:width 1.5s ease; background:linear-gradient(90deg,#ef4444 0%,#f97316 20%,#eab308 35%,#22c55e 50%,#06b6d4 65%,#8b5cf6 80%,#ec4899 100%);"></div>
+                <div id="iq-marker" style="position:absolute; top:-4px; width:16px; height:16px; background:#fff; border-radius:50%; border:2px solid #22d3ee; box-shadow:0 0 10px rgba(34,211,238,0.5); transition:left 1.5s ease; left:0%;"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.6rem; color:#64748b;">
+                <span>70</span><span>85</span><span>100</span><span>115</span><span>130</span><span>145</span><span>160+</span>
+              </div>
+              <p id="iq-description" style="color:#94a3b8; font-size:0.72rem; margin-top:10px; line-height:1.5;"></p>
+            </div>
             <p id="brain-insight" style="color:#cbd5e1; font-size:0.82rem; margin-top:14px; line-height:1.5; text-align:center;"></p>
           </div>
         </div>
@@ -578,8 +592,41 @@
         document.getElementById('creativity-fill').style.width = creativity + '%';
       }, 200);
 
-      // Generate insight
+      // Calculate IQ estimate from brain scores
       const avg = Math.round((focus + memory + problem + creativity) / 4);
+      const iqBase = 85 + Math.round(avg * 0.75);
+      const iqBonus = Math.min(Math.round(streak * 0.5 + courses * 1.5), 15);
+      const iq = Math.min(Math.max(iqBase + iqBonus, 75), 165);
+
+      // IQ classification
+      let iqLabel = '';
+      let iqDesc = '';
+      if (iq >= 145) { iqLabel = 'Genius'; iqDesc = 'Exceptional cognitive ability. You are in the top 0.1% of learners.'; }
+      else if (iq >= 130) { iqLabel = 'Very Superior'; iqDesc = 'Outstanding intelligence. Your brain processes information at an elite level.'; }
+      else if (iq >= 120) { iqLabel = 'Superior'; iqDesc = 'Above average intelligence. You grasp complex concepts faster than most.'; }
+      else if (iq >= 110) { iqLabel = 'High Average'; iqDesc = 'Strong cognitive skills. Keep learning to push into superior range.'; }
+      else if (iq >= 100) { iqLabel = 'Average'; iqDesc = 'Solid baseline. Consistent practice will rapidly boost your score.'; }
+      else if (iq >= 90) { iqLabel = 'Average'; iqDesc = 'Normal range. Complete more lessons to strengthen neural pathways.'; }
+      else { iqLabel = 'Building Up'; iqDesc = 'Your brain is warming up! Start completing lessons to see your IQ rise.'; }
+
+      // Animate IQ display
+      setTimeout(() => {
+        const iqEl = document.getElementById('iq-number');
+        let current = 70;
+        const iqInterval = setInterval(() => {
+          current += Math.ceil((iq - current) / 8);
+          if (current >= iq) { current = iq; clearInterval(iqInterval); }
+          iqEl.textContent = current;
+        }, 50);
+        document.getElementById('iq-label').textContent = iqLabel;
+        document.getElementById('iq-description').textContent = iqDesc;
+        // Position on bar (70-160 range mapped to 0-100%)
+        const pct = Math.min(Math.max(((iq - 70) / 90) * 100, 0), 100);
+        document.getElementById('iq-bar-fill').style.width = pct + '%';
+        document.getElementById('iq-marker').style.left = 'calc(' + pct + '% - 8px)';
+      }, 400);
+
+      // Generate insight
       const insights = [];
       if (avg >= 80) insights.push('Your brain is firing on all cylinders! Keep pushing your limits.');
       else if (avg >= 60) insights.push('Strong neural pathways forming. Consistent practice is paying off.');
