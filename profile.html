@@ -224,6 +224,75 @@
         </div>
       </div>
 
+      <!-- AI Brain Scan -->
+      <div id="brain-scan-section" style="margin-bottom:28px; text-align:center;">
+        <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px; text-align:left;">AI Brain Scan</h3>
+        <div id="brain-scan-card" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0e7490 100%); border-radius:var(--radius-lg); padding:28px 20px; position:relative; overflow:hidden; cursor:pointer;" onclick="startBrainScan()">
+          <!-- Brain SVG -->
+          <div id="brain-visual" style="position:relative; width:160px; height:160px; margin:0 auto 16px;">
+            <svg viewBox="0 0 200 200" width="160" height="160" id="brain-svg">
+              <defs>
+                <radialGradient id="brainGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="100" cy="100" r="90" fill="url(#brainGlow)" id="brain-pulse"/>
+              <!-- Brain outline -->
+              <path d="M100 30c-20 0-35 8-42 18-8-3-18-2-24 5-8 9-8 22-2 32-8 8-10 20-6 32 3 10 10 18 18 22-2 10 0 22 6 30 8 10 22 16 36 16h28c14 0 28-6 36-16 6-8 8-20 6-30 8-4 15-12 18-22 4-12 2-24-6-32 6-10 6-23-2-32-6-7-16-8-24-5C135 38 120 30 100 30z" fill="none" stroke="#22d3ee" stroke-width="2" opacity="0.6"/>
+              <!-- Brain details -->
+              <path d="M100 45c0 0-25 15-30 40s5 50 30 65" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.4"/>
+              <path d="M100 45c0 0 25 15 30 40s-5 50-30 65" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.4"/>
+              <path d="M70 80c20 5 40 5 60 0" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.3"/>
+              <path d="M65 105c22 8 48 8 70 0" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.3"/>
+              <!-- Scan line -->
+              <line x1="10" y1="0" x2="10" y2="200" stroke="#22d3ee" stroke-width="2" opacity="0" id="scan-line">
+                <animate attributeName="x1" from="10" to="190" dur="2s" fill="freeze" begin="indefinite" id="scanAnim1"/>
+                <animate attributeName="x2" from="10" to="190" dur="2s" fill="freeze" begin="indefinite" id="scanAnim2"/>
+                <animate attributeName="opacity" values="0;0.8;0.8;0" dur="2s" fill="freeze" begin="indefinite" id="scanAnim3"/>
+              </line>
+              <!-- Nodes that light up -->
+              <circle cx="75" cy="70" r="4" fill="#22d3ee" opacity="0" class="brain-node"/>
+              <circle cx="125" cy="70" r="4" fill="#22d3ee" opacity="0" class="brain-node"/>
+              <circle cx="65" cy="100" r="4" fill="#06b6d4" opacity="0" class="brain-node"/>
+              <circle cx="135" cy="100" r="4" fill="#06b6d4" opacity="0" class="brain-node"/>
+              <circle cx="80" cy="130" r="3" fill="#0891b2" opacity="0" class="brain-node"/>
+              <circle cx="120" cy="130" r="3" fill="#0891b2" opacity="0" class="brain-node"/>
+              <circle cx="100" cy="60" r="5" fill="#67e8f9" opacity="0" class="brain-node"/>
+              <circle cx="100" cy="110" r="4" fill="#67e8f9" opacity="0" class="brain-node"/>
+            </svg>
+          </div>
+          <p id="brain-scan-label" style="color:#67e8f9; font-weight:700; font-size:0.95rem; margin-bottom:4px;">Tap to Scan Your Brain</p>
+          <p id="brain-scan-sub" style="color:#94a3b8; font-size:0.75rem;">AI analyzes your learning patterns</p>
+          <!-- Results (hidden until scan) -->
+          <div id="brain-results" style="display:none; margin-top:20px; text-align:left;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div style="background:rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                <div style="color:#67e8f9; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Focus Level</div>
+                <div id="brain-focus" style="color:#fff; font-size:1.2rem; font-weight:800;">—</div>
+                <div id="brain-focus-bar" style="height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:0%; background:#22d3ee; border-radius:2px; transition:width 1s ease;" id="focus-fill"></div></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                <div style="color:#67e8f9; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Memory</div>
+                <div id="brain-memory" style="color:#fff; font-size:1.2rem; font-weight:800;">—</div>
+                <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:0%; background:#06b6d4; border-radius:2px; transition:width 1s ease;" id="memory-fill"></div></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                <div style="color:#67e8f9; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Problem Solving</div>
+                <div id="brain-problem" style="color:#fff; font-size:1.2rem; font-weight:800;">—</div>
+                <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:0%; background:#0891b2; border-radius:2px; transition:width 1s ease;" id="problem-fill"></div></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                <div style="color:#67e8f9; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Creativity</div>
+                <div id="brain-creativity" style="color:#fff; font-size:1.2rem; font-weight:800;">—</div>
+                <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:6px; overflow:hidden;"><div style="height:100%; width:0%; background:#67e8f9; border-radius:2px; transition:width 1s ease;" id="creativity-fill"></div></div>
+              </div>
+            </div>
+            <p id="brain-insight" style="color:#cbd5e1; font-size:0.82rem; margin-top:14px; line-height:1.5; text-align:center;"></p>
+          </div>
+        </div>
+      </div>
+
       <!-- Course Progress -->
       <div class="course-progress-section">
         <h3>Course Progress</h3>
@@ -444,7 +513,96 @@
       await logOut();
       window.location.href = 'login.html';
     });
+
+    // Brain Scan
+    let scanRunning = false;
+    window.startBrainScan = async function() {
+      if (scanRunning) return;
+      scanRunning = true;
+      const label = document.getElementById('brain-scan-label');
+      const sub = document.getElementById('brain-scan-sub');
+      const results = document.getElementById('brain-results');
+      results.style.display = 'none';
+
+      // Start scan animation
+      label.textContent = 'Scanning...';
+      sub.textContent = 'AI analyzing your neural patterns';
+      document.getElementById('scanAnim1').beginElement();
+      document.getElementById('scanAnim2').beginElement();
+      document.getElementById('scanAnim3').beginElement();
+
+      // Pulse brain
+      const pulse = document.getElementById('brain-pulse');
+      pulse.style.animation = 'brainPulse 0.8s ease infinite';
+
+      // Light up nodes sequentially
+      const nodes = document.querySelectorAll('.brain-node');
+      for (let i = 0; i < nodes.length; i++) {
+        await new Promise(r => setTimeout(r, 250));
+        nodes[i].style.opacity = '0.9';
+        nodes[i].style.transition = 'opacity 0.3s';
+      }
+
+      await new Promise(r => setTimeout(r, 800));
+
+      // Get user stats for AI analysis
+      let xp = parseInt(document.getElementById('stat-xp').textContent) || 0;
+      let streak = parseInt(document.getElementById('stat-streak').textContent) || 0;
+      let courses = document.querySelectorAll('#lesson-list li a').length || 0;
+
+      // Generate scores based on real data
+      const base = Math.min(xp / 10, 50);
+      const streakBonus = Math.min(streak * 3, 20);
+      const courseBonus = Math.min(courses * 5, 30);
+
+      const focus = Math.min(Math.round(base + streakBonus + Math.random() * 15 + 10), 100);
+      const memory = Math.min(Math.round(base + courseBonus + Math.random() * 15 + 8), 100);
+      const problem = Math.min(Math.round(base + Math.random() * 20 + streakBonus + 5), 100);
+      const creativity = Math.min(Math.round(base + courseBonus * 0.8 + Math.random() * 18 + 12), 100);
+
+      // Show results
+      label.textContent = 'Scan Complete';
+      sub.textContent = 'Your brain analysis is ready';
+      pulse.style.animation = 'brainPulse 2s ease infinite';
+      results.style.display = 'block';
+
+      // Animate scores
+      setTimeout(() => {
+        document.getElementById('brain-focus').textContent = focus + '%';
+        document.getElementById('focus-fill').style.width = focus + '%';
+        document.getElementById('brain-memory').textContent = memory + '%';
+        document.getElementById('memory-fill').style.width = memory + '%';
+        document.getElementById('brain-problem').textContent = problem + '%';
+        document.getElementById('problem-fill').style.width = problem + '%';
+        document.getElementById('brain-creativity').textContent = creativity + '%';
+        document.getElementById('creativity-fill').style.width = creativity + '%';
+      }, 200);
+
+      // Generate insight
+      const avg = Math.round((focus + memory + problem + creativity) / 4);
+      const insights = [];
+      if (avg >= 80) insights.push('Your brain is firing on all cylinders! Keep pushing your limits.');
+      else if (avg >= 60) insights.push('Strong neural pathways forming. Consistent practice is paying off.');
+      else if (avg >= 40) insights.push('Your brain is warming up. More daily practice will boost your scores.');
+      else insights.push('Start completing lessons to activate more brain regions!');
+
+      if (focus > memory + 15) insights.push('Your focus is exceptional — try more memory-based exercises.');
+      if (memory > problem + 15) insights.push('Great memory! Challenge yourself with harder problem-solving lessons.');
+      if (streak >= 7) insights.push('7+ day streak! Your consistency is building powerful neural habits.');
+      if (courses >= 3) insights.push('Multi-subject learner detected — cross-training strengthens all areas.');
+
+      document.getElementById('brain-insight').textContent = insights.join(' ');
+
+      setTimeout(() => { scanRunning = false; }, 3000);
+    };
   </script>
+  <style>
+    @keyframes brainPulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+    #brain-pulse { transform-origin: center; }
+  </style>
 
 </body>
 </html>
