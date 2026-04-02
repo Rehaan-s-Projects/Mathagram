@@ -336,6 +336,12 @@
               </div>
               <p id="iq-description" style="color:#94a3b8; font-size:0.72rem; margin-top:10px; line-height:1.5;"></p>
             </div>
+            <!-- Knowledge Memory Map -->
+            <div id="knowledge-map" style="display:none; margin-top:16px; background:rgba(255,255,255,0.05); border:1px solid rgba(34,211,238,0.15); border-radius:14px; padding:16px;">
+              <div style="color:#67e8f9; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px; text-align:center;">Brain Memory — What You've Learned</div>
+              <div id="knowledge-items" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;"></div>
+              <div id="knowledge-empty" style="color:#64748b; font-size:0.78rem; text-align:center; padding:8px;">Complete lessons to fill your brain memory!</div>
+            </div>
             <p id="brain-insight" style="color:#cbd5e1; font-size:0.82rem; margin-top:14px; line-height:1.5; text-align:center;"></p>
           </div>
         </div>
@@ -718,6 +724,82 @@
       if (courses >= 3) insights.push('Multi-subject learner detected — cross-training strengthens all areas.');
 
       document.getElementById('brain-insight').textContent = insights.join(' ');
+
+      // Knowledge Memory Map — show what the user has learned
+      const knowledgeMap = document.getElementById('knowledge-map');
+      const knowledgeItems = document.getElementById('knowledge-items');
+      const knowledgeEmpty = document.getElementById('knowledge-empty');
+      knowledgeMap.style.display = 'block';
+      knowledgeItems.innerHTML = '';
+
+      // Map course IDs to brain region labels, icons, and colors
+      const courseLabels = {
+        'calculus':['Calculus','#3b82f6','&#128200;','Frontal Lobe — Logic'],
+        'trigonometry':['Trigonometry','#8b5cf6','&#128208;','Parietal Lobe — Spatial'],
+        'algebra':['Algebra','#06b6d4','&#128290;','Frontal Lobe — Abstract'],
+        'ap-statistics':['Statistics','#22c55e','&#128202;','Left Brain — Analysis'],
+        'ap-chemistry':['Chemistry','#f97316','&#9878;','Temporal Lobe — Memory'],
+        'mind-bending-math':['Mind-Bending Math','#ec4899','&#129504;','Prefrontal — Creativity'],
+        'beyond-arithmetic':['Beyond Arithmetic','#eab308','&#8734;','Deep Logic Cortex'],
+        'math-history':['Math History','#a855f7','&#128218;','Hippocampus — Memory'],
+        'animals':['Animals','#22c55e','&#128062;','Visual Cortex — Recognition'],
+        'circuits':['Circuits','#f59e0b','&#9889;','Motor Cortex — Building'],
+        'english-grammar':['English','#3b82f6','&#128221;','Broca Area — Language'],
+        'catalan':['Catalan','#ec4899','&#127466;','Wernicke Area — Language'],
+        'mongolian':['Mongolian','#06b6d4','&#127474;','Wernicke Area — Language'],
+        'thai':['Thai','#8b5cf6','&#127481;','Wernicke Area — Tones'],
+        'nepali':['Nepali','#f97316','&#127475;','Wernicke Area — Script'],
+        'amharic':['Amharic','#22c55e','&#127466;','Wernicke Area — Ge\'ez'],
+        'spanish':['Spanish','#eab308','&#127466;','Wernicke Area — Language'],
+        'french':['French','#3b82f6','&#127467;','Wernicke Area — Language'],
+        'frisian':['Frisian','#a855f7','&#127475;','Wernicke Area — Language'],
+        'sundanese':['Sundanese','#f59e0b','&#127470;','Wernicke Area — Language'],
+        'urdu':['Urdu','#22c55e','&#127477;','Wernicke Area — Script'],
+        'persian':['Persian','#06b6d4','&#127470;','Wernicke Area — Script'],
+        'philosophy':['Philosophy','#8b5cf6','&#129300;','Prefrontal — Abstract Thought'],
+        'psychology':['Psychology','#ec4899','&#129504;','Limbic System — Emotion'],
+        'geography':['Geography','#22c55e','&#127758;','Parietal — Spatial Memory'],
+        'financial-literacy':['Finance','#eab308','&#128176;','Prefrontal — Planning'],
+        'study-skills':['Study Skills','#3b82f6','&#128214;','Prefrontal — Executive'],
+        'quantum-computing':['Quantum Computing','#a855f7','&#9883;','Deep Logic Cortex'],
+        'logic-deduction':['Logic','#06b6d4','&#129518;','Frontal Lobe — Reasoning'],
+        'critical-thinking':['Critical Thinking','#f97316','&#128161;','Prefrontal Cortex'],
+        'music-theory':['Music Theory','#ec4899','&#127925;','Auditory Cortex'],
+        'world-history':['World History','#8b5cf6','&#127760;','Hippocampus — Long-Term'],
+        'english-history':['English History','#3b82f6','&#127468;','Hippocampus — Memory'],
+        'game-theory':['Game Theory','#22c55e','&#127922;','Frontal — Strategy'],
+        'soil-science':['Soil Science','#f59e0b','&#127793;','Memory — Earth Sciences'],
+        'science-puzzles':['Science Puzzles','#06b6d4','&#128300;','Problem-Solving Center'],
+        'board-games':['Board Games','#eab308','&#127922;','Strategy Cortex'],
+      };
+
+      // Get course entries from the progress section
+      const progressItems = document.querySelectorAll('#lesson-list li a');
+      const learnedCourses = [];
+      progressItems.forEach(a => {
+        const href = a.getAttribute('href') || '';
+        const match = href.match(/course\/([^/]+)\//);
+        if (match) learnedCourses.push(match[1]);
+      });
+
+      if (learnedCourses.length > 0) {
+        knowledgeEmpty.style.display = 'none';
+        learnedCourses.forEach((courseId, i) => {
+          const info = courseLabels[courseId] || [courseId.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), '#64748b', '&#128218;', 'Memory Center'];
+          const chip = document.createElement('div');
+          chip.style.cssText = 'background:rgba(255,255,255,0.06); border:1px solid ' + info[1] + '33; border-radius:10px; padding:8px 12px; text-align:center; min-width:90px; opacity:0; transform:scale(0.8); transition:all 0.3s ease;';
+          chip.innerHTML = `
+            <div style="font-size:1.3rem; margin-bottom:2px;">${info[2]}</div>
+            <div style="color:#fff; font-size:0.75rem; font-weight:700;">${info[0]}</div>
+            <div style="color:${info[1]}; font-size:0.58rem; margin-top:2px;">${info[3]}</div>
+          `;
+          knowledgeItems.appendChild(chip);
+          // Animate in with delay
+          setTimeout(() => { chip.style.opacity = '1'; chip.style.transform = 'scale(1)'; }, 300 + i * 150);
+        });
+      } else {
+        knowledgeEmpty.style.display = 'block';
+      }
 
       setTimeout(() => { scanRunning = false; }, 3000);
     };
