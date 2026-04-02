@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animals — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Animals</h1>
+    <p>Explore the animal kingdom from microscopic tardigrades to blue whales. Classification, anatomy, behavior, evolution, and the most bizarre creatures on Earth. 600 lessons across 40 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Animal Classification',['What Is an Animal?','Domains of Life','Kingdom Animalia','Phyla Overview','Vertebrates vs Invertebrates','Binomial Nomenclature','Taxonomy — Kingdom to Species','Cladistics & Phylogenetic Trees','Dichotomous Keys','Symmetry — Radial vs Bilateral','Endotherms vs Ectotherms','Herbivores Carnivores Omnivores','Autotrophs vs Heterotrophs','Animal Classification Review','Classification Checkpoint']],
+      [2,'Cells & Anatomy Basics',['Animal Cell Structure','Cell Membrane & Transport','Mitochondria — Powerhouse','Nucleus & DNA','Tissues — Epithelial Connective Muscle Nervous','Organs & Organ Systems','Skeletal System Overview','Muscular System Overview','Circulatory System Overview','Respiratory System Overview','Digestive System Overview','Nervous System Overview','Endocrine System Overview','Comparative Anatomy','Cells & Anatomy Checkpoint']],
+      [3,'Invertebrates — Sponges to Worms',['Porifera — Sponges','Sponge Anatomy & Feeding','Cnidaria — Jellyfish Corals Anemones','Jellyfish Life Cycle','Coral Reef Builders','Box Jellyfish — Most Venomous','Platyhelminthes — Flatworms','Tapeworms & Parasitism','Nematoda — Roundworms','C. elegans — Model Organism','Annelida — Segmented Worms','Earthworm Anatomy','Leeches — Medical & Wild','Worm Composting & Ecology','Invertebrates I Checkpoint']],
+      [4,'Mollusks & Echinoderms',['Mollusca Overview','Gastropods — Snails & Slugs','Bivalves — Clams Mussels Oysters','Cephalopods — Octopus Squid Cuttlefish','Octopus Intelligence','Giant Squid — Deep Sea Mystery','Nautilus — Living Fossil','Mollusk Shells & Defense','Pearl Formation','Echinodermata Overview','Sea Stars — Regeneration','Sea Urchins','Sea Cucumbers','Brittle Stars & Crinoids','Mollusks & Echinoderms Checkpoint']],
+      [5,'Arthropods — Insects',['Arthropoda — Largest Phylum','Insect Body Plan — Head Thorax Abdomen','Insect Wings & Flight','Metamorphosis — Complete vs Incomplete','Beetles — Most Diverse Order','Butterflies & Moths — Lepidoptera','Butterfly Migration — Monarchs','Ants — Colony Structure','Ant Communication — Pheromones','Bees — Pollination & Hives','Honeybee Dance Language','Wasps & Hornets','Dragonflies — Ancient Flyers','Mosquitoes — Disease Vectors','Insects Checkpoint']],
+      [6,'Arthropods — Arachnids & Crustaceans',['Arachnida — Spiders Scorpions Ticks','Spider Web Engineering','Black Widow & Brown Recluse','Tarantulas — Gentle Giants','Scorpions — UV Fluorescence','Ticks & Lyme Disease','Mites & Dust Mites','Crustacea Overview','Crabs — Sideways Walkers','Lobsters — Biological Immortality?','Shrimp — Mantis Shrimp Punch','Barnacles — Sessile Crustaceans','Krill — Base of Food Chains','Myriapoda — Centipedes & Millipedes','Arachnids & Crustaceans Checkpoint']],
+      [7,'Fish — Cartilaginous',['What Makes a Fish?','Chondrichthyes — Cartilaginous Fish','Great White Shark','Hammerhead Shark — 360° Vision','Whale Shark — Largest Fish','Bull Shark — Freshwater & Saltwater','Tiger Shark — Garbage Eater','Mako Shark — Fastest Shark','Goblin Shark — Deep Sea','Megalodon — Extinct Giant','Rays — Stingrays & Manta Rays','Electric Rays','Sawfish — Endangered','Chimaeras — Ghost Sharks','Cartilaginous Fish Checkpoint']],
+      [8,'Fish — Bony Fish',['Osteichthyes — Bony Fish','Swim Bladder & Buoyancy','Salmon — Lifecycle & Migration','Tuna — Speed & Endurance','Anglerfish — Deep Sea Lure','Clownfish & Anemone Symbiosis','Pufferfish — Tetrodotoxin','Seahorse — Male Pregnancy','Electric Eel — 860 Volts','Piranha — Myth vs Reality','Coelacanth — Living Fossil','Lungfish — Air Breathers','Flying Fish — Gliding','Archer Fish — Water Gun','Bony Fish Checkpoint']],
+      [9,'Amphibians',['What Is an Amphibian?','Amphibian Metamorphosis','Frog Anatomy','Poison Dart Frogs — Deadly Colors','Red-Eyed Tree Frog','Glass Frogs — Transparent Bodies','Goliath Frog — Largest Frog','Cane Toad — Invasive Species','Salamanders & Newts','Axolotl — Regeneration Master','Giant Salamander — 5 Feet Long','Caecilians — Legless Amphibians','Amphibian Decline & Chytrid Fungus','Amphibian Conservation','Amphibians Checkpoint']],
+      [10,'Reptiles — Lizards & Snakes',['What Is a Reptile?','Reptile Scales & Skin','Squamata — Lizards & Snakes','Komodo Dragon — Largest Lizard','Chameleons — Color Change','Geckos — Wall Climbing','Gila Monster — Venomous Lizard','Horned Lizard — Blood Squirting','King Cobra — Longest Venomous Snake','Black Mamba — Fastest Snake','Reticulated Python — Longest Snake','Anaconda — Heaviest Snake','Rattlesnake — Heat Pits','Sea Snakes — Ocean Venom','Lizards & Snakes Checkpoint']],
+      [11,'Reptiles — Turtles & Crocodilians',['Testudines — Turtles & Tortoises','Sea Turtle Migration','Leatherback — Deepest Diving Turtle','Galápagos Tortoise — 100+ Years','Snapping Turtle — Powerful Bite','Box Turtles & Painted Turtles','Turtle Shell Anatomy','Crocodilia Overview','Saltwater Crocodile — Largest Reptile','Nile Crocodile','American Alligator','Gharial — Fish-Eating Croc','Crocodile vs Alligator','Tuatara — Living Fossil','Turtles & Crocs Checkpoint']],
+      [12,'Dinosaurs & Extinction',['What Were Dinosaurs?','Triassic — Dawn of Dinosaurs','Jurassic — Age of Giants','Cretaceous — Last Dinosaurs','Tyrannosaurus Rex','Velociraptor — Feathered Hunter','Triceratops — Three-Horned Face','Brachiosaurus — Tallest Dinosaur','Stegosaurus — Plates & Spikes','Spinosaurus — Aquatic Predator','Pterosaurs — Flying Reptiles','Plesiosaurs — Marine Reptiles','The K-Pg Extinction Event','Chicxulub Asteroid Impact','Dinosaurs Checkpoint']],
+      [13,'Birds — Anatomy & Flight',['What Makes a Bird?','Feather Types & Functions','Bird Skeleton — Hollow Bones','Flight Mechanics — Lift & Thrust','Wing Shapes & Flight Styles','Bird Respiratory System — Air Sacs','Bird Vision — UV & Magnetic','Bird Song & Communication','Nest Building Strategies','Egg Structure & Incubation','Migration — Navigation Mysteries','Homing Pigeons','Flightless Birds — Why?','Bird Evolution from Dinosaurs','Birds Anatomy Checkpoint']],
+      [14,'Birds — Diversity',['Raptors — Eagles Hawks Falcons','Bald Eagle — National Symbol','Peregrine Falcon — Fastest Animal','Owls — Silent Night Hunters','Parrots — Intelligence & Speech','Crows & Ravens — Tool Users','Hummingbirds — Hovering Masters','Penguins — Antarctic Swimmers','Albatross — Longest Wingspan','Flamingos — Pink Filter Feeders','Ostriches — Largest Bird','Kiwi — Nocturnal & Flightless','Woodpeckers — Shock Absorption','Birds of Paradise — Display','Birds Diversity Checkpoint']],
+      [15,'Mammals — Overview',['What Is a Mammal?','Mammary Glands & Milk','Hair & Fur','Mammal Brain — Neocortex','Warm-Blooded Metabolism','Three Types — Monotremes Marsupials Placental','Monotremes — Platypus & Echidna','Marsupials — Kangaroos Koalas','Placental Mammals — Largest Group','Mammal Teeth — Incisors Canines Molars','Mammal Senses','Mammal Locomotion','Mammal Social Behavior','Mammal Parental Care','Mammals Overview Checkpoint']],
+      [16,'Primates',['Primate Overview','Prosimians — Lemurs Lorises','New World Monkeys — Spider Howler','Old World Monkeys — Baboons Macaques','Gibbons — Lesser Apes','Orangutans — Solitary Apes','Gorillas — Gentle Giants','Chimpanzees — Closest Relatives','Bonobos — Peaceful Chimps','Primate Intelligence & Tool Use','Primate Social Structures','Primate Communication','Human Evolution — Hominids','Homo Sapiens — Us','Primates Checkpoint']],
+      [17,'Marine Mammals',['Marine Mammal Adaptations','Cetacea — Whales & Dolphins','Blue Whale — Largest Animal Ever','Humpback Whale — Songs','Orca — Apex Predator','Sperm Whale — Deep Diver','Narwhal — Unicorn of the Sea','Dolphins — Echolocation & Intelligence','Bottlenose Dolphin','Pinnipedia — Seals & Sea Lions','Elephant Seal — Deep Diving','Walrus — Tusks & Ice','Sirenia — Manatees & Dugongs','Sea Otter — Tool User','Marine Mammals Checkpoint']],
+      [18,'Big Cats',['Felidae — Cat Family','Lion — Pride Structure','Tiger — Largest Cat','Leopard — Master of Stealth','Jaguar — Strongest Bite','Cheetah — Fastest Land Animal','Snow Leopard — Ghost of Mountains','Cougar — Mountain Lion','Clouded Leopard','Lynx & Bobcat','Serval — Jumping Cat','Caracal — Desert Lynx','Fishing Cat — Aquatic Feline','Cat Conservation & Threats','Big Cats Checkpoint']],
+      [19,'Canids & Bears',['Canidae — Dog Family','Gray Wolf — Pack Dynamics','Arctic Wolf','African Wild Dog — Painted Wolf','Red Fox — Most Widespread','Arctic Fox — Camouflage','Coyote — Urban Adapter','Ursidae — Bear Family','Grizzly Bear — Salmon Fisher','Polar Bear — Arctic Giant','Giant Panda — Bamboo Specialist','Black Bear','Sun Bear — Smallest Bear','Spectacled Bear — South America','Canids & Bears Checkpoint']],
+      [20,'Elephants, Rhinos & Hippos',['Elephantidae — Elephant Family','African Bush Elephant — Largest Land Animal','African Forest Elephant','Asian Elephant','Elephant Intelligence & Memory','Elephant Communication — Infrasound','Elephant Social Structure','Rhinocerotidae — Rhino Family','White Rhino vs Black Rhino','Indian Rhino — One Horn','Sumatran Rhino — Most Endangered','Hippopotamidae — Hippos','Hippo — Most Dangerous in Africa','Pygmy Hippopotamus','Megafauna Checkpoint']],
+      [21,'Ungulates — Hoofed Animals',['What Are Ungulates?','Odd-Toed — Horses Zebras Tapirs','Even-Toed — Deer Cattle Pigs','Giraffe — Tallest Animal','Okapi — Forest Giraffe','Bison & Buffalo','Wildebeest — Great Migration','Deer — Antlers vs Horns','Moose — Largest Deer','Reindeer & Caribou','Pronghorn — Fastest in Americas','Mountain Goat','Ibex — Cliff Climber','Wild Boar & Warthog','Ungulates Checkpoint']],
+      [22,'Rodents, Rabbits & Small Mammals',['Rodentia — Largest Mammal Order','Capybara — Largest Rodent','Beaver — Ecosystem Engineer','Squirrels — Tree & Ground','Porcupine — Quill Defense','Naked Mole-Rat — Eusocial Mammal','Hamsters & Gerbils','Rats & Mice — Model Organisms','Guinea Pigs','Lagomorpha — Rabbits & Hares','Pikas — Mountain Squeakers','Bats — Only Flying Mammals','Fruit Bats — Pollination','Vampire Bats — Blood Feeders','Small Mammals Checkpoint']],
+      [23,'Extreme Animals',['Tardigrades — Indestructible','Immortal Jellyfish — Turritopsis','Bombardier Beetle — Chemical Weapon','Pistol Shrimp — Sonic Boom','Mimic Octopus — Master of Disguise','Lyrebird — Sound Copycat','Archerfish — Precision Shooter','Horned Lizard — Blood Squirter','Hagfish — Slime Machine','Platypus — Electric Sense & Venom','Star-Nosed Mole — Fastest Eater','Axolotl — Regrows Limbs','Turritopsis — Reverse Aging','Deinococcus radiodurans — Radiation Survivor','Extreme Animals Checkpoint']],
+      [24,'Venomous & Poisonous Animals',['Venomous vs Poisonous — The Difference','Inland Taipan — Most Venomous Snake','Box Jellyfish — Deadliest Sting','Blue-Ringed Octopus — Tiny & Lethal','Cone Snail — Harpoon Venom','Poison Dart Frog — Batrachotoxin','Pufferfish — Tetrodotoxin','Stonefish — Most Venomous Fish','Deathstalker Scorpion','Brazilian Wandering Spider','Gila Monster — Venomous Lizard','Platypus Spur Venom','Komodo Dragon — Toxic Bite','Slow Loris — Venomous Primate','Venomous & Poisonous Checkpoint']],
+      [25,'Deep Sea Creatures',['The Deep Ocean — Zones','Midnight Zone — No Light','Abyssal Zone','Hadal Zone — Deepest Trenches','Anglerfish — Bioluminescent Lure','Giant Squid — Kraken Legend','Colossal Squid — Largest Eyes','Vampire Squid — Not a Squid','Barreleye Fish — Transparent Head','Gulper Eel — Expandable Jaw','Dumbo Octopus — Deepest Octopus','Yeti Crab — Hydrothermal Vents','Giant Tube Worms — Chemosynthesis','Mariana Trench Snailfish','Deep Sea Checkpoint']],
+      [26,'Extinct Animals',['Dodo — Flightless & Gone','Woolly Mammoth — Ice Age Giant','Saber-Toothed Tiger','Giant Ground Sloth','Megalodon — Mega Shark','Passenger Pigeon — Billions to Zero','Thylacine — Tasmanian Tiger','Quagga — Half Zebra','Great Auk — Original Penguin','Steller Sea Cow','Irish Elk — Largest Antlers','Moa & Haast Eagle — New Zealand','Carolina Parakeet','De-Extinction Science — Cloning','Extinct Animals Checkpoint']],
+      [27,'Animal Behavior',['What Is Animal Behavior?','Innate vs Learned Behavior','Instinct & Fixed Action Patterns','Classical Conditioning — Pavlov','Operant Conditioning — Skinner','Imprinting — Konrad Lorenz','Migration Behavior','Hibernation & Torpor','Courtship & Mating Displays','Territorial Behavior','Aggression & Dominance Hierarchies','Altruism & Kin Selection','Play Behavior — Why Animals Play','Tool Use Across Species','Animal Behavior Checkpoint']],
+      [28,'Animal Intelligence',['Measuring Animal Intelligence','Self-Awareness — Mirror Test','Crow Tool Making','Octopus Problem Solving','Elephant Memory & Grief','Dolphin Communication','Chimpanzee Sign Language','Parrot Language — Alex the Parrot','Dog Understanding of Human Emotions','Bee Waggle Dance — Abstract Communication','Rat Empathy Studies','Pig Intelligence','Cephalopod Learning','Theory of Mind in Animals','Animal Intelligence Checkpoint']],
+      [29,'Animal Communication',['Why Animals Communicate','Visual Signals — Color & Display','Acoustic Communication — Calls & Songs','Chemical Communication — Pheromones','Tactile Communication — Touch','Electric Communication — Fish','Whale Songs — Longest Distance','Bird Song — Learning & Dialects','Wolf Howling — Pack Coordination','Bee Dance Language','Firefly Light Signals','Cuttlefish Color Displays','Primate Facial Expressions','Alarm Calls — Warning Systems','Communication Checkpoint']],
+      [30,'Symbiosis & Ecology',['What Is Symbiosis?','Mutualism — Both Benefit','Clownfish & Anemone','Oxpecker & Rhino','Mycorrhizae — Fungi & Plants','Commensalism — One Benefits','Remora & Shark','Parasitism — One Harms','Tapeworms & Hosts','Parasitoid Wasps','Predator-Prey Dynamics','Keystone Species','Trophic Cascades','Food Webs & Energy Flow','Symbiosis & Ecology Checkpoint']],
+      [31,'Camouflage & Mimicry',['Why Camouflage?','Cryptic Coloration','Countershading — Shark Belly','Disruptive Coloration — Zebra Stripes','Background Matching — Leaf Insects','Active Camouflage — Chameleons & Cuttlefish','Aposematism — Warning Colors','Batesian Mimicry — Fake Warning','Müllerian Mimicry — Shared Warning','Aggressive Mimicry — Anglerfish','Automimicry — False Eyes','Camouflage in the Deep Sea','Stick Insects & Leaf Bugs','Decorator Crabs','Camouflage & Mimicry Checkpoint']],
+      [32,'Animal Migration',['Why Migrate?','Bird Migration Routes — Flyways','Arctic Tern — Longest Migration','Bar-Tailed Godwit — Nonstop Flight','Monarch Butterfly Migration','Wildebeest Great Migration','Salmon Upstream Journey','Gray Whale Migration','Caribou Migration','Sea Turtle Nesting Migration','Eel Migration — Sargasso Sea','Humpback Whale Migration','Dragonfly Migration','Navigation — Magnetic Fields Stars Sun','Migration Checkpoint']],
+      [33,'Animal Reproduction',['Asexual vs Sexual Reproduction','External vs Internal Fertilization','Egg-Laying — Oviparity','Live Birth — Viviparity','Ovoviviparity — Eggs Inside','Marsupial Reproduction — Pouch','Metamorphosis in Insects','Amphibian Reproduction','Fish Spawning','Seahorse Male Pregnancy','Parthenogenesis — Virgin Birth','R vs K Selection Strategy','Parental Care Strategies','Brood Parasitism — Cuckoo','Reproduction Checkpoint']],
+      [34,'Evolution & Adaptation',['What Is Evolution?','Natural Selection — Darwin','Adaptation & Fitness','Convergent Evolution — Wings','Divergent Evolution — Darwin Finches','Coevolution — Flowers & Pollinators','Speciation — How New Species Form','Adaptive Radiation','Vestigial Structures — Whale Legs','Homologous vs Analogous Structures','Fossil Evidence','Molecular Evidence — DNA','Artificial Selection — Dog Breeds','Evolution in Real Time — Peppered Moth','Evolution Checkpoint']],
+      [35,'Conservation & Endangered Species',['What Is Conservation Biology?','IUCN Red List','Critically Endangered Species','Habitat Loss — #1 Threat','Poaching & Wildlife Trade','Climate Change & Animals','Invasive Species Impact','Captive Breeding Programs','National Parks & Reserves','CITES — Wildlife Trade Laws','Flagship Species — Pandas Tigers','Keystone Species Conservation','Rewilding Projects','Success Stories — Bald Eagle Comeback','Conservation Checkpoint']],
+      [36,'Animals & Humans',['Domestication History','Dogs — First Domesticated Animal','Cats — Self-Domesticated?','Horses & Human Civilization','Cattle, Sheep & Goats','Chickens — Most Numerous Bird','Service Animals & Therapy Animals','Lab Animals in Research','Animal Testing Ethics','Animal Rights Movement','Zoos — Conservation or Captivity?','Wildlife Photography & Documentaries','Ecotourism','Human-Wildlife Conflict','Animals & Humans Checkpoint']],
+      [37,'Microscopic Animals',['What Are Microscopic Animals?','Tardigrades — Water Bears','Rotifers — Wheel Animals','Nematodes — Everywhere','Copepods — Ocean Plankton','Water Fleas — Daphnia','Dust Mites — In Your Bed','Demodex — Face Mites','Amoebas — Shape Shifters','Paramecium — Cilia Swimmer','Hydra — Freshwater Cnidarian','Planaria — Flatworm Regeneration','Bdelloid Rotifers — No Males','Extremophile Microanimals','Microscopic Animals Checkpoint']],
+      [38,'Biomechanics & Animal Engineering',['Gecko Feet — Van der Waals','Spider Silk — Strongest Material','Shark Skin — Drag Reduction','Woodpecker Skull — Shock Absorber','Mantis Shrimp Punch — Fastest Strike','Pistol Shrimp Cavitation','Hummingbird Hovering Physics','Cheetah Spine — Flexibility','Dolphin Sonar — Echolocation','Bat Flight vs Bird Flight','Flea Jump — G-Force Record','Bombardier Beetle Chemistry','Archerfish Ballistics','Bio-Inspired Engineering','Biomechanics Checkpoint']],
+      [39,'Animals in Culture & Mythology',['Animals in Ancient Egypt — Cats & Ibis','Animals in Greek Mythology','Dragons — Cross-Cultural Legend','Animals in Hindu Mythology','Animals in Norse Mythology','Totem Animals — Indigenous Cultures','Chinese Zodiac Animals','Animals in Heraldry','Famous Animals in History','Animals in Literature','Animals in Film & Animation','Animals in Art','National Animals of Countries','Cryptozoology — Bigfoot Nessie','Animals in Culture Checkpoint']],
+      [40,'Animals — Final Mastery',['Invertebrates Recap','Fish & Amphibians Recap','Reptiles & Dinosaurs Recap','Birds Recap','Mammals Recap','Marine Life Recap','Extreme & Deep Sea Recap','Venomous & Poisonous Recap','Extinct Animals Recap','Behavior & Intelligence Recap','Communication & Symbiosis Recap','Migration & Reproduction Recap','Evolution & Adaptation Recap','Conservation Recap','Animals Mastery!']],
+    ];
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'an-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'science',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('animals');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('animals');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
