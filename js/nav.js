@@ -26,6 +26,9 @@ function getColorValue(colorName) {
  * @param {string} basePath - relative path to root (e.g., '' for root pages, '../../' for course lessons)
  */
 export function initNav(basePath = '') {
+  // Add Google Translate widget
+  addTranslateWidget();
+
   onAuthChange(async (user) => {
     const navLinks = document.querySelector('.nav-links');
     if (!navLinks) return;
@@ -111,4 +114,70 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+function addTranslateWidget() {
+  // Don't add twice
+  if (document.getElementById('translate-btn')) return;
+
+  const navLinks = document.querySelector('.nav-links');
+  if (!navLinks) return;
+
+  // Create translate button
+  const btn = document.createElement('button');
+  btn.id = 'translate-btn';
+  btn.title = 'Translate';
+  btn.setAttribute('aria-label', 'Translate page');
+  btn.style.cssText = 'background:none; border:none; cursor:pointer; padding:4px 8px; font-size:1.2rem; color:var(--color-text-secondary); transition:color 0.2s; display:flex; align-items:center; gap:4px;';
+  btn.innerHTML = '<span style="font-size:1.1rem;">&#127760;</span><span style="font-size:0.75rem; font-weight:600;">Translate</span>';
+
+  // Create dropdown
+  const dropdown = document.createElement('div');
+  dropdown.id = 'translate-dropdown';
+  dropdown.style.cssText = 'display:none; position:absolute; top:100%; right:0; background:var(--color-white); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:8px 0; z-index:999; min-width:180px; max-height:320px; overflow-y:auto;';
+
+  const languages = [
+    ['en','English'],['es','Spanish'],['fr','French'],['de','German'],['it','Italian'],['pt','Portuguese'],
+    ['ru','Russian'],['zh-CN','Chinese (Simplified)'],['zh-TW','Chinese (Traditional)'],['ja','Japanese'],['ko','Korean'],
+    ['ar','Arabic'],['hi','Hindi'],['bn','Bengali'],['ur','Urdu'],['fa','Persian'],
+    ['tr','Turkish'],['vi','Vietnamese'],['th','Thai'],['id','Indonesian'],['ms','Malay'],
+    ['sw','Swahili'],['am','Amharic'],['mn','Mongolian'],['ka','Georgian'],['hy','Armenian'],
+    ['uk','Ukrainian'],['pl','Polish'],['nl','Dutch'],['sv','Swedish'],['no','Norwegian'],
+    ['da','Danish'],['fi','Finnish'],['el','Greek'],['he','Hebrew'],['tl','Filipino']
+  ];
+
+  languages.forEach(([code, name]) => {
+    const item = document.createElement('button');
+    item.style.cssText = 'display:block; width:100%; text-align:left; padding:8px 16px; border:none; background:none; cursor:pointer; font-size:0.85rem; font-family:inherit; color:var(--color-text); transition:background 0.15s;';
+    item.textContent = name;
+    item.addEventListener('mouseenter', () => { item.style.background = 'var(--color-bg)'; });
+    item.addEventListener('mouseleave', () => { item.style.background = 'none'; });
+    item.addEventListener('click', () => {
+      translatePage(code);
+      dropdown.style.display = 'none';
+    });
+    dropdown.appendChild(item);
+  });
+
+  // Wrapper for positioning
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:relative; display:flex; align-items:center;';
+  wrapper.appendChild(btn);
+  wrapper.appendChild(dropdown);
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', () => { dropdown.style.display = 'none'; });
+
+  // Insert before the first link in nav
+  navLinks.insertBefore(wrapper, navLinks.firstChild);
+}
+
+function translatePage(lang) {
+  // Use Google Translate
+  const url = `https://translate.google.com/translate?sl=en&tl=${lang}&u=${encodeURIComponent(window.location.href)}`;
+  window.open(url, '_blank');
 }
