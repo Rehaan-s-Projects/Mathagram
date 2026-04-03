@@ -682,6 +682,30 @@
         document.getElementById('problem-fill').style.width = problem + '%';
         document.getElementById('brain-creativity').textContent = creativity + '%';
         document.getElementById('creativity-fill').style.width = creativity + '%';
+
+        // Memory warnings
+        const memEl = document.getElementById('brain-memory');
+        const memFill = document.getElementById('memory-fill');
+        const memCard = memEl.parentElement;
+        if (memory >= 99) {
+          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#ef4444;">BRAIN DIED</span>';
+          memFill.style.background = '#ef4444';
+          memCard.style.background = 'rgba(239,68,68,0.2)';
+          memCard.style.border = '2px solid #ef4444';
+          memCard.insertAdjacentHTML('beforeend', '<div style="margin-top:6px;font-size:0.65rem;color:#fca5a5;animation:blink 0.5s infinite;">&#9760; CRITICAL — Memory overloaded! Your brain has reached maximum capacity. Take a break immediately!</div>');
+        } else if (memory >= 95) {
+          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#f97316;">ALMOST DIED</span>';
+          memFill.style.background = '#f97316';
+          memCard.style.background = 'rgba(249,115,22,0.15)';
+          memCard.style.border = '2px solid #f97316';
+          memCard.insertAdjacentHTML('beforeend', '<div style="margin-top:6px;font-size:0.65rem;color:#fdba74;">&#9888; DANGER — Memory near collapse! Your brain is overheating. Rest now!</div>');
+        } else if (memory >= 85) {
+          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#eab308;">WARNING</span>';
+          memFill.style.background = '#eab308';
+          memCard.style.background = 'rgba(234,179,8,0.1)';
+          memCard.style.border = '2px solid #eab308';
+          memCard.insertAdjacentHTML('beforeend', '<div style="margin-top:6px;font-size:0.65rem;color:#fde047;">&#9888; Warning — Memory usage high. Consider taking a short break.</div>');
+        }
       }, 200);
 
       // Calculate IQ estimate from brain scores
@@ -905,6 +929,10 @@
     };
   </script>
   <style>
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
     @keyframes brainPulse {
       0%, 100% { opacity: 0.3; transform: scale(1); }
       50% { opacity: 0.6; transform: scale(1.05); }
