@@ -687,8 +687,8 @@
         const memEl = document.getElementById('brain-memory');
         const memFill = document.getElementById('memory-fill');
         const memCard = memEl.parentElement;
-        if (memory === 100) {
-          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#ef4444;">MEMORY MAXED</span>';
+        if (memory >= 99) {
+          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#ef4444;">MEMORY FULL</span>';
           memFill.style.background = '#ef4444';
           memCard.style.background = 'rgba(239,68,68,0.2)';
           memCard.style.border = '2px solid #ef4444';
