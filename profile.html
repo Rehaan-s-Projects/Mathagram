@@ -342,6 +342,13 @@
               <div id="knowledge-items" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;"></div>
               <div id="knowledge-empty" style="color:#64748b; font-size:0.78rem; text-align:center; padding:8px;">Complete lessons to fill your brain memory!</div>
             </div>
+            <!-- Daily IQ History -->
+            <div id="iq-history" style="margin-top:16px; background:rgba(255,255,255,0.05); border:1px solid rgba(34,211,238,0.15); border-radius:14px; padding:16px;">
+              <div style="color:#67e8f9; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; text-align:center;">Daily IQ History</div>
+              <canvas id="iq-chart" width="320" height="120" style="width:100%; height:120px;"></canvas>
+              <div id="iq-history-list" style="margin-top:10px; max-height:120px; overflow-y:auto;"></div>
+              <div id="iq-streak-info" style="color:#94a3b8; font-size:0.72rem; margin-top:8px; text-align:center;"></div>
+            </div>
             <p id="brain-insight" style="color:#cbd5e1; font-size:0.82rem; margin-top:14px; line-height:1.5; text-align:center;"></p>
           </div>
         </div>
@@ -800,6 +807,99 @@
       } else {
         knowledgeEmpty.style.display = 'block';
       }
+
+      // Save daily IQ to Firestore
+      try {
+        if (fbAuth.currentUser) {
+          const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+          const iqRef = doc(db, 'users', fbAuth.currentUser.uid, 'iqHistory', today);
+          await setDoc(iqRef, { iq: iq, focus: focus, memory: memory, problem: problem, creativity: creativity, date: today, ts: Date.now() });
+        }
+      } catch(e) { console.error('IQ save error:', e); }
+
+      // Load and display IQ history
+      try {
+        if (fbAuth.currentUser) {
+          const { collection: col2, getDocs: gd2, query, orderBy, limit: lim } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const histCol = col2(db, 'users', fbAuth.currentUser.uid, 'iqHistory');
+          const histSnap = await gd2(histCol);
+          const entries = [];
+          histSnap.forEach(d => entries.push(d.data()));
+          entries.sort((a, b) => a.date.localeCompare(b.date));
+          const last14 = entries.slice(-14); // Last 14 days
+
+          if (last14.length > 0) {
+            // Draw chart
+            const canvas = document.getElementById('iq-chart');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            const minIQ = Math.min(...last14.map(e => e.iq)) - 5;
+            const maxIQ = Math.max(...last14.map(e => e.iq)) + 5;
+            const range = maxIQ - minIQ || 1;
+
+            // Grid lines
+            ctx.strokeStyle = 'rgba(34,211,238,0.1)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 4; i++) {
+              const y = 10 + (i / 3) * (h - 20);
+              ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(w - 10, y); ctx.stroke();
+              ctx.fillStyle = 'rgba(148,163,184,0.5)';
+              ctx.font = '9px sans-serif';
+              ctx.fillText(Math.round(maxIQ - (i / 3) * range), 2, y + 3);
+            }
+
+            // Line
+            ctx.strokeStyle = '#22d3ee';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            const step = (w - 40) / Math.max(last14.length - 1, 1);
+            last14.forEach((e, i) => {
+              const x = 30 + i * step;
+              const y = 10 + ((maxIQ - e.iq) / range) * (h - 20);
+              if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Dots
+            last14.forEach((e, i) => {
+              const x = 30 + i * step;
+              const y = 10 + ((maxIQ - e.iq) / range) * (h - 20);
+              ctx.beginPath();
+              ctx.arc(x, y, i === last14.length - 1 ? 5 : 3, 0, Math.PI * 2);
+              ctx.fillStyle = i === last14.length - 1 ? '#22d3ee' : 'rgba(34,211,238,0.6)';
+              ctx.fill();
+            });
+
+            // Date labels
+            ctx.fillStyle = 'rgba(148,163,184,0.5)';
+            ctx.font = '8px sans-serif';
+            if (last14.length > 0) ctx.fillText(last14[0].date.slice(5), 30, h - 2);
+            if (last14.length > 1) ctx.fillText(last14[last14.length - 1].date.slice(5), 30 + (last14.length - 1) * step - 20, h - 2);
+
+            // History list
+            const listEl = document.getElementById('iq-history-list');
+            listEl.innerHTML = last14.slice().reverse().map(e =>
+              '<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.72rem;">' +
+              '<span style="color:#94a3b8;">' + e.date + '</span>' +
+              '<span style="color:#fff;font-weight:700;">IQ ' + e.iq + '</span>' +
+              '</div>'
+            ).join('');
+
+            // Streak info
+            const streakEl = document.getElementById('iq-streak-info');
+            const totalScans = entries.length;
+            const firstIQ = entries[0].iq;
+            const latestIQ = entries[entries.length - 1].iq;
+            const diff = latestIQ - firstIQ;
+            streakEl.innerHTML = totalScans + ' total scan' + (totalScans > 1 ? 's' : '') + ' &middot; ' +
+              (diff > 0 ? '<span style="color:#22c55e;">+' + diff + ' IQ growth</span>' :
+               diff < 0 ? '<span style="color:#ef4444;">' + diff + ' IQ</span>' :
+               '<span>No change yet</span>');
+          }
+        }
+      } catch(e) { console.error('IQ history error:', e); }
 
       setTimeout(() => { scanRunning = false; }, 3000);
     };
