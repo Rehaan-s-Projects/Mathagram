@@ -56,7 +56,7 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
 
 <div class="wrap">
 <h1>Capture the Stars — Silver</h1>
-<p class="sub">Harder positions! Jump OVER the ⭐ to capture it!</p>
+<p class="sub">Single, Double & Triple jumps! Chain your captures to grab all the ⭐!</p>
 <div class="bar"><div class="fill" id="bar"></div></div>
 <div id="game"></div>
 <div id="msg"></div>
@@ -75,57 +75,113 @@ import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress
 import { onAuthChange } from '../../js/auth.js';
 initSideCharacter('william', '../../');
 
+// Puzzles: p=piece, stars=stars to capture, jumps=landing spots in order, bad=wrong landing spots
+// type: 'single','double','triple'
 var puzzles = [
-  {p:[6,1], s:[5,2], g:[4,3], b:[4,1]},
-  {p:[6,5], s:[5,4], g:[4,3], b:[4,5]},
-  {p:[5,2], s:[4,3], g:[3,4], b:[3,0]},
-  {p:[5,6], s:[4,5], g:[3,4], b:[3,6]},
-  {p:[6,3], s:[5,2], g:[4,1], b:[4,5]}
+  // Single jumps (warm-up)
+  {type:'single', label:'Single Jump', p:[6,1], stars:[[5,2]], jumps:[[4,3]], bad:[[4,1]]},
+  {type:'single', label:'Single Jump', p:[6,5], stars:[[5,4]], jumps:[[4,3]], bad:[[4,5]]},
+  {type:'single', label:'Single Jump', p:[5,6], stars:[[4,5]], jumps:[[3,4]], bad:[[3,6]]},
+  // Double jumps
+  {type:'double', label:'Double Jump!', p:[6,1], stars:[[5,2],[3,4]], jumps:[[4,3],[2,5]], bad:[[4,1],[2,3]]},
+  {type:'double', label:'Double Jump!', p:[6,5], stars:[[5,4],[3,2]], jumps:[[4,3],[2,1]], bad:[[4,5],[2,3]]},
+  {type:'double', label:'Double Jump!', p:[7,0], stars:[[6,1],[4,3]], jumps:[[5,2],[3,4]], bad:[[5,0],[3,2]]},
+  {type:'double', label:'Double Jump!', p:[6,3], stars:[[5,2],[3,0]], jumps:[[4,1],[2,1]], bad:[[4,3],[2,3]]},
+  // Triple jumps
+  {type:'triple', label:'Triple Jump!', p:[7,0], stars:[[6,1],[4,3],[2,5]], jumps:[[5,2],[3,4],[1,6]], bad:[[5,0],[3,2],[1,4]]},
+  {type:'triple', label:'Triple Jump!', p:[7,6], stars:[[6,5],[4,3],[2,1]], jumps:[[5,4],[3,2],[1,0]], bad:[[5,6],[3,4],[1,2]]},
+  {type:'triple', label:'Triple Jump!', p:[7,2], stars:[[6,3],[4,5],[2,3]], jumps:[[5,4],[3,6],[1,2]], bad:[[5,2],[3,4],[1,4]]}
 ];
 var cur=0, sc=0, tot=puzzles.length;
+var jumpStep=0; // which jump in the chain we're on
 
 window.tap = function(good) {
   var q = puzzles[cur];
   if (good) {
-    sc++;
-    document.getElementById('game').innerHTML = makeBoard(q, true);
-    showBuddy('william','correct');
-    document.getElementById('msg').innerHTML =
-      '<div class="msg msg-ok">✓ Captured! The piece jumped over the star!</div>' +
-      '<button class="btn" onclick="nxt()">'+(cur>=tot-1?'Finish!':'Next →')+'</button>';
+    jumpStep++;
+    // Check if more jumps remaining
+    if (jumpStep < q.jumps.length) {
+      // Show intermediate state and next landing spots
+      showBuddy('william','correct');
+      document.getElementById('msg').innerHTML = '<div class="msg msg-ok">✓ Great capture! Keep jumping — '+(q.jumps.length - jumpStep)+' more!</div>';
+      document.getElementById('game').innerHTML = makeBoard(q, jumpStep);
+    } else {
+      // All jumps done
+      sc++;
+      showBuddy('william','correct');
+      var jumpWord = q.type==='triple'?'TRIPLE':q.type==='double'?'DOUBLE':'';
+      document.getElementById('game').innerHTML = makeBoard(q, jumpStep);
+      document.getElementById('msg').innerHTML =
+        '<div class="msg msg-ok">✓ '+(jumpWord?jumpWord+' ':'')+'Capture complete! '+q.stars.length+' star'+(q.stars.length>1?'s':'')+' captured!</div>' +
+        '<button class="btn" onclick="nxt()">'+(cur>=tot-1?'Finish!':'Next →')+'</button>';
+    }
   } else {
     showBuddy('william','wrong');
-    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong spot! Tap the OTHER green circle.</div>';
+    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong spot! Tap the correct green circle to capture the star.</div>';
     setTimeout(function(){ document.getElementById('msg').innerHTML=''; }, 900);
   }
 };
 
 window.nxt = function() {
   cur++;
+  jumpStep=0;
   if (cur<tot) render();
   else fin();
 };
 
-function makeBoard(q, jumped) {
+function makeBoard(q, step) {
+  // step: 0 = initial, number = how many jumps completed
+  var completed = (typeof step === 'number' && step > 0) ? step : 0;
+  var allDone = completed >= q.jumps.length;
+  // Current piece position
+  var piecePos = completed > 0 ? q.jumps[completed-1] : q.p;
+
   var h = '<table>';
   for (var r=0;r<8;r++) {
     h += '<tr>';
     for (var c=0;c<8;c++) {
       var cls = (r+c)%2===0 ? 'light' : 'dark';
       var inner = '';
-      if (jumped) {
-        if (r===q.g[0]&&c===q.g[1]) inner = '<div class="piece"></div>';
-      } else {
-        if (r===q.p[0]&&c===q.p[1]) inner = '<div class="piece"></div>';
-        else if (r===q.s[0]&&c===q.s[1]) inner = '<div class="star-piece">⭐</div>';
-        else if (r===q.g[0]&&c===q.g[1]) inner = '<div class="land-dot" onclick="tap(1)"></div>';
-        else if (r===q.b[0]&&c===q.b[1]) inner = '<div class="land-dot" onclick="tap(0)"></div>';
+
+      // Draw piece at current position
+      if (r===piecePos[0]&&c===piecePos[1]) {
+        inner = '<div class="piece"></div>';
+      }
+      // Draw remaining stars (not yet captured)
+      else {
+        var isStar = false;
+        for (var si=completed; si<q.stars.length; si++) {
+          if (r===q.stars[si][0]&&c===q.stars[si][1]) { isStar=true; break; }
+        }
+        if (isStar && !allDone) {
+          inner = '<div class="star-piece">⭐</div>';
+        }
+        // Draw next landing spot (good) if not all done
+        else if (!allDone && completed < q.jumps.length && r===q.jumps[completed][0]&&c===q.jumps[completed][1]) {
+          inner = '<div class="land-dot" onclick="tap(1)"></div>';
+        }
+        // Draw bad landing spot if not all done
+        else if (!allDone && completed < q.bad.length && r===q.bad[completed][0]&&c===q.bad[completed][1]) {
+          inner = '<div class="land-dot" onclick="tap(0)"></div>';
+        }
+        // Show captured star positions as faded
+        else {
+          for (var ci=0; ci<completed; ci++) {
+            if (r===q.stars[ci][0]&&c===q.stars[ci][1]) { inner = '<span style="opacity:0.2;font-size:22px;">⭐</span>'; break; }
+          }
+        }
       }
       h += '<td class="'+cls+'">'+inner+'</td>';
     }
     h += '</tr>';
   }
   h += '</table>';
+  // Show jump type badge
+  if (!allDone) {
+    h += '<div style="margin-top:8px;"><span style="background:'+(q.type==='triple'?'#ef4444':q.type==='double'?'#f97316':'#22c55e')+';color:#fff;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;">'+q.label+'</span>';
+    if (q.jumps.length > 1) h += ' <span style="color:#888;font-size:0.75rem;">Jump '+(completed+1)+' of '+q.jumps.length+'</span>';
+    h += '</div>';
+  }
   return h;
 }
 
