@@ -86,11 +86,11 @@ var puzzles = [
   {type:'double', label:'Double Jump!', p:[6,1], stars:[[5,2],[3,4]], jumps:[[4,3],[2,5]], bad:[[4,1],[2,3]]},
   {type:'double', label:'Double Jump!', p:[6,5], stars:[[5,4],[3,2]], jumps:[[4,3],[2,1]], bad:[[4,5],[2,3]]},
   {type:'double', label:'Double Jump!', p:[7,0], stars:[[6,1],[4,3]], jumps:[[5,2],[3,4]], bad:[[5,0],[3,2]]},
-  {type:'double', label:'Double Jump!', p:[6,3], stars:[[5,2],[3,0]], jumps:[[4,1],[2,1]], bad:[[4,3],[2,3]]},
+  {type:'double', label:'Double Jump!', p:[6,3], stars:[[5,2],[3,2]], jumps:[[4,1],[2,3]], bad:[[4,3],[2,1]]},
   // Triple jumps
   {type:'triple', label:'Triple Jump!', p:[7,0], stars:[[6,1],[4,3],[2,5]], jumps:[[5,2],[3,4],[1,6]], bad:[[5,0],[3,2],[1,4]]},
   {type:'triple', label:'Triple Jump!', p:[7,6], stars:[[6,5],[4,3],[2,1]], jumps:[[5,4],[3,2],[1,0]], bad:[[5,6],[3,4],[1,2]]},
-  {type:'triple', label:'Triple Jump!', p:[7,2], stars:[[6,3],[4,5],[2,3]], jumps:[[5,4],[3,6],[1,2]], bad:[[5,2],[3,4],[1,4]]}
+  {type:'triple', label:'Triple Jump!', p:[7,2], stars:[[6,3],[4,3],[2,3]], jumps:[[5,4],[3,2],[1,4]], bad:[[5,0],[3,4],[1,2]]}
 ];
 var cur=0, sc=0, tot=puzzles.length;
 var jumpStep=0; // which jump in the chain we're on
@@ -131,7 +131,7 @@ window.nxt = function() {
 
 function makeBoard(q, step) {
   // step: 0 = initial, number = how many jumps completed
-  var completed = (typeof step === 'number' && step > 0) ? step : 0;
+  var completed = parseInt(step) || 0;
   var allDone = completed >= q.jumps.length;
   // Current piece position
   var piecePos = completed > 0 ? q.jumps[completed-1] : q.p;
@@ -188,7 +188,7 @@ function makeBoard(q, step) {
 function render() {
   document.getElementById('bar').style.width = (cur/tot*100)+'%';
   document.getElementById('msg').innerHTML = '';
-  document.getElementById('game').innerHTML = makeBoard(puzzles[cur], false);
+  document.getElementById('game').innerHTML = makeBoard(puzzles[cur], 0);
 }
 
 function fin() {
