@@ -95,30 +95,40 @@ var puzzles = [
 var cur=0, sc=0, tot=puzzles.length;
 var jumpStep=0; // which jump in the chain we're on
 
+var tapping = false; // prevent double-tap
+
 window.tap = function(good) {
+  if (tapping) return;
+  tapping = true;
   var q = puzzles[cur];
+  var msgEl = document.getElementById('msg');
+  var gameEl = document.getElementById('game');
+
   if (good) {
     jumpStep++;
-    // Check if more jumps remaining
     if (jumpStep < q.jumps.length) {
-      // Show intermediate state and next landing spots
+      // More jumps to go — redraw board with piece at new position
       showBuddy('william','correct');
-      document.getElementById('msg').innerHTML = '<div class="msg msg-ok">✓ Great capture! Keep jumping — '+(q.jumps.length - jumpStep)+' more!</div>';
-      document.getElementById('game').innerHTML = makeBoard(q, jumpStep);
+      var remain = q.jumps.length - jumpStep;
+      msgEl.innerHTML = '<div class="msg msg-ok">✓ Captured ⭐! Keep jumping — '+remain+' more star'+(remain>1?'s':'')+' to capture!</div>';
+      gameEl.innerHTML = makeBoard(q, jumpStep);
+      tapping = false;
     } else {
-      // All jumps done
+      // All jumps completed — puzzle done
       sc++;
       showBuddy('william','correct');
-      var jumpWord = q.type==='triple'?'TRIPLE':q.type==='double'?'DOUBLE':'';
-      document.getElementById('game').innerHTML = makeBoard(q, jumpStep);
-      document.getElementById('msg').innerHTML =
-        '<div class="msg msg-ok">✓ '+(jumpWord?jumpWord+' ':'')+'Capture complete! '+q.stars.length+' star'+(q.stars.length>1?'s':'')+' captured!</div>' +
+      var total = q.stars.length;
+      var jumpWord = total >= 3 ? 'TRIPLE' : total >= 2 ? 'DOUBLE' : '';
+      gameEl.innerHTML = makeBoard(q, jumpStep);
+      msgEl.innerHTML =
+        '<div class="msg msg-ok">✓ '+(jumpWord?jumpWord+' ':'')+'Capture! '+total+' star'+(total>1?'s':'')+' captured!</div>' +
         '<button class="btn" onclick="nxt()">'+(cur>=tot-1?'Finish!':'Next →')+'</button>';
+      tapping = false;
     }
   } else {
     showBuddy('william','wrong');
-    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong spot! Tap the correct green circle to capture the star.</div>';
-    setTimeout(function(){ document.getElementById('msg').innerHTML=''; }, 900);
+    msgEl.innerHTML = '<div class="msg msg-no">✗ Wrong spot! Jump OVER the ⭐ to the other side.</div>';
+    setTimeout(function(){ msgEl.innerHTML=''; tapping=false; }, 1200);
   }
 };
 
@@ -129,12 +139,21 @@ window.nxt = function() {
   else fin();
 };
 
-function makeBoard(q, step) {
-  // step: 0 = initial, number = how many jumps completed
-  var completed = parseInt(step) || 0;
+function at(r,c,list) {
+  for (var i=0;i<list.length;i++) { if (list[i][0]===r&&list[i][1]===c) return i; }
+  return -1;
+}
+
+function makeBoard(q, completed) {
+  completed = completed || 0;
   var allDone = completed >= q.jumps.length;
-  // Current piece position
   var piecePos = completed > 0 ? q.jumps[completed-1] : q.p;
+
+  // Build lookup sets for fast cell checks
+  var capturedStars = q.stars.slice(0, completed);  // already captured
+  var remainStars = q.stars.slice(completed);        // still on board
+  var nextGood = (!allDone && completed < q.jumps.length) ? q.jumps[completed] : null;
+  var nextBad = (!allDone && completed < q.bad.length) ? q.bad[completed] : null;
 
   var h = '<table>';
   for (var r=0;r<8;r++) {
@@ -143,44 +162,43 @@ function makeBoard(q, step) {
       var cls = (r+c)%2===0 ? 'light' : 'dark';
       var inner = '';
 
-      // Draw piece at current position
-      if (r===piecePos[0]&&c===piecePos[1]) {
+      if (r===piecePos[0] && c===piecePos[1]) {
+        // The checker piece
         inner = '<div class="piece"></div>';
+      } else if (!allDone && at(r,c,remainStars) >= 0) {
+        // Stars still to capture
+        inner = '<div class="star-piece">⭐</div>';
+      } else if (!allDone && nextGood && r===nextGood[0] && c===nextGood[1]) {
+        // Correct landing spot
+        inner = '<div class="land-dot" onclick="tap(1)"></div>';
+      } else if (!allDone && nextBad && r===nextBad[0] && c===nextBad[1]) {
+        // Wrong landing spot
+        inner = '<div class="land-dot" onclick="tap(0)"></div>';
+      } else if (at(r,c,capturedStars) >= 0) {
+        // Faded captured star
+        inner = '<span style="opacity:0.15;font-size:20px;">⭐</span>';
       }
-      // Draw remaining stars (not yet captured)
-      else {
-        var isStar = false;
-        for (var si=completed; si<q.stars.length; si++) {
-          if (r===q.stars[si][0]&&c===q.stars[si][1]) { isStar=true; break; }
-        }
-        if (isStar && !allDone) {
-          inner = '<div class="star-piece">⭐</div>';
-        }
-        // Draw next landing spot (good) if not all done
-        else if (!allDone && completed < q.jumps.length && r===q.jumps[completed][0]&&c===q.jumps[completed][1]) {
-          inner = '<div class="land-dot" onclick="tap(1)"></div>';
-        }
-        // Draw bad landing spot if not all done
-        else if (!allDone && completed < q.bad.length && r===q.bad[completed][0]&&c===q.bad[completed][1]) {
-          inner = '<div class="land-dot" onclick="tap(0)"></div>';
-        }
-        // Show captured star positions as faded
-        else {
-          for (var ci=0; ci<completed; ci++) {
-            if (r===q.stars[ci][0]&&c===q.stars[ci][1]) { inner = '<span style="opacity:0.2;font-size:22px;">⭐</span>'; break; }
-          }
-        }
-      }
+
       h += '<td class="'+cls+'">'+inner+'</td>';
     }
     h += '</tr>';
   }
   h += '</table>';
-  // Show jump type badge
+
+  // Jump type badge + counter
   if (!allDone) {
-    h += '<div style="margin-top:8px;"><span style="background:'+(q.type==='triple'?'#ef4444':q.type==='double'?'#f97316':'#22c55e')+';color:#fff;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;">'+q.label+'</span>';
-    if (q.jumps.length > 1) h += ' <span style="color:#888;font-size:0.75rem;">Jump '+(completed+1)+' of '+q.jumps.length+'</span>';
+    var color = q.type==='triple'?'#ef4444':q.type==='double'?'#f97316':'#22c55e';
+    h += '<div style="margin-top:10px;">';
+    h += '<span style="background:'+color+';color:#fff;padding:5px 14px;border-radius:20px;font-size:0.8rem;font-weight:700;">'+q.label+'</span>';
+    if (q.jumps.length > 1) {
+      h += ' <span style="color:#888;font-size:0.8rem;margin-left:6px;">Jump '+(completed+1)+' of '+q.jumps.length+'</span>';
+    }
     h += '</div>';
+    // Show star count remaining
+    var left = q.stars.length - completed;
+    h += '<div style="margin-top:6px;font-size:0.8rem;color:#b58863;">'+'⭐'.repeat(left)+' '+left+' star'+(left>1?'s':'')+' to capture</div>';
+  } else {
+    h += '<div style="margin-top:10px;font-size:1.2rem;">'+' ⭐'.repeat(q.stars.length)+' All captured!</div>';
   }
   return h;
 }
