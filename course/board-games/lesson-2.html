@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>Checkers — Capture the Stars — Silver</title>
 <link rel="icon" href="../../assets/lighthouse/logo.svg">
 <link rel="stylesheet" href="../../css/global.css">
@@ -26,10 +23,7 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
   background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e);
   border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5);
 }
-.star-piece {
-  display:inline-block; width:38px; height:38px;
-  line-height:38px; font-size:28px; pointer-events:none;
-}
+.star-piece { display:inline-block; width:38px; height:38px; line-height:38px; font-size:28px; }
 .land-dot {
   display:inline-block; width:30px; height:30px; border-radius:50%;
   cursor:pointer; border:4px solid #4caf50;
@@ -45,10 +39,13 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
 .msg-no { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
 .btn { padding:12px 32px; font-size:1.05rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; margin-top:10px; box-shadow:0 4px 0 #46a302; }
 .btn:hover { background:#46a302; }
+.jump-info { margin-top:10px; font-size:0.85rem; }
+.jump-badge { display:inline-block; padding:4px 14px; border-radius:20px; color:#fff; font-weight:700; font-size:0.8rem; }
+.stars-left { margin-top:6px; font-size:0.85rem; color:#b58863; }
 </style>
 </head>
 <body>
-  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 <nav class="nav"><div class="container">
   <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
   <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
@@ -56,176 +53,209 @@ td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:
 
 <div class="wrap">
 <h1>Capture the Stars — Silver</h1>
-<p class="sub">Single, Double & Triple jumps! Chain your captures to grab all the ⭐!</p>
+<p class="sub">Single, Double &amp; Triple jumps! Chain your captures!</p>
 <div class="bar"><div class="fill" id="bar"></div></div>
 <div id="game"></div>
 <div id="msg"></div>
 </div>
 
 <script>
-if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})}); }
-if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}); }
-</script>
-<script type="module">
-import { initNav } from '../../js/nav.js';
-    import { initRitaChat } from '../../js/rita-chat.js'; initNav('../../');
-    initRitaChat('../../');
-import { showBuddy, initSideCharacter } from '../../js/characters.js';
-import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
-import { onAuthChange } from '../../js/auth.js';
-initSideCharacter('william', '../../');
-
-// Puzzles: p=piece, stars=stars to capture, jumps=landing spots in order, bad=wrong landing spots
-// type: 'single','double','triple'
+// NON-MODULE script so onclick handlers work everywhere
 var puzzles = [
-  // Single jumps (warm-up)
-  {type:'single', label:'Single Jump', p:[6,1], stars:[[5,2]], jumps:[[4,3]], bad:[[4,1]]},
-  {type:'single', label:'Single Jump', p:[6,5], stars:[[5,4]], jumps:[[4,3]], bad:[[4,5]]},
-  {type:'single', label:'Single Jump', p:[5,6], stars:[[4,5]], jumps:[[3,4]], bad:[[3,6]]},
-  // Double jumps
-  {type:'double', label:'Double Jump!', p:[6,1], stars:[[5,2],[3,4]], jumps:[[4,3],[2,5]], bad:[[4,1],[2,3]]},
-  {type:'double', label:'Double Jump!', p:[6,5], stars:[[5,4],[3,2]], jumps:[[4,3],[2,1]], bad:[[4,5],[2,3]]},
-  {type:'double', label:'Double Jump!', p:[7,0], stars:[[6,1],[4,3]], jumps:[[5,2],[3,4]], bad:[[5,0],[3,2]]},
-  {type:'double', label:'Double Jump!', p:[6,3], stars:[[5,2],[3,2]], jumps:[[4,1],[2,3]], bad:[[4,3],[2,1]]},
-  // Triple jumps
-  {type:'triple', label:'Triple Jump!', p:[7,0], stars:[[6,1],[4,3],[2,5]], jumps:[[5,2],[3,4],[1,6]], bad:[[5,0],[3,2],[1,4]]},
-  {type:'triple', label:'Triple Jump!', p:[7,6], stars:[[6,5],[4,3],[2,1]], jumps:[[5,4],[3,2],[1,0]], bad:[[5,6],[3,4],[1,2]]},
-  {type:'triple', label:'Triple Jump!', p:[7,2], stars:[[6,3],[4,3],[2,3]], jumps:[[5,4],[3,2],[1,4]], bad:[[5,0],[3,4],[1,2]]}
+  // 3 single jumps
+  {type:'single', p:[6,1], stars:[[5,2]], jumps:[[4,3]], bad:[[4,1]]},
+  {type:'single', p:[6,5], stars:[[5,4]], jumps:[[4,3]], bad:[[4,5]]},
+  {type:'single', p:[5,6], stars:[[4,5]], jumps:[[3,4]], bad:[[3,6]]},
+  // 4 double jumps
+  {type:'double', p:[6,1], stars:[[5,2],[3,4]], jumps:[[4,3],[2,5]], bad:[[4,1],[2,3]]},
+  {type:'double', p:[6,5], stars:[[5,4],[3,2]], jumps:[[4,3],[2,1]], bad:[[4,5],[2,3]]},
+  {type:'double', p:[7,0], stars:[[6,1],[4,3]], jumps:[[5,2],[3,4]], bad:[[5,0],[3,2]]},
+  {type:'double', p:[6,3], stars:[[5,2],[3,2]], jumps:[[4,1],[2,3]], bad:[[4,3],[2,1]]},
+  // 3 triple jumps
+  {type:'triple', p:[7,0], stars:[[6,1],[4,3],[2,5]], jumps:[[5,2],[3,4],[1,6]], bad:[[5,0],[3,2],[1,4]]},
+  {type:'triple', p:[7,6], stars:[[6,5],[4,3],[2,1]], jumps:[[5,4],[3,2],[1,0]], bad:[[5,6],[3,4],[1,2]]},
+  {type:'triple', p:[7,2], stars:[[6,3],[4,3],[2,3]], jumps:[[5,4],[3,2],[1,4]], bad:[[5,0],[3,4],[1,2]]}
 ];
-var cur=0, sc=0, tot=puzzles.length;
-var jumpStep=0; // which jump in the chain we're on
 
-var tapping = false; // prevent double-tap
+var cur = 0;
+var score = 0;
+var total = puzzles.length;
+var step = 0; // current jump within puzzle
+var locked = false;
 
-window.tap = function(good) {
-  if (tapping) return;
-  tapping = true;
-  var q = puzzles[cur];
-  var msgEl = document.getElementById('msg');
-  var gameEl = document.getElementById('game');
-
-  if (good) {
-    jumpStep++;
-    if (jumpStep < q.jumps.length) {
-      // More jumps to go — redraw board with piece at new position
-      showBuddy('william','correct');
-      var remain = q.jumps.length - jumpStep;
-      msgEl.innerHTML = '<div class="msg msg-ok">✓ Captured ⭐! Keep jumping — '+remain+' more star'+(remain>1?'s':'')+' to capture!</div>';
-      gameEl.innerHTML = makeBoard(q, jumpStep);
-      tapping = false;
-    } else {
-      // All jumps completed — puzzle done
-      sc++;
-      showBuddy('william','correct');
-      var total = q.stars.length;
-      var jumpWord = total >= 3 ? 'TRIPLE' : total >= 2 ? 'DOUBLE' : '';
-      gameEl.innerHTML = makeBoard(q, jumpStep);
-      msgEl.innerHTML =
-        '<div class="msg msg-ok">✓ '+(jumpWord?jumpWord+' ':'')+'Capture! '+total+' star'+(total>1?'s':'')+' captured!</div>' +
-        '<button class="btn" onclick="nxt()">'+(cur>=tot-1?'Finish!':'Next →')+'</button>';
-      tapping = false;
-    }
-  } else {
-    showBuddy('william','wrong');
-    msgEl.innerHTML = '<div class="msg msg-no">✗ Wrong spot! Jump OVER the ⭐ to the other side.</div>';
-    setTimeout(function(){ msgEl.innerHTML=''; tapping=false; }, 1200);
+function isAt(r, c, arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i][0] === r && arr[i][1] === c) return true;
   }
-};
-
-window.nxt = function() {
-  cur++;
-  jumpStep=0;
-  if (cur<tot) render();
-  else fin();
-};
-
-function at(r,c,list) {
-  for (var i=0;i<list.length;i++) { if (list[i][0]===r&&list[i][1]===c) return i; }
-  return -1;
+  return false;
 }
 
-function makeBoard(q, completed) {
-  completed = completed || 0;
-  var allDone = completed >= q.jumps.length;
-  var piecePos = completed > 0 ? q.jumps[completed-1] : q.p;
+function drawBoard() {
+  var q = puzzles[cur];
+  var pieceR, pieceC;
+  if (step > 0) {
+    pieceR = q.jumps[step - 1][0];
+    pieceC = q.jumps[step - 1][1];
+  } else {
+    pieceR = q.p[0];
+    pieceC = q.p[1];
+  }
 
-  // Build lookup sets for fast cell checks
-  var capturedStars = q.stars.slice(0, completed);  // already captured
-  var remainStars = q.stars.slice(completed);        // still on board
-  var nextGood = (!allDone && completed < q.jumps.length) ? q.jumps[completed] : null;
-  var nextBad = (!allDone && completed < q.bad.length) ? q.bad[completed] : null;
+  var done = step >= q.jumps.length;
+  var goodR = done ? -1 : q.jumps[step][0];
+  var goodC = done ? -1 : q.jumps[step][1];
+  var badR = done ? -1 : q.bad[step][0];
+  var badC = done ? -1 : q.bad[step][1];
 
-  var h = '<table>';
-  for (var r=0;r<8;r++) {
-    h += '<tr>';
-    for (var c=0;c<8;c++) {
-      var cls = (r+c)%2===0 ? 'light' : 'dark';
-      var inner = '';
+  var html = '<table>';
+  for (var r = 0; r < 8; r++) {
+    html += '<tr>';
+    for (var c = 0; c < 8; c++) {
+      var cls = (r + c) % 2 === 0 ? 'light' : 'dark';
+      var cell = '';
 
-      if (r===piecePos[0] && c===piecePos[1]) {
-        // The checker piece
-        inner = '<div class="piece"></div>';
-      } else if (!allDone && at(r,c,remainStars) >= 0) {
-        // Stars still to capture
-        inner = '<div class="star-piece">⭐</div>';
-      } else if (!allDone && nextGood && r===nextGood[0] && c===nextGood[1]) {
-        // Correct landing spot
-        inner = '<div class="land-dot" onclick="tap(1)"></div>';
-      } else if (!allDone && nextBad && r===nextBad[0] && c===nextBad[1]) {
-        // Wrong landing spot
-        inner = '<div class="land-dot" onclick="tap(0)"></div>';
-      } else if (at(r,c,capturedStars) >= 0) {
-        // Faded captured star
-        inner = '<span style="opacity:0.15;font-size:20px;">⭐</span>';
+      if (r === pieceR && c === pieceC) {
+        cell = '<div class="piece"></div>';
+      } else if (!done && r === goodR && c === goodC) {
+        cell = '<div class="land-dot" onclick="tapGood()"></div>';
+      } else if (!done && r === badR && c === badC) {
+        cell = '<div class="land-dot" onclick="tapBad()"></div>';
+      } else {
+        // Check if it's a remaining star (not yet captured)
+        for (var s = step; s < q.stars.length; s++) {
+          if (r === q.stars[s][0] && c === q.stars[s][1]) {
+            cell = '<div class="star-piece">⭐</div>';
+            break;
+          }
+        }
+        // Check if it's a captured star (faded)
+        if (!cell) {
+          for (var s2 = 0; s2 < step; s2++) {
+            if (r === q.stars[s2][0] && c === q.stars[s2][1]) {
+              cell = '<span style="opacity:0.15;font-size:20px;">⭐</span>';
+              break;
+            }
+          }
+        }
       }
 
-      h += '<td class="'+cls+'">'+inner+'</td>';
+      html += '<td class="' + cls + '">' + cell + '</td>';
     }
-    h += '</tr>';
+    html += '</tr>';
   }
-  h += '</table>';
+  html += '</table>';
 
-  // Jump type badge + counter
-  if (!allDone) {
-    var color = q.type==='triple'?'#ef4444':q.type==='double'?'#f97316':'#22c55e';
-    h += '<div style="margin-top:10px;">';
-    h += '<span style="background:'+color+';color:#fff;padding:5px 14px;border-radius:20px;font-size:0.8rem;font-weight:700;">'+q.label+'</span>';
+  // Info below board
+  if (!done) {
+    var color = q.type === 'triple' ? '#ef4444' : q.type === 'double' ? '#f97316' : '#22c55e';
+    var label = q.type === 'triple' ? 'Triple Jump' : q.type === 'double' ? 'Double Jump' : 'Single Jump';
+    var left = q.stars.length - step;
+    html += '<div class="jump-info">';
+    html += '<span class="jump-badge" style="background:' + color + ';">' + label + '</span>';
     if (q.jumps.length > 1) {
-      h += ' <span style="color:#888;font-size:0.8rem;margin-left:6px;">Jump '+(completed+1)+' of '+q.jumps.length+'</span>';
+      html += ' <span style="color:#666;">Step ' + (step + 1) + ' of ' + q.jumps.length + '</span>';
     }
-    h += '</div>';
-    // Show star count remaining
-    var left = q.stars.length - completed;
-    h += '<div style="margin-top:6px;font-size:0.8rem;color:#b58863;">'+'⭐'.repeat(left)+' '+left+' star'+(left>1?'s':'')+' to capture</div>';
-  } else {
-    h += '<div style="margin-top:10px;font-size:1.2rem;">'+' ⭐'.repeat(q.stars.length)+' All captured!</div>';
+    html += '</div>';
+    html += '<div class="stars-left">' + '⭐'.repeat(left) + ' ' + left + ' star' + (left > 1 ? 's' : '') + ' to capture</div>';
   }
-  return h;
+
+  document.getElementById('game').innerHTML = html;
 }
 
-function render() {
-  document.getElementById('bar').style.width = (cur/tot*100)+'%';
+function tapGood() {
+  if (locked) return;
+  locked = true;
+  step++;
+  var q = puzzles[cur];
+
+  if (step < q.jumps.length) {
+    // More jumps remain
+    var left = q.jumps.length - step;
+    document.getElementById('msg').innerHTML = '<div class="msg msg-ok">✓ Captured! ' + left + ' more star' + (left > 1 ? 's' : '') + ' to go!</div>';
+    drawBoard();
+    locked = false;
+  } else {
+    // Puzzle complete
+    score++;
+    var n = q.stars.length;
+    var word = n >= 3 ? 'TRIPLE ' : n >= 2 ? 'DOUBLE ' : '';
+    drawBoard();
+    document.getElementById('msg').innerHTML =
+      '<div class="msg msg-ok">✓ ' + word + 'Capture! ' + n + ' star' + (n > 1 ? 's' : '') + ' captured!</div>' +
+      '<button class="btn" onclick="nextPuzzle()">' + (cur >= total - 1 ? 'Finish!' : 'Next →') + '</button>';
+    locked = false;
+  }
+}
+
+function tapBad() {
+  if (locked) return;
+  locked = true;
+  document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong! Jump OVER the ⭐ to the other side.</div>';
+  setTimeout(function() {
+    document.getElementById('msg').innerHTML = '';
+    locked = false;
+  }, 1000);
+}
+
+function nextPuzzle() {
+  cur++;
+  step = 0;
+  if (cur < total) {
+    showPuzzle();
+  } else {
+    finishGame();
+  }
+}
+
+function showPuzzle() {
+  document.getElementById('bar').style.width = (cur / total * 100) + '%';
   document.getElementById('msg').innerHTML = '';
-  document.getElementById('game').innerHTML = makeBoard(puzzles[cur], 0);
+  drawBoard();
 }
 
-function fin() {
+function finishGame() {
   document.getElementById('bar').style.width = '100%';
-  var pct = Math.round(sc/tot*100);
-  var g = calculateGrade(pct);
-  var xp = calculateXP(pct);
+  var pct = Math.round(score / total * 100);
+  // Grade
+  var grade, stars;
+  if (pct >= 95) { grade = 'A'; stars = 3; }
+  else if (pct >= 85) { grade = 'B+'; stars = 2; }
+  else if (pct >= 75) { grade = 'B'; stars = 2; }
+  else if (pct >= 65) { grade = 'C'; stars = 1; }
+  else if (pct >= 50) { grade = 'D'; stars = 0; }
+  else { grade = 'F'; stars = 0; }
+  var xp = pct >= 60 ? 10 + (pct === 100 ? 5 : 0) : 0;
+
   document.getElementById('game').innerHTML = '';
   document.getElementById('msg').innerHTML =
-    '<h2 style="font-size:2.5rem;margin:16px 0">'+g.grade+'</h2>' +
-    '<div style="font-size:2.5rem">'+'⭐'.repeat(g.stars)+'☆'.repeat(3-g.stars)+'</div>' +
-    '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+'+xp+' XP</div>' +
-    '<p style="margin:10px 0;color:#888">Score: '+pct+'%</p>' +
+    '<h2 style="font-size:2.5rem;margin:16px 0">' + grade + '</h2>' +
+    '<div style="font-size:2.5rem">' + '⭐'.repeat(stars) + '☆'.repeat(3 - stars) + '</div>' +
+    '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+' + xp + ' XP</div>' +
+    '<p style="margin:10px 0;color:#888">Score: ' + pct + '% (' + score + '/' + total + ')</p>' +
     '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block">Back to Course</a>';
-  showBuddy('william', pct===100?'perfect':'correct');
-  onAuthChange(async function(u){if(u) await saveLessonResult('board-games','bg-2',pct);});
 }
 
-render();
+// Start
+showPuzzle();
+</script>
+
+<script type="module">
+import { initNav } from '../../js/nav.js';
+import { initRitaChat } from '../../js/rita-chat.js';
+import { initSideCharacter } from '../../js/characters.js';
+import { saveLessonResult } from '../../js/progress.js';
+import { onAuthChange } from '../../js/auth.js';
+initNav('../../');
+initRitaChat('../../');
+initSideCharacter('william', '../../');
+
+// Save result when game ends (hook into finishGame)
+var origFinish = window.finishGame;
+window.finishGame = function() {
+  origFinish();
+  var pct = Math.round(window.score / window.total * 100);
+  onAuthChange(async function(u) { if (u) await saveLessonResult('board-games', 'bg-2', pct); });
+};
 </script>
 </body>
 </html>
