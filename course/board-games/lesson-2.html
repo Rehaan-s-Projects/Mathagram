@@ -3,240 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkers — Capture the Stars — Silver</title>
+<title>Checkers — Capture the Stars</title>
 <link rel="icon" href="../../assets/lighthouse/logo.svg">
 <link rel="stylesheet" href="../../css/global.css">
 <link rel="stylesheet" href="../../css/characters.css">
 <style>
-body { background:#f8f9fa; }
-.wrap { max-width:460px; margin:70px auto 40px; text-align:center; padding:16px; }
-h1 { font-size:1.5rem; margin-bottom:6px; }
-.sub { color:#555; font-size:0.95rem; margin-bottom:14px; font-weight:500; }
-.bar { height:10px; background:#e0e0e0; border-radius:5px; margin-bottom:18px; }
-.fill { height:100%; background:#58cc02; border-radius:5px; transition:width 0.3s; }
-table { border-collapse:collapse; margin:0 auto 16px; border:4px solid #222; }
-td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:0; }
-.light { background:#f0d9b5; }
-.dark { background:#b58863; }
-.piece {
-  display:inline-block; width:38px; height:38px; border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e);
-  border:3px solid #3e1a00; box-shadow:0 3px 0 rgba(60,20,0,0.5);
-}
-.star-piece { display:inline-block; width:38px; height:38px; line-height:38px; font-size:28px; }
-.land-dot {
-  display:inline-block; width:30px; height:30px; border-radius:50%;
-  cursor:pointer; border:4px solid #4caf50;
-  animation:pulse 0.8s infinite;
-}
-.land-dot:hover { transform:scale(1.2); background:rgba(76,175,80,0.6); }
-@keyframes pulse {
-  0%,100% { background:rgba(76,175,80,0.2); }
-  50% { background:rgba(76,175,80,0.5); }
-}
-.msg { padding:14px; border-radius:10px; margin:12px 0; font-weight:700; font-size:1rem; }
-.msg-ok { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
-.msg-no { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
-.btn { padding:12px 32px; font-size:1.05rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; margin-top:10px; box-shadow:0 4px 0 #46a302; }
-.btn:hover { background:#46a302; }
-.jump-info { margin-top:10px; font-size:0.85rem; }
-.jump-badge { display:inline-block; padding:4px 14px; border-radius:20px; color:#fff; font-weight:700; font-size:0.8rem; }
-.stars-left { margin-top:6px; font-size:0.85rem; color:#b58863; }
+body{background:#f8f9fa}
+.wrap{max-width:460px;margin:70px auto 40px;text-align:center;padding:16px}
+h1{font-size:1.5rem;margin-bottom:6px}
+.sub{color:#555;font-size:.95rem;margin-bottom:14px;font-weight:500}
+.bar{height:10px;background:#e0e0e0;border-radius:5px;margin-bottom:18px}
+.fill{height:100%;background:#58cc02;border-radius:5px;transition:width .3s}
+table{border-collapse:collapse;margin:0 auto 12px;border:4px solid #222}
+td{width:50px;height:50px;text-align:center;vertical-align:middle;padding:0;-webkit-tap-highlight-color:transparent}
+.light{background:#f0d9b5}.dark{background:#b58863}
+.piece{display:inline-block;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e);border:3px solid #3e1a00;box-shadow:0 3px 0 rgba(60,20,0,.5)}
+.star{display:inline-block;width:38px;height:38px;line-height:38px;font-size:28px}
+.dot{display:inline-block;width:32px;height:32px;border-radius:50%;cursor:pointer;border:4px solid #4caf50;animation:p .8s infinite;-webkit-tap-highlight-color:transparent}
+.dot:active{background:rgba(76,175,80,.7)!important;transform:scale(1.15)}
+@keyframes p{0%,100%{background:rgba(76,175,80,.2)}50%{background:rgba(76,175,80,.5)}}
+.ok{padding:14px;border-radius:10px;margin:12px 0;font-weight:700;background:#dcfce7;color:#166534;border:2px solid #22c55e}
+.no{padding:14px;border-radius:10px;margin:12px 0;font-weight:700;background:#fef2f2;color:#991b1b;border:2px solid #ef4444}
+.btn{padding:12px 32px;font-size:1.05rem;font-weight:700;background:#58cc02;color:#fff;border:none;border-radius:12px;cursor:pointer;margin-top:10px;box-shadow:0 4px 0 #46a302}
+.btn:hover{background:#46a302}
+.info{margin-top:8px;font-size:.85rem;color:#666}
+.badge{display:inline-block;padding:4px 14px;border-radius:20px;color:#fff;font-weight:700;font-size:.8rem;margin-right:6px}
 </style>
 </head>
 <body>
 <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 <nav class="nav"><div class="container">
-  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
-  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+<a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+<div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
 </div></nav>
 
 <div class="wrap">
-<h1>Capture the Stars — Silver</h1>
-<p class="sub">Single, Double &amp; Triple jumps! Chain your captures!</p>
+<h1>Capture the Stars</h1>
+<p class="sub">Tap the green circle to jump OVER the ⭐ and capture it!</p>
 <div class="bar"><div class="fill" id="bar"></div></div>
-<div id="game"></div>
+<div id="board"></div>
+<div id="info"></div>
 <div id="msg"></div>
 </div>
 
 <script>
-// NON-MODULE script so onclick handlers work everywhere
-var puzzles = [
-  // 3 single jumps
-  {type:'single', p:[6,1], stars:[[5,2]], jumps:[[4,3]], bad:[[4,1]]},
-  {type:'single', p:[6,5], stars:[[5,4]], jumps:[[4,3]], bad:[[4,5]]},
-  {type:'single', p:[5,6], stars:[[4,5]], jumps:[[3,4]], bad:[[3,6]]},
-  // 4 double jumps
-  {type:'double', p:[6,1], stars:[[5,2],[3,4]], jumps:[[4,3],[2,5]], bad:[[4,1],[2,3]]},
-  {type:'double', p:[6,5], stars:[[5,4],[3,2]], jumps:[[4,3],[2,1]], bad:[[4,5],[2,3]]},
-  {type:'double', p:[7,0], stars:[[6,1],[4,3]], jumps:[[5,2],[3,4]], bad:[[5,0],[3,2]]},
-  {type:'double', p:[6,3], stars:[[5,2],[3,2]], jumps:[[4,1],[2,3]], bad:[[4,3],[2,1]]},
-  // 3 triple jumps
-  {type:'triple', p:[7,0], stars:[[6,1],[4,3],[2,5]], jumps:[[5,2],[3,4],[1,6]], bad:[[5,0],[3,2],[1,4]]},
-  {type:'triple', p:[7,6], stars:[[6,5],[4,3],[2,1]], jumps:[[5,4],[3,2],[1,0]], bad:[[5,6],[3,4],[1,2]]},
-  {type:'triple', p:[7,2], stars:[[6,3],[4,3],[2,3]], jumps:[[5,4],[3,2],[1,4]], bad:[[5,0],[3,4],[1,2]]}
+// All puzzles — each jump: piece goes from current pos, over star, to landing
+// Verified: every jump is a valid diagonal (row±2, col±2) with star at midpoint
+var P = [
+  // SINGLE JUMPS (1 star)
+  // piece[6,1] over star[5,2] land[4,3] | bad[4,1]
+  {t:1, p:[6,1], s:[[5,2]], g:[[4,3]], b:[[4,1]]},
+  // piece[6,5] over star[5,4] land[4,3] | bad[4,5]
+  {t:1, p:[6,5], s:[[5,4]], g:[[4,3]], b:[[4,5]]},
+  // piece[5,6] over star[4,5] land[3,4] | bad[3,6]
+  {t:1, p:[5,6], s:[[4,5]], g:[[3,4]], b:[[3,6]]},
+
+  // DOUBLE JUMPS (2 stars)
+  // jump1: [6,1]→over[5,2]→[4,3] jump2: [4,3]→over[3,4]→[2,5]
+  {t:2, p:[6,1], s:[[5,2],[3,4]], g:[[4,3],[2,5]], b:[[4,1],[2,3]]},
+  // jump1: [6,5]→over[5,4]→[4,3] jump2: [4,3]→over[3,2]→[2,1]
+  {t:2, p:[6,5], s:[[5,4],[3,2]], g:[[4,3],[2,1]], b:[[4,5],[2,3]]},
+  // jump1: [7,0]→over[6,1]→[5,2] jump2: [5,2]→over[4,3]→[3,4]
+  {t:2, p:[7,0], s:[[6,1],[4,3]], g:[[5,2],[3,4]], b:[[5,0],[3,2]]},
+
+  // TRIPLE JUMPS (3 stars)
+  // [7,0]→[6,1]→[5,2] → [4,3]→[3,4] → [2,5]→[1,6]
+  {t:3, p:[7,0], s:[[6,1],[4,3],[2,5]], g:[[5,2],[3,4],[1,6]], b:[[5,0],[3,2],[1,4]]},
+  // [7,6]→[6,5]→[5,4] → [4,3]→[3,2] → [2,1]→[1,0]
+  {t:3, p:[7,6], s:[[6,5],[4,3],[2,1]], g:[[5,4],[3,2],[1,0]], b:[[5,6],[3,4],[1,2]]}
 ];
 
-var cur = 0;
-var score = 0;
-var total = puzzles.length;
-var step = 0; // current jump within puzzle
-var locked = false;
+var ci = 0;       // current puzzle index
+var sc = 0;       // puzzles answered correctly
+var ji = 0;       // current jump index within puzzle
+var busy = false;  // prevent rapid taps
+var N = P.length;
 
-function isAt(r, c, arr) {
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i][0] === r && arr[i][1] === c) return true;
+// EVENT DELEGATION — guaranteed to work on all browsers/mobile
+document.getElementById('board').addEventListener('click', function(e) {
+  var el = e.target;
+  if (el.classList.contains('dot') || (el.parentElement && el.parentElement.classList.contains('dot'))) {
+    var d = el.classList.contains('dot') ? el : el.parentElement;
+    if (d.getAttribute('data-g') === '1') doGood();
+    else doBad();
   }
-  return false;
-}
+});
+document.getElementById('msg').addEventListener('click', function(e) {
+  if (e.target.id === 'nxtbtn') doNext();
+});
 
-function drawBoard() {
-  var q = puzzles[cur];
-  var pieceR, pieceC;
-  if (step > 0) {
-    pieceR = q.jumps[step - 1][0];
-    pieceC = q.jumps[step - 1][1];
-  } else {
-    pieceR = q.p[0];
-    pieceC = q.p[1];
-  }
+function draw() {
+  var q = P[ci];
+  // Where is the piece right now?
+  var pr = ji > 0 ? q.g[ji-1][0] : q.p[0];
+  var pc = ji > 0 ? q.g[ji-1][1] : q.p[1];
+  var done = ji >= q.g.length;
 
-  var done = step >= q.jumps.length;
-  var goodR = done ? -1 : q.jumps[step][0];
-  var goodC = done ? -1 : q.jumps[step][1];
-  var badR = done ? -1 : q.bad[step][0];
-  var badC = done ? -1 : q.bad[step][1];
-
-  var html = '<table>';
+  var h = '<table>';
   for (var r = 0; r < 8; r++) {
-    html += '<tr>';
+    h += '<tr>';
     for (var c = 0; c < 8; c++) {
-      var cls = (r + c) % 2 === 0 ? 'light' : 'dark';
-      var cell = '';
+      var bg = (r+c)%2===0 ? 'light' : 'dark';
+      var x = '';
 
-      if (r === pieceR && c === pieceC) {
-        cell = '<div class="piece"></div>';
-      } else if (!done && r === goodR && c === goodC) {
-        cell = '<div class="land-dot" onclick="tapGood()"></div>';
-      } else if (!done && r === badR && c === badC) {
-        cell = '<div class="land-dot" onclick="tapBad()"></div>';
-      } else {
-        // Check if it's a remaining star (not yet captured)
-        for (var s = step; s < q.stars.length; s++) {
-          if (r === q.stars[s][0] && c === q.stars[s][1]) {
-            cell = '<div class="star-piece">⭐</div>';
-            break;
-          }
+      if (r===pr && c===pc) {
+        x = '<div class="piece"></div>';
+      }
+      else if (!done && r===q.g[ji][0] && c===q.g[ji][1]) {
+        x = '<div class="dot" data-g="1"></div>';
+      }
+      else if (!done && r===q.b[ji][0] && c===q.b[ji][1]) {
+        x = '<div class="dot" data-g="0"></div>';
+      }
+      else {
+        // Remaining stars
+        for (var k = ji; k < q.s.length; k++) {
+          if (r===q.s[k][0] && c===q.s[k][1]) { x = '<div class="star">⭐</div>'; break; }
         }
-        // Check if it's a captured star (faded)
-        if (!cell) {
-          for (var s2 = 0; s2 < step; s2++) {
-            if (r === q.stars[s2][0] && c === q.stars[s2][1]) {
-              cell = '<span style="opacity:0.15;font-size:20px;">⭐</span>';
-              break;
-            }
+        // Captured stars (faded)
+        if (!x) {
+          for (var k2 = 0; k2 < ji; k2++) {
+            if (r===q.s[k2][0] && c===q.s[k2][1]) { x = '<span style="opacity:.15;font-size:20px">⭐</span>'; break; }
           }
         }
       }
-
-      html += '<td class="' + cls + '">' + cell + '</td>';
+      h += '<td class="'+bg+'">'+x+'</td>';
     }
-    html += '</tr>';
+    h += '</tr>';
   }
-  html += '</table>';
+  h += '</table>';
+  document.getElementById('board').innerHTML = h;
 
-  // Info below board
+  // Info line
+  var ihtml = '';
   if (!done) {
-    var color = q.type === 'triple' ? '#ef4444' : q.type === 'double' ? '#f97316' : '#22c55e';
-    var label = q.type === 'triple' ? 'Triple Jump' : q.type === 'double' ? 'Double Jump' : 'Single Jump';
-    var left = q.stars.length - step;
-    html += '<div class="jump-info">';
-    html += '<span class="jump-badge" style="background:' + color + ';">' + label + '</span>';
-    if (q.jumps.length > 1) {
-      html += ' <span style="color:#666;">Step ' + (step + 1) + ' of ' + q.jumps.length + '</span>';
-    }
-    html += '</div>';
-    html += '<div class="stars-left">' + '⭐'.repeat(left) + ' ' + left + ' star' + (left > 1 ? 's' : '') + ' to capture</div>';
+    var left = q.s.length - ji;
+    var col = q.t>=3?'#ef4444':q.t>=2?'#f97316':'#22c55e';
+    var lab = q.t>=3?'Triple Jump':q.t>=2?'Double Jump':'Single Jump';
+    ihtml = '<span class="badge" style="background:'+col+'">'+lab+'</span>';
+    if (q.t > 1) ihtml += 'Step '+(ji+1)+' of '+q.g.length+' &middot; ';
+    ihtml += '⭐'.repeat(left)+' '+left+' to capture';
+  } else {
+    ihtml = '✅ All '+ q.s.length +' star'+(q.s.length>1?'s':'')+' captured!';
   }
-
-  document.getElementById('game').innerHTML = html;
+  document.getElementById('info').innerHTML = '<div class="info">'+ihtml+'</div>';
 }
 
-function tapGood() {
-  if (locked) return;
-  locked = true;
-  step++;
-  var q = puzzles[cur];
+function doGood() {
+  if (busy) return;
+  busy = true;
+  ji++;
+  var q = P[ci];
 
-  if (step < q.jumps.length) {
-    // More jumps remain
-    var left = q.jumps.length - step;
-    document.getElementById('msg').innerHTML = '<div class="msg msg-ok">✓ Captured! ' + left + ' more star' + (left > 1 ? 's' : '') + ' to go!</div>';
-    drawBoard();
-    locked = false;
+  if (ji < q.g.length) {
+    // More jumps needed
+    document.getElementById('msg').innerHTML = '<div class="ok">✓ Got it! '+(q.g.length - ji)+' more to capture!</div>';
+    draw();
+    busy = false;
   } else {
-    // Puzzle complete
-    score++;
-    var n = q.stars.length;
-    var word = n >= 3 ? 'TRIPLE ' : n >= 2 ? 'DOUBLE ' : '';
-    drawBoard();
+    // Puzzle done
+    sc++;
+    draw();
+    var w = q.t>=3?'TRIPLE ':q.t>=2?'DOUBLE ':'';
     document.getElementById('msg').innerHTML =
-      '<div class="msg msg-ok">✓ ' + word + 'Capture! ' + n + ' star' + (n > 1 ? 's' : '') + ' captured!</div>' +
-      '<button class="btn" onclick="nextPuzzle()">' + (cur >= total - 1 ? 'Finish!' : 'Next →') + '</button>';
-    locked = false;
+      '<div class="ok">✓ '+w+'Capture! '+q.s.length+' star'+(q.s.length>1?'s':'')+' captured!</div>' +
+      '<button class="btn" id="nxtbtn">'+(ci>=N-1?'Finish!':'Next →')+'</button>';
+    busy = false;
   }
 }
 
-function tapBad() {
-  if (locked) return;
-  locked = true;
-  document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong! Jump OVER the ⭐ to the other side.</div>';
-  setTimeout(function() {
-    document.getElementById('msg').innerHTML = '';
-    locked = false;
-  }, 1000);
+function doBad() {
+  if (busy) return;
+  busy = true;
+  document.getElementById('msg').innerHTML = '<div class="no">✗ Wrong side! Jump OVER the star.</div>';
+  setTimeout(function(){ document.getElementById('msg').innerHTML=''; busy=false; }, 1000);
 }
 
-function nextPuzzle() {
-  cur++;
-  step = 0;
-  if (cur < total) {
-    showPuzzle();
-  } else {
-    finishGame();
-  }
-}
-
-function showPuzzle() {
-  document.getElementById('bar').style.width = (cur / total * 100) + '%';
+function doNext() {
+  ci++;
+  ji = 0;
   document.getElementById('msg').innerHTML = '';
-  drawBoard();
+  if (ci < N) {
+    document.getElementById('bar').style.width = (ci/N*100)+'%';
+    draw();
+  } else {
+    // FINISH
+    document.getElementById('bar').style.width = '100%';
+    var pct = Math.round(sc/N*100);
+    var gr, st;
+    if(pct>=95){gr='A';st=3}else if(pct>=85){gr='B+';st=2}else if(pct>=70){gr='B';st=2}else if(pct>=60){gr='C';st=1}else{gr='D';st=0}
+    var xp = pct>=60 ? 10+(pct===100?5:0) : 0;
+    document.getElementById('board').innerHTML = '';
+    document.getElementById('info').innerHTML = '';
+    document.getElementById('msg').innerHTML =
+      '<h2 style="font-size:2.5rem;margin:16px 0">'+gr+'</h2>'+
+      '<div style="font-size:2.5rem">'+'⭐'.repeat(st)+'☆'.repeat(3-st)+'</div>'+
+      '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+'+xp+' XP</div>'+
+      '<p style="margin:10px 0;color:#888">Score: '+pct+'% ('+sc+'/'+N+')</p>'+
+      '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block">Back to Course</a>';
+    // Save to Firebase
+    if (typeof window._saveResult === 'function') window._saveResult(pct);
+  }
 }
 
-function finishGame() {
-  document.getElementById('bar').style.width = '100%';
-  var pct = Math.round(score / total * 100);
-  // Grade
-  var grade, stars;
-  if (pct >= 95) { grade = 'A'; stars = 3; }
-  else if (pct >= 85) { grade = 'B+'; stars = 2; }
-  else if (pct >= 75) { grade = 'B'; stars = 2; }
-  else if (pct >= 65) { grade = 'C'; stars = 1; }
-  else if (pct >= 50) { grade = 'D'; stars = 0; }
-  else { grade = 'F'; stars = 0; }
-  var xp = pct >= 60 ? 10 + (pct === 100 ? 5 : 0) : 0;
-
-  document.getElementById('game').innerHTML = '';
-  document.getElementById('msg').innerHTML =
-    '<h2 style="font-size:2.5rem;margin:16px 0">' + grade + '</h2>' +
-    '<div style="font-size:2.5rem">' + '⭐'.repeat(stars) + '☆'.repeat(3 - stars) + '</div>' +
-    '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+' + xp + ' XP</div>' +
-    '<p style="margin:10px 0;color:#888">Score: ' + pct + '% (' + score + '/' + total + ')</p>' +
-    '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block">Back to Course</a>';
-}
-
-// Start
-showPuzzle();
+// GO
+draw();
 </script>
 
 <script type="module">
@@ -248,13 +219,8 @@ import { onAuthChange } from '../../js/auth.js';
 initNav('../../');
 initRitaChat('../../');
 initSideCharacter('william', '../../');
-
-// Save result when game ends (hook into finishGame)
-var origFinish = window.finishGame;
-window.finishGame = function() {
-  origFinish();
-  var pct = Math.round(window.score / window.total * 100);
-  onAuthChange(async function(u) { if (u) await saveLessonResult('board-games', 'bg-2', pct); });
+window._saveResult = function(pct) {
+  onAuthChange(async function(u) { if (u) await saveLessonResult('board-games','bg-2',pct); });
 };
 </script>
 </body>
