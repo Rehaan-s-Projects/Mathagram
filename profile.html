@@ -705,6 +705,18 @@
           memCard.style.background = 'rgba(234,179,8,0.1)';
           memCard.style.border = '2px solid #eab308';
           memCard.insertAdjacentHTML('beforeend', '<div style="margin-top:6px;font-size:0.65rem;color:#fde047;">&#9888; Warning — Memory usage high. Consider taking a short break.</div>');
+        } else if (memory <= 5) {
+          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#ef4444;">MEMORY LOSS</span>';
+          memFill.style.background = '#64748b';
+          memCard.style.background = 'rgba(239,68,68,0.15)';
+          memCard.style.border = '2px solid #ef4444';
+          memCard.insertAdjacentHTML('beforeend', '<div style="margin-top:6px;font-size:0.65rem;color:#fca5a5;animation:blink 0.8s infinite;">&#9888; CRITICAL — Almost no memory! Your brain could lose all knowledge. Start learning now to rebuild your memory!</div>');
+        } else if (memory <= 15) {
+          memEl.innerHTML = memory + '% <span style="font-size:0.6rem;display:block;color:#f97316;">START LEARNING</span>';
+          memFill.style.background = '#f97316';
+          memCard.style.background = 'rgba(249,115,22,0.1)';
+          memCard.style.border = '2px solid #f97316';
+          memCard.insertAdjacentHTML('beforeend', '<div style="margin-top:6px;font-size:0.65rem;color:#fdba74;">&#128218; Memory very low! Start completing lessons to build your brain power.</div>');
         }
       }, 200);
 
