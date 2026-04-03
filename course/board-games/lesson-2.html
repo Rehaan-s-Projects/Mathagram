@@ -17,7 +17,10 @@ h1{font-size:1.5rem;margin-bottom:6px}
 table{border-collapse:collapse;margin:0 auto 12px;border:4px solid #222}
 td{width:50px;height:50px;text-align:center;vertical-align:middle;padding:0;-webkit-tap-highlight-color:transparent}
 .light{background:#f0d9b5}.dark{background:#b58863}
-.piece{display:inline-block;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e);border:3px solid #3e1a00;box-shadow:0 3px 0 rgba(60,20,0,.5)}
+.piece{display:inline-block;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#a0522d,#5c2d0e);border:3px solid #3e1a00;box-shadow:0 3px 0 rgba(60,20,0,.5);position:relative}
+.piece.king::after{content:'⭐';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.kinged-msg{animation:kingPop .5s ease}
+@keyframes kingPop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
 .star{display:inline-block;width:38px;height:38px;line-height:38px;font-size:28px}
 .dot{display:inline-block;width:32px;height:32px;border-radius:50%;cursor:pointer;border:4px solid #4caf50;animation:p .8s infinite;-webkit-tap-highlight-color:transparent}
 .dot:active{background:rgba(76,175,80,.7)!important;transform:scale(1.15)}
@@ -107,7 +110,8 @@ function draw() {
       var x = '';
 
       if (r===pr && c===pc) {
-        x = '<div class="piece"></div>';
+        var isKing = (done && pr <= 1);
+        x = '<div class="piece'+(isKing?' king':'')+'"></div>';
       }
       else if (!done && r===q.g[ji][0] && c===q.g[ji][1]) {
         x = '<div class="dot" data-g="1"></div>';
@@ -165,8 +169,12 @@ function doGood() {
     sc++;
     draw();
     var w = q.t>=3?'TRIPLE ':q.t>=2?'DOUBLE ':'';
+    // Check if piece reached the end (row 0 or 1) = KINGED!
+    var finalR = q.g[q.g.length-1][0];
+    var kinged = finalR <= 1;
+    var kingMsg = kinged ? '<div class="kinged-msg" style="font-size:1.5rem;margin:6px 0">👑 KINGED!</div>' : '';
     document.getElementById('msg').innerHTML =
-      '<div class="ok">✓ '+w+'Capture! '+q.s.length+' star'+(q.s.length>1?'s':'')+' captured!</div>' +
+      '<div class="ok">✓ '+w+'Capture! '+q.s.length+' star'+(q.s.length>1?'s':'')+' captured!'+kingMsg+'</div>' +
       '<button class="btn" id="nxtbtn">'+(ci>=N-1?'Finish!':'Next →')+'</button>';
     busy = false;
   }
@@ -195,12 +203,17 @@ function doNext() {
     var xp = pct>=60 ? 10+(pct===100?5:0) : 0;
     document.getElementById('board').innerHTML = '';
     document.getElementById('info').innerHTML = '';
+    var starLine = '';
+    for (var i=0;i<3;i++) starLine += i<st ? '⭐' : '☆';
     document.getElementById('msg').innerHTML =
-      '<h2 style="font-size:2.5rem;margin:16px 0">'+gr+'</h2>'+
-      '<div style="font-size:2.5rem">'+'⭐'.repeat(st)+'☆'.repeat(3-st)+'</div>'+
-      '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+'+xp+' XP</div>'+
-      '<p style="margin:10px 0;color:#888">Score: '+pct+'% ('+sc+'/'+N+')</p>'+
-      '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block">Back to Course</a>';
+      '<div style="margin:20px 0">' +
+      '<h2 style="font-size:2.5rem;margin:0 0 8px">'+gr+'</h2>'+
+      '<div style="font-size:2.5rem;letter-spacing:6px">'+starLine+'</div>'+
+      (st===3?'<div class="kinged-msg" style="font-size:1.3rem;margin:8px 0">👑 Perfect Score!</div>':'')+
+      '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:12px 0">+'+xp+' XP</div>'+
+      '<p style="margin:8px 0;color:#888">Score: '+pct+'% &middot; '+sc+'/'+N+' puzzles</p>'+
+      '<a href="index.html" class="btn" style="text-decoration:none;display:inline-block;margin-top:12px">Back to Course</a>' +
+      '</div>';
     // Save to Firebase
     if (typeof window._saveResult === 'function') window._saveResult(pct);
   }
