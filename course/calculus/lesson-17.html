@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limits at Infinity — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+<link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits at Infinity</h1>
+
+    <p>
+      So far we've looked at what happens as \(x\) approaches a finite number. But what happens when \(x\) itself flies off toward \(\infty\) or \(-\infty\)? That's exactly what <strong>limits at infinity</strong> describe.
+    </p>
+
+    <div class="math-block">
+      $$\lim_{x \to \infty} f(x) = L$$
+    </div>
+
+    <p>
+      This means that as \(x\) grows without bound, the function values get closer and closer to some finite number \(L\). When this happens, the line \(y = L\) is called a <strong>horizontal asymptote</strong>.
+    </p>
+
+    <p><strong>Key rules for rational functions</strong> \(\displaystyle\frac{a_n x^n + \cdots}{b_m x^m + \cdots}\):</p>
+    <ul>
+      <li>If the degree of the numerator \(n\) is <strong>less than</strong> the degree of the denominator \(m\), the limit is \(0\).</li>
+      <li>If the degrees are <strong>equal</strong> (\(n = m\)), the limit is \(\displaystyle\frac{a_n}{b_m}\) (ratio of leading coefficients).</li>
+      <li>If the degree of the numerator is <strong>greater</strong> than the denominator, the limit is \(\pm\infty\) (no horizontal asymptote).</li>
+    </ul>
+
+    <p><strong>Example 1:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to \infty} \frac{3x^2 + 1}{5x^2 - 2} = \frac{3}{5}$$
+    </div>
+    <p>Same degree top and bottom, so we take the ratio of leading coefficients.</p>
+
+    <p><strong>Example 2:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to \infty} \frac{4x}{x^3 + 1} = 0$$
+    </div>
+    <p>The denominator grows much faster, so the fraction shrinks to zero.</p>
+
+    <p><strong>Example 3:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to -\infty} e^x = 0$$
+    </div>
+    <p>As \(x\) heads to negative infinity, \(e^x\) decays toward zero. So \(y = 0\) is a horizontal asymptote on the left.</p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    // KaTeX auto-render
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize side character
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to \\infty} \\frac{5x^3 + 2}{3x^3 - 7}\\)?',
+        options: ['0', '\\(\\frac{5}{3}\\)', '\\(\\frac{3}{5}\\)', '\\(\\infty\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If the degree of the numerator is less than the degree of the denominator, then \\(\\displaystyle\\lim_{x \\to \\infty} \\frac{p(x)}{q(x)} = 0\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to \\infty} \\frac{7x}{2x + 1} = \\) ___',
+        answer: '7/2'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the horizontal asymptote of \\(f(x) = \\frac{2x^2 + 1}{x^2 - 4}\\)?',
+        options: ['y = 0', 'y = 2', 'y = -4', 'No horizontal asymptote'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to -\\infty} e^x\\)?',
+        options: ['\\(\\infty\\)', '1', '0', '\\(-\\infty\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'matching',
+        question: 'Match each limit with its value.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to \\infty} \\frac{1}{x}\\)', right: '0' },
+          { left: '\\(\\lim_{x \\to \\infty} \\frac{4x}{2x}\\)', right: '2' },
+          { left: '\\(\\lim_{x \\to \\infty} \\frac{x}{x^2}\\)', right: '0' },
+          { left: '\\(\\lim_{x \\to \\infty} \\frac{3x^2}{x^2}\\)', right: '3' }
+        ]
+      },
+      {
+        type: 'true-false',
+        question: 'A function can have at most one horizontal asymptote.',
+        correctAnswer: false
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to \\infty} \\frac{x^2 + 3}{2x^2 - 5} = \\) ___',
+        answer: '1/2'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which function has NO horizontal asymptote?',
+        options: ['\\(\\frac{1}{x}\\)', '\\(\\frac{x}{x+1}\\)', '\\(\\frac{x^3}{x^2+1}\\)', '\\(e^{-x}\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to -\\infty} \\frac{3x}{|x|}\\)?',
+        options: ['3', '-3', '0', 'Does not exist'],
+        correctIndex: 1
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'calculus',
+      lessonId: 'lesson-17',
+      nextHref: 'lesson-18.html',
+      backHref: 'index.html'
+    });
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
+
+</body>
+</html>
