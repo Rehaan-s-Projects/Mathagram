@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .help-header {
+      background: linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #fb7185 100%);
+      padding: 60px 24px 80px;
+      text-align: center;
+      color: #fff;
+    }
+    .help-header img {
+      width: 100px; height: 100px; border-radius: 50%;
+      border: 4px solid #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      margin-bottom: 12px; animation: ritaBounce 2s ease infinite;
+    }
+    @keyframes ritaBounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .help-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .help-header p { font-size: 1rem; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+    .help-container {
+      max-width: 700px; margin: -40px auto 48px; padding: 0 24px;
+    }
+    .help-card {
+      background: var(--color-white); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg); padding: 32px 28px; margin-bottom: 20px;
+    }
+    .help-card h2 {
+      font-size: 1.2rem; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .help-card p, .help-card li {
+      font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.7;
+    }
+    .help-card ul { padding-left: 20px; margin: 8px 0 0; }
+    .help-card li { margin-bottom: 8px; }
+    .help-card a { color: var(--color-primary-dark); text-decoration: underline; }
+
+    .faq-item { border-bottom: 1px solid var(--color-border); padding: 14px 0; cursor: pointer; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 700; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; }
+    .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--color-text-muted); transition: transform 0.2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { display: none; font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.6; padding-top: 10px; }
+    .faq-item.open .faq-a { display: block; }
+
+    .rita-tip {
+      background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+      border: 2px solid #f9a8d4; border-radius: 14px;
+      padding: 16px 20px; margin: 16px 0;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .rita-tip img { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+    .rita-tip p { font-size: 0.88rem; color: #9d174d; line-height: 1.5; margin: 0; font-style: italic; }
+
+    .shortcut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .shortcut-item {
+      background: var(--color-bg); border-radius: var(--radius); padding: 12px;
+      text-align: center; font-size: 0.85rem;
+    }
+    .shortcut-item .icon { font-size: 1.5rem; margin-bottom: 4px; }
+    .shortcut-item .label { font-weight: 600; color: var(--color-text); }
+    .shortcut-item .desc { font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px; }
+
+    @media (max-width: 600px) {
+      .help-card { padding: 24px 20px; }
+      .shortcut-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Courses</a>
+        <a href="learning-post.html">Posts</a>
+        <a href="login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Rita Header -->
+  <div class="help-header">
+    <img src="assets/characters/rita.svg" alt="Rita the Cat">
+    <h1>Help Center</h1>
+    <p>Miau! I'm Rita the Cat. Need help with Mathagram? I've got you covered!</p>
+  </div>
+
+  <div class="help-container">
+
+    <!-- Getting Started -->
+    <div class="help-card">
+      <h2>&#128640; Getting Started</h2>
+      <p>Welcome to Mathagram! Here's how to begin your learning journey:</p>
+      <ul>
+        <li><strong>Create an account</strong> — Go to <a href="login.html">Sign Up</a> with your email. Choose a display name (3-13 characters, A-Z only) and pick your avatar color.</li>
+        <li><strong>Browse courses</strong> — Visit the <a href="courses.html">Courses</a> page. Filter by Math, Science, Data Analysis, Logic, Language, or Others.</li>
+        <li><strong>Start a lesson</strong> — Click any course, then tap a lesson on the learning path. Green = playable, gray = locked.</li>
+        <li><strong>Earn XP</strong> — Complete lessons to earn XP. Score higher for more stars (up to 3).</li>
+        <li><strong>Track progress</strong> — Visit your <a href="profile.html">Profile</a> to see XP, streak, courses completed, and your AI Brain Scan.</li>
+      </ul>
+      <div class="rita-tip">
+        <img src="assets/characters/rita.svg" alt="Rita">
+        <p>"Start with something you're curious about! Don't worry about finishing in order — learning should be fun. Purr!"</p>
+      </div>
+    </div>
+
+    <!-- Features Guide -->
+    <div class="help-card">
+      <h2>&#11088; Features</h2>
+      <div class="shortcut-grid">
+        <div class="shortcut-item">
+          <div class="icon">&#128218;</div>
+          <div class="label">Courses</div>
+          <div class="desc">80+ courses in math, science, language & more</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#127911;</div>
+          <div class="label">Listening Practice</div>
+          <div class="desc">Edam & Diego read questions aloud</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#129504;</div>
+          <div class="label">AI Brain Scan</div>
+          <div class="desc">Scan your brain, track daily IQ</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#128172;</div>
+          <div class="label">Learning Post</div>
+          <div class="desc">Share & discuss with the community</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#127760;</div>
+          <div class="label">Translate</div>
+          <div class="desc">Translate any page to 36 languages</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#127922;</div>
+          <div class="label">Games</div>
+          <div class="desc">Checkers, Impossible Math, Brain Puzzles</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#128202;</div>
+          <div class="label">Progress Tracking</div>
+          <div class="desc">XP, streaks, stars, and course progress</div>
+        </div>
+        <div class="shortcut-item">
+          <div class="icon">&#128247;</div>
+          <div class="label">Camera Brain Scan</div>
+          <div class="desc">Use your camera for the brain scan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="help-card">
+      <h2>&#10067; Frequently Asked Questions</h2>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How do I earn XP?</div>
+        <div class="faq-a">Complete any lesson quiz. Score 60%+ to earn XP. A perfect score (100%) gives bonus XP. XP is tracked on your profile.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How do stars work?</div>
+        <div class="faq-a">Each lesson gives 0-3 stars based on your score: A grade = 3 stars, B grade = 2 stars, C grade = 1 star. D or F = 0 stars.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What is the AI Brain Scan?</div>
+        <div class="faq-a">Go to your Profile and tap "Scan Brain IQ." It analyzes your XP, streak, and courses to generate Focus, Memory, Problem Solving, Creativity scores and an estimated IQ. You can also open your camera for a face scan! Scan daily to track your IQ over time.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What are the memory warnings?</div>
+        <div class="faq-a">Your brain scan memory score has warnings: 0-5% = Memory Loss (purple), 6-15% = Start Learning (blue), 85-94% = Stop Learning (yellow), 95-98% = Stop Learning (orange), 99-100% = Memory Full (red). These remind you to balance learning and rest!</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How do I change my display name or color?</div>
+        <div class="faq-a">Go to your <a href="profile.html">Profile</a>, edit your name (3-13 characters, A-Z only), pick a new color from the color picker, and tap "Save Changes."</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What is the Listening Practice?</div>
+        <div class="faq-a">Some lessons have headphone exercises where Edam the Bear and Diego take turns reading questions aloud. You answer without seeing the text — great for training your ears!</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What is Edam's Impossible Math?</div>
+        <div class="faq-a">It's a Baldi's Basics-style math game! Problems 1 & 2 are solvable, but Problem 3 is always a glitched unsolvable question. Edam gets angrier with each notebook. It's a fun challenge — how far can you survive?</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How does the translate button work?</div>
+        <div class="faq-a">Click the globe icon in the navigation bar, pick a language from the dropdown (36 available), and the page opens in Google Translate in a new tab.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What are the strike rules?</div>
+        <div class="faq-a">Mathagram uses a 3-Strike System enforced by Edam the Bear. Strike 1 = Warning. Strike 2 = 1-week suspension. Strike 3 = Permanent ban. Violations include bullying, spam, inappropriate content, and cheating. See our <a href="terms.html">Terms of Service</a> for full rules.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Is Mathagram free?</div>
+        <div class="faq-a">Yes! Mathagram is completely free. All courses, lessons, games, and features are available to everyone at no cost.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Who built Mathagram?</div>
+        <div class="faq-a">Mathagram was built by Rehaan Rashid. You can find him at <a href="https://linktr.ee/Rehaan_rashid" target="_blank">linktr.ee/Rehaan_rashid</a>.</div>
+      </div>
+    </div>
+
+    <!-- Characters Guide -->
+    <div class="help-card">
+      <h2>&#128062; Meet the Characters</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:14px; margin-top:12px;">
+        <div style="text-align:center;">
+          <img src="assets/characters/rita.svg" alt="Rita" style="width:56px;height:56px;border-radius:50%;border:3px solid #ec4899;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">Rita</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Help Chat Cat</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/edam.svg" alt="Edam" style="width:56px;height:56px;border-radius:50%;border:3px solid #fbbf24;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">Edam</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Community Guardian & Listening Host</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/diego.svg" alt="Diego" style="width:56px;height:56px;border-radius:50%;border:3px solid #3b82f6;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">Diego</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Listening Co-Host</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/william.svg" alt="William" style="width:56px;height:56px;border-radius:50%;border:3px solid #22c55e;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">William</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Board Games Buddy</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/sam.svg" alt="Sam" style="width:56px;height:56px;border-radius:50%;border:3px solid #f97316;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">Sam</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Quiz Character</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/gosia.svg" alt="Gosia" style="width:56px;height:56px;border-radius:50%;border:3px solid #8b5cf6;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">Gosia</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Quiz Character</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/james.svg" alt="James" style="width:56px;height:56px;border-radius:50%;border:3px solid #06b6d4;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">James</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Quiz Character</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="assets/characters/steve.svg" alt="Steve" style="width:56px;height:56px;border-radius:50%;border:3px solid #ef4444;">
+          <div style="font-weight:700;font-size:0.85rem;margin-top:4px;">Steve</div>
+          <div style="font-size:0.7rem;color:var(--color-text-muted);">Quiz Character</div>
+        </div>
+      </div>
+      <div class="rita-tip">
+        <img src="assets/characters/rita.svg" alt="Rita">
+        <p>"I'm always here in the bottom-right corner! Tap the pink circle to chat with me anytime. I can help with math, study tips, or just chat. Miau!"</p>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="help-card">
+      <h2>&#128236; Still Need Help?</h2>
+      <p>If you can't find what you're looking for:</p>
+      <ul>
+        <li><strong>Chat with Rita</strong> — Tap the pink cat icon in the bottom-right corner on any page.</li>
+        <li><strong>Read the rules</strong> — <a href="terms.html">Terms of Service</a> &amp; <a href="privacy.html">Privacy Policy</a></li>
+        <li><strong>Contact Rehaan</strong> — <a href="https://linktr.ee/Rehaan_rashid" target="_blank">linktr.ee/Rehaan_rashid</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    import { initRitaChat } from './js/rita-chat.js';
+    initNav('');
+    initRitaChat('');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
