@@ -46,14 +46,14 @@ h1{font-size:1.5rem;margin-bottom:4px}
 </div></nav>
 
 <div class="wrap">
-<h1>Edam's Impossible Math</h1>
-<p class="sub">Answer correctly... or Edam gets angry.</p>
+<h1>Edam's Basics in Education and Learning!</h1>
+<p class="sub">Solve 3 problems in each set. Problem 1 & 2 are easy. Problem 3... isn't.</p>
 <div class="bar"><div class="fill" id="bar" style="width:0%;background:#22c55e"></div></div>
 
 <div class="edam-box">
   <img src="../../assets/characters/edam.svg" alt="Edam" class="edam-img" id="edam">
   <div class="edam-mood" id="mood" style="color:#22c55e">&#128522; Edam is happy!</div>
-  <div class="edam-speech" id="speech">Welcome! Let's start with something easy...</div>
+  <div class="edam-speech" id="speech">"Oh hi! Welcome to my schoolhouse! I'm Edam. I'll teach you some math. Just answer all 3 problems correctly in each notebook and you'll get a shiny star!"</div>
 </div>
 
 <div class="question-box" id="question">Loading...</div>
@@ -64,29 +64,29 @@ h1{font-size:1.5rem;margin-bottom:4px}
 </div>
 
 <script>
+// Baldi's Basics pattern: Q1 easy, Q2 easy, Q3 GLITCHED UNSOLVABLE
+// Then it repeats — each set of 3 gets harder, Q3 always glitched
 var questions = [
-  // Easy (Edam happy)
-  {q:'1 + 1 = ?', a:'2', diff:0},
-  {q:'5 - 3 = ?', a:'2', diff:0},
-  {q:'2 × 4 = ?', a:'8', diff:0},
-  // Medium (Edam serious)
+  // SET 1: Super easy, then GLITCH
+  {q:'2 + 2 = ?', a:'4', diff:0},
+  {q:'3 - 1 = ?', a:'2', diff:0},
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  // SET 2: Easy, then GLITCH
+  {q:'5 × 3 = ?', a:'15', diff:0},
+  {q:'10 ÷ 2 = ?', a:'5', diff:0},
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  // SET 3: Medium, then GLITCH
   {q:'12 × 12 = ?', a:'144', diff:1},
   {q:'√144 = ?', a:'12', diff:1},
-  {q:'25% of 200 = ?', a:'50', diff:1},
-  // Hard (Edam angry)
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  // SET 4: Hard, then GLITCH
   {q:'17 × 23 = ?', a:'391', diff:2},
   {q:'2⁸ = ?', a:'256', diff:2},
-  // GLITCHED — Baldi-style unsolvable
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
-  // Back to hard
+  // SET 5: Impossible, then GLITCH
   {q:'83² = ?', a:'6889', diff:3},
-  // Another glitch
-  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
   {q:'How many primes < 100?', a:'25', diff:3},
-  // Final glitch
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
-  {q:'Find x: x^x^x = 256', a:'2', diff:4},
-  {q:'BB(5) = ?', a:'47176870', diff:4},
 ];
 
 // Glitched text generator — corrupted math like Baldi's 3rd question
@@ -107,19 +107,25 @@ function makeGlitchText() {
 var ci = 0, sc = 0, N = questions.length, busy = false;
 
 var moods = [
-  {border:'#22c55e',mood:'&#128522; Edam is happy!',moodColor:'#22c55e',speech:'This is easy! You got this!',barColor:'#22c55e',bg:'#1a1a2e'},
-  {border:'#fbbf24',mood:'&#128528; Edam is serious.',moodColor:'#fbbf24',speech:'Hmm... getting harder now.',barColor:'#fbbf24',bg:'#1a1a2e'},
-  {border:'#f97316',mood:'&#128544; Edam is ANGRY!',moodColor:'#f97316',speech:'You better get this right...',barColor:'#f97316',bg:'#1f1515'},
-  {border:'#ef4444',mood:'&#129324; Edam is FURIOUS!!',moodColor:'#ef4444',speech:'I AM LOSING MY PATIENCE!!!',barColor:'#ef4444',bg:'#2a0a0a'},
-  {border:'#dc2626',mood:'&#128565; Edam has LOST IT!!!',moodColor:'#dc2626',speech:'IMPOSSIBLE!!! YOU CANNOT SOLVE THIS!!!',barColor:'#dc2626',bg:'#1a0505'},
-  {border:'#ef4444',mood:'&#9888;&#65039; G̷̢̛L̵̰̈́I̵̛̯T̴̢̚C̶̡̊H̶͎͛',moodColor:'#ef4444',speech:'S̷O̵M̶E̷T̸H̷I̷N̴G̶ ̸I̵S̴ ̵W̷R̷O̴N̵G̶.̸.̴.̵',barColor:'#ef4444',bg:'#0a0000'},
+  {border:'#22c55e',mood:'&#128522; Edam is happy!',moodColor:'#22c55e',speech:'"Nice and easy! Just like I promised!"',barColor:'#22c55e',bg:'#1a1a2e'},
+  {border:'#fbbf24',mood:'&#128528; Edam is watching...',moodColor:'#fbbf24',speech:'"Let\'s see if you can keep this up."',barColor:'#fbbf24',bg:'#1a1a2e'},
+  {border:'#f97316',mood:'&#128544; Edam is getting angry!',moodColor:'#f97316',speech:'"I don\'t like wrong answers..."',barColor:'#f97316',bg:'#1f1515'},
+  {border:'#ef4444',mood:'&#129324; Edam is FURIOUS!!',moodColor:'#ef4444',speech:'"EVERY PROBLEM! SOLVE EVERY PROBLEM OR ELSE!"',barColor:'#ef4444',bg:'#2a0a0a'},
+  {border:'#dc2626',mood:'&#128565; Edam has SNAPPED!!!',moodColor:'#dc2626',speech:'"I HEAR EVERY SOUND YOU MAKE..."',barColor:'#dc2626',bg:'#1a0505'},
+  {border:'#ef4444',mood:'&#9888;&#65039; G̷̢̛L̵̰̈I̵̛T̴̢C̶̡H̶͎',moodColor:'#ef4444',speech:'T̸̗̊H̵̭̋I̶̺̊N̵̰̈K̶̡̊.̸.̴.̵ ̷T̸̗̊H̵̭̋I̶̺̊N̵̰̈K̶̡̊.̸.̴.̵',barColor:'#ef4444',bg:'#050000'},
 ];
 
-function getMood(diff) { return moods[Math.min(diff, moods.length-1)]; }
+// Edam gets angrier per set of 3 questions
+var wrongCount = 0;
+function getMood(q) {
+  if (q.glitch) return moods[5]; // Glitch mood
+  var setNum = Math.floor(ci / 3); // which set of 3
+  return moods[Math.min(setNum, 4)];
+}
 
 function render() {
   var q = questions[ci];
-  var m = getMood(q.diff);
+  var m = getMood(q);
 
   document.getElementById('bar').style.width = (ci/N*100)+'%';
   document.getElementById('bar').style.background = m.barColor;
@@ -147,6 +153,10 @@ function render() {
   document.getElementById('answer').focus();
   document.getElementById('msg').innerHTML = '';
   document.body.style.background = m.bg;
+  // Show "Problem X of 3" and "Notebook X"
+  var setNum = Math.floor(ci / 3) + 1;
+  var probInSet = (ci % 3) + 1;
+  document.querySelector('.sub').textContent = 'Notebook ' + setNum + ' — Problem ' + probInSet + ' of 3';
 
   // Shake edam on hard+
   if (q.diff >= 2) {
@@ -204,17 +214,31 @@ function submit() {
   if (correct) {
     sc++;
     flash('#22c55e');
-    var speeches = ['Correct!','Nice!','Well done!','You got it!','Impressive!'];
-    document.getElementById('msg').innerHTML = '<div class="ok">✓ '+speeches[ci%speeches.length]+'</div><button class="btn" id="nxtbtn">Next →</button>';
+    var setNum = Math.floor(ci / 3);
+    var speeches = [
+      'Correct! I knew you could do it!',
+      'Right! Keep going...',
+      'Correct... for now.',
+      'Fine. You got that one.',
+      'Lucky guess.'
+    ];
+    document.getElementById('msg').innerHTML = '<div class="ok">✓ '+speeches[Math.min(setNum,4)]+'</div><button class="btn" id="nxtbtn">Next →</button>';
   } else {
+    wrongCount++;
     flash('#ef4444');
-    var angry = q.diff >= 3 ?
-      ['WRONG!!! The answer was '+q.a+'!','YOU FAILED! It was '+q.a+'!','UNACCEPTABLE! Answer: '+q.a] :
-      ['Wrong! The answer was '+q.a+'.','Nope! It\'s '+q.a+'.','Incorrect. '+q.a+' was the answer.'];
+    // Edam gets angrier with more wrong answers
+    var angry;
+    if (wrongCount >= 4) {
+      angry = ['I HEAR EVERY WRONG ANSWER. The answer was '+q.a+'.','YOUR TIME IS RUNNING OUT. It was '+q.a+'.','*ruler slapping sounds* '+q.a+'!!!'];
+    } else if (wrongCount >= 2) {
+      angry = ['WRONG! The answer was '+q.a+'!','I\'m disappointed. It was '+q.a+'.','That\'s NOT correct! '+q.a+'!'];
+    } else {
+      angry = ['Oops! The answer was '+q.a+'.','Not quite. It\'s '+q.a+'.','Wrong! '+q.a+' was the answer.'];
+    }
     document.getElementById('msg').innerHTML = '<div class="no">✗ '+angry[ci%angry.length]+'</div><button class="btn" id="nxtbtn">'+(ci>=N-1?'Finish':'Next →')+'</button>';
-    // Shake screen on wrong for hard+
-    if (q.diff >= 2) document.querySelector('.wrap').style.animation = 'shake 0.3s ease';
-    setTimeout(function(){document.querySelector('.wrap').style.animation='none'},400);
+    // Shake screen — more violent with more wrongs
+    document.querySelector('.wrap').style.animation = 'shake '+(0.3-wrongCount*0.03)+'s ease '+(wrongCount >= 3 ? '5' : '2');
+    setTimeout(function(){document.querySelector('.wrap').style.animation='none'},600);
   }
   busy = false;
 }
