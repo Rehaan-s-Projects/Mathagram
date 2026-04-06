@@ -121,12 +121,20 @@
     <div class="chapter-label">Unit 1 &mdash; Listening Practice</div>
     <h1>&#127911; Listening Practice</h1>
 
-    <!-- Edam Banner -->
+    <!-- Edam & Diego Banner -->
     <div class="edam-banner">
-      <img src="../../assets/characters/edam.svg" alt="Edam the Bear" class="edam-avatar">
-      <div class="edam-name">Edam the Bear</div>
+      <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px;">
+        <div style="text-align:center;">
+          <img src="../../assets/characters/edam.svg" alt="Edam" class="edam-avatar" style="width:80px;height:80px;">
+          <div style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:4px;">Edam</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="../../assets/characters/diego.svg" alt="Diego" class="edam-avatar" style="width:80px;height:80px;border-color:#3b82f6;box-shadow:0 4px 20px rgba(59,130,246,0.3);animation-delay:0.5s;">
+          <div style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:4px;">Diego</div>
+        </div>
+      </div>
       <div class="edam-speech">
-        "Put your headphones on! I'll read you math questions out loud. You <strong>won't see the question</strong> &mdash; you have to listen carefully and pick the right answer. Tap the speaker button if you need to hear it again. Let's go!"
+        "Put your headphones on! We'll take turns reading you math questions. You <strong>won't see the question</strong> &mdash; listen carefully and pick the right answer!"
       </div>
       <div class="headphones-badge">
         <span>&#127911;</span> Headphones Recommended
@@ -140,7 +148,7 @@
 
   <section class="exercise-section">
     <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
-    <h2><span style="font-size:1.5rem;">&#127911;</span> Edam's Listening Quiz</h2>
+    <h2><span style="font-size:1.5rem;">&#127911;</span> Listening Quiz with Edam &amp; Diego</h2>
     <div id="exercises"></div>
     <div id="completion" style="display:none;"></div>
   </section>
@@ -161,7 +169,8 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Edam as the main character for listening
+    // Random Edam & Diego for listening (like Duolingo)
+    const speakers = ['edam', 'diego'];
     initSideCharacter('edam', '../../');
 
     const exercises = [
@@ -241,7 +250,9 @@
     const completionDiv = document.getElementById('completion');
 
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy('edam', isCorrect ? 'correct' : 'wrong');
+      const who = speakers[index % speakers.length];
+      initSideCharacter(who, '../../');
+      showBuddy(who, isCorrect ? 'correct' : 'wrong');
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,

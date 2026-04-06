@@ -78,6 +78,7 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, initSideCharacter } from '../../js/characters.js';
     document.getElementById('year').textContent = new Date().getFullYear();
+    const speakers = ['edam', 'diego'];
     initSideCharacter('edam', '../../');
 
     const exercises = [
@@ -156,7 +157,9 @@
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy('edam', isCorrect ? 'correct' : 'wrong');
+      const who = speakers[index % speakers.length];
+      initSideCharacter(who, '../../');
+      showBuddy(who, isCorrect ? 'correct' : 'wrong');
     });
     await showLessonComplete(container, completionDiv, score, { xp,
       courseId: 'calculus', lessonId: 'lesson-16', nextHref: 'index.html', backHref: 'index.html'
