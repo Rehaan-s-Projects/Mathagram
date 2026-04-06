@@ -116,8 +116,77 @@
       That's it. Plug in the value and you're done. No tricks, no algebra gymnastics &mdash; just substitute.
     </p>
 
+    <!-- Roller Coaster Visual -->
+    <div style="background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%); border-radius:16px; padding:24px 16px; margin:24px 0; text-align:center; position:relative; overflow:hidden;">
+      <div style="color:#67e8f9; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Imagine a Roller Coaster</div>
+      <svg viewBox="0 0 400 160" width="100%" height="140" style="max-width:400px;">
+        <!-- Sky -->
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+          <linearGradient id="track" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient>
+        </defs>
+        <!-- Stars -->
+        <circle cx="30" cy="15" r="1.5" fill="#fff" opacity="0.6"/>
+        <circle cx="90" cy="25" r="1" fill="#fff" opacity="0.4"/>
+        <circle cx="180" cy="10" r="1.5" fill="#fff" opacity="0.5"/>
+        <circle cx="300" cy="20" r="1" fill="#fff" opacity="0.6"/>
+        <circle cx="360" cy="12" r="1.5" fill="#fff" opacity="0.3"/>
+        <!-- Ground/landscape -->
+        <path d="M0 150 Q50 140 100 145 Q200 130 250 140 Q350 135 400 145 L400 160 L0 160 Z" fill="#1a3a2a" opacity="0.5"/>
+        <!-- Roller coaster track -->
+        <path d="M20 120 Q60 30 100 80 Q140 130 180 60 Q220 10 260 70 Q300 120 340 50 Q360 30 380 40" fill="none" stroke="url(#track)" stroke-width="3"/>
+        <!-- Track supports -->
+        <line x1="60" y1="55" x2="60" y2="150" stroke="#334155" stroke-width="1.5"/>
+        <line x1="140" y1="100" x2="140" y2="150" stroke="#334155" stroke-width="1.5"/>
+        <line x1="220" y1="35" x2="220" y2="150" stroke="#334155" stroke-width="1.5"/>
+        <line x1="300" y1="95" x2="300" y2="150" stroke="#334155" stroke-width="1.5"/>
+        <!-- Cart on track (at x=260, approaching x=300) -->
+        <circle cx="250" cy="72" r="8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+        <text x="250" y="76" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">You</text>
+        <!-- Target point -->
+        <circle cx="340" cy="50" r="6" fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="3,3">
+          <animate attributeName="r" values="6;10;6" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="340" y="38" text-anchor="middle" font-size="9" fill="#67e8f9" font-weight="bold">x = a</text>
+        <!-- Arrow showing approach -->
+        <path d="M265 70 L320 54" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="320,54 314,50 316,57" fill="#fbbf24"/>
+      </svg>
+      <p style="color:#94a3b8; font-size:0.82rem; margin-top:10px; line-height:1.5;">You're riding toward point <span style="color:#67e8f9; font-weight:700;">x = a</span>. The <strong style="color:#fbbf24;">limit</strong> is the height you're heading toward &mdash; even if the track has a gap there!</p>
+    </div>
+
+    <!-- Landscape Visual -->
+    <div style="background:linear-gradient(180deg,#f0fdf4 0%,#dcfce7 100%); border-radius:16px; padding:24px 16px; margin:24px 0; text-align:center;">
+      <div style="color:#166534; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Imagine a Mountain Landscape</div>
+      <svg viewBox="0 0 400 140" width="100%" height="120" style="max-width:400px;">
+        <!-- Sky -->
+        <rect width="400" height="140" fill="#e0f2fe"/>
+        <!-- Sun -->
+        <circle cx="340" cy="30" r="18" fill="#fbbf24" opacity="0.8"/>
+        <!-- Mountains -->
+        <polygon points="0,140 60,50 120,140" fill="#86efac"/>
+        <polygon points="80,140 160,30 240,140" fill="#4ade80"/>
+        <polygon points="200,140 280,45 360,140" fill="#22c55e"/>
+        <polygon points="300,140 370,60 400,100 400,140" fill="#16a34a"/>
+        <!-- Path with a hiker approaching a point -->
+        <path d="M30 130 Q100 125 150 110 Q200 95 250 100 Q300 105 350 90" fill="none" stroke="#92400e" stroke-width="2" stroke-dasharray="5,3"/>
+        <!-- Hiker -->
+        <circle cx="250" cy="100" r="6" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+        <text x="250" y="118" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="bold">You</text>
+        <!-- Destination -->
+        <circle cx="350" cy="90" r="5" fill="none" stroke="#dc2626" stroke-width="2">
+          <animate attributeName="r" values="5;9;5" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="350" y="82" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">x = a</text>
+        <!-- Flag at destination -->
+        <line x1="350" y1="90" x2="350" y2="70" stroke="#dc2626" stroke-width="1.5"/>
+        <polygon points="350,70 365,75 350,80" fill="#dc2626"/>
+      </svg>
+      <p style="color:#166534; font-size:0.82rem; margin-top:10px; line-height:1.5;">As you walk along the path toward <span style="color:#dc2626; font-weight:700;">x = a</span>, your <strong>altitude</strong> (the function value) approaches a specific height. That height is the <strong>limit</strong>!</p>
+    </div>
+
     <p>
-      This works for <strong>polynomials</strong>, <strong>rational functions</strong> (when the denominator isn't zero), <strong>trig functions</strong>, and <strong>exponentials</strong>. Basically, if the function doesn't blow up or have a hole at that point, direct substitution is your move.
+      This works for <strong>polynomials</strong>, <strong>rational functions</strong> (when the denominator isn't zero), <strong>trig functions</strong>, and <strong>exponentials</strong>. If the function doesn't blow up or have a hole at that point, direct substitution is your move.
     </p>
 
     <p><strong>Example 1:</strong></p>
@@ -194,8 +263,8 @@
         correctAnswer: false
       },
       {
-        type: 'listening',
-        spokenText: 'What is the limit of e to the x, as x approaches zero? Choose from: zero, one, e, or undefined.',
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} e^x\\)?',
         options: ['0', '1', 'e', 'undefined'],
         correctIndex: 1
       },
@@ -219,8 +288,12 @@
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,
