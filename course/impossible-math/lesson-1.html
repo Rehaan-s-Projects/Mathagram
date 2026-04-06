@@ -28,6 +28,11 @@ h1{font-size:1.5rem;margin-bottom:4px}
 .btn{padding:12px 32px;font-size:1rem;font-weight:700;background:#22d3ee;color:#0f172a;border:none;border-radius:12px;cursor:pointer;margin-top:8px}
 .btn:hover{background:#06b6d4}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes glitchText{0%{transform:translate(0);opacity:1}20%{transform:translate(-3px,2px);opacity:.8}40%{transform:translate(3px,-2px);opacity:.6}60%{transform:translate(-2px,-1px);opacity:.9}80%{transform:translate(2px,3px);opacity:.7}100%{transform:translate(0);opacity:1}}
+@keyframes glitchColor{0%{color:#ef4444}25%{color:#22d3ee}50%{color:#a855f7}75%{color:#22c55e}100%{color:#ef4444}}
+@keyframes scanLine{0%{top:0}100%{top:100%}}
+.glitch-q{animation:glitchText .15s infinite,glitchColor .5s infinite;font-family:monospace!important;text-shadow:2px 0 #ef4444,-2px 0 #22d3ee;position:relative}
+.glitch-q::after{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.1);animation:scanLine 1s linear infinite}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 20px 10px rgba(239,68,68,.2)}}
 .screen-flash{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;opacity:0;transition:opacity .1s}
 </style>
@@ -71,16 +76,33 @@ var questions = [
   // Hard (Edam angry)
   {q:'17 × 23 = ?', a:'391', diff:2},
   {q:'2⁸ = ?', a:'256', diff:2},
-  {q:'∫ 2x dx = ?', a:'x^2', diff:2},
-  // Impossible (Edam furious)
-  {q:'What is 9,653 × 7,281?', a:'70284393', diff:3},
-  {q:'BB(5) = ?', a:'47176870', diff:3},
+  // GLITCHED — Baldi-style unsolvable
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  // Back to hard
   {q:'83² = ?', a:'6889', diff:3},
-  // INSANE
-  {q:'What is the 10th digit of π?', a:'5', diff:4},
+  // Another glitch
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  {q:'How many primes < 100?', a:'25', diff:3},
+  // Final glitch
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
   {q:'Find x: x^x^x = 256', a:'2', diff:4},
-  {q:'How many primes < 100?', a:'25', diff:4},
+  {q:'BB(5) = ?', a:'47176870', diff:4},
 ];
+
+// Glitched text generator — corrupted math like Baldi's 3rd question
+var glitchChars = '▓░▒█▄▌▐▀╗╝╚╔╩╦╠═╬╣║╟╢╥╤╡╧╖╕╘╙╫╪┐┘┌└│─┤├¿¡§¶µ±×÷';
+function makeGlitchText() {
+  var parts = [
+    function(){ return Math.floor(Math.random()*99)+' '; },
+    function(){ return ['+','-','×','÷','=','±','∞','√','∫','Σ','Δ','π','∂'][Math.floor(Math.random()*13)]+' '; },
+    function(){ var s=''; for(var i=0;i<Math.floor(Math.random()*4)+2;i++) s+=glitchChars[Math.floor(Math.random()*glitchChars.length)]; return s+' '; },
+  ];
+  var txt = '';
+  for (var i=0; i<Math.floor(Math.random()*4)+5; i++) {
+    txt += parts[Math.floor(Math.random()*parts.length)]();
+  }
+  return txt.trim() + ' = ?';
+}
 
 var ci = 0, sc = 0, N = questions.length, busy = false;
 
@@ -90,6 +112,7 @@ var moods = [
   {border:'#f97316',mood:'&#128544; Edam is ANGRY!',moodColor:'#f97316',speech:'You better get this right...',barColor:'#f97316',bg:'#1f1515'},
   {border:'#ef4444',mood:'&#129324; Edam is FURIOUS!!',moodColor:'#ef4444',speech:'I AM LOSING MY PATIENCE!!!',barColor:'#ef4444',bg:'#2a0a0a'},
   {border:'#dc2626',mood:'&#128565; Edam has LOST IT!!!',moodColor:'#dc2626',speech:'IMPOSSIBLE!!! YOU CANNOT SOLVE THIS!!!',barColor:'#dc2626',bg:'#1a0505'},
+  {border:'#ef4444',mood:'&#9888;&#65039; G̷̢̛L̵̰̈́I̵̛̯T̴̢̚C̶̡̊H̶͎͛',moodColor:'#ef4444',speech:'S̷O̵M̶E̷T̸H̷I̷N̴G̶ ̸I̵S̴ ̵W̷R̷O̴N̵G̶.̸.̴.̵',barColor:'#ef4444',bg:'#0a0000'},
 ];
 
 function getMood(diff) { return moods[Math.min(diff, moods.length-1)]; }
@@ -100,8 +123,22 @@ function render() {
 
   document.getElementById('bar').style.width = (ci/N*100)+'%';
   document.getElementById('bar').style.background = m.barColor;
-  document.getElementById('question').textContent = q.q;
-  document.getElementById('question').style.borderColor = m.border;
+  var qBox = document.getElementById('question');
+  if (q.glitch) {
+    qBox.innerHTML = '<span class="glitch-q">' + makeGlitchText() + '</span>';
+    qBox.style.borderColor = '#ef4444';
+    // Re-glitch the text every 200ms
+    if (window._glitchInterval) clearInterval(window._glitchInterval);
+    window._glitchInterval = setInterval(function(){
+      var el = qBox.querySelector('.glitch-q');
+      if (el) el.textContent = makeGlitchText();
+    }, 200);
+  } else {
+    if (window._glitchInterval) { clearInterval(window._glitchInterval); window._glitchInterval=null; }
+    qBox.textContent = q.q;
+    qBox.className = 'question-box';
+  }
+  qBox.style.borderColor = q.glitch ? '#ef4444' : m.border;
   document.getElementById('edam').style.borderColor = m.border;
   document.getElementById('mood').innerHTML = m.mood;
   document.getElementById('mood').style.color = m.moodColor;
@@ -137,6 +174,28 @@ function submit() {
   if (busy) return;
   busy = true;
   var q = questions[ci];
+  if (window._glitchInterval) { clearInterval(window._glitchInterval); window._glitchInterval=null; }
+
+  // GLITCHED questions are ALWAYS wrong — just like Baldi's 3rd question
+  if (q.glitch) {
+    flash('#ef4444');
+    // Screen goes crazy
+    document.body.style.background = '#0a0000';
+    document.querySelector('.wrap').style.animation = 'shake 0.15s ease 5';
+    setTimeout(function(){document.querySelector('.wrap').style.animation='none'},800);
+    var glitchMsgs = [
+      'T̸̗̊H̵̭̋E̶̺͝R̶̰̈E̷͎͂ ̸̣̌I̷̱̅S̶̗̊ ̷̣̈N̵͖̑O̸̞͝ ̶̹̀A̷̗͠N̸͙̾S̵̗̈W̶̺̑E̵̫̊R̵̰̂',
+      'Ȩ̷̛D̸̰̈́Ä̵̧́M̶̬̌:̵̢͊ ̶̟̈"̷̱͂Ŷ̸̟O̴̗̚U̵̫̎ ̶̺̈S̷̢̈́H̸̹̋Ö̸͈́U̸̜̔L̴̘̔D̵̰́ ̴̜̀N̶̲̎O̵̰̍T̷̳̕ ̸̞̄H̴̛̲A̵̛̫V̸̤̉Ë̵̗́ ̸̦̌D̸̯̏O̸̺̓N̴̛̯Ȩ̸̌ ̶̡̊T̷̬̊H̶͎͛A̴̱͗T̴̢̚"̸̰̒',
+      '?????? = ?̷̧̛?̵̛̬?̶̘̚?̷̮̓?̴͎̎?̵̰̔',
+    ];
+    document.getElementById('msg').innerHTML =
+      '<div class="no" style="animation:glitchText .1s infinite;font-family:monospace;text-shadow:2px 0 #ef4444,-2px 0 #22d3ee">'+
+      glitchMsgs[Math.floor(Math.random()*glitchMsgs.length)]+
+      '</div><button class="btn" id="nxtbtn" style="background:#ef4444;color:#fff">'+(ci>=N-1?'Finish':'Next →')+'</button>';
+    busy = false;
+    return;
+  }
+
   var ans = document.getElementById('answer').value.trim().toLowerCase().replace(/\s+/g,'');
   var correct = ans === q.a.toLowerCase().replace(/\s+/g,'');
   // Also accept x**2 or x2 for x^2
