@@ -64,28 +64,35 @@ h1{font-size:1.5rem;margin-bottom:4px}
 </div>
 
 <script>
-// Baldi's Basics pattern: Q1 easy, Q2 easy, Q3 GLITCHED UNSOLVABLE
-// Then it repeats — each set of 3 gets harder, Q3 always glitched
+// Baldi's Basics: Q1 & Q2 solvable with answer hints, Q3 ALWAYS glitched
 var questions = [
-  // SET 1: Super easy, then GLITCH
-  {q:'2 + 2 = ?', a:'4', diff:0},
-  {q:'3 - 1 = ?', a:'2', diff:0},
+  // NOTEBOOK 1
+  {q:'How much is 2 + 2?', a:'4', diff:0, hint:'(Count on your fingers!)'},
+  {q:'How much is 8 - 3?', a:'5', diff:0, hint:'(Take away 3 from 8)'},
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
-  // SET 2: Easy, then GLITCH
-  {q:'5 × 3 = ?', a:'15', diff:0},
-  {q:'10 ÷ 2 = ?', a:'5', diff:0},
+  // NOTEBOOK 2
+  {q:'How much is 4 × 3?', a:'12', diff:0, hint:'(4 groups of 3)'},
+  {q:'How much is 15 ÷ 3?', a:'5', diff:0, hint:'(Split 15 into 3 equal parts)'},
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
-  // SET 3: Medium, then GLITCH
-  {q:'12 × 12 = ?', a:'144', diff:1},
-  {q:'√144 = ?', a:'12', diff:1},
+  // NOTEBOOK 3
+  {q:'How much is 9 + 7?', a:'16', diff:1, hint:'(Almost there!)'},
+  {q:'How much is 6 × 6?', a:'36', diff:1, hint:'(Six sixes)'},
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
-  // SET 4: Hard, then GLITCH
-  {q:'17 × 23 = ?', a:'391', diff:2},
-  {q:'2⁸ = ?', a:'256', diff:2},
+  // NOTEBOOK 4
+  {q:'How much is 12 × 11?', a:'132', diff:2, hint:'(Think carefully...)'},
+  {q:'How much is 256 ÷ 4?', a:'64', diff:2, hint:'(Quarter of 256)'},
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
-  // SET 5: Impossible, then GLITCH
-  {q:'83² = ?', a:'6889', diff:3},
-  {q:'How many primes < 100?', a:'25', diff:3},
+  // NOTEBOOK 5
+  {q:'How much is 23 × 17?', a:'391', diff:3, hint:'(You can do this...)'},
+  {q:'How much is 15² ?', a:'225', diff:3, hint:'(15 times 15)'},
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  // NOTEBOOK 6
+  {q:'How much is 47 × 53?', a:'2491', diff:4, hint:'(Good luck...)'},
+  {q:'How much is √1764 ?', a:'42', diff:4, hint:'(The answer to everything?)'},
+  {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
+  // NOTEBOOK 7 — FINAL
+  {q:'How much is 999 × 999?', a:'998001', diff:4, hint:'(Almost a million...)'},
+  {q:'How much is 31³ ?', a:'29791', diff:4, hint:'(31 × 31 × 31)'},
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
 ];
 
@@ -133,7 +140,6 @@ function render() {
   if (q.glitch) {
     qBox.innerHTML = '<span class="glitch-q">' + makeGlitchText() + '</span>';
     qBox.style.borderColor = '#ef4444';
-    // Re-glitch the text every 200ms
     if (window._glitchInterval) clearInterval(window._glitchInterval);
     window._glitchInterval = setInterval(function(){
       var el = qBox.querySelector('.glitch-q');
@@ -141,7 +147,7 @@ function render() {
     }, 200);
   } else {
     if (window._glitchInterval) { clearInterval(window._glitchInterval); window._glitchInterval=null; }
-    qBox.textContent = q.q;
+    qBox.innerHTML = q.q + (q.hint ? '<div style="font-size:0.7rem;color:#94a3b8;margin-top:6px;font-weight:400;">' + q.hint + '</div>' : '');
     qBox.className = 'question-box';
   }
   qBox.style.borderColor = q.glitch ? '#ef4444' : m.border;
@@ -215,14 +221,19 @@ function submit() {
     sc++;
     flash('#22c55e');
     var setNum = Math.floor(ci / 3);
-    var speeches = [
-      'Correct! I knew you could do it!',
-      'Right! Keep going...',
-      'Correct... for now.',
-      'Fine. You got that one.',
-      'Lucky guess.'
-    ];
-    document.getElementById('msg').innerHTML = '<div class="ok">✓ '+speeches[Math.min(setNum,4)]+'</div><button class="btn" id="nxtbtn">Next →</button>';
+    var probInSet = ci % 3; // 0=Q1, 1=Q2
+    // Baldi-style correct reactions
+    var speeches;
+    if (setNum <= 1) {
+      speeches = ['WOW! You exist! That\'s RIGHT!','You\'re doing FANTASTIC! Keep it up!','I LOVE when students get the right answer!','Great job! You\'re so smart!'];
+    } else if (setNum <= 2) {
+      speeches = ['Correct. I\'m... pleased.','That\'s right. Good.','You got it. Don\'t get cocky.'];
+    } else if (setNum <= 3) {
+      speeches = ['...Fine. That\'s correct.','Hmph. Right answer.','You\'re still here? Correct, I guess.'];
+    } else {
+      speeches = ['...How?','Impossible. But correct.','I didn\'t think you\'d get that.'];
+    }
+    document.getElementById('msg').innerHTML = '<div class="ok">✓ '+speeches[Math.floor(Math.random()*speeches.length)]+'</div><button class="btn" id="nxtbtn">Next →</button>';
   } else {
     wrongCount++;
     flash('#ef4444');
