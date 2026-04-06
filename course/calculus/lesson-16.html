@@ -13,10 +13,11 @@
     .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
     .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
     .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
-    .diego-intro { display: flex; align-items: center; gap: 16px; background: var(--color-bg); border: 2px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px; }
-    .diego-intro img { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--color-primary); flex-shrink: 0; }
-    .diego-intro .diego-name { font-weight: 700; color: var(--color-primary-dark); display: block; margin-bottom: 4px; }
-    .diego-intro .diego-speech { font-size: 0.95rem; line-height: 1.6; color: var(--color-text); }
+    .edam-banner { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 28px 24px; text-align: center; margin-bottom: 24px; }
+    .edam-banner img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #fbbf24; margin: 0 auto 10px; display: block; box-shadow: 0 4px 20px rgba(251,191,36,0.3); animation: edamBounce 2s ease infinite; }
+    @keyframes edamBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .edam-banner .edam-name { color: #fbbf24; font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .edam-banner .edam-speech { background: rgba(255,255,255,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 14px; padding: 14px 18px; color: #e2e8f0; font-size: 0.9rem; line-height: 1.6; font-style: italic; }
     .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
     .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
     .headphones-icon { font-size: 1.5rem; }
@@ -48,14 +49,12 @@
   <section class="lesson-content">
     <div class="chapter-label">Unit 1 &mdash; Listening Practice</div>
     <h1>Listening Practice: Limits</h1>
-    <div class="diego-intro">
-      <img src="../../assets/characters/diego.svg" alt="Diego">
-      <div>
-        <span class="diego-name">Diego</span>
-        <span class="diego-speech">"Alright, put your headphones on! I'll read you some limit problems and you have to figure out the answer just by listening. Focus up &mdash; calculus by ear!"</span>
-      </div>
+    <div class="edam-banner">
+      <img src="../../assets/characters/edam.svg" alt="Edam the Bear">
+      <div class="edam-name">Edam the Bear</div>
+      <div class="edam-speech">"Alright, put your headphones on! I'll read you some limit problems and you have to figure out the answer just by listening. Focus up &mdash; calculus by ear!"</div>
     </div>
-    <p>Diego will read limit questions aloud. Listen carefully and choose or type the correct answer. Tap the speaker button to hear the question again.</p>
+    <p>Edam will read limit questions aloud. The question text is <strong>hidden</strong> &mdash; train your ears! Tap the speaker button to hear it again.</p>
   </section>
 
   <section class="exercise-section">
@@ -79,7 +78,7 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, initSideCharacter } from '../../js/characters.js';
     document.getElementById('year').textContent = new Date().getFullYear();
-    initSideCharacter('diego', '../../');
+    initSideCharacter('edam', '../../');
 
     const exercises = [
       {
@@ -157,7 +156,7 @@
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy('diego', isCorrect ? 'correct' : 'wrong');
+      showBuddy('edam', isCorrect ? 'correct' : 'wrong');
     });
     await showLessonComplete(container, completionDiv, score, { xp,
       courseId: 'calculus', lessonId: 'lesson-16', nextHref: 'index.html', backHref: 'index.html'
