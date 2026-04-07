@@ -142,10 +142,16 @@
     <div class="teacher-status">Online</div>
   </div>
 
-  <!-- Clock -->
+  <!-- Day Toggle & Clock -->
   <div class="clock-bar">
-    <div class="clock-time" id="clock">8:00 AM</div>
-    <div class="clock-period" id="periodLabel">Period 1 — Starting Soon</div>
+    <div>
+      <div class="clock-time" id="clock">8:00 AM</div>
+      <div class="clock-period" id="periodLabel">Period 1 — Starting Soon</div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button class="grade-btn active" id="btnA" style="padding:8px 18px;font-size:.9rem;" onclick="setDay('A')">A Day</button>
+      <button class="grade-btn" id="btnB" style="padding:8px 18px;font-size:.9rem;" onclick="setDay('B')">B Day</button>
+    </div>
   </div>
 
   <!-- Gosia Chat -->
@@ -156,7 +162,7 @@
 
   <!-- Schedule -->
   <div class="schedule">
-    <h3>Today's Schedule</h3>
+    <h3 id="schedTitle">Today's Schedule — A Day</h3>
     <div id="scheduleList"></div>
   </div>
 </div>
@@ -174,96 +180,143 @@ setTimeout(function(){
   setTimeout(function(){ document.getElementById('busScreen').style.display='none'; }, 600);
 }, 3000);
 
-// Schedules per grade
+// A Day / B Day Block Schedule — 4 periods per day (~85 min each)
+var currentDay = 'A'; // A or B
+
 var schedules = {
-  7: [
-    {time:'8:00-8:45',subject:'Math — Pre-Algebra',course:'algebra'},
-    {time:'8:50-9:35',subject:'English — Grammar & Writing',course:'english-grammar'},
-    {time:'9:40-10:25',subject:'Science — Life Science',course:'animals'},
-    {time:'10:30-11:15',subject:'World History',course:'world-history'},
-    {time:'11:20-11:50',subject:'Lunch Break',course:null},
-    {time:'11:55-12:40',subject:'Geography',course:'geography'},
-    {time:'12:45-1:30',subject:'Study Skills',course:'study-skills'},
-    {time:'1:35-2:20',subject:'Brain Puzzles',course:'brain-puzzles'},
-    {time:'2:25-3:00',subject:'Homeroom — Review',course:null}
-  ],
-  8: [
-    {time:'8:00-8:45',subject:'Math — Algebra Foundations',course:'algebra'},
-    {time:'8:50-9:35',subject:'English — Difficult Words',course:'english-grammar'},
-    {time:'9:40-10:25',subject:'Science — Earth Science',course:'science-puzzles'},
-    {time:'10:30-11:15',subject:'World History',course:'world-history'},
-    {time:'11:20-11:50',subject:'Lunch Break',course:null},
-    {time:'11:55-12:40',subject:'Critical Thinking',course:'critical-thinking'},
-    {time:'12:45-1:30',subject:'Financial Literacy',course:'financial-literacy'},
-    {time:'1:35-2:20',subject:'Board Games & Strategy',course:'board-games'},
-    {time:'2:25-3:00',subject:'Homeroom — Review',course:null}
-  ],
-  9: [
-    {time:'8:00-8:45',subject:'Math — Algebra',course:'algebra'},
-    {time:'8:50-9:35',subject:'English — Grammar & Literature',course:'english-grammar'},
-    {time:'9:40-10:25',subject:'Biology — Animals',course:'animals'},
-    {time:'10:30-11:15',subject:'World History',course:'world-history'},
-    {time:'11:20-11:50',subject:'Lunch Break',course:null},
-    {time:'11:55-12:40',subject:'Psychology',course:'psychology'},
-    {time:'12:45-1:30',subject:'Logic & Reasoning',course:'logic-deduction'},
-    {time:'1:35-2:20',subject:'Music Theory',course:'music-theory'},
-    {time:'2:25-3:00',subject:'Homeroom — Review',course:null}
-  ],
-  10: [
-    {time:'8:00-8:45',subject:'Math — Trigonometry',course:'trigonometry'},
-    {time:'8:50-9:35',subject:'English — Advanced Writing',course:'english-grammar'},
-    {time:'9:40-10:25',subject:'Chemistry',course:'ap-chemistry'},
-    {time:'10:30-11:15',subject:'English History',course:'english-history'},
-    {time:'11:20-11:50',subject:'Lunch Break',course:null},
-    {time:'11:55-12:40',subject:'AP Statistics',course:'ap-statistics'},
-    {time:'12:45-1:30',subject:'Philosophy',course:'philosophy'},
-    {time:'1:35-2:20',subject:'Financial Literacy',course:'financial-literacy'},
-    {time:'2:25-3:00',subject:'Homeroom — Review',course:null}
-  ],
-  11: [
-    {time:'8:00-8:45',subject:'Math — Calculus',course:'calculus'},
-    {time:'8:50-9:35',subject:'English — SAT/ACT Prep',course:'english-grammar'},
-    {time:'9:40-10:25',subject:'AP Chemistry',course:'ap-chemistry'},
-    {time:'10:30-11:15',subject:'AP Statistics',course:'ap-statistics'},
-    {time:'11:20-11:50',subject:'Lunch Break',course:null},
-    {time:'11:55-12:40',subject:'Physics — Circuits',course:'circuits'},
-    {time:'12:45-1:30',subject:'Data Analysis',course:'data-wrangling'},
-    {time:'1:35-2:20',subject:'Game Theory',course:'game-theory'},
-    {time:'2:25-3:00',subject:'Homeroom — Review',course:null}
-  ],
-  12: [
-    {time:'8:00-8:45',subject:'Math — Calculus II',course:'calculus'},
-    {time:'8:50-9:35',subject:'English — College Prep',course:'english-grammar'},
-    {time:'9:40-10:25',subject:'AP Chemistry Advanced',course:'ap-chemistry'},
-    {time:'10:30-11:15',subject:'Quantum Computing',course:'quantum-computing'},
-    {time:'11:20-11:50',subject:'Lunch Break',course:null},
-    {time:'11:55-12:40',subject:'Beyond Arithmetic',course:'beyond-arithmetic'},
-    {time:'12:45-1:30',subject:'Mind-Bending Math',course:'mind-bending-math'},
-    {time:'1:35-2:20',subject:'Scientific Thinking',course:'scientific-thinking'},
-    {time:'2:25-3:00',subject:'Homeroom — Graduation Prep',course:null}
-  ]
+  7: {
+    A: [
+      {time:'8:00-9:25',subject:'Period 1 — Math (Pre-Algebra)',course:'algebra'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Grammar & Writing)',course:'english-grammar'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 3 — Science (Life Science)',course:'animals'},
+      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history'},
+    ],
+    B: [
+      {time:'8:00-9:25',subject:'Period 5 — Geography',course:'geography'},
+      {time:'9:30-10:55',subject:'Period 6 — Study Skills',course:'study-skills'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 7 — Brain Puzzles',course:'brain-puzzles'},
+      {time:'1:05-2:30',subject:'Period 8 — Financial Literacy',course:'financial-literacy'},
+    ]
+  },
+  8: {
+    A: [
+      {time:'8:00-9:25',subject:'Period 1 — Math (Algebra)',course:'algebra'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Difficult Words)',course:'english-grammar'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 3 — Earth Science',course:'science-puzzles'},
+      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history'},
+    ],
+    B: [
+      {time:'8:00-9:25',subject:'Period 5 — Critical Thinking',course:'critical-thinking'},
+      {time:'9:30-10:55',subject:'Period 6 — Financial Literacy',course:'financial-literacy'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 7 — Board Games & Strategy',course:'board-games'},
+      {time:'1:05-2:30',subject:'Period 8 — Psychology',course:'psychology'},
+    ]
+  },
+  9: {
+    A: [
+      {time:'8:00-9:25',subject:'Period 1 — Math (Algebra)',course:'algebra'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Grammar & Literature)',course:'english-grammar'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 3 — Biology',course:'animals'},
+      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history'},
+    ],
+    B: [
+      {time:'8:00-9:25',subject:'Period 5 — Psychology',course:'psychology'},
+      {time:'9:30-10:55',subject:'Period 6 — Logic & Reasoning',course:'logic-deduction'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 7 — Music Theory',course:'music-theory'},
+      {time:'1:05-2:30',subject:'Period 8 — Study Skills',course:'study-skills'},
+    ]
+  },
+  10: {
+    A: [
+      {time:'8:00-9:25',subject:'Period 1 — Math (Trigonometry)',course:'trigonometry'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Advanced Writing)',course:'english-grammar'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 3 — Chemistry',course:'ap-chemistry'},
+      {time:'1:05-2:30',subject:'Period 4 — English History',course:'english-history'},
+    ],
+    B: [
+      {time:'8:00-9:25',subject:'Period 5 — AP Statistics',course:'ap-statistics'},
+      {time:'9:30-10:55',subject:'Period 6 — Philosophy',course:'philosophy'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 7 — Financial Literacy',course:'financial-literacy'},
+      {time:'1:05-2:30',subject:'Period 8 — Geography',course:'geography'},
+    ]
+  },
+  11: {
+    A: [
+      {time:'8:00-9:25',subject:'Period 1 — Math (Calculus)',course:'calculus'},
+      {time:'9:30-10:55',subject:'Period 2 — English (SAT/ACT Prep)',course:'english-grammar'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 3 — AP Chemistry',course:'ap-chemistry'},
+      {time:'1:05-2:30',subject:'Period 4 — AP Statistics',course:'ap-statistics'},
+    ],
+    B: [
+      {time:'8:00-9:25',subject:'Period 5 — Physics (Circuits)',course:'circuits'},
+      {time:'9:30-10:55',subject:'Period 6 — Data Analysis',course:'data-wrangling'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 7 — Game Theory',course:'game-theory'},
+      {time:'1:05-2:30',subject:'Period 8 — Psychology',course:'psychology'},
+    ]
+  },
+  12: {
+    A: [
+      {time:'8:00-9:25',subject:'Period 1 — Math (Calculus II)',course:'calculus'},
+      {time:'9:30-10:55',subject:'Period 2 — English (College Prep)',course:'english-grammar'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 3 — AP Chemistry Advanced',course:'ap-chemistry'},
+      {time:'1:05-2:30',subject:'Period 4 — Quantum Computing',course:'quantum-computing'},
+    ],
+    B: [
+      {time:'8:00-9:25',subject:'Period 5 — Beyond Arithmetic',course:'beyond-arithmetic'},
+      {time:'9:30-10:55',subject:'Period 6 — Mind-Bending Math',course:'mind-bending-math'},
+      {time:'11:00-11:30',subject:'Lunch Break',course:null},
+      {time:'11:35-1:00',subject:'Period 7 — Scientific Thinking',course:'scientific-thinking'},
+      {time:'1:05-2:30',subject:'Period 8 — Math History',course:'math-history'},
+    ]
+  }
 };
 
 var gosiaMessages = {
-  7: '"Welcome to 7th grade! We\'re going to build strong foundations in math and science. Let\'s make this year count!"',
-  8: '"8th grade — time to level up! Algebra gets real this year, and we\'ll explore critical thinking. Ready?"',
-  9: '"Freshman year! High school starts now. I\'ll push you harder, but I believe in you. Let\'s go!"',
-  10: '"Sophomore year — trigonometry, chemistry, and statistics await. This is where things get exciting!"',
-  11: '"Junior year — the most important year! Calculus, AP classes, and SAT prep. I\'ve got your back."',
-  12: '"Senior year! College prep, quantum computing, and the hardest math. You\'ve come so far. Let\'s finish strong!"'
+  7: {A:'"A Day! Time for Math, English, Science, and History. Let\'s build strong foundations!"', B:'"B Day! Geography, Study Skills, Brain Puzzles, and Financial Literacy today!"'},
+  8: {A:'"A Day — Algebra, English, Earth Science, and History. Let\'s get it done!"', B:'"B Day — Critical Thinking, Financial Literacy, Board Games, and Psychology!"'},
+  9: {A:'"A Day! Algebra, English, Biology, and World History. Freshman year — let\'s go!"', B:'"B Day! Psychology, Logic, Music Theory, and Study Skills. Use your brain!"'},
+  10: {A:'"A Day — Trigonometry, Advanced Writing, Chemistry, and English History. Sophomore year gets real!"', B:'"B Day — Statistics, Philosophy, Financial Literacy, and Geography. Think deep!"'},
+  11: {A:'"A Day! Calculus, SAT Prep, AP Chemistry, AP Statistics. Junior year is the most important!"', B:'"B Day — Physics, Data Analysis, Game Theory, and Psychology. Almost there!"'},
+  12: {A:'"A Day! Calculus II, College Prep, AP Chemistry, Quantum Computing. Senior year — finish strong!"', B:'"B Day — Beyond Arithmetic, Mind-Bending Math, Scientific Thinking, Math History. The final stretch!"'}
 };
 
 var currentGrade = 9;
 
+function setDay(d) {
+  currentDay = d;
+  document.getElementById('btnA').classList.toggle('active', d==='A');
+  document.getElementById('btnB').classList.toggle('active', d==='B');
+  document.getElementById('gosiaMsg').textContent = (gosiaMessages[currentGrade]||gosiaMessages[9])[d];
+  renderSchedule(currentGrade);
+}
+
 function renderSchedule(grade) {
-  var sched = schedules[grade] || schedules[9];
+  var gradeData = schedules[grade] || schedules[9];
+  var sched = gradeData[currentDay] || gradeData['A'];
   var list = document.getElementById('scheduleList');
-  // Determine current period based on real time
   var now = new Date();
   var h = now.getHours(), m = now.getMinutes();
   var currentMin = h * 60 + m;
 
+  // Auto-detect A/B day based on date (even=A, odd=B) if user hasn't manually switched
+  var dayOfYear = Math.floor((now - new Date(now.getFullYear(),0,0)) / 86400000);
+  // Show which day it "should" be
+  var autoDay = dayOfYear % 2 === 0 ? 'A' : 'B';
+
   list.innerHTML = '';
+  list.insertAdjacentHTML('beforeend', '<div style="font-size:.75rem;color:var(--color-text-muted);margin-bottom:10px;text-align:center;">📅 ' + currentDay + ' Day — 4 Block Periods (85 min each) + Lunch</div>');
+
   sched.forEach(function(p, i) {
     var parts = p.time.split('-');
     var startParts = parts[0].split(':');
@@ -280,16 +333,19 @@ function renderSchedule(grade) {
     var isDone = currentMin >= endMin;
     var cls = isActive ? 'active' : (isDone ? 'done' : '');
 
+    var periodIcon = p.subject.includes('Lunch') ? '🍽' : (i+1);
+    var duration = p.course ? '85 min' : '30 min';
+
     var row = document.createElement('div');
     row.className = 'period-row ' + cls;
     row.innerHTML =
-      '<div class="period-num">' + (p.subject.includes('Lunch') ? '🍽' : p.subject.includes('Homeroom') ? '🏠' : (i+1)) + '</div>' +
-      '<div class="period-info"><div class="period-subject">' + p.subject + '</div><div class="period-time">' + p.time + (isActive ? ' — NOW' : isDone ? ' — Done' : '') + '</div></div>' +
+      '<div class="period-num">' + periodIcon + '</div>' +
+      '<div class="period-info"><div class="period-subject">' + p.subject + '</div><div class="period-time">' + p.time + ' (' + duration + ')' + (isActive ? ' — NOW' : isDone ? ' — Done ✓' : '') + '</div></div>' +
       (p.course && (isActive || !isDone) ? '<button class="period-go" onclick="goToClass(\'' + p.course + '\')">Go to Class →</button>' : '');
     list.appendChild(row);
 
     if (isActive) {
-      document.getElementById('periodLabel').textContent = 'Period ' + (i+1) + ' — ' + p.subject;
+      document.getElementById('periodLabel').textContent = p.subject + ' — ' + currentDay + ' Day';
     }
   });
 }
@@ -320,7 +376,8 @@ document.getElementById('gradeSelector').addEventListener('click', function(e) {
     e.target.classList.add('active');
     currentGrade = parseInt(e.target.dataset.grade);
     document.getElementById('gradeLabel').textContent = 'Grade ' + currentGrade;
-    document.getElementById('gosiaMsg').textContent = gosiaMessages[currentGrade];
+    document.getElementById('gosiaMsg').textContent = (gosiaMessages[currentGrade]||gosiaMessages[9])[currentDay];
+    document.getElementById('schedTitle').textContent = 'Today\'s Schedule — ' + currentDay + ' Day';
     renderSchedule(currentGrade);
   }
 });
