@@ -567,9 +567,7 @@ export function renderExercise(container, exercise, onAnswer) {
     const question = el("div", "exercise-question");
     question.innerHTML = sanitizeHTML(exercise.question);
     container.appendChild(question);
-
-    // Read the question aloud
-    speakQuestion(exercise.question);
+    // Normal lessons: no auto-speech (only listening exercises speak)
   }
 
   const render = renderers[exercise.type];
