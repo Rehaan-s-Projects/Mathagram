@@ -292,6 +292,35 @@ var gosiaMessages = {
   12: {A:'"A Day! Calculus II, College Prep, AP Chemistry, Quantum Computing. Senior year — finish strong!"', B:'"B Day — Beyond Arithmetic, Mind-Bending Math, Scientific Thinking, Math History. The final stretch!"'}
 };
 
+// Holiday calendar (month is 0-indexed: 0=Jan, 11=Dec)
+var holidays = [
+  {m:0, d:1, name:'New Year\'s Day'},
+  {m:0, d:20, name:'Martin Luther King Jr. Day'},
+  {m:1, d:17, name:'Presidents\' Day'},
+  // Spring Break — week of March 24-28
+  {m:2, d:24, name:'Spring Break'},{m:2, d:25, name:'Spring Break'},{m:2, d:26, name:'Spring Break'},{m:2, d:27, name:'Spring Break'},{m:2, d:28, name:'Spring Break'},
+  {m:4, d:26, name:'Memorial Day'},
+  {m:6, d:4, name:'Independence Day'},
+  {m:8, d:1, name:'Labor Day'},
+  {m:9, d:13, name:'Columbus Day'},
+  {m:10, d:11, name:'Veterans Day'},
+  // Thanksgiving — Nov 27-28
+  {m:10, d:27, name:'Thanksgiving Break'},{m:10, d:28, name:'Thanksgiving Break'},
+  // Winter Break — Dec 23 to Jan 3
+  {m:11, d:23, name:'Winter Break'},{m:11, d:24, name:'Winter Break (Christmas Eve)'},{m:11, d:25, name:'Christmas Day'},{m:11, d:26, name:'Winter Break'},{m:11, d:27, name:'Winter Break'},{m:11, d:28, name:'Winter Break'},{m:11, d:29, name:'Winter Break'},{m:11, d:30, name:'Winter Break'},{m:11, d:31, name:'New Year\'s Eve'},
+  {m:0, d:2, name:'Winter Break'},{m:0, d:3, name:'Winter Break'},
+];
+
+function getHoliday(date) {
+  var mo = date.getMonth(), da = date.getDate();
+  for (var i = 0; i < holidays.length; i++) {
+    if (holidays[i].m === mo && holidays[i].d === da) return holidays[i].name;
+  }
+  return null;
+}
+
+function isWeekend(date) { var day = date.getDay(); return day === 0 || day === 6; }
+
 var currentGrade = 9;
 
 function setDay(d) {
@@ -309,14 +338,46 @@ function renderSchedule(grade) {
   var now = new Date();
   var h = now.getHours(), m = now.getMinutes();
   var currentMin = h * 60 + m;
-
-  // Auto-detect A/B day based on date (even=A, odd=B) if user hasn't manually switched
-  var dayOfYear = Math.floor((now - new Date(now.getFullYear(),0,0)) / 86400000);
-  // Show which day it "should" be
-  var autoDay = dayOfYear % 2 === 0 ? 'A' : 'B';
+  var dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
 
   list.innerHTML = '';
-  list.insertAdjacentHTML('beforeend', '<div style="font-size:.75rem;color:var(--color-text-muted);margin-bottom:10px;text-align:center;">📅 ' + currentDay + ' Day — 4 Block Periods (85 min each) + Lunch</div>');
+
+  // Check weekend
+  if (isWeekend(now)) {
+    var wkDay = now.getDay() === 0 ? 'Sunday' : 'Saturday';
+    document.getElementById('periodLabel').textContent = '🏠 No School — ' + wkDay;
+    document.getElementById('schedTitle').textContent = wkDay + ' — No School';
+    document.getElementById('gosiaMsg').textContent = wkDay === 'Saturday' ?
+      '"It\'s Saturday! No classes today. Rest up, recharge, and I\'ll see you on Monday. Maybe do some fun learning on Mathagram! 😊"' :
+      '"Happy Sunday! Enjoy your day off. School starts again tomorrow. Get your backpack ready! 📚"';
+    list.innerHTML =
+      '<div style="text-align:center;padding:40px 20px;">' +
+      '<div style="font-size:3rem;margin-bottom:12px;">🏖️</div>' +
+      '<div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">No School Today!</div>' +
+      '<div style="font-size:.88rem;color:var(--color-text-muted);">It\'s ' + wkDay + '. Enjoy your weekend!</div>' +
+      '<div style="margin-top:16px;font-size:.82rem;color:var(--color-text-secondary);">Next school day: Monday</div>' +
+      '<a href="courses.html" style="display:inline-block;margin-top:16px;padding:10px 24px;background:#3b82f6;color:#fff;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Free Learn on Mathagram →</a>' +
+      '</div>';
+    return;
+  }
+
+  // Check holiday
+  var holiday = getHoliday(now);
+  if (holiday) {
+    document.getElementById('periodLabel').textContent = '🎉 ' + holiday;
+    document.getElementById('schedTitle').textContent = holiday + ' — No School';
+    document.getElementById('gosiaMsg').textContent = '"Happy ' + holiday + '! No classes today. Enjoy the break and come back refreshed! 🎊"';
+    list.innerHTML =
+      '<div style="text-align:center;padding:40px 20px;">' +
+      '<div style="font-size:3rem;margin-bottom:12px;">' + (holiday.includes('Christmas') ? '🎄' : holiday.includes('Thanksgiving') ? '🦃' : holiday.includes('Winter') ? '❄️' : holiday.includes('Spring') ? '🌸' : holiday.includes('Independence') ? '🎆' : holiday.includes('New Year') ? '🎆' : '🎉') + '</div>' +
+      '<div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">' + holiday + '</div>' +
+      '<div style="font-size:.88rem;color:var(--color-text-muted);">No school today — enjoy the holiday!</div>' +
+      '<a href="courses.html" style="display:inline-block;margin-top:16px;padding:10px 24px;background:#3b82f6;color:#fff;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Free Learn on Mathagram →</a>' +
+      '</div>';
+    return;
+  }
+
+  list.insertAdjacentHTML('beforeend', '<div style="font-size:.75rem;color:var(--color-text-muted);margin-bottom:10px;text-align:center;">📅 ' + dayName + ' — ' + currentDay + ' Day — 4 Block Periods (85 min each) + Lunch</div>');
 
   sched.forEach(function(p, i) {
     var parts = p.time.split('-');
@@ -362,11 +423,13 @@ function updateClock() {
   var h12 = h % 12 || 12;
   document.getElementById('clock').textContent = h12 + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
 
-  // Check if school is over
-  if (h >= 15) {
-    document.getElementById('periodLabel').textContent = 'School is over — See you tomorrow!';
-  } else if (h < 8) {
-    document.getElementById('periodLabel').textContent = 'School starts at 8:00 AM';
+  // Check if school is over (only on school days)
+  if (!isWeekend(now) && !getHoliday(now)) {
+    if (h >= 15) {
+      document.getElementById('periodLabel').textContent = 'School is over — See you tomorrow!';
+    } else if (h < 8) {
+      document.getElementById('periodLabel').textContent = 'School starts at 8:00 AM';
+    }
   }
 }
 
