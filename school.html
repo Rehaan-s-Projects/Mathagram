@@ -183,101 +183,102 @@ setTimeout(function(){
 // A Day / B Day Block Schedule — 4 periods per day (~85 min each)
 var currentDay = 'A'; // A or B
 
+// d = difficulty: 'Easy','Medium','Hard','Advanced','Difficult','Extreme'
 var schedules = {
   7: {
     A: [
-      {time:'8:00-9:25',subject:'Period 1 — Math (Pre-Algebra)',course:'algebra'},
-      {time:'9:30-10:55',subject:'Period 2 — English (Grammar & Writing)',course:'english-grammar'},
+      {time:'8:00-9:25',subject:'Period 1 — Math (Pre-Algebra)',course:'algebra',d:'Easy'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Grammar & Writing)',course:'english-grammar',d:'Easy'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 3 — Science (Life Science)',course:'animals'},
-      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history'},
+      {time:'11:35-1:00',subject:'Period 3 — Science (Life Science)',course:'animals',d:'Easy'},
+      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history',d:'Easy'},
     ],
     B: [
-      {time:'8:00-9:25',subject:'Period 5 — Geography',course:'geography'},
-      {time:'9:30-10:55',subject:'Period 6 — Study Skills',course:'study-skills'},
+      {time:'8:00-9:25',subject:'Period 5 — Geography',course:'geography',d:'Easy'},
+      {time:'9:30-10:55',subject:'Period 6 — Study Skills',course:'study-skills',d:'Easy'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 7 — Brain Puzzles',course:'brain-puzzles'},
-      {time:'1:05-2:30',subject:'Period 8 — Financial Literacy',course:'financial-literacy'},
+      {time:'11:35-1:00',subject:'Period 7 — Brain Puzzles',course:'brain-puzzles',d:'Easy'},
+      {time:'1:05-2:30',subject:'Period 8 — Financial Literacy',course:'financial-literacy',d:'Easy'},
     ]
   },
   8: {
     A: [
-      {time:'8:00-9:25',subject:'Period 1 — Math (Algebra)',course:'algebra'},
-      {time:'9:30-10:55',subject:'Period 2 — English (Difficult Words)',course:'english-grammar'},
+      {time:'8:00-9:25',subject:'Period 1 — Math (Algebra)',course:'algebra',d:'Easy'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Vocabulary)',course:'english-grammar',d:'Easy'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 3 — Earth Science',course:'science-puzzles'},
-      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history'},
+      {time:'11:35-1:00',subject:'Period 3 — Earth Science',course:'science-puzzles',d:'Medium'},
+      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history',d:'Easy'},
     ],
     B: [
-      {time:'8:00-9:25',subject:'Period 5 — Critical Thinking',course:'critical-thinking'},
-      {time:'9:30-10:55',subject:'Period 6 — Financial Literacy',course:'financial-literacy'},
+      {time:'8:00-9:25',subject:'Period 5 — Critical Thinking',course:'critical-thinking',d:'Medium'},
+      {time:'9:30-10:55',subject:'Period 6 — Financial Literacy',course:'financial-literacy',d:'Easy'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 7 — Board Games & Strategy',course:'board-games'},
-      {time:'1:05-2:30',subject:'Period 8 — Psychology',course:'psychology'},
+      {time:'11:35-1:00',subject:'Period 7 — Board Games',course:'board-games',d:'Easy'},
+      {time:'1:05-2:30',subject:'Period 8 — Psychology',course:'psychology',d:'Medium'},
     ]
   },
   9: {
     A: [
-      {time:'8:00-9:25',subject:'Period 1 — Math (Algebra)',course:'algebra'},
-      {time:'9:30-10:55',subject:'Period 2 — English (Grammar & Literature)',course:'english-grammar'},
+      {time:'8:00-9:25',subject:'Period 1 — Math (Algebra)',course:'algebra',d:'Easy'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Literature)',course:'english-grammar',d:'Easy'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 3 — Biology',course:'animals'},
-      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history'},
+      {time:'11:35-1:00',subject:'Period 3 — Biology',course:'animals',d:'Easy'},
+      {time:'1:05-2:30',subject:'Period 4 — World History',course:'world-history',d:'Easy'},
     ],
     B: [
-      {time:'8:00-9:25',subject:'Period 5 — Psychology',course:'psychology'},
-      {time:'9:30-10:55',subject:'Period 6 — Logic & Reasoning',course:'logic-deduction'},
+      {time:'8:00-9:25',subject:'Period 5 — Psychology',course:'psychology',d:'Easy'},
+      {time:'9:30-10:55',subject:'Period 6 — Logic & Reasoning',course:'logic-deduction',d:'Easy'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 7 — Music Theory',course:'music-theory'},
-      {time:'1:05-2:30',subject:'Period 8 — Study Skills',course:'study-skills'},
+      {time:'11:35-1:00',subject:'Period 7 — Music Theory',course:'music-theory',d:'Easy'},
+      {time:'1:05-2:30',subject:'Period 8 — Study Skills',course:'study-skills',d:'Easy'},
     ]
   },
   10: {
     A: [
-      {time:'8:00-9:25',subject:'Period 1 — Math (Trigonometry)',course:'trigonometry'},
-      {time:'9:30-10:55',subject:'Period 2 — English (Advanced Writing)',course:'english-grammar'},
+      {time:'8:00-9:25',subject:'Period 1 — Math (Trigonometry)',course:'trigonometry',d:'Medium'},
+      {time:'9:30-10:55',subject:'Period 2 — English (Advanced)',course:'english-grammar',d:'Medium'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 3 — Chemistry',course:'ap-chemistry'},
-      {time:'1:05-2:30',subject:'Period 4 — English History',course:'english-history'},
+      {time:'11:35-1:00',subject:'Period 3 — Chemistry',course:'ap-chemistry',d:'Medium'},
+      {time:'1:05-2:30',subject:'Period 4 — English History',course:'english-history',d:'Medium'},
     ],
     B: [
-      {time:'8:00-9:25',subject:'Period 5 — AP Statistics',course:'ap-statistics'},
-      {time:'9:30-10:55',subject:'Period 6 — Philosophy',course:'philosophy'},
+      {time:'8:00-9:25',subject:'Period 5 — AP Statistics',course:'ap-statistics',d:'Medium'},
+      {time:'9:30-10:55',subject:'Period 6 — Philosophy',course:'philosophy',d:'Medium'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 7 — Financial Literacy',course:'financial-literacy'},
-      {time:'1:05-2:30',subject:'Period 8 — Geography',course:'geography'},
+      {time:'11:35-1:00',subject:'Period 7 — Financial Literacy',course:'financial-literacy',d:'Medium'},
+      {time:'1:05-2:30',subject:'Period 8 — Geography',course:'geography',d:'Medium'},
     ]
   },
   11: {
     A: [
-      {time:'8:00-9:25',subject:'Period 1 — Math (Calculus)',course:'calculus'},
-      {time:'9:30-10:55',subject:'Period 2 — English (SAT/ACT Prep)',course:'english-grammar'},
+      {time:'8:00-9:25',subject:'Period 1 — Math (Calculus)',course:'calculus',d:'Hard'},
+      {time:'9:30-10:55',subject:'Period 2 — English (SAT Prep)',course:'english-grammar',d:'Hard'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 3 — AP Chemistry',course:'ap-chemistry'},
-      {time:'1:05-2:30',subject:'Period 4 — AP Statistics',course:'ap-statistics'},
+      {time:'11:35-1:00',subject:'Period 3 — AP Chemistry',course:'ap-chemistry',d:'Hard'},
+      {time:'1:05-2:30',subject:'Period 4 — AP Statistics',course:'ap-statistics',d:'Hard'},
     ],
     B: [
-      {time:'8:00-9:25',subject:'Period 5 — Physics (Circuits)',course:'circuits'},
-      {time:'9:30-10:55',subject:'Period 6 — Data Analysis',course:'data-wrangling'},
+      {time:'8:00-9:25',subject:'Period 5 — Physics (Circuits)',course:'circuits',d:'Hard'},
+      {time:'9:30-10:55',subject:'Period 6 — Data Analysis',course:'data-wrangling',d:'Advanced'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 7 — Game Theory',course:'game-theory'},
-      {time:'1:05-2:30',subject:'Period 8 — Psychology',course:'psychology'},
+      {time:'11:35-1:00',subject:'Period 7 — Game Theory',course:'game-theory',d:'Hard'},
+      {time:'1:05-2:30',subject:'Period 8 — Psychology',course:'psychology',d:'Advanced'},
     ]
   },
   12: {
     A: [
-      {time:'8:00-9:25',subject:'Period 1 — Math (Calculus II)',course:'calculus'},
-      {time:'9:30-10:55',subject:'Period 2 — English (College Prep)',course:'english-grammar'},
+      {time:'8:00-9:25',subject:'Period 1 — Math (Calculus II)',course:'calculus',d:'Difficult'},
+      {time:'9:30-10:55',subject:'Period 2 — English (College Prep)',course:'english-grammar',d:'Difficult'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 3 — AP Chemistry Advanced',course:'ap-chemistry'},
-      {time:'1:05-2:30',subject:'Period 4 — Quantum Computing',course:'quantum-computing'},
+      {time:'11:35-1:00',subject:'Period 3 — AP Chemistry Advanced',course:'ap-chemistry',d:'Difficult'},
+      {time:'1:05-2:30',subject:'Period 4 — Quantum Computing',course:'quantum-computing',d:'Extreme'},
     ],
     B: [
-      {time:'8:00-9:25',subject:'Period 5 — Beyond Arithmetic',course:'beyond-arithmetic'},
-      {time:'9:30-10:55',subject:'Period 6 — Mind-Bending Math',course:'mind-bending-math'},
+      {time:'8:00-9:25',subject:'Period 5 — Beyond Arithmetic',course:'beyond-arithmetic',d:'Extreme'},
+      {time:'9:30-10:55',subject:'Period 6 — Mind-Bending Math',course:'mind-bending-math',d:'Extreme'},
       {time:'11:00-11:30',subject:'Lunch Break',course:null},
-      {time:'11:35-1:00',subject:'Period 7 — Scientific Thinking',course:'scientific-thinking'},
-      {time:'1:05-2:30',subject:'Period 8 — Math History',course:'math-history'},
+      {time:'11:35-1:00',subject:'Period 7 — Scientific Thinking',course:'scientific-thinking',d:'Difficult'},
+      {time:'1:05-2:30',subject:'Period 8 — Math History',course:'math-history',d:'Difficult'},
     ]
   }
 };
@@ -336,11 +337,15 @@ function renderSchedule(grade) {
     var periodIcon = p.subject.includes('Lunch') ? '🍽' : (i+1);
     var duration = p.course ? '85 min' : '30 min';
 
+    // Difficulty badge colors
+    var diffColors = {Easy:'#22c55e',Medium:'#eab308',Hard:'#f97316',Advanced:'#ef4444',Difficult:'#dc2626',Extreme:'#7c3aed'};
+    var diffBadge = p.d ? '<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:700;color:#fff;background:'+(diffColors[p.d]||'#64748b')+';margin-left:6px;">'+p.d+'</span>' : '';
+
     var row = document.createElement('div');
     row.className = 'period-row ' + cls;
     row.innerHTML =
       '<div class="period-num">' + periodIcon + '</div>' +
-      '<div class="period-info"><div class="period-subject">' + p.subject + '</div><div class="period-time">' + p.time + ' (' + duration + ')' + (isActive ? ' — NOW' : isDone ? ' — Done ✓' : '') + '</div></div>' +
+      '<div class="period-info"><div class="period-subject">' + p.subject + diffBadge + '</div><div class="period-time">' + p.time + ' (' + duration + ')' + (isActive ? ' — NOW' : isDone ? ' — Done ✓' : '') + '</div></div>' +
       (p.course && (isActive || !isDone) ? '<button class="period-go" onclick="goToClass(\'' + p.course + '\')">Go to Class →</button>' : '');
     list.appendChild(row);
 
