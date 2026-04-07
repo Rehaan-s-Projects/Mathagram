@@ -438,18 +438,28 @@ function renderVisual(container, exercise, onAnswer) {
 function renderListening(container, exercise, onAnswer) {
   const listenArea = document.createElement('div');
   listenArea.className = 'listening-area';
-  listenArea.innerHTML = `
-    <button type="button" class="listening-volume-btn" id="listen-vol" title="Tap to replay">
-      <span class="volume-icon">&#128264;</span>
-    </button>
-    <p class="listening-hint">Listen and answer below</p>
-  `;
+
+  const volBtn = document.createElement('button');
+  volBtn.type = 'button';
+  volBtn.className = 'listening-volume-btn';
+  volBtn.title = 'Tap to replay';
+  volBtn.innerHTML = '<span class="volume-icon">&#128264;</span>';
+
+  const hint = document.createElement('p');
+  hint.className = 'listening-hint';
+  hint.textContent = 'Listen and answer below';
+
+  listenArea.appendChild(volBtn);
+  listenArea.appendChild(hint);
   container.appendChild(listenArea);
 
   const spokenText = exercise.spokenText || exercise.question;
 
   function speakNow() {
-    if (!('speechSynthesis' in window)) return;
+    if (!('speechSynthesis' in window)) {
+      hint.textContent = 'Speech not supported — question: ' + spokenText;
+      return;
+    }
     window.speechSynthesis.cancel();
     const clean = spokenText
       .replace(/\\\(.*?\\\)/g, 'math expression')
@@ -463,33 +473,55 @@ function renderListening(container, exercise, onAnswer) {
 
     const utterance = new SpeechSynthesisUtterance(clean);
     utterance.pitch = 1.0;
-    utterance.rate = 0.9;
-    utterance.volume = 0.85;
+    utterance.rate = 0.85;
+    utterance.volume = 1.0;
 
-    const voices = window.speechSynthesis.getVoices();
+    // Get voices — handle async loading
+    let voices = window.speechSynthesis.getVoices();
     if (voices.length > 0) {
-      const pref = voices.find(v => v.lang.startsWith('en')) || voices[0];
+      const pref = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) ||
+                   voices.find(v => v.lang.startsWith('en')) || voices[0];
       if (pref) utterance.voice = pref;
     }
 
-    const volBtn = document.getElementById('listen-vol');
-    if (volBtn) { volBtn.classList.add('active'); volBtn.querySelector('.volume-icon').innerHTML = '&#128266;'; }
+    volBtn.classList.add('active');
+    volBtn.querySelector('.volume-icon').innerHTML = '&#128266;';
+    hint.textContent = 'Speaking...';
 
     utterance.onend = () => {
-      if (volBtn) { volBtn.classList.remove('active'); volBtn.querySelector('.volume-icon').innerHTML = '&#128264;'; }
+      volBtn.classList.remove('active');
+      volBtn.querySelector('.volume-icon').innerHTML = '&#128264;';
+      hint.textContent = 'Tap speaker to hear again';
     };
-    utterance.onerror = () => {
-      if (volBtn) { volBtn.classList.remove('active'); volBtn.querySelector('.volume-icon').innerHTML = '&#128264;'; }
+    utterance.onerror = (e) => {
+      volBtn.classList.remove('active');
+      volBtn.querySelector('.volume-icon').innerHTML = '&#128264;';
+      hint.textContent = 'Tap speaker to try again';
     };
 
     window.speechSynthesis.speak(utterance);
   }
 
-  // Auto-play once
-  setTimeout(speakNow, 400);
+  // Wait for voices to load, then auto-play
+  if ('speechSynthesis' in window) {
+    const trySpeak = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        setTimeout(speakNow, 300);
+      } else {
+        // Voices not loaded yet — wait for event
+        window.speechSynthesis.addEventListener('voiceschanged', () => {
+          setTimeout(speakNow, 300);
+        }, { once: true });
+        // Fallback — try anyway after 1s
+        setTimeout(speakNow, 1000);
+      }
+    };
+    trySpeak();
+  }
 
-  // Volume button to replay
-  document.getElementById('listen-vol').addEventListener('click', speakNow);
+  // Replay button
+  volBtn.addEventListener('click', speakNow);
 
   // Render answer options
   const answerType = exercise.answerType || 'multiple-choice';
