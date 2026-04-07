@@ -18,7 +18,7 @@ h1{font-size:1.5rem;margin-bottom:4px}
 .edam-img{width:120px;height:120px;border-radius:50%;border:4px solid #fbbf24;margin:0 auto 8px;display:block;transition:border-color .3s,filter .3s}
 .edam-mood{font-size:.85rem;font-weight:700;transition:color .3s}
 .edam-speech{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 16px;margin-top:10px;font-size:.9rem;color:#e2e8f0;font-style:italic;min-height:40px}
-.question-box{background:rgba(255,255,255,.05);border:2px solid #334155;border-radius:16px;padding:24px;margin-bottom:16px;font-size:1.8rem;font-weight:900;min-height:80px;display:flex;align-items:center;justify-content:center;transition:border-color .3s}
+.question-box{background:rgba(255,255,255,.05);border:2px solid #334155;border-radius:16px;padding:24px;margin-bottom:16px;font-size:1.8rem;font-weight:900;min-height:80px;display:flex;align-items:center;justify-content:center;transition:border-color .3s,background .3s;overflow:hidden}
 .answer-input{width:100%;max-width:200px;padding:14px;font-size:1.5rem;font-weight:800;text-align:center;border:3px solid #475569;border-radius:12px;background:#0f172a;color:#fff;outline:none;font-family:inherit;margin-bottom:12px}
 .answer-input:focus{border-color:#22d3ee}
 .submit-btn{padding:12px 40px;font-size:1.1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:all .2s}
@@ -28,11 +28,12 @@ h1{font-size:1.5rem;margin-bottom:4px}
 .btn{padding:12px 32px;font-size:1rem;font-weight:700;background:#22d3ee;color:#0f172a;border:none;border-radius:12px;cursor:pointer;margin-top:8px}
 .btn:hover{background:#06b6d4}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-@keyframes glitchText{0%{transform:translate(0);opacity:1}20%{transform:translate(-3px,2px);opacity:.8}40%{transform:translate(3px,-2px);opacity:.6}60%{transform:translate(-2px,-1px);opacity:.9}80%{transform:translate(2px,3px);opacity:.7}100%{transform:translate(0);opacity:1}}
-@keyframes glitchColor{0%{color:#ef4444}25%{color:#22d3ee}50%{color:#a855f7}75%{color:#22c55e}100%{color:#ef4444}}
+@keyframes glitchText{0%{transform:translate(0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,-1px)}80%{transform:translate(1px,2px)}100%{transform:translate(0)}}
+@keyframes glitchFlicker{0%,100%{opacity:1}50%{opacity:.7}75%{opacity:.9}90%{opacity:.5}}
 @keyframes scanLine{0%{top:0}100%{top:100%}}
-.glitch-q{animation:glitchText .15s infinite,glitchColor .5s infinite;font-family:monospace!important;text-shadow:2px 0 #ef4444,-2px 0 #22d3ee;position:relative}
-.glitch-q::after{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.1);animation:scanLine 1s linear infinite}
+.glitch-q{animation:glitchText .1s infinite,glitchFlicker .3s infinite;font-family:'Courier New',monospace!important;font-size:2rem!important;letter-spacing:2px;color:#ff3333;text-shadow:3px 0 #00ffff,-3px 0 #ff00ff,0 3px rgba(255,0,0,.3);position:relative;line-height:2.5;padding:8px 0}
+.glitch-q::before{content:attr(data-text);position:absolute;top:0;left:2px;width:100%;height:100%;color:#00ffff;opacity:.5;clip-path:inset(0 0 60% 0);animation:glitchText .08s infinite reverse}
+.glitch-q::after{content:attr(data-text);position:absolute;top:0;left:-2px;width:100%;height:100%;color:#ff00ff;opacity:.5;clip-path:inset(60% 0 0 0);animation:glitchText .12s infinite}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 20px 10px rgba(239,68,68,.2)}}
 .screen-flash{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;opacity:0;transition:opacity .1s}
 </style>
@@ -96,19 +97,36 @@ var questions = [
   {q:'GLITCH', a:'__UNSOLVABLE__', diff:5, glitch:true},
 ];
 
-// Glitched text generator — corrupted math like Baldi's 3rd question
-var glitchChars = '▓░▒█▄▌▐▀╗╝╚╔╩╦╠═╬╣║╟╢╥╤╡╧╖╕╘╙╫╪┐┘┌└│─┤├¿¡§¶µ±×÷';
-function makeGlitchText() {
-  var parts = [
-    function(){ return Math.floor(Math.random()*99)+' '; },
-    function(){ return ['+','-','×','÷','=','±','∞','√','∫','Σ','Δ','π','∂'][Math.floor(Math.random()*13)]+' '; },
-    function(){ var s=''; for(var i=0;i<Math.floor(Math.random()*4)+2;i++) s+=glitchChars[Math.floor(Math.random()*glitchChars.length)]; return s+' '; },
-  ];
-  var txt = '';
-  for (var i=0; i<Math.floor(Math.random()*4)+5; i++) {
-    txt += parts[Math.floor(Math.random()*parts.length)]();
+// Baldi-style glitched number generator
+// In Baldi's Basics, Q3 looks like a real math problem but the numbers are corrupted/garbled
+var zalgo = ['\u0300','\u0301','\u0302','\u0303','\u0304','\u0305','\u0306','\u0307','\u0308','\u0309','\u030A','\u030B','\u030C','\u030D','\u030E','\u030F','\u0310','\u0311','\u0312','\u0313','\u0314','\u0315','\u031A','\u031B','\u033D','\u033E','\u033F','\u0340','\u0341','\u0342','\u0343','\u0344','\u0346','\u034A','\u034B','\u034C','\u0350','\u0351','\u0352','\u0357','\u035B','\u0363','\u0364','\u0365','\u0366','\u0367','\u0368','\u0369','\u036A','\u036B','\u036C','\u036D','\u036E','\u036F'];
+var zalgoBelow = ['\u0316','\u0317','\u0318','\u0319','\u031C','\u031D','\u031E','\u031F','\u0320','\u0321','\u0322','\u0323','\u0324','\u0325','\u0326','\u0327','\u0328','\u0329','\u032A','\u032B','\u032C','\u032D','\u032E','\u032F','\u0330','\u0331','\u0332','\u0333','\u0339','\u033A','\u033B','\u033C','\u0345','\u0347','\u0348','\u0349','\u034D','\u034E','\u0353','\u0354','\u0355','\u0356','\u0359','\u035A','\u035C'];
+
+function glitchNum() {
+  // Make a number that looks corrupted — like Baldi's garbled digits
+  var n = Math.floor(Math.random()*99) + 1;
+  var s = '' + n;
+  var out = '';
+  for (var i = 0; i < s.length; i++) {
+    out += s[i];
+    // Add 2-5 zalgo marks above and below to corrupt the digit
+    var count = Math.floor(Math.random()*4) + 2;
+    for (var j = 0; j < count; j++) {
+      out += zalgo[Math.floor(Math.random()*zalgo.length)];
+    }
+    count = Math.floor(Math.random()*3) + 1;
+    for (var j = 0; j < count; j++) {
+      out += zalgoBelow[Math.floor(Math.random()*zalgoBelow.length)];
+    }
   }
-  return txt.trim() + ' = ?';
+  return out;
+}
+
+function makeGlitchText() {
+  // Baldi format: "X + Y = _" but X and Y are corrupted zalgo numbers
+  var ops = ['+', '-', '×', '+', '-'];
+  var op = ops[Math.floor(Math.random()*ops.length)];
+  return glitchNum() + ' ' + op + ' ' + glitchNum() + ' = ?';
 }
 
 var ci = 0, sc = 0, N = questions.length, busy = false;
@@ -138,13 +156,19 @@ function render() {
   document.getElementById('bar').style.background = m.barColor;
   var qBox = document.getElementById('question');
   if (q.glitch) {
-    qBox.innerHTML = '<span class="glitch-q">' + makeGlitchText() + '</span>';
+    var gt = makeGlitchText();
+    qBox.innerHTML = '<span class="glitch-q" data-text="' + gt.replace(/"/g,'') + '">' + gt + '</span>';
     qBox.style.borderColor = '#ef4444';
+    qBox.style.background = 'rgba(255,0,0,0.05)';
     if (window._glitchInterval) clearInterval(window._glitchInterval);
     window._glitchInterval = setInterval(function(){
       var el = qBox.querySelector('.glitch-q');
-      if (el) el.textContent = makeGlitchText();
-    }, 200);
+      if (el) {
+        var newgt = makeGlitchText();
+        el.textContent = newgt;
+        el.setAttribute('data-text', newgt.replace(/["\u0300-\u036f]/g,''));
+      }
+    }, 250);
   } else {
     if (window._glitchInterval) { clearInterval(window._glitchInterval); window._glitchInterval=null; }
     qBox.innerHTML = q.q + (q.hint ? '<div style="font-size:0.7rem;color:#94a3b8;margin-top:6px;font-weight:400;">' + q.hint + '</div>' : '');
