@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Art</h1>
+    <p>Learn to draw, paint, and create — from pencil sketches to digital art, color theory, art history, and building your portfolio. 30 units, 450 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Drawing Fundamentals',['What You Need to Start Drawing','Holding a Pencil — Grip Techniques','Lines — Straight Curved Hatching','Shapes — Circle Square Triangle Oval','3D Forms — Sphere Cube Cylinder Cone','Light & Shadow — Where Does Light Come From?','Shading Techniques — Hatching Crosshatching','Blending & Smudging','Value Scale — Light to Dark','Contour Drawing — Outline Only','Gesture Drawing — Quick Poses','Negative Space — Drawing What\'s Not There','Proportion — Measuring with Your Pencil','Practice: Draw 5 Objects','Drawing Fundamentals Checkpoint']],
+      [2,'Pencil & Graphite',['Pencil Grades — 2H HB 2B 4B 6B 8B','Hard vs Soft — When to Use Each','Sketching Lightly — Building Up','Eraser Types — Kneaded Vinyl Electric','Paper Types — Sketch Smooth Textured','Pencil Sharpening — Blade vs Sharpener','Graphite Sticks — No Wood','Mechanical Pencils — Precise Lines','Charcoal vs Graphite','Blending Stumps & Tortillons','Fixing Mistakes — Don\'t Panic','Drawing Textures — Wood Metal Fabric','Drawing Hair — Strand by Strand','Drawing Eyes — Realistic','Pencil Checkpoint']],
+      [3,'Color Theory',['Primary Colors — Red Yellow Blue','Secondary Colors — Orange Green Purple','Tertiary Colors — In Between','The Color Wheel','Warm vs Cool Colors','Complementary Colors — Opposites','Analogous Colors — Neighbors','Triadic Color Schemes','Hue Saturation & Value','Tints — Adding White','Shades — Adding Black','Tones — Adding Gray','Color Harmony & Mood','Color Psychology — Emotions','Color Theory Checkpoint']],
+      [4,'Painting — Watercolor',['Watercolor Supplies — Paints Brushes Paper','Wet-on-Wet Technique','Wet-on-Dry Technique','Washes — Flat & Gradient','Layering — Glazing Technique','Lifting Paint — Correcting','Dry Brush Technique','Splatter & Texture Effects','Mixing Colors on Paper','Watercolor Pencils — Hybrid','Painting Skies & Clouds','Painting Water — Reflections','Painting Flowers','Painting Landscapes','Watercolor Checkpoint']],
+      [5,'Painting — Acrylic',['Acrylic Supplies — Paints Brushes Canvas','Acrylic vs Watercolor vs Oil','Mixing Acrylic Colors','Blocking In — Big Shapes First','Layering — Thick Over Thin','Blending Acrylics — Work Fast','Palette Knife Techniques','Texture Paste & Mediums','Dry Time — Fast Drying Trick','Gesso & Priming','Painting Portraits — Acrylic','Painting Animals — Acrylic','Abstract Acrylic Art','Pouring Art — Fluid Acrylics','Acrylic Checkpoint']],
+      [6,'Painting — Oil',['Oil Paint Supplies — Solvents Mediums','Fat Over Lean Rule','Mixing Oil Colors','Underpainting — Tonal Foundation','Alla Prima — Wet on Wet','Glazing — Transparent Layers','Impasto — Thick Texture','Oil Painting Mediums — Linseed Turpentine','Drying Times — Days to Weeks','Cleaning Brushes — Solvents','Old Masters Technique','Painting Skin Tones — Oil','Painting Still Life — Oil','Varnishing & Protecting','Oil Painting Checkpoint']],
+      [7,'Digital Art — Getting Started',['What Is Digital Art?','Tablets — Wacom iPad Huion','Software — Procreate Photoshop Krita','Stylus Pressure Sensitivity','Canvas Size & Resolution — DPI','Layers — The Key to Digital Art','Brush Settings — Size Opacity Flow','Undo/Redo — Your Best Friend','Zooming & Rotating Canvas','Color Picker & Palettes','Saving & Exporting — PNG PSD JPEG','Digital vs Traditional — Pros & Cons','Setting Up Your Workspace','Your First Digital Drawing','Digital Art Basics Checkpoint']],
+      [8,'Digital Art — Techniques',['Sketching Digitally — Rough to Clean','Lineart — Clean Lines','Flat Coloring — Base Colors','Cell Shading — Anime Style','Soft Shading — Realistic','Rendering — Adding Detail','Highlights & Rim Light','Background Painting — Digital','Blending Modes — Multiply Screen Overlay','Clipping Masks — Stay in the Lines','Adjustment Layers — Brightness Contrast','Filters & Effects','Custom Brushes — Download & Create','Speed Painting — 30 Minutes','Digital Techniques Checkpoint']],
+      [9,'Character Design',['What Is Character Design?','Silhouette — Readable Shape','Proportions — Head Count','Body Types — Variety Matters','Facial Expressions — Emotion','Hair Design — Style & Flow','Clothing Design — Form & Function','Color Palette for Characters','Personality Through Design','Character Turnaround — Front Side Back','Character Pose Sheet','Character Action Poses','Designing Villains vs Heroes','Designing Cute Characters','Character Design Checkpoint']],
+      [10,'Anatomy for Artists',['Why Artists Study Anatomy','The Skeleton — Basic Structure','The Skull & Head','Torso — Rib Cage & Pelvis','Arms & Hands','Legs & Feet','Muscles — Surface Anatomy','Drawing Hands — Step by Step','Drawing Feet — Step by Step','Drawing Faces — Proportions','Drawing Eyes Nose Mouth','Drawing Ears','Figure Drawing — Full Body','Gesture Drawing — 30 Second Poses','Anatomy Checkpoint']],
+      [11,'Perspective Drawing',['What Is Perspective?','Horizon Line & Vanishing Points','One-Point Perspective','Two-Point Perspective','Three-Point Perspective','Drawing Buildings in Perspective','Drawing Roads & Streets','Drawing Interiors — Rooms','Drawing Furniture','Drawing Vehicles','Atmospheric Perspective — Far = Faded','Foreshortening — Coming Toward You','Bird\'s Eye View','Worm\'s Eye View','Perspective Checkpoint']],
+      [12,'Composition & Layout',['What Is Composition?','Rule of Thirds','Golden Ratio in Art','Leading Lines — Guide the Eye','Focal Point — Where to Look','Balance — Symmetrical vs Asymmetrical','Negative Space — Breathing Room','Framing — Within the Frame','Depth — Foreground Midground Background','Contrast — Light vs Dark','Repetition & Pattern','Movement & Flow','Cropping — What to Include','Thumbnail Sketches — Planning','Composition Checkpoint']],
+      [13,'Art History — Ancient to Medieval',['Cave Paintings — Lascaux Altamira','Ancient Egypt — Hieroglyphics & Murals','Ancient Greece — Sculpture & Pottery','Roman Art — Mosaics & Frescos','Byzantine Art — Gold & Icons','Islamic Art — Geometric Patterns','Medieval Manuscripts — Illumination','Gothic Architecture — Cathedrals','Romanesque Art','Viking Art — Knotwork','Chinese Art — Ink Painting','Japanese Art — Ukiyo-e','African Art — Masks & Sculpture','Pre-Columbian Art — Maya Aztec','Ancient Art Checkpoint']],
+      [14,'Art History — Renaissance to Modern',['Renaissance — Leonardo Michelangelo Raphael','Mona Lisa — Why It\'s Famous','Sistine Chapel — Michelangelo','Baroque — Caravaggio Rembrandt','Impressionism — Monet Renoir','Post-Impressionism — Van Gogh Cézanne','Expressionism — Munch Kandinsky','Cubism — Picasso Braque','Surrealism — Dalí Magritte','Abstract Expressionism — Pollock','Pop Art — Warhol Lichtenstein','Street Art — Banksy','Contemporary Art','Art Movements Timeline','Modern Art Checkpoint']],
+      [15,'Famous Artists & Their Work',['Leonardo da Vinci — The Genius','Michelangelo — Sculptor & Painter','Rembrandt — Master of Light','Monet — Father of Impressionism','Van Gogh — Starry Night','Picasso — Cubism Pioneer','Frida Kahlo — Self-Portraits','Georgia O\'Keeffe — Flowers & Deserts','Basquiat — Neo-Expressionism','Yayoi Kusama — Infinity Dots','Banksy — Anonymous Street Artist','Hayao Miyazaki — Anime Art','Bob Ross — Happy Little Trees','Artists Who Changed Everything','Famous Artists Checkpoint']],
+      [16,'Illustration',['What Is Illustration?','Editorial Illustration — Magazines','Book Illustration — Children\'s Books','Comic Illustration — Panels & Gutters','Concept Art — Games & Film','Fashion Illustration','Scientific Illustration — Botanical','Medical Illustration','Infographic Design','Spot Illustrations — Small Drawings','Sequential Art — Visual Storytelling','Caricature — Exaggeration','Storyboarding — Frame by Frame','Building an Illustration Portfolio','Illustration Checkpoint']],
+      [17,'Comics & Manga',['Comics vs Manga — What\'s Different?','Panel Layout — Pacing','Speech Bubbles & Lettering','Character Consistency — Model Sheet','Inking — Thick & Thin Lines','Screentone — Manga Shading','Action Lines — Speed & Impact','Facial Expressions in Comics','Backgrounds in Comics','Color Comics vs Black & White','Webcomics — Publishing Online','Manga Eyes — Step by Step','Drawing Manga Hair','Creating a Short Comic — 4 Pages','Comics & Manga Checkpoint']],
+      [18,'Animation Basics',['What Is Animation?','Frame by Frame — Flipbook','12 Principles of Animation — Disney','Squash & Stretch','Anticipation','Staging','Follow Through & Overlapping Action','Slow In & Slow Out — Easing','Arcs — Natural Movement','Secondary Action','Timing — Fast vs Slow','Exaggeration','Solid Drawing','Appeal — Making Characters Likable','Animation Checkpoint']],
+      [19,'Pixel Art',['What Is Pixel Art?','Canvas Size — 16x16 32x32 64x64','Color Palette — Limited Colors','Single Pixel Placement','Anti-Aliasing — Smooth Edges','Dithering — Creating Gradients','Drawing Characters in Pixel Art','Drawing Landscapes — Pixel','Animated Sprites — Walk Cycle','Pixel Art for Games — Tiles','Isometric Pixel Art','Pixel Art Tools — Aseprite Piskel','Pixel Art Icons','Pixel Art Portrait','Pixel Art Checkpoint']],
+      [20,'3D Art Basics',['What Is 3D Art?','3D Software — Blender Maya ZBrush','Modeling — Polygons','Box Modeling — Start with a Cube','Sculpting — Digital Clay','Texturing — UV Mapping','Materials — Metal Wood Skin','Lighting — Key Fill Rim','Rendering — Creating the Final Image','Camera Angles in 3D','3D Character Modeling','3D Environment Modeling','3D Printing — Art to Physical','Low Poly Art Style','3D Art Checkpoint']],
+      [21,'Photography as Art',['Photography Basics — Aperture Shutter ISO','Composition in Photography','Rule of Thirds — Photography','Leading Lines in Photos','Natural Light vs Artificial','Portrait Photography','Landscape Photography','Street Photography','Macro Photography — Close Up','Black & White Photography','Photo Editing — Lightroom','Color Grading Photos','Photography Genres','Building a Photo Portfolio','Photography Checkpoint']],
+      [22,'Graphic Design',['What Is Graphic Design?','Typography — Fonts & Readability','Logo Design — Principles','Color in Branding','Layout Design — Grids','Poster Design','Business Card Design','Social Media Graphics','Infographic Design','Web Design Basics','UI Design — User Interface','Icon Design','Package Design','Design Software — Figma Canva Illustrator','Graphic Design Checkpoint']],
+      [23,'Art on DeviantArt',['What Is DeviantArt?','Creating a DeviantArt Account','Uploading Your First Art','Categories — Digital Traditional Photography','Writing Descriptions & Tags','Journals & Blog Posts','Favorites & Collections','Commenting & Feedback Etiquette','Groups & Communities','Commissions — Selling Art','Points & Premium','Art Theft — How to Report','Copyright on DeviantArt','Building a Following','DeviantArt Checkpoint']],
+      [24,'Selling & Sharing Your Art',['Where to Share Art Online','DeviantArt — Portfolio','Instagram — Art Account','ArtStation — Professional Portfolio','Behance — Design Portfolio','Twitter/X — Art Community','Tumblr — Art Reblogging','Selling Prints — Redbubble Society6','Selling Originals — Etsy','Commissions — Pricing Your Work','Digital Downloads — Gumroad','NFTs & Digital Art — Debate','Patreon — Membership Support','Building Your Brand as an Artist','Selling Art Checkpoint']],
+      [25,'Art Supplies Guide',['Pencils — Best Brands for Drawing','Erasers — Types & Uses','Paper — Sketchbooks & Loose','Pens — Micron Copic','Markers — Copic Prismacolor','Colored Pencils — Prismacolor Faber-Castell','Watercolor Sets — Student vs Professional','Acrylic Paint — Budget vs Quality','Oil Paint — Getting Started Kit','Canvas & Surfaces','Brushes — Shapes & Materials','Palettes — Plastic Wood Glass','Easels — Table vs Standing','Art Storage & Organization','Supplies Checkpoint']],
+      [26,'Creative Exercises',['30-Day Drawing Challenge','Draw Something Every Day — Inktober','Blind Contour Drawing — Don\'t Look','Left Hand Drawing — Challenge Yourself','Speed Drawing — 1 Minute 5 Minutes 15 Minutes','Draw from Life — Real Objects','Draw from Imagination — No Reference','Master Studies — Copy the Greats','Color Scheme Challenge — Limited Palette','Draw in Different Styles','Collaborate — Art Trades','Fan Art — Drawing Characters You Love','Redesign Challenge — Make It Yours','Art Journal — Daily Sketches','Exercises Checkpoint']],
+      [27,'Art Critique & Feedback',['How to Give Constructive Feedback','Praise Sandwich — Good Bad Good','Specific vs Vague Feedback','Technical Critique — Anatomy Perspective','Aesthetic Critique — Color Composition','How to Receive Feedback — Don\'t Take It Personal','Growing from Criticism','Online Art Communities — Getting Feedback','Art School vs Self-Taught','Comparing Yourself — Don\'t','Imposter Syndrome — It\'s Normal','Finding Your Style','Developing a Thick Skin','Art Growth Over Time','Critique Checkpoint']],
+      [28,'Art & Math Connection',['Golden Ratio — Φ 1.618','Fibonacci Spiral in Art','Symmetry — Rotational Reflective','Tessellations — Escher','Fractals — Mandelbrot in Art','Geometric Patterns — Islamic Art','Perspective Math — Vanishing Points','Color Math — RGB CMYK Hex','Proportions — The Head Count','Sacred Geometry','Pixel Math — Resolution DPI','3D Math — Vectors & Polygons','Algorithmic Art — Code-Generated','Math Makes Art Better','Art & Math Checkpoint']],
+      [29,'Building Your Portfolio',['What Is an Art Portfolio?','Choosing Your Best Work — Quality Over Quantity','Variety — Show Range','Consistency — Show Your Style','Digital Portfolio — Website','Physical Portfolio — Print','Artist Statement — Who You Are','Process Work — Sketches to Final','Commission Sheet — Prices & Rules','Resume for Artists','Art School Applications','Freelance Portfolio','Social Media as Portfolio','Presenting Your Work','Portfolio Checkpoint']],
+      [30,'Art Course Mastery',['Drawing Fundamentals Review','Color Theory Review','Painting Techniques Review','Digital Art Review','Character Design Review','Anatomy Review','Perspective Review','Art History Quiz','Famous Artists Quiz','Illustration & Comics Review','Animation Principles Review','Photography & Design Review','Your Best Artwork — Showcase','Art Goals — What\'s Next?','Art Course Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'art-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('art');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('art');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
