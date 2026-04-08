@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Rules — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Social Media Rules</h1>
+    <p>Stay safe online — learn the rules, laws, dangers, and best practices for every social media platform. Cyberbullying, privacy, scams, digital citizenship, and more. 25 units, 375 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Internet Safety Basics',['What Is Internet Safety?','Personal Information — What NOT to Share','Real Name vs Username','Passwords — Strong vs Weak','Two-Factor Authentication (2FA)','Phishing — Recognizing Fake Links','Scam Messages — Too Good to Be True','Public Wi-Fi Dangers','Screen Time — How Much Is Too Much?','Digital Footprint — Everything Is Permanent','Screenshots Last Forever','Location Sharing — Turn It Off','Stranger Danger Online','When to Tell a Parent or Teacher','Internet Safety Checkpoint']],
+      [2,'Age Requirements & COPPA',['What Is COPPA? (Children\'s Online Privacy)','Why 13 Is the Minimum Age','Platforms That Require 13+ — YouTube TikTok Instagram','Platforms for Kids Under 13 — YouTube Kids Messenger Kids','What Happens If You Lie About Your Age','Parental Consent — What It Means','Data Collection on Minors','Advertising to Children — Rules','Schools & Student Data — FERPA','International Laws — GDPR for Kids','Age Verification Methods','Why Companies Want Your Data','Your Rights as a Minor Online','Reporting Underage Accounts','COPPA Checkpoint']],
+      [3,'Cyberbullying',['What Is Cyberbullying?','Types — Harassment Exclusion Outing Impersonation','Cyberbullying vs Regular Bullying','How Cyberbullying Hurts','Signs Someone Is Being Cyberbullied','What to Do If You\'re Bullied Online','Don\'t Respond — Walk Away','Screenshot & Save Evidence','Block the Bully','Report to the Platform','Tell a Trusted Adult','What to Do If You See Bullying','Don\'t Be a Bystander','How to Be an Upstander','Cyberbullying Checkpoint']],
+      [4,'Privacy & Data Protection',['What Is Privacy Online?','What Data Social Media Collects','Cookies & Tracking','Your Profile — Public vs Private','Who Can See Your Posts?','Privacy Settings — Instagram','Privacy Settings — TikTok','Privacy Settings — Snapchat','Privacy Settings — YouTube','Data Breaches — What Happens','How Companies Sell Your Data','Right to Be Forgotten','Deleting Your Account — What Stays','Reading Terms of Service','Privacy Checkpoint']],
+      [5,'Instagram Rules',['Instagram Community Guidelines','Minimum Age — 13','What Gets You Banned','Bullying & Harassment Policy','Nudity & Sexual Content — Banned','Hate Speech — Zero Tolerance','Spam & Fake Accounts','Intellectual Property — Don\'t Steal Content','Reporting Posts & Accounts','Blocking & Restricting','Instagram Algorithm — What It Shows You','Explore Page Dangers','DM Safety — Strangers','Influencer Disclosure Rules — #Ad','Instagram Checkpoint']],
+      [6,'TikTok Rules',['TikTok Community Guidelines','Minimum Age — 13 (Restricted Mode Under 16)','Dangerous Challenges — Don\'t Try Them','Duets & Stitches — Consent','Bullying & Harassment on TikTok','Sexual Content — Banned','Violence & Graphic Content','Misinformation & Fake News','Copyright & Music — Fair Use','TikTok Data Collection — China Concerns','Screen Time Controls','Private vs Public Account','Reporting & Blocking','TikTok & Mental Health','TikTok Checkpoint']],
+      [7,'YouTube Rules',['YouTube Community Guidelines','Minimum Age — 13 (YouTube Kids for Under 13)','Copyright Strikes — 3 and You\'re Out','Content ID — Music & Video Claims','Hate Speech Policy','Harassment & Cyberbullying Policy','Dangerous & Harmful Content','Misinformation Policy','Child Safety on YouTube','Comments Section — Moderation','Monetization Rules — YPP','Clickbait & Misleading Content','Spam & Scam Links','Reporting Videos & Channels','YouTube Checkpoint']],
+      [8,'Snapchat Rules',['Snapchat Community Guidelines','Minimum Age — 13','Snap Map — Location Danger','Disappearing Messages — Not Really Gone','Screenshots — People Get Notified','Sexting — Never Do It','Sextortion — What It Is & How to Get Help','Snapchat Memories — Saved Forever','Snap Score — What It Means','Adding Strangers — Don\'t','Quick Add — Be Careful','My AI — Privacy Concerns','Drug Content on Snapchat','Reporting & Blocking','Snapchat Checkpoint']],
+      [9,'Twitter/X Rules',['X (Twitter) Rules & Policies','Minimum Age — 13','Hate Speech & Slurs','Threats of Violence — Banned','Doxxing — Sharing Personal Info','Misinformation & Fake News','Bot Accounts — Recognizing Them','Quote Tweets & Dunking Culture','Ratio Culture — What It Means','Cancel Culture & Pile-Ons','Verified Accounts & Blue Checks','DM Safety','Political Content & Bias','Reporting Tweets & Accounts','Twitter/X Checkpoint']],
+      [10,'Discord Rules',['Discord Community Guidelines','Minimum Age — 13','Server Rules — Every Server Is Different','NSFW Channels — Age Restricted','Grooming on Discord — Warning Signs','Scam Bots & Fake Nitro Links','Voice Chat Safety','Sharing Screens — Be Careful','Server Moderation — Roles & Permissions','Raiding — What It Is','DM Spam & Phishing','Discord & Gaming Communities','Leaving Toxic Servers','Reporting Users & Servers','Discord Checkpoint']],
+      [11,'Reddit Rules',['Reddit Content Policy','Minimum Age — 13','Subreddit Rules — Each Community Differs','NSFW Subreddits — Age Restricted','Doxxing & Personal Information','Brigading — Mass Reporting','Karma System — How It Works','Misinformation on Reddit','Anonymity — Good & Bad','Trolling Culture','Award System','Moderation — How Mods Work','Reporting Posts & Comments','Reddit & Mental Health','Reddit Checkpoint']],
+      [12,'Online Predators & Grooming',['What Is Online Grooming?','How Predators Find Victims','Warning Signs — Too Friendly Too Fast','Asking for Personal Info — Red Flag','Asking for Photos — Red Flag','Asking to Move to Private Chat — Red Flag','Secret Keeping — "Don\'t Tell Anyone"','Flattery & Gift Giving Online','Age Deception — Adults Pretending to Be Kids','Sextortion — Blackmail with Images','What to Do If It Happens to You','Tell a Trusted Adult Immediately','Report to NCMEC — CyberTipline','Law Enforcement Can Help','Predators Checkpoint']],
+      [13,'Sexting & Image Sharing',['What Is Sexting?','Why Sexting Is Dangerous for Minors','It\'s Illegal — Child Exploitation Laws','Images Spread — You Lose Control','Sextortion — Being Blackmailed','Revenge Sharing — After Breakups','Pressure from Partners — Say No','What If Someone Sends You an Image','Don\'t Forward or Save It','Report It to a Trusted Adult','Screenshot Evidence for Reporting','Legal Consequences — Even for Minors','Platforms That Report to Police','Recovery & Support Resources','Sexting Checkpoint']],
+      [14,'Misinformation & Fake News',['What Is Misinformation?','Misinformation vs Disinformation','Deepfakes — AI-Generated Fake Videos','How to Spot Fake News','Check the Source — Who Published It?','Check the Date — Is It Current?','Check the Author — Are They Real?','Reverse Image Search — Was It Edited?','Fact-Checking Websites — Snopes PolitiFact','Confirmation Bias — Believing What You Want','Echo Chambers & Filter Bubbles','Viral Lies — How They Spread','Health Misinformation — Vaccines','Election Misinformation','Fake News Checkpoint']],
+      [15,'Digital Citizenship',['What Is Digital Citizenship?','Being Kind Online — The Golden Rule','Empathy in Text — Tone Is Hard to Read','Think Before You Post — The THINK Test','T — Is It True? H — Is It Helpful?','I — Is It Inspiring? N — Is It Necessary?','K — Is It Kind?','Respecting Others\' Opinions','Cultural Sensitivity Online','Inclusive Language','Accessibility — Alt Text & Captions','Giving Credit — Citing Sources','Fair Use & Creative Commons','Being a Good Digital Citizen','Digital Citizenship Checkpoint']],
+      [16,'Mental Health & Social Media',['Social Media & Anxiety','Comparison Culture — Highlight Reels','FOMO — Fear of Missing Out','Likes & Validation — Dopamine Loops','Body Image & Filters — Unrealistic Standards','Doomscrolling — Can\'t Stop Bad News','Cyberbullying & Depression','Social Media Addiction — Signs','Setting Screen Time Limits','Digital Detox — Taking Breaks','Curating Your Feed — Follow Positivity','Unfollowing for Mental Health','When to Seek Help','Crisis Resources — 988 Lifeline','Mental Health Checkpoint']],
+      [17,'Copyright & Intellectual Property',['What Is Copyright?','Automatic Copyright — No Registration Needed','Fair Use — What\'s Allowed?','Fair Use — Commentary & Education','Fair Use — Parody & Satire','Music Copyright — You Can\'t Just Use Any Song','Content ID on YouTube','DMCA Takedown Notices','Creative Commons Licenses','Public Domain — Free to Use','Crediting Original Creators','Plagiarism vs Inspiration','Memes & Copyright — Gray Area','Consequences of Stealing Content','Copyright Checkpoint']],
+      [18,'Online Scams & Fraud',['Common Online Scams','Phishing Emails — Fake Links','Fake Giveaways — "You Won an iPhone!"','Advance Fee Scams — Send Money First','Romance Scams — Fake Relationships','Tech Support Scams — "Your Computer Has a Virus"','Cryptocurrency Scams','Free V-Bucks & Robux Scams — Always Fake','Catfishing — Fake Profiles','Identity Theft — Stealing Your Info','Credit Card Scams','How to Report Scams','Two-Factor Authentication Protects You','If You Get Scammed — What to Do','Scams Checkpoint']],
+      [19,'Platform-Specific Safety Tools',['Instagram — Restrict & Limit','TikTok — Family Pairing','YouTube — Restricted Mode','Snapchat — Ghost Mode','Discord — Privacy Settings','Twitter/X — Mute & Block','Reddit — Content Filters','Screen Time — iOS & Android Settings','Parental Controls — How They Work','Reporting Tools — Every Platform','Blocking vs Muting — When to Use Each','Two-Factor on Every Platform','Password Manager Recommendations','Recovery Options — Lost Accounts','Safety Tools Checkpoint']],
+      [20,'Laws & Legal Consequences',['Cyberbullying Laws by State','Revenge Porn Laws — It\'s a Crime','Child Exploitation Laws — CSAM','Sextortion — Federal Crime','Online Harassment — Legal Consequences','Doxxing — Can Be Prosecuted','Defamation & Libel Online','COPPA Violations — Fines','GDPR — European Privacy Law','Terms of Service — A Legal Contract','When Parents Can Sue','When Schools Can Intervene','Reporting to Police — How To','Digital Evidence in Court','Legal Checkpoint']],
+      [21,'Influencer Culture',['What Is an Influencer?','Micro vs Macro vs Mega Influencers','How Influencers Make Money','Sponsored Content — #Ad #Sponsored','FTC Disclosure Rules','Fake Followers & Engagement','Influencer Scams — Dropshipping','MLM & Pyramid Schemes on Social Media','Unrealistic Lifestyle Posts','Photoshop & Filters — Not Real','Parasocial Relationships','Stan Culture — Healthy vs Toxic','Celebrity vs Influencer','Being Critical of What You See','Influencer Checkpoint']],
+      [22,'Gaming & Online Communities',['Gaming Chat Safety','Voice Chat — Mute Toxic Players','In-Game Purchases — Loot Boxes','Gambling Mechanics in Games','Fortnite Roblox Minecraft — Rules','Among Us & Deception Games','Online Predators in Gaming','Sharing Personal Info in Games','Twitch & Streaming Safety','Esports Community Rules','Gaming Addiction — Warning Signs','Rage & Toxicity — Managing Anger','Reporting in Games','Healthy Gaming Habits','Gaming Checkpoint']],
+      [23,'AI & Deepfakes',['What Is AI-Generated Content?','Deepfake Videos — Face Swapping','Deepfake Audio — Voice Cloning','AI-Generated Images — Not Real People','ChatGPT & AI Text — Cheating Concerns','AI Art — Who Owns It?','Detecting Deepfakes — What to Look For','AI in Scams — Fake Voice Calls','AI & Misinformation','AI-Generated Child Exploitation — Illegal','Reporting AI Abuse','Using AI Responsibly','AI in Education — Good Uses','Future of AI & Social Media','AI Checkpoint']],
+      [24,'Building a Positive Online Presence',['Your Digital Resume — What Colleges See','Clean Up Your Profiles','Google Yourself — What Shows Up?','Positive Content Creation','Building a Portfolio Online','LinkedIn for Teens — Starting Early','Personal Branding','Networking Online — Safely','Volunteering & Activism Online','Supporting Others — Positive Comments','Being an Advocate Against Bullying','Starting a Blog or Channel — Safely','Digital Leadership','Your Online Legacy','Positive Presence Checkpoint']],
+      [25,'Social Media Rules Mastery',['Internet Safety Review','Privacy Settings — All Platforms','Cyberbullying — How to Stop It','Predator Awareness Review','Sexting — Just Say No','Fake News Detection','Copyright & Fair Use Review','Scam Recognition','Mental Health & Balance','Legal Consequences Review','Digital Citizenship Pledge','Safety Tools Checklist','Crisis Resources — Save These Numbers','Teaching Others — Spread the Knowledge','Social Media Rules Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'smr-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('social-media-rules');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('social-media-rules');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
