@@ -602,8 +602,76 @@ var gosiaResponses = {
   default: ["That's interesting! Tell me more and I'll try to help.","Hmm, let me think about that... Can you give me more details?","Good question! I want to make sure I give you the best answer. What subject is this for?","I'm not sure I understand completely. Can you rephrase that? I want to help!"]
 };
 
+// Content moderation — Gosia watches for inappropriate messages
+var chatWarnings = parseInt(localStorage.getItem('vs_chat_warnings') || '0');
+var chatBanned = localStorage.getItem('vs_chat_banned') === 'true';
+
+// Inappropriate content patterns
+var badPatterns = [
+  /\b(sex|sexy|nude|naked|porn|xxx|horny|boob|dick|penis|vagina|tit[s]?|ass(?:hole)?|fuck|shit|damn|hell|bitch|whore|slut|cock|cum)\b/i,
+  /\b(kill|murder|shoot|stab|die|dead|suicide|bomb|gun|weapon|attack|threat)\b/i,
+  /\b(bully|loser|ugly|fat|stupid|idiot|dumb|retard|hate you|shut up|kys|kms)\b/i,
+  /\b(drugs|weed|cocaine|meth|heroin|alcohol|drunk|vape|smoke)\b/i,
+  /\b(racist|n[i1]gg|fag|gay.?bashing|homo.?phob)\b/i,
+];
+
+function isInappropriate(msg) {
+  for (var i = 0; i < badPatterns.length; i++) {
+    if (badPatterns[i].test(msg)) return true;
+  }
+  return false;
+}
+
+var warningMessages = [
+  {level:1, msg:"⚠️ <strong>Warning (Strike 1/3):</strong> That language is NOT allowed in my classroom. This is a safe learning space. I'm watching. Please be respectful."},
+  {level:2, msg:"🚨 <strong>Serious Warning (Strike 2/3):</strong> I already warned you once. This kind of behavior is unacceptable. One more and you'll be removed from the classroom."},
+  {level:3, msg:"🚫 <strong>REMOVED FROM CLASSROOM (Strike 3/3):</strong> You have been banned from the online classroom for violating the Community Safety Rules. This behavior will be reported."},
+];
+
+// Gosia AI Voice — speaks her replies aloud
+function gosiaSpeak(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  var clean = text.replace(/<[^>]*>/g,'').replace(/[💜📚🎒💪🎉]/g,'').trim();
+  if (!clean) return;
+  var utterance = new SpeechSynthesisUtterance(clean);
+  utterance.rate = 0.9;
+  utterance.pitch = 1.15;
+  utterance.volume = 1.0;
+  // Try to find a female voice
+  var voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    var pref = voices.find(function(v){ return v.name.includes('Google') && v.name.includes('Female'); }) ||
+               voices.find(function(v){ return v.name.includes('Samantha'); }) ||
+               voices.find(function(v){ return v.name.includes('Google UK English Female'); }) ||
+               voices.find(function(v){ return v.lang.startsWith('en') && v.name.toLowerCase().includes('female'); }) ||
+               voices.find(function(v){ return v.lang.startsWith('en'); }) || voices[0];
+    if (pref) utterance.voice = pref;
+  }
+  window.speechSynthesis.speak(utterance);
+}
+
+// Load voices
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', function(){}, {once:true});
+}
+
 function getGosiaReply(msg) {
   var m = msg.toLowerCase();
+
+  // CHECK FOR INAPPROPRIATE CONTENT FIRST
+  if (isInappropriate(m)) {
+    chatWarnings++;
+    localStorage.setItem('vs_chat_warnings', chatWarnings);
+    if (chatWarnings >= 3) {
+      chatBanned = true;
+      localStorage.setItem('vs_chat_banned', 'true');
+      return warningMessages[2].msg;
+    }
+    return warningMessages[Math.min(chatWarnings-1, 1)].msg;
+  }
+
   if (/^(hi|hey|hello|good morning|good afternoon|sup|yo)/.test(m)) return gosiaResponses.greeting[Math.floor(Math.random()*gosiaResponses.greeting.length)];
   if (/math|algebra|calculus|trig|equation|solve|number|fraction|decimal|percent/.test(m)) return gosiaResponses.math[Math.floor(Math.random()*gosiaResponses.math.length)];
   if (/science|biology|chemistry|physics|atom|cell|energy|experiment/.test(m)) return gosiaResponses.science[Math.floor(Math.random()*gosiaResponses.science.length)];
@@ -618,6 +686,14 @@ function getGosiaReply(msg) {
 }
 
 function sendChat() {
+  // Check if banned
+  if (chatBanned) {
+    document.getElementById('chatInput').value = '';
+    document.getElementById('chatInput').placeholder = 'You have been removed from the classroom.';
+    document.getElementById('chatInput').disabled = true;
+    return;
+  }
+
   var input = document.getElementById('chatInput');
   var msg = input.value.trim();
   if (!msg) return;
@@ -625,12 +701,14 @@ function sendChat() {
 
   var container = document.getElementById('chatMessages');
   var studentName = localStorage.getItem('vs_name') || 'You';
+  var isBad = isInappropriate(msg.toLowerCase());
 
-  // Student message
+  // Student message — censor if inappropriate
+  var displayMsg = isBad ? msg.replace(/</g,'&lt;').replace(/\S/g,'*') : msg.replace(/</g,'&lt;');
   container.insertAdjacentHTML('beforeend',
     '<div style="display:flex;gap:8px;align-items:flex-start;justify-content:flex-end;">' +
-    '<div style="background:#3b82f6;color:#fff;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;line-height:1.5;">' + msg.replace(/</g,'&lt;') + '</div>' +
-    '<div style="width:28px;height:28px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0;">' + studentName.charAt(0).toUpperCase() + '</div>' +
+    '<div style="background:'+(isBad?'#ef4444':'#3b82f6')+';color:#fff;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;line-height:1.5;">' + displayMsg + (isBad?' <span style="font-size:.7rem;opacity:.7;">[censored]</span>':'') + '</div>' +
+    '<div style="width:28px;height:28px;border-radius:50%;background:'+(isBad?'#ef4444':'#3b82f6')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0;">' + studentName.charAt(0).toUpperCase() + '</div>' +
     '</div>'
   );
   container.scrollTop = container.scrollHeight;
@@ -650,14 +728,28 @@ function sendChat() {
     var typing = document.getElementById(typingId);
     if (typing) typing.remove();
     var reply = getGosiaReply(msg);
+    var isWarning = reply.includes('Strike') || reply.includes('REMOVED');
+    var bgColor = isWarning ? (reply.includes('Strike 3') ? '#fef2f2' : '#fef3c7') : '#ede9fe';
+    var borderColor = isWarning ? (reply.includes('Strike 3') ? '#ef4444' : '#f59e0b') : 'transparent';
+    var textColor = isWarning ? (reply.includes('Strike 3') ? '#991b1b' : '#92400e') : '#1e1b4b';
+
     container.insertAdjacentHTML('beforeend',
       '<div style="display:flex;gap:8px;align-items:flex-start;">' +
       '<img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">' +
-      '<div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;color:#1e1b4b;line-height:1.5;">' + reply + '</div>' +
+      '<div style="background:'+bgColor+';border:1px solid '+borderColor+';border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;color:'+textColor+';line-height:1.5;">' + reply + '</div>' +
       '</div>'
     );
     container.scrollTop = container.scrollHeight;
-  }, 1000 + Math.random() * 1500);
+
+    // Gosia speaks her reply aloud
+    gosiaSpeak(reply);
+
+    // If banned, disable input
+    if (chatBanned) {
+      document.getElementById('chatInput').disabled = true;
+      document.getElementById('chatInput').placeholder = 'You have been removed from the classroom.';
+    }
+  }, isBad ? 500 : 1000 + Math.random() * 1500);
 }
 
 // Email preview on setup
@@ -862,7 +954,13 @@ document.getElementById('year').textContent = new Date().getFullYear();
 updateClock();
 setInterval(updateClock, 30000);
 renderSchedule(currentGrade);
+renderAppointments();
 showDailyNotification();
+// Check if banned from chat
+if (chatBanned) {
+  document.getElementById('chatInput').disabled = true;
+  document.getElementById('chatInput').placeholder = 'You have been removed from the classroom.';
+}
 </script>
 
 <script type="module">
