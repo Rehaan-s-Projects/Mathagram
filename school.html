@@ -269,6 +269,31 @@
     </div>
   </div>
 
+  <!-- Online Classroom — Live Chat with Gosia -->
+  <div style="background:var(--color-white);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:20px;">
+    <div style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);padding:14px 20px;display:flex;align-items:center;gap:10px;">
+      <img src="assets/characters/gosia.svg" alt="Gosia" style="width:36px;height:36px;border-radius:50%;border:2px solid #fff;">
+      <div>
+        <div style="color:#fff;font-weight:700;font-size:.9rem;">Online Classroom — Live Chat</div>
+        <div style="color:rgba(255,255,255,.75);font-size:.72rem;">Ms. Gosia is here to help with your classwork</div>
+      </div>
+      <div style="margin-left:auto;width:10px;height:10px;background:#22c55e;border-radius:50%;border:2px solid #fff;"></div>
+    </div>
+    <div id="chatMessages" style="height:300px;overflow-y:auto;padding:16px;background:#f8fafc;display:flex;flex-direction:column;gap:10px;">
+      <!-- Gosia welcome -->
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">
+        <div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;color:#1e1b4b;line-height:1.5;">
+          Welcome to the online classroom! I'm Ms. Gosia. Ask me anything about your lessons, homework, or any subject. I'm here to help! 💜
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px;border-top:1px solid var(--color-border);display:flex;gap:8px;">
+      <input type="text" id="chatInput" placeholder="Ask Ms. Gosia a question..." style="flex:1;padding:10px 14px;font-size:.9rem;border:2px solid var(--color-border);border-radius:10px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()" style="padding:10px 18px;background:#7c3aed;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap;">Send →</button>
+    </div>
+  </div>
+
   <!-- Settings -->
   <div style="text-align:center;margin-bottom:20px;">
     <button onclick="localStorage.clear();location.reload();" style="padding:8px 16px;font-size:.75rem;background:none;border:1px solid var(--color-border);border-radius:var(--radius);cursor:pointer;color:var(--color-text-muted);font-family:inherit;">⚙️ Reset Virtual School Setup</button>
@@ -563,6 +588,77 @@ document.getElementById('gradeSelector').addEventListener('click', function(e) {
     renderSchedule(currentGrade);
   }
 });
+
+// Gosia Classroom Chat
+var gosiaResponses = {
+  math: ["Great question! Let me break that down for you. In math, the key is to practice step by step. Which specific problem are you working on?","Math is all about patterns! Try working through it one step at a time. Need me to show you an example?","I love math questions! Remember: read the problem, identify what you know, find what's missing, then solve. What are you stuck on?"],
+  science: ["Science is about observation and asking WHY! What experiment or topic are you studying?","That's a great science question! Let me think... The key concept here is understanding cause and effect. Can you tell me more?","I love science! Remember the scientific method: observe, hypothesize, test, conclude. What part are you on?"],
+  english: ["English is beautiful! Are you working on grammar, vocabulary, or writing? I can help with all three!","Great question! For writing, remember: clear topic sentence, supporting details, and a strong conclusion.","Let me help with that! Reading carefully and noting key words is the first step. What text are you working with?"],
+  history: ["History is like a giant story! Understanding the causes and effects helps everything make sense. What era are you studying?","Interesting question! Let me share some context... History is about connecting events. What period?","I love history! Remember: who, what, when, where, why. Which event are you learning about?"],
+  homework: ["Homework time! I'm here to guide you, not give answers directly. Let's work through it together!","Let's tackle that homework! Show me the problem and I'll help you understand the steps.","I'm proud of you for asking for help! That's what smart students do. What's the assignment?"],
+  help: ["I'm here for you! You can ask me about any subject — math, science, English, history, or study tips.","Need help? Just type your question and I'll do my best to explain it clearly!","Don't worry, no question is too simple! That's what teachers are for. Ask away! 💜"],
+  greeting: ["Hey there! Ready to learn today? What subject should we work on?","Hello! Great to see you in class! What can I help you with?","Hi! Ms. Gosia at your service! What are we studying today? 📚"],
+  motivation: ["You're doing amazing! Keep pushing — every problem you solve makes you smarter!","I believe in you! Even the hardest subjects become easy with practice.","Remember: every expert was once a beginner. You've got this! 💪"],
+  default: ["That's interesting! Tell me more and I'll try to help.","Hmm, let me think about that... Can you give me more details?","Good question! I want to make sure I give you the best answer. What subject is this for?","I'm not sure I understand completely. Can you rephrase that? I want to help!"]
+};
+
+function getGosiaReply(msg) {
+  var m = msg.toLowerCase();
+  if (/^(hi|hey|hello|good morning|good afternoon|sup|yo)/.test(m)) return gosiaResponses.greeting[Math.floor(Math.random()*gosiaResponses.greeting.length)];
+  if (/math|algebra|calculus|trig|equation|solve|number|fraction|decimal|percent/.test(m)) return gosiaResponses.math[Math.floor(Math.random()*gosiaResponses.math.length)];
+  if (/science|biology|chemistry|physics|atom|cell|energy|experiment/.test(m)) return gosiaResponses.science[Math.floor(Math.random()*gosiaResponses.science.length)];
+  if (/english|grammar|write|essay|read|vocab|word|spell|sentence/.test(m)) return gosiaResponses.english[Math.floor(Math.random()*gosiaResponses.english.length)];
+  if (/history|war|president|country|ancient|revolution|civil/.test(m)) return gosiaResponses.history[Math.floor(Math.random()*gosiaResponses.history.length)];
+  if (/homework|assignment|due|project|test|exam|quiz/.test(m)) return gosiaResponses.homework[Math.floor(Math.random()*gosiaResponses.homework.length)];
+  if (/help|stuck|confused|don'?t understand|how do/.test(m)) return gosiaResponses.help[Math.floor(Math.random()*gosiaResponses.help.length)];
+  if (/motivat|tired|bored|hard|give up|can'?t/.test(m)) return gosiaResponses.motivation[Math.floor(Math.random()*gosiaResponses.motivation.length)];
+  if (/thank|thanks|thx/.test(m)) return "You're welcome! That's what I'm here for. Keep up the great work! 💜";
+  if (/bye|goodbye|see you|leaving/.test(m)) return "Bye! Great work today. See you next class! 🎒";
+  return gosiaResponses.default[Math.floor(Math.random()*gosiaResponses.default.length)];
+}
+
+function sendChat() {
+  var input = document.getElementById('chatInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  var container = document.getElementById('chatMessages');
+  var studentName = localStorage.getItem('vs_name') || 'You';
+
+  // Student message
+  container.insertAdjacentHTML('beforeend',
+    '<div style="display:flex;gap:8px;align-items:flex-start;justify-content:flex-end;">' +
+    '<div style="background:#3b82f6;color:#fff;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;line-height:1.5;">' + msg.replace(/</g,'&lt;') + '</div>' +
+    '<div style="width:28px;height:28px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0;">' + studentName.charAt(0).toUpperCase() + '</div>' +
+    '</div>'
+  );
+  container.scrollTop = container.scrollHeight;
+
+  // Gosia typing indicator
+  var typingId = 'typing-' + Date.now();
+  container.insertAdjacentHTML('beforeend',
+    '<div id="' + typingId + '" style="display:flex;gap:8px;align-items:flex-start;">' +
+    '<img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">' +
+    '<div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;font-size:.85rem;color:#7c3aed;"><span style="animation:dots 1s infinite;">Typing</span><span class="bus-dots"></span></div>' +
+    '</div>'
+  );
+  container.scrollTop = container.scrollHeight;
+
+  // Gosia reply after delay
+  setTimeout(function() {
+    var typing = document.getElementById(typingId);
+    if (typing) typing.remove();
+    var reply = getGosiaReply(msg);
+    container.insertAdjacentHTML('beforeend',
+      '<div style="display:flex;gap:8px;align-items:flex-start;">' +
+      '<img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">' +
+      '<div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;color:#1e1b4b;line-height:1.5;">' + reply + '</div>' +
+      '</div>'
+    );
+    container.scrollTop = container.scrollHeight;
+  }, 1000 + Math.random() * 1500);
+}
 
 // Email preview on setup
 document.getElementById('setupName').addEventListener('input', updateEmailPreview);
