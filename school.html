@@ -115,11 +115,64 @@
   </div>
 </nav>
 
-<div class="school-container">
+<!-- SETUP SCREEN (first visit) -->
+<div class="school-container" id="setupScreen" style="display:none;">
+  <div style="background:var(--color-white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:32px 24px;text-align:center;max-width:500px;margin:0 auto;">
+    <img src="assets/characters/gosia.svg" alt="Ms. Gosia" style="width:80px;height:80px;border-radius:50%;border:3px solid #8b5cf6;margin-bottom:12px;">
+    <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:4px;">Welcome to Virtual School!</h2>
+    <p style="font-size:.9rem;color:var(--color-text-secondary);margin-bottom:20px;">I'm Ms. Gosia, your Intelligent Teacher. Let's set up your school year.</p>
+
+    <div style="text-align:left;margin-bottom:16px;">
+      <label style="font-weight:700;font-size:.85rem;display:block;margin-bottom:6px;">What grade are you in?</label>
+      <select id="setupGrade" style="width:100%;padding:10px;font-size:1rem;border:2px solid var(--color-border);border-radius:var(--radius);font-family:inherit;">
+        <option value="7">Grade 7</option><option value="8">Grade 8</option><option value="9" selected>Grade 9</option><option value="10">Grade 10</option><option value="11">Grade 11</option><option value="12">Grade 12</option>
+      </select>
+    </div>
+
+    <div style="text-align:left;margin-bottom:16px;">
+      <label style="font-weight:700;font-size:.85rem;display:block;margin-bottom:6px;">School year type</label>
+      <div style="display:flex;gap:8px;">
+        <button class="grade-btn active" id="setupRegular" onclick="document.getElementById('setupRegular').classList.add('active');document.getElementById('setupESY').classList.remove('active');" style="flex:1;padding:10px;">Regular Year<br><span style="font-size:.7rem;color:var(--color-text-muted);">Sep — Jun 19 (Juneteenth)</span></button>
+        <button class="grade-btn" id="setupESY" onclick="document.getElementById('setupESY').classList.add('active');document.getElementById('setupRegular').classList.remove('active');" style="flex:1;padding:10px;">ESY<br><span style="font-size:.7rem;color:var(--color-text-muted);">Extended School Year (Summer)</span></button>
+      </div>
+    </div>
+
+    <div style="text-align:left;margin-bottom:20px;">
+      <label style="font-weight:700;font-size:.85rem;display:block;margin-bottom:6px;">Your name (optional)</label>
+      <input type="text" id="setupName" placeholder="Enter your name" style="width:100%;padding:10px;font-size:1rem;border:2px solid var(--color-border);border-radius:var(--radius);font-family:inherit;box-sizing:border-box;">
+    </div>
+
+    <button onclick="finishSetup()" style="width:100%;padding:14px;font-size:1.1rem;font-weight:700;background:#3b82f6;color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 4px 0 #1d4ed8;">Start School →</button>
+  </div>
+</div>
+
+<!-- MAIN SCHOOL UI -->
+<div class="school-container" id="mainSchool">
   <!-- Header -->
   <div class="school-header">
     <h1>Mathagram Virtual School</h1>
     <p>Grades 7-12 — Your Intelligent Teacher is ready</p>
+  </div>
+
+  <!-- Gosia Notification Banner -->
+  <div id="gosiaNotification" style="display:none;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;">
+    <img src="assets/characters/gosia.svg" alt="" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;">
+    <div style="flex:1;">
+      <div style="font-weight:700;font-size:.82rem;color:#92400e;margin-bottom:2px;" id="notifTitle">🔔 Ms. Gosia — Notification</div>
+      <div style="font-size:.82rem;color:#78350f;line-height:1.5;" id="notifBody"></div>
+    </div>
+    <button onclick="this.parentElement.style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#92400e;padding:0;">✕</button>
+  </div>
+
+  <!-- Brain Temperature Check -->
+  <div id="tempCheck" style="display:none;background:var(--color-white);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:18px 20px;margin-bottom:16px;">
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:10px;">🌡️ Daily Health Check — How are you feeling?</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="grade-btn" onclick="reportTemp('good')" style="flex:1;min-width:100px;padding:10px;">😊 Feeling Good</button>
+      <button class="grade-btn" onclick="reportTemp('warm')" style="flex:1;min-width:100px;padding:10px;">🤒 Feeling Warm</button>
+      <button class="grade-btn" onclick="reportTemp('sick')" style="flex:1;min-width:100px;padding:10px;">🤧 Feeling Sick</button>
+    </div>
+    <div id="tempResult" style="margin-top:10px;font-size:.82rem;display:none;"></div>
   </div>
 
   <!-- Grade Selector -->
@@ -300,7 +353,13 @@ var holidays = [
   // Spring Break — week of March 24-28
   {m:2, d:24, name:'Spring Break'},{m:2, d:25, name:'Spring Break'},{m:2, d:26, name:'Spring Break'},{m:2, d:27, name:'Spring Break'},{m:2, d:28, name:'Spring Break'},
   {m:4, d:26, name:'Memorial Day'},
+  {m:5, d:19, name:'Juneteenth — Last Day of School! 🎓'},
+  {m:5, d:20, name:'Summer Break'},{m:5, d:23, name:'Summer Break'},{m:5, d:24, name:'Summer Break'},{m:5, d:25, name:'Summer Break'},{m:5, d:26, name:'Summer Break'},{m:5, d:27, name:'Summer Break'},{m:5, d:30, name:'Summer Break'},
+  {m:6, d:1, name:'Summer Break'},{m:6, d:2, name:'Summer Break'},{m:6, d:3, name:'Summer Break'},
   {m:6, d:4, name:'Independence Day'},
+  // Summer break Jul-Aug (ESY students still attend)
+  {m:6, d:7, name:'Summer Break'},{m:6, d:8, name:'Summer Break'},{m:6, d:9, name:'Summer Break'},{m:6, d:10, name:'Summer Break'},{m:6, d:11, name:'Summer Break'},{m:6, d:14, name:'Summer Break'},{m:6, d:15, name:'Summer Break'},{m:6, d:16, name:'Summer Break'},{m:6, d:17, name:'Summer Break'},{m:6, d:18, name:'Summer Break'},{m:6, d:21, name:'Summer Break'},{m:6, d:22, name:'Summer Break'},{m:6, d:23, name:'Summer Break'},{m:6, d:24, name:'Summer Break'},{m:6, d:25, name:'Summer Break'},{m:6, d:28, name:'Summer Break'},{m:6, d:29, name:'Summer Break'},{m:6, d:30, name:'Summer Break'},{m:6, d:31, name:'Summer Break'},
+  {m:7, d:1, name:'Summer Break'},{m:7, d:4, name:'Summer Break'},{m:7, d:5, name:'Summer Break'},{m:7, d:6, name:'Summer Break'},{m:7, d:7, name:'Summer Break'},{m:7, d:8, name:'Summer Break'},{m:7, d:11, name:'Summer Break'},{m:7, d:12, name:'Summer Break'},{m:7, d:13, name:'Summer Break'},{m:7, d:14, name:'Summer Break'},{m:7, d:15, name:'Summer Break'},{m:7, d:18, name:'Summer Break'},{m:7, d:19, name:'Summer Break'},{m:7, d:20, name:'Summer Break'},{m:7, d:21, name:'Summer Break'},{m:7, d:22, name:'Summer Break'},{m:7, d:25, name:'Summer Break'},{m:7, d:26, name:'Summer Break'},{m:7, d:27, name:'Summer Break'},{m:7, d:28, name:'Summer Break'},{m:7, d:29, name:'Summer Break'},
   {m:8, d:1, name:'Labor Day'},
   {m:9, d:13, name:'Columbus Day'},
   {m:10, d:11, name:'Veterans Day'},
@@ -450,11 +509,107 @@ document.getElementById('gradeSelector').addEventListener('click', function(e) {
   }
 });
 
+// ESY mode — if ESY, summer break holidays are ignored
+var isESY = localStorage.getItem('vs_esy') === 'true';
+
+// Override getHoliday for ESY students during summer
+var _origGetHoliday = getHoliday;
+getHoliday = function(date) {
+  var h = _origGetHoliday(date);
+  if (isESY && h && h.includes('Summer Break')) return null; // ESY students attend summer
+  return h;
+};
+
+// Setup screen
+function finishSetup() {
+  var grade = document.getElementById('setupGrade').value;
+  var name = document.getElementById('setupName').value.trim();
+  var esy = document.getElementById('setupESY').classList.contains('active');
+  localStorage.setItem('vs_grade', grade);
+  localStorage.setItem('vs_name', name || '');
+  localStorage.setItem('vs_esy', esy ? 'true' : 'false');
+  localStorage.setItem('vs_setup', 'done');
+  isESY = esy;
+  currentGrade = parseInt(grade);
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('mainSchool').style.display = 'block';
+  // Update UI
+  document.querySelectorAll('.grade-btn[data-grade]').forEach(function(b){b.classList.remove('active')});
+  var gb = document.querySelector('.grade-btn[data-grade="'+grade+'"]');
+  if(gb) gb.classList.add('active');
+  document.getElementById('gradeLabel').textContent = 'Grade ' + grade + (esy ? ' (ESY)' : '');
+  if (name) document.getElementById('gosiaMsg').textContent = '"Welcome back, ' + name + '! Let\'s have a great day!"';
+  renderSchedule(currentGrade);
+  showDailyNotification();
+}
+
+// Temperature / health check
+function reportTemp(status) {
+  var result = document.getElementById('tempResult');
+  result.style.display = 'block';
+  if (status === 'good') {
+    result.innerHTML = '<div style="background:#dcfce7;border:1px solid #22c55e;border-radius:10px;padding:10px;color:#166534;">✅ <strong>All clear!</strong> Your brain temperature is normal. Ms. Gosia says: "Great! You\'re ready to learn today!"</div>';
+    document.getElementById('tempCheck').dataset.done = 'true';
+  } else if (status === 'warm') {
+    result.innerHTML = '<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:10px;color:#92400e;">🌡️ <strong>Slightly warm — under 102°F.</strong> Ms. Gosia says: "You\'re okay to attend, but drink water and take it easy. I\'ll keep an eye on you!"</div>';
+  } else {
+    result.innerHTML = '<div style="background:#fef2f2;border:1px solid #ef4444;border-radius:10px;padding:10px;color:#991b1b;">🤒 <strong>You might have a fever (102°F+).</strong> Ms. Gosia says: "Please rest today. Your health comes first! You can do light learning on Mathagram from home. Get well soon! 💕"<br><a href="courses.html" style="display:inline-block;margin-top:8px;padding:6px 16px;background:#ef4444;color:#fff;border-radius:8px;font-weight:700;font-size:.8rem;text-decoration:none;">Light Learning from Home →</a></div>';
+  }
+}
+
+// Show daily notifications from Gosia
+function showDailyNotification() {
+  var now = new Date();
+  var mo = now.getMonth(), da = now.getDate();
+  var notif = document.getElementById('gosiaNotification');
+  var title = document.getElementById('notifTitle');
+  var body = document.getElementById('notifBody');
+
+  // Last day of school — Juneteenth
+  if (mo === 5 && da === 19) {
+    notif.style.display = 'flex';
+    notif.style.background = 'linear-gradient(135deg,#dbeafe,#bfdbfe)';
+    notif.style.borderColor = '#3b82f6';
+    title.innerHTML = '🎓 Ms. Gosia — Last Day of School!';
+    body.innerHTML = '"Today is Juneteenth and the <strong>last day of school!</strong> What an amazing year. I\'m so proud of every single one of you. Have a wonderful summer! ' + (isESY ? 'ESY students — I\'ll see you next week!" 📚' : 'See you in September!" ☀️');
+    return;
+  }
+  // First day of school — Sep 2
+  if (mo === 8 && da === 2) {
+    notif.style.display = 'flex';
+    title.innerHTML = '🏫 Ms. Gosia — First Day of School!';
+    body.innerHTML = '"Welcome back! It\'s the first day of the new school year. I\'ve been waiting all summer for this. Let\'s make this the best year yet!"';
+    return;
+  }
+  // Show health check on school days
+  if (!isWeekend(now) && !getHoliday(now)) {
+    var lastCheck = localStorage.getItem('vs_health_' + now.toDateString());
+    if (!lastCheck) {
+      document.getElementById('tempCheck').style.display = 'block';
+      localStorage.setItem('vs_health_' + now.toDateString(), 'shown');
+    }
+  }
+}
+
 // Init
+var savedSetup = localStorage.getItem('vs_setup');
+if (savedSetup === 'done') {
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('mainSchool').style.display = 'block';
+  var sg = localStorage.getItem('vs_grade');
+  if (sg) { currentGrade = parseInt(sg); document.querySelectorAll('.grade-btn[data-grade]').forEach(function(b){b.classList.remove('active')}); var gb=document.querySelector('.grade-btn[data-grade="'+sg+'"]'); if(gb)gb.classList.add('active'); document.getElementById('gradeLabel').textContent='Grade '+sg+(isESY?' (ESY)':''); }
+  var sn = localStorage.getItem('vs_name');
+  if (sn) document.getElementById('gosiaMsg').textContent = '"Welcome back, ' + sn + '! Let\'s have a great day!"';
+} else {
+  document.getElementById('setupScreen').style.display = 'block';
+  document.getElementById('mainSchool').style.display = 'none';
+}
+
 document.getElementById('year').textContent = new Date().getFullYear();
 updateClock();
 setInterval(updateClock, 30000);
 renderSchedule(currentGrade);
+showDailyNotification();
 </script>
 
 <script type="module">
