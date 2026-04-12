@@ -1,51 +1,27 @@
 // js/auto-update.js
-// Auto-update: checks for new version and refreshes the page silently.
+// Auto-update + auto-clear-cache.
+// - Clears browser caches and stale service workers on every page load.
+// - Polls version.json periodically. If version changes, wipes caches and reloads.
 
-const VERSION_CHECK_INTERVAL = 60 * 1000; // Check every 60 seconds
+const VERSION_CHECK_INTERVAL = 60 * 1000; // every 60s
 const VERSION_URL = '/version.json';
+const STORED_VERSION_KEY = 'mathagram_version';
 
 let currentVersion = null;
 
-/**
- * Start auto-update checker.
- * Fetches version.json periodically. If version changes, reloads the page.
- */
-export function startAutoUpdate() {
-  // Get current version on load
-  fetchVersion().then(v => {
-    currentVersion = v;
-  });
-
-  // Check periodically
-  setInterval(async () => {
-    try {
-      const newVersion = await fetchVersion();
-      if (currentVersion && newVersion && newVersion !== currentVersion) {
-        console.log('[Mathagram] New version detected:', newVersion);
-        // Clear service worker cache
-        if ('caches' in window) {
-          const keys = await caches.keys();
-          await Promise.all(keys.map(k => caches.delete(k)));
-        }
-        // Force reload from server
-        window.location.reload(true);
-      }
-    } catch (e) {
-      // Silently ignore network errors
+async function clearAllCaches() {
+  try {
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
     }
-  }, VERSION_CHECK_INTERVAL);
-
-  // Also check when tab becomes visible again
-  document.addEventListener('visibilitychange', async () => {
-    if (document.visibilityState === 'visible') {
-      try {
-        const newVersion = await fetchVersion();
-        if (currentVersion && newVersion && newVersion !== currentVersion) {
-          window.location.reload(true);
-        }
-      } catch (e) {}
+  } catch (e) {}
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
     }
-  });
+  } catch (e) {}
 }
 
 async function fetchVersion() {
@@ -53,4 +29,61 @@ async function fetchVersion() {
   if (!res.ok) return null;
   const data = await res.json();
   return data.version || null;
+}
+
+/**
+ * Start auto-update checker. Safe to call multiple times — only starts once.
+ */
+let started = false;
+export function startAutoUpdate() {
+  if (started) return;
+  started = true;
+
+  // 1. On page load: compare stored version vs server. If different, clear caches.
+  (async () => {
+    try {
+      const stored = localStorage.getItem(STORED_VERSION_KEY);
+      const serverVersion = await fetchVersion();
+      if (serverVersion) {
+        currentVersion = serverVersion;
+        if (stored && stored !== serverVersion) {
+          await clearAllCaches();
+          localStorage.setItem(STORED_VERSION_KEY, serverVersion);
+          // Reload once so the fresh assets load
+          if (!sessionStorage.getItem('mathagram_reloaded_for_version_' + serverVersion)) {
+            sessionStorage.setItem('mathagram_reloaded_for_version_' + serverVersion, '1');
+            window.location.reload();
+            return;
+          }
+        } else {
+          localStorage.setItem(STORED_VERSION_KEY, serverVersion);
+        }
+      }
+    } catch (e) {}
+  })();
+
+  // 2. Periodic poll while tab is open
+  setInterval(async () => {
+    try {
+      const newVersion = await fetchVersion();
+      if (currentVersion && newVersion && newVersion !== currentVersion) {
+        await clearAllCaches();
+        localStorage.setItem(STORED_VERSION_KEY, newVersion);
+        window.location.reload();
+      }
+    } catch (e) {}
+  }, VERSION_CHECK_INTERVAL);
+
+  // 3. Check again when tab regains focus
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible') return;
+    try {
+      const newVersion = await fetchVersion();
+      if (currentVersion && newVersion && newVersion !== currentVersion) {
+        await clearAllCaches();
+        localStorage.setItem(STORED_VERSION_KEY, newVersion);
+        window.location.reload();
+      }
+    } catch (e) {}
+  });
 }

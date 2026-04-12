@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Periodic Trends — Mathagram</title>
+  <title>Photoelectron Spectroscopy — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -97,7 +97,7 @@
         <span>Mathagram</span>
       </a>
       <div class="nav-links">
-        <a href="index.html">AP Chemistry</a>
+        <a href="index.html">Chemistry and Biochemistry</a>
         <a href="../../learning-post.html">Posts</a>
         <a href="../../login.html" data-auth="login">Login</a>
       </div>
@@ -106,49 +106,51 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Unit 1 &middot; Lesson 3</div>
-    <h1>Periodic Trends</h1>
+    <div class="chapter-label">Unit 1 &middot; Lesson 5</div>
+    <h1>Photoelectron Spectroscopy (PES)</h1>
 
     <p>
-      The periodic table is not just a list of elements -- it reveals powerful <strong>patterns</strong> in atomic properties. These trends are driven by changes in atomic structure as you move across periods and down groups.
+      <strong>Photoelectron spectroscopy</strong> is an experimental technique that provides direct evidence for electron configurations and energy levels within atoms. It works by shooting high-energy photons at atoms and measuring the kinetic energy of the ejected electrons.
     </p>
 
-    <h2>Atomic Radius</h2>
+    <h2>How PES Works</h2>
 
     <p>
-      <strong>Atomic radius increases going down a group</strong> because each row adds a new electron shell, making the atom larger. It <strong>decreases going across a period</strong> (left to right) because more protons pull the electron cloud inward.
-    </p>
-
-    <h2>Ionization Energy</h2>
-
-    <p>
-      <strong>Ionization energy</strong> is the energy required to remove an electron from a neutral atom. It <strong>increases across a period</strong> (electrons are held more tightly) and <strong>decreases down a group</strong> (outer electrons are farther from the nucleus and easier to remove).
-    </p>
-
-    <h2>Electronegativity</h2>
-
-    <p>
-      <strong>Electronegativity</strong> measures an atom's ability to attract bonding electrons. It follows the same trend as ionization energy: <strong>increases across a period</strong> and <strong>decreases down a group</strong>. <strong>Fluorine</strong> is the most electronegative element.
-    </p>
-
-    <h2>Electron Affinity</h2>
-
-    <p>
-      <strong>Electron affinity</strong> is the energy change when an atom gains an electron. <strong>Halogens</strong> (Group 17) have the most negative electron affinities because they are one electron short of a full shell.
-    </p>
-
-    <h2>Why Do These Trends Exist?</h2>
-
-    <p>
-      All periodic trends can be explained by <strong>Coulomb's law</strong>, which describes the force between charged particles:
+      When a photon with known energy hits an atom, it can knock out an electron. The <strong>binding energy</strong> of that electron is calculated using the equation:
     </p>
 
     <div class="math-block">
-      $$F = k\frac{q_1 \cdot q_2}{r^2}$$
+      $$E_{\text{binding}} = E_{\text{photon}} - E_{\text{kinetic}}$$
     </div>
 
     <p>
-      As the nuclear charge (\(q_1\)) increases across a period, the attractive force on electrons grows stronger. As the distance (\(r\)) increases down a group, the force weakens. This single equation explains every major periodic trend.
+      Electrons closer to the nucleus are held more tightly, so they have <strong>higher binding energies</strong>. Valence electrons, being farthest from the nucleus, have the <strong>lowest binding energies</strong>.
+    </p>
+
+    <h2>Reading a PES Spectrum</h2>
+
+    <p>
+      A PES spectrum plots <strong>binding energy</strong> on the x-axis (decreasing from left to right) and the <strong>relative number of electrons</strong> on the y-axis. Each peak corresponds to a subshell:
+    </p>
+    <ul>
+      <li>Peaks on the <strong>left</strong> (high binding energy) represent <strong>inner-shell</strong> (core) electrons</li>
+      <li>Peaks on the <strong>right</strong> (low binding energy) represent <strong>valence</strong> electrons</li>
+      <li>The <strong>height</strong> of a peak tells you how many electrons are in that subshell</li>
+    </ul>
+
+    <h2>Example: Nitrogen</h2>
+
+    <p>
+      Nitrogen has 7 electrons with the configuration \(1s^2\,2s^2\,2p^3\). Its PES spectrum shows three peaks:
+    </p>
+    <ul>
+      <li>A small peak at high binding energy &rarr; <strong>1s&sup2;</strong> (2 electrons)</li>
+      <li>A medium peak &rarr; <strong>2s&sup2;</strong> (2 electrons)</li>
+      <li>A taller peak at low binding energy &rarr; <strong>2p&sup3;</strong> (3 electrons)</li>
+    </ul>
+
+    <p>
+      By analyzing these peaks, we can determine the electron configuration and confirm the identity of the element.
     </p>
   </section>
 
@@ -196,41 +198,40 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'Which element has the highest electronegativity?',
-        options: ['Oxygen', 'Chlorine', 'Fluorine', 'Nitrogen'],
-        correctIndex: 2
+        question: 'In a PES spectrum, which electrons have the highest binding energy?',
+        options: ['Valence electrons', '1s electrons (closest to nucleus)', '2p electrons', 'Lone pair electrons'],
+        correctIndex: 1
       },
       {
         type: 'true-false',
-        question: 'Atomic radius increases as you move left to right across a period.',
-        correctAnswer: false
+        question: 'PES can determine the electron configuration of an element.',
+        correctAnswer: true
       },
       {
         type: 'fill-blank',
-        question: 'The trend of ionization energy across a period is ___.',
-        answer: 'increasing'
-      },
-      {
-        type: 'matching',
-        question: 'Match each trend with its key fact.',
-        pairs: [
-          { left: 'Atomic radius', right: 'Increases down a group' },
-          { left: 'Ionization energy', right: 'Increases across a period' },
-          { left: 'Electronegativity', right: 'Fluorine is highest' },
-          { left: 'Electron affinity', right: 'Halogens have highest' }
-        ]
-      },
-      {
-        type: 'ordering',
-        question: 'Order by increasing atomic radius.',
-        correctOrder: ['F', 'Cl', 'Br', 'I'],
-        shuffled: ['Br', 'F', 'I', 'Cl']
+        question: 'Binding energy = photon energy - ___.',
+        answer: 'kinetic energy'
       },
       {
         type: 'multiple-choice',
-        question: "According to Coulomb's law, what happens to the force when distance doubles?",
-        options: ['Force doubles', 'Force halves', 'Force decreases by factor of 4', 'Force stays the same'],
-        correctIndex: 2
+        question: 'A PES spectrum of carbon would show how many peaks?',
+        options: ['2 (1s, 2s)', '3 (1s, 2s, 2p)', '4 (1s, 2s, 2p, 3s)', '6 (one per electron)'],
+        correctIndex: 1
+      },
+      {
+        type: 'matching',
+        question: 'Match each PES feature with what it represents.',
+        pairs: [
+          { left: 'High binding energy', right: 'Inner shell electrons' },
+          { left: 'Low binding energy', right: 'Valence electrons' },
+          { left: 'Peak height', right: 'Number of electrons' },
+          { left: 'Peak position', right: 'Binding energy' }
+        ]
+      },
+      {
+        type: 'true-false',
+        question: 'Valence electrons have higher binding energy than core electrons.',
+        correctAnswer: false
       }
     ];
 
@@ -242,9 +243,9 @@
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'ap-chemistry',
-      lessonId: 'lesson-3',
-      nextHref: 'lesson-4.html',
+      courseId: 'chemistry-and-biochemistry',
+      lessonId: 'lesson-5',
+      nextHref: 'lesson-6.html',
       backHref: 'index.html'
     });
   </script>

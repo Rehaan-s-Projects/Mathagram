@@ -4,6 +4,7 @@
 // or Login/Sign Up buttons when logged out.
 
 import { onAuthChange, getUserProfile } from './auth.js';
+import { startAutoUpdate } from './auto-update.js';
 
 function getColorValue(colorName) {
   const colors = {
@@ -26,6 +27,9 @@ function getColorValue(colorName) {
  * @param {string} basePath - relative path to root (e.g., '' for root pages, '../../' for course lessons)
  */
 export function initNav(basePath = '') {
+  // Run auto-update + cache-clear on every page
+  startAutoUpdate();
+
   // Add Google Translate widget
   addTranslateWidget();
 

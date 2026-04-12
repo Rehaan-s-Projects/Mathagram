@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photoelectron Spectroscopy — Mathagram</title>
+  <title>VSEPR &amp; Molecular Geometry — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -97,7 +97,7 @@
         <span>Mathagram</span>
       </a>
       <div class="nav-links">
-        <a href="index.html">AP Chemistry</a>
+        <a href="index.html">Chemistry and Biochemistry</a>
         <a href="../../learning-post.html">Posts</a>
         <a href="../../login.html" data-auth="login">Login</a>
       </div>
@@ -106,51 +106,45 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Unit 1 &middot; Lesson 5</div>
-    <h1>Photoelectron Spectroscopy (PES)</h1>
+    <div class="chapter-label">Unit 2 &middot; Lesson 7</div>
+    <h1>VSEPR &amp; Molecular Geometry</h1>
 
     <p>
-      <strong>Photoelectron spectroscopy</strong> is an experimental technique that provides direct evidence for electron configurations and energy levels within atoms. It works by shooting high-energy photons at atoms and measuring the kinetic energy of the ejected electrons.
+      <strong>VSEPR</strong> stands for <strong>Valence Shell Electron Pair Repulsion</strong>. This model predicts the 3D shape of a molecule by assuming that electron pairs around a central atom repel each other and arrange themselves as far apart as possible.
     </p>
 
-    <h2>How PES Works</h2>
+    <h2>Electron Geometry vs Molecular Geometry</h2>
 
     <p>
-      When a photon with known energy hits an atom, it can knock out an electron. The <strong>binding energy</strong> of that electron is calculated using the equation:
+      <strong>Electron geometry</strong> considers all electron pairs (bonding and lone pairs) around the central atom. <strong>Molecular geometry</strong> only considers the positions of the atoms &mdash; lone pairs are invisible in the molecular shape but still affect it.
     </p>
 
-    <div class="math-block">
-      $$E_{\text{binding}} = E_{\text{photon}} - E_{\text{kinetic}}$$
-    </div>
+    <h2>Key Shapes</h2>
 
     <p>
-      Electrons closer to the nucleus are held more tightly, so they have <strong>higher binding energies</strong>. Valence electrons, being farthest from the nucleus, have the <strong>lowest binding energies</strong>.
-    </p>
-
-    <h2>Reading a PES Spectrum</h2>
-
-    <p>
-      A PES spectrum plots <strong>binding energy</strong> on the x-axis (decreasing from left to right) and the <strong>relative number of electrons</strong> on the y-axis. Each peak corresponds to a subshell:
+      The number of electron groups around the central atom determines the electron geometry:
     </p>
     <ul>
-      <li>Peaks on the <strong>left</strong> (high binding energy) represent <strong>inner-shell</strong> (core) electrons</li>
-      <li>Peaks on the <strong>right</strong> (low binding energy) represent <strong>valence</strong> electrons</li>
-      <li>The <strong>height</strong> of a peak tells you how many electrons are in that subshell</li>
+      <li><strong>2 groups</strong> &rarr; Linear (180&deg;)</li>
+      <li><strong>3 groups</strong> &rarr; Trigonal planar (120&deg;)</li>
+      <li><strong>4 groups</strong> &rarr; Tetrahedral (109.5&deg;)</li>
+      <li><strong>5 groups</strong> &rarr; Trigonal bipyramidal (90&deg; and 120&deg;)</li>
+      <li><strong>6 groups</strong> &rarr; Octahedral (90&deg;)</li>
     </ul>
 
-    <h2>Example: Nitrogen</h2>
+    <h2>How Lone Pairs Change Shape</h2>
 
     <p>
-      Nitrogen has 7 electrons with the configuration \(1s^2\,2s^2\,2p^3\). Its PES spectrum shows three peaks:
+      When lone pairs replace bonding pairs, the <strong>molecular geometry changes</strong> even though the electron geometry stays the same. For example, with 4 electron groups (tetrahedral electron geometry):
     </p>
     <ul>
-      <li>A small peak at high binding energy &rarr; <strong>1s&sup2;</strong> (2 electrons)</li>
-      <li>A medium peak &rarr; <strong>2s&sup2;</strong> (2 electrons)</li>
-      <li>A taller peak at low binding energy &rarr; <strong>2p&sup3;</strong> (3 electrons)</li>
+      <li><strong>0 lone pairs</strong> &rarr; Tetrahedral (CH&sub4;)</li>
+      <li><strong>1 lone pair</strong> &rarr; Trigonal pyramidal (NH&sub3;)</li>
+      <li><strong>2 lone pairs</strong> &rarr; Bent (H&sub2;O)</li>
     </ul>
 
     <p>
-      By analyzing these peaks, we can determine the electron configuration and confirm the identity of the element.
+      Lone pairs occupy more space than bonding pairs, which compresses bond angles slightly below the ideal values.
     </p>
   </section>
 
@@ -198,40 +192,41 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'In a PES spectrum, which electrons have the highest binding energy?',
-        options: ['Valence electrons', '1s electrons (closest to nucleus)', '2p electrons', 'Lone pair electrons'],
-        correctIndex: 1
-      },
-      {
-        type: 'true-false',
-        question: 'PES can determine the electron configuration of an element.',
-        correctAnswer: true
-      },
-      {
-        type: 'fill-blank',
-        question: 'Binding energy = photon energy - ___.',
-        answer: 'kinetic energy'
-      },
-      {
-        type: 'multiple-choice',
-        question: 'A PES spectrum of carbon would show how many peaks?',
-        options: ['2 (1s, 2s)', '3 (1s, 2s, 2p)', '4 (1s, 2s, 2p, 3s)', '6 (one per electron)'],
-        correctIndex: 1
+        question: 'What is the molecular geometry of CH\u2084?',
+        options: ['Linear', 'Trigonal planar', 'Tetrahedral', 'Trigonal pyramidal'],
+        correctIndex: 2
       },
       {
         type: 'matching',
-        question: 'Match each PES feature with what it represents.',
+        question: 'Match each molecule with its molecular geometry.',
         pairs: [
-          { left: 'High binding energy', right: 'Inner shell electrons' },
-          { left: 'Low binding energy', right: 'Valence electrons' },
-          { left: 'Peak height', right: 'Number of electrons' },
-          { left: 'Peak position', right: 'Binding energy' }
+          { left: 'CO\u2082', right: 'Linear' },
+          { left: 'H\u2082O', right: 'Bent' },
+          { left: 'NH\u2083', right: 'Trigonal pyramidal' },
+          { left: 'CH\u2084', right: 'Tetrahedral' }
         ]
       },
       {
         type: 'true-false',
-        question: 'Valence electrons have higher binding energy than core electrons.',
-        correctAnswer: false
+        question: 'Lone pairs affect molecular geometry.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'VSEPR stands for Valence Shell Electron Pair ___.',
+        answer: 'Repulsion'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the bond angle in a tetrahedral molecule?',
+        options: ['90\u00B0', '109.5\u00B0', '120\u00B0', '180\u00B0'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'BF\u2083 has what molecular geometry?',
+        options: ['Linear', 'Bent', 'Trigonal planar', 'Tetrahedral'],
+        correctIndex: 2
       }
     ];
 
@@ -243,9 +238,8 @@
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'ap-chemistry',
-      lessonId: 'lesson-5',
-      nextHref: 'lesson-6.html',
+      courseId: 'chemistry-and-biochemistry',
+      lessonId: 'lesson-7',
       backHref: 'index.html'
     });
   </script>

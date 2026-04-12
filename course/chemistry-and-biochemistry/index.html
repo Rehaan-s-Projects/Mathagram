@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AP Chemistry — Mathagram</title>
+  <title>Chemistry and Biochemistry — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/learning-path.css">
@@ -32,7 +32,7 @@
 
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
-    <h1>AP Chemistry</h1>
+    <h1>Chemistry and Biochemistry</h1>
     <p>Master atomic structure, bonding, reactions, kinetics, thermodynamics, equilibrium, electrochemistry, and biochemistry. 328 lessons across 19 units.</p>
   </header>
 
@@ -87,10 +87,10 @@
 
     async function loadPath() {
       const container = document.getElementById('learning-path');
-      let completed = await getCompletedLessons('ap-chemistry');
+      let completed = await getCompletedLessons('chemistry-and-biochemistry');
       renderPath(container, lessons, completed);
       onAuthChange(async (user) => {
-        completed = await getCompletedLessons('ap-chemistry');
+        completed = await getCompletedLessons('chemistry-and-biochemistry');
         renderPath(container, lessons, completed);
       });
     }

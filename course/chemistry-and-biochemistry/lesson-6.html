@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VSEPR &amp; Molecular Geometry — Mathagram</title>
+  <title>Lewis Structures — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -48,7 +48,7 @@
       margin: 24px 0;
       font-size: 1.3rem;
     }
-    .lesson-content ul {
+    .lesson-content ul, .lesson-content ol {
       margin: 12px 0 20px 20px;
       color: var(--color-text-secondary);
       line-height: 1.75;
@@ -97,7 +97,7 @@
         <span>Mathagram</span>
       </a>
       <div class="nav-links">
-        <a href="index.html">AP Chemistry</a>
+        <a href="index.html">Chemistry and Biochemistry</a>
         <a href="../../learning-post.html">Posts</a>
         <a href="../../login.html" data-auth="login">Login</a>
       </div>
@@ -106,45 +106,42 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Unit 2 &middot; Lesson 7</div>
-    <h1>VSEPR &amp; Molecular Geometry</h1>
+    <div class="chapter-label">Unit 2 &middot; Lesson 6</div>
+    <h1>Lewis Structures</h1>
 
     <p>
-      <strong>VSEPR</strong> stands for <strong>Valence Shell Electron Pair Repulsion</strong>. This model predicts the 3D shape of a molecule by assuming that electron pairs around a central atom repel each other and arrange themselves as far apart as possible.
+      <strong>Lewis structures</strong> (also called Lewis dot structures) show how valence electrons are arranged in a molecule. They help us predict bonding, lone pairs, and molecular shape.
     </p>
 
-    <h2>Electron Geometry vs Molecular Geometry</h2>
+    <h2>Drawing Lewis Structures</h2>
 
     <p>
-      <strong>Electron geometry</strong> considers all electron pairs (bonding and lone pairs) around the central atom. <strong>Molecular geometry</strong> only considers the positions of the atoms &mdash; lone pairs are invisible in the molecular shape but still affect it.
+      Follow these steps to draw a Lewis structure:
+    </p>
+    <ol>
+      <li><strong>Count total valence electrons</strong> for all atoms in the molecule</li>
+      <li><strong>Draw single bonds</strong> from the central atom to each surrounding atom</li>
+      <li><strong>Complete octets</strong> on the outer atoms first (hydrogen only needs 2)</li>
+      <li><strong>Place remaining electrons</strong> on the central atom</li>
+      <li>If the central atom lacks an octet, <strong>form double or triple bonds</strong> by sharing lone pairs from outer atoms</li>
+    </ol>
+
+    <h2>The Octet Rule</h2>
+
+    <p>
+      Most atoms in molecules want <strong>8 electrons</strong> around them (an octet). Hydrogen is the exception &mdash; it only needs <strong>2 electrons</strong> (a duet). Some elements in Period 3 and beyond can have <strong>expanded octets</strong> because they have access to d orbitals.
     </p>
 
-    <h2>Key Shapes</h2>
+    <h2>Lone Pairs vs Bonding Pairs</h2>
 
     <p>
-      The number of electron groups around the central atom determines the electron geometry:
+      A <strong>bonding pair</strong> is a pair of electrons shared between two atoms (shown as a line). A <strong>lone pair</strong> is a pair of electrons that belongs to only one atom (shown as two dots). Both types are important for determining molecular geometry.
     </p>
-    <ul>
-      <li><strong>2 groups</strong> &rarr; Linear (180&deg;)</li>
-      <li><strong>3 groups</strong> &rarr; Trigonal planar (120&deg;)</li>
-      <li><strong>4 groups</strong> &rarr; Tetrahedral (109.5&deg;)</li>
-      <li><strong>5 groups</strong> &rarr; Trigonal bipyramidal (90&deg; and 120&deg;)</li>
-      <li><strong>6 groups</strong> &rarr; Octahedral (90&deg;)</li>
-    </ul>
 
-    <h2>How Lone Pairs Change Shape</h2>
+    <h2>Example: Carbon Dioxide (CO&sub2;)</h2>
 
     <p>
-      When lone pairs replace bonding pairs, the <strong>molecular geometry changes</strong> even though the electron geometry stays the same. For example, with 4 electron groups (tetrahedral electron geometry):
-    </p>
-    <ul>
-      <li><strong>0 lone pairs</strong> &rarr; Tetrahedral (CH&sub4;)</li>
-      <li><strong>1 lone pair</strong> &rarr; Trigonal pyramidal (NH&sub3;)</li>
-      <li><strong>2 lone pairs</strong> &rarr; Bent (H&sub2;O)</li>
-    </ul>
-
-    <p>
-      Lone pairs occupy more space than bonding pairs, which compresses bond angles slightly below the ideal values.
+      Carbon has 4 valence electrons; each oxygen has 6. Total = \(4 + 2(6) = 16\) valence electrons. Carbon is central, and single bonds alone don't satisfy octets, so we form <strong>two double bonds</strong>: O=C=O. Each oxygen also has 2 lone pairs.
     </p>
   </section>
 
@@ -192,40 +189,48 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What is the molecular geometry of CH\u2084?',
-        options: ['Linear', 'Trigonal planar', 'Tetrahedral', 'Trigonal pyramidal'],
-        correctIndex: 2
-      },
-      {
-        type: 'matching',
-        question: 'Match each molecule with its molecular geometry.',
-        pairs: [
-          { left: 'CO\u2082', right: 'Linear' },
-          { left: 'H\u2082O', right: 'Bent' },
-          { left: 'NH\u2083', right: 'Trigonal pyramidal' },
-          { left: 'CH\u2084', right: 'Tetrahedral' }
-        ]
-      },
-      {
-        type: 'true-false',
-        question: 'Lone pairs affect molecular geometry.',
-        correctAnswer: true
-      },
-      {
-        type: 'fill-blank',
-        question: 'VSEPR stands for Valence Shell Electron Pair ___.',
-        answer: 'Repulsion'
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What is the bond angle in a tetrahedral molecule?',
-        options: ['90\u00B0', '109.5\u00B0', '120\u00B0', '180\u00B0'],
+        question: 'How many valence electrons does carbon have?',
+        options: ['2', '4', '6', '8'],
         correctIndex: 1
       },
       {
+        type: 'fill-blank',
+        question: 'In a Lewis structure, a line represents a ___ of electrons.',
+        answer: 'pair'
+      },
+      {
+        type: 'true-false',
+        question: 'Hydrogen follows the octet rule.',
+        correctAnswer: false
+      },
+      {
         type: 'multiple-choice',
-        question: 'BF\u2083 has what molecular geometry?',
-        options: ['Linear', 'Bent', 'Trigonal planar', 'Tetrahedral'],
+        question: 'How many total valence electrons are in H\u2082O?',
+        options: ['4', '6', '8', '10'],
+        correctIndex: 2
+      },
+      {
+        type: 'ordering',
+        question: 'Order the steps for drawing a Lewis structure.',
+        correctOrder: [
+          'Count total valence electrons',
+          'Draw single bonds to central atom',
+          'Complete octets on outer atoms',
+          'Place remaining electrons on central atom',
+          'Form multiple bonds if needed'
+        ],
+        shuffled: [
+          'Form multiple bonds if needed',
+          'Complete octets on outer atoms',
+          'Count total valence electrons',
+          'Place remaining electrons on central atom',
+          'Draw single bonds to central atom'
+        ]
+      },
+      {
+        type: 'multiple-choice',
+        question: 'How many lone pairs are on the oxygen in H\u2082O?',
+        options: ['0', '1', '2', '3'],
         correctIndex: 2
       }
     ];
@@ -238,8 +243,9 @@
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'ap-chemistry',
-      lessonId: 'lesson-7',
+      courseId: 'chemistry-and-biochemistry',
+      lessonId: 'lesson-6',
+      nextHref: 'lesson-7.html',
       backHref: 'index.html'
     });
   </script>
