@@ -147,6 +147,7 @@ function doGood() {
   busy = true;
   var q = P[ci];
   step++;
+  if (window.showBuddy) window.showBuddy('william','correct');
   if (step < q.t) {
     // more jumps to make in this chain
     busy = false;
@@ -166,6 +167,7 @@ function doGood() {
 }
 function doBad() {
   busy = true;
+  if (window.showBuddy) window.showBuddy('william','wrong');
   document.getElementById('msg').innerHTML = '<div class="no">✗ Wrong! The king jumps OVER a ⭐ and lands on the empty square behind it.</div>';
   setTimeout(function(){ document.getElementById('msg').innerHTML=''; busy=false; }, 1100);
 }
@@ -199,7 +201,8 @@ draw();
 <script type="module">
 import { initNav } from '../../js/nav.js';
 import { initRitaChat } from '../../js/rita-chat.js';
-import { initSideCharacter } from '../../js/characters.js';
+import { initSideCharacter, showBuddy } from '../../js/characters.js';
+window.showBuddy = showBuddy;
 import { saveLessonResult } from '../../js/progress.js';
 import { onAuthChange } from '../../js/auth.js';
 initNav('../../');initRitaChat('../../');initSideCharacter('william','../../');

@@ -156,6 +156,7 @@ function draw() {
 function doGood() {
   if (busy) return;
   busy = true;
+  if (window.showBuddy) window.showBuddy('william','correct');
   ji++;
   var q = P[ci];
 
@@ -183,6 +184,7 @@ function doGood() {
 function doBad() {
   if (busy) return;
   busy = true;
+  if (window.showBuddy) window.showBuddy('william','wrong');
   document.getElementById('msg').innerHTML = '<div class="no">✗ Wrong side! Jump OVER the star.</div>';
   setTimeout(function(){ document.getElementById('msg').innerHTML=''; busy=false; }, 1000);
 }
@@ -226,7 +228,8 @@ draw();
 <script type="module">
 import { initNav } from '../../js/nav.js';
 import { initRitaChat } from '../../js/rita-chat.js';
-import { initSideCharacter } from '../../js/characters.js';
+import { initSideCharacter, showBuddy } from '../../js/characters.js';
+window.showBuddy = showBuddy;
 import { saveLessonResult } from '../../js/progress.js';
 import { onAuthChange } from '../../js/auth.js';
 initNav('../../');
