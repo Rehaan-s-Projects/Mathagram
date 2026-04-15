@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkers — King Moves</title>
+<title>Checkers — King Captures</title>
 <link rel="icon" href="../../assets/lighthouse/logo.svg">
 <link rel="stylesheet" href="../../css/global.css">
 <link rel="stylesheet" href="../../css/characters.css">
@@ -19,12 +19,10 @@ td{width:50px;height:50px;text-align:center;vertical-align:middle;padding:0;-web
 .light{background:#f0d9b5}.dark{background:#b58863}
 .king{display:inline-block;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#d4a017,#8b6914);border:3px solid #6b5200;box-shadow:0 3px 0 rgba(80,50,0,.5);position:relative}
 .king::after{content:'👑';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px}
+.star{display:inline-block;width:38px;height:38px;line-height:38px;font-size:28px}
 .dot{display:inline-block;width:32px;height:32px;border-radius:50%;cursor:pointer;border:4px solid #4caf50;animation:p .8s infinite;-webkit-tap-highlight-color:transparent}
 .dot:active{background:rgba(76,175,80,.7)!important;transform:scale(1.15)}
-.dot-bad{border-color:#ef4444;animation:pb .8s infinite}
 @keyframes p{0%,100%{background:rgba(76,175,80,.2)}50%{background:rgba(76,175,80,.5)}}
-@keyframes pb{0%,100%{background:rgba(239,68,68,.15)}50%{background:rgba(239,68,68,.35)}}
-.blocker{display:inline-block;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#444,#222);border:2px solid #111;opacity:.7}
 .ok{padding:14px;border-radius:10px;margin:12px 0;font-weight:700;background:#dcfce7;color:#166534;border:2px solid #22c55e}
 .no{padding:14px;border-radius:10px;margin:12px 0;font-weight:700;background:#fef2f2;color:#991b1b;border:2px solid #ef4444}
 .btn{padding:12px 32px;font-size:1.05rem;font-weight:700;background:#58cc02;color:#fff;border:none;border-radius:12px;cursor:pointer;margin-top:10px;box-shadow:0 4px 0 #46a302}
@@ -41,8 +39,8 @@ td{width:50px;height:50px;text-align:center;vertical-align:middle;padding:0;-web
 </div></nav>
 
 <div class="wrap">
-<h1>👑 King Moves</h1>
-<p class="sub">Kings can move 1 square diagonally in ANY direction — forward or backward! Tap the correct green circle.</p>
+<h1>👑 King Captures</h1>
+<p class="sub">Kings capture in ANY diagonal direction — forward OR backward! Tap the green circle to jump over the ⭐ and capture it.</p>
 <div class="bar"><div class="fill" id="bar"></div></div>
 <div id="board"></div>
 <div id="info"></div>
@@ -50,54 +48,72 @@ td{width:50px;height:50px;text-align:center;vertical-align:middle;padding:0;-web
 </div>
 
 <script>
-// King move puzzles: king at p, correct move g, wrong move b, optional blockers
-// Kings move 1 diagonal in any direction (up-left, up-right, down-left, down-right)
+// Each puzzle: king jumps OVER star(s) to green landing spot
+// Kings can jump in any diagonal direction (forward or backward) — that's what makes them special
+// t: number of jumps, p: king pos, s: stars (midpoints), g: correct landings, b: wrong landings
 var P = [
-  // Forward moves (up)
-  {p:[4,3], g:[3,4], b:[3,2], dir:'Forward-Right', blockers:[]},
-  {p:[4,3], g:[3,2], b:[5,4], dir:'Forward-Left', blockers:[]},
-  // Backward moves (down) — only kings can do this!
-  {p:[3,4], g:[4,5], b:[2,5], dir:'Backward-Right', blockers:[]},
-  {p:[3,4], g:[4,3], b:[2,3], dir:'Backward-Left', blockers:[]},
-  // With blockers — must go the only open diagonal
-  {p:[4,3], g:[3,4], b:[5,2], dir:'Forward (blocked behind)', blockers:[[5,4],[3,2]]},
-  {p:[3,2], g:[4,3], b:[2,1], dir:'Backward (blocked forward)', blockers:[[2,3],[2,1]]},
-  {p:[4,5], g:[5,4], b:[3,4], dir:'Back-Left (blocked right)', blockers:[[5,6],[3,6]]},
-  // Tricky — all 4 diagonals shown, only 1 is correct
-  {p:[4,3], g:[5,4], b:[3,2], dir:'Backward-Right', blockers:[[3,4],[5,2]]},
-  {p:[3,4], g:[2,3], b:[4,5], dir:'Forward-Left', blockers:[[2,5],[4,3]]},
-  {p:[5,2], g:[4,1], b:[6,3], dir:'Forward-Left', blockers:[[4,3],[6,1]]},
+  // SINGLE JUMPS — introduce each direction
+  // Forward-right (up-right)
+  {t:1, p:[6,1], s:[[5,2]], g:[[4,3]], b:[[4,1]], dir:'Forward-Right'},
+  // Forward-left (up-left)
+  {t:1, p:[6,5], s:[[5,4]], g:[[4,3]], b:[[4,5]], dir:'Forward-Left'},
+  // Backward-right (down-right) — KING ONLY!
+  {t:1, p:[2,1], s:[[3,2]], g:[[4,3]], b:[[4,1]], dir:'Backward-Right ⬇'},
+  // Backward-left (down-left) — KING ONLY!
+  {t:1, p:[2,5], s:[[3,4]], g:[[4,3]], b:[[4,5]], dir:'Backward-Left ⬇'},
+
+  // CHOICE PUZZLES — two green circles, only one has the star between
+  // Backward capture; wrong spot has no star in between
+  {t:1, p:[1,2], s:[[2,3]], g:[[3,4]], b:[[3,0]], dir:'Backward-Right ⬇'},
+  // Forward capture; wrong option is a backward empty jump (no star)
+  {t:1, p:[5,6], s:[[4,5]], g:[[3,4]], b:[[7,4]], dir:'Forward-Left'},
+
+  // DOUBLE JUMPS — chain that changes direction (KING-only magic!)
+  // Forward then backward: king goes up, then back down — impossible for regular pieces
+  {t:2, p:[4,1], s:[[3,2],[3,4]], g:[[2,3],[4,5]], b:[[2,1],[0,5]], dir:'Forward → Backward ↕'},
+  // Backward then forward: king goes down, then back up
+  {t:2, p:[3,0], s:[[4,1],[4,3]], g:[[5,2],[3,4]], b:[[1,2],[7,4]], dir:'Backward → Forward ↕'}
 ];
 
-var ci = 0, sc = 0, N = P.length, busy = false;
+var ci = 0, sc = 0, N = P.length, step = 0, busy = false;
 
-document.getElementById('board').addEventListener('click', function(e) {
-  var el = e.target.classList.contains('dot') ? e.target : (e.target.parentElement && e.target.parentElement.classList.contains('dot') ? e.target.parentElement : null);
-  if (!el) return;
+document.getElementById('board').addEventListener('click', function(e){
+  var el = e.target.classList.contains('dot') ? e.target : null;
+  if (!el || busy) return;
   if (el.getAttribute('data-g') === '1') doGood();
   else doBad();
 });
-document.getElementById('msg').addEventListener('click', function(e) {
+document.getElementById('msg').addEventListener('click', function(e){
   if (e.target.id === 'nxtbtn') doNext();
 });
 
+function kingPos(q) {
+  // where the king currently sits based on how many jumps completed in this puzzle
+  if (step === 0) return q.p;
+  return q.g[step - 1];
+}
+function remainingStars(q) {
+  return q.s.slice(step);
+}
+
 function draw() {
   var q = P[ci];
+  var k = kingPos(q);
+  var stars = remainingStars(q);
+  var land = q.g[step];
+  var bad = q.b[step];
   var h = '<table>';
   for (var r = 0; r < 8; r++) {
     h += '<tr>';
     for (var c = 0; c < 8; c++) {
       var bg = (r+c)%2===0 ? 'light' : 'dark';
       var x = '';
-      if (r===q.p[0] && c===q.p[1]) {
-        x = '<div class="king"></div>';
-      } else if (r===q.g[0] && c===q.g[1]) {
-        x = '<div class="dot" data-g="1"></div>';
-      } else if (r===q.b[0] && c===q.b[1]) {
-        x = '<div class="dot dot-bad" data-g="0"></div>';
-      } else {
-        for (var k=0;k<q.blockers.length;k++) {
-          if (r===q.blockers[k][0] && c===q.blockers[k][1]) { x = '<div class="blocker"></div>'; break; }
+      if (r===k[0] && c===k[1]) x = '<div class="king"></div>';
+      else if (r===land[0] && c===land[1]) x = '<div class="dot" data-g="1"></div>';
+      else if (r===bad[0] && c===bad[1]) x = '<div class="dot" data-g="0"></div>';
+      else {
+        for (var i=0;i<stars.length;i++) {
+          if (r===stars[i][0] && c===stars[i][1]) { x = '<div class="star">⭐</div>'; break; }
         }
       }
       h += '<td class="'+bg+'">'+x+'</td>';
@@ -106,19 +122,19 @@ function draw() {
   }
   h += '</table>';
   document.getElementById('board').innerHTML = h;
-  document.getElementById('info').innerHTML = '<div class="info"><span class="badge">👑 King</span> Move: '+q.dir+'</div>';
+  var jumpLabel = q.t > 1 ? ' (jump '+(step+1)+' of '+q.t+')' : '';
+  document.getElementById('info').innerHTML = '<div class="info"><span class="badge">👑 King</span> '+q.dir+jumpLabel+'</div>';
 }
 
-function drawResult(q) {
+function drawFinal(q) {
+  var land = q.g[q.g.length - 1];
   var h = '<table>';
   for (var r = 0; r < 8; r++) {
     h += '<tr>';
     for (var c = 0; c < 8; c++) {
       var bg = (r+c)%2===0 ? 'light' : 'dark';
       var x = '';
-      if (r===q.g[0] && c===q.g[1]) x = '<div class="king"></div>';
-      else if (r===q.p[0] && c===q.p[1]) x = '<span style="opacity:.2;font-size:20px">⚫</span>';
-      else { for (var k=0;k<q.blockers.length;k++) { if (r===q.blockers[k][0]&&c===q.blockers[k][1]) { x='<div class="blocker"></div>'; break; } } }
+      if (r===land[0] && c===land[1]) x = '<div class="king"></div>';
       h += '<td class="'+bg+'">'+x+'</td>';
     }
     h += '</tr>';
@@ -128,39 +144,56 @@ function drawResult(q) {
 }
 
 function doGood() {
-  if (busy) return; busy = true;
-  sc++;
-  drawResult(P[ci]);
-  document.getElementById('msg').innerHTML =
-    '<div class="ok">✓ Correct! The king moved '+P[ci].dir+'!</div>' +
-    '<button class="btn" id="nxtbtn">'+(ci>=N-1?'Finish!':'Next →')+'</button>';
-  busy = false;
-}
-function doBad() {
-  if (busy) return; busy = true;
-  document.getElementById('msg').innerHTML = '<div class="no">✗ Wrong! Kings move 1 square diagonally. Try the green circle.</div>';
-  setTimeout(function(){ document.getElementById('msg').innerHTML=''; busy=false; }, 1000);
-}
-function doNext() {
-  ci++; document.getElementById('msg').innerHTML = '';
-  if (ci < N) { document.getElementById('bar').style.width=(ci/N*100)+'%'; draw(); }
-  else {
-    document.getElementById('bar').style.width='100%';
-    var pct=Math.round(sc/N*100);var gr,st;
-    if(pct>=95){gr='A';st=3}else if(pct>=85){gr='B+';st=2}else if(pct>=70){gr='B';st=2}else if(pct>=60){gr='C';st=1}else{gr='D';st=0}
-    var xp=pct>=60?10+(pct===100?5:0):0;
-    document.getElementById('board').innerHTML='';document.getElementById('info').innerHTML='';
-    var sl='';for(var i=0;i<3;i++)sl+=i<st?'⭐':'☆';
-    document.getElementById('msg').innerHTML=
-      '<div style="margin:20px 0"><h2 style="font-size:2.5rem;margin:0 0 8px">'+gr+'</h2>'+
-      '<div style="font-size:2.5rem;letter-spacing:6px">'+sl+'</div>'+
-      '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:12px 0">+'+xp+' XP</div>'+
-      '<p style="margin:8px 0;color:#888">Score: '+pct+'% ('+sc+'/'+N+')</p>'+
-      '<a href="lesson-4.html" class="btn" style="text-decoration:none;display:inline-block;margin-top:12px">Next Lesson →</a>'+
-      ' <a href="index.html" class="btn" style="text-decoration:none;display:inline-block;margin-top:12px;background:#888;box-shadow:0 4px 0 #666">Back</a></div>';
-    if(typeof window._saveResult==='function')window._saveResult(pct);
+  busy = true;
+  var q = P[ci];
+  step++;
+  if (step < q.t) {
+    // more jumps to make in this chain
+    busy = false;
+    draw();
+    document.getElementById('msg').innerHTML = '<div class="ok">✓ Nice! Keep jumping — '+(q.t - step)+' more to go!</div>';
+    setTimeout(function(){ document.getElementById('msg').innerHTML=''; }, 900);
+  } else {
+    // puzzle complete
+    sc++;
+    drawFinal(q);
+    var pts = q.t === 1 ? 'Captured the star!' : 'Captured all '+q.t+' stars in a multi-jump!';
+    document.getElementById('msg').innerHTML =
+      '<div class="ok">✓ '+pts+'</div>' +
+      '<button class="btn" id="nxtbtn">'+(ci>=N-1?'Finish!':'Next →')+'</button>';
+    busy = false;
   }
 }
+function doBad() {
+  busy = true;
+  document.getElementById('msg').innerHTML = '<div class="no">✗ Wrong! The king jumps OVER a ⭐ and lands on the empty square behind it.</div>';
+  setTimeout(function(){ document.getElementById('msg').innerHTML=''; busy=false; }, 1100);
+}
+function doNext() {
+  ci++; step = 0; document.getElementById('msg').innerHTML = '';
+  if (ci < N) { document.getElementById('bar').style.width=(ci/N*100)+'%'; draw(); }
+  else finish();
+}
+
+function finish() {
+  document.getElementById('bar').style.width='100%';
+  var pct = Math.round(sc/N*100);
+  var gr, st;
+  if(pct>=95){gr='A';st=3}else if(pct>=85){gr='B+';st=2}else if(pct>=70){gr='B';st=2}else if(pct>=60){gr='C';st=1}else{gr='D';st=0}
+  var xp = pct>=60 ? 10 + (pct===100 ? 5 : 0) : 0;
+  document.getElementById('board').innerHTML = '';
+  document.getElementById('info').innerHTML = '';
+  var sl = ''; for (var i=0;i<3;i++) sl += i<st ? '⭐' : '☆';
+  document.getElementById('msg').innerHTML =
+    '<div style="margin:20px 0"><h2 style="font-size:2.5rem;margin:0 0 8px">'+gr+'</h2>' +
+    '<div style="font-size:2.5rem;letter-spacing:6px">'+sl+'</div>' +
+    '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:12px 0">+'+xp+' XP</div>' +
+    '<p style="margin:8px 0;color:#888">Score: '+pct+'% ('+sc+'/'+N+')</p>' +
+    '<a href="lesson-4.html" class="btn" style="text-decoration:none;display:inline-block;margin-top:12px">Next Lesson →</a>' +
+    ' <a href="index.html" class="btn" style="text-decoration:none;display:inline-block;margin-top:12px;background:#888;box-shadow:0 4px 0 #666">Back</a></div>';
+  if (typeof window._saveResult === 'function') window._saveResult(pct);
+}
+
 draw();
 </script>
 <script type="module">
