@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .courses-header {
+      padding: 80px 24px 32px;
+      text-align: center;
+    }
+    .courses-header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .courses-header p {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Filter tabs */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 16px 24px 32px;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 2px solid var(--color-border);
+      border-radius: 999px;
+      background: var(--color-white);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary-dark);
+    }
+    .filter-btn.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+    .filter-btn[data-filter="math"].active { background: var(--color-math); border-color: var(--color-math); }
+    .filter-btn[data-filter="science"].active { background: var(--color-science); border-color: var(--color-science); }
+    .filter-btn[data-filter="data"].active { background: var(--color-data); border-color: var(--color-data); }
+    .filter-btn[data-filter="logic"].active { background: var(--color-logic); border-color: var(--color-logic); }
+    .filter-btn[data-filter="language"].active { background: var(--color-language); border-color: var(--color-language); }
+    .filter-btn[data-filter="others"].active { background: var(--color-others); border-color: var(--color-others); }
+    .course-item[data-category="others"] .category-badge { background: var(--color-others); }
+    .course-item[data-category="others"] .accent-bar { background: var(--color-others); }
+
+    /* Course cards enhanced */
+    .courses-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+
+    .course-item {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .course-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      color: inherit;
+    }
+
+    .course-item .category-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #fff;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+    .course-item[data-category="math"] .category-badge { background: var(--color-math); }
+    .course-item[data-category="science"] .category-badge { background: var(--color-science); }
+    .course-item[data-category="data"] .category-badge { background: var(--color-data); }
+    .course-item[data-category="logic"] .category-badge { background: var(--color-logic); }
+    .course-item[data-category="language"] .category-badge { background: var(--color-language); }
+
+    .course-item h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .course-item p {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .course-item .course-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+    .course-item .course-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .course-item .accent-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .course-item[data-category="math"] .accent-bar { background: var(--color-math); }
+    .course-item[data-category="science"] .accent-bar { background: var(--color-science); }
+    .course-item[data-category="data"] .accent-bar { background: var(--color-data); }
+    .course-item[data-category="logic"] .accent-bar { background: var(--color-logic); }
+    .course-item[data-category="language"] .accent-bar { background: var(--color-language); }
+
+    /* Hidden by filter */
+    .course-item.hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .courses-header h1 { font-size: 2rem; }
+      .courses-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="courses.html" style="color: var(--color-primary-dark); font-weight: 600;">Courses</a>
+        <a href="learning-post.html">Posts</a>
+        <a href="login.html" data-auth="login">Login</a>
+        <a href="login.html" data-auth="signup">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="courses-header">
+    <h1>Courses</h1>
+    <p>Explore our growing library of interactive courses in math, science, data analysis, and logic.</p>
+  </header>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="math">Math</button>
+    <button class="filter-btn" data-filter="science">Science</button>
+    <button class="filter-btn" data-filter="data">Data Analysis</button>
+    <button class="filter-btn" data-filter="logic">Logic</button>
+    <button class="filter-btn" data-filter="language">Language</button>
+    <button class="filter-btn" data-filter="others">Others</button>
+  </div>
+
+  <!-- Course Grid -->
+  <div class="courses-grid">
+
+    <!-- MATH -->
+    <a href="course/calculus/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>Calculus</h3>
+      <p>Master limits, derivatives, integrals, sequences, series, and multivariable calculus.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>556 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/algebra/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>Algebra</h3>
+      <p>The ultimate algebra course — from foundations to advanced topics including exponential functions, coordinate transformations, and real-world applications.</p>
+      <div class="course-meta">
+        <span>47 units</span>
+        <span>1117 lessons</span>
+      </div>
+    </a>
+
+<a href="course/trigonometry/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>Trigonometry</h3>
+      <p>Understand angles, triangles, and periodic functions. See how trig connects geometry to the real world.</p>
+      <div class="course-meta">
+        <span>30 units</span>
+        <span>313 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/ap-statistics/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>AP Statistics</h3>
+      <p>Learn to collect, analyze, and draw conclusions from data. Includes AP exam prep and workplace math.</p>
+      <div class="course-meta">
+        <span>11 units</span>
+        <span>264 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/mind-bending-math/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>Mind-Bending Math</h3>
+      <p>Puzzles, paradoxes, infinity, number theory, fractals, cryptography, and the strangest ideas in mathematics.</p>
+      <div class="course-meta">
+        <span>16 units</span>
+        <span>560 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/math-history/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>Math History</h3>
+      <p>5,000 years of mathematical discovery — from Babylonian tablets to the Millennium Problems. Meet the minds who shaped mathematics.</p>
+      <div class="course-meta">
+        <span>35 units</span>
+        <span>525 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/beyond-arithmetic/index.html" class="course-item" data-category="math">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Math</span>
+      <h3>Beyond Arithmetic</h3>
+      <p>Hyperoperations, Knuth arrows, Graham's number, TREE(3), SCG(13), Busy Beaver, Rayo number, and numbers so large they break notation itself.</p>
+      <div class="course-meta">
+        <span>43 units</span>
+        <span>645 lessons</span>
+      </div>
+    </a>
+
+    <!-- SCIENCE -->
+    <a href="course/psychology/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Psychology</h3>
+      <p>Understand the human mind — memory, emotions, behavior, personality, mental health, and social psychology.</p>
+      <div class="course-meta">
+        <span>22 units</span>
+        <span>350 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/animals/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Animals</h3>
+      <p>The entire animal kingdom — from tardigrades to blue whales. Classification, anatomy, behavior, evolution, venomous creatures, deep sea life, and conservation.</p>
+      <div class="course-meta">
+        <span>40 units</span>
+        <span>600 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/chemistry-and-biochemistry/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Chemistry and Biochemistry</h3>
+      <p>Master atomic structure, bonding, reactions, kinetics, thermodynamics, equilibrium, electrochemistry, and biochemistry. 328 lessons across 19 units.</p>
+      <div class="course-meta">
+        <span>19 units</span>
+        <span>328 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/circuits/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Circuits</h3>
+      <p>Build and analyze electrical circuits — from Ohm's law to microcontrollers and real projects.</p>
+      <div class="course-meta">
+        <span>12 units</span>
+        <span>180 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/digital-circuits/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Digital Circuits</h3>
+      <p>Explore logic gates, binary arithmetic, sequential logic, FSMs, memory, FPGAs, HDLs, and CPU architecture. 379 lessons across 29 units.</p>
+      <div class="course-meta">
+        <span>29 units</span>
+        <span>379 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/science-fiction/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Science Fiction</h3>
+      <p>The real science behind sci-fi — space travel, AI, aliens, time travel, multiverse, robots, cyberpunk, and how fiction becomes reality.</p>
+      <div class="course-meta">
+        <span>30 units</span>
+        <span>450 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/hobby-plotters/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Hobby Plotters & Makers</h3>
+      <p>Cricut, Silhouette, 3D printers, laser cutters, CNC, sublimation, laminating, vinyl, screen printing, embroidery, and resin.</p>
+      <div class="course-meta">
+        <span>31 units</span>
+        <span>465 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/neon/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Neon, Light & Lasers</h3>
+      <p>Neon signs, lasers, LEDs, plasma, fiber optics, holograms, UV, X-rays, bioluminescence, spectroscopy, solar energy, and relativity.</p>
+      <div class="course-meta">
+        <span>44 units</span>
+        <span>660 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/nasa-circuits/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>NASA Circuits &amp; Space Engineering</h3>
+      <p>Explore the circuits behind NASA's telescopes, rockets, rovers, satellites, and space stations. Real space engineering.</p>
+      <div class="course-meta">
+        <span>13 units</span>
+        <span>169 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/scientific-thinking/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Scientific Thinking</h3>
+      <p>Hypothesize, experiment, and reason like a scientist. Includes gears, mechanics, structures, and electricity.</p>
+      <div class="course-meta">
+        <span>16 units</span>
+        <span>258 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/science-puzzles/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Science Puzzles</h3>
+      <p>Physics, chemistry, biology, earth science, astronomy puzzles, paradoxes, and speed rounds.</p>
+      <div class="course-meta">
+        <span>13 units</span>
+        <span>195 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/kurzgesagt/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Kurzgesagt — Science Explored</h3>
+      <p>Explore the universe, life, and everything in between — from black holes to immune cells, quantum physics to climate change. 360 lessons.</p>
+      <div class="course-meta">
+        <span>14 units</span>
+        <span>360 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/quantum-computing/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Quantum Computing</h3>
+      <p>Dive into qubits, superposition, entanglement, quantum gates, algorithms, and real quantum hardware.</p>
+      <div class="course-meta">
+        <span>14 units</span>
+        <span>175 lessons</span>
+      </div>
+    </a>
+
+<a href="course/soil-science/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Soil Science</h3>
+      <p>Explore soil formation, texture, chemistry, biology, and the role soil plays in agriculture, ecosystems, and climate.</p>
+      <div class="course-meta">
+        <span>9 units</span>
+        <span>93 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/difficult-molecules/index.html" class="course-item" data-category="science">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Science</span>
+      <h3>Difficult Molecules</h3>
+      <p>Master the most complex molecules in chemistry — from buckminsterfullerene to DNA, pharmaceuticals to molecular machines. No simple molecules here.</p>
+      <div class="course-meta">
+        <span>14 units</span>
+        <span>175 lessons</span>
+      </div>
+    </a>
+
+    <!-- DATA ANALYSIS -->
+    <a href="course/data-wrangling/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Data Wrangling</h3>
+      <p>Data Cleaning, Manipulation, Preprocessing for ML — CSV, JSON, SQL, Python, pipelines, and real-world projects.</p>
+      <div class="course-meta">
+        <span>39 units</span>
+        <span>585 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/exploring-data-visually/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Exploring Data Visually</h3>
+      <p>Turn raw numbers into compelling visual stories — bar charts, scatter plots, heatmaps, dashboards, and storytelling with data.</p>
+      <div class="course-meta">
+        <span>29 units</span>
+        <span>402 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/probability-in-data/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Probability in Data</h3>
+      <p>Bayes theorem, distributions, hypothesis testing, A/B testing, Monte Carlo, and Markov chains.</p>
+      <div class="course-meta">
+        <span>30 units</span>
+        <span>406 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/clustering-and-classification/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Clustering &amp; Classification</h3>
+      <p>K-Means, DBSCAN, decision trees, random forests, SVM, neural networks, PCA, and model evaluation.</p>
+      <div class="course-meta">
+        <span>27 units</span>
+        <span>398 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/regression/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Regression</h3>
+      <p>Linear, multiple, polynomial, ridge, lasso, logistic regression, residuals, and diagnostics.</p>
+      <div class="course-meta">
+        <span>27 units</span>
+        <span>393 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/predicting-with-probability/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Predicting with Probability</h3>
+      <p>Bayesian networks, XGBoost, ARIMA, Prophet, forecasting, ensemble methods, and ethical prediction.</p>
+      <div class="course-meta">
+        <span>29 units</span>
+        <span>393 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/qualitative-vs-quantitative/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Qualitative vs Quantitative Data</h3>
+      <p>Master both types of data — surveys, interviews, experiments, and statistics. Know when to count and when to describe.</p>
+      <div class="course-meta">
+        <span>6 units</span>
+        <span>68 lessons</span>
+      </div>
+    </a>
+
+    <!-- LOGIC -->
+    <a href="course/logical-reasoning/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Logical Reasoning</h3>
+      <p>Strengthen deductive and inductive reasoning skills. Build airtight arguments and spot logical fallacies.</p>
+      <div class="course-meta">
+        <span>9 units</span>
+        <span>135 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/rationality/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Rationality</h3>
+      <p>Cognitive biases, Bayesian reasoning, decision theory, and the art of being less wrong.</p>
+      <div class="course-meta">
+        <span>12 units</span>
+        <span>180 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/logic-deduction/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Logic Deduction</h3>
+      <p>Master logical reasoning through puzzles — from ordering and negation to quantifiers and optimization.</p>
+      <div class="course-meta">
+        <span>7 levels</span>
+        <span>63 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/logical-languages/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Logical Languages</h3>
+      <p>Learn to reason with Venn diagrams, set operations, and formal arguments. Build the language of logic.</p>
+      <div class="course-meta">
+        <span>6 levels</span>
+        <span>26 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/critical-thinking/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Critical Thinking</h3>
+      <p>Evaluate arguments, detect fallacies, think clearly, and make better decisions.</p>
+      <div class="course-meta">
+        <span>15 units</span>
+        <span>225 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/information-theory/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Information Theory</h3>
+      <p>The mathematics of communication — bits, entropy, compression, and error correction. The science behind data.</p>
+      <div class="course-meta">
+        <span>8 units</span>
+        <span>65 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/game-theory/index.html" class="course-item" data-category="logic">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Logic</span>
+      <h3>Game Theory</h3>
+      <p>Strategic thinking — Prisoner's Dilemma, auctions, evolutionary games, mechanism design, and voting theory.</p>
+      <div class="course-meta">
+        <span>13 units</span>
+        <span>195 lessons</span>
+      </div>
+    </a>
+
+    <!-- LANGUAGE -->
+    <a href="course/english-grammar/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>English Grammar &amp; Difficult Words</h3>
+      <p>Grammar, 2000+ OED words with IPA — medical, psychology, art, music, culinary, architecture, nature, war, nautical, astronomy, and math vocabulary.</p>
+      <div class="course-meta">
+        <span>110 units</span>
+        <span>2220 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/catalan/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Catalan</h3>
+      <p>Master Catalan — grammar, all dialects (Valencian, Balearic, Northern, Alguerès), folklore, literature, cooking, and professional fluency.</p>
+      <div class="course-meta">
+        <span>74 units</span>
+        <span>1584 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/english-history/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>English History</h3>
+      <p>Trace the evolution of English — from Old English runes to global digital English. Literature, grammar, dialects, and the people who shaped our language.</p>
+      <div class="course-meta">
+        <span>89 units</span>
+        <span>1333 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/frisian/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Frisian</h3>
+      <p>The closest living relative of English — sailing, Wadden Sea, Old Frisian, islands, agriculture, and North/Sater Frisian.</p>
+      <div class="course-meta">
+        <span>75 units</span>
+        <span>1308 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/icelandic/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Icelandic</h3>
+      <p>The Viking language — four cases, sagas, Eddas, Björk, volcanoes, glaciers, Northern Lights, puffins, hot springs, and elves.</p>
+      <div class="course-meta">
+        <span>81 units</span>
+        <span>1215 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/ipa/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>International Phonetic Alphabet</h3>
+      <p>Transcribe any language — consonants, vowels, tones, diacritics, acoustic phonetics, speech therapy, singing, and 50+ languages.</p>
+      <div class="course-meta">
+        <span>77 units</span>
+        <span>1156 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/urdu/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Urdu</h3>
+      <p>Learn Urdu — the beautiful Nastaliq-scripted language spoken by over 230 million people in Pakistan and India. From the alphabet to fluency.</p>
+      <div class="course-meta">
+        <span>47 units</span>
+        <span>940 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/sundanese/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Sundanese</h3>
+      <p>Spoken by 40 million in West Java. Rich in wayang, angklung, gamelan, and Sundanese cuisine.</p>
+      <div class="course-meta">
+        <span>57 units</span>
+        <span>843 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/mongolian/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Mongolian</h3>
+      <p>The official language of Mongolia — from Cyrillic script and traditional Bichig to advanced reading, writing, and cultural mastery.</p>
+      <div class="course-meta">
+        <span>42 units</span>
+        <span>839 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/nepali/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Nepali</h3>
+      <p>The official language of Nepal — Devanagari script, grammar, culture, trekking, and Himalayan life.</p>
+      <div class="course-meta">
+        <span>55 units</span>
+        <span>832 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/filipino/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Filipino</h3>
+      <p>The national language of the Philippines — verb focus system, Taglish, OFW culture, adobo, fiestas, and 7,641 islands.</p>
+      <div class="course-meta">
+        <span>48 units</span>
+        <span>720 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/thai/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Thai</h3>
+      <p>The official language of Thailand — tones, script, culture, and conversation. From สวัสดี to fluency.</p>
+      <div class="course-meta">
+        <span>45 units</span>
+        <span>685 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/amharic/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Amharic</h3>
+      <p>The official language of Ethiopia — Ge'ez script, grammar, coffee culture, history, and Amharic mastery.</p>
+      <div class="course-meta">
+        <span>45 units</span>
+        <span>682 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/shiddin/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Shiddin</h3>
+      <p>Learn Shiddin — script, grammar, culture, traditions, dialects, crafts, and full fluency.</p>
+      <div class="course-meta">
+        <span>45 units</span>
+        <span>675 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/tamil/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Tamil</h3>
+      <p>One of the world's oldest living languages, spoken by over 80 million people in India, Sri Lanka, Singapore, and Malaysia.</p>
+      <div class="course-meta">
+        <span>30 units</span>
+        <span>600 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/kazakh/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Kazakh</h3>
+      <p>Learn Kazakh — a Turkic language spoken by 13 million people in Kazakhstan. Nomadic heritage and steppe culture.</p>
+      <div class="course-meta">
+        <span>35 units</span>
+        <span>526 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/kurdish/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Kurdish (Kurmanji)</h3>
+      <p>Spoken by 20 million Kurds — script, grammar, Newroz, Kurdish history, music, Sorani & Kurmanji dialects.</p>
+      <div class="course-meta">
+        <span>34 units</span>
+        <span>503 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/khmer/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Khmer</h3>
+      <p>The language of Cambodia — script, grammar, Angkor Wat, Cambodian history, Apsara dance, and cuisine.</p>
+      <div class="course-meta">
+        <span>34 units</span>
+        <span>501 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/sinhala/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Sinhala</h3>
+      <p>The language of Sri Lanka — rounded script, grammar, Buddhist culture, Sigiriya, and Sri Lankan cuisine.</p>
+      <div class="course-meta">
+        <span>34 units</span>
+        <span>500 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/gujarati/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Gujarati</h3>
+      <p>The language of Gandhi — Devanagari script, grammar, Garba, Navratri, Kathiawadi & Surati dialects.</p>
+      <div class="course-meta">
+        <span>34 units</span>
+        <span>500 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/tigrinya/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Tigrinya</h3>
+      <p>Spoken in Eritrea & northern Ethiopia — Ge'ez script, grammar, Orthodox culture, Eritrean history.</p>
+      <div class="course-meta">
+        <span>34 units</span>
+        <span>498 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/persian/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Persian (Farsi)</h3>
+      <p>The language of Rumi and Hafez — script, grammar, poetry, Nowruz, Iranian history, Dari & Tajik dialects.</p>
+      <div class="course-meta">
+        <span>34 units</span>
+        <span>496 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/georgian/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Georgian</h3>
+      <p>A Kartvelian language with its own unique alphabet. 33 units and 435 lessons — from basics to certification.</p>
+      <div class="course-meta">
+        <span>33 units</span>
+        <span>435 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/telugu/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Telugu</h3>
+      <p>The most spoken Dravidian language. 18 units and 275 lessons — from basics to mastery.</p>
+      <div class="course-meta">
+        <span>18 units</span>
+        <span>275 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/international-sign/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>International Sign</h3>
+      <p>Master International Sign — the contact sign language used at international Deaf events, conferences, and travel. Covers ASL, BSL, JSL, and more.</p>
+      <div class="course-meta">
+        <span>18 units</span>
+        <span>262 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/armenian/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Armenian</h3>
+      <p>An ancient Indo-European language with its own script since 405 AD. 10 units, 200 lessons.</p>
+      <div class="course-meta">
+        <span>10 units</span>
+        <span>200 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/uzbek/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Uzbek</h3>
+      <p>Learn Uzbek — a Turkic language spoken by 35 million people in Uzbekistan. Silk Road heritage and rich culture. 183 lessons across 12 units.</p>
+      <div class="course-meta">
+        <span>12 units</span>
+        <span>183 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/burmese/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Burmese</h3>
+      <p>Learn Burmese — the official language of Myanmar, written in beautiful circular script. 174 lessons across 12 units.</p>
+      <div class="course-meta">
+        <span>12 units</span>
+        <span>174 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/pashto/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Pashto</h3>
+      <p>Learn Pashto — spoken by 60 million Pashtuns in Afghanistan and Pakistan. Written in Perso-Arabic script. 169 lessons across 13 units.</p>
+      <div class="course-meta">
+        <span>13 units</span>
+        <span>169 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/azerbaijani/index.html" class="course-item" data-category="language">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Language</span>
+      <h3>Azerbaijani</h3>
+      <p>A Turkic language spoken by 30 million people in Azerbaijan and Iran. Mugham music, Caspian heritage, and rich culture.</p>
+      <div class="course-meta">
+        <span>11 units</span>
+        <span>143 lessons</span>
+      </div>
+    </a>
+
+    <!-- OTHERS -->
+    <a href="course/algorithmic/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Algorithmic</h3>
+      <p>Think like a computer scientist — data structures, sorting, searching, graphs, dynamic programming, and classic algorithms. 300 lessons across 20 units.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/how-much-storage/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>How Much Storage</h3>
+      <p>Bits, bytes, files, and drives — understand digital storage from a single bit to exabyte-scale data centers. 225 lessons across 15 units.</p>
+      <div class="course-meta">
+        <span>15 units</span>
+        <span>225 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/about-rehaan/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>About Rehaan</h3>
+      <p>Meet the creator of Mathagram — his journey, art on DeviantArt, the story behind the platform, and his vision for the future.</p>
+      <div class="course-meta">
+        <span>5 units</span>
+        <span>75 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/brain-puzzles/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Brain Puzzle Games</h3>
+      <p>Water sorting, door & key puzzles, mazes, escape rooms, trick questions, IQ tests, and optical illusions — just like mobile brain games.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>375 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/impossible-math/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Edam's Impossible Math</h3>
+      <p>Baldi-style math! Edam starts nice, then gets FURIOUS as questions get impossible. How far can you survive?</p>
+      <div class="course-meta">
+        <span>10 units</span>
+        <span>150 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/art/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Art</h3>
+      <p>Drawing, painting, digital art, character design, anatomy, comics, manga, animation, pixel art, 3D, photography, DeviantArt, and art history.</p>
+      <div class="course-meta">
+        <span>30 units</span>
+        <span>450 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/social-media-rules/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Internet Safety Rules &amp; Terms of Service</h3>
+      <p>DMCA copyright removal, callout post rules, evidence docs, cyberbullying, privacy, scams, predators, and platform rules.</p>
+      <div class="course-meta">
+        <span>22 units</span>
+        <span>330 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/mrbeast/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>MrBeast</h3>
+      <p>The math, business, psychology, and strategy behind the world's biggest YouTuber. From viral videos to Feastables.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/glitch-symbols/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>G&#x0336;l&#x0337;i&#x0338;t&#x0336;c&#x0337;h&#x0338; Symbols</h3>
+      <p>Zalgo text, box-drawing, Unicode exploits, ASCII art, kaomoji, cursed text, Braille art, ancient scripts, and glitch aesthetics.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/study-skills/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Study Skills & Learning</h3>
+      <p>Master how to learn — note-taking, time management, memory techniques, focus, and exam strategies.</p>
+      <div class="course-meta">
+        <span>29 units</span>
+        <span>434 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/financial-literacy/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Financial Literacy</h3>
+      <p>Budgeting, investing, crypto, taxes, FIRE, side hustles, stock market, real estate, financial math, and economic history.</p>
+      <div class="course-meta">
+        <span>49 units</span>
+        <span>735 lessons</span>
+      </div>
+    </a>
+
+
+    <a href="course/world-history/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>World History</h3>
+      <p>From ancient civilizations to the future of humanity — empires, revolutions, wars, food history, and what comes next.</p>
+      <div class="course-meta">
+        <span>57 units</span>
+        <span>1393 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/board-games/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Board Games</h3>
+      <p>Master classic board games — Checkers, Backgammon, Go, Mancala, Shogi, Scrabble, and more. No chess.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>289 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/geography/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Geography</h3>
+      <p>Countries, capitals, continents, oceans, climate zones, and the physical and human geography of Earth.</p>
+      <div class="course-meta">
+        <span>19 units</span>
+        <span>276 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/music-theory/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Music Theory</h3>
+      <p>Notes, scales, chords, rhythm, harmony, and composition — understand the language of music.</p>
+      <div class="course-meta">
+        <span>17 units</span>
+        <span>247 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/philosophy/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Philosophy</h3>
+      <p>Ethics, epistemology, metaphysics, political philosophy — great thinkers from Socrates to modern day.</p>
+      <div class="course-meta">
+        <span>19 units</span>
+        <span>276 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/backrooms/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>The Backrooms</h3>
+      <p>Explore the infinite labyrinth — every level, entity, object, and survival strategy. From Level 0 to the Frontrooms.</p>
+      <div class="course-meta">
+        <span>26 units</span>
+        <span>483 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/group-theory/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Group Theory</h3>
+      <p>The mathematics of symmetry — from basic groups to Galois theory and modern abstract algebra.</p>
+      <div class="course-meta">
+        <span>21 units</span>
+        <span>273 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/internship/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Internship</h3>
+      <p>Land your dream internship — resumes, cover letters, interviews, networking, and workplace skills.</p>
+      <div class="course-meta">
+        <span>17 units</span>
+        <span>246 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/numbers-to-infinity/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Numbers: 0 to Absolute Infinity</h3>
+      <p>Every number ever named — from zero to googolplex, Graham's number, TREE(3), transfinite ordinals, large cardinals, and absolute infinity.</p>
+      <div class="course-meta">
+        <span>50 units</span>
+        <span>750 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/afterlife/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Afterlife</h3>
+      <p>A comparative tour of afterlife beliefs — Egyptian Duat, Greek Hades, heaven and hell, reincarnation, bardo states, indigenous cosmologies, and secular views.</p>
+      <div class="course-meta">
+        <span>15 units</span>
+        <span>225 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/albert-einstein/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Albert Einstein</h3>
+      <p>The life, ideas, and legacy of Albert Einstein — from Ulm and the patent office to relativity, quantum debates, Princeton, and humanitarian advocacy.</p>
+      <div class="course-meta">
+        <span>15 units</span>
+        <span>225 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/critical-thinking-problem-solving/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Critical Thinking &amp; Problem-Solving</h3>
+      <p>College-level capstone — formal logic, argument analysis, statistical and scientific reasoning, decision analysis, ethics, and worksheet-driven case studies.</p>
+      <div class="course-meta">
+        <span>15 units</span>
+        <span>225 lessons</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="24" height="24" style="display:inline-block;vertical-align:middle;margin-right:6px;">
+        <span>Mathagram</span>
+      </div>
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    import { initRitaChat } from './js/rita-chat.js';
+    initNav('');
+    initRitaChat('');
+  </script>
+  <script>
+    // Dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Category filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const courseItems = document.querySelectorAll('.course-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        courseItems.forEach(item => {
+          if (filter === 'all' || item.dataset.category === filter) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

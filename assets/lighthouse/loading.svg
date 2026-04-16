@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Ground line -->
+  <rect x="40" y="176" width="120" height="8" rx="4" fill="#1a1a2e"/>
+
+  <!-- Tower body -->
+  <polygon points="80,176 74,72 126,72 120,176" fill="#1a1a2e"/>
+
+  <!-- Horizontal stripes -->
+  <rect x="78" y="96" width="44" height="8" rx="2" fill="#00e5c8" opacity="0.45"/>
+  <rect x="76" y="120" width="48" height="8" rx="2" fill="#00e5c8" opacity="0.45"/>
+  <rect x="74.5" y="144" width="51" height="8" rx="2" fill="#00e5c8" opacity="0.45"/>
+
+  <!-- Door -->
+  <rect x="92" y="156" width="16" height="20" rx="8" fill="#00e5c8" opacity="0.3"/>
+
+  <!-- Lamp house -->
+  <rect x="68" y="56" width="64" height="20" rx="4" fill="#1a1a2e"/>
+
+  <!-- Lamp window glow -->
+  <rect x="78" y="60" width="44" height="12" rx="3" fill="#00e5c8"/>
+
+  <!-- Dome -->
+  <polygon points="88,32 100,18 112,32" fill="#1a1a2e"/>
+  <rect x="84" y="32" width="32" height="24" rx="4" fill="#1a1a2e"/>
+
+  <!-- Tip -->
+  <circle cx="100" cy="18" r="3" fill="#00e5c8"/>
+</svg>

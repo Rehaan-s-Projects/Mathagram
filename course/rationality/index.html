@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Rationality — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/learning-path.css">
+<style>
+.course-header { padding: 80px 24px 24px; text-align: center; }
+.course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+.course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+.course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+@media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+<header class="course-header">
+  <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+  <h1>Rationality</h1>
+  <p>Master rational thinking — cognitive biases, decision theory, Bayesian reasoning, and the art of being less wrong. 180 lessons across 12 units.</p>
+</header>
+<div id="learning-path" class="path-container"></div>
+<footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+<script>
+if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})}); }
+</script>
+<script type="module">
+import { initNav } from '../../js/nav.js'; initNav('../../');
+import { renderPath, getCompletedLessons } from '../../js/learning-path.js?v=3';
+import { onAuthChange } from '../../js/auth.js?v=3';
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const units = [
+  [1,'Introduction to Rationality',['What is Rationality?','Epistemic vs Instrumental Rationality','Beliefs & Evidence','Truth-Seeking','The Map is Not the Territory','Rationality vs Intelligence','Bounded Rationality','System 1 vs System 2 Thinking','Dual Process Theory','Heuristics Overview','Why Rationality Matters','Rationality in Daily Life','History of Rationality','LessWrong & Rationalist Community','Introduction Review']],
+  [2,'Cognitive Biases — Judgment',['What is a Cognitive Bias?','Confirmation Bias','Anchoring Bias','Availability Heuristic','Representativeness Heuristic','Base Rate Neglect','Conjunction Fallacy (Linda Problem)','Framing Effect','Loss Aversion','Status Quo Bias','Endowment Effect','Peak-End Rule','Hindsight Bias','Dunning-Kruger Effect','Judgment Biases Review']],
+  [3,'Cognitive Biases — Social',['Bandwagon Effect','In-Group Bias','Halo Effect','Authority Bias','Social Proof','Bystander Effect','Fundamental Attribution Error','Actor-Observer Bias','Just-World Hypothesis','Curse of Knowledge','False Consensus Effect','Spotlight Effect','Conformity Bias','Groupthink','Social Biases Review']],
+  [4,'Cognitive Biases — Memory & Perception',['Recency Bias','Primacy Effect','Misinformation Effect','Source Confusion','Cryptomnesia','Change Blindness','Inattentional Blindness','Selective Perception','Clustering Illusion','Apophenia & Pattern Seeking','Texas Sharpshooter Fallacy','Frequency Illusion (Baader-Meinhof)','Rosy Retrospection','Nostalgia Bias','Memory Biases Review']],
+  [5,'Logical Fallacies',['What is a Logical Fallacy?','Ad Hominem','Straw Man','Appeal to Authority','Appeal to Emotion','Appeal to Nature','Red Herring','Slippery Slope','False Dichotomy','Circular Reasoning (Begging the Question)','Tu Quoque (Whataboutism)','Equivocation','Hasty Generalization','Post Hoc Ergo Propter Hoc','Fallacies Review']],
+  [6,'Bayesian Reasoning',['What is Bayesian Thinking?','Prior Probability','Updating on Evidence','Likelihood Ratios','Posterior Probability','Bayes Theorem Formula','Medical Test Example','False Positive Puzzle','Base Rate in Bayesian Thinking','Strong vs Weak Evidence','Extraordinary Claims & Evidence','Bayesian vs Frequentist','Conservation of Expected Evidence','Calibration & Confidence','Bayesian Review']],
+  [7,'Decision Theory',['Expected Value','Expected Utility','Risk Aversion','Risk Seeking','Prospect Theory','Loss Aversion in Decisions','Sunk Cost Fallacy','Opportunity Cost','Decision Matrices','Multi-Criteria Decision Analysis','Minimax & Maximin','Regret Minimization','Value of Information','Reversible vs Irreversible Decisions','Decision Theory Review']],
+  [8,'Probability & Prediction',['Thinking Probabilistically','Calibration Training','Prediction Markets','Superforecasting','Reference Class Forecasting','Inside View vs Outside View','Planning Fallacy','Optimism Bias in Predictions','Confidence Intervals','Fermi Estimation','Order of Magnitude','Black Swan Events','Tail Risks','Prediction Review']],
+  [9,'Effective Reasoning',['Deductive Reasoning','Inductive Reasoning','Abductive Reasoning','Analogical Reasoning','Reductio Ad Absurdum','Steelmanning (Strongest Version)','Principle of Charity','Taboo Your Words','Crux Finding','Double Crux Method','Murphyjitsu','Pre-Mortem Analysis','Effective Reasoning Review']],
+  [10,'Rationality & Emotions',['Emotions are Information','Emotional Regulation','Cognitive Reappraisal','Motivated Reasoning','Identity-Protective Cognition','Belief as Attire','The Affect Heuristic','Emotional vs Rational Decisions','When Intuition Works','Expert Intuition','Somatic Markers','Mindfulness & Rationality','Emotions Review']],
+  [11,'Applied Rationality',['Rationality in Career Decisions','Rationality in Relationships','Rationality in Health','Rationality in Finance','Rationality in Politics','Media Literacy & Rationality','Social Media & Bias','Conspiracy Theory Thinking','Science vs Pseudoscience','Alternative Medicine Evaluation','Climate Change Reasoning','AI Risk & Rationality','Applied Review']],
+  [12,'Advanced Topics & Mastery',['Newcombs Problem','Prisoners Dilemma & Rationality','Evidential vs Causal Decision Theory','Timeless Decision Theory','Pascals Wager Analysis','Pascals Mugging','Moral Uncertainty','Effective Altruism & Rationality','Existential Risk Reasoning','Anthropic Reasoning','Simulation Argument','Fermi Paradox & Rationality','The Sequences (Eliezer Yudkowsky)','Rationality Mastery Challenge','Rationality Final Review']]
+];
+let n = 0;
+const lessons = [];
+units.forEach(([u, name, titles]) => {
+  titles.forEach((t, i) => {
+    n++;
+    lessons.push({ id: 'rat-'+n, title: t, href: '#', unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
+  });
+});
+const container = document.getElementById('learning-path');
+const initialCompleted = await getCompletedLessons('rationality');
+renderPath(container, lessons, initialCompleted);
+try {
+  onAuthChange(async (user) => {
+    const completed = await getCompletedLessons('rationality');
+    renderPath(container, lessons, completed);
+  });
+} catch(e) {}
+</script>
+</body>
+</html>

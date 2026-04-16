@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Periodic Trends — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-science);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Chemistry and Biochemistry</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &middot; Lesson 3</div>
+    <h1>Periodic Trends</h1>
+
+    <p>
+      The periodic table is not just a list of elements -- it reveals powerful <strong>patterns</strong> in atomic properties. These trends are driven by changes in atomic structure as you move across periods and down groups.
+    </p>
+
+    <h2>Atomic Radius</h2>
+
+    <p>
+      <strong>Atomic radius increases going down a group</strong> because each row adds a new electron shell, making the atom larger. It <strong>decreases going across a period</strong> (left to right) because more protons pull the electron cloud inward.
+    </p>
+
+    <h2>Ionization Energy</h2>
+
+    <p>
+      <strong>Ionization energy</strong> is the energy required to remove an electron from a neutral atom. It <strong>increases across a period</strong> (electrons are held more tightly) and <strong>decreases down a group</strong> (outer electrons are farther from the nucleus and easier to remove).
+    </p>
+
+    <h2>Electronegativity</h2>
+
+    <p>
+      <strong>Electronegativity</strong> measures an atom's ability to attract bonding electrons. It follows the same trend as ionization energy: <strong>increases across a period</strong> and <strong>decreases down a group</strong>. <strong>Fluorine</strong> is the most electronegative element.
+    </p>
+
+    <h2>Electron Affinity</h2>
+
+    <p>
+      <strong>Electron affinity</strong> is the energy change when an atom gains an electron. <strong>Halogens</strong> (Group 17) have the most negative electron affinities because they are one electron short of a full shell.
+    </p>
+
+    <h2>Why Do These Trends Exist?</h2>
+
+    <p>
+      All periodic trends can be explained by <strong>Coulomb's law</strong>, which describes the force between charged particles:
+    </p>
+
+    <div class="math-block">
+      $$F = k\frac{q_1 \cdot q_2}{r^2}$$
+    </div>
+
+    <p>
+      As the nuclear charge (\(q_1\)) increases across a period, the attractive force on electrons grows stronger. As the distance (\(r\)) increases down a group, the force weakens. This single equation explains every major periodic trend.
+    </p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    // KaTeX auto-render — poll until auto-render is loaded (defer + ES module can race).
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\(", right: "\)", display: false }
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(renderMath, 80);
+      }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+
+    // Initialize side character (Duolingo-style)
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'Which element has the highest electronegativity?',
+        options: ['Oxygen', 'Chlorine', 'Fluorine', 'Nitrogen'],
+        correctIndex: 2
+      },
+      {
+        type: 'true-false',
+        question: 'Atomic radius increases as you move left to right across a period.',
+        correctAnswer: false
+      },
+      {
+        type: 'fill-blank',
+        question: 'The trend of ionization energy across a period is ___.',
+        answer: 'increasing'
+      },
+      {
+        type: 'matching',
+        question: 'Match each trend with its key fact.',
+        pairs: [
+          { left: 'Atomic radius', right: 'Increases down a group' },
+          { left: 'Ionization energy', right: 'Increases across a period' },
+          { left: 'Electronegativity', right: 'Fluorine is highest' },
+          { left: 'Electron affinity', right: 'Halogens have highest' }
+        ]
+      },
+      {
+        type: 'ordering',
+        question: 'Order by increasing atomic radius.',
+        correctOrder: ['F', 'Cl', 'Br', 'I'],
+        shuffled: ['Br', 'F', 'I', 'Cl']
+      },
+      {
+        type: 'multiple-choice',
+        question: "According to Coulomb's law, what happens to the force when distance doubles?",
+        options: ['Force doubles', 'Force halves', 'Force decreases by factor of 4', 'Force stays the same'],
+        correctIndex: 2
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'chemistry-and-biochemistry',
+      lessonId: 'lesson-3',
+      nextHref: 'lesson-4.html',
+      backHref: 'index.html'
+    });
+  </script>
+
+</body>
+</html>

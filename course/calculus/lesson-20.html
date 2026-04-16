@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formal Limit Proofs — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+  <link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Formal Limit Proofs</h1>
+
+    <p>Once you understand the \(\varepsilon\)-\(\delta\) definition, the next step is writing clean proofs that specific limits hold.</p>
+
+    <p><strong>The proof template.</strong> To prove \(\lim_{x \to a} f(x) = L\):</p>
+    <ul>
+      <li>Let \(\varepsilon &gt; 0\) be arbitrary.</li>
+      <li><em>Scratch work:</em> start from \(|f(x) - L| &lt; \varepsilon\), manipulate to get it in terms of \(|x - a|\), and read off a value of \(\delta\).</li>
+      <li><em>Formal proof:</em> choose that \(\delta\) and verify that \(0 &lt; |x - a| &lt; \delta\) implies \(|f(x) - L| &lt; \varepsilon\).</li>
+    </ul>
+
+    <p><strong>Example 1 — linear.</strong> Prove \(\lim_{x \to 2}(3x - 1) = 5\).</p>
+    <p>Scratch: \(|(3x - 1) - 5| = |3x - 6| = 3|x - 2|\). We want this \(&lt; \varepsilon\), so \(|x - 2| &lt; \varepsilon/3\). Choose \(\delta = \varepsilon/3\).</p>
+    <p>Proof: let \(\varepsilon &gt; 0\) and set \(\delta = \varepsilon/3\). If \(0 &lt; |x - 2| &lt; \delta\), then \(|(3x - 1) - 5| = 3|x - 2| &lt; 3\delta = \varepsilon.\ \Box\)</p>
+
+    <p><strong>Example 2 — quadratic.</strong> Prove \(\lim_{x \to 3} x^2 = 9\).</p>
+    <p>Scratch: \(|x^2 - 9| = |x - 3||x + 3|\). The troublesome factor is \(|x + 3|\). Bound it by first restricting to \(|x - 3| &lt; 1\): then \(2 &lt; x &lt; 4\), so \(5 &lt; x + 3 &lt; 7\), giving \(|x + 3| &lt; 7\). So \(|x^2 - 9| &lt; 7|x - 3|\). For this to be \(&lt; \varepsilon\), take \(|x - 3| &lt; \varepsilon/7\). Combining: \(\delta = \min(1,\ \varepsilon/7)\).</p>
+
+    <p><strong>Common trick:</strong> for nonlinear \(f\), first restrict \(\delta \le 1\) to bound the "extra" factor, then set \(\delta = \min(1, \varepsilon/M)\) where \(M\) is that bound.</p>
+
+    <p><strong>Example 3 — constant.</strong> Prove \(\lim_{x \to a} c = c\). For any \(\varepsilon &gt; 0\), any \(\delta &gt; 0\) works, since \(|c - c| = 0 &lt; \varepsilon\) always.</p>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      }
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: 'To prove lim x\→1 of (4x+2) = 6, a valid choice is:',
+        options: ['\δ = \ε', '\δ = \ε/4', '\δ = 4\ε', '\δ = \ε²'],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: 'For lim x\→0 of (7x) = 0, choose \δ = \ε/___.',
+        answer: '7' },
+      { type: 'true-false',
+        question: 'In proving a nonlinear limit, it is common to restrict \δ \≤ 1 first to bound a troublesome factor.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'In the proof of lim x\→3 of x² = 9, we factored |x²-9| as:',
+        options: ['|x - 3|²', '|x-3|\ |x+3|', '|x+3|²', '|x²| - 9'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'What value of \δ works for lim x\→3 of x² = 9 given \ε > 0?',
+        options: ['\\min(1,\\ \ε/7)', '\ε', '\ε/3', '\ε²'],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'For lim x\→a of c = c, any \δ > 0 works.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'To prove lim x\→-2 of (5x+4) = -6, choose \δ = \ε/___.',
+        answer: '5' },
+      { type: 'multiple-choice',
+        question: 'Which step is NOT part of a formal \ε-\δ proof?',
+        options: [
+          'Let \ε > 0 be arbitrary.',
+          'Compute the derivative of f.',
+          'Choose a specific \δ depending on \ε.',
+          'Verify the implication 0 < |x-a| < \δ \⇒ |f(x)-L| < \ε.'
+        ],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'If a \δ works for \ε, the same \δ also works for any smaller \ε.',
+        correctAnswer: false },
+      { type: 'fill-blank',
+        question: 'In lim x\→3 of x² = 9, bounding |x+3| < ___ when |x-3| < 1 is the key step.',
+        answer: '7' },
+      { type: 'multiple-choice',
+        question: 'Which of these is a valid choice of \δ for lim x\→0 of x² = 0?',
+        options: ['\δ = \ε', '\δ = \√(\ε)', '\δ = 2\ε', '\δ = \ε²'],
+        correctIndex: 1 },
+      { type: 'matching',
+        question: 'Match each limit to a working \δ.',
+        pairs: [
+          { left: 'lim x\→1 of 2x = 2', right: '\δ = \ε/2' },
+          { left: 'lim x\→5 of 3x = 15', right: '\δ = \ε/3' },
+          { left: 'lim x\→0 of c = c', right: 'any \δ > 0' },
+          { left: 'lim x\→3 of x² = 9', right: '\\min(1, \ε/7)' }
+        ] }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'calculus', lessonId: 'lesson-20', nextHref: 'index.html', backHref: 'index.html'
+    });
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
+</body>
+</html>

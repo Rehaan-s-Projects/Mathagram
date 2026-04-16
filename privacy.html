@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .legal-container {
+      max-width: 800px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+    .legal-container h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .legal-updated {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin-bottom: 32px;
+    }
+    .legal-container h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .legal-container p {
+      margin-bottom: 16px;
+      line-height: 1.7;
+      color: var(--color-text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="legal-container">
+    <h1>Privacy Policy</h1>
+    <p class="legal-updated">Last updated: <span id="year-updated"></span></p>
+
+    <h2>1. Information We Collect</h2>
+    <p>When you create an account, we collect your email address and display name. As you use Mathagram, we collect usage data including lessons completed, quiz scores, XP earned, and progress through courses.</p>
+
+    <h2>2. How We Use Your Information</h2>
+    <p>We use the information we collect to provide and maintain the Mathagram service, track your learning progress across courses and lessons, personalize your experience with characters and levels, and improve our educational content based on aggregate usage patterns.</p>
+
+    <h2>3. Third-Party Services</h2>
+    <p>Mathagram uses Firebase Authentication and Cloud Firestore, both provided by Google, to manage user accounts and store data. Your information is processed in accordance with <a href="https://policies.google.com/privacy" style="color: var(--color-primary-dark); text-decoration: underline;">Google's Privacy Policy</a>. We do not sell or share your personal information with any other third parties.</p>
+
+    <h2>4. Data Security</h2>
+    <p>We take data security seriously. All connections to Mathagram are encrypted via HTTPS. User data is protected by Firebase security rules that restrict access to authorized users only. Passwords are never stored in plaintext; authentication is handled entirely by Firebase Authentication.</p>
+
+    <h2>5. Data Retention</h2>
+    <p>Your data is retained for as long as your account is active. If you wish to delete your account and all associated data, please contact us via email and we will process your request within 30 days.</p>
+
+    <h2>6. Children's Privacy</h2>
+    <p>Mathagram is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us so we can take appropriate action.</p>
+
+    <h2>7. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date. We encourage you to review this policy periodically to stay informed about how we protect your information.</p>
+
+    <h2>8. Contact</h2>
+    <p>If you have questions about this Privacy Policy or wish to request data deletion, please contact Rehaan Rashid at <a href="https://linktr.ee/Rehaan_rashid" style="color: var(--color-primary-dark); text-decoration: underline;">linktr.ee/Rehaan_rashid</a>.</p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('');
+  </script>
+  <script>
+    const yr = new Date().getFullYear();
+    document.getElementById('year').textContent = yr;
+    document.getElementById('year-updated').textContent = yr;
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intermediate Value Theorem — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+  <link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Intermediate Value Theorem</h1>
+
+    <p>The <strong>Intermediate Value Theorem (IVT)</strong> is a powerful consequence of continuity. Intuitively: if you draw a continuous curve from \((a, f(a))\) to \((b, f(b))\) without lifting your pen, you must pass through every \(y\)-value between \(f(a)\) and \(f(b)\).</p>
+
+    <p><strong>Statement:</strong> If \(f\) is continuous on the closed interval \([a, b]\), and \(N\) is any number between \(f(a)\) and \(f(b)\), then there exists at least one number \(c\) in \((a, b)\) such that:</p>
+    <div class="math-block">$$f(c) = N$$</div>
+
+    <p><strong>Two requirements</strong> (both are essential):</p>
+    <ul>
+      <li>\(f\) must be continuous on \([a, b]\).</li>
+      <li>\(N\) must be strictly between \(f(a)\) and \(f(b)\).</li>
+    </ul>
+
+    <p><strong>Most common use — proving a root exists.</strong> To show \(f(x) = 0\) has a solution on \([a, b]\), check that \(f\) is continuous there and that \(f(a)\) and \(f(b)\) have opposite signs. Then by IVT there is some \(c\) in \((a, b)\) with \(f(c) = 0\).</p>
+
+    <p><strong>Example 1:</strong> Does \(f(x) = x^3 + x - 1\) have a root in \([0, 1]\)? \(f\) is a polynomial, so continuous everywhere. \(f(0) = -1\) and \(f(1) = 1\). Since \(0\) is between \(-1\) and \(1\), IVT guarantees a \(c \in (0, 1)\) with \(f(c) = 0\).</p>
+
+    <p><strong>Example 2:</strong> Show \(\cos x = x\) has a solution in \([0, 1]\). Let \(g(x) = \cos x - x\). Then \(g(0) = 1\) and \(g(1) = \cos 1 - 1 \approx -0.46\). By IVT, some \(c\) makes \(g(c) = 0\), i.e. \(\cos c = c\).</p>
+
+    <p><strong>Warning:</strong> IVT does <em>not</em> tell you how many solutions exist, nor does it tell you the value of \(c\) — only that at least one exists.</p>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      }
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: 'IVT requires f to be:',
+        options: ['Differentiable on [a,b]', 'Continuous on [a,b]', 'Polynomial', 'Monotonic'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'IVT guarantees a unique solution c with f(c) = N.',
+        correctAnswer: false },
+      { type: 'multiple-choice',
+        question: 'For f(x) = x² - 3 on [1, 2], which value of N is IVT guaranteed to produce?',
+        options: ['N = -5', 'N = 0', 'N = 5', 'None of these'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'If f is continuous on [0,4], f(0) = -2, and f(4) = 7, then there is some c \∈ (0,4) with f(c) = 3.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'For f(x) = x³ + x - 1, f(0) = -1 and f(1) = ___.',
+        answer: '1' },
+      { type: 'multiple-choice',
+        question: 'Which function is NOT guaranteed to have a zero in [-1, 1] by IVT?',
+        options: [
+          'x³',
+          'x² - 1 (equals 0 at ends)',
+          '\sin x',
+          'x² + 1 (always positive)'
+        ],
+        correctIndex: 3 },
+      { type: 'true-false',
+        question: 'IVT can be used to approximate roots by repeatedly narrowing intervals (bisection method).',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'For g(x) = \cos x - x, g(0) = 1 and g(1) \≈ -0.46. What does IVT tell us?',
+        options: [
+          'There is a unique c with g(c) = 0.',
+          'There is at least one c \∈ (0,1) with \cos c = c.',
+          'g has no roots.',
+          'g is monotonic.'
+        ],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: 'If f is continuous on [2, 5], f(2) = -4 and f(5) = 10, IVT guarantees some c with f(c) = N for any N between -4 and ___.',
+        answer: '10' },
+      { type: 'multiple-choice',
+        question: 'Why does IVT fail to apply to f(x) = 1/x on [-1, 1]?',
+        options: [
+          '1/x is never continuous.',
+          'f is not continuous at x = 0 in [-1, 1].',
+          'It is not a polynomial.',
+          'f(-1) = f(1).'
+        ],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'If f(a) = f(b), IVT tells us f takes every value between f(a) and f(b) on (a,b).',
+        correctAnswer: false },
+      { type: 'matching',
+        question: 'Match each condition for using IVT to show a root exists.',
+        pairs: [
+          { left: 'Continuity requirement', right: 'f continuous on [a,b]' },
+          { left: 'Sign condition', right: 'f(a) and f(b) differ in sign' },
+          { left: 'Conclusion', right: '\∃\ c \∈ (a,b) with f(c)=0' },
+          { left: 'What IVT does NOT say', right: 'How many roots or where they are' }
+        ] }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'calculus', lessonId: 'lesson-18', nextHref: 'index.html', backHref: 'index.html'
+    });
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
+</body>
+</html>

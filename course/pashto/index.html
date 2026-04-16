@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pashto — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Pashto</h1>
+    <p>Learn Pashto — spoken by 60 million Pashtuns in Afghanistan and Pakistan. Written in Perso-Arabic script. 169 lessons across 13 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Arabic-Pashto Script',['Pashto Alphabet Overview','Perso-Arabic Base Letters','Unique Pashto Letters (ټ ډ ړ ږ ښ)','Vowel Marks (Zabar Zer Pesh)','Letter Connections (Initial Medial Final)','Numbers in Pashto Script','Writing Direction & Ligatures','Short Vowels vs Long Vowels','Diacritical Marks','Reading Simple Words','Writing Practice: Names','Reading Practice: Signs','Script Review']],
+      [2,'Greetings & Basics',['Assalamu Alaikum (Peace Greeting)','Stare Mashay (Hello)','Pa Khayr (Goodbye)','Tsenga Yey? (How Are You?)','Zama Num ... Dey (My Name Is)','Manana (Thank You)','Wabakhsha (Excuse Me)','Ho / Na (Yes / No)','Numbers 1-20','Numbers 20-100','Days of the Week','Months & Seasons','Greetings Review']],
+      [3,'Pronouns & Grammar',['Za (I)','Ta (You informal)','Taso (You formal)','Haghah (He/She)','Mung (We)','Haghwee (They)','Demonstrative Pronouns (Da Haghah)','Possessive Markers','Word Order (SOV)','Pashto Gender (Masculine Feminine)','Plural Formation','Question Words (Tsok Cherta Wale)','Pronouns Review']],
+      [4,'Present Tense',['Verb Roots in Pashto','Present Tense Endings','Kawul (To Do)','Tlul (To Go)','Raatlul (To Come)','Khorawul (To Eat)','Tskul (To Drink)','Wayul (To Say)','Lidul (To See)','Lwastul (To Read)','Likul (To Write)','Negative Present Tense','Present Tense Review']],
+      [5,'Past Tense',['Simple Past Formation','Split Ergativity in Pashto','Past of Kawul (Did)','Past of Tlul (Went)','Past of Raatlul (Came)','Past of Khorawul (Ate)','Past of Wayul (Said)','Past of Lidul (Saw)','Continuous Past','Perfect Past','Negative Past Forms','Time Expressions (Paroon Nan Sabaa)','Past Tense Review']],
+      [6,'Future & Modal Verbs',['Future Tense Formation (Ba + Present)','Ba Particle Usage','Will Go (Ba Dzee)','Will Do (Ba Kawee)','Want To (Ghwaarul)','Can / Able (Shwul)','Must / Should (Bayad)','Need To (Zaroorat)','Requesting Politely','Giving Advice','Permission & Prohibition','Expressing Wishes','Future & Modal Review']],
+      [7,'Family & People',['Plaar (Father)','Mor (Mother)','Wror (Brother)','Khwar (Sister)','Neekai (Grandfather)','Anaa (Grandmother)','Treh (Uncle Paternal)','Maama (Uncle Maternal)','Tror (Aunt Paternal)','Khaalah (Aunt Maternal)','Khaawand / Merman (Spouse)','Maashoom (Child)','Family Review']],
+      [8,'Food & Cuisine',['Dodai (Bread)','Kabuli Pulao (National Dish)','Mantu (Dumplings)','Bolani (Stuffed Flatbread)','Ashak (Leek Dumplings)','Qorma (Meat Stew)','Chainaki (Tea Pot Kebab)','Sheer Chai (Pink Tea)','Fruits of Afghanistan','Nan & Kebab Culture','At the Restaurant','Ordering & Paying','Food Review']],
+      [9,'Shopping & Numbers',['Large Numbers (Zar Lak Million)','Counting Money (Afghani Rupee)','At the Bazaar','Haggling Phrases','Clothing Vocabulary','Colors in Pashto','Sizes & Measurements','Price & Cost Phrases','Comparing Items','Traditional Crafts Shopping','Grocery Shopping','Online & Modern Shopping','Shopping Review']],
+      [10,'Travel & Afghanistan/Pakistan',['Kabul City Guide','Kandahar Province','Peshawar & KPK','Jalalabad & Nangarhar','Mazar-i-Sharif','Herat City','Bamiyan Valley','Khyber Pass','At the Airport','Hotel & Accommodation','Directions & Transport','Emergency Travel Phrases','Travel Review']],
+      [11,'Culture & Traditions',['Pashtunwali Code of Honor','Melmastia (Hospitality)','Nanawatai (Asylum)','Badal (Justice)','Loya Jirga (Grand Assembly)','Attan Dance','Pashto Poetry (Landay)','Khushal Khan Khattak','Rahman Baba','Wedding Traditions','Eid Celebrations','Tribal Structure','Culture Review']],
+      [12,'Advanced Grammar',['Complex Sentence Structures','Relative Clauses','Passive Voice in Pashto','Causative Verbs','Compound Verbs','Subjunctive Mood','Conditional Sentences','Direct & Indirect Speech','Formal vs Informal Register','Dialectal Differences (Northern Southern)','Idiomatic Expressions','Proverbs & Sayings','Advanced Grammar Review']],
+      [13,'Fluency & Mastery',['Conversation Starters','Small Talk & Weather','Expressing Opinions','Agreeing & Disagreeing','Storytelling in Pashto','Pashto News Reading','Pashto Song Lyrics','Listening Comprehension 1','Listening Comprehension 2','Writing a Paragraph','Debate & Discussion','Role Play Scenarios','Final Pashto Challenge']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pa-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('pashto');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('pashto');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

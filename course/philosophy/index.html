@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Philosophy — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Philosophy</h1>
+    <p>Explore the big questions — from ancient wisdom to modern thought. 276 lessons across 19 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'What Is Philosophy?', ['Defining Philosophy','The Branches of Philosophy','Why Study Philosophy?','Philosophy vs Religion vs Science','Asking Philosophical Questions','The Socratic Method','Thought Experiments','Logic & Argumentation','Deductive & Inductive Reasoning','Philosophy\'s Role in History','Eastern vs Western Traditions','Reading Philosophical Texts','Writing a Philosophy Paper','Philosophy in Everyday Life','What Is Philosophy? Review']],
+      [2, 'Ancient Greek Philosophy', ['Pre-Socratic Thinkers','Thales & the Origin of Everything','Heraclitus & Change','Parmenides & Being','Democritus & Atomism','Socrates & the Examined Life','The Socratic Dialogues','Plato\'s Theory of Forms','The Allegory of the Cave','Plato\'s Republic','Aristotle\'s Logic','Aristotle\'s Ethics','Aristotle\'s Politics','Stoics Epicureans & Cynics','Ancient Greek Philosophy Review']],
+      [3, 'Eastern Philosophy', ['Overview of Eastern Thought','Confucius & the Analects','Confucian Ethics & Ren','Mencius & Human Nature','Lao Tzu & the Tao Te Ching','Daoism & Wu Wei','The Yin-Yang Concept','Siddhartha Gautama the Buddha','The Four Noble Truths','The Eightfold Path','Zen Buddhism','Hindu Philosophy & Vedanta','Karma Dharma & Moksha','Comparing Eastern & Western','Eastern Philosophy Review']],
+      [4, 'Medieval Philosophy', ['Philosophy Meets Religion','St. Augustine & the City of God','Augustine on Evil & Free Will','Boethius & Consolation','Islamic Philosophy Al-Farabi','Avicenna (Ibn Sina)','Averroes (Ibn Rushd)','Maimonides & Jewish Philosophy','St. Anselm\'s Ontological Argument','St. Thomas Aquinas','The Five Ways','Faith vs Reason','William of Ockham & Ockham\'s Razor','Scholasticism','Medieval Philosophy Review']],
+      [5, 'Modern Philosophy', ['The Birth of Modern Philosophy','Descartes & Methodic Doubt','Cogito Ergo Sum','Rationalism','Spinoza & Substance Monism','Leibniz & Monads','Empiricism Overview','John Locke & Tabula Rasa','George Berkeley & Idealism','David Hume & Skepticism','Hume on Causation','Immanuel Kant\'s Synthesis','The Categorical Imperative','Kant\'s Critique of Pure Reason','Modern Philosophy Review']],
+      [6, 'Ethics', ['What Is Ethics?','Moral Relativism vs Objectivism','Divine Command Theory','Natural Law Theory','Utilitarianism Bentham','Utilitarianism Mill','Deontological Ethics Kant','Duty & Moral Rules','Virtue Ethics Aristotle','Character & the Good Life','Care Ethics','Social Contract Theory','Applied Ethics Overview','Ethical Dilemmas & Case Studies','Ethics Review']],
+      [7, 'Political Philosophy', ['What Is Political Philosophy?','Plato\'s Ideal State','Aristotle on Politics','Machiavelli & The Prince','Thomas Hobbes & Leviathan','John Locke & Natural Rights','Rousseau & the General Will','Montesquieu & Separation of Powers','Karl Marx & Class Struggle','Marxism & Communism','John Stuart Mill & Liberty','John Rawls & Justice as Fairness','Libertarianism Nozick','Feminist Political Philosophy','Political Philosophy Review']],
+      [8, 'Existentialism', ['What Is Existentialism?','Kierkegaard & the Leap of Faith','Kierkegaard on Anxiety & Despair','Nietzsche & the Death of God','Nietzsche\'s Will to Power','The Ubermensch','Heidegger & Being','Sartre & Radical Freedom','Existence Precedes Essence','Bad Faith','Simone de Beauvoir & the Other','Albert Camus & the Absurd','The Myth of Sisyphus','Existentialism & Literature','Existentialism Review']],
+      [9, 'Philosophy of Mind', ['The Mind-Body Problem','Dualism Descartes','Behaviorism','Identity Theory','Functionalism','The Hard Problem of Consciousness','Qualia','The Chinese Room Argument','Turing Test & AI','Free Will vs Determinism','Compatibilism','Neuroscience & Philosophy','Personal Identity','Philosophy of Mind & AI','Philosophy of Mind Review']],
+      [10, 'Contemporary Philosophy', ['Analytic vs Continental','Logical Positivism','Wittgenstein & Language Games','Pragmatism James & Dewey','Phenomenology Husserl','Hermeneutics','Structuralism & Post-Structuralism','Derrida & Deconstruction','Foucault & Power','Philosophy of Science Popper & Kuhn','Environmental Ethics','Bioethics','Philosophy of Technology','The Future of Philosophy','Contemporary Philosophy Review']],
+      [11, 'Modern Philosophy Descartes to Kant', ['Descartes & Radical Doubt','Cogito Ergo Sum','Mind-Body Dualism','Spinoza & Substance','Leibniz & Monads','Locke & Empiricism','Tabula Rasa','Berkeley & Idealism','Hume & Skepticism','The Problem of Induction','Kant & the Copernican Revolution','Synthetic A Priori','The Categorical Imperative','Modern Philosophy Review']],
+      [12, '19th Century Philosophy', ['Hegel & Dialectics','The Absolute Spirit','Marx & Historical Materialism','Alienation & Class Struggle','Schopenhauer & Will','Kierkegaard & Anxiety','The Leap of Faith','John Stuart Mill & Utilitarianism','Nietzsche & the Will to Power','Death of God','Ubermensch','Eternal Recurrence','Pragmatism James & Peirce','19th Century Review']],
+      [13, 'Applied Ethics', ['What Is Applied Ethics?','Bioethics Introduction','Euthanasia & End of Life','Abortion Debate','Animal Rights & Ethics','Environmental Ethics Applied','Business Ethics','Ethics of Technology','AI Ethics','Privacy & Surveillance','Ethics of War','Global Justice','Ethical Consumption','Applied Ethics Review']],
+      [14, 'Aesthetics', ['What Is Aesthetics?','Beauty & Sublimity','Plato on Art','Aristotle on Tragedy','Kant on Taste','Hegel on Art','The Definition of Art','Institutional Theory','Expression Theory','Formalism','Art & Morality','Photography & Film as Art','Digital Art & AI Creativity','Aesthetics Review']],
+      [15, 'Philosophy of Science', ['What Is Science?','Demarcation Problem','Logical Positivism & Science','Popper & Falsification','Kuhn & Paradigm Shifts','Lakatos & Research Programs','Feyerabend Against Method','Scientific Realism','Instrumentalism','Underdetermination','Explanation in Science','Laws of Nature','Values in Science','Philosophy of Science Review']],
+      [16, 'Philosophy of Language', ['What Is Philosophy of Language?','Frege on Sense & Reference','Russell on Descriptions','Wittgenstein Tractatus','Language Games','Speech Act Theory','Austin & Performatives','Searle & Intentionality','Meaning & Use','Truth Theories','Metaphor & Figurative Language','Translation & Interpretation','Language & Thought','Philosophy of Language Review']],
+      [17, 'Epistemology Advanced', ['What Is Knowledge?','Justified True Belief','Gettier Problem','Reliabilism','Foundationalism','Coherentism','Skeptical Scenarios','Brain in a Vat','Epistemic Virtue','Social Epistemology','Testimony & Trust','Epistemic Injustice','Naturalized Epistemology','Epistemology Advanced Review']],
+      [18, 'Phenomenology & Hermeneutics', ['What Is Phenomenology?','Husserl & Intentionality','Bracketing & Reduction','Heidegger Being & Time','Dasein & Authenticity','Merleau-Ponty & Embodiment','Levinas & the Other','What Is Hermeneutics?','Schleiermacher & Interpretation','Dilthey & Human Sciences','Gadamer & Horizons','Ricoeur & Narrative','Hermeneutic Circle','Phenomenology & Hermeneutics Review']],
+      [19, 'Philosophy & Global Traditions', ['African Philosophy Ubuntu','Negritude Movement','Latin American Philosophy','Liberation Theology','Japanese Philosophy Zen & Nothingness','Korean Neo-Confucianism','Islamic Philosophy Modern','Jewish Philosophy Modern','Indigenous Philosophies','Comparative Philosophy Methods','Intercultural Dialogue','Decolonizing Philosophy','Global Ethics','Global Traditions Review']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ph-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('philosophy');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('philosophy');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

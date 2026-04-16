@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hobby Plotters & Makers — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Hobby Plotters & Makers</h1>
+    <p>Cricut, Silhouette, 3D printers, laser cutters, CNC machines, sublimation, laminating, vinyl cutting, and the maker movement. 31 units, 465 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is a Plotter & Maker Machine?',['What Is a Plotter?','Pen Plotters — Drawing Machines','Cutting Plotters — Vinyl & Paper','The Maker Movement — What Is It?','Makerspace — Community Workshops','Types of Maker Machines','DIY vs Commercial Machines','Software for Makers','File Formats — SVG PNG DXF STL','Vector vs Raster — Why It Matters','Design Software — Free Options','Safety in the Maker Lab','Cost of Getting Started','Choosing Your First Machine','Plotter & Maker Basics Checkpoint']],
+      [2,'Cricut Machines',['What Is Cricut?','Cricut Explore Air 2','Cricut Maker 3','Cricut Joy — Compact Cutter','Cricut Venture — Large Format','Cricut Design Space — The Software','Uploading Images to Design Space','Text & Fonts in Design Space','Layers & Groups','Cut Lines vs Draw Lines','Print Then Cut — How It Works','Cricut Access — Subscription','Cricut Blades — Fine Point Deep Cut Rotary','Cricut Mats — Light Standard Strong Fabric','Cricut Machines Checkpoint']],
+      [3,'Cricut Materials & Projects',['Adhesive Vinyl — Permanent & Removable','Heat Transfer Vinyl (HTV) — Iron-On','Cardstock & Paper','Faux Leather','Fabric with Cricut','Infusible Ink — Sublimation by Cricut','Smart Materials — No Mat Needed','Transfer Tape — Applying Vinyl','Weeding — Removing Excess','Project: Custom Stickers','Project: T-Shirt with HTV','Project: Paper Cards','Project: Wall Decals','Project: Mug with Infusible Ink','Cricut Materials Checkpoint']],
+      [4,'Silhouette Machines',['What Is Silhouette?','Silhouette Cameo 4','Silhouette Portrait 3','Silhouette Curio — Embossing & Stippling','Silhouette Alta — 3D Printer','Silhouette Studio — The Software','Silhouette vs Cricut — Comparison','Blade Types — AutoBlade Ratchet','Cutting Mats — Silhouette','Cut Settings — Speed Force Passes','Print & Cut — Registration Marks','PixScan — Camera Alignment','Silhouette Design Store','Using SVG Files in Silhouette','Silhouette Checkpoint']],
+      [5,'Vinyl Cutting Deep Dive',['What Is Vinyl?','Adhesive Vinyl — Oracle 651 vs 631','Heat Transfer Vinyl — Siser EasyWeed','Specialty Vinyl — Glitter Holographic Glow','Vinyl Colors & Finishes','Cutting Vinyl — Settings & Tips','Weeding Tools — Hook Tweezers','Transfer Tape — Application Method','Wet vs Dry Application','Vinyl on Tumblers — Wrapping','Vinyl on Cars — Decals','Vinyl on Windows — Business Signs','Vinyl on Laptops & Phones','Layering Vinyl — Multi-Color','Vinyl Cutting Checkpoint']],
+      [6,'Heat Transfer & T-Shirts',['What Is Heat Transfer Vinyl?','HTV Types — Regular Glitter Foil Flock','Cutting HTV — Mirror Your Design!','Heat Press vs Iron','Temperature & Time Settings','Pressing Pillows — Even Pressure','Cold Peel vs Hot Peel','Layering HTV — Multi-Color Shirts','Sublimation vs HTV — Differences','DTF — Direct to Film','DTG — Direct to Garment','Screen Printing — Traditional','Project: Custom T-Shirt','Starting a T-Shirt Business','Heat Transfer Checkpoint']],
+      [7,'3D Printing — Getting Started',['What Is 3D Printing?','How FDM Printing Works — Layer by Layer','Parts of a 3D Printer — Extruder Bed Frame','Filament Types — PLA ABS PETG TPU','PLA — Best for Beginners','Slicing Software — Cura PrusaSlicer','STL Files — Where to Find Them','Thingiverse — Free Models','First Print — Test Cube','Bed Leveling — Most Important Step','Print Speed vs Quality','Infill — 0% to 100%','Support Structures — Overhangs','Raft Brim Skirt — Bed Adhesion','3D Printing Basics Checkpoint']],
+      [8,'3D Printing — Machines',['Creality Ender 3 — Best Budget','Prusa i3 MK4 — Best Overall','Bambu Lab P1S — Fast & Reliable','Anycubic Kobra','Elegoo Neptune','Resin Printers — SLA & MSLA','Elegoo Mars — Resin','Anycubic Photon — Resin','Resin vs FDM — Comparison','Multi-Color Printing — AMS','Enclosed vs Open Frame','Direct Drive vs Bowden','Auto Bed Leveling','Large Format Printers','3D Printers Checkpoint']],
+      [9,'3D Printing — Advanced',['Advanced Filaments — Nylon Carbon Wood','PETG — Strong & Clear','TPU — Flexible Prints','ABS — Heat Resistant','ASA — UV Resistant Outdoor','Resin Types — Standard Tough Flexible','Post-Processing — Sanding Painting','Vapor Smoothing — Acetone ABS','Resin Post-Curing — UV Light','Multi-Material Printing','Supports — Tree vs Normal','Bridging — Printing in Mid-Air','Retraction Settings — No Stringing','Troubleshooting — Warping Stringing Layer Shift','3D Printing Advanced Checkpoint']],
+      [10,'3D Printing — Projects',['Project: Phone Stand','Project: Custom Keychains','Project: Desk Organizer','Project: Cookie Cutters','Project: Plant Pots','Project: Board Game Pieces','Project: Cosplay Props','Project: Lithophane — Photo in 3D','Project: Articulated Dragon','Project: Mechanical Keyboard Case','Project: Drone Parts','Project: Prosthetic Hands — e-NABLE','Project: Architectural Models','Project: Custom Figurines','3D Projects Checkpoint']],
+      [11,'3D Design & Modeling',['Tinkercad — Easiest 3D Design','Fusion 360 — Professional Free','Blender — Sculpting & Modeling','OpenSCAD — Code Your Models','SketchUp — Architecture Style','FreeCAD — Parametric Design','Meshmixer — Editing STL Files','3D Scanning — Phone Apps','Photogrammetry — Photos to 3D','Designing for 3D Printing — Tolerances','Wall Thickness — Minimum','Overhangs — 45° Rule','Snap Fits — Joining Parts','Threads — Screws & Nuts','3D Design Checkpoint']],
+      [12,'Laser Cutting & Engraving',['What Is Laser Cutting?','CO2 Lasers — Wood Acrylic','Diode Lasers — Entry Level','Fiber Lasers — Metal','Glowforge — Popular Laser Cutter','xTool — Budget Laser','Epilog — Professional','Laser Engraving vs Cutting','Materials — Wood Acrylic Leather','Materials to NEVER Laser — PVC Vinyl','Laser Safety — Ventilation & Goggles','Vector Cut vs Raster Engrave','Power & Speed Settings','Software — LightBurn LaserGRBL','Laser Cutting Checkpoint']],
+      [13,'Laser Projects',['Project: Engraved Cutting Board','Project: Acrylic LED Sign','Project: Wooden Coasters','Project: Leather Journal Cover','Project: Wooden Puzzle','Project: Custom Stamp','Project: Phone Case Engraving','Project: Cardboard Architectural Model','Project: Engraved Photo on Wood','Project: Earrings — Acrylic','Project: Map Wall Art','Project: Name Tags & Badges','Project: Stencils','Project: Jigsaw Puzzle','Laser Projects Checkpoint']],
+      [14,'CNC Machines',['What Is CNC? — Computer Numerical Control','CNC Router vs CNC Mill','How CNC Works — G-Code','CNC for Wood — Shapeoko Onefinity','CNC for Metal — Tormach Haas','Desktop CNC — Bantam Carvey','CNC Software — Carbide Create Fusion CAM','Feeds & Speeds — Cutting Parameters','End Mills & Bits — Types','Workholding — Clamps Vise Tape','CNC Safety — Chips & Noise','2D Cutting — Profiles Pockets','3D Carving — Topographic Maps','CNC vs Laser vs 3D Printer','CNC Checkpoint']],
+      [15,'Sublimation Printing',['What Is Sublimation?','How Sublimation Works — Dye to Gas','Sublimation Printer — Epson Sawgrass','Sublimation Ink — Special Dye','Sublimation Paper — Transfer Sheet','Heat Press for Sublimation','Temperature & Time — 400°F 60 sec','Polyester Only — Why It Matters','Sublimation Blanks — Mugs Tumblers Shirts','Project: Custom Mug','Project: Photo Slate','Project: Mouse Pad','Project: Tumbler Wrap','Full-Color vs Vinyl — Comparison','Sublimation Checkpoint']],
+      [16,'Screen Printing',['What Is Screen Printing?','How Screen Printing Works','Screens & Mesh Count','Emulsion — Photo-Sensitive Coating','Exposing Screens — UV Light','Washing Out — Revealing the Design','Squeegee Technique — Pulling Ink','Plastisol vs Water-Based Ink','Flash Curing — Between Colors','Multi-Color Registration','Spot Color vs CMYK','Screen Printing Press — Manual vs Auto','Curing — Heat Gun or Conveyor','Starting a Print Shop','Screen Printing Checkpoint']],
+      [17,'Embroidery Machines',['What Is Machine Embroidery?','Single Needle vs Multi-Needle','Brother PE800 — Popular Choice','Brother PR1055X — Multi-Needle','Janome MC500E','Embroidery Software — PE Design Hatch','Digitizing — Turning Art into Stitches','Stitch Types — Satin Fill Running','Hooping — Securing Fabric','Stabilizers — Cutaway Tearaway','Thread — Polyester Rayon','Project: Embroidered Hat','Project: Monogrammed Towel','Project: Custom Patches','Embroidery Checkpoint']],
+      [18,'Pen Plotters & Drawing Machines',['What Is a Pen Plotter?','AxiDraw — Most Popular Pen Plotter','iDraw — Budget Pen Plotter','How Pen Plotters Work — GRBL','Software — Inkscape + AxiDraw Plugin','SVG Files for Plotting','Pen Selection — Markers Fineliners','Paper Selection — Weight & Texture','Generative Art with Plotters','Plotting Photographs — Stippling','Multi-Color Pen Plotting','Watercolor with Plotters','Calligraphy with Plotters','Selling Plotter Art','Pen Plotter Checkpoint']],
+      [19,'Resin Crafts & UV Curing',['What Is UV Resin?','Epoxy Resin vs UV Resin','Resin Safety — Gloves Ventilation','Mixing Resin — Ratio Matters','Pigments & Dyes — Color','Molds — Silicone','Inclusions — Flowers Glitter Photos','Resin Jewelry — Pendants Rings','Resin Coasters — Geode Style','Resin Tumblers — Spinning','Resin River Tables','UV Curing Stations','Sanding & Polishing Resin','Resin Art — Pour Painting','Resin Crafts Checkpoint']],
+      [20,'Maker Electronics',['Arduino — Microcontroller Basics','Raspberry Pi — Mini Computer','LED Projects — NeoPixels','Soldering — Joining Components','Basic Circuits — Breadboard','Sensors — Temperature Light Motion','Motors — Servo Stepper DC','Displays — LCD OLED','Power Supply — Batteries USB','3D Printed Electronics Enclosures','IoT — Internet of Things','Home Automation Projects','Wearable Electronics','Robot Building Basics','Electronics Checkpoint']],
+      [21,'Design Software for Makers',['Adobe Illustrator — Vector Design','Inkscape — Free Vector Alternative','Canva — Quick Graphics','Affinity Designer — One-Time Purchase','Silhouette Studio — Cut Files','Cricut Design Space — Projects','Tinkercad — 3D Design','Fusion 360 — CAD/CAM','Blender — 3D Sculpting','LightBurn — Laser Software','Cura — 3D Print Slicing','Figma — Digital Design','GIMP — Photo Editing Free','Preparing Files for Machines','Software Checkpoint']],
+      [22,'Starting a Maker Business',['Selling on Etsy — Getting Started','Selling on Amazon Handmade','Selling at Craft Fairs','Setting Up a Website — Shopify','Pricing Your Products — Material + Time + Profit','Product Photography — Phone Tips','Listing Optimization — SEO Keywords','Shipping & Packaging','Custom Orders — Managing Clients','Scaling Production','Print on Demand — Merch','Licensing & Copyright — Your Designs','Business Insurance','Taxes for Side Businesses','Maker Business Checkpoint']],
+      [23,'Materials Science for Makers',['Wood Types — Plywood MDF Hardwood','Acrylic — Cast vs Extruded','Leather — Genuine vs Faux','Fabric — Cotton Polyester Blend','Metal — Aluminum Steel Copper','Plastics — PLA ABS PETG Nylon','Paper & Cardstock','Vinyl — Adhesive & Heat Transfer','Resin — Epoxy UV Polyester','Glass — Cutting & Engraving','Ceramic & Porcelain','Foam — EVA Craft Insulation','Rubber — Silicone Latex','Material Selection Guide','Materials Checkpoint']],
+      [24,'Maker Safety',['Workshop Safety — General Rules','Eye Protection — Goggles Shields','Hearing Protection — Loud Machines','Respiratory — Dust Fumes Resin','Fire Safety — Laser & Soldering','Electrical Safety — Grounding','Chemical Safety — Resin Solvents','Ventilation — Fume Extraction','First Aid Kit — Workshop Edition','Machine Guards & Emergency Stops','Laser Safety — Class 4','3D Printer Safety — Hot End Burns','CNC Safety — Flying Chips','Child Safety in Makerspace','Safety Checkpoint']],
+      [25,'Maker Community & Events',['Maker Faire — The Big One','Local Makerspaces — Find One','Online Communities — Reddit r/3Dprinting','YouTube Makers — Channels to Follow','Instructables — Step-by-Step Projects','Thingiverse & Printables — Free Files','Hackathons — Building Under Pressure','STEM Clubs at School','FabLab — Digital Fabrication Lab','Library Makerspaces','Tool Libraries — Borrow Don\'t Buy','Maker Education — Teaching Kids','Open Source Hardware','Repair Cafes — Fix Don\'t Throw','Community Checkpoint']],
+      [26,'Advanced 3D Printing',['Multi-Material Printing — AMS Palette','Resin Printing — Detail & Smoothness','SLS — Selective Laser Sintering','MJF — Multi Jet Fusion','Metal 3D Printing — DMLS','Concrete 3D Printing — Houses','Food 3D Printing — Chocolate','Bio-Printing — Living Tissue','4D Printing — Shape Memory','Full Color Printing — Binder Jetting','Continuous Fiber — Markforged','Large Scale — Big Area Additive','Speed — High Speed FDM','The Future of 3D Printing','Advanced 3D Checkpoint']],
+      [27,'Textile & Fabric Crafts',['Sewing Machines — Basics','Serger — Edge Finishing','Embroidery — Machine vs Hand','Quilting — Patchwork','Heat Press — Vinyl & Sublimation on Fabric','DTF — Direct to Film on Any Fabric','Screen Printing on Fabric','Fabric Cutting — Rotary Cutter','Pattern Making — Digital','Cricut for Fabric — Rotary Blade','Sublimation on Polyester','Bleach Shirts — Reverse Tie-Dye','Tie-Dye — Traditional','Fabric Painting','Textile Checkpoint']],
+      [28,'Laminating & Paper Finishing',['What Is Lamination?','Hot Lamination — Pouch Laminators','Cold Lamination — Peel & Stick','Laminator Machines — Budget to Pro','Laminating Pouches — Sizes & Thickness','Thermal Laminating Film — Roll','Self-Adhesive Laminate Sheets','Matte vs Glossy Laminate','Laminating Stickers — Waterproof','Laminating Vinyl Prints — Protection','Laminating Photos — Preservation','Laminating Bookmarks & Cards','Laminating ID Badges','Cutting Laminated Pieces — Cricut','Laminating Checkpoint']],
+      [29,'Paper Crafts & Die Cutting',['Die Cutting Basics — Cricut & Silhouette','Cardstock Types & Weights','Scoring & Folding','Pop-Up Cards — Paper Engineering','Paper Flowers — 3D','Shadow Boxes — Layered Paper Art','Gift Box Templates','Envelope Making','Bookbinding — Simple Stitched','Scrapbooking — Digital & Physical','Origami — Paper Folding','Kirigami — Paper Cutting','Paper Quilling — Rolled Art','Papier-Mâché — Sculpting','Paper Crafts Checkpoint']],
+      [30,'Maker Math & Science',['Measurements — Imperial vs Metric','Conversion — Inches to mm','Area Calculation — Material Needed','Volume — 3D Printing Filament Usage','Scale — Enlarging & Reducing Designs','Tolerances — Tight vs Loose Fit','Kerf — Material Lost to Cut','Feed Rate & Speed — Calculation','Infill Percentage — Strength vs Material','Cost Calculation — Material + Time + Energy','Heat Transfer — Temperature Science','Light Wavelength — Laser Power','Gear Ratios — CNC & Robotics','Structural Strength — Bridges & Beams','Maker Math Checkpoint']],
+      [31,'Hobby Plotters & Makers Mastery',['Cricut & Silhouette Review','Vinyl Cutting Review','Heat Transfer Review','3D Printing Review','Laser Cutting Review','CNC Review','Sublimation Review','Screen Printing Review','Embroidery Review','Pen Plotter Review','Resin Crafts Review','Electronics Review','Business & Selling Review','Safety Review','Hobby Plotters & Makers Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'hp-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('hobby-plotters');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('hobby-plotters');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

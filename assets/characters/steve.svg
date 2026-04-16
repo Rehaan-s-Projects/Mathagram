@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fox: Steve — clever, pointy ears -->
+  <!-- Ears -->
+  <polygon points="22,10 14,38 34,34" fill="#E8722A"/>
+  <polygon points="78,10 86,38 66,34" fill="#E8722A"/>
+  <polygon points="23,16 18,34 31,32" fill="#FFF0E0"/>
+  <polygon points="77,16 82,34 69,32" fill="#FFF0E0"/>
+  <!-- Head -->
+  <circle cx="50" cy="52" r="32" fill="#E8722A"/>
+  <!-- Face patch -->
+  <ellipse cx="50" cy="58" rx="20" ry="16" fill="#FFF0E0"/>
+  <!-- Eyes -->
+  <ellipse cx="38" cy="46" rx="3.5" ry="4" fill="#1a1a2e"/>
+  <ellipse cx="62" cy="46" rx="3.5" ry="4" fill="#1a1a2e"/>
+  <circle cx="39" cy="45" r="1.2" fill="#fff"/>
+  <circle cx="63" cy="45" r="1.2" fill="#fff"/>
+  <!-- Nose -->
+  <ellipse cx="50" cy="56" rx="4" ry="3" fill="#2D1810"/>
+  <!-- Mouth -->
+  <path d="M46 62 Q50 66 54 62" stroke="#2D1810" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Whisker dots -->
+  <circle cx="40" cy="58" r="1" fill="#C4956A"/>
+  <circle cx="60" cy="58" r="1" fill="#C4956A"/>
+</svg>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Implicit Differentiation — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+  <link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 4 &mdash; Implicit &amp; Inverse</div>
+    <h1>Implicit Differentiation</h1>
+
+    <p>Some curves can't be written as \(y = f(x)\) — for example, the circle \(x^2 + y^2 = 25\). You can still find \(\dfrac{dy}{dx}\) using <strong>implicit differentiation</strong>: differentiate both sides with respect to \(x\), treating \(y\) as an unknown function of \(x\), then solve for \(\dfrac{dy}{dx}\).</p>
+
+    <p><strong>The one rule to remember.</strong> Every time you differentiate a \(y\)-term, the chain rule tacks on a \(\dfrac{dy}{dx}\):</p>
+    <div class="math-block">$$\frac{d}{dx}[\,y^2\,] = 2y\cdot\frac{dy}{dx},\qquad \frac{d}{dx}[\,y\,] = \frac{dy}{dx}.$$</div>
+
+    <p><strong>Example 1 — the circle.</strong> Differentiate \(x^2 + y^2 = 25\).</p>
+    <div class="math-block">$$2x + 2y\frac{dy}{dx} = 0 \ \Longrightarrow\ \frac{dy}{dx} = -\frac{x}{y}.$$</div>
+
+    <p><strong>Example 2 — a product.</strong> Find \(\dfrac{dy}{dx}\) for \(x^2 y + y^3 = 10\).</p>
+    <p>Differentiate term by term, using the product rule on \(x^2 y\):</p>
+    <div class="math-block">$$2xy + x^2\frac{dy}{dx} + 3y^2\frac{dy}{dx} = 0.$$</div>
+    <p>Collect the \(\dfrac{dy}{dx}\) terms and solve:</p>
+    <div class="math-block">$$\frac{dy}{dx} = -\frac{2xy}{x^2 + 3y^2}.$$</div>
+
+    <p><strong>Example 3 — a point.</strong> For the circle above, find the slope at \((3, 4)\): \(\dfrac{dy}{dx} = -\dfrac{3}{4}\).</p>
+
+    <p><strong>Procedure.</strong></p>
+    <ul>
+      <li>Differentiate each side with respect to \(x\).</li>
+      <li>Whenever you differentiate a \(y\)-term, multiply by \(\dfrac{dy}{dx}\).</li>
+      <li>Algebraically solve for \(\dfrac{dy}{dx}\).</li>
+      <li>If asked for a slope, plug in the point at the end.</li>
+    </ul>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }], throwOnError: false });
+      } else { setTimeout(renderMath, 80); }
+    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      { type: 'multiple-choice', question: 'When we differentiate y² with respect to x, we get:',
+        options: ['2y', '2y\ \(dy)/(dx)', 'y\ \(dy)/(dx)', '2x'],
+        correctIndex: 1 },
+      { type: 'multiple-choice', question: 'From x²+y²=25, \(dy)/(dx) =',
+        options: ['\(x)/(y)', '-\(x)/(y)', '\(y)/(x)', '-\(y)/(x)'],
+        correctIndex: 1 },
+      { type: 'fill-blank', question: 'For the circle x²+y²=25, the slope at (3,4) is -3/___.',
+        answer: '4' },
+      { type: 'multiple-choice', question: 'Differentiate x³ + y³ = 6xy implicitly. The equation becomes:',
+        options: [
+          '3x² + 3y²\(dy)/(dx) = 6y + 6x\(dy)/(dx)',
+          '3x² + 3y² = 6xy',
+          '3x²\(dy)/(dx) + 3y² = 6x + 6y\(dy)/(dx)',
+          'x³ + y³ = 6x\(dy)/(dx) + 6y'
+        ],
+        correctIndex: 0 },
+      { type: 'true-false', question: 'Implicit differentiation requires the chain rule on every y-term.',
+        correctAnswer: true },
+      { type: 'multiple-choice', question: 'Differentiate xy = 1 implicitly:',
+        options: ['\(dy)/(dx) = -\(y)/(x)', '\(dy)/(dx) = \(y)/(x)', '\(dy)/(dx) = -x/y', '\(dy)/(dx)=1'],
+        correctIndex: 0 },
+      { type: 'fill-blank', question: 'From y² = x, differentiating gives 2y\(dy)/(dx) = 1, so \(dy)/(dx) = \1___.',
+        answer: '2y' },
+      { type: 'multiple-choice', question: 'For \sin y = x, \(dy)/(dx) =',
+        options: ['\cos y', '\(1)/(\cos y)', '-\cos y', '\sec y \· \sin y'],
+        correctIndex: 1 },
+      { type: 'true-false', question: 'You can always solve explicit curves like y=f(x) using implicit differentiation — it just takes longer.',
+        correctAnswer: true },
+      { type: 'fill-blank', question: 'For x² + xy + y² = 7, after differentiating: 2x + y + x\(dy)/(dx) + 2y\(dy)/(dx) = 0. So \(dy)/(dx) = \(-(2x+y))/(x+2y). At (1,2), \(dy)/(dx) = ___ (fraction).',
+        answer: '-4/5' },
+      { type: 'multiple-choice', question: 'Which equation is MOST naturally handled by implicit differentiation?',
+        options: ['y = x²', 'y = \sin x', 'x² + xy + y² = 7', 'y = e^x'],
+        correctIndex: 2 },
+      { type: 'matching', question: 'Match each derivative operation to the x-derivative.',
+        pairs: [
+          { left: '\(d)/(dx)[x²]', right: '2x' },
+          { left: '\(d)/(dx)[y²]', right: '2y\ \(dy)/(dx)' },
+          { left: '\(d)/(dx)[xy]', right: 'y + x\ \(dy)/(dx)' },
+          { left: '\(d)/(dx)[\sin y]', right: '\cos y \· \(dy)/(dx)' }
+        ] }
+    ];
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length]; initSideCharacter(c, '../../'); showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-25', nextHref: 'index.html', backHref: 'index.html' });
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
+</body>
+</html>

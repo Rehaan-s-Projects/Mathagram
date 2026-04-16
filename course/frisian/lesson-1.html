@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Frisian Alphabet Overview — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-language); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content h2 { font-size: 1.3rem; font-weight: 700; margin-top: 32px; margin-bottom: 12px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .dialogue-flow { display: flex; flex-direction: column; gap: 20px; margin: 24px 0; }
+    .dialogue-row { display: flex; align-items: flex-start; gap: 12px; }
+    .dialogue-row.right { flex-direction: row-reverse; }
+    .dialogue-avatar { flex-shrink: 0; width: 56px; text-align: center; }
+    .dialogue-avatar img { width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--color-border); }
+    .dialogue-avatar .avatar-name { font-size: 0.65rem; font-weight: 700; color: var(--color-text-muted); margin-top: 4px; }
+    .dialogue-bubble { background: var(--color-white); border: 2px solid var(--color-border); border-radius: 18px; padding: 14px 18px; max-width: 380px; }
+    .dialogue-row:not(.right) .dialogue-bubble { border-bottom-left-radius: 4px; }
+    .dialogue-row.right .dialogue-bubble { border-bottom-right-radius: 4px; background: #fef3c7; border-color: #fde68a; }
+    .dialogue-frisian { font-size: 1.05rem; font-weight: 700; color: var(--color-language); margin-bottom: 4px; }
+    .dialogue-english { font-size: 0.82rem; color: var(--color-text-muted); }
+    .dialogue-listen { display: inline-flex; align-items: center; gap: 4px; background: none; border: 1px solid var(--color-border); border-radius: 8px; padding: 4px 10px; font-size: 0.72rem; font-weight: 600; color: var(--color-text-secondary); cursor: pointer; margin-top: 6px; transition: all 0.2s; }
+    .dialogue-listen:hover { border-color: var(--color-language); color: var(--color-language); }
+    .dialogue-listen.speaking { background: var(--color-language); color: #fff; border-color: var(--color-language); }
+    .vocab-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .vocab-table th, .vocab-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .vocab-table th { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+    .vocab-table .frisian { font-weight: 700; color: var(--color-language); }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Frisian</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Alphabet & Sounds</div>
+    <h1>The Frisian Alphabet Overview</h1>
+
+    <p>
+      <strong>Wolkom!</strong> (Welcome!) West Frisian (Frysk) is the closest living relative of English. Spoken by about 500,000 people in Friesland, Netherlands, it shares many words with English that you'll recognize right away.
+    </p>
+
+    <h2>Meet Your Frisian Buddies</h2>
+    <p>Your characters will teach you Frisian. Tap the speaker to hear them!</p>
+
+    <div class="dialogue-flow" id="dialogues">
+      <div class="dialogue-row">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/edam.svg" alt="Edam">
+          <div class="avatar-name">Edam</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Goeie! Ik bin Edam. Hoe giet it?</div>
+          <div class="dialogue-english">Hello! I am Edam. How's it going?</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Goeie! Ik bin Edam. Hoe giet it?', 'edam')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row right">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/gosia.svg" alt="Gosia">
+          <div class="avatar-name">Gosia</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">It giet goed, tankewol! En mei dy?</div>
+          <div class="dialogue-english">It's going well, thank you! And with you?</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'It giet goed, tankewol! En mei dy?', 'gosia')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/steve.svg" alt="Steve">
+          <div class="avatar-name">Steve</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Moarn! Ik bin Steve. Lit ús Frysk leare!</div>
+          <div class="dialogue-english">Morning! I'm Steve. Let's learn Frisian!</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Moarn! Ik bin Steve. Lit ús Frysk leare!', 'steve')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row right">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/rita.svg" alt="Rita">
+          <div class="avatar-name">Rita</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Miau! Ik bin Rita. Noflik om kennis te meitsjen!</div>
+          <div class="dialogue-english">Meow! I'm Rita. Nice to meet you!</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Miau! Ik bin Rita. Noflik om kennis te meitsjen!', 'rita')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/james.svg" alt="James">
+          <div class="avatar-name">James</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Kom op! Ik bin James. Ik bin hiel sterk!</div>
+          <div class="dialogue-english">Come on! I'm James. I'm very strong!</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Kom op! Ik bin James. Ik bin hiel sterk!', 'james')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row right">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/diego.svg" alt="Diego">
+          <div class="avatar-name">Diego</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Bysûnder! Ik bin Diego. Ik hâld fan ûndersykjen.</div>
+          <div class="dialogue-english">Remarkable! I'm Diego. I love researching.</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Bysûnder! Ik bin Diego. Ik hâld fan ûndersykjen.', 'diego')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/sam.svg" alt="Sam">
+          <div class="avatar-name">Sam</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Wauw! Ik bin Sam. Ik wol sa graach leare!</div>
+          <div class="dialogue-english">Wow! I'm Sam. I really want to learn!</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Wauw! Ik bin Sam. Ik wol sa graach leare!', 'sam')">&#128264; Listen</button>
+        </div>
+      </div>
+
+      <div class="dialogue-row right">
+        <div class="dialogue-avatar">
+          <img src="../../assets/characters/william.svg" alt="William">
+          <div class="avatar-name">William</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="dialogue-frisian">Goedemiddei. Ik bin William. Kennis is macht.</div>
+          <div class="dialogue-english">Good afternoon. I'm William. Knowledge is power.</div>
+          <button class="dialogue-listen" onclick="speakFrisian(this, 'Goedemiddei. Ik bin William. Kennis is macht.', 'william')">&#128264; Listen</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Essential Greetings</h2>
+    <table class="vocab-table">
+      <thead><tr><th>Frisian</th><th>English</th></tr></thead>
+      <tbody>
+        <tr><td class="frisian">Goeie</td><td>Hello</td></tr>
+        <tr><td class="frisian">Moarn</td><td>Good morning</td></tr>
+        <tr><td class="frisian">Goedemiddei</td><td>Good afternoon</td></tr>
+        <tr><td class="frisian">Goedenacht</td><td>Good night</td></tr>
+        <tr><td class="frisian">Oant sjen</td><td>Goodbye (see you)</td></tr>
+        <tr><td class="frisian">Tankewol</td><td>Thank you</td></tr>
+        <tr><td class="frisian">Asjebleaft</td><td>Please</td></tr>
+        <tr><td class="frisian">Ja / Nee</td><td>Yes / No</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Frisian Looks Like English!</h2>
+    <p>Frisian and English split apart about 1,500 years ago. Many basic words are almost identical:</p>
+    <ul>
+      <li><strong>brea</strong> = bread</li>
+      <li><strong>griene</strong> = green</li>
+      <li><strong>tsiis</strong> = cheese</li>
+      <li><strong>ko</strong> = cow</li>
+      <li><strong>dei</strong> = day</li>
+      <li><strong>wetterr</strong> = water</li>
+      <li><strong>skiep</strong> = sheep</li>
+    </ul>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter, setCharacterLang } from '../../js/characters.js';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    setCharacterLang('fy');
+    initSideCharacter(randomCharacterId(), '../../');
+
+    // Character voice settings — each has a unique pitch/rate
+    const charVoices = {
+      edam:    { pitch: 0.8,  rate: 0.85 },
+      steve:   { pitch: 1.15, rate: 1.1  },
+      james:   { pitch: 0.55, rate: 0.8  },
+      diego:   { pitch: 0.95, rate: 0.95 },
+      rita:    { pitch: 1.7,  rate: 1.15 },
+      sam:     { pitch: 1.5,  rate: 1.25 },
+      william: { pitch: 0.45, rate: 0.7  },
+      gosia:   { pitch: 1.35, rate: 1.0  }
+    };
+
+    // Speak Frisian with character-specific voice (Dutch voice as closest)
+    window.speakFrisian = function(btn, text, charId) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      document.querySelectorAll('.dialogue-listen').forEach(b => { b.classList.remove('speaking'); b.innerHTML = '&#128264; Listen'; });
+      const utterance = new SpeechSynthesisUtterance(text);
+      const vs = charVoices[charId] || { pitch: 1.0, rate: 0.9 };
+      utterance.pitch = vs.pitch;
+      utterance.rate = vs.rate;
+      utterance.volume = 0.85;
+      const voices = window.speechSynthesis.getVoices();
+      const voice = voices.find(v => v.lang.startsWith('nl')) || voices.find(v => v.lang.startsWith('de')) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+      if (voice) utterance.voice = voice;
+      btn.classList.add('speaking');
+      btn.innerHTML = '&#128266; Speaking...';
+      utterance.onend = () => { btn.classList.remove('speaking'); btn.innerHTML = '&#128264; Replay'; };
+      utterance.onerror = () => { btn.classList.remove('speaking'); btn.innerHTML = '&#128264; Listen'; };
+      window.speechSynthesis.speak(utterance);
+    };
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'How does Edam say "Hello" in Frisian?',
+        options: ['Goeie', 'Hola', 'Bonjour', 'Hallo'],
+        correctIndex: 0
+      },
+      {
+        type: 'matching',
+        question: 'Match the Frisian words with their English meanings.',
+        pairs: [
+          { left: 'Goeie', right: 'Hello' },
+          { left: 'Tankewol', right: 'Thank you' },
+          { left: 'Oant sjen', right: 'Goodbye' },
+          { left: 'Moarn', right: 'Good morning' }
+        ]
+      },
+      {
+        type: 'fill-blank',
+        question: 'Translate to Frisian: "Please" = ___',
+        answer: 'Asjebleaft'
+      },
+      {
+        type: 'listening',
+        spokenText: 'Goedemiddei. What does goedemiddei mean? Choose: good morning, good afternoon, good night, or goodbye.',
+        options: ['Good morning', 'Good afternoon', 'Good night', 'Goodbye'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The Frisian word "tsiis" means:',
+        options: ['cheese', 'tea', 'chair', 'tree'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'Frisian is the closest living relative of English.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What does Rita say in Frisian? "Noflik om kennis te meitsjen" means:',
+        options: ['Nice to meet you', 'I am a cat', 'Good morning', 'See you later'],
+        correctIndex: 0
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'frisian',
+      lessonId: 'lesson-1',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

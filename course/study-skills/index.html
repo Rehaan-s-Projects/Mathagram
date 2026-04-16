@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Skills & Learning — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Study Skills &amp; Learning</h1>
+    <p>Master how to learn — from note-taking to digital tools. 434 lessons across 29 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'How to Learn', ['What Is Metacognition?','The Growth Mindset','Fixed vs Growth Thinking','Visual Learning Strategies','Auditory Learning Strategies','Kinesthetic Learning Strategies','Setting Learning Goals','Self-Assessment Techniques','Building Study Habits','The Science of Learning','Active vs Passive Learning','Bloom\'s Taxonomy','Learning from Mistakes','Teaching Others to Learn','How to Learn Review']],
+      [2, 'Note-Taking Methods', ['Why Take Notes?','The Cornell Method','Cornell Method Practice','Mind Mapping Basics','Creating Effective Mind Maps','Sketch Notes Introduction','Visual Note-Taking','Outline Method','Charting Method','Sentence Method','Digital vs Handwritten Notes','Annotating Textbooks','Summarizing Key Ideas','Organizing Your Notes','Note-Taking Review']],
+      [3, 'Memory & Recall', ['How Memory Works','Short-Term vs Long-Term Memory','Spaced Repetition Explained','Building a Spaced Repetition Schedule','Introduction to Mnemonics','Acronym & Acrostic Mnemonics','The Memory Palace Technique','Building Your First Memory Palace','Chunking Information','The Forgetting Curve','Active Recall Practice','Retrieval Practice Strategies','Interleaving Topics','Sleep & Memory','Memory & Recall Review']],
+      [4, 'Focus & Productivity', ['Understanding Attention','The Pomodoro Technique','Customizing Pomodoro Sessions','Deep Work Principles','Creating a Deep Work Environment','Eliminating Distractions','Managing Digital Distractions','Time Blocking','Prioritization with Eisenhower Matrix','The Two-Minute Rule','Batching Similar Tasks','Energy Management','Overcoming Procrastination','Building a Daily Routine','Focus & Productivity Review']],
+      [5, 'Reading & Comprehension', ['Active Reading Strategies','Previewing a Text','The SQ3R Method','Survey & Question Steps','Read & Recite Steps','Review & Reflect','Speed Reading Basics','Skimming & Scanning','Identifying Main Ideas','Making Inferences','Vocabulary in Context','Annotating While Reading','Summarizing What You Read','Critical Reading Skills','Reading & Comprehension Review']],
+      [6, 'Writing & Communication', ['The Writing Process','Brainstorming & Outlining','Writing Strong Thesis Statements','Paragraph Structure','Essay Introduction Techniques','Body Paragraph Development','Writing Conclusions','Revising & Editing','Presentation Skills Basics','Designing Effective Slides','Public Speaking Tips','Professional Email Writing','Peer Review & Feedback','Citation & Avoiding Plagiarism','Writing & Communication Review']],
+      [7, 'Exam Strategies', ['Creating a Study Plan','Reviewing Effectively','Practice Testing','Multiple Choice Strategies','Process of Elimination','True/False Strategies','Short Answer Techniques','Essay Exam Strategies','Managing Test Anxiety','Breathing & Relaxation Techniques','Time Management During Exams','Reading Questions Carefully','Showing Your Work','Post-Exam Reflection','Exam Strategies Review']],
+      [8, 'Digital Learning Tools', ['Introduction to Anki','Building Anki Decks','Spaced Repetition with Anki','Notion for Students','Building a Study Dashboard','Organizing Notes in Notion','Flashcard Apps Compared','Quizlet & Alternatives','Study Timer Apps','Mind Mapping Software','Digital Annotation Tools','Online Study Groups','Video Learning Strategies','Choosing the Right Tools','Digital Learning Tools Review']],
+      [9, 'Critical Thinking Foundations', ['What Is Critical Thinking?','Identifying Assumptions','Evaluating Evidence','Logical Fallacies Overview','Ad Hominem & Straw Man','Appeal to Authority & Emotion','False Dilemma & Slippery Slope','Correlation vs Causation','Distinguishing Fact from Opinion','Analyzing Arguments','Constructing Sound Arguments','Bias Awareness','Confirmation Bias in Study','Perspective-Taking','Critical Thinking Foundations Review']],
+      [10, 'Logical Arguments', ['What Is an Argument?','Premises & Conclusions','Identifying Arguments in Text','Deductive Reasoning','Inductive Reasoning','Abductive Reasoning','Validity vs Soundness','Strong vs Weak Arguments','Evaluating Argument Structure','Counterarguments','Syllogisms','Conditional Statements','Necessary vs Sufficient Conditions','Logical Arguments Review']],
+      [11, 'Logical Fallacies', ['What Is a Fallacy?','Ad Hominem','Straw Man','False Dichotomy','Appeal to Authority','Appeal to Emotion','Red Herring','Slippery Slope','Circular Reasoning','Hasty Generalization','Post Hoc Ergo Propter Hoc','Bandwagon Fallacy','Tu Quoque','Logical Fallacies Review']],
+      [12, 'Evidence & Sources', ['What Counts as Evidence?','Primary vs Secondary Sources','Evaluating Source Credibility','Author Expertise & Bias','Peer-Reviewed Research','Understanding Statistics in Claims','Sample Size & Representation','Correlation vs Causation Deep Dive','Fact-Checking Methods','Cross-Referencing Sources','Recognizing Misinformation','Evaluating Websites','Citation & Attribution','Evidence & Sources Review']],
+      [13, 'Media Literacy', ['What Is Media Literacy?','How Media Shapes Perception','News vs Opinion','Clickbait & Sensationalism','Identifying Bias in Reporting','Left vs Right Media Bias','Propaganda Techniques','Social Media & Echo Chambers','Algorithms & Filter Bubbles','Deepfakes & AI-Generated Content','Advertising & Persuasion','Evaluating Visual Media','Media Ownership & Influence','Media Literacy Review']],
+      [14, 'Decision Making', ['Cognitive Biases Overview','Anchoring Bias','Availability Heuristic','Dunning-Kruger Effect','Sunk Cost Fallacy','Framing Effects','Groupthink','Decision Matrices','Cost-Benefit Analysis','Risk Assessment','Ethical Decision Making','Decision Making Under Uncertainty','Reflection & Metacognition','Decision Making Review']],
+      [15, 'Applied Critical Thinking', ['Critical Thinking in Science','Critical Thinking in History','Critical Thinking in Politics','Evaluating Health Claims','Consumer Critical Thinking','Critical Thinking in Technology','Debate & Argumentation Skills','Persuasive Writing with Logic','Socratic Seminar Techniques','Critical Thinking in Math','Ethical Reasoning','Systems Thinking','Building a Critical Thinking Habit','Applied Critical Thinking Review']],
+      [16, 'Research Skills', ['Introduction to Research','Choosing a Research Topic','Formulating Research Questions','Primary vs Secondary Sources','Evaluating Source Credibility','Using Academic Databases','Google Scholar Techniques','Library Research Skills','Reading Academic Papers','Identifying Key Findings','Synthesizing Multiple Sources','Avoiding Plagiarism','Paraphrasing & Quoting','Annotated Bibliographies','Research Skills Review']],
+      [17, 'Math Study Strategies', ['Overcoming Math Anxiety','Building Number Sense','Problem-Solving Frameworks','Reading Math Textbooks','Working Through Examples','Practice Problem Strategies','Error Analysis in Math','Showing Work Clearly','Using Diagrams & Visuals','Formula Memorization Techniques','Word Problem Strategies','Estimation & Checking Answers','Study Groups for Math','Math Review Sessions','Math Study Strategies Review']],
+      [18, 'Science Study Strategies', ['The Scientific Method Review','Reading Science Textbooks','Lab Report Writing','Understanding Graphs & Data','Memorizing Scientific Terms','Concept Mapping in Science','Hypothesis Formation','Experimental Design Basics','Interpreting Results','Science Journal Reading','Connecting Theory to Practice','Science Fair Preparation','Collaborative Science Study','Staying Current in Science','Science Study Strategies Review']],
+      [19, 'Language Learning', ['How Languages Are Learned','Immersion Techniques','Vocabulary Acquisition Methods','Flashcards for Language','Grammar Study Approaches','Listening Comprehension Practice','Speaking Practice Strategies','Reading in a New Language','Writing in a New Language','Language Exchange Partners','Using Language Apps Effectively','Cultural Context in Language','Pronunciation Techniques','Building Daily Language Habits','Language Learning Review']],
+      [20, 'Group Study & Collaboration', ['Benefits of Group Study','Forming Effective Study Groups','Setting Group Ground Rules','Collaborative Note-Taking','Peer Teaching Methods','The Jigsaw Technique','Think-Pair-Share','Group Problem Solving','Handling Group Conflicts','Online Collaboration Tools','Study Group Scheduling','Accountability Partners','Group Exam Review Sessions','Reflecting on Group Work','Group Study & Collaboration Review']],
+      [21, 'Motivation & Mindset', ['Intrinsic vs Extrinsic Motivation','Setting SMART Goals','Breaking Big Goals into Steps','Reward Systems for Study','Overcoming Burnout','Dealing with Failure','Building Resilience','Self-Compassion in Learning','Visualization Techniques','Positive Self-Talk','Finding Your Why','Motivation During Hard Times','Celebrating Progress','Building Long-Term Discipline','Motivation & Mindset Review']],
+      [22, 'Time Management', ['Auditing Your Time','Weekly Planning Systems','Daily Scheduling Techniques','The 80/20 Rule for Study','Deadline Management','Avoiding Last-Minute Cramming','Balancing School & Life','Saying No to Distractions','Using Calendars Effectively','Buffer Time & Flexibility','Semester Planning','Project Timeline Creation','Tracking Time Spent Studying','Reviewing & Adjusting Plans','Time Management Review']],
+      [23, 'Health & Wellness for Learners', ['Sleep & Academic Performance','Creating a Sleep Routine','Nutrition for Brain Power','Hydration & Focus','Exercise & Cognitive Function','Stress Management Basics','Mindfulness for Students','Breathing Exercises','Stretching & Study Breaks','Screen Time Management','Eye Care for Readers','Ergonomic Study Setup','Mental Health Awareness','When to Seek Help','Health & Wellness Review']],
+      [24, 'Creative Thinking', ['What Is Creative Thinking?','Brainstorming Techniques','SCAMPER Method','Lateral Thinking Puzzles','Mind Mapping for Ideas','Six Thinking Hats','Reverse Thinking','Analogical Reasoning','Combining Unrelated Ideas','Creative Problem Solving','Overcoming Creative Blocks','Journaling for Creativity','Visual Thinking Strategies','Innovation in Learning','Creative Thinking Review']],
+      [25, 'Study Environment', ['Designing Your Study Space','Lighting & Comfort','Noise & Music for Focus','Organizing Your Desk','Digital Workspace Setup','Library vs Home Study','Café & Alternative Spaces','Minimizing Visual Clutter','Temperature & Airflow','Study Materials Organization','Creating a Portable Study Kit','Rotating Study Locations','Shared Spaces & Boundaries','Seasonal Adjustments','Study Environment Review']],
+      [26, 'Technology & Learning', ['Digital Literacy Basics','Evaluating Online Information','Bookmarking & Saving Resources','Cloud Storage for Students','Typing Speed & Efficiency','Keyboard Shortcuts for Productivity','Using Spreadsheets for Study','Presentation Software Mastery','Screen Recording for Review','Podcast & Audiobook Learning','AI Tools for Study','Coding as a Learning Tool','Digital Security for Students','Tech Detox Strategies','Technology & Learning Review']],
+      [27, 'Self-Directed Learning', ['What Is Self-Directed Learning?','Setting Your Own Curriculum','Finding Free Online Courses','MOOCs & Open Courseware','YouTube as a Learning Tool','Learning from Books Independently','Building a Reading List','Tracking Self-Study Progress','Creating Personal Projects','Learning Journals','Seeking Feedback Without a Teacher','Building a Portfolio of Learning','Connecting with Online Communities','Lifelong Learning Mindset','Self-Directed Learning Review']],
+      [28, 'Emotional Intelligence in Learning', ['What Is Emotional Intelligence?','Self-Awareness in Study','Recognizing Your Emotions','Managing Frustration','Empathy in Group Work','Social Skills for Collaboration','Handling Academic Pressure','Coping with Comparison','Building Confidence','Assertive Communication','Conflict Resolution','Emotional Regulation Techniques','Gratitude & Positivity','Emotional Intelligence at School','Emotional Intelligence Review']],
+      [29, 'Review & Mastery', ['Cumulative Review Strategies','Spaced Practice Across Units','Interleaving All Subjects','Building a Personal Study System','Creating Your Study Playbook','Teaching What You\'ve Learned','Reflecting on Growth','Identifying Remaining Gaps','Setting Future Learning Goals','Final Comprehensive Review']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ss-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('study-skills');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('study-skills');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

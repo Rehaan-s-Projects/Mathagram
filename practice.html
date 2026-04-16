@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/exercises.css">
+  <style>
+    .practice-header { padding: 80px 24px 16px; text-align: center; }
+    .practice-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+    .practice-header p { color: var(--color-text-secondary); font-size: 0.95rem; }
+    .practice-wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+    .practice-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .practice-progress-bar { flex: 1; height: 10px; background: rgba(0,0,0,0.08); border-radius: 999px; overflow: hidden; }
+    .practice-progress-fill { height: 100%; background: var(--color-others, #8b5cf6); transition: width 0.3s ease; }
+    .practice-progress-text { font-weight: 700; font-size: 0.9rem; color: var(--color-text-secondary); }
+    .practice-done { text-align: center; padding: 48px 24px; }
+    .practice-done h2 { font-size: 1.6rem; margin-bottom: 12px; }
+    .practice-done p { color: var(--color-text-secondary); margin-bottom: 24px; }
+    .practice-done .btn { display: inline-block; padding: 12px 24px; border-radius: 999px; background: var(--color-others, #8b5cf6); color: #fff; text-decoration: none; font-weight: 700; }
+    .practice-done .btn.secondary { background: transparent; color: var(--color-text, #111); border: 1px solid rgba(0,0,0,0.15); margin-left: 8px; }
+    .back-link { display: inline-block; margin: 16px 0 0 24px; color: var(--color-text-secondary); text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { color: var(--color-text, #111); }
+
+    /* Character avatar + speech bubble */
+    .character-row { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 24px; min-height: 140px; }
+    .character-avatar { flex: 0 0 120px; width: 120px; height: 120px; display: flex; align-items: flex-end; justify-content: center; }
+    .character-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .character-avatar.bounce img { animation: bounce 0.5s ease; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .speech-bubble { position: relative; background: var(--color-surface, #fff); border: 2px solid rgba(0,0,0,0.1); border-radius: 16px; padding: 14px 18px; max-width: 420px; font-size: 0.95rem; line-height: 1.4; color: var(--color-text, #111); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .speech-bubble::before { content: ''; position: absolute; left: -10px; bottom: 18px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 10px solid rgba(0,0,0,0.1); }
+    .speech-bubble::after { content: ''; position: absolute; left: -7px; bottom: 20px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 8px solid var(--color-surface, #fff); }
+    .speech-bubble .speaker-name { display: block; font-weight: 700; font-size: 0.85rem; color: var(--color-others, #8b5cf6); margin-bottom: 2px; }
+    .speech-bubble.correct { border-color: #22c55e; }
+    .speech-bubble.correct .speaker-name { color: #22c55e; }
+    .speech-bubble.wrong { border-color: #ef4444; }
+    .speech-bubble.wrong .speaker-name { color: #ef4444; }
+
+    /* Tap-what-you-hear UI */
+    .tap-hear-prompt { text-align: center; font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; color: var(--color-text, #111); }
+    .big-speaker {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 22px; border-radius: 16px;
+      background: var(--color-others, #8b5cf6); color: #fff;
+      border: none; cursor: pointer; font-size: 1rem; font-weight: 700;
+      margin: 0 auto 24px; box-shadow: 0 4px 14px rgba(139,92,246,0.35);
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+    .big-speaker:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(139,92,246,0.45); }
+    .big-speaker:active { transform: translateY(0); }
+    .big-speaker.playing { animation: pulse 0.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    .big-speaker .icon { font-size: 1.8rem; }
+
+    .answer-zone {
+      min-height: 80px; padding: 16px;
+      border: 2px dashed rgba(0,0,0,0.15); border-radius: 12px;
+      background: rgba(0,0,0,0.02);
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .answer-zone.empty::before {
+      content: 'Tap the words below to build what you heard'; color: var(--color-text-secondary); font-size: 0.9rem;
+      margin: auto; font-style: italic;
+    }
+    .word-bank {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 8px 0; margin-bottom: 24px;
+    }
+    .word-tile {
+      display: inline-block; padding: 10px 16px; border-radius: 12px;
+      background: var(--color-surface, #fff); color: var(--color-text, #111);
+      border: 2px solid rgba(0,0,0,0.1); border-bottom-width: 4px;
+      cursor: pointer; font-size: 1rem; font-weight: 600;
+      user-select: none; transition: transform 0.08s ease, border-color 0.15s ease, opacity 0.2s ease;
+    }
+    .word-tile:hover { border-color: var(--color-others, #8b5cf6); }
+    .word-tile:active { transform: translateY(1px); border-bottom-width: 2px; }
+    .word-tile.used { opacity: 0.3; pointer-events: none; }
+    .word-tile.in-answer { border-color: var(--color-others, #8b5cf6); }
+    .word-tile.correct { border-color: #22c55e; background: #dcfce7; }
+    .word-tile.wrong { border-color: #ef4444; background: #fee2e2; animation: shake 0.35s; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+    .check-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; }
+    .btn-skip { background: transparent; color: var(--color-text-secondary); border: none; font-size: 0.9rem; cursor: pointer; padding: 10px 16px; }
+    .btn-skip:hover { color: var(--color-text, #111); }
+    .btn-check {
+      padding: 12px 28px; border-radius: 999px;
+      background: var(--color-others, #8b5cf6); color: #fff;
+      border: none; font-weight: 800; font-size: 1rem;
+      cursor: pointer; letter-spacing: 0.04em;
+      box-shadow: 0 4px 14px rgba(139,92,246,0.35);
+    }
+    .btn-check:disabled { background: #9ca3af; cursor: not-allowed; box-shadow: none; }
+
+    @media (max-width: 540px) {
+      .character-row { gap: 10px; min-height: 100px; }
+      .character-avatar { flex: 0 0 80px; width: 80px; height: 80px; }
+      .speech-bubble { font-size: 0.88rem; padding: 10px 14px; }
+      .word-tile { padding: 8px 12px; font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="courses.html">Courses</a>
+        <a href="learning-post.html">Posts</a>
+        <a href="login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <a id="back-link" class="back-link" href="courses.html">&larr; Back to course</a>
+
+  <header class="practice-header">
+    <h1>Tap What You Hear</h1>
+    <p id="practice-subtitle">Loading…</p>
+  </header>
+
+  <div class="practice-wrap">
+    <div class="practice-progress">
+      <div class="practice-progress-bar"><div id="progress-fill" class="practice-progress-fill" style="width:0%"></div></div>
+      <span id="progress-text" class="practice-progress-text">0/6</span>
+    </div>
+    <div class="character-row">
+      <div id="character-avatar" class="character-avatar"></div>
+      <div id="speech-bubble" class="speech-bubble">
+        <span id="speaker-name" class="speaker-name"></span>
+        <span id="speaker-text"></span>
+      </div>
+    </div>
+    <div id="exercise-root"></div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('');
+    import { CHARACTERS } from './js/characters.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const params = new URLSearchParams(window.location.search);
+    const courseSlug = params.get('course') || '';
+    const unitNum = parseInt(params.get('unit') || '1', 10);
+    const afterLesson = parseInt(params.get('after') || '0', 10); // global real-lesson count before this practice node
+    const SESSION_SIZE = 6;
+
+    // Random companion — Edam or Diego
+    const companions = ['edam', 'diego'];
+    const companionId = companions[Math.floor(Math.random() * companions.length)];
+    const companion = CHARACTERS[companionId];
+
+    const avatarEl = document.getElementById('character-avatar');
+    const bubbleEl = document.getElementById('speech-bubble');
+    const nameEl = document.getElementById('speaker-name');
+    const textEl = document.getElementById('speaker-text');
+
+    avatarEl.innerHTML = `<img src="assets/characters/${companion.file}" alt="${companion.name}">`;
+    document.getElementById('back-link').href = courseSlug ? `course/${courseSlug}/index.html` : 'courses.html';
+
+    function showBubble(kind, text) {
+      bubbleEl.classList.remove('correct', 'wrong');
+      if (kind) bubbleEl.classList.add(kind);
+      nameEl.textContent = companion.name;
+      textEl.textContent = text;
+      avatarEl.classList.remove('bounce');
+      void avatarEl.offsetWidth;
+      avatarEl.classList.add('bounce');
+    }
+
+    // --- Speech ---
+    function speak(text, onStart, onEnd) {
+      if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+      window.speechSynthesis.cancel();
+      const clean = text.replace(/\s+/g, ' ').trim();
+      if (!clean) { if (onEnd) onEnd(); return; }
+      const u = new SpeechSynthesisUtterance(clean);
+      u.rate = 0.85; u.pitch = 1.0; u.volume = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const pref = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'))
+        || voices.find(v => v.lang.startsWith('en'))
+        || voices[0];
+      if (pref) u.voice = pref;
+      if (onStart) u.onstart = onStart;
+      if (onEnd) { u.onend = onEnd; u.onerror = onEnd; }
+      window.speechSynthesis.speak(u);
+    }
+
+    // --- Data ---
+    async function loadCourseUnits() {
+      if (!courseSlug) return [];
+      try {
+        const res = await fetch(`course/${courseSlug}/index.html`, { cache: 'no-store' });
+        if (!res.ok) return [];
+        const html = await res.text();
+        const m = html.match(/const units = (\[[\s\S]*?\]);/);
+        if (!m) return [];
+        try { return (new Function('return ' + m[1]))(); } catch (e) { return []; }
+      } catch (e) { return []; }
+    }
+
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+
+    function tokenize(phrase) {
+      // Split on whitespace, keep punctuation attached to the word so tokens stay readable.
+      return phrase.split(/\s+/).filter(Boolean);
+    }
+
+    // --- Question: Tap What You Hear ---
+    function pickPhrase(focusTitles, allTitles) {
+      // Prefer focus unit titles that split into at least 2 words; fall back to other units.
+      const eligible = focusTitles.filter(t => tokenize(t).length >= 2);
+      if (eligible.length) return pick(eligible);
+      const anywhere = allTitles.filter(t => tokenize(t).length >= 2);
+      return anywhere.length ? pick(anywhere) : pick(focusTitles);
+    }
+
+    function renderTapWhatYouHear({ phrase, distractorWords }, onAnswer) {
+      const root = document.getElementById('exercise-root');
+      const words = tokenize(phrase);
+
+      // Extra decoy words, drawn from distractor pool and de-duplicated against the answer.
+      const inPhrase = new Set(words.map(w => w.toLowerCase()));
+      const decoys = shuffle(distractorWords.filter(w => !inPhrase.has(w.toLowerCase()))).slice(0, Math.min(3, Math.max(1, Math.ceil(words.length / 3))));
+      const bank = shuffle([...words.map((w, i) => ({ text: w, correctIdx: i, decoy: false })), ...decoys.map(w => ({ text: w, correctIdx: -1, decoy: true }))]);
+
+      root.innerHTML = `
+        <button type="button" class="big-speaker" id="play-btn">
+          <span class="icon">🔊</span><span>Play audio</span>
+        </button>
+        <div class="answer-zone empty" id="answer-zone"></div>
+        <div class="word-bank" id="word-bank"></div>
+        <div class="check-row">
+          <button type="button" class="btn-skip" id="skip-btn">Can't listen now</button>
+          <button type="button" class="btn-check" id="check-btn" disabled>Check</button>
+        </div>
+      `;
+
+      const playBtn = root.querySelector('#play-btn');
+      const answerZone = root.querySelector('#answer-zone');
+      const wordBank = root.querySelector('#word-bank');
+      const checkBtn = root.querySelector('#check-btn');
+      const skipBtn = root.querySelector('#skip-btn');
+
+      const tileEls = [];
+      bank.forEach((tok, bankIdx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'word-tile';
+        btn.textContent = tok.text;
+        btn.dataset.bankIdx = bankIdx;
+        btn.addEventListener('click', () => moveToAnswer(btn, tok));
+        wordBank.appendChild(btn);
+        tileEls.push(btn);
+      });
+
+      const chosen = []; // array of { btn, tok }
+
+      function refreshCheckBtn() {
+        checkBtn.disabled = chosen.length === 0;
+      }
+      function moveToAnswer(btn, tok) {
+        if (btn.classList.contains('used')) return;
+        btn.classList.add('used');
+        const clone = document.createElement('button');
+        clone.type = 'button';
+        clone.className = 'word-tile in-answer';
+        clone.textContent = tok.text;
+        clone.addEventListener('click', () => moveBack(btn, clone));
+        answerZone.appendChild(clone);
+        answerZone.classList.remove('empty');
+        chosen.push({ btn, clone, tok });
+        refreshCheckBtn();
+      }
+      function moveBack(originalBtn, clone) {
+        const i = chosen.findIndex(c => c.clone === clone);
+        if (i >= 0) chosen.splice(i, 1);
+        clone.remove();
+        originalBtn.classList.remove('used');
+        if (chosen.length === 0) answerZone.classList.add('empty');
+        refreshCheckBtn();
+      }
+
+      playBtn.addEventListener('click', () => {
+        playBtn.classList.add('playing');
+        speak(phrase, null, () => playBtn.classList.remove('playing'));
+      });
+      skipBtn.addEventListener('click', () => { lock(); onAnswer(false); });
+      checkBtn.addEventListener('click', () => {
+        const guess = chosen.map(c => c.tok.text).join(' ');
+        const isCorrect = guess === phrase;
+        chosen.forEach(c => c.clone.classList.add(isCorrect ? 'correct' : 'wrong'));
+        lock();
+        onAnswer(isCorrect);
+      });
+      function lock() {
+        playBtn.disabled = true; checkBtn.disabled = true; skipBtn.disabled = true;
+        tileEls.forEach(t => t.style.pointerEvents = 'none');
+      }
+
+      // Auto-play after voices load
+      const autoPlay = () => {
+        playBtn.classList.add('playing');
+        speak(phrase, null, () => playBtn.classList.remove('playing'));
+      };
+      if ('speechSynthesis' in window) {
+        const v = window.speechSynthesis.getVoices();
+        if (v.length) setTimeout(autoPlay, 350);
+        else window.speechSynthesis.addEventListener('voiceschanged', () => setTimeout(autoPlay, 350), { once: true });
+      }
+    }
+
+    // --- Runner ---
+    function updateProgress(done, total) {
+      document.getElementById('progress-fill').style.width = (done / total * 100) + '%';
+      document.getElementById('progress-text').textContent = `${done}/${total}`;
+    }
+
+    function showDone(correct, total, nextLesson) {
+      const msg = correct === total ? companion.messages.perfect : companion.messages.correct;
+      showBubble(correct === total ? 'correct' : null, msg);
+      const root = document.getElementById('exercise-root');
+      const nextBtn = nextLesson
+        ? `<a class="btn" href="course/${courseSlug}/index.html">Next Lesson → ${nextLesson.title}</a>`
+        : `<a class="btn" href="course/${courseSlug}/index.html">You're at the end — Back to Course</a>`;
+      root.innerHTML = `
+        <div class="practice-done">
+          <h2>Session Complete!</h2>
+          <p>You got <strong>${correct}</strong> of <strong>${total}</strong> correct.</p>
+          ${nextBtn}
+          <div style="margin-top:14px;">
+            <a class="btn secondary" href="practice.html?course=${courseSlug}&unit=${unitNum}&after=${afterLesson}">Practice Again</a>
+            <a class="btn secondary" href="course/${courseSlug}/index.html">Back to Course</a>
+          </div>
+        </div>
+      `;
+    }
+
+    async function run() {
+      const units = await loadCourseUnits();
+      if (!units.length) {
+        document.getElementById('exercise-root').innerHTML = '<p style="text-align:center;color:var(--color-text-secondary);padding:40px;">Could not load practice for this course.</p>';
+        return;
+      }
+      const focusUnit = units.find(u => u[0] === unitNum) || units[0];
+      const focusTitles = focusUnit[2];
+      const allTitles = units.flatMap(u => u[2]);
+      const distractorWords = Array.from(new Set(allTitles.flatMap(tokenize).filter(w => w.length >= 3)));
+
+      // Compute the *next normal lesson* after this practice node.
+      // afterLesson is the global count of real lessons that preceded the practice;
+      // the next normal lesson is the (afterLesson+1)th real lesson in the course.
+      const flatLessons = [];
+      units.forEach(u => u[2].forEach(t => flatLessons.push({ title: t, unit: u[0], unitName: u[1] })));
+      const nextLesson = afterLesson > 0 && afterLesson < flatLessons.length
+        ? flatLessons[afterLesson]
+        : null;
+
+      document.getElementById('practice-subtitle').textContent = `Unit ${focusUnit[0]}: ${focusUnit[1]}`;
+
+      // Build SESSION_SIZE distinct phrases
+      const phrases = [];
+      const pool = [...focusTitles];
+      while (phrases.length < SESSION_SIZE && pool.length) {
+        const idx = Math.floor(Math.random() * pool.length);
+        const candidate = pool.splice(idx, 1)[0];
+        if (tokenize(candidate).length >= 2) phrases.push(candidate);
+      }
+      // Top up from other units if needed
+      if (phrases.length < SESSION_SIZE) {
+        const others = allTitles.filter(t => !phrases.includes(t) && tokenize(t).length >= 2);
+        while (phrases.length < SESSION_SIZE && others.length) {
+          phrases.push(others.splice(Math.floor(Math.random() * others.length), 1)[0]);
+        }
+      }
+      const total = phrases.length;
+      updateProgress(0, total);
+
+      const greeting = companionId === 'edam'
+        ? `Hi! I'm Edam. Let's practice what you can hear in Unit ${focusUnit[0]}.`
+        : `Diego here. ${total} audio phrases — tap the words you hear, in order.`;
+      showBubble(null, greeting);
+
+      let idx = 0;
+      let correctCount = 0;
+
+      function next() {
+        if (idx >= total) {
+          updateProgress(total, total);
+          showDone(correctCount, total, nextLesson);
+          return;
+        }
+        showBubble(null, `${companion.name}: Tap the speaker, then tap the words you hear — in order.`);
+        renderTapWhatYouHear({
+          phrase: phrases[idx],
+          distractorWords,
+        }, (isCorrect) => {
+          if (isCorrect) {
+            correctCount++;
+            showBubble('correct', companion.messages.correct);
+          } else {
+            showBubble('wrong', `${companion.messages.wrong} It was: "${phrases[idx]}".`);
+          }
+          idx++;
+          updateProgress(idx, total);
+          setTimeout(next, 1400);
+        });
+      }
+      setTimeout(next, 700);
+    }
+    run();
+  </script>
+</body>
+</html>

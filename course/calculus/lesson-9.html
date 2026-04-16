@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Squeeze Theorem — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+<link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Squeeze Theorem</h1>
+
+    <p>
+      Sometimes you can't evaluate a limit directly because the function is too wild &mdash; it oscillates or behaves unpredictably. The <strong>Squeeze Theorem</strong> (also called the Sandwich Theorem) lets you trap the function between two simpler ones.
+    </p>
+
+    <p><strong>The Squeeze Theorem:</strong> If for all \(x\) near \(a\) (except possibly at \(a\) itself):</p>
+    <div class="math-block">
+      $$g(x) \le f(x) \le h(x)$$
+    </div>
+    <p>and</p>
+    <div class="math-block">
+      $$\lim_{x \to a} g(x) = \lim_{x \to a} h(x) = L$$
+    </div>
+    <p>then</p>
+    <div class="math-block">
+      $$\lim_{x \to a} f(x) = L$$
+    </div>
+
+    <p>Think of it like this: if you're squeezed between two friends who are both walking toward the same door, you have no choice but to end up at that door too.</p>
+
+    <p><strong>Classic Example:</strong> Prove \(\displaystyle\lim_{x \to 0} x^2 \sin\!\left(\frac{1}{x}\right) = 0\).</p>
+    <p>We know \(-1 \le \sin\!\left(\frac{1}{x}\right) \le 1\) for all \(x \neq 0\). Multiply through by \(x^2\) (which is non-negative):</p>
+    <div class="math-block">
+      $$-x^2 \le x^2 \sin\!\left(\frac{1}{x}\right) \le x^2$$
+    </div>
+    <p>Since \(\displaystyle\lim_{x \to 0} (-x^2) = 0\) and \(\displaystyle\lim_{x \to 0} x^2 = 0\), by the Squeeze Theorem:</p>
+    <div class="math-block">
+      $$\lim_{x \to 0} x^2 \sin\!\left(\frac{1}{x}\right) = 0$$
+    </div>
+
+    <p>Another important result from the Squeeze Theorem:</p>
+    <div class="math-block">
+      $$\lim_{x \to 0} \frac{\sin x}{x} = 1$$
+    </div>
+    <p>This limit is fundamental and will appear constantly in calculus.</p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    // KaTeX auto-render
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize side character
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'What does the Squeeze Theorem require about the bounding functions \\(g(x)\\) and \\(h(x)\\)?',
+        options: [
+          'They must be continuous',
+          'Their limits at the point must be equal',
+          'They must be differentiable',
+          'They must be polynomials'
+        ],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{\\sin x}{x} = \\) ___',
+        answer: '1'
+      },
+      {
+        type: 'true-false',
+        question: 'The Squeeze Theorem can be used to evaluate \\(\\displaystyle\\lim_{x \\to 0} x^2 \\cos\\!\\left(\\frac{1}{x}\\right)\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'If \\(-x^2 \\le f(x) \\le x^2\\) for all \\(x\\), what is \\(\\displaystyle\\lim_{x \\to 0} f(x)\\)?',
+        options: ['1', '-1', '0', 'Does not exist'],
+        correctIndex: 2
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which inequality is useful for squeezing \\(x \\sin\\!\\left(\\frac{1}{x}\\right)\\) as \\(x \\to 0\\)?',
+        options: [
+          '\\(-1 \\le x\\sin(1/x) \\le 1\\)',
+          '\\(-|x| \\le x\\sin(1/x) \\le |x|\\)',
+          '\\(0 \\le x\\sin(1/x) \\le x^2\\)',
+          '\\(-x^2 \\le x\\sin(1/x) \\le x\\)'
+        ],
+        correctIndex: 1
+      },
+      {
+        type: 'matching',
+        question: 'Match each limit with its value (using the Squeeze Theorem or known results).',
+        pairs: [
+          { left: '\\(\\lim_{x \\to 0} x^2\\sin(1/x)\\)', right: '0' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{\\sin x}{x}\\)', right: '1' },
+          { left: '\\(\\lim_{x \\to 0} x\\cos(1/x)\\)', right: '0' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{1-\\cos x}{x}\\)', right: '0' }
+        ]
+      },
+      {
+        type: 'true-false',
+        question: 'The Squeeze Theorem can only be applied when \\(x \\to 0\\).',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} x^4 \\sin\\!\\left(\\frac{3}{x}\\right)\\)?',
+        options: ['3', '0', '1', 'Does not exist'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if 3 ≤ f(x) ≤ 3 + x² as x → 0, then lim f(x) = ___',
+        answer: '3'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0} x^2 \\sin(1/x) = \\) ___',
+        answer: '0'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if 5 − x² ≤ f(x) ≤ 5 + x² as x → 0, then lim f(x) = ___',
+        answer: '5'
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'calculus',
+      lessonId: 'lesson-9',
+      nextHref: 'lesson-10.html',
+      backHref: 'index.html'
+    });
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
+
+</body>
+</html>

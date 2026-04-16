@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vowel System — Open &amp; Closed — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-language); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content h2 { font-size: 1.3rem; font-weight: 700; margin-top: 32px; margin-bottom: 12px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .vowel-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 12px; margin: 20px 0; }
+    .vowel-card { background: linear-gradient(135deg,#fff7ed,#ffedd5); border: 2px solid #fed7aa; border-radius: 12px; padding: 16px 12px; text-align: center; }
+    .vowel-card.closed { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #bfdbfe; }
+    .vowel-card .sym { font-size: 2rem; font-weight: 800; color: #0f172a; }
+    .vowel-card .ipa { font-size: 0.85rem; color: #475569; }
+    .vowel-card .ex { font-size: 0.8rem; color: #0f172a; margin-top: 6px; font-style: italic; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 · Lesson 2</div>
+    <h1>Vowel System — Open &amp; Closed</h1>
+    <p>Catalan has <strong>seven vowel sounds</strong> — more than Spanish! The letters <strong>e</strong> and <strong>o</strong> each have two versions: an <strong>open</strong> version (mouth wide) and a <strong>closed</strong> version (mouth narrow).</p>
+
+    <h2>Open vs Closed</h2>
+    <div class="vowel-grid">
+      <div class="vowel-card"><div class="sym">è</div><div class="ipa">/ɛ/ open</div><div class="ex">mel (honey)</div></div>
+      <div class="vowel-card closed"><div class="sym">é</div><div class="ipa">/e/ closed</div><div class="ex">més (more)</div></div>
+      <div class="vowel-card"><div class="sym">ò</div><div class="ipa">/ɔ/ open</div><div class="ex">cor (heart)</div></div>
+      <div class="vowel-card closed"><div class="sym">ó</div><div class="ipa">/o/ closed</div><div class="ex">amor (love)</div></div>
+      <div class="vowel-card"><div class="sym">a</div><div class="ipa">/a/</div><div class="ex">casa (house)</div></div>
+      <div class="vowel-card closed"><div class="sym">i</div><div class="ipa">/i/</div><div class="ex">fil (thread)</div></div>
+      <div class="vowel-card closed"><div class="sym">u</div><div class="ipa">/u/</div><div class="ex">lluna (moon)</div></div>
+    </div>
+
+    <h2>Key Rules</h2>
+    <ul>
+      <li>The <strong>grave accent</strong> (è, ò) marks an <strong>open</strong> vowel.</li>
+      <li>The <strong>acute accent</strong> (é, ó) marks a <strong>closed</strong> vowel.</li>
+      <li><strong>À</strong> (always grave) is used on stressed <em>a</em>.</li>
+      <li>The open/closed distinction can change meaning: <em>déu</em> (god) vs <em>deu</em> (ten).</li>
+    </ul>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter, setCharacterLang } from '../../js/characters.js';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    setCharacterLang('ca');
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'How many distinct vowel sounds does Catalan have?',
+        options: ['5', '6', '7', '8'],
+        correctIndex: 2
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which accent marks an OPEN vowel?',
+        options: ['Grave (è, ò)', 'Acute (é, ó)', 'Circumflex (ê, ô)', 'Tilde (ñ)'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'In Catalan, "é" is pronounced with a wider, more open mouth than "è".',
+        correctAnswer: false
+      },
+      {
+        type: 'matching',
+        question: 'Match the Catalan vowel with its type.',
+        pairs: [
+          { left: 'è', right: 'Open e' },
+          { left: 'é', right: 'Closed e' },
+          { left: 'ò', right: 'Open o' },
+          { left: 'ó', right: 'Closed o' }
+        ]
+      },
+      {
+        type: 'fill-blank',
+        question: 'The word "mel" (honey) has an ___ e (write open or closed).',
+        answer: 'open'
+      },
+      {
+        type: 'fill-blank',
+        question: 'The word "amor" (love) has a ___ o (write open or closed).',
+        answer: 'closed'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which pair changes meaning based on open vs closed vowel?',
+        options: ['déu vs deu', 'casa vs casas', 'jo vs tu', 'sí vs no'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'The letter "à" always carries a grave accent when stressed.',
+        correctAnswer: true
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'catalan',
+      lessonId: 'lesson-2',
+      nextHref: 'lesson-3.html',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

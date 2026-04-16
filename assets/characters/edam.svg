@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bear: Edam — friendly, rounded -->
+  <!-- Ears -->
+  <circle cx="25" cy="22" r="14" fill="#8B5E3C"/>
+  <circle cx="75" cy="22" r="14" fill="#8B5E3C"/>
+  <circle cx="25" cy="22" r="8" fill="#C4956A"/>
+  <circle cx="75" cy="22" r="8" fill="#C4956A"/>
+  <!-- Head -->
+  <circle cx="50" cy="50" r="34" fill="#8B5E3C"/>
+  <!-- Face patch -->
+  <ellipse cx="50" cy="56" rx="22" ry="18" fill="#C4956A"/>
+  <!-- Eyes -->
+  <circle cx="38" cy="44" r="4" fill="#1a1a2e"/>
+  <circle cx="62" cy="44" r="4" fill="#1a1a2e"/>
+  <circle cx="39.5" cy="43" r="1.5" fill="#fff"/>
+  <circle cx="63.5" cy="43" r="1.5" fill="#fff"/>
+  <!-- Nose -->
+  <ellipse cx="50" cy="54" rx="5" ry="3.5" fill="#5C3D2E"/>
+  <!-- Mouth -->
+  <path d="M44 60 Q50 66 56 60" stroke="#5C3D2E" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

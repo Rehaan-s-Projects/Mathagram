@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afterlife — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Afterlife</h1>
+    <p>A comparative survey of afterlife beliefs across world religions, mythologies, and philosophies — heavens, underworlds, reincarnation, resurrection, near-death experiences, and secular views. 15 units, 225 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'Introduction to Afterlife Beliefs',['What Is the Afterlife?','Why Cultures Imagine an Afterlife','Soul, Spirit, and Consciousness','Death Across Cultures','Funerary Rites Overview','Grief and Meaning-Making','Studying Religion Respectfully','Primary vs Secondary Sources','Comparative Method','Literal vs Symbolic Readings','Common Themes Across Traditions','Maps of the Otherworld','Judgment, Reward, and Punishment','Course Roadmap','Introduction Checkpoint']],
+      [2,'Ancient Egypt',['Ka, Ba, and Akh','The Duat (Underworld)','Weighing of the Heart','Osiris, Anubis, and Thoth','Book of the Dead','Pyramid Texts','Coffin Texts','Field of Reeds','Mummification Practices','Canopic Jars & Amulets','Tomb Architecture','Valley of the Kings','Spells for the Journey','Legacy on Later Religions','Egypt Checkpoint']],
+      [3,'Mesopotamia & the Ancient Near East',['Sumerian Kur','The Descent of Inanna','Epic of Gilgamesh on Death','Babylonian Irkalla','Ereshkigal & Nergal','Funerary Offerings','Ghosts (Gidim) and Haunting','Ancestor Cults','Canaanite Views','Ugaritic Texts','Hittite Beliefs','Persian Zoroastrian Influence','The Chinvat Bridge','Frashokereti — Final Renovation','Mesopotamia Checkpoint']],
+      [4,'Greek & Roman Afterlife',['Homeric Hades','The Five Rivers: Styx, Acheron, Lethe, Cocytus, Phlegethon','Charon the Ferryman','Judges of the Dead: Minos, Rhadamanthus, Aeacus','Elysium & Isles of the Blessed','Tartarus','Asphodel Meadows','Orphic Mysteries','Eleusinian Mysteries','Plato\'s Myth of Er','Virgil\'s Underworld (Aeneid VI)','Roman Manes & Lares','Lucretius on Death','Stoic & Epicurean Views','Greco-Roman Checkpoint']],
+      [5,'Judaism',['Sheol in the Hebrew Bible','Biblical Views of Death','Resurrection in Daniel','Second Temple Period Beliefs','Pharisees vs Sadducees on Resurrection','Gan Eden (Paradise)','Gehinnom & Purification','Olam Ha-Ba (World to Come)','Techiyat Ha-Metim','Kabbalistic Views','Gilgul Neshamot (Transmigration)','Jewish Mourning: Shiva & Kaddish','Yahrzeit & Remembrance','Modern Jewish Perspectives','Judaism Checkpoint']],
+      [6,'Christianity',['New Testament Teachings','Heaven in Christian Thought','Hell — Traditional Views','Purgatory (Catholic)','Limbo — Historical View','Last Judgment','Resurrection of the Body','Intermediate State','Orthodox Views (Toll Houses)','Protestant Reformation Shifts','Annihilationism','Universalism (Apokatastasis)','Eastern Orthodox Theosis','Dante\'s Divine Comedy','Christianity Checkpoint']],
+      [7,'Islam',['Barzakh — The Interval','Questioning by Munkar and Nakir','Yawm al-Qiyamah (Day of Resurrection)','The Sirat Bridge','Mizan — The Scales','Jannah (Paradise) and Its Levels','Jahannam (Hell) and Its Levels','Intercession (Shafa\'ah)','Martyrs\' Station','Hadith on the Grave','Sufi Perspectives','Ibn Arabi on the Imaginal World','Shia Perspectives','Quranic Imagery','Islam Checkpoint']],
+      [8,'Hinduism',['Atman and Brahman','Samsara — The Cycle','Karma and Rebirth','Svarga (Heavenly Realms)','Naraka (Hells) and Yama','Pitr Loka (Realm of Ancestors)','Shraddha Rites','Moksha — Liberation','Paths to Moksha: Jnana, Bhakti, Karma, Raja','Bhagavad Gita on Death','Upanishadic Teachings','Gati — Directions After Death','Cremation at Varanasi','Modern Hindu Views','Hinduism Checkpoint']],
+      [9,'Buddhism',['Anatta — No-Self','Dependent Origination','The Six Realms of Rebirth','Bardo States (Tibetan)','Tibetan Book of the Dead','Pure Land Traditions','Amitabha and Sukhavati','Theravada View of Rebirth','Mahayana Bodhisattva Path','Nirvana and Parinirvana','Merit Transfer to the Dead','Hungry Ghosts (Preta)','Zen on Death','Funeral Practices','Buddhism Checkpoint']],
+      [10,'East Asian Traditions',['Chinese Ancestor Veneration','Diyu — Ten Courts of Hell','King Yama & the Judges','Ghost Month (Zhongyuan Jie)','Joss Paper & Offerings','Taoist Immortality','The Three Pure Ones','Xian — Immortals','Shinto Kami and Death Taboo','Yomi — Japanese Underworld','Obon Festival','Korean Jeosung','Vietnamese Ancestral Altars','Confucian Filial Piety','East Asia Checkpoint']],
+      [11,'Indigenous & Traditional Cosmologies',['Australian Aboriginal Dreamtime','Māori Afterlife and Cape Rēinga','Native American Happy Hunting Ground','Lakota Wanagi and the Spirit Road','Mesoamerican Mictlan (Aztec)','Mayan Xibalba','Inca Ukhu Pacha','Yoruba Orun','Akan Asamando','Zulu Ancestor Realm','Norse Valhalla, Fólkvangr, Hel','Celtic Otherworld — Tír na nÓg','Slavic Nav','Polynesian Pulotu','Indigenous Checkpoint']],
+      [12,'Philosophical Views',['Plato on the Immortal Soul','Aristotle on the Soul','Epicurean Non-Existence','Stoic Cosmic Cycles','Cartesian Dualism','Leibniz on Monads','Kant on Postulates of Practical Reason','Hegel on Spirit','Nietzsche on Eternal Recurrence','Heidegger — Being-Toward-Death','Wittgenstein on Death','Contemporary Philosophy of Mind','Personal Identity & Survival','Parfit on What Matters','Philosophy Checkpoint']],
+      [13,'Secular, Scientific & Skeptical Views',['Materialist View of Death','Neuroscience of Consciousness','Brain Death and Clinical Death','Near-Death Experiences (NDEs) — Data','NDEs — Skeptical Explanations','Out-of-Body Experiences','Terminal Lucidity','Cryonics','Mind Uploading & Digital Afterlife','Simulation Hypothesis','Legacy & Symbolic Immortality','Humanism on Death','Existentialism and Meaning','Acceptance & Mortality Salience','Secular Checkpoint']],
+      [14,'Death, Grief & Rituals',['Stages of Grief (Kübler-Ross)','Continuing Bonds Theory','Funerary Practices Worldwide','Burial vs Cremation','Sky Burial (Tibetan)','Green & Natural Burials','Memorial Days Across Cultures','Day of the Dead (Día de los Muertos)','All Souls\' Day','Qingming Festival','Mourning Periods','Death Doulas & Hospice','Children and Death','Writing a Eulogy','Rituals Checkpoint']],
+      [15,'Modern Questions & Reflection',['Why Do Beliefs Differ?','What Do Traditions Share?','How Beliefs Shape Ethics','Afterlife in Literature','Afterlife in Film & TV','Afterlife in Video Games','Mediums & Spiritualism (Historical)','Ghost Stories Across Cultures','Environmental Ethics of Burial','Planning for End of Life','Talking About Death','Comparative Reflection Essay','Building Your Own View','Respectful Dialogue','Course Mastery Checkpoint']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'al-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('afterlife');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('afterlife');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

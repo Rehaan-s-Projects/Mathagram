@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tamil — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Tamil</h1>
+    <p>Learn Tamil — one of the world's oldest living languages, spoken by over 80 million people in India, Sri Lanka, Singapore, and Malaysia. 600 lessons across 30 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'Tamil Script & Alphabet',['Tamil Alphabet Overview','Vowels (உயிர் எழுத்துக்கள்)','Short Vowels (அ இ உ)','Long Vowels (ஆ ஈ ஊ)','Consonants (மெய் எழுத்துக்கள்)','Vallinam Consonants (க ச ட த ப ற)','Mellinam Consonants (ங ஞ ண ந ம ன)','Idaiyinam Consonants (ய ர ல வ ழ ள)','Combined Letters (உயிர்மெய்)','Reading Tamil Script','Writing Practice','Numbers 1–10','Numbers 11–100','Days of the Week','Months of the Year','Tamil Calendar','Vowel Marks (கொம்பு புள்ளி)','Special Characters (ஃ ஸ்ரீ)','Pronunciation Rules','Script Review']],
+      [2,'Greetings & Basics',['Vanakkam (Hello)','Nandri (Thank You)','Aamaa / Illai (Yes / No)','How Are You? (Eppadi Irukkeenga?)','My Name Is (En Peyar)','Where Are You From?','Good Morning (Kaalai Vanakkam)','Good Night (Iravu Vanakkam)','Please (Thayavu Seithu)','Sorry (Mannikkanum)','Excuse Me','I Don\'t Understand','Can You Repeat?','How Do You Say…?','Nice to Meet You','See You Later','Formal vs Informal (Nee vs Neengal)','Basic Questions','Emergency Phrases','Greetings Review']],
+      [3,'Pronouns & Basic Grammar',['I (Naan)','You Informal (Nee)','You Formal (Neengal)','He / She / It (Avan / Aval / Adhu)','We (Naangal)','They (Avargal)','This / That (Idhu / Adhu)','My / Your / His / Her','Word Order (SOV)','Postpositions','Gender in Tamil','Plural Formation','Question Words (Enna Yaar Engey Eppodhu Yean Eppadi)','Making Questions','Negative Sentences (Illai)','Sentence Connectors','Emphasis Particles','Formal vs Informal Grammar','Basic Conversations','Grammar Review']],
+      [4,'Present Tense',['Verb Roots','Present Tense Formation','To Be (Iru)','To Go (Po)','To Come (Vaa)','To Eat (Saapidu)','To Drink (Kudi)','To See (Paaru)','To Hear (Kelu)','To Speak (Pesu)','To Read (Padi)','To Write (Ezhudhu)','To Do (Sei)','To Want (Venum)','To Know (Theriyum)','Can / Able To (Mudiyum)','Present Continuous','Negative Present','Daily Activities','Present Tense Review']],
+      [5,'Past Tense',['Simple Past Introduction','Past Tense Markers (-een -aay -aan)','Regular Past Verbs','Irregular Past Verbs','Past of Iru (Irundhen)','Past of Po (Ponein)','Past of Vaa (Vandhen)','Past of Saapidu (Saapitein)','Past Continuous','Past Negative','Time Expressions (Nettru Ponra Vaaram)','Telling Stories','Past Tense with Objects','Past Tense Questions','Narrating Events','Experience (Irukku)','Comparing Past Forms','Past in Conversation','Past Writing Practice','Past Tense Review']],
+      [6,'Future & Conditional',['Future Tense Formation','Future Markers (-vein -vaay -vaan)','To Go Future (Poven)','To Come Future (Varuven)','Making Plans','Future Predictions','Immediate Future','Modal Verbs (Venum Koodadhu)','Should / Must','If…Then (Endral…Anal)','Conditional Sentences','Wishes & Desires','Permission & Requests','Polite Commands','Subjunctive Mood','Future Negative','Future Questions','Future Plans Discussion','Future in Writing','Future & Conditional Review']],
+      [7,'Family & People',['Father (Appa / Thanthai)','Mother (Amma / Thaai)','Brother (Annan / Thambi)','Sister (Akka / Thangai)','Grandparents (Thatha / Paatti)','Uncle (Mama / Chithappa)','Aunt (Athai / Chithhi)','Husband / Wife (Kanavar / Manaivi)','Son / Daughter (Magan / Magal)','Baby (Kuzhanthai)','Relatives (Uravinar)','Describing People','Physical Appearance','Personality Traits','Ages & Birthdays','Family Gatherings','Relationships','Marriage (Thirumaanam)','Family Conversations','Family Review']],
+      [8,'Food & Dining',['Rice (Arisi / Saadham)','Idli & Dosa','Sambar & Rasam','Pongal','Biryani','Chettinad Cuisine','Vegetables (Kaaikari)','Fruits (Pazham)','Spices (Masaalaa)','Tea & Coffee (Theneer Kaapi)','Street Food (Sundal Bajji Bonda)','Cooking Verbs','Kitchen Vocabulary','At the Restaurant','Ordering Food','Paying the Bill','Banana Leaf Meals','Sweets (Payasam Halwa Laddu)','Festival Foods','Food Review']],
+      [9,'Shopping & Numbers',['Large Numbers (Aayiram Laksham Kodi)','Money & Currency','At the Market (Sandhai)','Bargaining','Clothing (Udai)','Traditional Dress (Veshti Saree)','Jewelry (Naigai)','Grocery Shopping','Fruits & Vegetables Market','Electronics Shopping','Sizes & Measurements','Colors in Detail','Comparing Prices','Online Shopping Terms','Receipt Reading','Banking','ATM Vocabulary','Currency Exchange','Shopping Conversations','Shopping Review']],
+      [10,'Travel & Tamil Nadu',['Tamil Nadu Geography','Chennai (Madras)','Madurai — Temple City','Thanjavur & Temples','Coimbatore','Ooty & Hill Stations','Rameswaram','Kanyakumari','At the Airport','At the Train Station','Auto Rickshaw & Bus','Asking Directions','Left / Right / Straight (Idadhu / Valadhu / Naerae)','At the Hotel','Booking a Room','Beach & Sea Terms','Weather in Tamil','Travel Problems','Travel Conversations','Travel Review']],
+      [11,'Health & Body',['Body Parts (Udal Uruppugal)','Head & Face','Internal Organs','Common Illnesses','Fever / Cold / Cough','At the Doctor (Maruthuvar)','Describing Symptoms','At the Pharmacy','Prescriptions','Dental Terms','Eye Care','Mental Health','Exercise & Yoga','Healthy Eating','Ayurveda & Siddha Medicine','First Aid','Emergency (Ambulance)','Hospital Vocabulary','Health Conversations','Health Review']],
+      [12,'Education & Work',['School (Palli)','Subjects','Classroom Objects','Student Life','College (Kalluri)','Common Professions','Teacher (Aasiriyar)','Doctor (Maruthuvar)','Engineer (Porulaalar)','Lawyer (Vazhakkuraignar)','Farmer (Vivasaayi)','At the Office','Job Interview','Work Schedule','Writing Letters','Email in Tamil','Meetings','Career Goals','Professional Tamil','Work Review']],
+      [13,'Culture & Traditions',['Tamil Culture Overview','Pongal Festival','Deepavali (Diwali)','Tamil New Year (Puthandu)','Navaratri & Golu','Thirukarthigai','Temple Traditions','Kolam (Rangoli)','Bharatanatyam Dance','Carnatic Music','Tamil Cinema (Kollywood)','Tamil Literature History','Sangam Literature','Thirukkural','Famous Tamil Poets (Bharathiyar Bharathidasan)','Cricket & Kabaddi','Respect for Elders','Wedding Customs','Cultural Conversations','Culture Review']],
+      [14,'Nature & Environment',['Animals (Vilangu)','Birds (Paravai)','Plants & Trees (Maram)','Flowers (Poo — Jasmine Lotus)','The Sea & Coast','Mountains (Western Ghats)','Rivers (Kaveri Vaigai)','Weather Expressions','Seasons','Environmental Issues','Farming & Agriculture','Rice Cultivation','Coconut & Banana Trees','National Parks','Wildlife Sanctuaries','Conservation','Biodiversity','Climate in Tamil Nadu','Nature Excursions','Nature Review']],
+      [15,'Media & Technology',['Computer (Kanini)','Internet','Social Media','Mobile Phone (Kaiyalasi)','Television & Radio','Newspaper (Seithithal)','Tamil Typing','Photography','Video & Film','Music Apps','Online Shopping','Digital Communication','Tamil Websites','Podcasts in Tamil','Blogging','Gaming Terms','Smart Devices','Tech Problems','Tamil in Digital Age','Media Review']],
+      [16,'Advanced Grammar',['Verbal Participles','Conditional Advanced','Reported Speech','Passive Voice','Causative Verbs','Compound Verbs','Relative Clauses (Eppadi Participle)','Noun Clauses','Adverb Clauses','Complex Sentences','Emphatic Forms','Literary vs Spoken Tamil','Formal Written Tamil','Dialectal Differences (Chennai vs Madurai)','Sri Lankan Tamil','Singapore Tamil','Malaysian Tamil','Old Tamil vs Modern Tamil','Grammar Exceptions','Advanced Grammar Review']],
+      [17,'Reading & Writing',['Reading Comprehension 1','Reading Comprehension 2','News Article Reading','Short Story Reading','Poetry Reading (Bharathiyar)','Thirukkural Reading','Writing Paragraphs','Writing Letters Formal','Writing Letters Informal','Writing Essays','Writing Diary Entries','Writing Reviews','Summarizing Texts','Paraphrasing','Tamil Proverbs (Pazhamozhigal)','Idioms in Tamil','Common Errors','Punctuation','Creative Writing','Reading & Writing Review']],
+      [18,'Fluency & Practice',['Conversation Starters','Small Talk','Expressing Opinions','Agreeing & Disagreeing','Storytelling','Describing Experiences','Hypothetical Situations','Tamil Idioms Practice','Tongue Twisters','Word Games','Listening Practice 1','Listening Practice 2','Role Play Market','Role Play Doctor','Role Play Travel','Role Play Job Interview','Comprehensive Review 1','Comprehensive Review 2','Final Tamil Challenge','Tamil Mastery!']],
+      [19,'Tamil Poetry & Literature',['Sangam Poetry Overview','Thirukkural Deep Dive','Silappathikaram','Manimekalai','Kambaramayanam','Bharathiyar Poetry','Bharathidasan Works','Subramania Bharati','Modern Tamil Poetry','Short Story Reading 1','Short Story Reading 2','Novel Excerpts','Literary Devices in Tamil','Metaphors & Similes','Alliteration & Rhythm','Writing Poetry Basics','Haiku in Tamil','Free Verse','Literary Analysis Practice','Poetry & Literature Review']],
+      [20,'Business Tamil',['Office Vocabulary','Business Greetings','Phone Etiquette','Email Writing Formal','Business Letters','Meeting Vocabulary','Presentations','Negotiation Phrases','Banking Tamil','Insurance Vocabulary','Real Estate Terms','Legal Tamil Basics','Contracts & Agreements','Invoices & Receipts','Customer Service','Complaints & Returns','Business Proposals','Interview Tamil','Professional Networking','Business Tamil Review']],
+      [21,'Tamil for Travel Abroad',['At the Airport International','Immigration & Customs','Hotel Booking','Restaurant Abroad','Asking for Help Abroad','Medical Emergency Abroad','Money Exchange','Public Transport Abroad','Sightseeing','Taking Photos','Shopping Abroad','Dealing with Problems','Lost & Found','Describing Tamil Culture Abroad','Tamil Diaspora','Tamil in Singapore','Tamil in Malaysia','Tamil in Sri Lanka','Tamil in Canada & UK','Travel Abroad Review']],
+      [22,'Tamil Proverbs & Wisdom',['What are Pazhamozhigal?','Proverbs about Hard Work','Proverbs about Knowledge','Proverbs about Patience','Proverbs about Truth','Proverbs about Wealth','Proverbs about Family','Proverbs about Food','Proverbs about Nature','Proverbs about Time','Proverbs about Friendship','Thirukkural Wisdom 1','Thirukkural Wisdom 2','Thirukkural Wisdom 3','Avvaiyar Sayings','Aathichudi','Kondrai Venthan','Modern Sayings','Using Proverbs in Speech','Proverbs Review']],
+      [23,'Tamil Cinema & Music',['History of Tamil Cinema','Golden Era (1950s-70s)','MGR & Sivaji Era','Rajinikanth & Kamal Haasan','Modern Tamil Cinema','Mani Ratnam Films','AR Rahman Music','Ilayaraja Legacy','Carnatic Music Basics','Film Song Vocabulary','Understanding Lyrics','Singing Tamil Songs','Dance in Tamil Cinema','Comedy in Tamil','Dialogue Famous Lines','Film Reviews in Tamil','Music Instruments','Classical vs Film Music','Tamil Cinema Today','Cinema & Music Review']],
+      [24,'Tamil Dialects & Variations',['Standard Tamil (Centhamizh)','Spoken Tamil (Kodunthamizh)','Chennai Tamil','Madurai Tamil','Coimbatore Tamil','Tirunelveli Tamil','Thanjavur Tamil','Kongu Tamil','Sri Lankan Tamil (Jaffna)','Sri Lankan Tamil (Colombo)','Singapore Tamil','Malaysian Tamil','Brahmin Tamil (Iyer/Iyengar)','Muslim Tamil','Christian Tamil','Dalit Tamil','Chettinad Tamil','Comparing Dialects','Code Switching','Dialects Review']],
+      [25,'Tamil History & Heritage',['Ancient Tamil Civilization','Sangam Age','Chola Dynasty','Pandya Dynasty','Chera Dynasty','Pallava Dynasty','Temple Architecture','Brihadeeswara Temple','Meenakshi Temple','Shore Temple Mahabalipuram','Tamil Inscriptions','Tamil Brahmi Script','Palm Leaf Manuscripts','Tamil Maritime Trade','Tamil Influence in Southeast Asia','Colonial Period','Tamil Renaissance','Independence Movement','Modern Tamil Nadu','History Review']],
+      [26,'Science & Technology in Tamil',['Mathematics Vocabulary','Physics Terms','Chemistry Terms','Biology Terms','Computer Science in Tamil','Programming Vocabulary','Internet Terms in Tamil','Scientific Method','Famous Tamil Scientists','Ramanujan','APJ Abdul Kalam','CV Raman','ISRO & Space Tamil','Medical Terms','Engineering Terms','Agricultural Science','Environmental Science Tamil','Technology News Reading','Science Writing','Science & Tech Review']],
+      [27,'Tamil for Children',['Animal Names','Animal Sounds','Colors Song','Counting Rhyme','Body Parts Song','Family Song','Food Names for Kids','Fruit Names','Vehicle Names','Action Words for Kids','Simple Stories 1','Simple Stories 2','Simple Stories 3','Nursery Rhymes Tamil','Lullabies (Thalaattu)','Riddles (Vidukathai)','Games Vocabulary','School Words','Manners & Politeness','Children Tamil Review']],
+      [28,'Tamil Cooking & Recipes',['Rice Varieties','Sambar Recipe','Rasam Recipe','Idli Recipe','Dosa Recipe','Pongal Recipe','Chettinad Chicken','Fish Curry','Vegetable Kootu','Avial','Payasam Recipe','Halwa Recipe','Murukku Recipe','Pickles (Oorugai)','Chutneys','Spice Measurements','Cooking Instructions','Kitchen Safety','Meal Planning','Cooking Review']],
+      [29,'Tamil Sports & Games',['Cricket in Tamil','Football Vocabulary','Kabaddi','Kho Kho','Silambam (Martial Art)','Jallikattu','Pallankuzhi (Board Game)','Paramapadham (Snakes & Ladders)','Chess (Sathuranga Aatam)','Carrom','Swimming Terms','Athletics','Olympics Vocabulary','Sports Commentary','Fitness Vocabulary','Yoga Poses in Tamil','Team Sports','Individual Sports','Sports News Reading','Sports Review']],
+      [30,'Tamil Mastery & Certification',['Comprehensive Grammar Test','Vocabulary Challenge 1','Vocabulary Challenge 2','Reading Comprehension Advanced 1','Reading Comprehension Advanced 2','Listening Comprehension 1','Listening Comprehension 2','Writing Test Formal','Writing Test Informal','Speaking Practice 1','Speaking Practice 2','Translation English to Tamil','Translation Tamil to English','Error Correction','Proverb Challenge','Literature Quiz','Culture Quiz','Speed Reading','Final Comprehensive Exam','Tamil Mastery Certificate!']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ta-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('tamil');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('tamil');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

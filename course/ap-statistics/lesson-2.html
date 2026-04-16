@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Frequency Tables — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/exercises.css">
+<link rel="stylesheet" href="../../css/characters.css">
+<link rel="stylesheet" href="../../css/calculator.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+
+<div class="container" style="max-width:760px; padding:80px 24px 32px;">
+  <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to AP Statistics</a>
+  <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">Frequency Tables</h1>
+
+  <section style="line-height:1.8; font-size:1.05rem;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:12px;">What Is a Frequency Table?</h2>
+    <p>A <strong>frequency table</strong> shows how often each value (or category) occurs in a data set. It's one of the simplest and most useful ways to organize data.</p>
+
+    <h3 style="font-size:1.1rem; font-weight:600; margin:20px 0 8px;">Building a Frequency Table</h3>
+    <p>A frequency table typically has these columns:</p>
+    <ul style="margin:8px 0 16px 24px;">
+      <li><strong>Value</strong> — The category or data value</li>
+      <li><strong>Frequency</strong> — How many times that value appears</li>
+      <li><strong>Relative Frequency</strong> (optional) — The fraction or percentage of the total</li>
+    </ul>
+
+    <h3 style="font-size:1.1rem; font-weight:600; margin:20px 0 8px;">Example</h3>
+    <p>A survey asks 25 students their favorite fruit:</p>
+    <table style="width:100%; border-collapse:collapse; margin:12px 0 20px;">
+      <tr style="background:var(--color-surface);"><th style="padding:8px 12px; text-align:left; border-bottom:2px solid var(--color-border);">Fruit</th><th style="padding:8px 12px; text-align:center; border-bottom:2px solid var(--color-border);">Frequency</th><th style="padding:8px 12px; text-align:center; border-bottom:2px solid var(--color-border);">Relative Frequency</th></tr>
+      <tr><td style="padding:8px 12px; border-bottom:1px solid var(--color-border);">Apple</td><td style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--color-border);">12</td><td style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--color-border);">12/25 = 48%</td></tr>
+      <tr><td style="padding:8px 12px; border-bottom:1px solid var(--color-border);">Banana</td><td style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--color-border);">8</td><td style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--color-border);">8/25 = 32%</td></tr>
+      <tr><td style="padding:8px 12px; border-bottom:1px solid var(--color-border);">Orange</td><td style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--color-border);">5</td><td style="padding:8px 12px; text-align:center; border-bottom:1px solid var(--color-border);">5/25 = 20%</td></tr>
+      <tr style="font-weight:700;"><td style="padding:8px 12px;">Total</td><td style="padding:8px 12px; text-align:center;">25</td><td style="padding:8px 12px; text-align:center;">100%</td></tr>
+    </table>
+
+    <div style="background:var(--color-surface); border-radius:12px; padding:20px; margin:20px 0;">
+      <strong>Key Insight:</strong> Relative frequency is calculated as: \(\text{Relative Frequency} = \frac{\text{Frequency}}{\text{Total}}\). All relative frequencies must add up to 1 (or 100%).
+    </div>
+  </section>
+
+  <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
+  <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Practice</h2>
+  <div id="exercises"></div>
+  <div id="completion"></div>
+</div>
+
+<footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+<script type="module">
+  import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js'; initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+  import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body, {
+        delimiters: [{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}],
+        throwOnError: false
+      });
+    }
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  initSideCharacter(randomCharacterId(), '../../');
+
+  const exercises = [
+    {
+      type: 'multiple-choice',
+      question: 'What does a frequency table show?',
+      options: ['The average of data values', 'How often each value occurs', 'The range of the data', 'The median of the data'],
+      correctIndex: 1
+    },
+    {
+      type: 'fill-blank',
+      question: 'If 15 out of 50 students chose pizza, the relative frequency is ___%.',
+      answer: '30'
+    },
+    {
+      type: 'true-false',
+      question: 'All relative frequencies in a table must add up to 1 (or 100%).',
+      correctAnswer: true
+    },
+    {
+      type: 'multiple-choice',
+      question: 'In a survey, red = 20, blue = 15, green = 10, yellow = 5. What is the frequency of blue?',
+      options: ['5', '10', '15', '20'],
+      correctIndex: 2
+    },
+    {
+      type: 'fill-blank',
+      question: 'Total frequency in the survey (20 + 15 + 10 + 5) = ___.',
+      answer: '50'
+    },
+    {
+      type: 'multiple-choice',
+      question: 'What is the relative frequency of red (20 out of 50)?',
+      options: ['20%', '30%', '40%', '50%'],
+      correctIndex: 2
+    },
+    {
+      type: 'ordering',
+      question: 'Put the steps for building a frequency table in the correct order.',
+      correctOrder: ['Collect the data', 'List all unique values', 'Count how many times each appears', 'Calculate relative frequencies', 'Verify frequencies sum to total'],
+      shuffled: ['Calculate relative frequencies', 'Verify frequencies sum to total', 'Collect the data', 'Count how many times each appears', 'List all unique values']
+    },
+    {
+      type: 'true-false',
+      question: 'A frequency table can only be used for categorical data.',
+      correctAnswer: false
+    }
+  ];
+
+  const container = document.getElementById('exercises');
+  const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+    showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+  });
+
+    await showLessonComplete(container, document.getElementById('completion'), score, {
+      courseId: 'ap-statistics',
+      lessonId: 's-2',
+      nextHref: 'lesson-3.html',
+      backHref: 'index.html'
+    });
+</script>
+<script type="module">import{createCalculator}from"../../js/calculator.js";createCalculator();</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geography — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Geography</h1>
+    <p>Understand our world — from Earth's structure to human geography. 276 lessons across 19 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Earth\'s Structure', ['Layers of the Earth','The Crust','The Mantle','The Core','Plate Tectonics','Continental Drift','Types of Plate Boundaries','Earthquakes','Volcanoes','Mountain Formation','Rock Cycle','Minerals & Rocks','Erosion & Weathering','Soil Formation','Earth\'s Structure Review']],
+      [2, 'Continents & Oceans', ['The Seven Continents','Africa Overview','Asia Overview','Europe Overview','North America Overview','South America Overview','Australia & Oceania','Antarctica','The Five Oceans','Pacific Ocean','Atlantic Ocean','Indian Ocean','Arctic & Southern Oceans','Major Seas & Waterways','Continents & Oceans Review']],
+      [3, 'Climate & Weather', ['Weather vs Climate','The Atmosphere','Solar Radiation & Seasons','Air Pressure & Wind','The Water Cycle','Clouds & Precipitation','Weather Fronts','Severe Weather Storms','Hurricanes & Typhoons','Tornadoes','Climate Zones','K\u00F6ppen Climate Classification','El Ni\u00F1o & La Ni\u00F1a','Climate Change Science','Climate & Weather Review']],
+      [4, 'Biomes & Ecosystems', ['What Is a Biome?','Tropical Rainforests','Tropical Savannas','Deserts','Temperate Grasslands','Temperate Forests','Boreal Forests (Taiga)','Tundra','Freshwater Ecosystems','Marine Ecosystems','Coral Reefs','Wetlands','Biodiversity','Human Impact on Biomes','Biomes & Ecosystems Review']],
+      [5, 'Population & Migration', ['World Population Overview','Population Growth Rates','Demographic Transition Model','Birth & Death Rates','Population Pyramids','Population Density','Overpopulation & Carrying Capacity','Types of Migration','Push & Pull Factors','Refugees & Asylum','Urbanization Trends','Rural-to-Urban Migration','Immigration Policies','Diaspora Communities','Population & Migration Review']],
+      [6, 'Urbanization', ['What Is Urbanization?','History of Cities','Urban Growth Patterns','Megacities','Urban Planning Basics','Transportation in Cities','Housing & Homelessness','Urban Sprawl','Smart Cities','Gentrification','Slums & Informal Settlements','Urban Heat Islands','Green Cities & Sustainability','Cities of the Future','Urbanization Review']],
+      [7, 'Economic Geography', ['What Is Economic Geography?','Primary Economic Activities','Agriculture Types','Mining & Extraction','Secondary Activities Manufacturing','Tertiary Activities Services','Quaternary & Quinary Activities','Global Trade Patterns','Supply Chains','Economic Development Indicators','HDI & GDP','Developed vs Developing','Globalization & Trade','Economic Inequality','Economic Geography Review']],
+      [8, 'Political Geography', ['What Is Political Geography?','Nation-States & Sovereignty','Types of Boundaries','Border Disputes','Colonialism\'s Legacy','Supranational Organizations','The United Nations','NATO & Military Alliances','The European Union','Geopolitics','Territorial Conflicts','World Capitals','Landlocked Countries','Geopolitical Hotspots','Political Geography Review']],
+      [9, 'Environmental Geography', ['Human-Environment Interaction','Deforestation','Desertification','Water Scarcity','Air & Water Pollution','Soil Degradation','Ozone Layer','Greenhouse Effect','Global Warming Impacts','Sea Level Rise','Renewable Energy Sources','Conservation Strategies','Sustainable Development Goals','Environmental Policy','Environmental Geography Review']],
+      [10, 'Maps & GIS', ['What Is Cartography?','Types of Maps','Map Projections','Mercator vs Peters','Latitude & Longitude','Coordinate Systems','Map Scale & Distance','Contour Lines & Topography','Thematic Maps','Choropleth Maps','Remote Sensing','Satellite Imagery','What Is GIS?','GIS Applications','Maps & GIS Review']],
+      [11, 'Human Geography', ['What Is Human Geography?','Population Distribution','Migration Patterns','Push & Pull Factors','Refugees & Asylum','Cultural Diffusion','Language Families','Religious Geography','Ethnic Diversity','Human Development Index','Quality of Life Measures','Rural to Urban Migration','Demographic Transition','Human Geography Review']],
+      [12, 'Population & Demographics', ['World Population Growth','Birth & Death Rates','Fertility Rate Factors','Life Expectancy','Age-Sex Pyramids','Population Policies','Overpopulation Concerns','Underpopulation Challenges','Census & Data Collection','Dependency Ratios','Population Projections','Malthus vs Boserup','Population Momentum','Population Review']],
+      [13, 'Agriculture & Food Systems', ['Agricultural Revolutions','Subsistence vs Commercial Farming','Von Thunen Model','Green Revolution','GMOs & Biotechnology','Fair Trade & Organic','Food Deserts','Global Food Supply Chains','Irrigation & Water Use','Soil Degradation','Livestock & Environment','Aquaculture','Food Security','Agriculture Review']],
+      [14, 'Natural Resources & Energy', ['Renewable vs Non-Renewable','Fossil Fuels Overview','Coal Mining & Use','Oil & Natural Gas','Solar Energy','Wind Energy','Hydroelectric Power','Nuclear Energy','Geothermal Energy','Resource Depletion','Conflict Minerals','Water as a Resource','Sustainable Energy Future','Natural Resources Review']],
+      [15, 'Geopolitics Advanced', ['Geopolitical Theory','Heartland Theory','Rimland Theory','Sea Power Theory','Territorial Disputes Today','Maritime Boundaries & UNCLOS','Geopolitics of Oil','Geopolitics of Water','Arctic Geopolitics','Space Geopolitics','Cyber Geopolitics','Proxy Wars','Global Governance Challenges','Geopolitics Advanced Review']],
+      [16, 'Cultural Geography', ['What Is Culture?','Cultural Landscapes','Language & Place','Religion & Sacred Spaces','Architecture & Geography','Food Culture & Geography','Music & Regional Identity','Sports Geography','Tourism Geography','Heritage Sites','Globalization & Culture','Cultural Preservation','Indigenous Geographies','Cultural Geography Review']],
+      [17, 'Development Geography', ['Measuring Development','Rostow Stages of Growth','Dependency Theory','World Systems Theory','Aid & Development','Microfinance','Infrastructure & Development','Education & Development','Gender & Development','Health Geography','Disease Geography','Millennium Development Goals','Sustainable Development Goals','Development Review']],
+      [18, 'Hazards & Disasters', ['Natural Hazards Overview','Earthquake Zones','Tsunami Formation','Volcanic Hazards','Hurricane Tracking','Tornado Alley','Flooding Types','Drought & Famine','Wildfire Geography','Landslides & Avalanches','Disaster Risk Reduction','Emergency Response','Climate Adaptation','Hazards Review']],
+      [19, 'Oceans & Marine Geography', ['Ocean Floor Topography','Mid-Ocean Ridges','Ocean Currents','Thermohaline Circulation','Tides & Waves','Coastal Landforms','Coral Reef Geography','Deep Sea Exploration','Fishing & Overfishing','Marine Pollution','Oceanic Dead Zones','Marine Protected Areas','Law of the Sea','Oceans Review']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'gg-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('geography');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('geography');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psychology — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Psychology</h1>
+    <p>Explore the human mind — from neurons to social behavior. 350 lessons across 22 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Intro to Psychology', ['What Is Psychology?','History of Psychology','Schools of Thought','Structuralism & Functionalism','Behaviorism','Psychoanalysis','Humanistic Psychology','Cognitive Psychology','Biological Psychology','Evolutionary Psychology','Cross-Cultural Psychology','Research Methods in Psychology','Ethics in Psychological Research','Careers in Psychology','Intro to Psychology Review']],
+      [2, 'The Brain & Nervous System', ['Neurons & How They Work','Synapses & Neurotransmitters','The Central Nervous System','The Peripheral Nervous System','The Autonomic Nervous System','Parts of the Brain Overview','The Cerebral Cortex','The Limbic System','The Brainstem & Cerebellum','Left Brain vs Right Brain','Brain Plasticity','Brain Imaging Techniques','Hormones & the Endocrine System','Drugs & the Brain','Brain & Nervous System Review']],
+      [3, 'Sensation & Perception', ['What Is Sensation?','Thresholds & Signal Detection','Vision & the Eye','Color Perception','Hearing & the Ear','Taste & Smell','Touch & Pain','The Vestibular Sense','What Is Perception?','Gestalt Principles','Depth Perception','Perceptual Constancy','Illusions & Why They Work','Attention & Selective Perception','Sensation & Perception Review']],
+      [4, 'Learning & Conditioning', ['What Is Learning?','Classical Conditioning','Pavlov\'s Experiments','Acquisition & Extinction','Generalization & Discrimination','Operant Conditioning','Skinner\'s Experiments','Reinforcement Positive & Negative','Punishment Positive & Negative','Schedules of Reinforcement','Shaping Behavior','Observational Learning','Bandura\'s Bobo Doll','Cognitive Factors in Learning','Learning & Conditioning Review']],
+      [5, 'Memory', ['What Is Memory?','Encoding Strategies','Sensory Memory','Short-Term Memory','Working Memory Model','Long-Term Memory Types','Explicit vs Implicit Memory','Encoding Specificity','Retrieval Cues','The Forgetting Curve','Interference Theory','Memory Distortion','False Memories','Eyewitness Testimony','Memory Review']],
+      [6, 'Cognition & Intelligence', ['What Is Cognition?','Concept Formation','Problem Solving Strategies','Heuristics & Algorithms','Decision Making & Biases','Language & Thought','Linguistic Relativity','Creativity','What Is Intelligence?','IQ Tests & History','Multiple Intelligences','Emotional Intelligence','Nature vs Nurture of Intelligence','Cognitive Development Piaget','Cognition & Intelligence Review']],
+      [7, 'Developmental Psychology', ['What Is Development?','Prenatal Development','Infant Reflexes & Abilities','Attachment Theory','Piaget\'s Stages','Vygotsky\'s Theory','Language Development','Moral Development Kohlberg','Erikson\'s Psychosocial Stages','Adolescent Development','Identity Formation','Adult Development','Aging & Cognition','Death & Dying Kubler-Ross','Developmental Psychology Review']],
+      [8, 'Personality Theories', ['What Is Personality?','Freud\'s Psychoanalytic Theory','The Id Ego & Superego','Defense Mechanisms','Psychosexual Stages','Jung\'s Analytical Psychology','Archetypes & the Collective Unconscious','Adler\'s Individual Psychology','Humanistic Theories Rogers & Maslow','Trait Theory','The Big Five Personality Traits','Personality Assessment','Myers-Briggs & Its Limitations','Biological Basis of Personality','Personality Theories Review']],
+      [9, 'Social Psychology', ['What Is Social Psychology?','Social Cognition & Attribution','Attitudes & Attitude Change','Cognitive Dissonance','Conformity & Asch Experiments','Obedience & Milgram Experiments','Group Dynamics','Groupthink','Social Facilitation & Loafing','Prejudice & Discrimination','Stereotypes','Aggression','Prosocial Behavior & Altruism','Interpersonal Attraction','Social Psychology Review']],
+      [10, 'Mental Health & Disorders', ['What Is Abnormal Psychology?','The DSM & Classification','Anxiety Disorders','Generalized Anxiety & Panic','Phobias','Obsessive-Compulsive Disorder','PTSD & Trauma','Depressive Disorders','Bipolar Disorder','Schizophrenia','Dissociative Disorders','Eating Disorders','Personality Disorders Overview','Stigma & Mental Health','Mental Health & Disorders Review']],
+      [11, 'Therapy & Treatment', ['History of Treatment','Psychoanalytic Therapy','Humanistic Therapy','Cognitive Therapy','Behavioral Therapy','Cognitive-Behavioral Therapy (CBT)','Group & Family Therapy','Biomedical Therapies','Psychopharmacology','Antidepressants & Anti-Anxiety','Antipsychotics & Mood Stabilizers','Evaluating Therapy Effectiveness','Seeking Help & Resources','Prevention & Wellness','Therapy & Treatment Review']],
+      [12, 'Applied Psychology', ['Industrial-Organizational Psychology','Motivation in the Workplace','Leadership Psychology','Consumer Psychology','Health Psychology','Stress & Coping','Psychology of Sport','Forensic Psychology','Environmental Psychology','Educational Psychology','Positive Psychology','Flow & Optimal Experience','Psychology & Technology','Cross-Cultural Applications','Applied Psychology Review']],
+      [13, 'Lifespan Development Advanced', ['Prenatal Risk Factors','Infant Cognitive Development','Toddler Social-Emotional Growth','Early Childhood Education','Middle Childhood Friendships','Puberty & Brain Changes','Teen Risk-Taking & the Brain','Emerging Adulthood','Quarter-Life Transitions','Midlife Crisis or Growth?','Empty Nest Syndrome','Successful Aging','Grief & Bereavement','End-of-Life Psychology','Lifespan Advanced Review']],
+      [14, 'Advanced Social Psychology', ['Social Identity Theory','Self-Serving Bias','Fundamental Attribution Error','Implicit Bias & the IAT','Persuasion & the ELM','Foot-in-the-Door Technique','Door-in-the-Face Technique','Bystander Effect','Deindividuation','Social Exchange Theory','Equity Theory','Intergroup Conflict','Contact Hypothesis','Reconciliation Psychology','Social Psychology Advanced Review']],
+      [15, 'Advanced Personality', ['The Trait Approach Deep Dive','HEXACO Model','Dark Triad Traits','Personality & Culture','Personality Stability & Change','Personality & Health Outcomes','Personality Assessment Methods','Projective Tests','Self-Report Inventories','Observer Ratings','Behavioral Genetics of Personality','Personality & Relationships','Personality Disorders Deep Dive','Narcissism Spectrum','Advanced Personality Review']],
+      [16, 'Psychological Disorders Advanced', ['Neurodevelopmental Disorders','ADHD in Depth','Autism Spectrum Disorder','Intellectual Disabilities','Substance Use Disorders','Addiction Neuroscience','Gambling Disorder','Somatic Symptom Disorders','Conversion Disorder','Body Dysmorphic Disorder','Hoarding Disorder','Sleep Disorders','Gender Dysphoria','Impulse Control Disorders','Disorders Advanced Review']],
+      [17, 'Advanced Therapy & Intervention', ['Dialectical Behavior Therapy','Acceptance & Commitment Therapy','EMDR Therapy','Motivational Interviewing','Solution-Focused Brief Therapy','Narrative Therapy','Art & Music Therapy','Play Therapy','Teletherapy & Digital Mental Health','Crisis Intervention','Suicide Prevention','Trauma-Informed Care','Cultural Competence in Therapy','Evidence-Based Practice','Advanced Therapy Review']],
+      [18, 'Cognitive Psychology Advanced', ['Attention Models','Selective Attention Experiments','Divided Attention','Pattern Recognition','Object Recognition','Language Processing','Sentence Comprehension','Bilingualism & Cognition','Reasoning & Logic','Judgment Under Uncertainty','Expertise & Skill Acquisition','Metacognition','Embodied Cognition','Cognitive Neuroscience Methods','Cognitive Advanced Review']],
+      [19, 'Health Psychology', ['Biopsychosocial Model','Stress & the Body','Psychoneuroimmunology','Health Behavior Change Models','Transtheoretical Model','Health Belief Model','Chronic Pain Psychology','Coping Strategies Taxonomy','Social Support & Health','Placebo Effect','Adherence to Treatment','Psychology of Eating','Exercise Psychology','Sleep & Mental Health','Health Psychology Review']],
+      [20, 'Industrial-Organizational Psychology', ['What Is I-O Psychology?','Job Analysis','Personnel Selection','Structured Interviews','Performance Appraisal','Training & Development','Organizational Culture','Job Satisfaction','Employee Engagement','Burnout & Recovery','Team Dynamics','Organizational Change','Diversity in the Workplace','Work-Life Balance','I-O Psychology Review']],
+      [21, 'Positive Psychology', ['What Is Positive Psychology?','Character Strengths (VIA)','Gratitude Research','Savoring & Mindfulness','Optimism & Explanatory Style','Resilience Science','Post-Traumatic Growth','Grit & Perseverance','Self-Determination Theory','Meaning & Purpose','Relationships & Well-Being','Positive Education','Positive Aging','Happiness Interventions','Positive Psychology Review']],
+      [22, 'IQ Testing', ['What Is an IQ Test?','History of IQ — Galton & Binet','Binet-Simon Scale','Stanford-Binet Test','Army Alpha & Beta Tests','Wechsler Scales (WAIS, WISC, WPPSI)','Raven\'s Progressive Matrices','Cattell Culture Fair Test','Verbal vs Performance IQ','Fluid vs Crystallized Intelligence','The g Factor (Spearman)','Thurstone\'s Primary Mental Abilities','Cattell-Horn-Carroll Theory','Gardner\'s Multiple Intelligences','Sternberg\'s Triarchic Theory','IQ Score Distribution & Bell Curve','Mean, SD, and Percentiles','Test Reliability & Validity','Standardization & Norming','The Flynn Effect','Nature vs Nurture of IQ','Twin & Adoption Studies','Cultural Bias in Testing','Stereotype Threat','IQ and Academic Achievement','IQ and Life Outcomes','Giftedness & Mensa','Intellectual Disability Classification','Online IQ Tests — Cautions','Practice: Pattern Recognition','Practice: Verbal Analogies','Practice: Numerical Reasoning','Practice: Spatial Reasoning','Ethics of IQ Testing','IQ Testing Checkpoint']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ps-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'science',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('psychology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('psychology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

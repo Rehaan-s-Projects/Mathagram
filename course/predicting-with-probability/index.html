@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predicting with Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Predicting with Probability</h1>
+    <p>Bayesian thinking and predictive modeling. 393 lessons across 29 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Frequentist vs Bayesian',['Two Schools of Thought','Frequentist Interpretation','Bayesian Interpretation','Prior Beliefs','Updating with Evidence','Subjectivity in Priors','Objective Priors','Comparing Approaches','When to Use Which']],
+      [2,'Bayesian Updating',['Prior Distribution','Likelihood Function','Posterior Distribution','Conjugate Priors','Beta-Binomial Model','Normal-Normal Model','Sequential Updating','Multiple Evidence','Bayesian Updating Review']],
+      [3,'Predictive Models',['What is a Predictive Model?','Training Data','Validation Data','Test Data','Overfitting','Underfitting','Bias-Variance Tradeoff','Model Selection','Cross-Validation']],
+      [4,'Decision Theory',['Expected Utility','Loss Functions','Minimax Decisions','Bayesian Decisions','Risk Assessment','Cost-Benefit Analysis','Decision Trees','Sensitivity Analysis','Decision Theory Review']],
+      [5,'Time Series Forecasting',['What is a Time Series?','Trend Analysis','Seasonality','Moving Averages','Exponential Smoothing','ARIMA Introduction','Forecasting Accuracy','MAE & RMSE','Time Series Review']],
+      [6,'Risk & Uncertainty',['Quantifying Uncertainty','Confidence vs Credible Intervals','Prediction Intervals','Scenario Analysis','Monte Carlo Simulation','Value at Risk','Black Swan Events','Tail Risk','Risk Review']],
+      [7,'Prior & Posterior',['Choosing Priors','Flat Priors','Weakly Informative Priors','Expert Elicitation','Prior Sensitivity Analysis','Posterior Computation','Analytical Posteriors','Grid Approximation','Quadratic Approximation','MCMC Sampling','Metropolis-Hastings','Gibbs Sampling','Posterior Summaries','Posterior Predictive Checks','Prior & Posterior Review']],
+      [8,'Bayesian Updating',['Sequential Bayesian Updating','Online Learning','Bayesian Parameter Estimation','Beta-Binomial Updating','Normal Updating','Conjugate Prior Families','Non-Conjugate Models','Approximate Bayesian Computation','Variational Inference Intro','Evidence & Marginal Likelihood','Bayesian Model Averaging','Bayesian Hierarchical Models','Empirical Bayes','Shrinkage Estimation','Bayesian Updating Review']],
+      [9,'Naive Bayes Classifier',['Naive Bayes Foundations','Class-Conditional Independence','Gaussian Naive Bayes','Multinomial Naive Bayes','Bernoulli Naive Bayes','Complement Naive Bayes','Laplace Smoothing','Text Classification','Bag of Words','TF-IDF Features','Spam Detection Pipeline','Sentiment Classification','Naive Bayes Tuning','Naive Bayes Evaluation','Naive Bayes Review']],
+      [10,'Bayesian Networks',['Directed Acyclic Graphs','Conditional Independence','D-Separation','Markov Blanket','Network Structure Learning','Parameter Learning','Exact Inference','Variable Elimination','Belief Propagation','Junction Tree Algorithm','Approximate Inference','Bayesian Network Software','Causal Bayesian Networks','Bayesian Network Applications','Bayesian Networks Review']],
+      [11,'Probabilistic Graphical Models',['PGM Overview','Bayesian Networks Review','Markov Random Fields','Factor Graphs','Undirected vs Directed','Clique Potentials','Inference Algorithms','Message Passing','Loopy Belief Propagation','Variational Methods','Sampling Methods','Structure Learning','PGM for NLP','PGM for Computer Vision','PGM Review']],
+      [12,'Hidden Markov Models',['HMM Definition','Hidden States','Observations','Transition Probabilities','Emission Probabilities','Forward Algorithm','Backward Algorithm','Viterbi Algorithm','Baum-Welch Algorithm','HMM for Speech Recognition','HMM for Genomics','HMM for Finance','HMM Limitations','HMM Extensions','HMM Review']],
+      [13,'Ensemble Methods',['Why Ensembles?','Voting Classifiers','Averaging Regressors','Weighted Ensembles','Diversity in Ensembles','Ensemble Selection','Stacked Generalization','Blending','Model Combination Strategies','Ensemble for Classification','Ensemble for Regression','Ensemble Pruning','Heterogeneous Ensembles','Ensemble Best Practices','Ensemble Methods Review']],
+      [14,'Boosting & XGBoost',['Boosting Concept','AdaBoost Algorithm','Gradient Boosting','Gradient Boosting for Regression','Gradient Boosting for Classification','XGBoost Overview','XGBoost Regularization','XGBoost Hyperparameters','LightGBM Overview','CatBoost Overview','Boosting vs Bagging','Learning Rate in Boosting','Early Stopping','Feature Importance in Boosting','Boosting Review']],
+      [15,'Bagging',['Bootstrap Aggregating','Bagging Algorithm','Bagging for Variance Reduction','Bagging Classifiers','Bagging Regressors','Random Subspaces','Random Patches','Pasting','Out-of-Bag Estimation','Bagging vs Boosting','Bagging Decision Trees','Bagging Stability','Bagging Parallelization','Bagging Applications','Bagging Review']],
+      [16,'Stacking',['Stacking Concept','Level-0 Models','Level-1 Meta-Learner','Cross-Validated Stacking','Multi-Layer Stacking','Choosing Base Models','Choosing Meta-Learner','Stacking for Classification','Stacking for Regression','Stacking vs Blending','Stacking Implementation','Stacking with Sklearn','Stacking Best Practices','Stacking Case Study','Stacking Review']],
+      [17,'Time Series Forecasting',['Time Series Components','Stationarity','Differencing','ACF & PACF','White Noise','Random Walk','AR Models','MA Models','ARMA Models','Seasonal Decomposition','Trend Extraction','Forecasting Evaluation','Forecast Horizon','Multi-Step Forecasting','Time Series Forecasting Review']],
+      [18,'ARIMA Models',['ARIMA Components','ARIMA(p,d,q)','Identifying p d q','Auto ARIMA','Seasonal ARIMA (SARIMA)','SARIMAX','Model Diagnostics','Ljung-Box Test','AIC for ARIMA','BIC for ARIMA','Forecasting with ARIMA','Confidence Intervals in ARIMA','ARIMA Limitations','ARIMA in Python','ARIMA Models Review']],
+      [19,'Exponential Smoothing',['Simple Exponential Smoothing','Smoothing Parameter Alpha','Double Exponential Smoothing','Holt Method','Triple Exponential Smoothing','Holt-Winters Method','Additive vs Multiplicative','Damped Trends','ETS Framework','State Space Models','Parameter Optimization','Exponential Smoothing vs ARIMA','Exponential Smoothing in Python','Forecasting Comparison','Exponential Smoothing Review']],
+      [20,'Prophet Forecasting',['Prophet Overview','Prophet Components','Trend Modeling','Changepoints','Seasonality in Prophet','Holiday Effects','Regressors in Prophet','Prophet Parameters','Cross-Validation in Prophet','Performance Metrics','Prophet vs ARIMA','Prophet at Scale','Prophet for Business','Prophet Implementation','Prophet Review']],
+      [21,'Prediction Intervals',['Point vs Interval Predictions','Prediction Interval Definition','PI for Regression','PI for Time Series','PI Width Factors','Bootstrap Prediction Intervals','Conformal Prediction','Quantile Regression','Prediction Interval Coverage','Calibration of Intervals','PI for Classification','Prediction Sets','PI Visualization','PI in Practice','Prediction Intervals Review']],
+      [22,'Model Evaluation Metrics',['MAE','MSE','RMSE','MAPE','sMAPE','R-Squared for Prediction','Adjusted R-Squared','Log-Loss','Brier Score','Calibration Curves','Lift Charts','Gain Charts','Cumulative Accuracy Profile','Metric Selection Strategy','Evaluation Metrics Review']],
+      [23,'Overfitting & Underfitting',['Recognizing Overfitting','Recognizing Underfitting','Training vs Validation Curves','Learning Curves','Model Complexity','Regularization Overview','Early Stopping','Dropout','Data Augmentation','Cross-Validation Strategy','Ensemble to Reduce Overfitting','Feature Selection to Reduce','Occam Razor','Model Parsimony','Overfitting & Underfitting Review']],
+      [24,'Bias-Variance Tradeoff',['Bias Definition','Variance Definition','Irreducible Error','Decomposing MSE','High Bias Models','High Variance Models','Tradeoff Visualization','Bias-Variance for KNN','Bias-Variance for Trees','Bias-Variance for Ensembles','Bias-Variance for Neural Nets','Double Descent','Managing the Tradeoff','Practical Guidelines','Bias-Variance Review']],
+      [25,'Feature Importance',['Permutation Importance','Mean Decrease Impurity','SHAP Values','SHAP Summary Plot','SHAP Dependence Plot','LIME Explanations','Partial Dependence Plots','Individual Conditional Expectation','Feature Interaction Detection','Accumulated Local Effects','Global vs Local Importance','Feature Importance Stability','Model-Agnostic Methods','Interpretable ML','Feature Importance Review']],
+      [26,'Prediction in Production',['Model Deployment Basics','REST API for Predictions','Batch vs Real-Time','Model Versioning','Model Monitoring','Data Drift Detection','Concept Drift','Model Retraining Strategies','A/B Testing Models','Shadow Mode Testing','Canary Deployments','Model Performance Dashboards','Alerting Systems','MLOps Overview','Production Review']],
+      [27,'Ethical Prediction',['Fairness in Prediction','Bias in Training Data','Protected Attributes','Disparate Impact','Equalized Odds','Calibration Across Groups','Fairness Metrics','Bias Mitigation Strategies','Explainability Requirements','Right to Explanation','Prediction & Privacy','Differential Privacy','Ethical Frameworks','Responsible AI Guidelines','Ethical Prediction Review']],
+      [28,'Real-World Prediction Projects',['Demand Forecasting Project','Customer Churn Prediction','Disease Outbreak Prediction','Energy Load Forecasting','Fraud Detection System','Credit Default Prediction','Recommendation Engine','Predictive Maintenance','Crop Yield Forecasting','Traffic Prediction','Supply Chain Forecasting','Subscription Cancellation','Sports Outcome Prediction','Prediction Portfolio','Real-World Projects Review']],
+      [29,'Real-World Forecasting',['Weather Prediction','Election Forecasting','Economic Forecasting','Sports Predictions','Pandemic Modeling','Stock Market','Demand Forecasting','Insurance Pricing','Forecasting Review']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pp-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('predicting-with-probability');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('predicting-with-probability');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

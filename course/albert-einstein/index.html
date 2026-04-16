@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albert Einstein — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Albert Einstein</h1>
+    <p>The life, ideas, and legacy of Albert Einstein — from his early years and patent office days to special &amp; general relativity, quantum debates, Nobel Prize, Princeton, and his humanitarian voice. 15 units, 225 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'Early Life (1879–1895)',['Born in Ulm, Germany','The Einstein Family','Childhood in Munich','The Compass Gift','Early School Years','Learning Violin','Religious Phase & Questioning','Reading Popular Science','Electrical Business — Father\'s Workshop','Bullied at Gymnasium','Leaving Germany for Italy','Self-Study in Pavia','First Thought Experiments','Dreams of Being a Scientist','Early Life Checkpoint']],
+      [2,'Swiss Years & Education (1895–1902)',['Aarau Cantonal School','Passing the ETH Entrance','Studying at ETH Zürich','Meeting Mileva Marić','Friends: Besso, Grossmann','Skipping Lectures & Self-Study','Graduating in 1900','Job Hunt Struggles','Teaching Tutor Years','Renouncing German Citizenship','Becoming Swiss','Olympia Academy','Reading Hume, Mach, Poincaré','Preparing for Patent Office','Swiss Years Checkpoint']],
+      [3,'The Patent Office & Miracle Year (1902–1905)',['Bern Patent Office Clerk','Marriage to Mileva','Son Hans Albert Born','Evenings of Physics','The Annus Mirabilis','Photoelectric Effect Paper','Brownian Motion Paper','Special Relativity Paper','E = mc² Paper','Why These Four Papers Changed Physics','Reception by the Community','Planck Takes Notice','Doctorate Finally Awarded','Life After the Miracle Year','Miracle Year Checkpoint']],
+      [4,'Special Relativity',['Galilean Relativity Recap','The Ether Problem','Michelson–Morley Experiment','Postulates of Special Relativity','Simultaneity Is Relative','Time Dilation','Length Contraction','The Lorentz Transformation','Relativistic Velocity Addition','Mass–Energy Equivalence','Relativistic Momentum','The Twin Paradox','Minkowski Spacetime','Experimental Confirmations','Special Relativity Checkpoint']],
+      [5,'Academic Rise (1905–1914)',['Privatdozent in Bern','University of Zürich Professor','Prague Professorship','Return to ETH as Full Professor','Solvay Conference 1911','Meeting Marie Curie','Predicting Gravitational Lensing','Berlin Offer from Planck','Kaiser Wilhelm Institute','Prussian Academy of Sciences','Separation from Mileva','Growing Fame','Wartime Germany','Pacifist Manifesto','Academic Rise Checkpoint']],
+      [6,'General Relativity',['The Equivalence Principle','Elevator Thought Experiment','Curved Spacetime','Tensor Mathematics with Grossmann','Field Equations','The 1915 November Breakthrough','Mercury\'s Perihelion Solved','Light Bending Prediction','Eddington\'s 1919 Eclipse','Worldwide Fame Overnight','Gravitational Time Dilation','Black Hole Solutions (Schwarzschild)','Gravitational Waves Prediction','Cosmological Constant','General Relativity Checkpoint']],
+      [7,'Nobel Prize & World Fame (1919–1925)',['Remarriage to Elsa','American Tour 1921','Meeting Chaplin & Roosevelt','Nobel Prize 1921 (Awarded 1922)','Why Nobel Was for Photoelectric Effect','Japan & Palestine Tour','Hebrew University Founding','Zionist Advocacy','Einstein as Cultural Icon','Press & Public Adoration','Einstein\'s Humor & Quips','Playing Violin Publicly','Life in Berlin','Family Troubles','Fame Checkpoint']],
+      [8,'Quantum Debates',['Photoelectric Effect Revisited','Einstein vs Bohr','The 1927 Solvay Conference','God Does Not Play Dice','Completeness of Quantum Mechanics','Bose–Einstein Statistics','Bose–Einstein Condensates Predicted','Stimulated Emission (Laser Foundation)','EPR Paradox Paper (1935)','Spooky Action at a Distance','Hidden Variables Idea','Einstein\'s Realism','Later Vindication & Bell\'s Theorem','Einstein\'s Enduring Quantum Legacy','Quantum Debates Checkpoint']],
+      [9,'Leaving Germany (1932–1933)',['Rising Nazi Threat','Book Burnings Target Einstein','Renouncing German Citizenship Again','Bounty on His Head','Leaving Caputh Summer House','Brief Stay in Belgium','Lectures in England','Offer from Princeton','Voyage to America','Arrival in New York 1933','Never Returning to Germany','Helping Refugees Escape','Rescuing Fellow Scientists','Public Anti-Nazi Voice','Leaving Germany Checkpoint']],
+      [10,'Princeton Years (1933–1955)',['Institute for Advanced Study','Life in Princeton, NJ','Home on Mercer Street','American Citizenship 1940','Simple Daily Routines','Refusing to Wear Socks','Walks with Gödel','Friendship with Oppenheimer','Doctoral Students','The Search for Unified Field Theory','Later Papers','Declining Presidency of Israel','Mentoring Young Scientists','Final Working Years','Princeton Years Checkpoint']],
+      [11,'Einstein & the Atomic Bomb',['1939 Szilárd–Einstein Letter','Warning FDR About Nazi Bomb','The Manhattan Project (Without Einstein)','Why Einstein Was Not Cleared','Reaction to Hiroshima & Nagasaki','Deep Regret Over the Letter','Russell–Einstein Manifesto','Call for Nuclear Disarmament','Emergency Committee of Atomic Scientists','Advocating World Government','Science and Moral Responsibility','Bulletin of the Atomic Scientists','Einstein\'s Pacifism Revisited','Legacy of the Letter','Atomic Bomb Checkpoint']],
+      [12,'Humanitarian & Political Voice',['Pacifism & Conscientious Objection','Civil Rights Advocacy','Friendship with Paul Robeson','NAACP Membership','Speaking Against McCarthyism','Supporting Refugees','Zionism & Binational State Views','Socialist Sympathies ("Why Socialism?")','FBI Surveillance File','Writing to W.E.B. Du Bois','Lincoln University Visit','Critique of American Racism','Open Letters & Essays','Ethical Legacy','Humanitarian Checkpoint']],
+      [13,'Personal Life & Personality',['Marriage to Mileva Marić','Daughter Lieserl Mystery','Sons Hans Albert & Eduard','Divorce & Settlement','Marriage to Elsa Löwenthal','Stepdaughters Margot & Ilse','Relationship with Eduard\'s Illness','Friendships: Besso, Born, Ehrenfest','Love of Sailing','Violin & Music','Sense of Humor','Messy Hair & Iconic Look','Pipe Smoking','Simple Tastes','Personal Life Checkpoint']],
+      [14,'Final Years & Death (1950–1955)',['Health Problems','Aortic Aneurysm Diagnosis','Refusing Surgery','Final Letter to Russell','Last Day April 17, 1955','Death in Princeton Hospital','The Missing Final Words','Brain Removed Without Permission','Thomas Harvey & the Brain Study','Cremation & Ashes','Funeral & Memorials','Global Mourning','Obituaries Around the World','Unfinished Unified Theory Pages','Final Years Checkpoint']],
+      [15,'Legacy & Impact',['Person of the Century (TIME, 1999)','GPS & Relativity in Daily Life','Gravitational Waves Detected (2015)','Black Hole Image (2019)','Einstein Equations Still Tested','Influence on Modern Physics','Bose–Einstein Condensate Achieved (1995)','Quantum Entanglement Technology','Lasers Everywhere','Solar Cells & Photovoltaics','Einstein in Popular Culture','The Einstein Archives','Einstein Papers Project','Lessons from His Life','Legacy Checkpoint']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ae-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('albert-einstein');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('albert-einstein');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

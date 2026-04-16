@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Violation Notice — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    body { background: #f8f9fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .violation-card {
+      background: #fff; border-radius: 20px; max-width: 520px; width: 100%;
+      padding: 40px 32px; text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+      animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Strike 1 - Warning */
+    .violation-card.strike-1 { border-top: 6px solid #f59e0b; }
+    .violation-card.strike-1 .strike-badge { background: #fef3c7; color: #92400e; }
+    .violation-card.strike-1 .edam-border { border-color: #f59e0b; }
+
+    /* Strike 2 - Suspension */
+    .violation-card.strike-2 { border-top: 6px solid #ef4444; }
+    .violation-card.strike-2 .strike-badge { background: #fef2f2; color: #dc2626; }
+    .violation-card.strike-2 .edam-border { border-color: #ef4444; }
+
+    /* Strike 3 - Banned */
+    .violation-card.strike-3 { border-top: 6px solid #1a1a2e; background: #1a1a2e; }
+    .violation-card.strike-3 { color: #fff; }
+    .violation-card.strike-3 .strike-badge { background: #dc2626; color: #fff; }
+    .violation-card.strike-3 .edam-border { border-color: #dc2626; }
+    .violation-card.strike-3 .speech-bubble { background: #2d2d4e; border-color: #3d3d5e; }
+    .violation-card.strike-3 .speech-bubble p { color: #fca5a5; }
+    .violation-card.strike-3 .reason-box { background: #2d2d4e; border-color: #3d3d5e; }
+    .violation-card.strike-3 .reason-box h3 { color: #94a3b8; }
+    .violation-card.strike-3 .reason-box p { color: #e2e8f0; }
+    .violation-card.strike-3 .strikes-track .strike-dot { background: #3d3d5e; }
+    .violation-card.strike-3 .strikes-track .strike-dot.active { background: #ef4444; }
+    .violation-card.strike-3 .violation-note { color: #94a3b8; }
+    .violation-card.strike-3 .violation-note a { color: #fca5a5; }
+
+    .edam-img {
+      width: 100px; height: 100px; border-radius: 50%;
+      border: 4px solid #f59e0b; margin: 0 auto 16px;
+      display: block;
+    }
+    .strike-badge {
+      display: inline-block; padding: 6px 18px; font-size: 0.8rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em; border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .violation-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+    .violation-subtitle { font-size: 1rem; font-weight: 600; color: #64748b; margin-bottom: 20px; }
+    .violation-card.strike-3 .violation-subtitle { color: #94a3b8; }
+
+    .speech-bubble {
+      background: #fffbeb; border: 2px solid #fde68a; border-radius: 16px;
+      padding: 18px; margin-bottom: 20px; position: relative;
+    }
+    .speech-bubble::before {
+      content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      border-left: 10px solid transparent; border-right: 10px solid transparent;
+      border-bottom: 10px solid #fde68a;
+    }
+    .violation-card.strike-2 .speech-bubble { background: #fef2f2; border-color: #fecaca; }
+    .violation-card.strike-2 .speech-bubble::before { border-bottom-color: #fecaca; }
+    .violation-card.strike-2 .speech-bubble p { color: #991b1b; }
+    .violation-card.strike-3 .speech-bubble::before { border-bottom-color: #3d3d5e; }
+    .speech-bubble p { font-size: 0.92rem; color: #92400e; line-height: 1.6; margin: 0; font-style: italic; font-weight: 600; }
+    .speech-bubble .edam-name { font-style: normal; margin-top: 8px; font-size: 0.85rem; }
+
+    .reason-box {
+      background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 12px;
+      padding: 14px; margin-bottom: 20px; text-align: left;
+    }
+    .reason-box h3 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 6px; }
+    .reason-box p { font-size: 0.88rem; color: #1a1a2e; line-height: 1.5; margin: 0; }
+
+    /* Strike tracker */
+    .strikes-track { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
+    .strike-dot {
+      width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: #fff;
+    }
+    .strike-dot.active { background: #f59e0b; }
+    .strike-dot.active.red { background: #ef4444; }
+
+    .suspension-timer {
+      background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px;
+      padding: 14px; margin-bottom: 20px;
+    }
+    .suspension-timer p { font-size: 0.9rem; color: #dc2626; font-weight: 700; margin: 0; }
+    .suspension-timer .countdown { font-size: 1.3rem; font-weight: 800; margin-top: 4px; }
+
+    .violation-note { font-size: 0.82rem; color: #64748b; line-height: 1.5; margin-bottom: 20px; }
+    .violation-note a { color: #dc2626; text-decoration: underline; }
+
+    .violation-btn {
+      display: inline-block; padding: 12px 32px; font-size: 1rem; font-weight: 700;
+      border: none; border-radius: 12px; cursor: pointer; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-warning { background: #f59e0b; color: #fff; }
+    .btn-warning:hover { background: #d97706; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="violation-card" id="violationCard">
+    <img src="assets/characters/edam.svg" alt="Edam the Bear" class="edam-img edam-border" id="edamImg">
+    <div id="violationContent">Loading...</div>
+  </div>
+
+  <script type="module">
+    const params = new URLSearchParams(window.location.search);
+    const strike = parseInt(params.get('strike')) || 1;
+    const reason = params.get('reason') ? decodeURIComponent(params.get('reason')) : 'Violation of Community Safety Rules';
+    const until = params.get('until') ? decodeURIComponent(params.get('until')) : '';
+
+    const card = document.getElementById('violationCard');
+    const content = document.getElementById('violationContent');
+
+    card.classList.add('strike-' + Math.min(strike, 3));
+
+    function strikeDots(count) {
+      let dots = '';
+      for (let i = 1; i <= 3; i++) {
+        const active = i <= count;
+        const red = i >= 2 && active;
+        dots += `<div class="strike-dot ${active ? 'active' : ''} ${red ? 'red' : ''}">${i}</div>`;
+      }
+      return `<div class="strikes-track">${dots}</div>`;
+    }
+
+    if (strike === 1) {
+      content.innerHTML = `
+        <span class="strike-badge">Strike 1 — Warning</span>
+        <div class="violation-title">Warning from Edam</div>
+        <div class="violation-subtitle">This is your first violation.</div>
+        <div class="speech-bubble">
+          <p>"Hey, I need to talk to you. You broke one of our community rules. I know everyone makes mistakes, but please be more careful next time. I don't want to have to do something worse. Let's keep Mathagram a safe place for everyone, okay?"</p>
+          <p class="edam-name">— Edam the Bear</p>
+        </div>
+        <div class="reason-box">
+          <h3>What you did</h3>
+          <p>${reason}</p>
+        </div>
+        ${strikeDots(1)}
+        <p class="violation-note">This warning has been recorded on your account. Two more violations will result in a <strong>permanent ban</strong>. Please review our <a href="terms.html">Terms of Service</a>.</p>
+        <a href="index.html" class="violation-btn btn-warning">I Understand</a>
+      `;
+    } else if (strike === 2) {
+      content.innerHTML = `
+        <span class="strike-badge">Strike 2 — Suspended</span>
+        <div class="violation-title">You're Suspended</div>
+        <div class="violation-subtitle">You cannot use Mathagram for 1 week.</div>
+        <div class="speech-bubble">
+          <p>"I warned you last time, and you did it again. I'm really upset. You're suspended from Mathagram for one full week. No lessons, no Learning Post, nothing. Use this time to think about why rules matter. If this happens one more time, you're gone forever."</p>
+          <p class="edam-name">— Edam the Bear</p>
+        </div>
+        <div class="reason-box">
+          <h3>What you did</h3>
+          <p>${reason}</p>
+        </div>
+        ${strikeDots(2)}
+        <div class="suspension-timer">
+          <p>Your suspension ends:</p>
+          <p class="countdown" id="countdown">${until || 'in 7 days'}</p>
+        </div>
+        <p class="violation-note">Your account is locked until the suspension period ends. One more violation after this will result in <strong>permanent account termination</strong>. Review our <a href="terms.html">Terms of Service</a>.</p>
+        <button class="violation-btn btn-danger" onclick="window.location.href='index.html'">Sign Out</button>
+      `;
+
+      // Countdown timer
+      if (until) {
+        const endDate = new Date(until);
+        function updateCountdown() {
+          const now = new Date();
+          const diff = endDate - now;
+          if (diff <= 0) {
+            document.getElementById('countdown').textContent = 'Suspension ended! You can sign in again.';
+            return;
+          }
+          const days = Math.floor(diff / 86400000);
+          const hours = Math.floor((diff % 86400000) / 3600000);
+          const mins = Math.floor((diff % 3600000) / 60000);
+          document.getElementById('countdown').textContent = days + 'd ' + hours + 'h ' + mins + 'm remaining';
+          setTimeout(updateCountdown, 60000);
+        }
+        updateCountdown();
+      }
+
+      // Auto sign out
+      try {
+        const { auth } = await import('./js/firebase-config.js');
+        const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        await signOut(auth);
+      } catch(e) {}
+    } else {
+      // Strike 3 — permanent ban
+      content.innerHTML = `
+        <span class="strike-badge">Strike 3 — Permanently Banned</span>
+        <div class="violation-title" style="color:#ef4444;">Account Terminated</div>
+        <div class="violation-subtitle">You have been permanently removed from Mathagram.</div>
+        <div class="speech-bubble">
+          <p>"That's it. I gave you a warning. I gave you a suspension. And you still broke the rules. I can't trust you in this community anymore. Your account is permanently terminated. All your progress, XP, and posts are gone. Goodbye."</p>
+          <p class="edam-name">— Edam the Bear</p>
+        </div>
+        <div class="reason-box">
+          <h3>Final violation</h3>
+          <p>${reason}</p>
+        </div>
+        ${strikeDots(3)}
+        <p class="violation-note">This is permanent. Your account cannot be recovered, reinstated, or appealed. Any new accounts created to evade this ban will also be terminated. See our <a href="terms.html">Terms of Service</a>.</p>
+        <button class="violation-btn btn-danger" onclick="window.location.href='index.html'">Sign Out</button>
+      `;
+
+      // Auto sign out and clear data
+      try {
+        const { auth } = await import('./js/firebase-config.js');
+        const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        await signOut(auth);
+        sessionStorage.clear();
+        Object.keys(localStorage).forEach(k => { if (k.startsWith('mathagram_')) localStorage.removeItem(k); });
+      } catch(e) {}
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>French — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>French</h1>
+    <p>The language of love, diplomacy, and culture. 38 units, 570 lessons — from bonjour to fluency.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Alphabet & Pronunciation',['The French Alphabet','Vowel Sounds — A E I O U','Nasal Vowels — An En In On','Accents — É È Ê Ë','Cedilla — Ç','Silent Letters','Liaison & Enchaînement','The French R','U vs OU Sounds','Consonant Pronunciation','Syllable Stress','Intonation Patterns','Reading Aloud Practice','Minimal Pairs','Pronunciation Checkpoint']],
+      [2,'Greetings & Politeness',['Bonjour & Bonsoir','Comment allez-vous?','Je m\'appelle...','Enchanté — Nice to Meet You','Au revoir & À bientôt','S\'il vous plaît & Merci','Excusez-moi & Pardon','Tu vs Vous — Formal & Informal','Introducing Others','Small Talk — Ça va?','Responding to Greetings','Phone Greetings','Polite Expressions','Social Customs','Greetings Checkpoint']],
+      [3,'Numbers & Dates',['Numbers 0-20','Numbers 21-69','Numbers 70-100 — Soixante-dix Quatre-vingts','Large Numbers','Telling Time — Quelle heure est-il?','Days of the Week','Months of the Year','Dates — Le premier janvier','Ordinal Numbers','Seasons — Les Saisons','Frequency — Toujours Jamais','Duration — Depuis Pendant','Age — Quel âge avez-vous?','Schedules & Timetables','Numbers & Dates Checkpoint']],
+      [4,'Articles & Gender',['Definite Articles — Le La Les','Indefinite Articles — Un Une Des','Partitive Articles — Du De la Des','Masculine vs Feminine Nouns','Gender Rules & Patterns','Plural Formation','Contractions — Au Du','Articles with Negation — De','Omitting Articles','Agreement Practice','Gender Exceptions','Articles in Context','Quantity Expressions','Article Review','Articles & Gender Checkpoint']],
+      [5,'Present Tense -er Verbs',['ER Verb Conjugation — Parler','Subject Pronouns — Je Tu Il','Common ER Verbs — Manger Travailler','Spelling Changes — -ger -cer','Aimer & Préférer','Habiter & Voyager','Acheter & Appeler','Commencer & Manger','Negative Sentences — Ne...pas','Asking Questions — Est-ce que','Inversion Questions','Daily Routine Verbs','Describing Habits','ER Verbs in Conversation','ER Verbs Checkpoint']],
+      [6,'Present Tense -ir -re Verbs',['IR Verb Conjugation — Finir','Common IR Verbs — Choisir Réussir','Irregular IR — Partir Dormir Sortir','RE Verb Conjugation — Vendre','Common RE Verbs — Attendre Répondre','Irregular RE — Prendre Mettre','Comparing ER IR RE Patterns','Mixed Conjugation Practice','Negative with IR RE Verbs','Questions with IR RE Verbs','Describing Actions','Choosing & Deciding','Selling & Buying','Verb Review','IR RE Verbs Checkpoint']],
+      [7,'Être & Avoir',['Être — To Be Conjugation','Être — Descriptions & Identity','Être — Nationality & Profession','Être — Location','Avoir — To Have Conjugation','Avoir — Possession','Avoir Expressions — Faim Soif Froid','Avoir — Age & Characteristics','Il y a — There Is/Are','C\'est vs Il est','Être vs Avoir Usage','Negative with Être Avoir','Questions with Être Avoir','Practice in Context','Être & Avoir Checkpoint']],
+      [8,'Aller & Faire',['Aller — To Go Conjugation','Aller + Infinitive — Near Future','Aller — Directions & Destinations','Common Aller Expressions','Faire — To Do/Make Conjugation','Faire — Weather — Il fait beau','Faire — Sports & Activities','Faire — Household — Faire le ménage','Faire vs Jouer — Sports','Aller & Faire Combined','Travel Vocabulary with Aller','Daily Activities with Faire','Questions & Negatives','Conversation Practice','Aller & Faire Checkpoint']],
+      [9,'Family & Descriptions',['Family Members — La famille','Parents — Père Mère','Siblings — Frère Sœur','Extended Family','Describing People — Physical','Hair & Eyes — Cheveux Yeux','Tall Short — Grand Petit','Personality — Gentil Intelligent','Possessive Adjectives — Mon Ma Mes','Describing Relationships','Talking About Family','Pets — Les animaux domestiques','Family Activities','Family Traditions','Family & Descriptions Checkpoint']],
+      [10,'Food & Cuisine',['French Cuisine Overview','Meals — Petit-déjeuner Déjeuner Dîner','Bread & Pastries — Pain Croissant','Cheese — Fromage','Meat & Fish — Viande Poisson','Fruits & Vegetables — Fruits Légumes','Beverages — Boissons Vin Café','At the Restaurant — Au restaurant','Ordering — Je voudrais...','The Menu — La carte','Describing Food — Délicieux','Cooking Vocabulary — Cuisiner','At the Market — Au marché','Paying — L\'addition','Food & Cuisine Checkpoint']],
+      [11,'Shopping & Markets',['Stores — Les magasins','At the Bakery — À la boulangerie','At the Market — Au marché','Asking Prices — Combien ça coûte?','Euros & Currency','Bargaining Phrases','Clothing Shopping','Sizes & Fitting','Paying — Cash & Card','Grocery Shopping','Online Shopping','Sales — Les soldes','Describing Products','Returns & Exchanges','Shopping & Markets Checkpoint']],
+      [12,'Directions & Transport',['Asking Directions — Où est...?','Left Right Straight — Gauche Droite','Near & Far — Près Loin','City Places — Place Rue','Public Transport — Métro Bus','At the Train Station — La gare','Buying Tickets — Billets','At the Airport — L\'aéroport','Taxi & Ride Services','Driving — Conduire','Road Signs','Booking Hotels','Travel Documents','Describing Journeys','Directions & Transport Checkpoint']],
+      [13,'Home & Furniture',['Rooms — Les pièces','Kitchen — La cuisine','Bedroom — La chambre','Bathroom — La salle de bains','Living Room — Le salon','Furniture — Les meubles','Household Items — Objets','Appliances — Appareils','Chores — Les tâches ménagères','Describing Your Home','Types of Housing — Maison Appartement','Neighborhood — Le quartier','Renting — Louer','Home Repairs','Home & Furniture Checkpoint']],
+      [14,'Clothing & Fashion',['Clothing — Les vêtements','Shoes & Accessories','Colors — Rouge Bleu Vert','Patterns & Fabrics','Getting Dressed — S\'habiller','Fashion — La mode','Describing Outfits','Shopping for Clothes','Sizes — Taille Pointure','Seasonal Clothing','Formal & Casual — Chic Décontracté','French Fashion Icons','Laundry — La lessive','Complimenting Style','Clothing & Fashion Checkpoint']],
+      [15,'Weather & Nature',['Weather — Le temps Quel temps fait-il?','Il fait chaud froid beau','Il pleut Il neige','Temperature — Degrés','Seasons — Printemps Été Automne Hiver','Weather Forecast — La météo','Nature — La nature','Trees & Flowers — Arbres Fleurs','Animals — Les animaux','Landscapes — Montagne Mer Forêt','Climate Vocabulary','Environmental Terms','Natural Disasters','Weather Conversations','Weather & Nature Checkpoint']],
+      [16,'Body & Health',['Body Parts — Le corps','Head & Face — Tête Visage','At the Doctor — Chez le médecin','Symptoms — J\'ai mal à...','Common Illnesses — Grippe Rhume','At the Pharmacy — La pharmacie','Emergency — Urgence','Making Appointments','Describing Pain','Mental Health — Santé mentale','Exercise — Exercice Sport','Healthy Habits','Hospital Vocabulary','First Aid — Premiers secours','Body & Health Checkpoint']],
+      [17,'School & Studies',['School — L\'école','Classroom — La salle de classe','Subjects — Les matières','Teacher & Student — Professeur Élève','School Supplies — Fournitures','Homework & Tests — Devoirs Examens','Grades — Notes','University — L\'université','Studying — Étudier Apprendre','Library — La bibliothèque','Schedule — L\'emploi du temps','Extracurriculars','Graduation — Le diplôme','Education Conversations','School & Studies Checkpoint']],
+      [18,'Work & Careers',['Jobs — Les métiers','Office — Le bureau','Job Application — Candidature','Resume — CV','Interview — L\'entretien','Salary — Le salaire','Work Schedule — Horaire','Colleagues — Les collègues','Meetings — Les réunions','Professional Email','Workplace Vocabulary','Career Goals — Objectifs','Quitting & Retiring','Describing Your Work','Work & Careers Checkpoint']],
+      [19,'Passé Composé',['Passé Composé with Avoir','Regular Past Participles — É I U','Irregular Past Participles — Fait Dit Vu','Passé Composé with Être — DR MRS VANDERTRAMP','Agreement with Être','Negative in Passé Composé','Questions in Passé Composé','Time Markers — Hier Déjà','Passé Composé with Reflexives','Passé Composé vs Present','Common Past Participle Errors','Storytelling in Passé Composé','Describing Past Events','Conversation Practice','Passé Composé Checkpoint']],
+      [20,'Imparfait',['Imparfait Formation — -ais -ait -aient','Être in Imparfait — J\'étais','Describing the Past — Background','Habitual Actions — D\'habitude','Weather in Past — Il faisait','Age in Past — J\'avais...ans','Descriptions & Feelings','Passé Composé vs Imparfait','Using Both Together','Interrupted Actions — Quand','While — Pendant que','Storytelling Practice','Childhood Memories','Narrating Events','Imparfait Checkpoint']],
+      [21,'Futur Simple & Conditionnel',['Futur Simple Formation — -ai -as -a','Irregular Future Stems — Serai Aurai','Future for Plans & Predictions','Quand + Future','Conditionnel Formation — -ais','Irregular Conditional Stems','Politeness — Je voudrais','Hypothetical — Si + Imparfait','Wishes & Desires','Giving Advice — Tu devrais','Promises & Plans','Si Clauses Overview','Future vs Aller + Infinitive','Mixed Practice','Futur & Conditionnel Checkpoint']],
+      [22,'Subjonctif I',['What Is the Subjonctif?','Subjonctif Formation — Regular','Subjonctif — Être Avoir Aller Faire','Subjonctif with Wishes — Je veux que','Subjonctif with Emotions — Je suis content que','Subjonctif with Doubt — Je doute que','Subjonctif with Necessity — Il faut que','Subjonctif with Fear — J\'ai peur que','Subjonctif vs Indicatif','Conjunctions — Pour que Avant que','Subjonctif with Superlatives','Subjonctif in Fixed Expressions','Avoiding the Subjonctif','Practice in Context','Subjonctif I Checkpoint']],
+      [23,'Subjonctif II',['Subjonctif Passé','Subjonctif Imparfait — Literary','Subjonctif Plus-que-parfait','Sequence of Tenses','Subjonctif in Relative Clauses','Subjonctif with Indefinites','Advanced Conjunctions — Bien que Quoique','Subjonctif vs Indicatif — Nuances','Subjonctif in Formal Writing','Subjonctif in Literature','Subjonctif in Daily Speech','Common Errors','Advanced Practice','Review & Synthesis','Subjonctif II Checkpoint']],
+      [24,'L\'Impératif',['Tu Commands — Regular','Tu Commands — Irregular Va Sois Aie','Vous Commands','Nous Commands — Let\'s','Negative Commands','Commands with Pronouns — Donne-le-moi','Commands with Y & En','Reflexive Commands — Lève-toi','Softening Commands','Giving Instructions','Recipes in Imperative','Classroom Commands','Emergency Commands','Imperative Practice','L\'Impératif Checkpoint']],
+      [25,'Pronoms Objets',['Direct Object — Le La Les','Indirect Object — Lui Leur','Y — Replacing À + Place','En — Replacing De + Thing','Double Pronouns — Order','Pronoun Placement — Before Verb','Pronouns with Infinitive','Pronouns with Passé Composé','Pronouns with Commands','Stressed Pronouns — Moi Toi Lui','Possessive Pronouns — Le mien','Demonstrative Pronouns — Celui','Relative Pronouns — Qui Que Dont Où','Pronoun Review','Pronoms Objets Checkpoint']],
+      [26,'Prepositions & Adverbs',['À — To At In','De — Of From','En — In By','Dans — In Inside','Sur & Sous — On & Under','Avec & Sans — With & Without','Chez — At Someone\'s Place','Prepositions with Countries','Prepositions with Transport','Common Adverbs — Bien Mal Vite','Adverbs of Time — Maintenant Bientôt','Adverbs of Place — Ici Là-bas','Forming Adverbs — -ment','Adverb Placement','Prepositions & Adverbs Checkpoint']],
+      [27,'Relative Clauses',['Qui — Subject Relative','Que — Object Relative','Dont — Of Which/Whose','Où — Where/When','Lequel Laquelle — After Prepositions','Ce qui Ce que Ce dont','Complex Relative Clauses','Relative Clauses in Context','Combining Sentences','Relative with Subjunctive','Formal vs Informal Relatives','Practice with Texts','Writing with Relatives','Relative Clause Review','Relative Clauses Checkpoint']],
+      [28,'Négation Advanced',['Ne...pas Review','Ne...plus — No Longer','Ne...jamais — Never','Ne...rien — Nothing','Ne...personne — Nobody','Ne...aucun — Not Any','Ne...ni...ni — Neither...Nor','Ne...que — Only','Negative with Infinitive','Multiple Negatives','Negative Questions — Si','Negative in Formal Writing','Dropping Ne — Informal','Negative Expressions','Négation Checkpoint']],
+      [29,'Idioms & Expressions',['Common Idioms — Expressions idiomatiques','Body Idioms — Avoir le bras long','Animal Idioms — Poser un lapin','Food Idioms — Avoir la pêche','Weather Expressions','Color Expressions — Voir rouge','Number Expressions','Proverbs — Proverbes','Filler Words — Bon Ben Euh','Slang — Argot & Verlan','Youth Language','Texting Abbreviations','Humor & Wordplay','Using Idioms Naturally','Idioms & Expressions Checkpoint']],
+      [30,'French Culture',['France — Regions & Geography','Paris — Landmarks & Life','French Cuisine Culture','Wine & Cheese Traditions','Fashion & Haute Couture','Art — Monet Renoir Matisse','Literature — Hugo Camus Proust','Cinema — Nouvelle Vague','Music — Édith Piaf to Today','French Holidays — Bastille Day Noël','Education System','Social Customs & Etiquette','Political System','French Values — Liberté Égalité','French Culture Checkpoint']],
+      [31,'Francophone World',['Francophonie Overview','Quebec — Le Québec','Belgium — La Belgique','Switzerland — La Suisse','West Africa — Sénégal Côte d\'Ivoire','Central Africa — Congo Cameroun','North Africa — Maroc Tunisie Algérie','Madagascar','Haiti — Haïti','Louisiana & Cajun French','Pacific — Polynésie Nouvelle-Calédonie','Creole Languages','Accent & Vocabulary Differences','Francophone Literature','Francophone World Checkpoint']],
+      [32,'Media & Cinema',['French News — Les actualités','Reading Newspapers — Le Monde','French TV & Series','French Cinema — Films classiques','Modern French Films','French Music Genres','Podcasts & Radio','Social Media in French','French Literature Today','Bande Dessinée — Comics','French YouTube','Sports in France','Cultural Magazines','Media Vocabulary','Media & Cinema Checkpoint']],
+      [33,'Business French',['Business Greetings & Etiquette','Office Vocabulary — Le bureau','Meetings — Les réunions','Presentations — Les présentations','Negotiation — La négociation','Contracts — Les contrats','Banking — La banque','Marketing & Sales','International Trade — Commerce','Business Email & Letters','Phone Calls — Appels','Business Travel','French Economy','Professional French','Business French Checkpoint']],
+      [34,'Academic French',['Academic Writing — La rédaction','Research — La recherche','Citing Sources — Les citations','Lecture Vocabulary','Academic Discussion — Le débat','Literary Analysis — L\'analyse','Scientific French','Historical Texts','Philosophy — La philosophie','Thesis — La thèse','Presenting Research','Peer Review','Academic Register','Formal Style','Academic French Checkpoint']],
+      [35,'Advanced Reading',['News Articles — Presse','Opinion & Editorials','Literary Fiction — Roman','Poetry — La poésie','Academic Papers','Business Documents','Legal Texts','Historical Sources','Speed Reading — Lecture rapide','Inferring Meaning','Analyzing Tone & Style','Summarizing Texts','Comparing Sources','Critical Reading','Advanced Reading Checkpoint']],
+      [36,'Advanced Writing',['Essay Structure — Introduction Développement Conclusion','Formal Letters','Informal Writing — Blog Journal','Narrative Writing — Le récit','Descriptive Writing','Persuasive Writing — L\'argumentation','Report Writing — Le rapport','Creative Writing','Poetry Writing','Editing & Proofreading','Common Errors','Tone & Register','Connectors — Cependant Néanmoins','Writing Portfolio','Advanced Writing Checkpoint']],
+      [37,'Advanced Conversation',['Debating Current Events','Expressing Complex Opinions','Agreeing & Disagreeing','Storytelling & Anecdotes','Humor & Wordplay','Conflict Resolution','Phone & Video Calls','Public Speaking — Discours','Interview Skills','Negotiation Practice','Cultural Sensitivity','Register Switching','Regional Awareness','Conversation Confidence','Advanced Conversation Checkpoint']],
+      [38,'French Mastery',['Comprehensive Grammar Review','Vocabulary Mastery Test','Reading Comprehension Final','Listening Comprehension Final','Writing Assessment','Speaking Assessment','Translation Practice','Error Correction','Cultural Knowledge Review','Passé Composé vs Imparfait Final','Subjonctif Mastery','Pronunciation Final','Idiomatic Expression Review','Proficiency Simulation','French Mastery Checkpoint']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'fr-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('french');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('french');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

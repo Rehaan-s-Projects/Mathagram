@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>International Sign — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>International Sign</h1>
+    <p>Master International Sign — the contact sign language used at international Deaf events, conferences, and travel. 262 lessons across 18 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations & Fingerspelling',['What Is International Sign?','History of International Sign','Deaf Culture Worldwide','One-Handed Fingerspelling','Two-Handed Fingerspelling','Numbers 1-20','Numbers 21-100','Large Numbers','Ordinal Numbers','Name Signs','Introducing Yourself','Greetings & Farewells','Polite Expressions','Yes/No Questions','Foundations Review']],
+      [2,'Basic Vocabulary & Grammar',['Pronouns (I You He She)','Possessives (My Your His Her)','Demonstratives (This That)','Basic Nouns (People)','Basic Nouns (Objects)','Basic Nouns (Places)','Classifiers Introduction','Whole Entity Classifiers','Surface Classifiers','Instrument Classifiers','Topic-Comment Structure','Basic Word Order','Negation (Not No None)','Question Words (Who What Where)','Basic Vocabulary Review']],
+      [3,'Daily Life & Conversation',['Family Members','Describing People','Colors','Days of the Week','Months & Seasons','Telling Time','Weather','Feelings & Emotions','Health & Body Parts','At the Doctor','Clothing','Housing & Rooms','Daily Routines','Making Plans','Daily Life Review']],
+      [4,'Food Travel & Shopping',['Common Foods','Fruits & Vegetables','Drinks & Beverages','At a Restaurant','Ordering Food','Cooking & Kitchen','Countries & Nationalities','Transportation','Asking for Directions','At the Airport','At the Hotel','Money & Currency','Shopping & Prices','Bargaining & Negotiating','Food Travel Review']],
+      [5,'Verbs & Action Signs',['Common Action Verbs','Directional Verbs','Plain Verbs vs Directional','Aspect (Duration Completion)','Habitual Aspect','Continuous Aspect','Imperative (Commands)','Request & Permission','Can & Cannot','Want & Need','Like & Dislike','Know & Understand','Think & Believe','Remember & Forget','Verbs Review']],
+      [6,'Sentence Structure & Grammar',['Complex Sentences','Conditional Statements (If-Then)','Because & Reason','But & However','Relative Clauses','Temporal Sequencing','Role Shifting','Constructed Action','Constructed Dialogue','Rhetorical Questions','Listing & Buoys','Comparison (More Less Same)','Superlatives (Most Least Best)','Conjunctions & Connectors','Grammar Review']],
+      [7,'Non-Manual Signals & Expression',['Facial Grammar Overview','Eyebrow Raise (Yes/No Questions)','Eyebrow Furrow (WH-Questions)','Head Nod & Shake','Mouth Morphemes','Cheek & Lip Signals','Eye Gaze (Referencing)','Eye Gaze (Turn-Taking)','Body Shift for Role Play','Intensity Through Expression','Adverbial Non-Manual Markers','Emotional Expression','Affect & Tone','Register (Formal vs Informal)','Non-Manual Signals Review']],
+      [8,'Education & Work',['School & Classroom','Subjects & Courses','Teacher & Student','Homework & Exams','University Life','Jobs & Professions','At the Office','Technology & Computers','Email & Internet','Meetings & Presentations','Teamwork & Collaboration','Goals & Achievements','Problems & Solutions','Career Planning','Education & Work Review']],
+      [9,'World Sign Languages Compared',['ASL Overview & Key Differences','BSL Overview & Key Differences','French Sign Language (LSF)','German Sign Language (DGS)','Japanese Sign Language (JSL)','Chinese Sign Language (CSL)','Arabic Sign Language Overview','Korean Sign Language (KSL)','Brazilian Sign Language (Libras)','Russian Sign Language','Indian Sign Language','Australian Sign Language (Auslan)','Shared Signs Across Languages','False Friends in Sign','World Sign Languages Review']],
+      [10,'Events Conferences & Travel',['Deaf International Events','World Federation of the Deaf','Deaflympics','International Deaf Conferences','Interpreting at Events','Cultural Sensitivity','Networking in IS','Presenting in IS','Panel Discussions','Workshop Facilitation','Social Events & Parties','Sightseeing & Tourism','Emergency Situations','Medical Emergencies Abroad','Events & Travel Review']],
+      [11,'Advanced Topics & Discourse',['Storytelling Techniques','Narrative Structure','Poetry in Sign','Humor & Jokes in IS','Debate & Argumentation','Persuasion Techniques','Abstract Concepts','Philosophy & Ethics in Sign','Science & Technology Vocabulary','Politics & Current Events','Environmental Topics','Human Rights & Advocacy','Media & News','Social Media & Communication','Advanced Topics Review']],
+      [12,'Sports & Recreation',['Sports Vocabulary','Football (Soccer)','Basketball & Tennis','Swimming & Water Sports','Olympic Sports','Gym & Fitness','Board Games & Card Games','Outdoor Activities','Hiking & Camping','Music & Dance','Art & Drawing','Photography','Video Games','Hobbies & Interests','Sports & Recreation Review']],
+      [13,'Science & Technology',['Science Vocabulary','Biology Basics','Chemistry Basics','Physics Basics','Space & Astronomy','The Human Body','Animals & Nature','Plants & Ecology','Computers & Software','Smartphones & Apps','Artificial Intelligence','Robotics','Engineering Concepts','Inventions & Discoveries','Science & Technology Review']],
+      [14,'History & Society',['Ancient History','Medieval History','Modern History','Wars & Conflicts','Peace & Treaties','Government & Politics','Democracy & Voting','Laws & Justice','Crime & Punishment','Police & Courts','Immigration & Migration','Poverty & Wealth','Social Movements','Famous Deaf People in History','History & Society Review']],
+      [15,'Arts Media & Entertainment',['Cinema & Film','Television Shows','Theater & Performance','Visual Arts','Sculpture & Pottery','Literature & Books','Newspapers & Magazines','Radio & Podcasts','YouTube & Streaming','Social Media Platforms','Advertising','Fashion & Design','Architecture','Museums & Galleries','Arts & Media Review']],
+      [16,'Deaf Rights & Advocacy',['Deaf Rights History','Gallaudet University','Milan Conference 1880','Oralism vs Manualism Debate','Deaf President Now','UN Convention on Disability Rights','Accessibility Laws','Cochlear Implant Debate','Deaf Education Models','Bilingual-Bicultural Education','Deaf Interpreting','DeafBlind Communication','Deaf Community Organizations','Advocacy & Activism','Deaf Rights Review']],
+      [17,'Fluency & Mastery',['Speed & Fluency Drills','Register Switching','Simultaneous Communication','Code-Switching (IS & National Sign)','Interpreting Practice','Sight Translation','Consecutive Interpreting','Live Conversation Practice','Group Discussion Skills','Conflict Resolution in IS','Teaching IS to Others','Creating Learning Materials','IS in the Digital Age','Future of International Sign','International Sign Mastery!']],
+      [18,'Certification & Real World',['IS Proficiency Levels','Self-Assessment','Mock Exam Vocabulary','Mock Exam Grammar','Mock Exam Conversation','Volunteering with Deaf Organizations','International Sign Certification!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'is-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('international-sign');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('international-sign');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

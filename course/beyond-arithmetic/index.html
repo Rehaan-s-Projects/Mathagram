@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beyond Arithmetic — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>Beyond Arithmetic</h1>
+    <p>Go far beyond addition and multiplication. Explore hyperoperations, Knuth arrows, Graham's number, TREE(3), SCG(13), uncomputable functions, complex numbers, quaternions, surreal numbers, and numbers so large they break notation itself. 645 lessons across 43 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'The Four Basic Operations',['Addition — The First Operation','Subtraction — The Inverse','Multiplication — Repeated Addition','Division — Repeated Subtraction','Order of Operations','Why Only Four?','What Comes After?','Successor Function','Repeated Operations Idea','Iterated Functions','From Counting to Climbing','The Hyperoperation Concept','History of Arithmetic','Why Go Beyond?','Basic Operations Review']],
+      [2,'Exponentiation — The Third Hyperoperation',['What Is Exponentiation?','Squares & Cubes','Powers of 2','Powers of 10','Exponential Growth','Doubling & Half-Life','Scientific Notation','Large Exponents (10^100)','Negative Exponents','Fractional Exponents','Zero Exponent Rule','Laws of Exponents','Exponents in Nature','Limits of Exponentiation','Exponentiation Review']],
+      [3,'Complex Numbers',['What Are Complex Numbers?','The Imaginary Unit i','i² = -1','Real Part & Imaginary Part','Complex Plane (Argand Diagram)','Adding Complex Numbers','Subtracting Complex Numbers','Multiplying Complex Numbers','Conjugate of a Complex Number','Dividing Complex Numbers','Modulus (Absolute Value)','Polar Form r(cosθ + i sinθ)','Euler Formula e^(iθ)','e^(iπ) + 1 = 0 — Euler Identity','Complex Numbers Review']],
+      [4,'Tetration — The Fourth Hyperoperation',['What Is Tetration?','Power Towers','2^^2 = 4','2^^3 = 16','2^^4 = 65,536','2^^5 = 2^65,536','3^^2 = 27','3^^3 = 7,625,597,484,987','4^^3','10^^2 vs 10^^3','Left vs Right Association','Tetration Grows Insanely Fast','Iterated Exponentiation','Notation for Tetration','Tetration Review']],
+      [5,'Pentation — The Fifth Hyperoperation',['What Is Pentation?','Repeated Tetration','2^^^2','2^^^3 — A Power Tower of 65,536 Twos','3^^^2 = 3^^3^^3','3^^^3 — Beyond All Description','How Fast Pentation Grows','Comparing Pentation to Tetration','Pentation Examples','Visualizing Pentation Growth','Why Pentation Breaks Intuition','Pentation in Googology','Physical Meaning?','Notation for Pentation','Pentation Review']],
+      [6,'Hexation, Heptation & Higher',['Hexation — The Sixth Hyperoperation','Repeated Pentation','2^^^^2','3^^^^3','Heptation — The Seventh','Octation — The Eighth','Nontation — The Ninth','Decation — The Tenth','Pattern of Hyperoperations','Each Level Dwarfs the Last','Hyperoperation Sequence H_n','General Formula','Growth Rate Comparison','Can We Keep Going Forever?','Higher Hyperoperations Review']],
+      [7,'Knuth Up-Arrow Notation',['Who Is Donald Knuth?','Single Arrow a↑b = a^b','Double Arrow a↑↑b = Tetration','Triple Arrow a↑↑↑b = Pentation','Quadruple Arrow a↑↑↑↑b = Hexation','n Arrows = (n+2)th Hyperoperation','3↑↑3 = 7,625,597,484,987','3↑↑↑3 — A Tower of 3s','3↑↑↑↑3 — Unimaginable','Evaluating Arrow Expressions','Arrow Arithmetic Rules','Comparing Arrow Expressions','Nested Arrows','Arrow Notation Limits','Knuth Arrows Review']],
+      [8,'Conway Chained Arrow Notation',['Why Knuth Arrows Are Not Enough','John Conway — The Mathematician','Chain Notation Basics','Two-Element Chains a→b','Three-Element Chains a→b→c','Rule: a→b→1 = a→b','Rule: a→1→c = a','Evaluating a→b→c','Four-Element Chains a→b→c→d','Chain Growth Rate','3→3→3 vs 3↑↑↑3','3→3→3→3','Chains vs Arrows — Comparison','Long Chains','Conway Chains Review']],
+      [9,'Steinhaus-Moser Notation',['Hugo Steinhaus & Leo Moser','Triangle Notation — Mega','Triangle of 2','Mega = 2 in a Triangle','Square Notation — Megiston','Pentagon Notation','n-gon Notation','Moser Number','How Big Is Mega?','How Big Is Moser?','Moser vs Googolplex','Moser vs Graham Number','Polygon Growth Rate','Historical Significance','Steinhaus-Moser Review']],
+      [10,'Graham Number — Step by Step',['Ronald Graham — Who Was He?','Ramsey Theory Introduction','Graham Problem — Hypercube Coloring','Building G1 = 3↑↑↑↑3','How Big Is G1?','G2 = 3↑^(G1)3 — G1 Arrows','G3 = 3↑^(G2)3','The Stacking Pattern','G4 Through G10','G10 Through G63','G64 = Graham Number','Last Digits of Graham Number','Graham vs Googolplex','Graham vs Moser','Graham Number Review']],
+      [11,'Numbers Bigger Than Graham',['Is Graham the Biggest?','Graham +1','G65 G66 G100','G(Graham Number)','Graham Sequence Iterated','Friedman Numbers','Harvey Friedman Contributions','TREE Function Introduction','SCG Function Introduction','Loader Number','Rayo Number Preview','Fish Number','Oblivion & Utter Oblivion','The Race for Bigger','Beyond Graham Review']],
+      [12,'TREE Sequence — From Graph Theory',['What Is a Tree (Graph Theory)?','Labeled Trees','Tree Embedding & Minors','Kruskal Tree Theorem','What Is the TREE Function?','TREE(1) = 1','TREE(2) = 3','Why TREE(3) Is Finite','TREE(3) — Incomprehensibly Large','TREE(3) vs Graham Number','TREE(3) Dwarfs Graham','TREE(3) in the Fast-Growing Hierarchy','TREE(4) and Beyond','Friedman Finite Forms','TREE Sequence Review']],
+      [13,'TREE(3) — Deep Dive',['Why TREE(3) Is Famous','The Rules of the TREE Game','3 Labels — 3 Colors','Legal Sequences of Trees','Why Does It End?','Lower Bounds on TREE(3)','TREE(3) Exceeds Γ₀ in FGH','TREE(3) vs f_ϑ(Ω^ω×ω)(n)','Ordinal Analysis of TREE','Proof-Theoretic Strength','Kruskal Theorem & Independence','TREE in Reverse Mathematics','Harvey Friedman on TREE(3)','Numberphile & TREE(3)','TREE(3) Deep Dive Review']],
+      [14,'SCG & Subcubic Graph Numbers',['What Is a Subcubic Graph?','Graph Minor Theory','Robertson-Seymour Theorem','The SCG Function','SCG(0)','SCG(1)','SCG(2)','SCG(3) — Unbelievably Large','SCG(3) vs TREE(3)','SCG(3) Dwarfs TREE(3)','SCG(13) — Even Larger','SSCG Function (Simple SCG)','SSCG(3)','Ordinal Analysis of SCG','SCG Review']],
+      [15,'Fast-Growing Hierarchy',['What Is the FGH?','f_0(n) = n + 1 (Successor)','f_1(n) = 2n (Doubling)','f_2(n) = n × 2^n','f_3(n) — Tetration Level','f_4(n) — Pentation Level','f_ω(n) — Diagonalization','f_ω+1(n)','f_ω×2(n)','f_ω^2(n)','f_ω^ω(n)','f_ε₀(n)','f_Γ₀(n)','Comparing Famous Numbers to FGH','Fast-Growing Hierarchy Review']],
+      [16,'Slow-Growing & Hardy Hierarchy',['Slow-Growing Hierarchy g_α','g_0(n) = 0','g_ω(n) = n','g_ε₀(n)','SGH vs FGH','Hardy Hierarchy H_α','H_0(n) = n','H_ω(n) = H_n(n)','Connection to FGH','Fundamental Sequences','Ordinal Notations for Hierarchies','Comparing All Three Hierarchies','Which Hierarchy Is Best?','Applications in Googology','Hierarchies Review']],
+      [17,'Ordinal Numbers for Large Numbers',['What Are Ordinals?','Finite Ordinals (0 1 2...)','Omega (ω) — First Infinite','ω+1 ω+2 ω×2','ω^2 ω^ω ω^ω^ω','Epsilon-Zero (ε₀)','Veblen Functions','Gamma-Zero (Γ₀)','Feferman-Schütte Ordinal','Bachmann-Howard Ordinal','Ordinal Collapsing Functions','ψ(Ω) ψ(Ω^Ω)','Ordinals Classify Growth Rates','Every Googological Number Has an Ordinal','Ordinals Review']],
+      [18,'Busy Beaver Function',['What Is a Turing Machine?','Halting Problem','The Busy Beaver Game','BB(1) = 1','BB(2) = 4','BB(3) = 6','BB(4) = 13','BB(5) = 47,176,870','BB(6) — Currently Unknown','Why BB Grows So Fast','BB Is Uncomputable','BB Beats Every Computable Function','BB vs Graham vs TREE','BB & Gödel Incompleteness','Busy Beaver Review']],
+      [19,'Uncomputable Functions',['What Does Uncomputable Mean?','Computable vs Uncomputable','Halting Problem Proof','BB Is Uncomputable — Why?','Rado Sigma Function Σ(n)','Shift Function S(n)','BB vs Σ vs S','Oracle Machines','Turing Jump','Arithmetical Hierarchy','Hyperarithmetical Functions','Analytic Functions','Projective Functions','Uncomputable Hierarchy','Uncomputable Review']],
+      [20,'Rayo Number',['What Is Rayo Number?','Agustin Rayo vs Adam Elga','The Big Number Duel','First-Order Set Theory Language','Rayo Function R(n)','How Rayo Function Works','Rayo(10) Rayo(100)','Rayo(10^100) — Rayo Number','Why Rayo Beats Everything','Rayo vs Busy Beaver','Rayo vs TREE(3)','Rayo vs BIG FOOT','Is Rayo Well-Defined?','Criticisms of Rayo','Rayo Number Review']],
+      [21,'Named Googological Numbers',['Tritri = 3^^^3','Giggol = 10↑↑100','Gaggol = 10↑↑↑100','Geegol = 10↑↑↑↑100','Goggol = 10↑↑↑↑↑100','Boogol & Corporal','Grand Tridecal','Meameamealokkapoowa','Meameamealokkapoowa Oompa','BIG FOOT','Little Bigeddon','Sasquatch','Fish Numbers 1-7','Sam Number','Named Googological Review']],
+      [22,'BEAF — Bowers Exploding Array Function',['Jonathan Bowers — Googologist','Linear Arrays {a,b,c}','{3,3,3} = Tritri','Four-Entry Arrays {a,b,c,d}','Five-Entry Arrays','Dimensional Arrays {a,b (1) 2}','Tetrational Arrays','Pentational Arrays','Legions {a,b,c,...}','Lugions','Beyond Legions','Corporal & Grand Tridecal','Meameamealokkapoowa Oompa in BEAF','BEAF Limits','BEAF Review']],
+      [23,'Extensible Arrow Notations',['Bird Array Notation','Hyper-E Notation (Sbiis Saibian)','E100#2 E100#3','Cascading-E Notation','Extended Cascading-E','Hyper-E Beyond BEAF','Strong Array Notation','Nested Array Notation','Dimensional Array Notation Extensions','Comparing Notation Systems','Which Notation Reaches Furthest?','Notation Design Principles','Creating Your Own Notation','Limits of Notation','Arrow Notations Review']],
+      [24,'Chained Arrows & Extreme Expressions',['10→10→10 (Ten Arrows)','10→10→10→10','10→→10 (Double Chain)','10{28}10 — 28 Chained Arrows','How Big Is 10{28}10?','10{100}10','10{1000}10','10{10{100}10}10 — Nested Chain Depth','Comparing 10{28}10 to Graham','Comparing 10{10{100}10}10 to TREE(3)','Iterated Chain Notation','Super-Nested Chains','Limits of Chain Notation','Beyond Chained Arrows','Extreme Expressions Review']],
+      [25,'Loader Number & Computable Limits',['What Is Loader Number?','Loader.c — The Program','Ralph Loader & the Contest','How Loader Number Is Computed','Loader Number vs TREE(3)','Loader Number vs SCG(13)','Calculus of Constructions','Type Theory & Large Numbers','Computable vs Uncomputable Boundary','Largest Computable Numbers Known','Why Computable Limits Matter','Friedman Finite Theorem Numbers','Kruskal Tree Theorem Numbers','Pushing Computable Limits','Loader Number Review']],
+      [26,'Fish Numbers & Bashicu Matrix',['Fish Number 1','Fish Number 2','Fish Number 3','Fish Number 4','Fish Number 5','Fish Number 6','Fish Number 7','Bashicu Matrix System','BMS Basics','BMS Growth Rate','BMS vs Ordinal Notations','Pair Sequence System','Trio Sequence System','Comparing Fish to Other Systems','Fish & BMS Review']],
+      [27,'Large Number Showdowns',['Googolplex vs Graham Number','Graham Number vs Moser','Graham vs TREE(3)','TREE(3) vs SCG(3)','SCG(3) vs SCG(13)','TREE(3) vs Loader Number','Loader vs Busy Beaver','BB(100) vs Rayo(100)','Rayo vs BIG FOOT','Computable vs Uncomputable Winner','Finite vs Infinite','The Absolute Largest Named Number','Power Rankings of Large Numbers','Why Comparing Matters','Showdowns Review']],
+      [28,'Infinity & Beyond Finite',['Is There a Largest Finite Number?','Every Finite Number Has a Successor','Omega — The First Infinity','Countable Infinity ℵ₀','Uncountable Infinity c','Power Set & Larger Infinities','Large Cardinals','All Finite Numbers < ℵ₀','TREE(3) < Graham(Graham) < ... < ℵ₀','Finite vs Infinite — The Gulf','Absolute Infinite','Proper Classes','Why Infinity Is Different','Infinity Is Not a Big Number','Infinity Review']],
+      [29,'Googology — The Culture',['What Is Googology?','Googology Wiki','Sbiis Saibian — Prolific Googologist','Jonathan Bowers — Array King','Chris Bird — Bird Arrays','Deedlit11 — Ordinal Master','Harvey Friedman — Professional Mathematician','Googology Competitions','Large Number Garden Number','Community Notations','Googology YouTube & Numberphile','Common Mistakes in Googology','Ethics of Large Numbers','Googology & Real Mathematics','Googology Culture Review']],
+      [30,'Applications & Connections',['Large Numbers in Computer Science','Algorithm Complexity & Growth Rates','Ackermann Function','Inverse Ackermann in Data Structures','Ramsey Theory & Combinatorics','Proof Theory & Ordinal Analysis','Independence Results & Large Numbers','Paris-Harrington Theorem','Goodstein Theorem','Hydra Game','Kruskal Theorem in Logic','Friedman Theorems','Large Numbers in Cryptography','Large Numbers in Physics','Applications Review']],
+      [31,'Ackermann Function — Deep Dive',['Wilhelm Ackermann — Who Was He?','Definition of the Ackermann Function','A(0,n) = n+1','A(1,n) = n+2','A(2,n) = 2n+3','A(3,n) — Exponential Growth','A(4,n) — Tetration Level','A(4,2) = 2^65536 - 3','A(5,n) — Pentation Level','Why Ackermann Is Not Primitive Recursive','Total but Not Primitive Recursive','Ackermann vs Hyperoperations','Inverse Ackermann α(n)','α(n) in Union-Find Data Structures','Ackermann Deep Dive Review']],
+      [32,'Goodstein Sequences',['What Is a Goodstein Sequence?','Hereditary Base Notation','Base 2 Hereditary Representation','Goodstein Process Step by Step','G(4) — A Walkthrough','Why Goodstein Sequences Always Terminate','Goodstein Theorem','Connection to Ordinal Numbers','Ordinal Descent Argument','ε₀ and Goodstein','Unprovable in Peano Arithmetic','Kirby & Paris Proof','Goodstein vs Paris-Harrington','Growth Rate of Goodstein Sequences','Goodstein Sequences Review']],
+      [33,'The Hydra Game',['What Is the Hydra Game?','Heads, Necks & Roots','Cutting a Head — What Happens?','Hydra Regrowth Rules','Why You Always Win Eventually','Ordinal Assignment to Hydra','Hydra & ε₀','Kirby-Paris Hydra Theorem','Unprovable in Peano Arithmetic','Hydra Game Strategies','Shortest vs Longest Games','Hercules vs the Hydra','Hydra Growth Rate','Hydra vs Goodstein','Hydra Game Review']],
+      [34,'Surreal Numbers & Combinatorial Games',['John Conway — Inventor of Surreals','What Is a Surreal Number?','Day 0: Creating Zero','Day 1: Creating -1 and 1','Day 2: Halves Appear','Day ω: All Real Numbers','Surreal Arithmetic — Addition','Surreal Arithmetic — Multiplication','Infinitesimals in Surreals','ω in Surreal Numbers','ω-1 and ω/2 and √ω','Surreal Numbers Include All Ordinals','Nim Values & Nimbers','Combinatorial Game Theory Basics','Surreal Numbers Review']],
+      [35,'Quaternions & Octonions',['Beyond Complex: Why More Dimensions?','William Rowan Hamilton & Quaternions','i² = j² = k² = ijk = -1','Quaternion Arithmetic','Quaternion Multiplication Is Non-Commutative','Quaternions & 3D Rotations','Quaternions in Video Games','Quaternions in Aerospace','What Are Octonions?','Octonion Multiplication Table','Octonions Are Non-Associative','Cayley-Dickson Construction','Sedenions & Beyond (16D)','Division Algebras Theorem (1,2,4,8)','Quaternions & Octonions Review']],
+      [36,'p-adic Numbers',['A Different Kind of Distance','p-adic Absolute Value','2-adic Numbers','3-adic Numbers','p-adic Expansions','...111 = -1 in 2-adics','p-adic Arithmetic','p-adic Integers','Hasse Principle','Hensel Lemma','p-adic Analysis','Ostrowski Theorem','Adeles & Ideles','p-adics in Modern Number Theory','p-adic Numbers Review']],
+      [37,'Modular Arithmetic & Congruences',['What Is Modular Arithmetic?','Clock Arithmetic Analogy','Congruence Notation a ≡ b (mod n)','Addition mod n','Multiplication mod n','Modular Inverses','Fermat Little Theorem','Euler Totient Function','Chinese Remainder Theorem','Modular Exponentiation','RSA Cryptography Basics','Diffie-Hellman Key Exchange','Modular Arithmetic in Hash Functions','Checksums & Error Detection','Modular Arithmetic Review']],
+      [38,'Transfinite Arithmetic',['Ordinal Addition','Ordinal Addition Is Not Commutative','1 + ω ≠ ω + 1','Ordinal Multiplication','ω × 2 vs 2 × ω','Ordinal Exponentiation','ω^ω','Cantor Normal Form','Cardinal Addition ℵ₀ + ℵ₀ = ℵ₀','Cardinal Multiplication ℵ₀ × ℵ₀ = ℵ₀','Cardinal Exponentiation 2^ℵ₀ = c','Continuum Hypothesis','Generalized Continuum Hypothesis','König Theorem','Transfinite Arithmetic Review']],
+      [39,'Nonstandard Arithmetic & Analysis',['What Is Nonstandard Analysis?','Abraham Robinson & Hyperreals','Infinitesimals Made Rigorous','Infinite Hyperreal Numbers','Transfer Principle','Internal Set Theory','Nonstandard Natural Numbers','Nonstandard Integers','Overspill Principle','Calculus with Infinitesimals','Nonstandard Proofs of Standard Theorems','Ultrapower Construction','Hyperfinite Sets','Nonstandard vs Standard — Which Is Better?','Nonstandard Arithmetic Review']],
+      [40,'Proof Theory & Independence',['What Is Proof Theory?','Hilbert Program','Gödel First Incompleteness Theorem','Gödel Second Incompleteness Theorem','Gentzen Consistency Proof','Ordinal Analysis','Peano Arithmetic Strength','Second-Order Arithmetic','Reverse Mathematics','The Big Five Subsystems','Unprovable Combinatorial Statements','Harvey Friedman Boolean Relation Theory','Long Finite Sequences Theorem','Finite Promise Games','Proof Theory Review']],
+      [41,'Extreme Notation Systems',['Dollar Function $','Hyperfactorial & Superfactorial','Steinhaus-Moser Extended','Circle Notation','Veblen Function φ_α(β)','Theta Function ϑ(α)','Collapsing with ψ Functions','Taranovsky Notation','Degrees of Recursive Inaccessibility','Stegert Notation','Bashicu Matrix System Extended','Y-Sequence','Pair Sequence Extended','Comparing All Notations','Extreme Notations Review']],
+      [42,'Number Bases & Exotic Representations',['Binary (Base 2)','Ternary (Base 3)','Hexadecimal (Base 16)','Balanced Ternary','Factorial Number System','Fibonacci Representation (Zeckendorf)','Continued Fractions','Cantor Normal Form for Ordinals','Hereditary Base-n Notation','Phinary (Base φ)','Negative Bases (Negabinary)','Complex Bases (Base 2i)','Mixed Radix Systems','Representing Huge Numbers Compactly','Exotic Representations Review']],
+      [43,'Beyond Arithmetic — Final Mastery',['Hyperoperation Recap','Knuth & Conway Notation Recap','Graham Number Recap','TREE(3) & SCG Recap','Fast-Growing Hierarchy Recap','Busy Beaver & Uncomputable Recap','Rayo & Named Numbers Recap','BEAF & Array Notation Recap','10{28}10 & Extreme Chains Recap','Ordinals & Growth Classification Recap','Complex Numbers & Quaternions Recap','Surreal & p-adic Numbers Recap','Proof Theory & Independence Recap','What Comes Next?','Beyond Arithmetic Mastery!']]
+    ];
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ba-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'math',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('beyond-arithmetic');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('beyond-arithmetic');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

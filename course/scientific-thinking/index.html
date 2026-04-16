@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Thinking — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Scientific Thinking</h1>
+    <p>Hypothesize, experiment, and reason like a scientist. Includes gears, mechanics, structures, and electricity. 258 lessons across 16 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Observation & Curiosity',['What is Science?','What is Scientific Thinking?','Observation vs Inference','Qualitative Observations','Quantitative Observations','Using Your 5 Senses','Asking Good Questions','Testable vs Non-Testable Questions','Curiosity as a Skill','Science in Everyday Life','Famous Scientific Observations','Pattern Recognition','Observation Review']],
+      [2,'The Scientific Method',['Steps of the Scientific Method','Identifying a Problem','Background Research','Forming a Hypothesis','If-Then Hypotheses','Null Hypothesis','Designing an Experiment','Independent Variables','Dependent Variables','Controlled Variables','Control Groups','Experimental Groups','Scientific Method Review']],
+      [3,'Experimental Design',['Randomization','Sample Size Matters','Blinding & Double-Blinding','Placebo Effect','Replication','Reproducibility','Field Experiments vs Lab Experiments','Natural Experiments','Quasi-Experiments','Longitudinal Studies','Cross-Sectional Studies','Case Studies','Experimental Design Review']],
+      [4,'Measurement & Data Collection',['Units of Measurement','SI System (Metric)','Converting Units','Significant Figures','Accuracy vs Precision','Systematic Error','Random Error','Calibration','Data Tables','Data Recording Best Practices','Digital vs Analog Instruments','Measurement Uncertainty','Measurement Review']],
+      [5,'Data Analysis & Statistics',['Mean Median Mode in Science','Range & Standard Deviation','Graphing Data (Bar Charts)','Graphing Data (Line Graphs)','Graphing Data (Scatter Plots)','Best Fit Lines','Correlation vs Causation','Percent Error Calculations','Statistical Significance','P-Values in Science','T-Tests Basics','Chi-Square Basics','Data Analysis Review']],
+      [6,'Drawing Conclusions',['Interpreting Results','Supporting or Rejecting Hypotheses','Unexpected Results','Sources of Error','Confounding Variables','Bias in Science','Confirmation Bias','Selection Bias','Publication Bias','Overgeneralization','Anecdotal Evidence vs Data','Conclusions Review']],
+      [7,'Communication & Peer Review',['Writing a Lab Report','Abstract Writing','Introduction & Background','Methods Section','Results Section','Discussion Section','Scientific Papers','Peer Review Process','How Peer Review Works','Responding to Criticism','Presenting at Conferences','Scientific Posters','Communication Review']],
+      [8,'Critical Evaluation of Science',['Reading Scientific Papers','Evaluating Sources','Primary vs Secondary Sources','Credible vs Non-Credible','Spotting Pseudoscience','Logical Fallacies in Science','Appeal to Authority','Cherry-Picking Data','Correlation Implies Causation Fallacy','Survivorship Bias','Replication Crisis','Evaluating Media Science Headlines','Critical Evaluation Review']],
+      [9,'Ethics in Science',['What are Research Ethics?','Informed Consent','Animal Testing Ethics','Human Subjects Research','IRB (Institutional Review Board)','Data Fabrication & Falsification','Plagiarism in Science','Conflicts of Interest','Whistleblowing in Science','Dual-Use Research','Environmental Ethics in Research','Scientific Integrity','Ethics Review']],
+      [10,'History of Scientific Discoveries',['Ancient Greek Science','The Scientific Revolution','Galileo & the Telescope','Newton & Gravity','Darwin & Evolution','Mendel & Genetics','Pasteur & Germ Theory','Marie Curie & Radioactivity','Einstein & Relativity','Watson Crick & DNA','The Human Genome Project','Recent Breakthroughs','History Review']],
+      [11,'Science in Society',['Science & Public Policy','Climate Science & Policy','Vaccine Science','GMO Debate','Nuclear Energy Debate','Science Funding','Science Literacy','Citizen Science','Open Access Science','Science Communication to Public','Misinformation & Science','Trust in Science','Society Review']],
+      [12,'Gears & Simple Machines',['What Are Simple Machines?','Levers — First Second Third Class','Mechanical Advantage of Levers','Pulleys — Fixed & Movable','Pulley Systems & Compound Pulleys','Wheel and Axle','Inclined Planes','Wedges','Screws','Compound Machines','Gear Basics — Spur Gears','Gear Ratios','Gear Trains','Bevel Gears & Worm Gears','Rack and Pinion','Planetary Gears','Torque & Rotational Force','Friction in Machines','Efficiency of Machines','Real-World Gear Applications','Gears in Clocks & Watches','Gears in Bicycles','Gears in Cars & Transmissions','Gears in Robotics','Gears & Simple Machines Review']],
+      [13,'Forces & Mechanics',['What Is a Force?','Contact vs Non-Contact Forces','Gravity','Weight vs Mass','Normal Force','Friction — Static & Kinetic','Air Resistance & Drag','Tension Force','Spring Force & Hookes Law','Net Force & Balanced Forces','Newtons First Law (Inertia)','Newtons Second Law (F=ma)','Newtons Third Law (Action-Reaction)','Free Body Diagrams','Centripetal Force & Circular Motion','Momentum','Impulse','Conservation of Momentum','Collisions — Elastic & Inelastic','Work Energy & Power','Kinetic & Potential Energy','Conservation of Energy','Pressure','Hydraulics & Pneumatics','Forces & Mechanics Review']],
+      [14,'Structures & Engineering',['What Is Engineering?','Types of Engineers','Structural Engineering Basics','Bridges — Beam Arch Suspension','Trusses & Triangles in Structures','Load-Bearing Walls','Compression & Tension in Buildings','Materials Science — Metals','Materials Science — Polymers & Composites','Stress Strain & Elasticity','Testing Materials to Failure','Skyscrapers & Foundations','Dams & Water Engineering','Earthquake-Resistant Design','Wind Engineering','Aerodynamics Basics','Flight — How Planes Stay Up','Bernoullis Principle','Buoyancy & Archimedes Principle','Fluid Dynamics Basics','Thermodynamics in Engineering','Heat Transfer — Conduction Convection Radiation','Renewable Energy Engineering','Engineering Design Challenge','Structures & Engineering Review']],
+      [15,'Electricity & Magnetism Basics',['What Is Electricity?','Static Electricity','Electric Charge','Current Voltage & Resistance','Ohms Law','Series Circuits','Parallel Circuits','Circuit Diagrams & Symbols','Batteries & Power Sources','Conductors & Insulators','Semiconductors','What Is Magnetism?','Magnetic Fields','Electromagnets','Electric Motors','Generators','Transformers','Electromagnetic Spectrum','Light as a Wave','Sound as a Wave','Wave Properties — Frequency Amplitude Wavelength','Reflection & Refraction','Electricity at Home','Electrical Safety','Electricity & Magnetism Review']],
+      [16,'Applied Scientific Thinking',['Scientific Thinking at Work','Problem Solving with Science','Decision Making with Evidence','Design Thinking','Engineering Design Process','Medical Diagnosis as Science','Forensic Science','Environmental Science Methods','Space Exploration Methods','Science in Cooking','Science in Sports','Science in Technology','Rube Goldberg Machines','Invention & Innovation','Patent & Intellectual Property','Scientific Thinking Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'st-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    const container = document.getElementById('learning-path');
+    const initialCompleted = await getCompletedLessons('scientific-thinking');
+    renderPath(container, lessons, initialCompleted);
+    try {
+      onAuthChange(async (user) => {
+        const completed = await getCompletedLessons('scientific-thinking');
+        renderPath(container, lessons, completed);
+      });
+    } catch(e) {}
+  </script>
+</body>
+</html>

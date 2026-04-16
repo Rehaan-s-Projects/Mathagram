@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; connect-src https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.googleapis.com;">
+  <title>Sign In — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .auth-container {
+      max-width: 480px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+    .auth-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 32px;
+    }
+    .auth-card h1 {
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--color-primary-dark);
+    }
+    .tab-switcher {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      background: var(--color-bg);
+      border-radius: var(--radius);
+      padding: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      font-family: var(--font-sans);
+      font-size: 0.925rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-text-secondary);
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--color-white);
+      color: var(--color-text);
+      box-shadow: var(--shadow-sm);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--color-text);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      font-family: var(--font-sans);
+      font-size: 0.925rem;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      background: var(--color-bg);
+      color: var(--color-text);
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+    .auth-card .btn-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+    .error-msg {
+      display: none;
+      color: #ef4444;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .error-msg.show {
+      display: block;
+    }
+    .color-picker {
+      margin-bottom: 20px;
+    }
+    .color-option.selected {
+      border-color: #1a1a2e !important;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .auth-card {
+        padding: 28px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Auth Form -->
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1>Welcome</h1>
+
+      <!-- Tab Switcher -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" data-tab="signin">Sign In</button>
+        <button class="tab-btn" data-tab="signup">Sign Up</button>
+      </div>
+
+      <!-- Sign In Tab -->
+      <div id="tab-signin" class="tab-content active">
+        <form id="signin-form">
+          <div class="form-group">
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary">Sign In</button>
+          <p id="signin-error" class="error-msg"></p>
+        </form>
+      </div>
+
+      <!-- Sign Up Tab -->
+      <div id="tab-signup" class="tab-content">
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="signup-name">Display Name <span id="nameCharCount" style="font-size:0.75rem; font-weight:400; color:var(--color-text-muted);">(3-13 chars)</span></label>
+            <input type="text" id="signup-name" required autocomplete="name" maxlength="13" minlength="3" pattern="[A-Za-z]{3,13}" title="Only characters A-Z and a-z, 3-13 characters">
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="color-picker">
+            <p style="font-weight:600; margin-bottom:12px;">Choose your color</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="button" class="color-option selected" data-color="blue" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/blue.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="green" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/green.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="orange" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/orange.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="purple" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/purple.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="cyan" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/cyan.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="pink" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/pink.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+              <button type="button" class="color-option" data-color="gray" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
+                <img src="assets/avatars/gray.svg" style="width:48px; height:48px; border-radius:50%;">
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+          <p id="signup-error" class="error-msg"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('');
+    import { signUp, signIn, onAuthChange } from './js/auth.js';
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // Color picker
+    let selectedColor = 'blue';
+    window.selectColor = function(el) {
+      document.querySelectorAll('.color-option').forEach(b => { b.classList.remove('selected'); b.style.borderColor = 'transparent'; });
+      el.classList.add('selected');
+      el.style.borderColor = '#1a1a2e';
+      selectedColor = el.dataset.color;
+    };
+
+    // Sign In
+    const signinForm = document.getElementById('signin-form');
+    const signinError = document.getElementById('signin-error');
+
+    signinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      signinError.classList.remove('show');
+
+      const email = document.getElementById('signin-email').value;
+      const password = document.getElementById('signin-password').value;
+
+      try {
+        await signIn(email, password);
+
+        // Check if account is banned before allowing access
+        const { db } = await import('./js/firebase-config.js');
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const { auth } = await import('./js/firebase-config.js');
+        const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+
+        if (auth.currentUser) {
+          const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            // Strike 3 — permanent ban
+            if (data.banned) {
+              await signOut(auth);
+              signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Terminated</strong><br>This account has been permanently banned for violating our Community Safety Rules. You cannot sign in.';
+              signinError.classList.add('show');
+              return;
+            }
+            // Strike 2 — suspended
+            if (data.suspended && data.suspendedUntil) {
+              const until = new Date(data.suspendedUntil.seconds ? data.suspendedUntil.seconds * 1000 : data.suspendedUntil);
+              if (until > new Date()) {
+                await signOut(auth);
+                const days = Math.ceil((until - new Date()) / 86400000);
+                signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Suspended</strong><br>Your account is suspended for ' + days + ' more day' + (days === 1 ? '' : 's') + ' due to a second violation. You cannot sign in until the suspension ends.';
+                signinError.classList.add('show');
+                return;
+              }
+            }
+          }
+        }
+
+        window.location.href = 'profile.html';
+      } catch (err) {
+        signinError.textContent = err.message;
+        signinError.classList.add('show');
+      }
+    });
+
+    // Sign Up
+    const signupForm = document.getElementById('signup-form');
+    const signupError = document.getElementById('signup-error');
+
+    // Name input: A-Z a-z only, max 13 chars, live counter
+    const nameInput = document.getElementById('signup-name');
+    const nameCharCount = document.getElementById('nameCharCount');
+    nameInput.addEventListener('input', () => {
+      nameInput.value = nameInput.value.replace(/[^A-Za-z]/g, '');
+      if (nameInput.value.length > 13) nameInput.value = nameInput.value.slice(0, 13);
+      const len = nameInput.value.length;
+      nameCharCount.textContent = `(${len}/13)`;
+      nameCharCount.style.color = (len >= 3 && len <= 13) ? '#22c55e' : '#ef4444';
+    });
+
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      signupError.classList.remove('show');
+
+      const name = document.getElementById('signup-name').value.trim();
+      if (!name || name.length < 3 || name.length > 13 || !/^[A-Za-z]{3,13}$/.test(name)) {
+        signupError.textContent = 'Name must be 3-13 characters, only A-Z and a-z.';
+        signupError.classList.add('show');
+        return;
+      }
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+
+      try {
+        await signUp(email, password, name, selectedColor);
+        window.location.href = 'profile.html';
+      } catch (err) {
+        signupError.textContent = err.message;
+        signupError.classList.add('show');
+      }
+    });
+
+    // Redirect if already logged in (but not if banned)
+    onAuthChange(async (user) => {
+      if (user) {
+        try {
+          const { db } = await import('./js/firebase-config.js');
+          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists() && userDoc.data().banned) {
+            const { auth } = await import('./js/firebase-config.js');
+            const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+            await signOut(auth);
+            return;
+          }
+        } catch(e) {}
+        window.location.href = 'profile.html';
+      }
+    });
+  </script>
+
+</body>
+</html>
