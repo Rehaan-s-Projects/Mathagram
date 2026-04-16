@@ -182,63 +182,64 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'At a jump discontinuity, the limit...',
-        options: [
-          'equals the function value',
-          'does not exist because left \u2260 right',
-          'is always infinity',
-          'equals zero'
-        ],
-        correctIndex: 1
-      },
-      {
-        type: 'true-false',
-        question: 'If \\(\\lim_{x \\to a^-} f(x) = 3\\) and \\(\\lim_{x \\to a^+} f(x) = 3\\), the limit exists and equals 3.',
-        correctAnswer: true
-      },
-      {
-        type: 'fill-blank',
-        question: 'For the limit to exist, the left-hand limit must ___ the right-hand limit.',
-        answer: 'equal'
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What notation represents the left-hand limit?',
-        options: [
-          '\\(\\lim_{x \\to a^+}\\)',
-          '\\(\\lim_{x \\to a^-}\\)',
-          '\\(\\lim_{x \\to a}\\)',
-          '\\(\\lim_{x \\to \\infty}\\)'
-        ],
-        correctIndex: 1
-      },
-      {
-        type: 'true-false',
-        question: 'A function can have a jump discontinuity and still have both one-sided limits exist.',
-        correctAnswer: true
-      },
-      {
-        type: 'multiple-choice',
-        question: 'If \\(f(x) = \\begin{cases} 2x & x < 1 \\\\ x+3 & x \\ge 1 \\end{cases}\\), what is \\(\\lim_{x \\to 1^-} f(x)\\)?',
+      { type: 'multiple-choice',
+        question: 'At a jump discontinuity, the two-sided limit:',
+        options: ['Equals the function value', 'Does not exist because left ≠ right', 'Is always infinity', 'Equals zero'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'What notation represents the left-hand limit (approaching from below)?',
+        options: ['\\(\\lim_{x \\to a^+} f(x)\\)', '\\(\\lim_{x \\to a^-} f(x)\\)', '\\(\\lim_{x \\to a} f(x)\\)', '\\(\\lim_{x \\to \\infty} f(x)\\)'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'If \\(\\lim_{x \\to a^-} f(x) = 3\\) and \\(\\lim_{x \\to a^+} f(x) = 3\\), the two-sided limit exists and equals 3.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'For the two-sided limit to exist, the left-hand limit must ___ the right-hand limit.',
+        answer: 'equal' },
+      { type: 'multiple-choice',
+        question: 'Given \\(f(x) = \\begin{cases} 2x & x < 1 \\\\ x+3 & x \\ge 1 \\end{cases}\\), what is \\(\\lim_{x \\to 1^-} f(x)\\)?',
         options: ['4', '2', '3', '1'],
-        correctIndex: 1
-      }
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'Using the same piecewise function, what is \\(\\lim_{x \\to 1^+} f(x)\\)?',
+        options: ['2', '3', '4', '1'],
+        correctIndex: 2 },
+      { type: 'true-false',
+        question: 'For the piecewise example, \\(\\lim_{x \\to 1} f(x)\\) does not exist because \\(2 \\neq 4\\).',
+        correctAnswer: true },
+      { type: 'true-false',
+        question: 'A function can have a jump discontinuity and still have both one-sided limits exist.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'A jump discontinuity happens when both one-sided limits exist but are ___.',
+        answer: 'different' },
+      { type: 'multiple-choice',
+        question: 'The superscript "−" in \\(\\lim_{x \\to a^-}\\) means approaching from the:',
+        options: ['Right', 'Left', 'Top', 'Bottom'],
+        correctIndex: 1 },
+      { type: 'matching',
+        question: 'Match each concept to its description.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to a^-}\\)', right: 'Left-hand limit' },
+          { left: '\\(\\lim_{x \\to a^+}\\)', right: 'Right-hand limit' },
+          { left: 'Jump discontinuity', right: 'One-sided limits differ' },
+          { left: 'Two-sided limit exists', right: 'One-sided limits are equal' }
+        ] },
+      { type: 'fill-blank',
+        question: 'The symbol \\(\\iff\\) means "if and ___ if."',
+        answer: 'only' }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
-
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'calculus',
-      lessonId: 'lesson-2',
-      nextHref: 'lesson-3.html',
-      backHref: 'index.html'
+      courseId: 'calculus', lessonId: 'lesson-2', nextHref: 'lesson-3.html', backHref: 'index.html'
     });
   import { createCalculator } from "../../js/calculator.js"; createCalculator();
 </script>
