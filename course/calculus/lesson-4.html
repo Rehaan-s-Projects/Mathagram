@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>U-Substitution — Mathagram</title>
+  <title>Limits at Removable Discontinuities with Trig — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -46,12 +46,6 @@
       margin: 12px 0 20px 20px;
       color: var(--color-text-secondary);
       line-height: 1.75;
-    }
-    .lesson-content h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 28px 0 12px;
-      color: var(--color-text);
     }
     .exercise-section {
       max-width: 700px;
@@ -107,36 +101,50 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Chapter 04</div>
-    <h1>U-Substitution</h1>
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits at Removable Discontinuities with Trig</h1>
 
     <p>
-      <strong>U-substitution</strong> is the integration counterpart of the <em>chain rule</em> for derivatives. When you see a composite function inside an integral, u-substitution can simplify it into a form you already know how to integrate.
+      Two special trigonometric limits show up constantly in calculus. You need to <strong>memorize</strong> both of them:
     </p>
 
     <div class="math-block">
-      $$\int f(g(x)) \cdot g'(x)\, dx = \int f(u)\, du$$
+      $$\lim_{x \to 0} \frac{\sin x}{x} = 1$$
+    </div>
+
+    <div class="math-block">
+      $$\lim_{x \to 0} \frac{1 - \cos x}{x} = 0$$
     </div>
 
     <p>
-      The idea: choose \(u = g(x)\), compute \(du = g'(x)\,dx\), then rewrite the integral entirely in terms of \(u\). After integrating, substitute back to the original variable.
+      These are both \(\frac{0}{0}\) indeterminate forms, but the limits exist. The first one says that \(\sin x\) and \(x\) behave almost identically near zero. The second says that \(1 - \cos x\) shrinks to zero <strong>faster</strong> than \(x\) does.
     </p>
 
-    <h2>Example 1</h2>
-    <p>Evaluate \(\int 2x \cdot e^{x^2}\, dx\):</p>
-    <ul>
-      <li>Let \(u = x^2\), so \(du = 2x\,dx\)</li>
-      <li>The integral becomes \(\int e^u\, du = e^u + C\)</li>
-      <li>Substitute back: \(e^{x^2} + C\)</li>
-    </ul>
+    <p><strong>Example 1:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to 0} \frac{\sin(3x)}{x}$$
+    </div>
+    <p>
+      Rewrite to match the known form: multiply and divide by 3.
+    </p>
+    <div class="math-block">
+      $$= \lim_{x \to 0} 3 \cdot \frac{\sin(3x)}{3x} = 3 \cdot 1 = 3$$
+    </div>
 
-    <h2>Example 2: Adjusting Constants</h2>
-    <p>Evaluate \(\int x \cdot \cos(x^2)\, dx\):</p>
-    <ul>
-      <li>Let \(u = x^2\), so \(du = 2x\,dx\), which means \(x\,dx = \tfrac{1}{2}\,du\)</li>
-      <li>The integral becomes \(\tfrac{1}{2}\int \cos(u)\, du = \tfrac{1}{2}\sin(u) + C\)</li>
-      <li>Substitute back: \(\tfrac{1}{2}\sin(x^2) + C\)</li>
-    </ul>
+    <p><strong>Example 2:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to 0} \frac{\sin(5x)}{\sin(2x)}$$
+    </div>
+    <p>
+      Rewrite each sine using the known limit:
+    </p>
+    <div class="math-block">
+      $$= \lim_{x \to 0} \frac{\sin(5x)}{5x} \cdot \frac{2x}{\sin(2x)} \cdot \frac{5x}{2x} = 1 \cdot 1 \cdot \frac{5}{2} = \frac{5}{2}$$
+    </div>
+
+    <p>
+      The general pattern: \(\displaystyle\lim_{x \to 0} \frac{\sin(ax)}{bx} = \frac{a}{b}\).
+    </p>
   </section>
 
   <!-- Exercises -->
@@ -160,8 +168,8 @@
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-    import { generateExercises } from '../../js/problem-generator.js';
 
+    // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
@@ -177,10 +185,90 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
 
-    // Initialize side character (Duolingo-style)
+    // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = generateExercises(\'integrals\', 6);
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} \\frac{\\sin x}{x}\\)?',
+        options: ['0', '1', '-1', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = \\) ___',
+        answer: '0'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} \\frac{\\sin(4x)}{x}\\)?',
+        options: ['1', '0', '4', '1/4'],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{\\sin(7x)}{\\sin(2x)} = \\) ___ (write as a fraction like 7/2)',
+        answer: '7/2'
+      },
+      {
+        type: 'true-false',
+        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{\\sin x}{x} = 0\\)',
+        correctAnswer: false
+      },
+      {
+        type: 'matching',
+        question: 'Match each trigonometric limit with its value.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}\\)', right: '3' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{\\sin x}{5x}\\)', right: '1/5' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{1 - \\cos x}{x}\\)', right: '0' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{\\sin(2x)}{\\sin(x)}\\)', right: '2' }
+        ]
+      },
+      {
+        type: 'listening',
+        spokenText: 'What is the limit as x approaches zero of sine of six x divided by three x? Choose from: one half, two, six, or three.',
+        options: ['1/2', '2', '6', '3'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} \\frac{\\tan x}{x}\\)? (Hint: \\(\\tan x = \\frac{\\sin x}{\\cos x}\\))',
+        options: ['0', '1', 'undefined', '-1'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 The speedometer reads <strong>v(x) = sin(x)/x</strong>. As x → 0, the speed limit approaches ___ mph.',
+        answer: '1'
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 \\(\\lim_{x\\to 0} \\frac{\\sin(3x)}{x}\\) (coaster smoothness check) = ___.',
+        answer: '3'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ \\(\\lim_{x\\to 0} \\frac{1-\\cos(x)}{x}\\) = ___ (hiker\'s tiny-step landscape).',
+        answer: '0'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0}\\frac{\\sin(5x)}{x} = \\) ___',
+        answer: '5'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0}\\frac{\\tan(x)}{x} = \\) ___',
+        answer: '1'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0}\\frac{\\sin(2x)}{\\sin(3x)} = \\frac{\\_\\_}{3}\\). Numerator is ___',
+        answer: '2'
+      }
+    ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

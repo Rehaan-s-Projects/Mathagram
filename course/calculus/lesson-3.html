@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Definite Integrals — Mathagram</title>
+  <title>Limits at Removable Discontinuities — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -46,12 +46,6 @@
       margin: 12px 0 20px 20px;
       color: var(--color-text-secondary);
       line-height: 1.75;
-    }
-    .lesson-content h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 28px 0 12px;
-      color: var(--color-text);
     }
     .exercise-section {
       max-width: 700px;
@@ -107,33 +101,47 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Chapter 03</div>
-    <h1>Definite Integrals</h1>
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits at Removable Discontinuities</h1>
 
     <p>
-      A <strong>definite integral</strong> computes the <em>net area</em> between a curve and the x-axis over a specific interval \([a, b]\). Unlike indefinite integrals, definite integrals produce a number, not a family of functions.
+      Sometimes when you try direct substitution, you get \(\frac{0}{0}\). This is called an <strong>indeterminate form</strong>, and it usually signals a <strong>removable discontinuity</strong> &mdash; a "hole" in the graph.
     </p>
 
-    <h2>The Fundamental Theorem of Calculus</h2>
     <p>
-      The Fundamental Theorem of Calculus connects differentiation and integration. It states that if \(F(x)\) is an antiderivative of \(f(x)\), then:
+      A removable discontinuity occurs when a factor cancels from both the numerator and denominator. The function is undefined at that point, but the <strong>limit still exists</strong>.
+    </p>
+
+    <p><strong>Strategy:</strong> Factor, cancel the common factor, then use direct substitution on the simplified expression.</p>
+
+    <p><strong>Example 1:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to 2} \frac{x^2 - 4}{x - 2}$$
+    </div>
+
+    <p>
+      Direct substitution gives \(\frac{0}{0}\). Factor the numerator:
     </p>
 
     <div class="math-block">
-      $$\int_a^b f(x)\, dx = F(b) - F(a)$$
+      $$\frac{x^2 - 4}{x - 2} = \frac{(x-2)(x+2)}{x-2} = x + 2 \quad (x \neq 2)$$
     </div>
 
-    <h2>Example</h2>
-    <p>Let's evaluate \(\int_1^3 2x\, dx\):</p>
-    <ul>
-      <li>Find the antiderivative: \(F(x) = x^2\)</li>
-      <li>Plug in the upper bound: \(F(3) = 9\)</li>
-      <li>Plug in the lower bound: \(F(1) = 1\)</li>
-      <li>Subtract: \(F(3) - F(1) = 9 - 1 = 8\)</li>
-    </ul>
+    <p>
+      Now substitute:
+    </p>
+
+    <div class="math-block">
+      $$\lim_{x \to 2} (x + 2) = 4$$
+    </div>
+
+    <p><strong>Example 2:</strong></p>
+    <div class="math-block">
+      $$\lim_{x \to 3} \frac{x^2 - 9}{x - 3} = \lim_{x \to 3} \frac{(x-3)(x+3)}{x-3} = \lim_{x \to 3}(x+3) = 6$$
+    </div>
 
     <p>
-      <strong>Note on net area:</strong> Definite integrals give <em>net</em> area — regions below the x-axis count as negative. So the result is not always positive.
+      The key insight: the limit describes what value the function <strong>approaches</strong>, not what value it equals at that point. Even though \(f(2)\) is undefined, the limit as \(x \to 2\) is perfectly well-defined.
     </p>
   </section>
 
@@ -158,8 +166,8 @@
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-    import { generateExercises } from '../../js/problem-generator.js';
 
+    // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
@@ -175,10 +183,90 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
 
-    // Initialize side character (Duolingo-style)
+    // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = generateExercises(\'integrals\', 6);
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}\\)?',
+        options: ['2', '4', '0', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to -1} \\frac{x^2 - 1}{x + 1}\\)?',
+        options: ['-2', '0', '2', 'undefined'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3} = \\) ___',
+        answer: '6'
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 5} \\frac{x^2 - 25}{x - 5} = \\) ___',
+        answer: '10'
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f(a)\\) is undefined, then \\(\\displaystyle\\lim_{x \\to a} f(x)\\) must also be undefined.',
+        correctAnswer: false
+      },
+      {
+        type: 'matching',
+        question: 'Match each limit with its value after factoring and canceling.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}\\)', right: '2' },
+          { left: '\\(\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4}\\)', right: '8' },
+          { left: '\\(\\lim_{x \\to -3} \\frac{x^2 - 9}{x + 3}\\)', right: '-6' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{x^2 + 3x}{x}\\)', right: '3' }
+        ]
+      },
+      {
+        type: 'listening',
+        spokenText: 'What is the limit of x squared minus sixteen, divided by x minus four, as x approaches four? Choose from: four, eight, zero, or undefined.',
+        options: ['4', '8', '0', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'When direct substitution gives \\(\\frac{0}{0}\\), this is called:',
+        options: ['An infinite limit', 'An indeterminate form', 'A divergent limit', 'A continuous function'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 A car\'s speed near a pothole has a tiny gap in the data at t = 2, but readings around it approach 45 mph. The limit is ___ mph.',
+        answer: '45'
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 The coaster height <strong>h(x) = (x² − 4)/(x − 2)</strong> has a hole at x = 2, but the limit there equals ___.',
+        answer: '4'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ The altitude function has a single missing point at x = 3 with surrounding values approaching 7 m. lim altitude = ___ m.',
+        answer: '7'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 3}\\frac{x^2 - 9}{x - 3} = \\lim_{x\\to 3}(x + 3) = \\) ___',
+        answer: '6'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 2}\\frac{x^2 - 4}{x - 2} = \\) ___',
+        answer: '4'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 1}\\frac{x^2 - 1}{x - 1} = \\) ___',
+        answer: '2'
+      }
+    ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

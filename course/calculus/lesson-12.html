@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Limits at Essential Discontinuities — Mathagram</title>
+  <title>Squeeze Theorem — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -102,48 +102,37 @@
   <!-- Teaching Content -->
   <section class="lesson-content">
     <div class="chapter-label">Unit 1 &mdash; Limits</div>
-    <h1>Limits at Essential Discontinuities</h1>
+    <h1>Squeeze Theorem</h1>
 
     <p>
-      An <strong>essential (non-removable) discontinuity</strong> occurs at a vertical asymptote &mdash; where the function blows up to \(\pm\infty\). Unlike removable discontinuities, you can't "fix" these by canceling a factor.
+      Some limits are impossible to evaluate directly &mdash; the function oscillates wildly or defies substitution. The <strong>Squeeze Theorem</strong> (also called the Sandwich Theorem or Pinching Theorem) lets you trap the function between two simpler ones.
     </p>
 
-    <p><strong>Example 1:</strong> Consider \(f(x) = \dfrac{1}{x}\) as \(x \to 0\).</p>
+    <p>Here is the formal statement:</p>
 
-    <p>
-      From the right (\(x \to 0^+\)), the values grow without bound: \(\frac{1}{0.1} = 10\), \(\frac{1}{0.01} = 100\), etc.
-    </p>
     <div class="math-block">
-      $$\lim_{x \to 0^+} \frac{1}{x} = +\infty$$
+      $$\text{If } g(x) \le f(x) \le h(x) \text{ near } a, \text{ and } \lim_{x \to a} g(x) = \lim_{x \to a} h(x) = L, \text{ then } \lim_{x \to a} f(x) = L.$$
     </div>
 
     <p>
-      From the left (\(x \to 0^-\)), the values plunge: \(\frac{1}{-0.1} = -10\), \(\frac{1}{-0.01} = -100\), etc.
+      The idea is simple: if \(f(x)\) is always sandwiched between \(g(x)\) and \(h(x)\), and both of those converge to the same value \(L\), then \(f(x)\) has no choice &mdash; it must converge to \(L\) too.
     </p>
+
+    <p><strong>Classic example:</strong></p>
     <div class="math-block">
-      $$\lim_{x \to 0^-} \frac{1}{x} = -\infty$$
+      $$\lim_{x \to 0} x^2 \sin\!\left(\frac{1}{x}\right)$$
     </div>
 
     <p>
-      Since the one-sided limits disagree, the <strong>two-sided limit does not exist</strong>:
+      We know \(-1 \le \sin(1/x) \le 1\), so multiplying through by \(x^2\) (which is non-negative):
     </p>
-    <div class="math-block">
-      $$\lim_{x \to 0} \frac{1}{x} \text{ DNE}$$
-    </div>
 
-    <p><strong>Example 2:</strong> Now consider \(f(x) = \dfrac{1}{x^2}\) as \(x \to 0\).</p>
     <div class="math-block">
-      $$\lim_{x \to 0^+} \frac{1}{x^2} = +\infty \quad \text{and} \quad \lim_{x \to 0^-} \frac{1}{x^2} = +\infty$$
-    </div>
-    <p>
-      Both sides agree (both go to \(+\infty\)), so we write:
-    </p>
-    <div class="math-block">
-      $$\lim_{x \to 0} \frac{1}{x^2} = +\infty$$
+      $$-x^2 \le x^2 \sin\!\left(\frac{1}{x}\right) \le x^2$$
     </div>
 
     <p>
-      <strong>Key point:</strong> When a limit equals \(\pm\infty\), the limit technically "does not exist" as a finite number, but we use the infinity notation to describe the behavior.
+      Both \(-x^2\) and \(x^2\) approach \(0\) as \(x \to 0\). By the Squeeze Theorem, the limit is \(\mathbf{0}\).
     </p>
   </section>
 
@@ -191,46 +180,104 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 0^+} \\frac{1}{x}\\)?',
-        options: ['0', '+∞', '-∞', 'DNE'],
-        correctIndex: 1
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} \\frac{1}{x}\\)?',
-        options: ['0', '+∞', '-∞', 'DNE'],
-        correctIndex: 3
+        question: 'The Squeeze Theorem requires ___ functions.',
+        options: ['one', 'two', 'three', 'four'],
+        correctIndex: 2
       },
       {
         type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 3^+} \\frac{1}{x - 3} = \\) ___ (write +infinity, -infinity, or DNE)',
-        answer: '+infinity'
+        question: 'If \\(-x^2 \\le f(x) \\le x^2\\) and \\(x \\to 0\\), then \\(\\lim f(x) = \\) ___',
+        answer: '0'
       },
       {
         type: 'true-false',
-        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{1}{x^2} = +\\infty\\)',
+        question: 'The Squeeze Theorem can determine a limit even when direct substitution fails.',
         correctAnswer: true
       },
       {
         type: 'matching',
-        question: 'Match each one-sided limit with its value.',
+        question: 'Match each term with its role in the Squeeze Theorem.',
         pairs: [
-          { left: '\\(\\lim_{x \\to 0^+} \\frac{1}{x}\\)', right: '+∞' },
-          { left: '\\(\\lim_{x \\to 0^-} \\frac{1}{x}\\)', right: '-∞' },
-          { left: '\\(\\lim_{x \\to 2^+} \\frac{1}{(x-2)^2}\\)', right: '+∞' },
-          { left: '\\(\\lim_{x \\to 2^-} \\frac{-1}{x-2}\\)', right: '+∞' }
+          { left: 'Lower bound', right: 'g(x)' },
+          { left: 'Upper bound', right: 'h(x)' },
+          { left: 'Squeezed function', right: 'f(x)' },
+          { left: 'Common limit', right: 'L' }
         ]
       },
       {
-        type: 'listening',
-        spokenText: 'What is the limit as x approaches one from the right of one divided by the quantity x minus one? Choose from: positive infinity, negative infinity, zero, or does not exist.',
-        options: ['+∞', '-∞', '0', 'DNE'],
+        type: 'multiple-choice',
+        question: '\\(\\displaystyle\\lim_{x \\to 0} x^2 \\cos\\!\\left(\\frac{1}{x}\\right) = \\;?\\)',
+        options: ['1', '-1', '0', 'does not exist'],
+        correctIndex: 2
+      },
+      {
+        type: 'ordering',
+        question: 'Put the Squeeze Theorem steps in the correct order.',
+        items: [
+          'Identify g(x) \u2264 f(x) \u2264 h(x)',
+          'Find lim g(x) as x \u2192 a',
+          'Find lim h(x) as x \u2192 a',
+          'Verify both limits equal L',
+          'Conclude lim f(x) = L'
+        ]
+      },
+      {
+        type: 'multiple-choice',
+        question: '🥪 Two roller coasters bound a third track: <strong>g(x) ≤ f(x) ≤ h(x)</strong>. If g and h both approach 5, what does f approach?',
+        options: ['5','10','0','Cannot tell'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: '🎢 If a track is squeezed between two coasters heading to the same height, it must also hit that height.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '🏔️ Your path is between valley floor g(x) and ridge h(x). Both meet at altitude 3 at x = 0. What is lim f(x) as x → 0?',
+        options: ['3','0','Cannot tell','∞'],
         correctIndex: 0
       },
       {
         type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 0^-} \\frac{5}{x^3} = \\) ___ (write +infinity, -infinity, or DNE)',
-        answer: '-infinity'
+        question: '🥪 \\(\\lim_{x\\to 0} x^2 \\sin(1/x)\\) = ___ (by Squeeze Theorem).',
+        answer: '0'
+      },
+      {
+        type: 'multiple-choice',
+        question: '🎢 Squeeze Theorem requires g ≤ f ≤ h and g, h approach the ___ value.',
+        options: ['same','different','infinite','zero only'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🥪 \\(\\lim_{x\\to 0} x^2 \\cos(1/x)\\) = ___ (Squeeze Theorem).',
+        answer: '0'
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 Two coasters bound f(x): both approach 4 at x = 1. By Squeeze, lim f(x) = ___.',
+        answer: '4'
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 A car\'s speed is squeezed between 60 mph and 60 mph as t → 5. Its speed at the limit is ___ mph.',
+        answer: '60'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if 3 ≤ f(x) ≤ 3 + x² as x → 0, then lim f(x) = ___',
+        answer: '3'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0} x^2 \\sin(1/x) = \\) ___',
+        answer: '0'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if 5 − x² ≤ f(x) ≤ 5 + x² as x → 0, then lim f(x) = ___',
+        answer: '5'
       }
     ];
 

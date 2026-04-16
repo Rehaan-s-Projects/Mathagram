@@ -60,12 +60,13 @@
       [11,'Digital & Microcontrollers',['Analog vs Digital','Binary Numbers & Logic','Logic Gates (AND OR NOT)','NAND & NOR Gates','Combinational Logic','Flip-Flops','Counters','What is a Microcontroller?','Arduino Introduction','GPIO Pins','Digital Read & Write','Analog Read (ADC)','PWM Output','Serial Communication','Microcontrollers Review']],
       [12,'Projects & Applications',['LED Blinker Circuit','Traffic Light Controller','Light-Activated Switch','Temperature Monitor','Motor Speed Controller','Audio Amplifier','Power Supply Design','Battery Charger Circuit','Alarm System','Radio Receiver Basics','PCB Design Basics','Soldering Techniques','Troubleshooting Circuits','Circuit Simulation Tools','Circuits Mastery!']]
     ];
+    const playable = {1:'lesson-1.html'};
     let n = 0;
     const lessons = [];
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'ci-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'ci-'+n, title: t, href: playable[n]||'#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {

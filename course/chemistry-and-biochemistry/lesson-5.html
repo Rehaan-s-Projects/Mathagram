@@ -176,18 +176,20 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
-    // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    // KaTeX auto-render — poll until auto-render is loaded (defer + ES module can race).
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
             { left: "$$", right: "$$", display: true },
-            { left: "\\(", right: "\\)", display: false }
+            { left: "\(", right: "\)", display: false }
           ],
           throwOnError: false
         });
+      } else {
+        setTimeout(renderMath, 80);
       }
-    });
+    })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 

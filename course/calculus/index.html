@@ -33,7 +33,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-math)">Math</span>
     <h1>Calculus</h1>
-    <p>A complete calculus course — limits, differentiation, integration, sequences &amp; series, vectors, and multivariable calculus. 531 lessons across 24 units.</p>
+    <p>A complete calculus course — limits, differentiation, integration, sequences &amp; series, vectors, and multivariable calculus. 556 lessons across 25 units.</p>
   </header>
 
   <div id="learning-path" class="path-container"></div>
@@ -371,13 +371,28 @@
         'Well-Posed Problems','Characteristics Method',
         'Green\'s Functions Preview','Sturm-Liouville Problems',
         'Spectral Methods Preview','Calculus Mastery!'
+      ]],
+      [25,'Calculus in the Real World',[ // 25 lessons — Duolingo-style visual intuition
+        'Roller Coaster: Position vs Time','Roller Coaster: Going Up & Down',
+        'Roller Coaster: Slope = Speed','Roller Coaster: The Steepest Drop',
+        'Roller Coaster: When Slope Is Zero (Top of the Hill)','Roller Coaster: Second Derivative = Curvature',
+        'Roller Coaster: Feeling G-Forces','Landscape: Hills as Graphs',
+        'Landscape: Area Under the Ground is an Integral','Landscape: Filling a Valley with Water',
+        'Landscape: Building a Road Over Hills','Landscape: Total Distance Walked',
+        'Car Speedometer: Derivative in Action','Odometer: Integral of Speed',
+        'Filling a Bathtub: Rate In vs Total Water','Draining a Pool: Negative Rates',
+        'Shadow Growing at Sunset: Related Rates','Ladder Sliding Down a Wall: Related Rates',
+        'Pizza Cooling Down: Exponential Decay','Population of Rabbits: Exponential Growth',
+        'Stretching a Spring: Work as an Integral','Rocket Launch: Variable Thrust Integral',
+        'Heartbeat Graph: Integrating a Signal','Painting a Dome: Surface of Revolution',
+        'Real-World Calculus Checkpoint'
       ]]
     ];
 
     /* Build flat lessons array from compact units */
     let n = 0;
     const lessons = [];
-    const playable = {1:'lesson-5.html',2:'lesson-6.html',3:'lesson-10.html',4:'lesson-11.html',5:'lesson-12.html',6:'lesson-17.html',7:'lesson-18.html',8:'lesson-13.html',9:'lesson-19.html',10:'lesson-14.html',11:'lesson-15.html',12:'lesson-7.html',21:'lesson-16.html',23:'lesson-20.html',24:'lesson-21.html',26:'lesson-22.html'};
+    const playable = {1:'lesson-1.html',2:'lesson-2.html',3:'lesson-3.html',4:'lesson-4.html',5:'lesson-5.html',6:'lesson-6.html',7:'lesson-7.html',8:'lesson-8.html',9:'lesson-9.html',10:'lesson-10.html',11:'lesson-11.html',12:'lesson-12.html',13:'lesson-17.html',14:'lesson-18.html',15:'lesson-19.html',16:'lesson-20.html',17:'lesson-21.html',21:'lesson-13.html',23:'lesson-14.html',24:'lesson-15.html',26:'lesson-16.html',43:'lesson-22.html',44:'lesson-23.html',45:'lesson-24.html',63:'lesson-25.html',64:'lesson-26.html',65:'lesson-27.html',79:'lesson-28.html',80:'lesson-29.html',81:'lesson-30.html'};
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;

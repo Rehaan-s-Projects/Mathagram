@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Limits at Removable Discontinuities — Mathagram</title>
+  <title>Continuity — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -102,46 +102,38 @@
   <!-- Teaching Content -->
   <section class="lesson-content">
     <div class="chapter-label">Unit 1 &mdash; Limits</div>
-    <h1>Limits at Removable Discontinuities</h1>
+    <h1>Continuity</h1>
 
     <p>
-      Sometimes when you try direct substitution, you get \(\frac{0}{0}\). This is called an <strong>indeterminate form</strong>, and it usually signals a <strong>removable discontinuity</strong> &mdash; a "hole" in the graph.
+      A function \(f\) is <strong>continuous at \(x = a\)</strong> if and only if all three of the following conditions are met:
     </p>
 
+    <ul>
+      <li><strong>1.</strong> \(f(a)\) is defined (the function has a value at \(a\)).</li>
+      <li><strong>2.</strong> \(\displaystyle\lim_{x \to a} f(x)\) exists (the limit from both sides agrees).</li>
+      <li><strong>3.</strong> \(\displaystyle\lim_{x \to a} f(x) = f(a)\) (the limit equals the function value).</li>
+    </ul>
+
     <p>
-      A removable discontinuity occurs when a factor cancels from both the numerator and denominator. The function is undefined at that point, but the <strong>limit still exists</strong>.
+      If <strong>any</strong> of these three conditions fails, the function is <strong>discontinuous</strong> at \(x = a\).
     </p>
 
-    <p><strong>Strategy:</strong> Factor, cancel the common factor, then use direct substitution on the simplified expression.</p>
+    <p><strong>Example 1:</strong> Is \(f(x) = x^2\) continuous at \(x = 3\)?</p>
+    <ul>
+      <li>\(f(3) = 9\) &mdash; defined. &#10003;</li>
+      <li>\(\lim_{x \to 3} x^2 = 9\) &mdash; exists. &#10003;</li>
+      <li>\(\lim_{x \to 3} x^2 = f(3) = 9\) &mdash; equal. &#10003;</li>
+    </ul>
+    <p>All three conditions hold, so \(f\) is continuous at \(x = 3\).</p>
 
-    <p><strong>Example 1:</strong></p>
-    <div class="math-block">
-      $$\lim_{x \to 2} \frac{x^2 - 4}{x - 2}$$
-    </div>
-
-    <p>
-      Direct substitution gives \(\frac{0}{0}\). Factor the numerator:
-    </p>
-
-    <div class="math-block">
-      $$\frac{x^2 - 4}{x - 2} = \frac{(x-2)(x+2)}{x-2} = x + 2 \quad (x \neq 2)$$
-    </div>
-
-    <p>
-      Now substitute:
-    </p>
-
-    <div class="math-block">
-      $$\lim_{x \to 2} (x + 2) = 4$$
-    </div>
-
-    <p><strong>Example 2:</strong></p>
-    <div class="math-block">
-      $$\lim_{x \to 3} \frac{x^2 - 9}{x - 3} = \lim_{x \to 3} \frac{(x-3)(x+3)}{x-3} = \lim_{x \to 3}(x+3) = 6$$
-    </div>
+    <p><strong>Example 2:</strong> Let \(g(x) = \dfrac{x^2 - 1}{x - 1}\). Is \(g\) continuous at \(x = 1\)?</p>
+    <ul>
+      <li>\(g(1) = \frac{0}{0}\) &mdash; undefined. &#10007;</li>
+    </ul>
+    <p>Condition 1 fails immediately. The function has a removable discontinuity (hole) at \(x = 1\), even though the limit exists and equals 2.</p>
 
     <p>
-      The key insight: the limit describes what value the function <strong>approaches</strong>, not what value it equals at that point. Even though \(f(2)\) is undefined, the limit as \(x \to 2\) is perfectly well-defined.
+      <strong>Key facts:</strong> Polynomials are continuous everywhere. Rational functions are continuous wherever the denominator is nonzero. Trig functions like \(\sin x\) and \(\cos x\) are continuous on all of \(\mathbb{R}\).
     </p>
   </section>
 
@@ -189,52 +181,115 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}\\)?',
-        options: ['2', '4', '0', 'undefined'],
-        correctIndex: 1
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to -1} \\frac{x^2 - 1}{x + 1}\\)?',
-        options: ['-2', '0', '2', 'undefined'],
-        correctIndex: 0
-      },
-      {
-        type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3} = \\) ___',
-        answer: '6'
-      },
-      {
-        type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 5} \\frac{x^2 - 25}{x - 5} = \\) ___',
-        answer: '10'
+        question: 'How many conditions must be satisfied for a function to be continuous at a point?',
+        options: ['1', '2', '3', '4'],
+        correctIndex: 2
       },
       {
         type: 'true-false',
-        question: 'If \\(f(a)\\) is undefined, then \\(\\displaystyle\\lim_{x \\to a} f(x)\\) must also be undefined.',
+        question: 'If \\(\\displaystyle\\lim_{x \\to a} f(x)\\) exists, then \\(f\\) must be continuous at \\(x = a\\).',
         correctAnswer: false
       },
       {
+        type: 'fill-blank',
+        question: 'For continuity at \\(x = a\\), we need \\(\\displaystyle\\lim_{x \\to a} f(x) = \\) ___',
+        answer: 'f(a)'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which type of function is continuous everywhere on its domain?',
+        options: ['Piecewise functions', 'Polynomials', 'Step functions', 'Functions with holes'],
+        correctIndex: 1
+      },
+      {
         type: 'matching',
-        question: 'Match each limit with its value after factoring and canceling.',
+        question: 'Match each scenario to the continuity condition that fails.',
         pairs: [
-          { left: '\\(\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}\\)', right: '2' },
-          { left: '\\(\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4}\\)', right: '8' },
-          { left: '\\(\\lim_{x \\to -3} \\frac{x^2 - 9}{x + 3}\\)', right: '-6' },
-          { left: '\\(\\lim_{x \\to 0} \\frac{x^2 + 3x}{x}\\)', right: '3' }
+          { left: 'Function has a hole at \\(x = a\\)', right: 'f(a) is not defined' },
+          { left: 'Left and right limits disagree', right: 'Limit does not exist' },
+          { left: 'Limit exists but ≠ f(a)', right: 'Limit ≠ f(a)' },
+          { left: 'Vertical asymptote at \\(x = a\\)', right: 'f(a) is not defined' }
         ]
       },
       {
         type: 'listening',
-        spokenText: 'What is the limit of x squared minus sixteen, divided by x minus four, as x approaches four? Choose from: four, eight, zero, or undefined.',
-        options: ['4', '8', '0', 'undefined'],
+        spokenText: 'Which of the following is NOT one of the three conditions for continuity at a point? Choose from: the function value exists, the limit exists, the derivative exists, or the limit equals the function value.',
+        options: ['The function value exists', 'The limit exists', 'The derivative exists', 'The limit equals the function value'],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'Is \\(f(x) = \\sin(x)\\) continuous at \\(x = \\pi\\)? (yes or no)',
+        answer: 'yes'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'A rational function \\(\\frac{p(x)}{q(x)}\\) is continuous at \\(x = a\\) provided that:',
+        options: [
+          'p(a) = 0',
+          'q(a) ≠ 0',
+          'p(a) > q(a)',
+          'q(a) = 0'
+        ],
         correctIndex: 1
       },
       {
         type: 'multiple-choice',
-        question: 'When direct substitution gives \\(\\frac{0}{0}\\), this is called:',
-        options: ['An infinite limit', 'An indeterminate form', 'A divergent limit', 'A continuous function'],
-        correctIndex: 1
+        question: '🎢 Which roller coaster track is <strong>continuous</strong>?',
+        options: ['Smooth hills with no breaks','Track with a gap in the middle','Two separate tracks side-by-side','Track ending at a cliff'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: '🏔️ A continuous landscape means you can walk the whole path without jumping over anything.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '🏔️ A hiker reaches a cliff where altitude suddenly drops. This is a ___ discontinuity.',
+        options: ['jump','removable','infinite','none — it\'s continuous'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 For f to be continuous at x = a, the limit must equal ___ (write f(a)).',
+        answer: 'f(a)'
+      },
+      {
+        type: 'multiple-choice',
+        question: '🚗 A road is continuous if the car\'s path has no:',
+        options: ['gaps or jumps','tires','fuel','direction'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 For the coaster to be continuous at x = a, the limit must equal ___ (write f(a)).',
+        answer: 'f(a)'
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 On a smooth road with no gaps, v(t) = 2t + 3. The speed at t = 5 is ___ mph.',
+        answer: '13'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ A hiker\'s path f(x) = x² is continuous everywhere. f(−3) = ___.',
+        answer: '9'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f(x) = 2x + 1, then f(4) = ___',
+        answer: '9'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f(x) = x² − 3x, then f(5) = ___',
+        answer: '10'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f is continuous at 2 and \\(\\lim_{x\\to 2} f(x) = 7\\), then f(2) = ___',
+        answer: '7'
       }
     ];
 

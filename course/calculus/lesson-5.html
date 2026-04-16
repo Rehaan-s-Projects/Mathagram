@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Limits by Direct Evaluation — Mathagram</title>
+  <title>Limits at Essential Discontinuities — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -79,6 +79,7 @@
     .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
     .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
   </style>
+<link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
@@ -101,151 +102,48 @@
   <!-- Teaching Content -->
   <section class="lesson-content">
     <div class="chapter-label">Unit 1 &mdash; Limits</div>
-    <h1>Limits by Direct Evaluation</h1>
+    <h1>Limits at Essential Discontinuities</h1>
 
     <p>
-      The simplest way to evaluate a limit is <strong>direct substitution</strong>. If a function \(f\) is continuous at \(x = a\), then:
+      An <strong>essential (non-removable) discontinuity</strong> occurs at a vertical asymptote &mdash; where the function blows up to \(\pm\infty\). Unlike removable discontinuities, you can't "fix" these by canceling a factor.
     </p>
 
-    <div class="math-block">
-      $$\lim_{x \to a} f(x) = f(a)$$
-    </div>
+    <p><strong>Example 1:</strong> Consider \(f(x) = \dfrac{1}{x}\) as \(x \to 0\).</p>
 
     <p>
-      That's it. Plug in the value and you're done. No tricks, no algebra gymnastics &mdash; just substitute.
+      From the right (\(x \to 0^+\)), the values grow without bound: \(\frac{1}{0.1} = 10\), \(\frac{1}{0.01} = 100\), etc.
     </p>
-
-    <!-- Roller Coaster Visual -->
-    <div style="background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%); border-radius:16px; padding:24px 16px; margin:24px 0; text-align:center; position:relative; overflow:hidden;">
-      <div style="color:#67e8f9; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Imagine a Roller Coaster</div>
-      <svg viewBox="0 0 400 160" width="100%" height="140" style="max-width:400px;">
-        <!-- Sky -->
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-          <linearGradient id="track" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient>
-        </defs>
-        <!-- Stars -->
-        <circle cx="30" cy="15" r="1.5" fill="#fff" opacity="0.6"/>
-        <circle cx="90" cy="25" r="1" fill="#fff" opacity="0.4"/>
-        <circle cx="180" cy="10" r="1.5" fill="#fff" opacity="0.5"/>
-        <circle cx="300" cy="20" r="1" fill="#fff" opacity="0.6"/>
-        <circle cx="360" cy="12" r="1.5" fill="#fff" opacity="0.3"/>
-        <!-- Ground/landscape -->
-        <path d="M0 150 Q50 140 100 145 Q200 130 250 140 Q350 135 400 145 L400 160 L0 160 Z" fill="#1a3a2a" opacity="0.5"/>
-        <!-- Roller coaster track -->
-        <path d="M20 120 Q60 30 100 80 Q140 130 180 60 Q220 10 260 70 Q300 120 340 50 Q360 30 380 40" fill="none" stroke="url(#track)" stroke-width="3"/>
-        <!-- Track supports -->
-        <line x1="60" y1="55" x2="60" y2="150" stroke="#334155" stroke-width="1.5"/>
-        <line x1="140" y1="100" x2="140" y2="150" stroke="#334155" stroke-width="1.5"/>
-        <line x1="220" y1="35" x2="220" y2="150" stroke="#334155" stroke-width="1.5"/>
-        <line x1="300" y1="95" x2="300" y2="150" stroke="#334155" stroke-width="1.5"/>
-        <!-- Cart on track (at x=260, approaching x=300) -->
-        <circle cx="250" cy="72" r="8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
-        <text x="250" y="76" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">You</text>
-        <!-- Target point -->
-        <circle cx="340" cy="50" r="6" fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="3,3">
-          <animate attributeName="r" values="6;10;6" dur="1.5s" repeatCount="indefinite"/>
-        </circle>
-        <text x="340" y="38" text-anchor="middle" font-size="9" fill="#67e8f9" font-weight="bold">x = a</text>
-        <!-- Arrow showing approach -->
-        <path d="M265 70 L320 54" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <polygon points="320,54 314,50 316,57" fill="#fbbf24"/>
-      </svg>
-      <p style="color:#94a3b8; font-size:0.82rem; margin-top:10px; line-height:1.5;">You're riding toward point <span style="color:#67e8f9; font-weight:700;">x = a</span>. The <strong style="color:#fbbf24;">limit</strong> is the height you're heading toward &mdash; even if the track has a gap there!</p>
-    </div>
-
-    <!-- Landscape Visual -->
-    <div style="background:linear-gradient(180deg,#f0fdf4 0%,#dcfce7 100%); border-radius:16px; padding:24px 16px; margin:24px 0; text-align:center;">
-      <div style="color:#166534; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Imagine a Mountain Landscape</div>
-      <svg viewBox="0 0 400 140" width="100%" height="120" style="max-width:400px;">
-        <!-- Sky -->
-        <rect width="400" height="140" fill="#e0f2fe"/>
-        <!-- Sun -->
-        <circle cx="340" cy="30" r="18" fill="#fbbf24" opacity="0.8"/>
-        <!-- Mountains -->
-        <polygon points="0,140 60,50 120,140" fill="#86efac"/>
-        <polygon points="80,140 160,30 240,140" fill="#4ade80"/>
-        <polygon points="200,140 280,45 360,140" fill="#22c55e"/>
-        <polygon points="300,140 370,60 400,100 400,140" fill="#16a34a"/>
-        <!-- Path with a hiker approaching a point -->
-        <path d="M30 130 Q100 125 150 110 Q200 95 250 100 Q300 105 350 90" fill="none" stroke="#92400e" stroke-width="2" stroke-dasharray="5,3"/>
-        <!-- Hiker -->
-        <circle cx="250" cy="100" r="6" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
-        <text x="250" y="118" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="bold">You</text>
-        <!-- Destination -->
-        <circle cx="350" cy="90" r="5" fill="none" stroke="#dc2626" stroke-width="2">
-          <animate attributeName="r" values="5;9;5" dur="1.5s" repeatCount="indefinite"/>
-        </circle>
-        <text x="350" y="82" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">x = a</text>
-        <!-- Flag at destination -->
-        <line x1="350" y1="90" x2="350" y2="70" stroke="#dc2626" stroke-width="1.5"/>
-        <polygon points="350,70 365,75 350,80" fill="#dc2626"/>
-      </svg>
-      <p style="color:#166534; font-size:0.82rem; margin-top:10px; line-height:1.5;">As you walk along the path toward <span style="color:#dc2626; font-weight:700;">x = a</span>, your <strong>altitude</strong> (the function value) approaches a specific height. That height is the <strong>limit</strong>!</p>
-    </div>
-
-    <!-- Speed Limit / Car Visual -->
-    <div style="background:linear-gradient(180deg,#64748b 0%,#475569 100%); border-radius:16px; padding:24px 16px; margin:24px 0; text-align:center; position:relative; overflow:hidden;">
-      <div style="color:#fbbf24; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">Imagine a Speed Limit</div>
-      <svg viewBox="0 0 400 150" width="100%" height="130" style="max-width:400px;">
-        <!-- Road -->
-        <rect x="0" y="85" width="400" height="50" fill="#334155" rx="4"/>
-        <!-- Road lines -->
-        <line x1="0" y1="110" x2="40" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <line x1="60" y1="110" x2="100" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <line x1="120" y1="110" x2="160" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <line x1="180" y1="110" x2="220" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <line x1="240" y1="110" x2="280" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <line x1="300" y1="110" x2="340" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <line x1="360" y1="110" x2="400" y2="110" stroke="#fbbf24" stroke-width="2" stroke-dasharray="12,8"/>
-        <!-- Speed limit sign post -->
-        <line x1="300" y1="40" x2="300" y2="85" stroke="#9ca3af" stroke-width="3"/>
-        <!-- Speed limit sign -->
-        <rect x="275" y="8" width="50" height="58" rx="6" fill="#fff" stroke="#ef4444" stroke-width="4"/>
-        <text x="300" y="26" text-anchor="middle" font-size="8" fill="#1e293b" font-weight="bold">SPEED</text>
-        <text x="300" y="37" text-anchor="middle" font-size="8" fill="#1e293b" font-weight="bold">LIMIT</text>
-        <text x="300" y="58" text-anchor="middle" font-size="22" fill="#1e293b" font-weight="900">65</text>
-        <!-- Car approaching the sign -->
-        <g>
-          <rect x="100" y="90" width="60" height="24" rx="6" fill="#3b82f6"/>
-          <rect x="112" y="82" width="36" height="14" rx="4" fill="#60a5fa"/>
-          <!-- Windows -->
-          <rect x="116" y="84" width="12" height="9" rx="2" fill="#bfdbfe" opacity="0.7"/>
-          <rect x="132" y="84" width="12" height="9" rx="2" fill="#bfdbfe" opacity="0.7"/>
-          <!-- Wheels -->
-          <circle cx="118" cy="116" r="7" fill="#1e293b"/><circle cx="118" cy="116" r="3" fill="#64748b"/>
-          <circle cx="148" cy="116" r="7" fill="#1e293b"/><circle cx="148" cy="116" r="3" fill="#64748b"/>
-          <!-- Headlights -->
-          <rect x="158" y="95" width="4" height="6" rx="1" fill="#fbbf24"/>
-          <animateTransform attributeName="transform" type="translate" values="0,0;10,0;0,0" dur="2s" repeatCount="indefinite"/>
-        </g>
-        <!-- Speed values above car -->
-        <text x="80" y="80" font-size="9" fill="#94a3b8" font-weight="600">55 mph</text>
-        <text x="140" y="75" font-size="9" fill="#fbbf24" font-weight="700">60 mph</text>
-        <text x="210" y="72" font-size="10" fill="#fb923c" font-weight="700">63 mph</text>
-        <text x="260" y="70" font-size="10" fill="#ef4444" font-weight="800">64.9 mph</text>
-        <!-- Arrow showing approach to 65 -->
-        <path d="M90 78 Q180 68 268 68" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="3,2"/>
-      </svg>
-      <p style="color:#cbd5e1; font-size:0.82rem; margin-top:10px; line-height:1.5;">Your car speeds up: <span style="color:#94a3b8;">55</span> &rarr; <span style="color:#fbbf24;">60</span> &rarr; <span style="color:#fb923c;">63</span> &rarr; <span style="color:#ef4444;">64.9</span> &rarr; getting closer and closer to <strong style="color:#fff;">65 mph</strong>. The <strong style="color:#fbbf24;">limit</strong> is <strong style="color:#fff;">65</strong> &mdash; the value you <em>approach</em>, even if you never quite hit it!</p>
+    <div class="math-block">
+      $$\lim_{x \to 0^+} \frac{1}{x} = +\infty$$
     </div>
 
     <p>
-      This works for <strong>polynomials</strong>, <strong>rational functions</strong> (when the denominator isn't zero), <strong>trig functions</strong>, and <strong>exponentials</strong>. If the function doesn't blow up or have a hole at that point, direct substitution is your move.
+      From the left (\(x \to 0^-\)), the values plunge: \(\frac{1}{-0.1} = -10\), \(\frac{1}{-0.01} = -100\), etc.
     </p>
-
-    <p><strong>Example 1:</strong></p>
     <div class="math-block">
-      $$\lim_{x \to 3} (2x + 1) = 2(3) + 1 = 7$$
-    </div>
-
-    <p><strong>Example 2:</strong></p>
-    <div class="math-block">
-      $$\lim_{x \to 0} \cos(x) = \cos(0) = 1$$
+      $$\lim_{x \to 0^-} \frac{1}{x} = -\infty$$
     </div>
 
     <p>
-      Direct substitution is always your <strong>first attempt</strong>. Only when it produces something undefined &mdash; like \(\frac{0}{0}\) &mdash; do you need fancier techniques.
+      Since the one-sided limits disagree, the <strong>two-sided limit does not exist</strong>:
+    </p>
+    <div class="math-block">
+      $$\lim_{x \to 0} \frac{1}{x} \text{ DNE}$$
+    </div>
+
+    <p><strong>Example 2:</strong> Now consider \(f(x) = \dfrac{1}{x^2}\) as \(x \to 0\).</p>
+    <div class="math-block">
+      $$\lim_{x \to 0^+} \frac{1}{x^2} = +\infty \quad \text{and} \quad \lim_{x \to 0^-} \frac{1}{x^2} = +\infty$$
+    </div>
+    <p>
+      Both sides agree (both go to \(+\infty\)), so we write:
+    </p>
+    <div class="math-block">
+      $$\lim_{x \to 0} \frac{1}{x^2} = +\infty$$
+    </div>
+
+    <p>
+      <strong>Key point:</strong> When a limit equals \(\pm\infty\), the limit technically "does not exist" as a finite number, but we use the infinity notation to describe the behavior.
     </p>
   </section>
 
@@ -293,52 +191,84 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 2} (3x^2 - 1)\\)?',
-        options: ['11', '5', '12', '9'],
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0^+} \\frac{1}{x}\\)?',
+        options: ['0', '+∞', '-∞', 'DNE'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} \\frac{1}{x}\\)?',
+        options: ['0', '+∞', '-∞', 'DNE'],
+        correctIndex: 3
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\displaystyle\\lim_{x \\to 3^+} \\frac{1}{x - 3} = \\) ___ (write +infinity, -infinity, or DNE)',
+        answer: '+infinity'
+      },
+      {
+        type: 'true-false',
+        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{1}{x^2} = +\\infty\\)',
+        correctAnswer: true
+      },
+      {
+        type: 'matching',
+        question: 'Match each one-sided limit with its value.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to 0^+} \\frac{1}{x}\\)', right: '+∞' },
+          { left: '\\(\\lim_{x \\to 0^-} \\frac{1}{x}\\)', right: '-∞' },
+          { left: '\\(\\lim_{x \\to 2^+} \\frac{1}{(x-2)^2}\\)', right: '+∞' },
+          { left: '\\(\\lim_{x \\to 2^-} \\frac{-1}{x-2}\\)', right: '+∞' }
+        ]
+      },
+      {
+        type: 'listening',
+        spokenText: 'What is the limit as x approaches one from the right of one divided by the quantity x minus one? Choose from: positive infinity, negative infinity, zero, or does not exist.',
+        options: ['+∞', '-∞', '0', 'DNE'],
         correctIndex: 0
       },
       {
         type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 4} \\sqrt{x} = \\) ___',
-        answer: '2'
-      },
-      {
-        type: 'true-false',
-        question: 'You can always evaluate a limit by direct substitution.',
-        correctAnswer: false
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} e^x\\)?',
-        options: ['0', '1', 'e', 'undefined'],
-        correctIndex: 1
-      },
-      {
-        type: 'matching',
-        question: 'Match each limit with its value.',
-        pairs: [
-          { left: '\\(\\lim_{x \\to 1} x^3\\)', right: '1' },
-          { left: '\\(\\lim_{x \\to \\pi} \\sin(x)\\)', right: '0' },
-          { left: '\\(\\lim_{x \\to 0} \\cos(x)\\)', right: '1' },
-          { left: '\\(\\lim_{x \\to 2} 5\\)', right: '5' }
-        ]
+        question: '\\(\\displaystyle\\lim_{x \\to 0^-} \\frac{5}{x^3} = \\) ___ (write +infinity, -infinity, or DNE)',
+        answer: '-infinity'
       },
       {
         type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to -1} (x^2 + 2x + 1) = \\) ___',
-        answer: '0'
+        question: '🚗 A broken speedometer blinks wildly near t = 0 with no settled value. The limit at t = 0 ___ (write DNE).',
+        answer: 'DNE'
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 The coaster function <strong>f(x) = 1/x</strong> shoots to ___ as x → 0 from the right.',
+        answer: 'infinity'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ \\(\\lim_{x\\to 0} \\sin(1/x)\\) oscillates forever. This limit ___ (write DNE).',
+        answer: 'DNE'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0^+}\\frac{1}{x} = \\) ___ (write infinity)',
+        answer: 'infinity'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 0^-}\\frac{1}{x^2} = \\) ___ (write infinity)',
+        answer: 'infinity'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if left limit = 3 and right limit = 5, then \\(\\lim_{x\\to a} f(x) \\) ___ (write DNE)',
+        answer: 'DNE'
       }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
-    // Random character for EACH question
-    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      const c = chars[index % chars.length];
-      initSideCharacter(c, '../../');
-      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,
@@ -347,6 +277,7 @@
       nextHref: 'lesson-6.html',
       backHref: 'index.html'
     });
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
 </script>
 
 </body>

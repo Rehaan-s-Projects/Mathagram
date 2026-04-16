@@ -3,88 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Definition of the Derivative — Mathagram</title>
+  <title>Limits Involving Trig Identities — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
-    .lesson-content {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 48px 24px 32px;
-    }
-    .lesson-content .chapter-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-primary);
-      margin-bottom: 8px;
-    }
-    .lesson-content h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-    .lesson-content p {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--color-text-secondary);
-      margin-bottom: 16px;
-    }
-    .lesson-content .math-block {
-      text-align: center;
-      margin: 24px 0;
-      font-size: 1.3rem;
-    }
-    .lesson-content ul {
-      margin: 12px 0 20px 20px;
-      color: var(--color-text-secondary);
-      line-height: 1.75;
-    }
-    .exercise-section {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 0 24px 48px;
-    }
-    .exercise-section h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-    .lesson-complete {
-      text-align: center;
-      padding: 40px 24px;
-      background: var(--color-white);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      max-width: 480px;
-      margin: 32px auto;
-      box-shadow: var(--shadow-md);
-    }
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
     .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
     .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
     .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
-    .lesson-complete .xp-earned {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 20px; font-size: 1rem; font-weight: 700;
-      color: var(--color-xp); background: rgba(234,179,8,0.1);
-      border-radius: var(--radius); margin-bottom: 16px;
-    }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
     .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
     .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
   </style>
-<link rel="stylesheet" href="../../css/calculator.css">
+  <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
-
-  <!-- Navigation -->
   <nav class="nav">
     <div class="container">
       <a href="../../index.html" class="nav-logo">
@@ -99,57 +46,37 @@
     </div>
   </nav>
 
-  <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Unit 2 &mdash; Derivatives</div>
-    <h1>Definition of the Derivative</h1>
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits Involving Trig Identities</h1>
 
-    <p>
-      The <strong>derivative</strong> of a function at a point is the <em>instantaneous rate of change</em> at that point. It's what you get when you take the average rate of change and let the interval shrink to zero.
-    </p>
+    <p>Limits of trig functions are often "\(0/0\)" and can't be evaluated by direct substitution. Two identities let you unlock almost all of them:</p>
 
-    <p><strong>Limit Definition of the Derivative:</strong></p>
-    <div class="math-block">
-      $$f'(a) = \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$$
-    </div>
+    <div class="math-block">$$\lim_{x \to 0} \frac{\sin x}{x} = 1 \qquad\qquad \lim_{x \to 0} \frac{1 - \cos x}{x} = 0$$</div>
 
-    <p>An equivalent form uses \(x \to a\):</p>
-    <div class="math-block">
-      $$f'(a) = \lim_{x \to a} \frac{f(x) - f(a)}{x - a}$$
-    </div>
+    <p>Both apply when \(x\) is measured in <strong>radians</strong>. Together with the algebraic limit laws and trig identities, they cover most classic trig limits.</p>
 
-    <p><strong>Geometric meaning:</strong> The derivative \(f'(a)\) is the slope of the <strong>tangent line</strong> to the graph of \(f\) at the point \((a, f(a))\). The tangent line just touches the curve at that point and matches its direction.</p>
+    <p><strong>Example 1.</strong> Evaluate \(\lim_{x\to 0}\dfrac{\sin 5x}{x}\).</p>
+    <p>Rewrite: \(\dfrac{\sin 5x}{x} = 5 \cdot \dfrac{\sin 5x}{5x}\). As \(x \to 0\), \(5x \to 0\), so \(\dfrac{\sin 5x}{5x} \to 1\). The limit is \(5 \cdot 1 = 5\).</p>
 
-    <p><strong>Notation:</strong> The derivative of \(f(x)\) can be written as:</p>
-    <ul>
-      <li>\(f'(x)\) &mdash; Lagrange notation (prime notation)</li>
-      <li>\(\dfrac{dy}{dx}\) &mdash; Leibniz notation</li>
-      <li>\(\dfrac{df}{dx}\) &mdash; also Leibniz</li>
-      <li>\(\dot{y}\) &mdash; Newton's notation (used in physics)</li>
-    </ul>
+    <p><strong>General rule.</strong> \(\displaystyle\lim_{x\to 0}\dfrac{\sin(kx)}{x} = k\) for any constant \(k\).</p>
 
-    <p><strong>Example:</strong> Find \(f'(x)\) for \(f(x) = x^2\) using the limit definition.</p>
-    <div class="math-block">
-      $$f'(x) = \lim_{h \to 0} \frac{(x+h)^2 - x^2}{h} = \lim_{h \to 0} \frac{x^2 + 2xh + h^2 - x^2}{h}$$
-    </div>
-    <div class="math-block">
-      $$= \lim_{h \to 0} \frac{2xh + h^2}{h} = \lim_{h \to 0} (2x + h) = 2x$$
-    </div>
-    <p>So the derivative of \(x^2\) is \(2x\). At \(x = 3\), the slope of the tangent line is \(f'(3) = 6\).</p>
+    <p><strong>Example 2.</strong> Evaluate \(\lim_{x\to 0}\dfrac{\sin 4x}{\sin 3x}\).</p>
+    <p>Split: \(\dfrac{\sin 4x}{\sin 3x} = \dfrac{\sin 4x}{4x} \cdot \dfrac{3x}{\sin 3x} \cdot \dfrac{4}{3}\). The first factor \(\to 1\), the second \(\to 1\), and the third is constant, so the limit is \(\tfrac{4}{3}\).</p>
 
-    <p>
-      <strong>Key insight:</strong> If a function is differentiable at a point, it must be continuous there. But being continuous does NOT guarantee differentiability (think of a sharp corner like \(|x|\) at \(x = 0\)).
-    </p>
+    <p><strong>Example 3.</strong> Evaluate \(\lim_{x\to 0}\dfrac{1-\cos x}{x^2}\).</p>
+    <p>Multiply top and bottom by \(1 + \cos x\):</p>
+    <div class="math-block">$$\frac{1-\cos x}{x^2}\cdot\frac{1+\cos x}{1+\cos x} = \frac{\sin^2 x}{x^2(1+\cos x)} \to 1^2 \cdot \frac{1}{2} = \frac{1}{2}.$$</div>
+
+    <p><strong>Example 4.</strong> Evaluate \(\lim_{x\to 0}\dfrac{\tan x}{x}\). Write \(\tan x = \dfrac{\sin x}{\cos x}\), so \(\dfrac{\tan x}{x} = \dfrac{\sin x}{x}\cdot\dfrac{1}{\cos x} \to 1 \cdot 1 = 1\).</p>
   </section>
 
-  <!-- Exercises -->
   <section class="exercise-section">
     <h2>Practice Exercises</h2>
     <div id="exercises"></div>
     <div id="completion" style="display:none;"></div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
@@ -164,126 +91,78 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
-    // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\(", right: "\\)", display: false }
-          ],
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
       }
     });
-
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      {
-        type: 'multiple-choice',
-        question: 'The limit definition of the derivative is:',
-        options: [
-          '\\(\\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}\\)',
-          '\\(\\lim_{h \\to 0} \\frac{f(a) - f(h)}{a}\\)',
-          '\\(\\lim_{h \\to \\infty} \\frac{f(a+h) - f(a)}{h}\\)',
-          '\\(\\frac{f(b) - f(a)}{b - a}\\)'
-        ],
-        correctIndex: 0
-      },
-      {
-        type: 'fill-blank',
-        question: 'Using the limit definition, the derivative of \\(f(x) = 3x\\) is ___.',
-        answer: '3'
-      },
-      {
-        type: 'true-false',
-        question: 'If a function is differentiable at a point, it must be continuous there.',
-        correctAnswer: true
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What does \\(f\'(a)\\) represent geometrically?',
-        options: [
-          'The y-intercept of f',
-          'The slope of the secant line',
-          'The slope of the tangent line at x = a',
-          'The area under the curve'
-        ],
-        correctIndex: 2
-      },
-      {
-        type: 'fill-blank',
-        question: 'If \\(f(x) = x^2\\), then \\(f\'(3) = \\) ___.',
-        answer: '6'
-      },
-      {
-        type: 'true-false',
-        question: 'If a function is continuous at a point, it must be differentiable there.',
-        correctAnswer: false
-      },
-      {
-        type: 'matching',
-        question: 'Match each notation with its description.',
+      { type: 'fill-blank',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\sin x}{x} =\\) ___.',
+        answer: '1' },
+      { type: 'fill-blank',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x} =\\) ___.',
+        answer: '0' },
+      { type: 'multiple-choice',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\sin 5x}{x} =\\)',
+        options: ['\\(1\\)', '\\(5\\)', '\\(0\\)', '\\(\\infty\\)'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\sin 4x}{\\sin 3x} =\\)',
+        options: ['\\(1\\)', '\\(\\tfrac{4}{3}\\)', '\\(\\tfrac{3}{4}\\)', '\\(12\\)'],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\sin(7x)}{x} =\\) ___.',
+        answer: '7' },
+      { type: 'multiple-choice',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\tan x}{x} =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(\\infty\\)', '\\(\\pi\\)'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x^2} =\\)',
+        options: ['\\(0\\)', '\\(\\tfrac{1}{2}\\)', '\\(1\\)', '\\(2\\)'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'The limit \\(\\lim_{x\\to 0}\\dfrac{\\sin x}{x} = 1\\) holds in radian measure, not degrees.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\sin(2x)}{3x} =\\) ___ (fraction).',
+        answer: '2/3' },
+      { type: 'multiple-choice',
+        question: '\\(\\lim_{x\\to 0}\\dfrac{\\sin^2 x}{x} =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(2\\)', 'Undefined'],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'Direct substitution into \\(\\dfrac{\\sin x}{x}\\) at \\(x=0\\) gives an indeterminate form \\(0/0\\).',
+        correctAnswer: true },
+      { type: 'matching',
+        question: 'Match each classic trig limit to its value.',
         pairs: [
-          { left: '\\(f\'(x)\\)', right: 'Lagrange (prime) notation' },
-          { left: '\\(\\frac{dy}{dx}\\)', right: 'Leibniz notation' },
-          { left: '\\(\\dot{y}\\)', right: 'Newton notation' },
-          { left: '\\(\\frac{\\Delta y}{\\Delta x}\\)', right: 'Average rate of change' }
-        ]
-      },
-      {
-        type: 'multiple-choice',
-        question: 'Using the limit definition, what is the derivative of \\(f(x) = x^3\\)?',
-        options: ['\\(x^2\\)', '\\(3x^2\\)', '\\(3x\\)', '\\(x^3\\)'],
-        correctIndex: 1
-      },
-      {
-        type: 'multiple-choice',
-        question: 'At which point is \\(f(x) = |x|\\) NOT differentiable?',
-        options: ['x = 1', 'x = -1', 'x = 0', 'It is differentiable everywhere'],
-        correctIndex: 2
-      },
-      {
-        type: 'fill-blank',
-        question: 'The derivative of a constant function \\(f(x) = 7\\) is ___.',
-        answer: '0'
-      },
-      {
-        type: 'multiple-choice',
-        question: 'If \\(f(x) = 5x + 2\\), what is \\(f\'(x)\\)?',
-        options: ['5x', '5', '2', '7'],
-        correctIndex: 1
-      },
-      {
-        type: 'true-false',
-        question: 'The derivative of \\(f(x) = x^2\\) at \\(x = 0\\) is 0, which means the tangent line there is horizontal.',
-        correctAnswer: true
-      }
+          { left: '\\(\\lim_{x\\to 0}\\dfrac{\\sin x}{x}\\)', right: '\\(1\\)' },
+          { left: '\\(\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x}\\)', right: '\\(0\\)' },
+          { left: '\\(\\lim_{x\\to 0}\\dfrac{\\tan x}{x}\\)', right: '\\(1\\)' },
+          { left: '\\(\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x^2}\\)', right: '\\(\\tfrac{1}{2}\\)' }
+        ] }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
-
-    // Random character for EACH question
     const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       const c = chars[index % chars.length];
       initSideCharacter(c, '../../');
       showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'calculus',
-      lessonId: 'lesson-21',
-      nextHref: 'lesson-22.html',
-      backHref: 'index.html'
+      courseId: 'calculus', lessonId: 'lesson-21', nextHref: 'index.html', backHref: 'index.html'
     });
-  import { createCalculator } from "../../js/calculator.js"; createCalculator();
-</script>
-
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
 </body>
 </html>

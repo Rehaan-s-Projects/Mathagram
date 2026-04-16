@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Determining & Classifying Discontinuities — Mathagram</title>
+  <title>Definition of the Derivative — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -101,46 +101,45 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Unit 1 &mdash; Limits</div>
-    <h1>Determining &amp; Classifying Discontinuities</h1>
+    <div class="chapter-label">Unit 2 &mdash; Derivatives</div>
+    <h1>Definition of the Derivative</h1>
 
     <p>
-      Now that you know the three conditions for continuity, let's classify what goes wrong when a function <strong>isn't</strong> continuous. There are three main types of discontinuity:
+      The <strong>derivative</strong> of a function at a point is the <em>instantaneous rate of change</em> at that point. It's what you get when you take the average rate of change and let the interval shrink to zero.
     </p>
 
-    <p><strong>1. Removable Discontinuity (Hole)</strong></p>
-    <p>
-      The limit exists, but either \(f(a)\) is undefined or \(f(a) \neq \lim_{x \to a} f(x)\). You can "remove" the discontinuity by redefining \(f(a)\).
-    </p>
+    <p><strong>Limit Definition of the Derivative:</strong></p>
     <div class="math-block">
-      $$f(x) = \frac{x^2 - 1}{x - 1} \quad \text{has a removable discontinuity at } x = 1$$
+      $$f'(a) = \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$$
     </div>
 
-    <p><strong>2. Jump Discontinuity</strong></p>
-    <p>
-      The left-hand and right-hand limits both exist but are <strong>not equal</strong>. Common in piecewise functions.
-    </p>
+    <p>An equivalent form uses \(x \to a\):</p>
     <div class="math-block">
-      $$f(x) = \begin{cases} x + 1 & x < 2 \\ x - 1 & x \geq 2 \end{cases}$$
-    </div>
-    <p>
-      Here \(\lim_{x \to 2^-} f(x) = 3\) but \(\lim_{x \to 2^+} f(x) = 1\). The function "jumps."
-    </p>
-
-    <p><strong>3. Infinite Discontinuity</strong></p>
-    <p>
-      At least one of the one-sided limits is \(\pm\infty\). This happens at vertical asymptotes.
-    </p>
-    <div class="math-block">
-      $$f(x) = \frac{1}{x} \quad \text{has an infinite discontinuity at } x = 0$$
+      $$f'(a) = \lim_{x \to a} \frac{f(x) - f(a)}{x - a}$$
     </div>
 
-    <p><strong>Classification strategy:</strong></p>
+    <p><strong>Geometric meaning:</strong> The derivative \(f'(a)\) is the slope of the <strong>tangent line</strong> to the graph of \(f\) at the point \((a, f(a))\). The tangent line just touches the curve at that point and matches its direction.</p>
+
+    <p><strong>Notation:</strong> The derivative of \(f(x)\) can be written as:</p>
     <ul>
-      <li>Check if the limit exists and is finite. If yes &rarr; removable.</li>
-      <li>Check if both one-sided limits are finite but unequal &rarr; jump.</li>
-      <li>If any one-sided limit is \(\pm\infty\) &rarr; infinite.</li>
+      <li>\(f'(x)\) &mdash; Lagrange notation (prime notation)</li>
+      <li>\(\dfrac{dy}{dx}\) &mdash; Leibniz notation</li>
+      <li>\(\dfrac{df}{dx}\) &mdash; also Leibniz</li>
+      <li>\(\dot{y}\) &mdash; Newton's notation (used in physics)</li>
     </ul>
+
+    <p><strong>Example:</strong> Find \(f'(x)\) for \(f(x) = x^2\) using the limit definition.</p>
+    <div class="math-block">
+      $$f'(x) = \lim_{h \to 0} \frac{(x+h)^2 - x^2}{h} = \lim_{h \to 0} \frac{x^2 + 2xh + h^2 - x^2}{h}$$
+    </div>
+    <div class="math-block">
+      $$= \lim_{h \to 0} \frac{2xh + h^2}{h} = \lim_{h \to 0} (2x + h) = 2x$$
+    </div>
+    <p>So the derivative of \(x^2\) is \(2x\). At \(x = 3\), the slope of the tangent line is \(f'(3) = 6\).</p>
+
+    <p>
+      <strong>Key insight:</strong> If a function is differentiable at a point, it must be continuous there. But being continuous does NOT guarantee differentiability (think of a sharp corner like \(|x|\) at \(x = 0\)).
+    </p>
   </section>
 
   <!-- Exercises -->
@@ -180,83 +179,165 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
-
     // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What type of discontinuity does \\(f(x) = \\frac{x^2 - 4}{x - 2}\\) have at \\(x = 2\\)?',
-        options: ['Jump', 'Removable', 'Infinite', 'None — it is continuous'],
-        correctIndex: 1
+        question: 'The limit definition of the derivative is:',
+        options: [
+          '\\(\\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}\\)',
+          '\\(\\lim_{h \\to 0} \\frac{f(a) - f(h)}{a}\\)',
+          '\\(\\lim_{h \\to \\infty} \\frac{f(a+h) - f(a)}{h}\\)',
+          '\\(\\frac{f(b) - f(a)}{b - a}\\)'
+        ],
+        correctIndex: 0
       },
       {
-        type: 'multiple-choice',
-        question: 'What type of discontinuity does \\(f(x) = \\frac{1}{(x-3)^2}\\) have at \\(x = 3\\)?',
-        options: ['Removable', 'Jump', 'Infinite', 'None'],
-        correctIndex: 2
+        type: 'fill-blank',
+        question: 'Using the limit definition, the derivative of \\(f(x) = 3x\\) is ___.',
+        answer: '3'
       },
       {
         type: 'true-false',
-        question: 'A jump discontinuity can be removed by redefining the function at that point.',
+        question: 'If a function is differentiable at a point, it must be continuous there.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What does \\(f\'(a)\\) represent geometrically?',
+        options: [
+          'The y-intercept of f',
+          'The slope of the secant line',
+          'The slope of the tangent line at x = a',
+          'The area under the curve'
+        ],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'If \\(f(x) = x^2\\), then \\(f\'(3) = \\) ___.',
+        answer: '6'
+      },
+      {
+        type: 'true-false',
+        question: 'If a function is continuous at a point, it must be differentiable there.',
         correctAnswer: false
       },
       {
-        type: 'fill-blank',
-        question: 'If the left-hand limit is 5 and the right-hand limit is 5 but \\(f(a)\\) is undefined, the discontinuity is ___ (removable, jump, or infinite).',
-        answer: 'removable'
-      },
-      {
         type: 'matching',
-        question: 'Match each function to its type of discontinuity at the given point.',
+        question: 'Match each notation with its description.',
         pairs: [
-          { left: '\\(\\frac{x^2-9}{x-3}\\) at \\(x=3\\)', right: 'Removable' },
-          { left: '\\(\\frac{1}{x}\\) at \\(x=0\\)', right: 'Infinite' },
-          { left: 'Piecewise: 1 if \\(x<0\\), 2 if \\(x \\geq 0\\)', right: 'Jump' },
-          { left: '\\(\\frac{x+1}{(x+1)}\\) at \\(x=-1\\)', right: 'Removable' }
+          { left: '\\(f\'(x)\\)', right: 'Lagrange (prime) notation' },
+          { left: '\\(\\frac{dy}{dx}\\)', right: 'Leibniz notation' },
+          { left: '\\(\\dot{y}\\)', right: 'Newton notation' },
+          { left: '\\(\\frac{\\Delta y}{\\Delta x}\\)', right: 'Average rate of change' }
         ]
       },
       {
-        type: 'listening',
-        spokenText: 'If the left-hand limit as x approaches a is positive infinity, what type of discontinuity is this? Choose from: removable, jump, infinite, or no discontinuity.',
-        options: ['Removable', 'Jump', 'Infinite', 'No discontinuity'],
+        type: 'multiple-choice',
+        question: 'Using the limit definition, what is the derivative of \\(f(x) = x^3\\)?',
+        options: ['\\(x^2\\)', '\\(3x^2\\)', '\\(3x\\)', '\\(x^3\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'At which point is \\(f(x) = |x|\\) NOT differentiable?',
+        options: ['x = 1', 'x = -1', 'x = 0', 'It is differentiable everywhere'],
         correctIndex: 2
       },
       {
         type: 'fill-blank',
-        question: 'If \\(\\lim_{x \\to a^-} f(x) = 3\\) and \\(\\lim_{x \\to a^+} f(x) = 7\\), the discontinuity at \\(x = a\\) is a ___ discontinuity.',
-        answer: 'jump'
+        question: 'The derivative of a constant function \\(f(x) = 7\\) is ___.',
+        answer: '0'
       },
       {
         type: 'multiple-choice',
-        question: 'Which of the following is true about removable discontinuities?',
-        options: [
-          'The two-sided limit does not exist',
-          'The limit exists but does not equal f(a) (or f(a) is undefined)',
-          'The function goes to infinity',
-          'The left and right limits are different finite values'
-        ],
+        question: 'If \\(f(x) = 5x + 2\\), what is \\(f\'(x)\\)?',
+        options: ['5x', '5', '2', '7'],
         correctIndex: 1
       },
       {
         type: 'true-false',
-        question: 'Every polynomial function is continuous on all of \\(\\mathbb{R}\\).',
+        question: 'The derivative of \\(f(x) = x^2\\) at \\(x = 0\\) is 0, which means the tangent line there is horizontal.',
         correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '🎢 Instantaneous speed at ONE point on the coaster track is the:',
+        options: ['derivative','average','limit at infinity','integral'],
+        correctIndex: 0
+      },
+      {
+        type: 'multiple-choice',
+        question: '🚗 The speedometer shows the derivative of ___ with respect to time.',
+        options: ['position','time','speed','acceleration'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: '🏔️ The derivative at x is the slope of the tangent line at that point on the landscape.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 Definition: f\'(a) = lim h→0 (f(a+h) − f(a)) / ___.',
+        answer: 'h'
+      },
+      {
+        type: 'multiple-choice',
+        question: '🚗 At t = 2, your derivative (instantaneous speed) is 30 mph. This means:',
+        options: ['You\'re moving at 30 mph right now','You drove 30 miles total','Time is 30 seconds','Your average speed is 30'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 The speedometer reading IS the derivative of ___ with respect to time (one word).',
+        answer: 'position'
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 Definition: f\'(a) = lim h→0 (f(a + h) − f(a)) / ___.',
+        answer: 'h'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ At x = 2, the tangent line slope of f(x) = x² is ___.',
+        answer: '4'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: f(x) = x², f\'(3) = ___',
+        answer: '6'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: f(x) = 5x + 2, f\'(x) = ___',
+        answer: '5'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: f(x) = x², f\'(−4) = ___',
+        answer: '-8'
       }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,
       courseId: 'calculus',
       lessonId: 'lesson-15',
-      nextHref: 'lesson-7.html',
+      nextHref: 'lesson-16.html',
       backHref: 'index.html'
     });
   import { createCalculator } from "../../js/calculator.js"; createCalculator();

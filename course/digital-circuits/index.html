@@ -32,7 +32,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-science)">Science</span>
     <h1>Digital Circuits</h1>
-    <p>Logic gates, binary arithmetic, sequential logic, FSMs, memory, FPGAs, HDLs, and CPU architecture. 379 lessons across 29 units.</p>
+    <p>Logic gates, binary arithmetic, sequential logic, FSMs, memory, FPGAs, HDLs, and CPU architecture. 406 lessons across 29 units.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -47,9 +47,9 @@
     import { onAuthChange } from '../../js/auth.js';
     document.getElementById('year').textContent = new Date().getFullYear();
     const units = [
-      [1,'Binary Basics',['Binary Numbers','Boolean Logic','AND, OR, NOT Gates','XOR & NAND Gates','Logic Gates Checkpoint']],
-      [2,'Arithmetic',['Binary Addition','Half & Full Adders','Subtraction & Complements','Multiplexers','Arithmetic Checkpoint']],
-      [3,'Sequential Logic',['Flip-Flops & Latches','Counters & Registers','Memory & Storage','CPU Fundamentals','Sequential Logic Checkpoint']],
+      [1,'Binary Basics',['What Are Digital Circuits','Analog vs Digital Signals','Bits & Bytes','Binary Numbers','Counting in Binary','Binary to Decimal','Decimal to Binary','Boolean Logic Intro','AND Gate','OR Gate','NOT Gate','XOR Gate','NAND & NOR Gates','Binary Basics Checkpoint']],
+      [2,'Arithmetic',['Binary Addition Basics','Binary Subtraction Basics','Binary Multiplication','Binary Division','Overflow & Carry','Half Adder Intro','Full Adder Intro','4-bit Adder','Complements Intro','Two\'s Complement Intro','Binary Negation','Multiplexer Intro','Demultiplexer Intro','Arithmetic Checkpoint']],
+      [3,'Sequential Logic',['What Is Sequential Logic','Combinational vs Sequential','Clock Signals Intro','Memory Elements','SR Latch Intro','D Latch Intro','Flip-Flop Intro','D Flip-Flop Intro','JK Flip-Flop Intro','Counter Intro','Register Intro','Memory & Storage Intro','CPU Fundamentals Intro','Sequential Logic Checkpoint']],
       [4,'Number Systems & Codes',['Decimal System','Binary System','Octal System','Hexadecimal','Base Conversion','Signed Binary','Sign-Magnitude','One\'s Complement','Two\'s Complement','BCD — Binary Coded Decimal','Gray Code','ASCII Encoding','Unicode Basics','Number Systems Checkpoint']],
       [5,'Boolean Algebra Fundamentals',['Boolean Variables','Truth Tables','AND Law','OR Law','NOT Law','Commutative Law','Associative Law','Distributive Law','De Morgan\'s Theorems','Duality Principle','Canonical Forms','Sum of Products (SOP)','Product of Sums (POS)','Boolean Algebra Checkpoint']],
       [6,'Karnaugh Maps & Minimization',['2-Variable K-Map','3-Variable K-Map','4-Variable K-Map','5-Variable K-Map','Minterms','Maxterms','Essential Prime Implicants','Don\'t Care Conditions','SOP Minimization','POS Minimization','Quine-McCluskey Method','Tabular Method','Hazards in Logic','K-Map Checkpoint']],

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quotient Rule — Mathagram</title>
+  <title>Derivative at a Value — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -47,28 +47,35 @@
   </nav>
 
   <section class="lesson-content">
-    <div class="chapter-label">Unit 3 &mdash; Differentiation Advanced</div>
-    <h1>Quotient Rule</h1>
+    <div class="chapter-label">Unit 5 &mdash; Applications of Derivatives I</div>
+    <h1>Derivative at a Value</h1>
 
-    <p>The <strong>quotient rule</strong> tells you how to differentiate a fraction of two functions \(f(x)\) and \(g(x)\).</p>
-    <div class="math-block">$$\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$$</div>
-    <p>Memorable form: "<em>low d-high minus high d-low, over low-squared</em>."</p>
-
-    <p><strong>Example 1.</strong> Differentiate \(h(x) = \dfrac{x^2}{x+1}\).</p>
-    <p>Here \(f = x^2,\ g = x+1\), so \(f' = 2x,\ g' = 1\). Then</p>
-    <div class="math-block">$$h'(x) = \frac{2x(x+1) - x^2(1)}{(x+1)^2} = \frac{x^2 + 2x}{(x+1)^2}.$$</div>
-
-    <p><strong>Example 2.</strong> Differentiate \(h(x) = \dfrac{\sin x}{x}\).</p>
-    <div class="math-block">$$h'(x) = \frac{\cos x \cdot x - \sin x \cdot 1}{x^2} = \frac{x\cos x - \sin x}{x^2}.$$</div>
-
-    <p><strong>When not to use it.</strong> Simple expressions like \(\dfrac{3}{x^2}\) can be rewritten as \(3x^{-2}\) and differentiated with the power rule — much faster.</p>
-
-    <p><strong>Common pitfalls.</strong></p>
+    <p>The <strong>derivative at a specific value</strong> \(f'(a)\) is a single number — the instantaneous rate of change of \(f\) at the point \(x = a\).</p>
+    <div class="math-block">$$f'(a) = \lim_{h\to 0} \frac{f(a+h) - f(a)}{h}.$$</div>
+    <p>But after you know the differentiation rules, the easier path is:</p>
     <ul>
-      <li>The order in the numerator matters — it's \(f'g - fg'\), not \(fg' - f'g\).</li>
-      <li>Don't forget to square the denominator.</li>
-      <li>Always simplify after applying the rule.</li>
+      <li>Find the general derivative \(f'(x)\) using the rules.</li>
+      <li>Plug in \(x = a\).</li>
     </ul>
+
+    <p><strong>Example 1.</strong> For \(f(x) = x^2 - 3x\), find \(f'(4)\).</p>
+    <p>\(f'(x) = 2x - 3\), so \(f'(4) = 5\).</p>
+
+    <p><strong>Example 2.</strong> For \(f(x) = \dfrac{1}{x}\), find \(f'(2)\).</p>
+    <p>\(f'(x) = -x^{-2}\), so \(f'(2) = -\dfrac{1}{4}\).</p>
+
+    <p><strong>Example 3 — trig.</strong> For \(f(x) = \sin x\), find \(f'(\pi)\).</p>
+    <p>\(f'(x) = \cos x\), so \(f'(\pi) = -1\).</p>
+
+    <p><strong>Interpretations.</strong></p>
+    <ul>
+      <li><strong>Slope</strong> of the tangent line to \(y = f(x)\) at \(x = a\).</li>
+      <li><strong>Instantaneous rate of change</strong> — how fast \(f\) changes at that exact input.</li>
+      <li>If \(f(t)\) is position, \(f'(a)\) is <strong>velocity</strong> at time \(a\).</li>
+    </ul>
+
+    <p><strong>Alternative form</strong> (useful on AP problems):</p>
+    <div class="math-block">$$f'(a) = \lim_{x\to a}\frac{f(x) - f(a)}{x - a}.$$</div>
   </section>
 
   <section class="exercise-section">
@@ -100,37 +107,38 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice', question: 'The quotient rule states \\(\\left(\\dfrac{f}{g}\\right)\' =\\)',
-        options: ['\\(\\dfrac{f\'g+fg\'}{g^2}\\)', '\\(\\dfrac{f\'g-fg\'}{g^2}\\)', '\\(\\dfrac{f\'g\'}{g^2}\\)', '\\(\\dfrac{fg\'-f\'g}{g^2}\\)'],
+      { type: 'fill-blank', question: 'For \\(f(x)=x^2-3x\\), \\(f\'(4) =\\) ___.',
+        answer: '5' },
+      { type: 'multiple-choice', question: 'For \\(f(x)=1/x\\), \\(f\'(2) =\\)',
+        options: ['\\(\\tfrac{1}{4}\\)', '\\(-\\tfrac{1}{4}\\)', '\\(\\tfrac{1}{2}\\)', '\\(2\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x}{x+1}\\).',
-        options: ['\\(\\dfrac{1}{(x+1)^2}\\)', '\\(\\dfrac{x}{(x+1)^2}\\)', '\\(\\dfrac{-1}{(x+1)^2}\\)', '\\(\\dfrac{x+1}{x^2}\\)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Memorize it as: low d-high minus ___ d-low, over low-squared.',
-        answer: 'high' },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x^2}{x+1}\\).',
-        options: ['\\(\\dfrac{2x}{x+1}\\)', '\\(\\dfrac{x^2+2x}{(x+1)^2}\\)', '\\(\\dfrac{x^2-2x}{(x+1)^2}\\)', '\\(\\dfrac{2x(x+1)}{x+1}\\)'],
-        correctIndex: 1 },
-      { type: 'true-false', question: 'For \\(\\dfrac{3}{x^2}\\), the power rule is faster than the quotient rule.',
+      { type: 'fill-blank', question: 'For \\(f(x)=\\sin x\\), \\(f\'(\\pi) =\\) ___.',
+        answer: '-1' },
+      { type: 'multiple-choice', question: 'For \\(f(x)=x^3\\), \\(f\'(2) =\\)',
+        options: ['\\(6\\)', '\\(8\\)', '\\(12\\)', '\\(4\\)'],
+        correctIndex: 2 },
+      { type: 'true-false', question: '\\(f\'(a)\\) gives the slope of the tangent line to \\(y=f(x)\\) at \\(x=a\\).',
         correctAnswer: true },
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\!\\left[\\dfrac{\\sin x}{x}\\right] =\\)',
-        options: ['\\(\\dfrac{\\cos x}{1}\\)', '\\(\\dfrac{x\\cos x - \\sin x}{x^2}\\)', '\\(\\dfrac{\\cos x - \\sin x}{x}\\)', '\\(\\dfrac{\\sin x - x\\cos x}{x^2}\\)'],
+      { type: 'fill-blank', question: 'For \\(f(x)=\\sqrt{x}\\), \\(f\'(9) = \\dfrac{1}{2\\sqrt{9}} = \\dfrac{1}{\\)___\\(}\\).',
+        answer: '6' },
+      { type: 'multiple-choice', question: 'For \\(f(x)=e^x\\), \\(f\'(0) =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(e\\)', 'Undefined'],
         correctIndex: 1 },
-      { type: 'fill-blank', question: 'In the quotient rule, the denominator of \\(\\left(\\dfrac{f}{g}\\right)\'\\) is ___.',
-        answer: 'g^2' },
-      { type: 'true-false', question: 'Swapping \\(f\'g\\) and \\(fg\'\\) in the numerator gives the correct quotient rule.',
-        correctAnswer: false },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{1}{x^2+1}\\).',
-        options: ['\\(\\dfrac{-2x}{(x^2+1)^2}\\)', '\\(\\dfrac{2x}{(x^2+1)^2}\\)', '\\(\\dfrac{-1}{(x^2+1)^2}\\)', '\\(\\dfrac{1}{(x^2+1)^2}\\)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Differentiate \\(h(x)=\\dfrac{e^x}{x}\\). Numerator becomes \\(e^x x - e^x\\). Final answer: \\((xe^x - e^x)/\\) ___.',
-        answer: 'x^2' },
-      { type: 'matching', question: 'Match each function to its derivative.',
+      { type: 'fill-blank', question: 'For \\(f(x)=\\ln x\\), \\(f\'(1) =\\) ___.',
+        answer: '1' },
+      { type: 'multiple-choice', question: '\\(f\'(a) = \\lim_{h\\to 0} \\dfrac{f(a+h) - f(a)}{h}\\) is the:',
+        options: ['Average rate of change', 'Definition of the derivative at \\(a\\)', 'Power rule', 'Quotient rule'],
+        correctIndex: 1 },
+      { type: 'fill-blank', question: 'For \\(f(x)=5x^2\\), \\(f\'(1) =\\) ___.',
+        answer: '10' },
+      { type: 'true-false', question: 'If \\(f(t)\\) is position, \\(f\'(a)\\) is velocity at time \\(a\\).',
+        correctAnswer: true },
+      { type: 'matching', question: 'Match each function with \\(f\'(1)\\).',
         pairs: [
-          { left: '\\(\\dfrac{1}{x}\\)', right: '\\(-\\dfrac{1}{x^2}\\)' },
-          { left: '\\(\\dfrac{x}{x+1}\\)', right: '\\(\\dfrac{1}{(x+1)^2}\\)' },
-          { left: '\\(\\dfrac{x^2}{x}\\)', right: '\\(1\\)' },
-          { left: '\\(\\dfrac{\\cos x}{x}\\)', right: '\\(\\dfrac{-x\\sin x - \\cos x}{x^2}\\)' }
+          { left: '\\(f(x)=x^2\\)', right: '\\(2\\)' },
+          { left: '\\(f(x)=x^3\\)', right: '\\(3\\)' },
+          { left: '\\(f(x)=\\sqrt{x}\\)', right: '\\(\\tfrac{1}{2}\\)' },
+          { left: '\\(f(x)=\\ln x\\)', right: '\\(1\\)' }
         ] }
     ];
     const container = document.getElementById('exercises');
@@ -139,7 +147,7 @@
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       const c = chars[index % chars.length]; initSideCharacter(c, '../../'); showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-22', nextHref: 'index.html', backHref: 'index.html' });
+    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-28', nextHref: 'index.html', backHref: 'index.html' });
     import { createCalculator } from "../../js/calculator.js"; createCalculator();
   </script>
 </body>

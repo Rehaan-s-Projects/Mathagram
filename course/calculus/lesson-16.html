@@ -3,35 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Listening Practice: Limits — Mathagram</title>
+  <title>Power Rule &amp; Basic Rules — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
-    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
-    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
-    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
-    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
-    .edam-banner { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 28px 24px; text-align: center; margin-bottom: 24px; }
-    .edam-banner img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #fbbf24; margin: 0 auto 10px; display: block; box-shadow: 0 4px 20px rgba(251,191,36,0.3); animation: edamBounce 2s ease infinite; }
-    @keyframes edamBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-    .edam-banner .edam-name { color: #fbbf24; font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
-    .edam-banner .edam-speech { background: rgba(255,255,255,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 14px; padding: 14px 18px; color: #e2e8f0; font-size: 0.9rem; line-height: 1.6; font-style: italic; }
-    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
-    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-    .headphones-icon { font-size: 1.5rem; }
-    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
     .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
     .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
     .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
-    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
     .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
     .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
   </style>
+<link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <!-- Navigation -->
   <nav class="nav">
     <div class="container">
       <a href="../../index.html" class="nav-logo">
@@ -46,27 +99,68 @@
     </div>
   </nav>
 
+  <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Unit 1 &mdash; Listening Practice</div>
-    <h1>Listening Practice: Limits</h1>
-    <div class="edam-banner">
-      <img src="../../assets/characters/edam.svg" alt="Edam the Bear">
-      <div class="edam-name">Edam the Bear</div>
-      <div class="edam-speech">"Alright, put your headphones on! I'll read you some limit problems and you have to figure out the answer just by listening. Focus up &mdash; calculus by ear!"</div>
+    <div class="chapter-label">Unit 2 &mdash; Derivatives</div>
+    <h1>Power Rule &amp; Basic Rules</h1>
+
+    <p>
+      Using the limit definition every time would be painfully slow. Thankfully, there are <strong>shortcut rules</strong> that let you find derivatives quickly. The most important one is the <strong>Power Rule</strong>.
+    </p>
+
+    <p><strong>The Power Rule:</strong> If \(f(x) = x^n\), where \(n\) is any real number, then:</p>
+    <div class="math-block">
+      $$\frac{d}{dx}\left[x^n\right] = n \cdot x^{n-1}$$
     </div>
-    <p>Edam will read limit questions aloud. The question text is <strong>hidden</strong> &mdash; train your ears! Tap the speaker button to hear it again.</p>
+    <p>Bring the exponent down as a coefficient, then subtract one from the exponent.</p>
+
+    <p><strong>The Constant Rule:</strong> The derivative of a constant is zero.</p>
+    <div class="math-block">
+      $$\frac{d}{dx}[c] = 0$$
+    </div>
+
+    <p><strong>The Constant Multiple Rule:</strong> Constants factor out of derivatives.</p>
+    <div class="math-block">
+      $$\frac{d}{dx}[c \cdot f(x)] = c \cdot f'(x)$$
+    </div>
+
+    <p><strong>The Sum/Difference Rule:</strong> The derivative of a sum (or difference) is the sum (or difference) of the derivatives.</p>
+    <div class="math-block">
+      $$\frac{d}{dx}[f(x) \pm g(x)] = f'(x) \pm g'(x)$$
+    </div>
+
+    <p><strong>Example 1:</strong> Find the derivative of \(f(x) = 4x^5\).</p>
+    <div class="math-block">
+      $$f'(x) = 4 \cdot 5x^4 = 20x^4$$
+    </div>
+
+    <p><strong>Example 2:</strong> Find the derivative of \(f(x) = 3x^4 - 2x^3 + 7x - 9\).</p>
+    <div class="math-block">
+      $$f'(x) = 12x^3 - 6x^2 + 7$$
+    </div>
+
+    <p><strong>Example 3:</strong> Find the derivative of \(f(x) = \frac{1}{x^2} = x^{-2}\).</p>
+    <div class="math-block">
+      $$f'(x) = -2x^{-3} = -\frac{2}{x^3}$$
+    </div>
+
+    <p><strong>Example 4:</strong> Find the derivative of \(f(x) = \sqrt{x} = x^{1/2}\).</p>
+    <div class="math-block">
+      $$f'(x) = \frac{1}{2}x^{-1/2} = \frac{1}{2\sqrt{x}}$$
+    </div>
   </section>
 
+  <!-- Exercises -->
   <section class="exercise-section">
-    <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
-    <h2><span class="headphones-icon">&#127911;</span> Listening Exercises</h2>
+    <h2>Practice Exercises</h2>
     <div id="exercises"></div>
     <div id="completion" style="display:none;"></div>
   </section>
 
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
     </div>
   </footer>
 
@@ -76,94 +170,192 @@
     initNav('../../');
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
-    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    // KaTeX auto-render
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+
     document.getElementById('year').textContent = new Date().getFullYear();
-    const speakers = ['edam', 'diego'];
-    initSideCharacter('edam', '../../');
+
+    // Initialize side character
+    initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
       {
-        type: 'listening',
-        question: 'What is the limit of x squared as x approaches 3?',
-        spokenText: 'What is the limit of x squared as x approaches 3?',
-        options: ['6', '9', '12', '27'],
+        type: 'multiple-choice',
+        question: 'What is \\(\\frac{d}{dx}[x^5]\\)?',
+        options: ['\\(5x^4\\)', '\\(4x^5\\)', '\\(5x^5\\)', '\\(x^4\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: 'The derivative of \\(f(x) = 7\\) is ___.',
+        answer: '0'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\frac{d}{dx}[3x^4]\\)?',
+        options: ['\\(3x^3\\)', '\\(12x^3\\)', '\\(12x^4\\)', '\\(4x^3\\)'],
         correctIndex: 1
       },
       {
-        type: 'listening',
-        question: 'True or false: The limit of 1 over x as x approaches infinity is zero.',
-        spokenText: 'True or false. The limit of 1 over x as x approaches infinity is zero.',
-        answerType: 'true-false',
+        type: 'true-false',
+        question: 'The derivative of \\(x^1\\) is \\(1\\).',
         correctAnswer: true
       },
       {
-        type: 'listening',
-        question: 'What is the limit of sine x over x as x approaches zero?',
-        spokenText: 'What is the limit of sine x over x as x approaches zero?',
-        options: ['0', '1', 'infinity', 'does not exist'],
+        type: 'fill-blank',
+        question: 'If \\(f(x) = x^6\\), then \\(f\'(x) = \\) ___.',
+        answer: '6x^5'
+      },
+      {
+        type: 'matching',
+        question: 'Match each function with its derivative.',
+        pairs: [
+          { left: '\\(x^3\\)', right: '\\(3x^2\\)' },
+          { left: '\\(5x\\)', right: '\\(5\\)' },
+          { left: '\\(x^{-1}\\)', right: '\\(-x^{-2}\\)' },
+          { left: '\\(\\sqrt{x}\\)', right: '\\(\\frac{1}{2\\sqrt{x}}\\)' }
+        ]
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the derivative of \\(f(x) = 2x^3 - 5x + 4\\)?',
+        options: ['\\(6x^2 - 5x\\)', '\\(6x^2 - 5\\)', '\\(2x^2 - 5\\)', '\\(6x^3 - 5\\)'],
         correctIndex: 1
       },
       {
-        type: 'listening',
-        question: 'What is the limit of 2x plus 5 as x approaches 4?',
-        spokenText: 'What is the limit of 2x plus 5 as x approaches 4?',
-        answerType: 'fill-blank',
-        answer: '13'
-      },
-      {
-        type: 'listening',
-        question: 'True or false: If a function is continuous at a point, the limit equals the function value.',
-        spokenText: 'True or false. If a function is continuous at a point, the limit equals the function value.',
-        answerType: 'true-false',
+        type: 'true-false',
+        question: 'The power rule works for fractional and negative exponents.',
         correctAnswer: true
       },
       {
-        type: 'listening',
-        question: 'What is the limit of x squared minus 9 over x minus 3 as x approaches 3?',
-        spokenText: 'What is the limit of x squared minus 9, over x minus 3, as x approaches 3?',
-        options: ['0', '3', '6', 'does not exist'],
-        correctIndex: 2
+        type: 'fill-blank',
+        question: 'The derivative of \\(f(x) = x^{-3}\\) is ___.',
+        answer: '-3x^{-4}'
       },
       {
-        type: 'listening',
-        question: 'What is the limit of 1 over x as x approaches zero from the right?',
-        spokenText: 'What is the limit of 1 over x as x approaches zero from the right?',
-        options: ['0', '1', 'positive infinity', 'negative infinity'],
-        correctIndex: 2
+        type: 'multiple-choice',
+        question: 'What is \\(\\frac{d}{dx}[\\sqrt[3]{x}]\\)?',
+        options: [
+          '\\(\\frac{1}{3}x^{-2/3}\\)',
+          '\\(3x^{2/3}\\)',
+          '\\(\\frac{1}{3}x^{2/3}\\)',
+          '\\(\\frac{2}{3}x^{-1/3}\\)'
+        ],
+        correctIndex: 0
       },
       {
-        type: 'listening',
-        question: 'What is the limit of 3x squared minus 2x plus 1 as x approaches 1?',
-        spokenText: 'What is the limit of 3x squared minus 2x plus 1, as x approaches 1?',
-        answerType: 'fill-blank',
-        answer: '2'
-      },
-      {
-        type: 'listening',
-        question: 'True or false: The limit of x over the absolute value of x as x approaches zero exists.',
-        spokenText: 'True or false. The limit of x over the absolute value of x, as x approaches zero, exists.',
-        answerType: 'true-false',
-        correctAnswer: false
-      },
-      {
-        type: 'listening',
-        question: 'What type of discontinuity does the function x squared minus 4 over x minus 2 have at x equals 2?',
-        spokenText: 'What type of discontinuity does the function x squared minus 4 over x minus 2 have at x equals 2?',
-        options: ['Jump', 'Removable', 'Infinite', 'No discontinuity'],
+        type: 'multiple-choice',
+        question: 'Find \\(f\'(2)\\) if \\(f(x) = x^3 - 4x\\).',
+        options: ['4', '8', '0', '12'],
         correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'The derivative of \\(f(x) = 10x^2 + 3x - 1\\) is ___.',
+        answer: '20x+3'
+      },
+      {
+        type: 'true-false',
+        question: 'The derivative of \\(f(x) = x^0\\) is \\(0\\) (since \\(x^0 = 1\\), a constant).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the derivative of \\(f(x) = \\frac{4}{x} = 4x^{-1}\\)?',
+        options: ['\\(-\\frac{4}{x^2}\\)', '\\(\\frac{4}{x^2}\\)', '\\(-4x\\)', '\\(4\\ln x\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'multiple-choice',
+        question: '🎢 d/dx [x³] equals:',
+        options: ['3x²','x²','3x','x³/3'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ Derivative of altitude h(x) = x⁵ is ___ (format: 5x^4).',
+        answer: '5x^4'
+      },
+      {
+        type: 'multiple-choice',
+        question: '🚗 d/dx [5x] equals:',
+        options: ['5','5x','x','0'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: '🎢 The derivative of a constant height (flat track at h = 10) is 0.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '🏔️ d/dx [x² + 3x] equals:',
+        options: ['2x + 3','2x','3','x² + 3'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 d/dx [x⁴] = ___ (format: 4x^3).',
+        answer: '4x^3'
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 A car\'s position is s(t) = 3t². Its speed at time t is ___ (format: 6t).',
+        answer: '6t'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ d/dx [7] (a flat landscape) = ___.',
+        answer: '0'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: d/dx [x⁶] = 6x^___',
+        answer: '5'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: d/dx [4x³] = ___x²',
+        answer: '12'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: d/dx [x^10] at x = 1 is ___',
+        answer: '10'
       }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
+
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      const who = speakers[index % speakers.length];
-      initSideCharacter(who, '../../');
-      showBuddy(who, isCorrect ? 'correct' : 'wrong');
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
+
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'calculus', lessonId: 'lesson-16', nextHref: 'index.html', backHref: 'index.html'
+      courseId: 'calculus',
+      lessonId: 'lesson-16',
+      nextHref: 'index.html',
+      backHref: 'index.html'
     });
-  </script>
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
+
 </body>
 </html>

@@ -140,20 +140,19 @@ function flushRow(container, nodes, rowIndex) {
         <span class="path-label">${n.title}</span>
       `;
     } else {
-      const href = (n.href && n.href !== '#') ? n.href : '#';
+      let href;
+      if (n.type === 'practice') {
+        href = buildPracticeUrl(n);
+      } else if (n.href && n.href !== '#') {
+        href = n.href;
+      } else {
+        href = '#';
+      }
       nodeEl.innerHTML = `
         <a href="${href}" class="${classes}">${icon}</a>
         <span class="path-label">${n.title}</span>
         ${n.state === 'completed' ? '<span class="path-stars">⭐⭐⭐⭐⭐</span>' : ''}
       `;
-
-      if (n.type === 'practice') {
-        const link = nodeEl.querySelector('a');
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          openListeningPractice(n);
-        });
-      }
     }
 
     row.appendChild(nodeEl);
@@ -233,69 +232,21 @@ export async function getCompletedLessons(courseId) {
 }
 
 /**
- * Open a listening-practice modal for a given practice node.
- * Picks up to 4 lessons from the same unit as answer options, speaks one,
- * and asks the student to identify which was spoken.
+ * Build a URL for the dedicated listening-practice page for this practice node.
+ * Derives the course slug from the current page path (/course/<slug>/...)
+ * and the depth-appropriate path prefix to practice.html.
  */
-async function openListeningPractice(practiceNode) {
-  const pool = currentLessons.filter(l => l.unit === practiceNode.unit && !l.type);
-  if (pool.length < 2) return;
-
-  const shuffled = pool.slice().sort(() => Math.random() - 0.5);
-  const options = shuffled.slice(0, Math.min(4, shuffled.length)).map(l => l.title);
-  const correctIndex = Math.floor(Math.random() * options.length);
-  const spokenText = options[correctIndex];
-
-  const overlay = document.createElement('div');
-  overlay.className = 'practice-modal-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
-
-  const modal = document.createElement('div');
-  modal.className = 'practice-modal';
-  modal.style.cssText = 'background:var(--color-surface,#fff);color:var(--color-text,#111);border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;position:relative;';
-
-  const closeBtn = document.createElement('button');
-  closeBtn.type = 'button';
-  closeBtn.innerHTML = '&times;';
-  closeBtn.setAttribute('aria-label', 'Close');
-  closeBtn.style.cssText = 'position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:inherit;line-height:1;';
-  closeBtn.addEventListener('click', () => closeModal());
-
-  const title = document.createElement('h2');
-  title.textContent = 'Listening Practice';
-  title.style.cssText = 'margin:0 0 4px;font-size:1.4rem;';
-
-  const subtitle = document.createElement('p');
-  subtitle.textContent = `Unit ${practiceNode.unit}: ${practiceNode.unitName || ''}`;
-  subtitle.style.cssText = 'margin:0 0 20px;color:var(--color-text-secondary,#666);font-size:0.9rem;';
-
-  const exerciseContainer = document.createElement('div');
-
-  modal.appendChild(closeBtn);
-  modal.appendChild(title);
-  modal.appendChild(subtitle);
-  modal.appendChild(exerciseContainer);
-  overlay.appendChild(modal);
-  document.body.appendChild(overlay);
-
-  function closeModal() {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    overlay.remove();
-  }
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-
-  try {
-    const { renderExercise } = await import('./exercises.js');
-    renderExercise(exerciseContainer, {
-      type: 'listening',
-      question: spokenText,
-      spokenText,
-      options,
-      correctIndex,
-    }, () => { /* answer handled by exercises.js UI */ });
-  } catch (err) {
-    exerciseContainer.textContent = 'Could not load practice. Please try again.';
-  }
+function buildPracticeUrl(practiceNode) {
+  const m = window.location.pathname.match(/\/course\/([^/]+)\//);
+  const slug = m ? m[1] : '';
+  const depth = (window.location.pathname.match(/\//g) || []).length - 1;
+  const prefix = depth >= 2 ? '../../' : depth === 1 ? '../' : '';
+  // Encode how many real lessons preceded this practice — lets practice.html
+  // identify the *exact* next normal lesson to continue with.
+  const idMatch = /practice-(\d+)/.exec(practiceNode.id || '');
+  const after = idMatch ? idMatch[1] : '';
+  const qs = `course=${encodeURIComponent(slug)}&unit=${encodeURIComponent(practiceNode.unit)}${after ? `&after=${after}` : ''}`;
+  return `${prefix}practice.html?${qs}`;
 }
 
 /**

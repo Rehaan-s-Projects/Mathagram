@@ -34,6 +34,9 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
   // Use XP from quiz if provided, otherwise calculate
   const xpEarned = xp || Math.max(25, Math.round(25 + (score / 100) * 25));
   const starStr = '\u2B50'.repeat(stars) + '\u2606'.repeat(5 - stars);
+  const starLabels = ['', 'Good', 'Sweet', 'Excellent Job', 'Fantastic Job', 'Intelligent'];
+  const starLabel = starLabels[stars] || '';
+  const starLabelHTML = starLabel ? `<div class="star-label" style="font-size:1.1rem; font-weight:800; color:var(--color-primary); margin:-4px 0 12px;">${starLabel}!</div>` : '';
 
   // Always mark locally so next lesson unlocks (works in Incognito)
   if (courseId && lessonId) {
@@ -59,6 +62,7 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
       <div class="lesson-complete">
         <h2>Lesson Complete!</h2>
         <div class="stars" style="font-size:2.5rem; letter-spacing:6px; margin:16px 0;">${starStr}</div>
+        ${starLabelHTML}
         <div class="xp-earned">+${xpEarned} XP</div>
         <p class="score-text">You scored ${score}%</p>
         <p style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:16px;">Correct = 10 XP (double) | Past mistakes = 5 XP</p>
@@ -78,6 +82,7 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
       <div class="lesson-complete">
         <h2>Lesson Complete!</h2>
         <div class="stars" style="font-size:2.5rem; letter-spacing:6px; margin:16px 0;">${starStr}</div>
+        ${starLabelHTML}
         <p class="score-text">You scored ${score}%</p>
         <div style="background:linear-gradient(135deg,#f0fdf4,#ecfdf5); border:1px solid #bbf7d0; border-radius:12px; padding:20px; margin:20px 0; text-align:center;">
           <p style="font-size:1rem; font-weight:700; color:#166534; margin-bottom:4px;">Sign up to save your progress!</p>

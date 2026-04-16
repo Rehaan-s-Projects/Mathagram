@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Squeeze Theorem — Mathagram</title>
+  <title>Continuity — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -102,37 +102,34 @@
   <!-- Teaching Content -->
   <section class="lesson-content">
     <div class="chapter-label">Unit 1 &mdash; Limits</div>
-    <h1>Squeeze Theorem</h1>
+    <h1>Continuity</h1>
 
     <p>
-      Some limits are impossible to evaluate directly &mdash; the function oscillates wildly or defies substitution. The <strong>Squeeze Theorem</strong> (also called the Sandwich Theorem or Pinching Theorem) lets you trap the function between two simpler ones.
+      Intuitively, a function is <strong>continuous</strong> if you can draw its graph without lifting your pen. But in calculus we need a precise definition.
     </p>
 
-    <p>Here is the formal statement:</p>
+    <p>A function \(f\) is <strong>continuous at \(x = a\)</strong> if all three conditions hold:</p>
+    <ul>
+      <li><strong>1.</strong> \(f(a)\) is defined (the point exists).</li>
+      <li><strong>2.</strong> \(\displaystyle\lim_{x \to a} f(x)\) exists (left and right limits agree).</li>
+      <li><strong>3.</strong> \(\displaystyle\lim_{x \to a} f(x) = f(a)\) (the limit equals the function value).</li>
+    </ul>
 
+    <p>If any one of these fails, we have a <strong>discontinuity</strong>. There are three main types:</p>
+    <ul>
+      <li><strong>Removable discontinuity</strong> (hole): The limit exists but \(f(a)\) is either missing or doesn't match. You could "fill in" the hole to fix it.</li>
+      <li><strong>Jump discontinuity</strong>: The left-hand and right-hand limits exist but are different. Think of a step function.</li>
+      <li><strong>Infinite discontinuity</strong>: The function blows up to \(\pm\infty\) near \(x = a\). This creates a vertical asymptote.</li>
+    </ul>
+
+    <p><strong>Example:</strong> Consider \(\displaystyle f(x) = \frac{x^2 - 1}{x - 1}\). At \(x = 1\), the function is undefined (division by zero). But:</p>
     <div class="math-block">
-      $$\text{If } g(x) \le f(x) \le h(x) \text{ near } a, \text{ and } \lim_{x \to a} g(x) = \lim_{x \to a} h(x) = L, \text{ then } \lim_{x \to a} f(x) = L.$$
+      $$\lim_{x \to 1} \frac{x^2 - 1}{x - 1} = \lim_{x \to 1} \frac{(x-1)(x+1)}{x-1} = \lim_{x \to 1} (x+1) = 2$$
     </div>
+    <p>The limit exists and equals 2, but \(f(1)\) is undefined. This is a <strong>removable discontinuity</strong>.</p>
 
     <p>
-      The idea is simple: if \(f(x)\) is always sandwiched between \(g(x)\) and \(h(x)\), and both of those converge to the same value \(L\), then \(f(x)\) has no choice &mdash; it must converge to \(L\) too.
-    </p>
-
-    <p><strong>Classic example:</strong></p>
-    <div class="math-block">
-      $$\lim_{x \to 0} x^2 \sin\!\left(\frac{1}{x}\right)$$
-    </div>
-
-    <p>
-      We know \(-1 \le \sin(1/x) \le 1\), so multiplying through by \(x^2\) (which is non-negative):
-    </p>
-
-    <div class="math-block">
-      $$-x^2 \le x^2 \sin\!\left(\frac{1}{x}\right) \le x^2$$
-    </div>
-
-    <p>
-      Both \(-x^2\) and \(x^2\) approach \(0\) as \(x \to 0\). By the Squeeze Theorem, the limit is \(\mathbf{0}\).
+      <strong>Key fact:</strong> Polynomials, exponentials, sine, and cosine are continuous everywhere. Rational functions are continuous wherever the denominator is nonzero.
     </p>
   </section>
 
@@ -173,61 +170,139 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
-
     // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'The Squeeze Theorem requires ___ functions.',
-        options: ['one', 'two', 'three', 'four'],
+        question: 'Which of the following is NOT a condition for continuity at \\(x = a\\)?',
+        options: ['\\(f(a)\\) is defined', '\\(\\lim_{x \\to a} f(x)\\) exists', '\\(f\'(a)\\) exists', '\\(\\lim_{x \\to a} f(x) = f(a)\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'true-false',
+        question: 'Every polynomial is continuous on \\((-\\infty, \\infty)\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The function \\(f(x) = \\frac{x^2 - 4}{x - 2}\\) has what type of discontinuity at \\(x = 2\\)?',
+        options: ['Jump', 'Infinite', 'Removable', 'No discontinuity'],
         correctIndex: 2
       },
       {
         type: 'fill-blank',
-        question: 'If \\(-x^2 \\le f(x) \\le x^2\\) and \\(x \\to 0\\), then \\(\\lim f(x) = \\) ___',
-        answer: '0'
-      },
-      {
-        type: 'true-false',
-        question: 'The Squeeze Theorem can determine a limit even when direct substitution fails.',
-        correctAnswer: true
-      },
-      {
-        type: 'matching',
-        question: 'Match each term with its role in the Squeeze Theorem.',
-        pairs: [
-          { left: 'Lower bound', right: 'g(x)' },
-          { left: 'Upper bound', right: 'h(x)' },
-          { left: 'Squeezed function', right: 'f(x)' },
-          { left: 'Common limit', right: 'L' }
-        ]
+        question: 'If \\(\\lim_{x \\to 3^-} f(x) = 5\\) and \\(\\lim_{x \\to 3^+} f(x) = 8\\), the discontinuity at \\(x = 3\\) is called a ___ discontinuity.',
+        answer: 'jump'
       },
       {
         type: 'multiple-choice',
-        question: '\\(\\displaystyle\\lim_{x \\to 0} x^2 \\cos\\!\\left(\\frac{1}{x}\\right) = \\;?\\)',
-        options: ['1', '-1', '0', 'does not exist'],
+        question: 'Which function is continuous everywhere?',
+        options: ['\\(\\frac{1}{x}\\)', '\\(\\tan(x)\\)', '\\(\\sin(x)\\)', '\\(\\ln(x)\\)'],
         correctIndex: 2
       },
       {
-        type: 'ordering',
-        question: 'Put the Squeeze Theorem steps in the correct order.',
-        items: [
-          'Identify g(x) \u2264 f(x) \u2264 h(x)',
-          'Find lim g(x) as x \u2192 a',
-          'Find lim h(x) as x \u2192 a',
-          'Verify both limits equal L',
-          'Conclude lim f(x) = L'
+        type: 'matching',
+        question: 'Match each scenario with the type of discontinuity.',
+        pairs: [
+          { left: 'Limit exists but \\(f(a)\\) is undefined', right: 'Removable' },
+          { left: 'Left and right limits differ', right: 'Jump' },
+          { left: 'Function goes to \\(\\pm\\infty\\)', right: 'Infinite' },
+          { left: 'All 3 conditions hold', right: 'Continuous' }
         ]
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f(a)\\) is defined and \\(\\lim_{x \\to a} f(x)\\) exists, then \\(f\\) must be continuous at \\(x = a\\).',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The function \\(f(x) = \\frac{1}{x - 3}\\) has what type of discontinuity at \\(x = 3\\)?',
+        options: ['Removable', 'Jump', 'Infinite', 'None'],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'To "remove" a removable discontinuity at \\(x = a\\), you redefine \\(f(a)\\) to equal the ___ at that point.',
+        answer: 'limit'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The greatest integer function \\(f(x) = \\lfloor x \\rfloor\\) has what type of discontinuity at each integer?',
+        options: ['Removable', 'Jump', 'Infinite', 'It is continuous at integers'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: '🎢 Which roller coaster track is <strong>continuous</strong>?',
+        options: ['Smooth hills with no breaks','Track with a gap in the middle','Two separate tracks side-by-side','Track ending at a cliff'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: '🏔️ A continuous landscape means you can walk the whole path without jumping over anything.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '🏔️ A hiker reaches a cliff where altitude suddenly drops. This is a ___ discontinuity.',
+        options: ['jump','removable','infinite','none — it\'s continuous'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 For f to be continuous at x = a, the limit must equal ___ (write f(a)).',
+        answer: 'f(a)'
+      },
+      {
+        type: 'multiple-choice',
+        question: '🚗 A road is continuous if the car\'s path has no:',
+        options: ['gaps or jumps','tires','fuel','direction'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '🎢 For the coaster to be continuous at x = a, the limit must equal ___ (write f(a)).',
+        answer: 'f(a)'
+      },
+      {
+        type: 'fill-blank',
+        question: '🚗 On a smooth road with no gaps, v(t) = 2t + 3. The speed at t = 5 is ___ mph.',
+        answer: '13'
+      },
+      {
+        type: 'fill-blank',
+        question: '🏔️ A hiker\'s path f(x) = x² is continuous everywhere. f(−3) = ___.',
+        answer: '9'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f(x) = 2x + 1, then f(4) = ___',
+        answer: '9'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f(x) = x² − 3x, then f(5) = ___',
+        answer: '10'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f is continuous at 2 and \\(\\lim_{x\\to 2} f(x) = 7\\), then f(2) = ___',
+        answer: '7'
       }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
 
     await showLessonComplete(container, completionDiv, score, { xp,

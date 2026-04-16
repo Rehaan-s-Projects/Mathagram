@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quotient Rule — Mathagram</title>
+  <title>Slope at a Value — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -47,28 +47,30 @@
   </nav>
 
   <section class="lesson-content">
-    <div class="chapter-label">Unit 3 &mdash; Differentiation Advanced</div>
-    <h1>Quotient Rule</h1>
+    <div class="chapter-label">Unit 5 &mdash; Applications of Derivatives I</div>
+    <h1>Slope at a Value</h1>
 
-    <p>The <strong>quotient rule</strong> tells you how to differentiate a fraction of two functions \(f(x)\) and \(g(x)\).</p>
-    <div class="math-block">$$\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$$</div>
-    <p>Memorable form: "<em>low d-high minus high d-low, over low-squared</em>."</p>
+    <p>The <strong>slope</strong> of a curve \(y = f(x)\) at the point \(x = a\) is exactly \(f'(a)\). "Slope of the curve" and "derivative at that point" mean the same thing.</p>
 
-    <p><strong>Example 1.</strong> Differentiate \(h(x) = \dfrac{x^2}{x+1}\).</p>
-    <p>Here \(f = x^2,\ g = x+1\), so \(f' = 2x,\ g' = 1\). Then</p>
-    <div class="math-block">$$h'(x) = \frac{2x(x+1) - x^2(1)}{(x+1)^2} = \frac{x^2 + 2x}{(x+1)^2}.$$</div>
+    <p>Why? Zoom in on the curve around \(x = a\) and it looks more and more like a straight line — the tangent line. The slope of that tangent line is \(f'(a)\).</p>
 
-    <p><strong>Example 2.</strong> Differentiate \(h(x) = \dfrac{\sin x}{x}\).</p>
-    <div class="math-block">$$h'(x) = \frac{\cos x \cdot x - \sin x \cdot 1}{x^2} = \frac{x\cos x - \sin x}{x^2}.$$</div>
+    <p><strong>Example 1.</strong> Find the slope of \(y = x^3\) at \(x = 2\).</p>
+    <p>\(f'(x) = 3x^2\), so the slope at \(x = 2\) is \(3(2)^2 = 12\).</p>
 
-    <p><strong>When not to use it.</strong> Simple expressions like \(\dfrac{3}{x^2}\) can be rewritten as \(3x^{-2}\) and differentiated with the power rule — much faster.</p>
+    <p><strong>Example 2.</strong> Find the slope of \(y = \cos x\) at \(x = 0\).</p>
+    <p>\(f'(x) = -\sin x\), so the slope at \(x = 0\) is \(0\). That matches what you see graphically — \(\cos x\) has a local max at \(x = 0\).</p>
 
-    <p><strong>Common pitfalls.</strong></p>
+    <p><strong>Example 3.</strong> Where does \(y = x^2 - 4x + 1\) have slope \(6\)?</p>
+    <p>\(f'(x) = 2x - 4\). Set \(2x - 4 = 6\) → \(x = 5\).</p>
+
+    <p><strong>Slope sign tells you direction.</strong></p>
     <ul>
-      <li>The order in the numerator matters — it's \(f'g - fg'\), not \(fg' - f'g\).</li>
-      <li>Don't forget to square the denominator.</li>
-      <li>Always simplify after applying the rule.</li>
+      <li>\(f'(a) &gt; 0\): curve is rising at \(x = a\).</li>
+      <li>\(f'(a) &lt; 0\): curve is falling at \(x = a\).</li>
+      <li>\(f'(a) = 0\): tangent is horizontal — possibly a peak, valley, or plateau.</li>
     </ul>
+
+    <p><strong>Vertical tangents.</strong> If \(f'(a)\) is undefined because a limit goes to \(\pm\infty\), the tangent line is vertical (e.g. \(y = \sqrt[3]{x}\) at \(x = 0\)).</p>
   </section>
 
   <section class="exercise-section">
@@ -100,37 +102,39 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice', question: 'The quotient rule states \\(\\left(\\dfrac{f}{g}\\right)\' =\\)',
-        options: ['\\(\\dfrac{f\'g+fg\'}{g^2}\\)', '\\(\\dfrac{f\'g-fg\'}{g^2}\\)', '\\(\\dfrac{f\'g\'}{g^2}\\)', '\\(\\dfrac{fg\'-f\'g}{g^2}\\)'],
+      { type: 'fill-blank', question: 'Slope of \\(y = x^3\\) at \\(x=2\\) is ___.',
+        answer: '12' },
+      { type: 'multiple-choice', question: 'Slope of \\(y=\\cos x\\) at \\(x=0\\) is:',
+        options: ['\\(1\\)', '\\(0\\)', '\\(-1\\)', '\\(\\pi\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x}{x+1}\\).',
-        options: ['\\(\\dfrac{1}{(x+1)^2}\\)', '\\(\\dfrac{x}{(x+1)^2}\\)', '\\(\\dfrac{-1}{(x+1)^2}\\)', '\\(\\dfrac{x+1}{x^2}\\)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Memorize it as: low d-high minus ___ d-low, over low-squared.',
-        answer: 'high' },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x^2}{x+1}\\).',
-        options: ['\\(\\dfrac{2x}{x+1}\\)', '\\(\\dfrac{x^2+2x}{(x+1)^2}\\)', '\\(\\dfrac{x^2-2x}{(x+1)^2}\\)', '\\(\\dfrac{2x(x+1)}{x+1}\\)'],
+      { type: 'fill-blank', question: 'Slope of \\(y = x^2\\) at \\(x=3\\) is ___.',
+        answer: '6' },
+      { type: 'multiple-choice', question: 'Where does \\(y = x^2 - 4x + 1\\) have slope \\(6\\)?',
+        options: ['\\(x=2\\)', '\\(x=5\\)', '\\(x=3\\)', '\\(x=6\\)'],
         correctIndex: 1 },
-      { type: 'true-false', question: 'For \\(\\dfrac{3}{x^2}\\), the power rule is faster than the quotient rule.',
+      { type: 'true-false', question: 'A horizontal tangent corresponds to \\(f\'(a) = 0\\).',
         correctAnswer: true },
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\!\\left[\\dfrac{\\sin x}{x}\\right] =\\)',
-        options: ['\\(\\dfrac{\\cos x}{1}\\)', '\\(\\dfrac{x\\cos x - \\sin x}{x^2}\\)', '\\(\\dfrac{\\cos x - \\sin x}{x}\\)', '\\(\\dfrac{\\sin x - x\\cos x}{x^2}\\)'],
+      { type: 'multiple-choice', question: 'If \\(f\'(a) &lt; 0\\), the curve at \\(x=a\\) is:',
+        options: ['Rising', 'Falling', 'Flat', 'Vertical'],
         correctIndex: 1 },
-      { type: 'fill-blank', question: 'In the quotient rule, the denominator of \\(\\left(\\dfrac{f}{g}\\right)\'\\) is ___.',
-        answer: 'g^2' },
-      { type: 'true-false', question: 'Swapping \\(f\'g\\) and \\(fg\'\\) in the numerator gives the correct quotient rule.',
-        correctAnswer: false },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{1}{x^2+1}\\).',
-        options: ['\\(\\dfrac{-2x}{(x^2+1)^2}\\)', '\\(\\dfrac{2x}{(x^2+1)^2}\\)', '\\(\\dfrac{-1}{(x^2+1)^2}\\)', '\\(\\dfrac{1}{(x^2+1)^2}\\)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Differentiate \\(h(x)=\\dfrac{e^x}{x}\\). Numerator becomes \\(e^x x - e^x\\). Final answer: \\((xe^x - e^x)/\\) ___.',
-        answer: 'x^2' },
-      { type: 'matching', question: 'Match each function to its derivative.',
+      { type: 'fill-blank', question: 'Slope of \\(y = \\sqrt{x}\\) at \\(x=4\\) is ___ (fraction).',
+        answer: '1/4' },
+      { type: 'multiple-choice', question: 'Slope of \\(y = e^x\\) at \\(x=0\\) is:',
+        options: ['\\(e\\)', '\\(1\\)', '\\(0\\)', '\\(\\infty\\)'],
+        correctIndex: 1 },
+      { type: 'fill-blank', question: 'Slope of \\(y = \\ln x\\) at \\(x=e\\) is \\(1/\\)___.',
+        answer: 'e' },
+      { type: 'true-false', question: 'The curve \\(y = \\sqrt[3]{x}\\) has a vertical tangent at \\(x=0\\).',
+        correctAnswer: true },
+      { type: 'multiple-choice', question: 'For \\(y = 3x^2 + 2x\\), where is the slope \\(0\\)?',
+        options: ['\\(x=0\\)', '\\(x=-\\tfrac{1}{3}\\)', '\\(x=\\tfrac{1}{3}\\)', '\\(x=2\\)'],
+        correctIndex: 1 },
+      { type: 'matching', question: 'Match each curve to its slope at the given point.',
         pairs: [
-          { left: '\\(\\dfrac{1}{x}\\)', right: '\\(-\\dfrac{1}{x^2}\\)' },
-          { left: '\\(\\dfrac{x}{x+1}\\)', right: '\\(\\dfrac{1}{(x+1)^2}\\)' },
-          { left: '\\(\\dfrac{x^2}{x}\\)', right: '\\(1\\)' },
-          { left: '\\(\\dfrac{\\cos x}{x}\\)', right: '\\(\\dfrac{-x\\sin x - \\cos x}{x^2}\\)' }
+          { left: '\\(y=x^2\\) at \\(x=3\\)', right: '\\(6\\)' },
+          { left: '\\(y=\\sin x\\) at \\(x=0\\)', right: '\\(1\\)' },
+          { left: '\\(y=e^x\\) at \\(x=1\\)', right: '\\(e\\)' },
+          { left: '\\(y=\\tfrac{1}{x}\\) at \\(x=2\\)', right: '\\(-\\tfrac{1}{4}\\)' }
         ] }
     ];
     const container = document.getElementById('exercises');
@@ -139,7 +143,7 @@
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       const c = chars[index % chars.length]; initSideCharacter(c, '../../'); showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-22', nextHref: 'index.html', backHref: 'index.html' });
+    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-29', nextHref: 'index.html', backHref: 'index.html' });
     import { createCalculator } from "../../js/calculator.js"; createCalculator();
   </script>
 </body>

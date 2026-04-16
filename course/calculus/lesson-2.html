@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Indefinite Integrals — Mathagram</title>
+  <title>Limits at Jump Discontinuities — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -46,12 +46,6 @@
       margin: 12px 0 20px 20px;
       color: var(--color-text-secondary);
       line-height: 1.75;
-    }
-    .lesson-content h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 28px 0 12px;
-      color: var(--color-text);
     }
     .exercise-section {
       max-width: 700px;
@@ -107,39 +101,43 @@
 
   <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Chapter 02</div>
-    <h1>Indefinite Integrals</h1>
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits at Jump Discontinuities</h1>
 
     <p>
-      An <strong>indefinite integral</strong> represents a family of functions — all the antiderivatives of a given function. Unlike definite integrals, indefinite integrals do not have bounds and always include a <strong>constant of integration</strong>.
+      Not every limit can be solved by plugging in a value. Sometimes a function <strong>jumps</strong> at a point &mdash; the left side and the right side approach different values.
+    </p>
+
+    <p>
+      We write the <strong>left-hand limit</strong> (approaching from below) and the <strong>right-hand limit</strong> (approaching from above) like this:
     </p>
 
     <div class="math-block">
-      $$\int f(x)\, dx = F(x) + C$$
+      $$\lim_{x \to a^-} f(x) \quad \text{and} \quad \lim_{x \to a^+} f(x)$$
     </div>
 
     <p>
-      Here, \(F(x)\) is any function whose derivative is \(f(x)\), and \(C\) is an arbitrary constant. We need \(C\) because the derivative of any constant is zero — so infinitely many functions share the same derivative.
+      A two-sided limit exists <strong>only if both one-sided limits are equal</strong>:
     </p>
 
-    <h2>The Power Rule for Integration</h2>
-    <p>One of the most fundamental integration rules:</p>
     <div class="math-block">
-      $$\int x^n\, dx = \frac{x^{n+1}}{n+1} + C \quad (n \neq -1)$$
-    </div>
-
-    <h2>The Sum Rule</h2>
-    <p>Integrals distribute over addition and subtraction:</p>
-    <div class="math-block">
-      $$\int [f(x) + g(x)]\, dx = \int f(x)\, dx + \int g(x)\, dx$$
+      $$\lim_{x \to a} f(x) = L \iff \lim_{x \to a^-} f(x) = \lim_{x \to a^+} f(x) = L$$
     </div>
 
     <p>
-      For example, to integrate \(3x^2 + 2x - 5\), split it into three separate integrals, apply the power rule to each, then add the constant \(C\):
+      A <strong>jump discontinuity</strong> happens when both one-sided limits exist, but they are <em>different</em>. The function literally jumps from one value to another.
     </p>
+
+    <p><strong>Example:</strong> Consider the piecewise function</p>
     <div class="math-block">
-      $$\int (3x^2 + 2x - 5)\, dx = x^3 + x^2 - 5x + C$$
+      $$f(x) = \begin{cases} 2x & \text{if } x < 1 \\ x + 3 & \text{if } x \ge 1 \end{cases}$$
     </div>
+
+    <p>
+      As \(x \to 1^-\), we use \(2x\): the left-hand limit is \(2\).<br>
+      As \(x \to 1^+\), we use \(x + 3\): the right-hand limit is \(4\).<br>
+      Since \(2 \neq 4\), the limit <strong>does not exist</strong> at \(x = 1\).
+    </p>
   </section>
 
   <!-- Exercises -->
@@ -163,8 +161,8 @@
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-    import { generateExercises } from '../../js/problem-generator.js';
 
+    // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
@@ -180,10 +178,54 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
 
-    // Initialize side character (Duolingo-style)
+    // Initialize side character
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = generateExercises(\'integrals\', 6);
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'At a jump discontinuity, the limit...',
+        options: [
+          'equals the function value',
+          'does not exist because left \u2260 right',
+          'is always infinity',
+          'equals zero'
+        ],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(\\lim_{x \\to a^-} f(x) = 3\\) and \\(\\lim_{x \\to a^+} f(x) = 3\\), the limit exists and equals 3.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'For the limit to exist, the left-hand limit must ___ the right-hand limit.',
+        answer: 'equal'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What notation represents the left-hand limit?',
+        options: [
+          '\\(\\lim_{x \\to a^+}\\)',
+          '\\(\\lim_{x \\to a^-}\\)',
+          '\\(\\lim_{x \\to a}\\)',
+          '\\(\\lim_{x \\to \\infty}\\)'
+        ],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'A function can have a jump discontinuity and still have both one-sided limits exist.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'If \\(f(x) = \\begin{cases} 2x & x < 1 \\\\ x+3 & x \\ge 1 \\end{cases}\\), what is \\(\\lim_{x \\to 1^-} f(x)\\)?',
+        options: ['4', '2', '3', '1'],
+        correctIndex: 1
+      }
+    ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quotient Rule — Mathagram</title>
+  <title>Implicit Differentiation with Exponentials — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -47,28 +47,25 @@
   </nav>
 
   <section class="lesson-content">
-    <div class="chapter-label">Unit 3 &mdash; Differentiation Advanced</div>
-    <h1>Quotient Rule</h1>
+    <div class="chapter-label">Unit 4 &mdash; Implicit &amp; Inverse</div>
+    <h1>Implicit Differentiation with Exponentials</h1>
 
-    <p>The <strong>quotient rule</strong> tells you how to differentiate a fraction of two functions \(f(x)\) and \(g(x)\).</p>
-    <div class="math-block">$$\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$$</div>
-    <p>Memorable form: "<em>low d-high minus high d-low, over low-squared</em>."</p>
+    <p>When the equation involves \(e^y\), \(e^{xy}\), or \(\ln y\), the chain rule bolts a \(\dfrac{dy}{dx}\) onto each \(y\)-involving term.</p>
 
-    <p><strong>Example 1.</strong> Differentiate \(h(x) = \dfrac{x^2}{x+1}\).</p>
-    <p>Here \(f = x^2,\ g = x+1\), so \(f' = 2x,\ g' = 1\). Then</p>
-    <div class="math-block">$$h'(x) = \frac{2x(x+1) - x^2(1)}{(x+1)^2} = \frac{x^2 + 2x}{(x+1)^2}.$$</div>
+    <div class="math-block">$$\frac{d}{dx}[e^y] = e^y\cdot\frac{dy}{dx},\qquad \frac{d}{dx}[\ln y] = \frac{1}{y}\cdot\frac{dy}{dx}.$$</div>
 
-    <p><strong>Example 2.</strong> Differentiate \(h(x) = \dfrac{\sin x}{x}\).</p>
-    <div class="math-block">$$h'(x) = \frac{\cos x \cdot x - \sin x \cdot 1}{x^2} = \frac{x\cos x - \sin x}{x^2}.$$</div>
+    <p><strong>Example 1.</strong> Find \(\dfrac{dy}{dx}\) if \(e^y + x = y\).</p>
+    <div class="math-block">$$e^y\frac{dy}{dx} + 1 = \frac{dy}{dx}\ \Longrightarrow\ \frac{dy}{dx}(e^y - 1) = -1\ \Longrightarrow\ \frac{dy}{dx} = \frac{1}{1 - e^y}.$$</div>
 
-    <p><strong>When not to use it.</strong> Simple expressions like \(\dfrac{3}{x^2}\) can be rewritten as \(3x^{-2}\) and differentiated with the power rule — much faster.</p>
+    <p><strong>Example 2 — product inside an exponential.</strong> Differentiate \(e^{xy} = x + y\).</p>
+    <div class="math-block">$$e^{xy}\left(y + x\frac{dy}{dx}\right) = 1 + \frac{dy}{dx}.$$</div>
+    <p>Collect the \(\dfrac{dy}{dx}\) terms:</p>
+    <div class="math-block">$$\frac{dy}{dx}\bigl(xe^{xy} - 1\bigr) = 1 - ye^{xy}\ \Longrightarrow\ \frac{dy}{dx} = \frac{1 - ye^{xy}}{xe^{xy} - 1}.$$</div>
 
-    <p><strong>Common pitfalls.</strong></p>
-    <ul>
-      <li>The order in the numerator matters — it's \(f'g - fg'\), not \(fg' - f'g\).</li>
-      <li>Don't forget to square the denominator.</li>
-      <li>Always simplify after applying the rule.</li>
-    </ul>
+    <p><strong>Example 3 — logarithm of \(y\).</strong> Differentiate \(\ln y + x^2 = 2y\).</p>
+    <div class="math-block">$$\frac{1}{y}\frac{dy}{dx} + 2x = 2\frac{dy}{dx}\ \Longrightarrow\ \frac{dy}{dx}\!\left(\frac{1}{y} - 2\right) = -2x\ \Longrightarrow\ \frac{dy}{dx} = \frac{-2x}{\frac{1}{y} - 2} = \frac{2xy}{2y - 1}.$$</div>
+
+    <p><strong>Takeaway.</strong> Implicit differentiation is still the same two-step recipe — apply the chain rule, collect \(\dfrac{dy}{dx}\) terms — you just need to remember the derivatives of \(e\) and \(\ln\).</p>
   </section>
 
   <section class="exercise-section">
@@ -100,37 +97,55 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice', question: 'The quotient rule states \\(\\left(\\dfrac{f}{g}\\right)\' =\\)',
-        options: ['\\(\\dfrac{f\'g+fg\'}{g^2}\\)', '\\(\\dfrac{f\'g-fg\'}{g^2}\\)', '\\(\\dfrac{f\'g\'}{g^2}\\)', '\\(\\dfrac{fg\'-f\'g}{g^2}\\)'],
+      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}[e^y] =\\)',
+        options: ['\\(e^y\\)', '\\(e^y\\cdot\\dfrac{dy}{dx}\\)', '\\(\\ln y\\)', '\\(\\dfrac{1}{y}\\cdot\\dfrac{dy}{dx}\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x}{x+1}\\).',
-        options: ['\\(\\dfrac{1}{(x+1)^2}\\)', '\\(\\dfrac{x}{(x+1)^2}\\)', '\\(\\dfrac{-1}{(x+1)^2}\\)', '\\(\\dfrac{x+1}{x^2}\\)'],
+      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}[\\ln y] =\\)',
+        options: ['\\(\\dfrac{1}{y}\\)', '\\(\\dfrac{1}{y}\\cdot\\dfrac{dy}{dx}\\)', '\\(\\ln y\\cdot\\dfrac{dy}{dx}\\)', '\\(\\dfrac{1}{\\ln y}\\)'],
+        correctIndex: 1 },
+      { type: 'multiple-choice', question: 'From \\(e^y + x = y\\), solving gives \\(\\dfrac{dy}{dx} =\\)',
+        options: ['\\(\\dfrac{1}{e^y - 1}\\)', '\\(\\dfrac{-1}{e^y - 1}\\)', '\\(\\dfrac{1}{1 - e^y}\\)', '\\(e^y\\)'],
+        correctIndex: 2 },
+      { type: 'fill-blank', question: 'From \\(\\ln y = x\\), \\(\\dfrac{1}{y}\\dfrac{dy}{dx} = 1\\) so \\(\\dfrac{dy}{dx} =\\) ___.',
+        answer: 'y' },
+      { type: 'multiple-choice', question: 'Differentiate \\(e^{xy}=x+y\\). The correct setup is:',
+        options: [
+          '\\(e^{xy}(y + x\\dfrac{dy}{dx}) = 1 + \\dfrac{dy}{dx}\\)',
+          '\\(e^{xy}\\dfrac{dy}{dx} = 1 + \\dfrac{dy}{dx}\\)',
+          '\\(xy\\cdot e^{xy} = 1 + \\dfrac{dy}{dx}\\)',
+          '\\(e^{xy}(y\\dfrac{dy}{dx}) = 1 + \\dfrac{dy}{dx}\\)'
+        ],
         correctIndex: 0 },
-      { type: 'fill-blank', question: 'Memorize it as: low d-high minus ___ d-low, over low-squared.',
-        answer: 'high' },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x^2}{x+1}\\).',
-        options: ['\\(\\dfrac{2x}{x+1}\\)', '\\(\\dfrac{x^2+2x}{(x+1)^2}\\)', '\\(\\dfrac{x^2-2x}{(x+1)^2}\\)', '\\(\\dfrac{2x(x+1)}{x+1}\\)'],
-        correctIndex: 1 },
-      { type: 'true-false', question: 'For \\(\\dfrac{3}{x^2}\\), the power rule is faster than the quotient rule.',
+      { type: 'true-false', question: '\\(e^y\\) differentiates to itself times \\(\\dfrac{dy}{dx}\\), just as \\(e^x\\) differentiates to itself.',
         correctAnswer: true },
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\!\\left[\\dfrac{\\sin x}{x}\\right] =\\)',
-        options: ['\\(\\dfrac{\\cos x}{1}\\)', '\\(\\dfrac{x\\cos x - \\sin x}{x^2}\\)', '\\(\\dfrac{\\cos x - \\sin x}{x}\\)', '\\(\\dfrac{\\sin x - x\\cos x}{x^2}\\)'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'In the quotient rule, the denominator of \\(\\left(\\dfrac{f}{g}\\right)\'\\) is ___.',
-        answer: 'g^2' },
-      { type: 'true-false', question: 'Swapping \\(f\'g\\) and \\(fg\'\\) in the numerator gives the correct quotient rule.',
-        correctAnswer: false },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{1}{x^2+1}\\).',
-        options: ['\\(\\dfrac{-2x}{(x^2+1)^2}\\)', '\\(\\dfrac{2x}{(x^2+1)^2}\\)', '\\(\\dfrac{-1}{(x^2+1)^2}\\)', '\\(\\dfrac{1}{(x^2+1)^2}\\)'],
+      { type: 'multiple-choice', question: 'From \\(y\\ln y = x\\), the derivative of the LHS is:',
+        options: [
+          '\\(\\dfrac{dy}{dx}(\\ln y + 1)\\)',
+          '\\(\\dfrac{dy}{dx}\\cdot \\ln y\\)',
+          '\\(\\dfrac{1}{y}\\dfrac{dy}{dx}\\)',
+          '\\(y\\cdot\\dfrac{1}{y}\\)'
+        ],
         correctIndex: 0 },
-      { type: 'fill-blank', question: 'Differentiate \\(h(x)=\\dfrac{e^x}{x}\\). Numerator becomes \\(e^x x - e^x\\). Final answer: \\((xe^x - e^x)/\\) ___.',
-        answer: 'x^2' },
-      { type: 'matching', question: 'Match each function to its derivative.',
+      { type: 'fill-blank', question: 'Differentiate \\(\\ln(xy) = 5\\). Using the chain rule: \\(\\dfrac{1}{xy}\\cdot(y + x\\dfrac{dy}{dx}) = 0\\), so \\(\\dfrac{dy}{dx} = -\\)___.',
+        answer: 'y/x' },
+      { type: 'true-false', question: 'For \\(\\ln y + x^2 = 2y\\), the result is \\(\\dfrac{dy}{dx} = \\dfrac{2xy}{2y-1}\\).',
+        correctAnswer: true },
+      { type: 'multiple-choice', question: 'Differentiate \\(xe^y = 2\\).',
+        options: [
+          '\\(\\dfrac{dy}{dx} = -\\dfrac{1}{x}\\)',
+          '\\(\\dfrac{dy}{dx} = e^y\\)',
+          '\\(\\dfrac{dy}{dx} = -e^y\\)',
+          '\\(\\dfrac{dy}{dx} = \\dfrac{1}{x}\\)'
+        ],
+        correctIndex: 0 },
+      { type: 'fill-blank', question: 'From \\(e^y = x\\), \\(e^y\\dfrac{dy}{dx} = 1\\), so \\(\\dfrac{dy}{dx} = \\dfrac{1}{\\)___\\(}\\) (express in terms of \\(y\\)).',
+        answer: 'e^y' },
+      { type: 'matching', question: 'Match each derivative to the correct form.',
         pairs: [
-          { left: '\\(\\dfrac{1}{x}\\)', right: '\\(-\\dfrac{1}{x^2}\\)' },
-          { left: '\\(\\dfrac{x}{x+1}\\)', right: '\\(\\dfrac{1}{(x+1)^2}\\)' },
-          { left: '\\(\\dfrac{x^2}{x}\\)', right: '\\(1\\)' },
-          { left: '\\(\\dfrac{\\cos x}{x}\\)', right: '\\(\\dfrac{-x\\sin x - \\cos x}{x^2}\\)' }
+          { left: '\\(\\dfrac{d}{dx}[e^y]\\)', right: '\\(e^y\\cdot\\dfrac{dy}{dx}\\)' },
+          { left: '\\(\\dfrac{d}{dx}[\\ln y]\\)', right: '\\(\\dfrac{1}{y}\\cdot\\dfrac{dy}{dx}\\)' },
+          { left: '\\(\\dfrac{d}{dx}[e^{xy}]\\)', right: '\\(e^{xy}(y + x\\dfrac{dy}{dx})\\)' },
+          { left: '\\(\\dfrac{d}{dx}[\\ln(xy)]\\)', right: '\\(\\dfrac{1}{xy}(y + x\\dfrac{dy}{dx})\\)' }
         ] }
     ];
     const container = document.getElementById('exercises');
@@ -139,7 +154,7 @@
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       const c = chars[index % chars.length]; initSideCharacter(c, '../../'); showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-22', nextHref: 'index.html', backHref: 'index.html' });
+    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-27', nextHref: 'index.html', backHref: 'index.html' });
     import { createCalculator } from "../../js/calculator.js"; createCalculator();
   </script>
 </body>

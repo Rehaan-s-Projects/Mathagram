@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quotient Rule — Mathagram</title>
+  <title>Tangent Lines — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -47,28 +47,31 @@
   </nav>
 
   <section class="lesson-content">
-    <div class="chapter-label">Unit 3 &mdash; Differentiation Advanced</div>
-    <h1>Quotient Rule</h1>
+    <div class="chapter-label">Unit 5 &mdash; Applications of Derivatives I</div>
+    <h1>Tangent Lines</h1>
 
-    <p>The <strong>quotient rule</strong> tells you how to differentiate a fraction of two functions \(f(x)\) and \(g(x)\).</p>
-    <div class="math-block">$$\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$$</div>
-    <p>Memorable form: "<em>low d-high minus high d-low, over low-squared</em>."</p>
+    <p>The <strong>tangent line</strong> to a curve \(y = f(x)\) at the point \(x = a\) is the straight line that touches the curve at \((a, f(a))\) and has the same slope as the curve there.</p>
+    <div class="math-block">$$y - f(a) = f'(a)\,(x - a)$$</div>
+    <p>That's just point-slope form with the point \((a, f(a))\) and slope \(f'(a)\).</p>
 
-    <p><strong>Example 1.</strong> Differentiate \(h(x) = \dfrac{x^2}{x+1}\).</p>
-    <p>Here \(f = x^2,\ g = x+1\), so \(f' = 2x,\ g' = 1\). Then</p>
-    <div class="math-block">$$h'(x) = \frac{2x(x+1) - x^2(1)}{(x+1)^2} = \frac{x^2 + 2x}{(x+1)^2}.$$</div>
-
-    <p><strong>Example 2.</strong> Differentiate \(h(x) = \dfrac{\sin x}{x}\).</p>
-    <div class="math-block">$$h'(x) = \frac{\cos x \cdot x - \sin x \cdot 1}{x^2} = \frac{x\cos x - \sin x}{x^2}.$$</div>
-
-    <p><strong>When not to use it.</strong> Simple expressions like \(\dfrac{3}{x^2}\) can be rewritten as \(3x^{-2}\) and differentiated with the power rule — much faster.</p>
-
-    <p><strong>Common pitfalls.</strong></p>
+    <p><strong>Three-step recipe:</strong></p>
     <ul>
-      <li>The order in the numerator matters — it's \(f'g - fg'\), not \(fg' - f'g\).</li>
-      <li>Don't forget to square the denominator.</li>
-      <li>Always simplify after applying the rule.</li>
+      <li>Compute \(f(a)\) — the \(y\)-coordinate of the tangent point.</li>
+      <li>Compute \(f'(a)\) — the slope.</li>
+      <li>Plug into point-slope form.</li>
     </ul>
+
+    <p><strong>Example 1.</strong> Find the tangent line to \(y = x^2\) at \(x = 3\).</p>
+    <p>\(f(3) = 9\) and \(f'(x) = 2x\) so \(f'(3) = 6\). Tangent:</p>
+    <div class="math-block">$$y - 9 = 6(x - 3),\ \text{or}\ y = 6x - 9.$$</div>
+
+    <p><strong>Example 2.</strong> Find the tangent line to \(y = \sin x\) at \(x = 0\).</p>
+    <p>\(f(0) = 0\) and \(f'(0) = \cos 0 = 1\). Tangent:</p>
+    <div class="math-block">$$y = x.$$</div>
+
+    <p><strong>Example 3 — horizontal tangent.</strong> \(y = x^2 - 6x + 5\) has \(f'(x) = 2x - 6 = 0\) at \(x = 3\). The tangent line there is \(y = -4\).</p>
+
+    <p><strong>Tangent line as a linear approximation.</strong> Near \(x = a\), \(f(x) \approx f(a) + f'(a)(x - a)\). This is the basis of "linear approximation" or "linearization" problems — the tangent gives a simple estimate of \(f\) near \(a\).</p>
   </section>
 
   <section class="exercise-section">
@@ -100,37 +103,44 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice', question: 'The quotient rule states \\(\\left(\\dfrac{f}{g}\\right)\' =\\)',
-        options: ['\\(\\dfrac{f\'g+fg\'}{g^2}\\)', '\\(\\dfrac{f\'g-fg\'}{g^2}\\)', '\\(\\dfrac{f\'g\'}{g^2}\\)', '\\(\\dfrac{fg\'-f\'g}{g^2}\\)'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x}{x+1}\\).',
-        options: ['\\(\\dfrac{1}{(x+1)^2}\\)', '\\(\\dfrac{x}{(x+1)^2}\\)', '\\(\\dfrac{-1}{(x+1)^2}\\)', '\\(\\dfrac{x+1}{x^2}\\)'],
+      { type: 'multiple-choice', question: 'Tangent to \\(y = x^2\\) at \\(x = 3\\) is:',
+        options: ['\\(y = 6x - 9\\)', '\\(y = 6x + 9\\)', '\\(y = 9x - 6\\)', '\\(y = 3x - 9\\)'],
         correctIndex: 0 },
-      { type: 'fill-blank', question: 'Memorize it as: low d-high minus ___ d-low, over low-squared.',
-        answer: 'high' },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{x^2}{x+1}\\).',
-        options: ['\\(\\dfrac{2x}{x+1}\\)', '\\(\\dfrac{x^2+2x}{(x+1)^2}\\)', '\\(\\dfrac{x^2-2x}{(x+1)^2}\\)', '\\(\\dfrac{2x(x+1)}{x+1}\\)'],
-        correctIndex: 1 },
-      { type: 'true-false', question: 'For \\(\\dfrac{3}{x^2}\\), the power rule is faster than the quotient rule.',
-        correctAnswer: true },
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\!\\left[\\dfrac{\\sin x}{x}\\right] =\\)',
-        options: ['\\(\\dfrac{\\cos x}{1}\\)', '\\(\\dfrac{x\\cos x - \\sin x}{x^2}\\)', '\\(\\dfrac{\\cos x - \\sin x}{x}\\)', '\\(\\dfrac{\\sin x - x\\cos x}{x^2}\\)'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'In the quotient rule, the denominator of \\(\\left(\\dfrac{f}{g}\\right)\'\\) is ___.',
-        answer: 'g^2' },
-      { type: 'true-false', question: 'Swapping \\(f\'g\\) and \\(fg\'\\) in the numerator gives the correct quotient rule.',
+      { type: 'multiple-choice', question: 'Tangent to \\(y = \\sin x\\) at \\(x = 0\\) is:',
+        options: ['\\(y = x\\)', '\\(y = 1\\)', '\\(y = \\cos x\\)', '\\(y = 0\\)'],
+        correctIndex: 0 },
+      { type: 'fill-blank', question: 'The tangent-line formula is \\(y - f(a) = f\'(a)(x - \\)___\\()\\).',
+        answer: 'a' },
+      { type: 'multiple-choice', question: 'Tangent to \\(y = x^3\\) at \\(x = 1\\) is:',
+        options: ['\\(y = 3x - 2\\)', '\\(y = 3x + 2\\)', '\\(y = x + 2\\)', '\\(y = 3x\\)'],
+        correctIndex: 0 },
+      { type: 'fill-blank', question: '\\(y = x^2 - 6x + 5\\) has a horizontal tangent at \\(x =\\) ___.',
+        answer: '3' },
+      { type: 'multiple-choice', question: 'Tangent to \\(y = 1/x\\) at \\(x = 1\\) is:',
+        options: ['\\(y = -x + 2\\)', '\\(y = x\\)', '\\(y = x - 1\\)', '\\(y = -x + 1\\)'],
+        correctIndex: 0 },
+      { type: 'true-false', question: 'The tangent line and curve always intersect at exactly one point.',
         correctAnswer: false },
-      { type: 'multiple-choice', question: 'Differentiate \\(h(x)=\\dfrac{1}{x^2+1}\\).',
-        options: ['\\(\\dfrac{-2x}{(x^2+1)^2}\\)', '\\(\\dfrac{2x}{(x^2+1)^2}\\)', '\\(\\dfrac{-1}{(x^2+1)^2}\\)', '\\(\\dfrac{1}{(x^2+1)^2}\\)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Differentiate \\(h(x)=\\dfrac{e^x}{x}\\). Numerator becomes \\(e^x x - e^x\\). Final answer: \\((xe^x - e^x)/\\) ___.',
-        answer: 'x^2' },
-      { type: 'matching', question: 'Match each function to its derivative.',
+      { type: 'fill-blank', question: 'Tangent to \\(y = e^x\\) at \\(x = 0\\) is \\(y = x + \\)___.',
+        answer: '1' },
+      { type: 'multiple-choice', question: 'Linear approximation near \\(x = a\\) uses:',
+        options: [
+          '\\(f(a)\\)',
+          '\\(f(a) + f\'(a)(x-a)\\)',
+          '\\(f\'(a)\\)',
+          '\\(f(a) + f\'\'(a)(x-a)^2\\)'
+        ],
+        correctIndex: 1 },
+      { type: 'fill-blank', question: 'Use the tangent to \\(y=\\sqrt{x}\\) at \\(x=4\\) to approximate \\(\\sqrt{4.1}\\). \\(f\'(4) = 1/4\\). Approximation: \\(2 + 0.25 \\cdot 0.1 = \\) ___.',
+        answer: '2.025' },
+      { type: 'true-false', question: 'The tangent line gives the best linear approximation to \\(f\\) near \\(x=a\\).',
+        correctAnswer: true },
+      { type: 'matching', question: 'Match each curve/point to its tangent line.',
         pairs: [
-          { left: '\\(\\dfrac{1}{x}\\)', right: '\\(-\\dfrac{1}{x^2}\\)' },
-          { left: '\\(\\dfrac{x}{x+1}\\)', right: '\\(\\dfrac{1}{(x+1)^2}\\)' },
-          { left: '\\(\\dfrac{x^2}{x}\\)', right: '\\(1\\)' },
-          { left: '\\(\\dfrac{\\cos x}{x}\\)', right: '\\(\\dfrac{-x\\sin x - \\cos x}{x^2}\\)' }
+          { left: '\\(y=x^2\\), \\(x=1\\)', right: '\\(y = 2x - 1\\)' },
+          { left: '\\(y=e^x\\), \\(x=0\\)', right: '\\(y = x + 1\\)' },
+          { left: '\\(y=\\ln x\\), \\(x=1\\)', right: '\\(y = x - 1\\)' },
+          { left: '\\(y=\\sin x\\), \\(x=0\\)', right: '\\(y = x\\)' }
         ] }
     ];
     const container = document.getElementById('exercises');
@@ -139,7 +149,7 @@
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
       const c = chars[index % chars.length]; initSideCharacter(c, '../../'); showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-22', nextHref: 'index.html', backHref: 'index.html' });
+    await showLessonComplete(container, completionDiv, score, { xp, courseId: 'calculus', lessonId: 'lesson-30', nextHref: 'index.html', backHref: 'index.html' });
     import { createCalculator } from "../../js/calculator.js"; createCalculator();
   </script>
 </body>
