@@ -205,6 +205,28 @@ export function createCalculator(container) {
     });
     document.getElementById('cb-eq' + suffix).addEventListener('click', function() {
       try {
+        // Check for integral: ∫ ... dx
+        if (expression.indexOf('\u222B') !== -1 && expression.indexOf(' dx') !== -1) {
+          var integralResult = solveIntegral(display, expression);
+          if (integralResult) {
+            document.getElementById('calc-history').textContent = display + ' = ' + integralResult;
+            display = integralResult;
+            expression = '';
+            updateDisplay();
+            return;
+          }
+        }
+        // Check for derivative: d/dx ...
+        if (expression.indexOf('d/dx ') !== -1) {
+          var derivResult = solveDerivative(display, expression);
+          if (derivResult) {
+            document.getElementById('calc-history').textContent = display + ' = ' + derivResult;
+            display = derivResult;
+            expression = '';
+            updateDisplay();
+            return;
+          }
+        }
         // Clean expression for eval
         var clean = expression.replace(/\u222B/g,'').replace(/d\/dx/g,'').replace(/\u2211/g,'')
           .replace(/\u220F/g,'').replace(/lim/g,'').replace(/ dx/g,'').replace(/ dy/g,'')
@@ -221,4 +243,93 @@ export function createCalculator(container) {
       }
     });
   });
+
+  // Power-rule integration: ∫ axⁿ dx = ax^(n+1)/(n+1) + C
+  function solveIntegral(disp, expr) {
+    var inner = expr.replace(/\u222B/g,'').replace(/ dx/g,'').trim();
+    var terms = parseTerms(inner);
+    if (!terms) return null;
+    var parts = [];
+    for (var i = 0; i < terms.length; i++) {
+      var t = terms[i];
+      if (t.exp === -1) {
+        parts.push((t.coeff < 0 ? '' : '+') + t.coeff + 'ln|x|');
+      } else {
+        var newExp = t.exp + 1;
+        var newCoeff = t.coeff / newExp;
+        var cs = formatCoeff(newCoeff);
+        if (newExp === 1) parts.push(cs + 'x');
+        else parts.push(cs + 'x' + formatExp(newExp));
+      }
+    }
+    var result = parts.join(' ').replace(/^\+\s*/, '') + ' + C';
+    return result;
+  }
+
+  // Power-rule derivative: d/dx axⁿ = nax^(n-1)
+  function solveDerivative(disp, expr) {
+    var inner = expr.replace(/d\/dx\s*/g,'').trim();
+    var terms = parseTerms(inner);
+    if (!terms) return null;
+    var parts = [];
+    for (var i = 0; i < terms.length; i++) {
+      var t = terms[i];
+      if (t.exp === 0) continue;
+      var newCoeff = t.coeff * t.exp;
+      var newExp = t.exp - 1;
+      var cs = formatCoeff(newCoeff);
+      if (newExp === 0) parts.push(String(newCoeff));
+      else if (newExp === 1) parts.push(cs + 'x');
+      else parts.push(cs + 'x' + formatExp(newExp));
+    }
+    return parts.join(' ').replace(/^\+\s*/, '') || '0';
+  }
+
+  function parseTerms(s) {
+    s = s.replace(/\u2212/g, '-').replace(/\u00D7/g, '*').replace(/\*\*/g, '^');
+    s = s.replace(/\s+/g, '');
+    if (!s) return null;
+    var terms = [];
+    var re = /([+-]?)(\d*\.?\d*)(x?)(?:\^([+-]?\d+\.?\d*))?/g;
+    var m;
+    while ((m = re.exec(s)) !== null) {
+      if (!m[0]) { re.lastIndex++; continue; }
+      var sign = m[1] === '-' ? -1 : 1;
+      var coeff, exp;
+      if (m[3] === 'x') {
+        coeff = m[2] ? parseFloat(m[2]) * sign : sign;
+        exp = m[4] !== undefined ? parseFloat(m[4]) : 1;
+      } else if (m[2]) {
+        coeff = parseFloat(m[2]) * sign;
+        exp = 0;
+      } else continue;
+      terms.push({ coeff: coeff, exp: exp });
+    }
+    return terms.length ? terms : null;
+  }
+
+  function formatCoeff(c) {
+    var r = Math.round(c * 10000) / 10000;
+    if (r === 1) return '+';
+    if (r === -1) return '-';
+    var frac = toFraction(r);
+    if (frac) return (r > 0 ? '+' : '') + frac;
+    return (r > 0 ? '+' : '') + r;
+  }
+
+  function formatExp(n) {
+    var sup = { '0':'\u2070','1':'\u00B9','2':'\u00B2','3':'\u00B3','4':'\u2074',
+                '5':'\u2075','6':'\u2076','7':'\u2077','8':'\u2078','9':'\u2079','-':'\u207B' };
+    return String(n).split('').map(function(c) { return sup[c] || c; }).join('');
+  }
+
+  function toFraction(d) {
+    for (var den = 2; den <= 12; den++) {
+      var num = Math.round(d * den);
+      if (Math.abs(num / den - d) < 0.0001) {
+        return (d < 0 ? '-' : '') + Math.abs(num) + '/' + den;
+      }
+    }
+    return null;
+  }
 }
