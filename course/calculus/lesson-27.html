@@ -97,55 +97,55 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice', question: '\(d)/(dx)[e^y] =',
-        options: ['e^y', 'e^y\·\(dy)/(dx)', '\ln y', '\(1)/(y)\·\(dy)/(dx)'],
+      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)[e^y] =',
+        options: ['e^y', 'e^y\\cdot\\(\\dfrac{dy}{dx}\\)', '\ln y', '\\(\\dfrac{1}{y}\\)\\cdot\\(\\dfrac{dy}{dx}\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: '\(d)/(dx)[\ln y] =',
-        options: ['\(1)/(y)', '\(1)/(y)\·\(dy)/(dx)', '\ln y\·\(dy)/(dx)', '\(1)/(\ln y)'],
+      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)[\ln y] =',
+        options: ['\\(\\dfrac{1}{y}\\)', '\\(\\dfrac{1}{y}\\)\\cdot\\(\\dfrac{dy}{dx}\\)', '\ln y\\cdot\\(\\dfrac{dy}{dx}\\)', '\\(\\dfrac{1}{\ln y}\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: 'From e^y + x = y, solving gives \(dy)/(dx) =',
-        options: ['\(1)/(e^y - 1)', '\(-1)/(e^y - 1)', '\(1)/(1 - e^y)', 'e^y'],
+      { type: 'multiple-choice', question: 'From e^y + x = y, solving gives \\(\\dfrac{dy}{dx}\\) =',
+        options: ['\\(\\dfrac{1}{e^y - 1}\\)', '\\(\\dfrac{-1}{e^y - 1}\\)', '\\(\\dfrac{1}{1 - e^y}\\)', 'e^y'],
         correctIndex: 2 },
-      { type: 'fill-blank', question: 'From \ln y = x, \(1)/(y)\(dy)/(dx) = 1 so \(dy)/(dx) = ___.',
+      { type: 'fill-blank', question: 'From \ln y = x, \\(\\dfrac{1}{y}\\)\\(\\dfrac{dy}{dx}\\) = 1 so \\(\\dfrac{dy}{dx}\\) = ___.',
         answer: 'y' },
       { type: 'multiple-choice', question: 'Differentiate e^(xy)=x+y. The correct setup is:',
         options: [
-          'e^(xy)(y + x\(dy)/(dx)) = 1 + \(dy)/(dx)',
-          'e^(xy)\(dy)/(dx) = 1 + \(dy)/(dx)',
-          'xy\· e^(xy) = 1 + \(dy)/(dx)',
-          'e^(xy)(y\(dy)/(dx)) = 1 + \(dy)/(dx)'
+          'e^(xy)(y + x\\(\\dfrac{dy}{dx}\\)) = 1 + \\(\\dfrac{dy}{dx}\\)',
+          'e^(xy)\\(\\dfrac{dy}{dx}\\) = 1 + \\(\\dfrac{dy}{dx}\\)',
+          'xy\\cdot e^(xy) = 1 + \\(\\dfrac{dy}{dx}\\)',
+          'e^(xy)(y\\(\\dfrac{dy}{dx}\\)) = 1 + \\(\\dfrac{dy}{dx}\\)'
         ],
         correctIndex: 0 },
-      { type: 'true-false', question: 'e^y differentiates to itself times \(dy)/(dx), just as e^x differentiates to itself.',
+      { type: 'true-false', question: 'e^y differentiates to itself times \\(\\dfrac{dy}{dx}\\), just as e^x differentiates to itself.',
         correctAnswer: true },
       { type: 'multiple-choice', question: 'From y\ln y = x, the derivative of the LHS is:',
         options: [
-          '\(dy)/(dx)(\ln y + 1)',
-          '\(dy)/(dx)\· \ln y',
-          '\(1)/(y)\(dy)/(dx)',
-          'y\·\(1)/(y)'
+          '\\(\\dfrac{dy}{dx}\\)(\ln y + 1)',
+          '\\(\\dfrac{dy}{dx}\\)\\cdot \ln y',
+          '\\(\\dfrac{1}{y}\\)\\(\\dfrac{dy}{dx}\\)',
+          'y\\cdot\\(\\dfrac{1}{y}\\)'
         ],
         correctIndex: 0 },
-      { type: 'fill-blank', question: 'Differentiate \ln(xy) = 5. Using the chain rule: \(1)/(xy)\·(y + x\(dy)/(dx)) = 0, so \(dy)/(dx) = -___.',
+      { type: 'fill-blank', question: 'Differentiate \ln(xy) = 5. Using the chain rule: \\(\\dfrac{1}{xy}\\)\\cdot(y + x\\(\\dfrac{dy}{dx}\\)) = 0, so \\(\\dfrac{dy}{dx}\\) = -___.',
         answer: 'y/x' },
-      { type: 'true-false', question: 'For \ln y + x² = 2y, the result is \(dy)/(dx) = \(2xy)/(2y-1).',
+      { type: 'true-false', question: 'For \ln y + x^2 = 2y, the result is \\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{2xy}{2y-1}\\).',
         correctAnswer: true },
       { type: 'multiple-choice', question: 'Differentiate xe^y = 2.',
         options: [
-          '\(dy)/(dx) = -\(1)/(x)',
-          '\(dy)/(dx) = e^y',
-          '\(dy)/(dx) = -e^y',
-          '\(dy)/(dx) = \(1)/(x)'
+          '\\(\\dfrac{dy}{dx}\\) = -\\(\\dfrac{1}{x}\\)',
+          '\\(\\dfrac{dy}{dx}\\) = e^y',
+          '\\(\\dfrac{dy}{dx}\\) = -e^y',
+          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{1}{x}\\)'
         ],
         correctIndex: 0 },
-      { type: 'fill-blank', question: 'From e^y = x, e^y\(dy)/(dx) = 1, so \(dy)/(dx) = \1___ (express in terms of y).',
+      { type: 'fill-blank', question: 'From e^y = x, e^y\\(\\dfrac{dy}{dx}\\) = 1, so \\(\\dfrac{dy}{dx}\\) = \1___ (express in terms of y).',
         answer: 'e^y' },
       { type: 'matching', question: 'Match each derivative to the correct form.',
         pairs: [
-          { left: '\(d)/(dx)[e^y]', right: 'e^y\·\(dy)/(dx)' },
-          { left: '\(d)/(dx)[\ln y]', right: '\(1)/(y)\·\(dy)/(dx)' },
-          { left: '\(d)/(dx)[e^(xy)]', right: 'e^(xy)(y + x\(dy)/(dx))' },
-          { left: '\(d)/(dx)[\ln(xy)]', right: '\(1)/(xy)(y + x\(dy)/(dx))' }
+          { left: '\\(\\dfrac{d}{dx}\\)[e^y]', right: 'e^y\\cdot\\(\\dfrac{dy}{dx}\\)' },
+          { left: '\\(\\dfrac{d}{dx}\\)[\ln y]', right: '\\(\\dfrac{1}{y}\\)\\cdot\\(\\dfrac{dy}{dx}\\)' },
+          { left: '\\(\\dfrac{d}{dx}\\)[e^(xy)]', right: 'e^(xy)(y + x\\(\\dfrac{dy}{dx}\\))' },
+          { left: '\\(\\dfrac{d}{dx}\\)[\ln(xy)]', right: '\\(\\dfrac{1}{xy}\\)(y + x\\(\\dfrac{dy}{dx}\\))' }
         ] }
     ];
     const container = document.getElementById('exercises');

@@ -100,45 +100,45 @@
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice', question: '\(d)/(dx)[\sin y] =',
-        options: ['\cos y', '\cos y\·\(dy)/(dx)', '-\sin y', '\sin y\·\(dy)/(dx)'],
+      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)[\sin y] =',
+        options: ['\cos y', '\cos y\\cdot\\(\\dfrac{dy}{dx}\\)', '-\sin y', '\sin y\\cdot\\(\\dfrac{dy}{dx}\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: '\(d)/(dx)[\tan y] =',
-        options: ['\sec² y', '\sec² y\·\(dy)/(dx)', '\tan y\·\(dy)/(dx)', '\sec y\tan y\·\(dy)/(dx)'],
+      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)[\tan y] =',
+        options: ['\sec^2 y', '\sec^2 y\\cdot\\(\\dfrac{dy}{dx}\\)', '\tan y\\cdot\\(\\dfrac{dy}{dx}\\)', '\sec y\tan y\\cdot\\(\\dfrac{dy}{dx}\\)'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: 'From \sin y + x = y, solving gives \(dy)/(dx) =',
-        options: ['\(1)/(\cos y - 1)', '\(1)/(1 - \cos y)', '\cos y', '-\cos y'],
+      { type: 'multiple-choice', question: 'From \sin y + x = y, solving gives \\(\\dfrac{dy}{dx}\\) =',
+        options: ['\\(\\dfrac{1}{\cos y - 1}\\)', '\\(\\dfrac{1}{1 - \cos y}\\)', '\cos y', '-\cos y'],
         correctIndex: 1 },
-      { type: 'multiple-choice', question: 'From y = x\cos y, \(dy)/(dx) =',
-        options: ['\cos y', '\(\cos y)/(1 + x\sin y)', '\(\cos y)/(1 - x\sin y)', '-x\sin y'],
+      { type: 'multiple-choice', question: 'From y = x\cos y, \\(\\dfrac{dy}{dx}\\) =',
+        options: ['\cos y', '\\(\\dfrac{\cos y}{1 + x\sin y}\\)', '\\(\\dfrac{\cos y}{1 - x\sin y}\\)', '-x\sin y'],
         correctIndex: 1 },
-      { type: 'fill-blank', question: 'Differentiating \cos y = x: -\sin y\(dy)/(dx) = 1, so \(dy)/(dx) = \-1___.',
+      { type: 'fill-blank', question: 'Differentiating \cos y = x: -\sin y\\(\\dfrac{dy}{dx}\\) = 1, so \\(\\dfrac{dy}{dx}\\) = \-1___.',
         answer: 'sin y' },
-      { type: 'true-false', question: '\(d)/(dx)[\cos y] = -\sin y\·\(dy)/(dx).',
+      { type: 'true-false', question: '\\(\\dfrac{d}{dx}\\)[\cos y] = -\sin y\\cdot\\(\\dfrac{dy}{dx}\\).',
         correctAnswer: true },
       { type: 'multiple-choice', question: 'Differentiate \sin(xy) = y. LHS becomes:',
         options: [
-          '\cos(xy)\· y + x\(dy)/(dx)',
-          '\cos(xy)\·\(y + x\(dy)/(dx)\)',
-          '\cos(xy)\·\(dy)/(dx)',
-          '-\sin(xy)\· y'
+          '\cos(xy)\\cdot y + x\\(\\dfrac{dy}{dx}\\)',
+          '\cos(xy)\\cdot\(y + x\\(\\dfrac{dy}{dx}\\)\)',
+          '\cos(xy)\\cdot\\(\\dfrac{dy}{dx}\\)',
+          '-\sin(xy)\\cdot y'
         ],
         correctIndex: 1 },
       { type: 'true-false', question: 'For \tan(xy) = x, the derivative of the left side uses both chain rule and product rule on xy.',
         correctAnswer: true },
-      { type: 'fill-blank', question: 'From \tan(xy) = x, the derivative gives \sec²(xy)\·\(y + x\(dy)/(dx)\) = 1. Solving: \(dy)/(dx) = \\cos²(xy) - y___.',
+      { type: 'fill-blank', question: 'From \tan(xy) = x, the derivative gives \sec^2(xy)\\cdot\(y + x\\(\\dfrac{dy}{dx}\\)\) = 1. Solving: \\(\\dfrac{dy}{dx}\\) = \\cos^2(xy) - y___.',
         answer: 'x' },
       { type: 'multiple-choice', question: 'Differentiate y\sin x = \cos y.',
         options: [
-          '\(dy)/(dx) = \(-y\cos x)/(\sin x + \sin y)',
-          '\(dy)/(dx) = \(y\cos x)/(\sin x - \sin y)',
-          '\(dy)/(dx) = \(\cos y)/(\sin x)',
-          '\(dy)/(dx) = -\sin x'
+          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{-y\cos x}{\sin x + \sin y}\\)',
+          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{y\cos x}{\sin x - \sin y}\\)',
+          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{\cos y}{\sin x}\\)',
+          '\\(\\dfrac{dy}{dx}\\) = -\sin x'
         ],
         correctIndex: 0 },
       { type: 'true-false', question: 'The approach is the same as polynomial implicit differentiation — only the derivative formulas change.',
         correctAnswer: true },
-      { type: 'fill-blank', question: 'From \sin y = x, the slope at y=0 is \(1)/(\cos 0) = ___.',
+      { type: 'fill-blank', question: 'From \sin y = x, the slope at y=0 is \\(\\dfrac{1}{\cos 0}\\) = ___.',
         answer: '1' }
     ];
     const container = document.getElementById('exercises');

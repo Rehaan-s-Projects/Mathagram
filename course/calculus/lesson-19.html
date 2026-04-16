@@ -103,7 +103,7 @@
 
     const exercises = [
       { type: 'multiple-choice',
-        question: 'In the \ε-\δ definition, \ε controls:',
+        question: 'In the \\varepsilon-\\delta definition, \\varepsilon controls:',
         options: [
           'The closeness of x to a',
           'The closeness of f(x) to L',
@@ -112,7 +112,7 @@
         ],
         correctIndex: 1 },
       { type: 'multiple-choice',
-        question: 'And \δ controls:',
+        question: 'And \\delta controls:',
         options: [
           'The closeness of x to a',
           'The closeness of f(x) to L',
@@ -124,55 +124,55 @@
         question: 'The condition 0 < |x - a| intentionally excludes x = a from the definition.',
         correctAnswer: true },
       { type: 'multiple-choice',
-        question: 'To prove lim x\→2 of (3x+1) = 7, the smallest \δ that works for a given \ε is:',
+        question: 'To prove lim x\\to2 of (3x+1) = 7, the smallest \\delta that works for a given \\varepsilon is:',
         options: [
-          '\δ = \ε',
-          '\δ = \ε/3',
-          '\δ = 3\ε',
-          '\δ = \ε²'
+          '\\delta = \\varepsilon',
+          '\\delta = \\varepsilon/3',
+          '\\delta = 3\\varepsilon',
+          '\\delta = \\varepsilon^2'
         ],
         correctIndex: 1 },
       { type: 'true-false',
-        question: 'For every \ε > 0 there is a different \δ that works.',
+        question: 'For every \\varepsilon > 0 there is a different \\delta that works.',
         correctAnswer: true },
       { type: 'fill-blank',
-        question: 'For lim x\→4 of (2x-1) = 7, pick \δ = \ε/___.',
+        question: 'For lim x\\to4 of (2x-1) = 7, pick \\delta = \\varepsilon/___.',
         answer: '2' },
       { type: 'multiple-choice',
-        question: '|x - a| < \δ is equivalent to:',
+        question: '|x - a| < \\delta is equivalent to:',
         options: [
           'x = a',
-          'x \∈ (a-\δ,\\ a+\δ)',
-          'x \∈ [a, a+\δ]',
+          'x \\in (a-\\delta,\\ a+\\delta)',
+          'x \\in [a, a+\\delta]',
           'x > a'
         ],
         correctIndex: 1 },
       { type: 'multiple-choice',
-        question: 'If lim x\→a of f(x) = L, which statement is TRUE?',
+        question: 'If lim x\\toa of f(x) = L, which statement is TRUE?',
         options: [
           'f(a) must equal L.',
-          'For any \ε > 0, some \δ forces |f(x)-L| < \ε whenever 0 < |x-a| < \δ.',
+          'For any \\varepsilon > 0, some \\delta forces |f(x)-L| < \\varepsilon whenever 0 < |x-a| < \\delta.',
           'The function must be differentiable at a.',
           'f must be a polynomial.'
         ],
         correctIndex: 1 },
       { type: 'true-false',
-        question: 'If a single \δ works for a specific \ε, any smaller \δ also works.',
+        question: 'If a single \\delta works for a specific \\varepsilon, any smaller \\delta also works.',
         correctAnswer: true },
       { type: 'multiple-choice',
-        question: 'What does the negation "lim x\→a of f(x) \≠ L" mean?',
+        question: 'What does the negation "lim x\\toa of f(x) \\ne L" mean?',
         options: [
-          'There exists some \ε > 0 for which no \δ works.',
-          'Every \ε fails.',
+          'There exists some \\varepsilon > 0 for which no \\delta works.',
+          'Every \\varepsilon fails.',
           'f is discontinuous.',
           'a is not in the domain.'
         ],
         correctIndex: 0 },
       { type: 'fill-blank',
-        question: 'For lim x\→5 of (4x) = 20, a valid choice is \δ = \ε/___.',
+        question: 'For lim x\\to5 of (4x) = 20, a valid choice is \\delta = \\varepsilon/___.',
         answer: '4' },
       { type: 'true-false',
-        question: 'The \ε-\δ definition requires f to be defined at a.',
+        question: 'The \\varepsilon-\\delta definition requires f to be defined at a.',
         correctAnswer: false }
     ];
 
