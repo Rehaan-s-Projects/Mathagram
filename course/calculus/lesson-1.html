@@ -153,43 +153,78 @@
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-    import { generateExercises } from '../../js/problem-generator.js';
-
-    // KaTeX auto-render
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\(", right: "\\)", display: false }
-          ],
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
       }
     });
-
     document.getElementById('year').textContent = new Date().getFullYear();
-
-
-    // Initialize side character (Duolingo-style)
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = generateExercises('integrals', 6);
+    const exercises = [
+      { type: 'multiple-choice',
+        question: 'An integral measures the:',
+        options: ['Rate of change at a point', 'Accumulation of a quantity over an interval', 'Slope of a tangent line', 'Maximum value of a function'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'The symbol \\(\\int\\) stands for:',
+        options: ['Infinity', 'Summa (Latin for "sum")', 'Sigma', 'Derivative'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'In \\(\\int f(x)\\, dx\\), what is \\(f(x)\\) called?',
+        options: ['The integral', 'The derivative', 'The integrand', 'The constant'],
+        correctIndex: 2 },
+      { type: 'true-false',
+        question: 'The "dx" in \\(\\int f(x)\\, dx\\) tells us we are integrating with respect to x.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'Using the power rule: \\(\\int x^2\\, dx = \\frac{x^3}{\\text{___}} + C\\). Fill in the denominator.',
+        answer: '3' },
+      { type: 'multiple-choice',
+        question: 'What does the "+ C" represent in an indefinite integral?',
+        options: ['The variable of integration', 'The constant of integration', 'The speed of light', 'The coefficient'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'Integration can be thought of as summing infinitely many thin rectangles under a curve.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'The most common geometric interpretation of an integral is:',
+        options: ['The slope of a curve', 'The area under a curve', 'The tangent of a curve', 'The length of a curve'],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: 'Each thin rectangle under the curve has height \\(f(x)\\) and width ___.',
+        answer: 'dx' },
+      { type: 'matching',
+        question: 'Match each integral concept to its meaning.',
+        pairs: [
+          { left: '\\(\\int\\)', right: 'Elongated S for "sum"' },
+          { left: '\\(f(x)\\)', right: 'The integrand' },
+          { left: '\\(dx\\)', right: 'With respect to x' },
+          { left: '\\(+ C\\)', right: 'Constant of integration' }
+        ] },
+      { type: 'fill-blank',
+        question: 'The power rule says: to integrate \\(x^n\\), add 1 to the exponent and ___ by the new exponent.',
+        answer: 'divide' },
+      { type: 'true-false',
+        question: 'While derivatives tell us the rate of change, integrals tell us the total accumulation.',
+        correctAnswer: true }
+    ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
-
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
-      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
-
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'calculus',
-      lessonId: 'lesson-1',
-      nextHref: 'lesson-2.html',
-      backHref: 'index.html'
+      courseId: 'calculus', lessonId: 'lesson-1', nextHref: 'lesson-2.html', backHref: 'index.html'
     });
-  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
 </script>
 
 </body>
