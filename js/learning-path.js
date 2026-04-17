@@ -170,12 +170,17 @@ function injectSkillNodes(lessons) {
   const result = [];
   let lessonCount = 0;
 
+  // Check if course already has manually added practice/reading lessons
+  const hasManualPractice = lessons.some(l => l.type === 'practice' && l.href && l.href !== '#');
+  const hasManualReading = lessons.some(l => l.type === 'reading' && l.href && l.href !== '#');
+
   lessons.forEach((lesson, i) => {
     result.push(lesson);
+    if (lesson.type === 'practice' || lesson.type === 'reading') return;
     lessonCount++;
 
-    // Add practice node after every 4th lesson
-    if (lessonCount % 4 === 0 && i < lessons.length - 1) {
+    // Add practice node after every 4th lesson (skip if course has manual ones)
+    if (!hasManualPractice && lessonCount % 4 === 0 && i < lessons.length - 1) {
       result.push({
         id: `practice-${lessonCount}`,
         title: 'Listening Practice',
@@ -187,8 +192,8 @@ function injectSkillNodes(lessons) {
       });
     }
 
-    // Add reading node after every 8th lesson
-    if (lessonCount % 8 === 0 && i < lessons.length - 1) {
+    // Add reading node after every 8th lesson (skip if course has manual ones)
+    if (!hasManualReading && lessonCount % 8 === 0 && i < lessons.length - 1) {
       result.push({
         id: `reading-${lessonCount}`,
         title: 'Reading',
