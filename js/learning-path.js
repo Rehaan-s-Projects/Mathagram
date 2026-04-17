@@ -59,10 +59,7 @@ export function renderPath(container, lessons, completedIds = new Set()) {
     }
 
     let state;
-    if (lesson.type === 'reading') {
-      state = 'current';
-    } else if (lesson.type === 'practice') {
-      // Optional side activity — unlocked only if the preceding real lesson is completed.
+    if (lesson.type === 'reading' || lesson.type === 'practice') {
       state = prevRealLessonState === 'completed' ? 'current' : 'locked';
     } else {
       // Determine state — check by lesson id, href filename, or lesson-N pattern
