@@ -573,8 +573,126 @@ function updateClock() {
 }
 
 function goToClass(course) {
-  window.location.href = 'course/' + course + '/index.html';
+  var chatBox = document.getElementById('chatMessages');
+  var input = document.getElementById('chatInput');
+  chatBox.parentElement.parentElement.scrollIntoView({behavior:'smooth'});
+
+  var subjectName = course.replace(/-/g,' ').replace(/\b\w/g, function(c){return c.toUpperCase();});
+  activeCourse = course;
+  chatQuizStep = 0;
+  chatQuizScore = 0;
+
+  var lesson = chatLessons[course];
+  if (!lesson) {
+    addGosiaChat("Welcome to <strong>" + subjectName + "</strong> class! Ask me anything about the topic and I'll teach you through our chat. Let's learn together! 💜");
+    return;
+  }
+
+  addGosiaChat("📚 Welcome to <strong>" + subjectName + "</strong>! Let me teach you today's lesson right here in our chat.");
+  setTimeout(function(){
+    addGosiaChat(lesson.teach);
+    setTimeout(function(){
+      chatQuizStep = 0;
+      askChatQuiz();
+    }, 2000);
+  }, 1500);
 }
+
+var activeCourse = null;
+var chatQuizStep = 0;
+var chatQuizScore = 0;
+
+var chatLessons = {
+  'algebra': {
+    teach: "<strong>Solving One-Step Equations</strong><br><br>An equation is like a balance — whatever you do to one side, you must do to the other.<br><br>Example: <strong>x + 5 = 12</strong><br>Subtract 5 from both sides: <strong>x = 7</strong> ✓<br><br>Example: <strong>3x = 15</strong><br>Divide both sides by 3: <strong>x = 5</strong> ✓",
+    quiz: [
+      {q:"Solve: x + 7 = 10. What is x?", a:"3", hint:"Subtract 7 from both sides."},
+      {q:"Solve: 4x = 20. What is x?", a:"5", hint:"Divide both sides by 4."},
+      {q:"Solve: x − 3 = 9. What is x?", a:"12", hint:"Add 3 to both sides."},
+      {q:"True or false: To solve x + 5 = 8, you add 5 to both sides.", a:"false", hint:"You SUBTRACT to undo addition."}
+    ]
+  },
+  'calculus': {
+    teach: "<strong>What Are Integrals?</strong><br><br>An <strong>integral</strong> measures the <em>accumulation</em> of a quantity over an interval. The notation: <strong>∫ f(x) dx</strong><br><br>• The ∫ symbol means \"sum\"<br>• f(x) is the integrand<br>• dx means \"with respect to x\"<br><br><strong>Power Rule:</strong> ∫ x² dx = x³/3 + C",
+    quiz: [
+      {q:"What does the ∫ symbol stand for?", a:"sum", hint:"It comes from the Latin word 'summa'."},
+      {q:"In ∫ f(x) dx, what is f(x) called?", a:"integrand", hint:"The function being integrated."},
+      {q:"Using the power rule: ∫ x² dx = x³/___  + C. Fill in the blank.", a:"3", hint:"Add 1 to the exponent, then divide by the new exponent."},
+      {q:"What does the '+ C' represent?", a:"constant", hint:"The constant of integration."}
+    ]
+  },
+  'trigonometry': {
+    teach: "<strong>Introduction to Trigonometry</strong><br><br>Trigonometry studies relationships between <strong>angles</strong> and <strong>sides</strong> of triangles.<br><br>The three main ratios (SOH-CAH-TOA):<br>• <strong>sin θ = opposite / hypotenuse</strong><br>• <strong>cos θ = adjacent / hypotenuse</strong><br>• <strong>tan θ = opposite / adjacent</strong>",
+    quiz: [
+      {q:"What does SOH stand for?", a:"sin equals opposite over hypotenuse", hint:"Sin = Opposite / Hypotenuse."},
+      {q:"cos θ = adjacent / ___. Fill in the blank.", a:"hypotenuse", hint:"CAH = Cos Adjacent Hypotenuse."},
+      {q:"tan θ = ___ / adjacent. Fill in the blank.", a:"opposite", hint:"TOA = Tan Opposite Adjacent."},
+      {q:"True or false: Trigonometry only works with right triangles.", a:"false", hint:"It extends to all triangles and the unit circle."}
+    ]
+  },
+  'circuits': {
+    teach: "<strong>What Is Electricity?</strong><br><br><strong>Electricity</strong> is the flow of <strong>electric charge</strong> — electrons moving through a wire.<br><br>Three key quantities:<br>• <strong>Current (I)</strong> — rate of charge flow, measured in <strong>Amperes (A)</strong><br>• <strong>Voltage (V)</strong> — the \"push\", measured in <strong>Volts (V)</strong><br>• <strong>Resistance (R)</strong> — opposition to flow, measured in <strong>Ohms (Ω)</strong><br><br>Formula: <strong>I = Q / t</strong>",
+    quiz: [
+      {q:"Current is measured in what unit?", a:"amperes", hint:"Also written as 'A'."},
+      {q:"Voltage is measured in ___.", a:"volts", hint:"Named after Alessandro Volta."},
+      {q:"If 6 coulombs flow past a point in 2 seconds, what is the current in amperes?", a:"3", hint:"I = Q / t = 6 / 2."},
+      {q:"True or false: Copper is a conductor.", a:"true", hint:"Conductors let electrons move freely."}
+    ]
+  },
+  'english-grammar': {
+    teach: "<strong>Parts of a Sentence</strong><br><br>Every sentence needs:<br>• A <strong>subject</strong> — who or what the sentence is about<br>• A <strong>verb</strong> (predicate) — what the subject does<br><br>Example: <strong>The cat (subject) sleeps (verb).</strong><br><br>Modifiers add detail: adjectives describe nouns, adverbs describe verbs.",
+    quiz: [
+      {q:"What are the two essential parts of a sentence?", a:"subject and verb", hint:"Every sentence must have these two."},
+      {q:"In 'The dog runs fast', what is the subject?", a:"dog", hint:"Who or what is doing the action?"},
+      {q:"What part of speech describes a noun?", a:"adjective", hint:"Like 'big', 'red', 'fast'."},
+      {q:"True or false: 'Runs quickly' is a complete sentence.", a:"false", hint:"It's missing a subject."}
+    ]
+  },
+  'world-history': {
+    teach: "<strong>Ancient Civilizations</strong><br><br>The first civilizations arose near <strong>rivers</strong> because water was essential for farming.<br><br>• <strong>Mesopotamia</strong> — between the Tigris and Euphrates (modern Iraq)<br>• <strong>Egypt</strong> — along the Nile River<br>• <strong>Indus Valley</strong> — along the Indus River (modern Pakistan/India)<br>• <strong>China</strong> — along the Yellow River",
+    quiz: [
+      {q:"Why did early civilizations develop near rivers?", a:"water", hint:"Rivers provided water for farming and drinking."},
+      {q:"Mesopotamia was between which two rivers?", a:"tigris and euphrates", hint:"Located in modern-day Iraq."},
+      {q:"Which civilization developed along the Nile River?", a:"egypt", hint:"Famous for pyramids and pharaohs."},
+      {q:"True or false: The Indus Valley civilization was in modern-day China.", a:"false", hint:"It was in modern Pakistan/India."}
+    ]
+  },
+  'psychology': {
+    teach: "<strong>What Is Psychology?</strong><br><br>Psychology is the scientific study of <strong>mind and behavior</strong>.<br><br>Major approaches:<br>• <strong>Behavioral</strong> — focuses on observable actions<br>• <strong>Cognitive</strong> — focuses on thinking and memory<br>• <strong>Biological</strong> — focuses on the brain and nervous system<br>• <strong>Humanistic</strong> — focuses on personal growth",
+    quiz: [
+      {q:"Psychology is the scientific study of ___ and behavior.", a:"mind", hint:"The mental side of things."},
+      {q:"Which approach focuses on observable actions?", a:"behavioral", hint:"Behavior you can see and measure."},
+      {q:"Which approach studies the brain and nervous system?", a:"biological", hint:"Bio = life, relating to the body."},
+      {q:"True or false: Psychology is only about mental illness.", a:"false", hint:"It covers all aspects of mind and behavior."}
+    ]
+  }
+};
+
+function addGosiaChat(html) {
+  var container = document.getElementById('chatMessages');
+  container.insertAdjacentHTML('beforeend',
+    '<div style="display:flex;gap:8px;align-items:flex-start;">' +
+    '<img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">' +
+    '<div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;color:#1e1b4b;line-height:1.5;">' + html + '</div>' +
+    '</div>');
+  container.scrollTop = container.scrollHeight;
+  gosiaSpeak(html.replace(/<[^>]*>/g,''));
+}
+
+function askChatQuiz() {
+  var lesson = chatLessons[activeCourse];
+  if (!lesson || chatQuizStep >= lesson.quiz.length) {
+    var pct = lesson ? Math.round(chatQuizScore / lesson.quiz.length * 100) : 0;
+    addGosiaChat("🎉 <strong>Quiz Complete!</strong> You got " + chatQuizScore + "/" + (lesson?lesson.quiz.length:0) + " (" + pct + "%). " + (pct >= 80 ? "Excellent work! ⭐" : pct >= 60 ? "Good effort! Keep practicing! 💪" : "Let's review this material again soon. You'll get it! 📚"));
+    activeCourse = null;
+    return;
+  }
+  var q = lesson.quiz[chatQuizStep];
+  addGosiaChat("📝 <strong>Question " + (chatQuizStep+1) + ":</strong> " + q.q);
+  waitingForQuizAnswer = true;
+}
+
+var waitingForQuizAnswer = false;
 
 // Grade selector
 document.getElementById('gradeSelector').addEventListener('click', function(e) {
@@ -727,6 +845,24 @@ function sendChat() {
   setTimeout(function() {
     var typing = document.getElementById(typingId);
     if (typing) typing.remove();
+
+    // Handle quiz answer
+    if (waitingForQuizAnswer && activeCourse && chatLessons[activeCourse]) {
+      var q = chatLessons[activeCourse].quiz[chatQuizStep];
+      var ans = msg.toLowerCase().trim();
+      var correct = ans.indexOf(q.a.toLowerCase()) !== -1;
+      if (correct) {
+        chatQuizScore++;
+        addGosiaChat("✅ <strong>Correct!</strong> Great job! 🌟");
+      } else {
+        addGosiaChat("❌ Not quite. <strong>Hint:</strong> " + q.hint + "<br>The answer was: <strong>" + q.a + "</strong>");
+      }
+      waitingForQuizAnswer = false;
+      chatQuizStep++;
+      setTimeout(function(){ askChatQuiz(); }, 1500);
+      return;
+    }
+
     var reply = getGosiaReply(msg);
     var isWarning = reply.includes('Strike') || reply.includes('REMOVED');
     var bgColor = isWarning ? (reply.includes('Strike 3') ? '#fef2f2' : '#fef3c7') : '#ede9fe';
