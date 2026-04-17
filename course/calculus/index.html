@@ -396,7 +396,8 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'c-'+n, title: t, href: playable[n]||'#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+        const type = t.startsWith('Reading Practice') ? 'reading' : t.startsWith('Listening Practice') ? 'practice' : undefined;
+        lessons.push({ id: 'c-'+n, title: t, href: playable[n]||'#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1, ...(type && {type}) });
       });
     });
 
