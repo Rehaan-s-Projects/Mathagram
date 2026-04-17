@@ -150,7 +150,7 @@
     <div style="text-align:left;margin-bottom:20px;">
       <label style="font-weight:700;font-size:.85rem;display:block;margin-bottom:6px;">📧 Your School Email (auto-generated)</label>
       <div id="setupEmailPreview" style="background:var(--color-bg);border:2px solid var(--color-border);border-radius:var(--radius);padding:10px;font-family:monospace;font-size:.95rem;color:var(--color-primary-dark);">___@Mgramschools.net</div>
-      <p style="font-size:.7rem;color:var(--color-text-muted);margin-top:4px;">Your school email is based on your name. Use it for school communication.</p>
+      <p style="font-size:.7rem;color:var(--color-text-muted);margin-top:4px;">Your school email includes a unique ID number so every student has a different login.</p>
     </div>
 
     <button onclick="finishSetup()" style="width:100%;padding:14px;font-size:1.1rem;font-weight:700;background:#3b82f6;color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 4px 0 #1d4ed8;">Create Account & Start School →</button>
@@ -891,10 +891,11 @@ function sendChat() {
 // Email preview on setup
 document.getElementById('setupName').addEventListener('input', updateEmailPreview);
 document.getElementById('setupLast').addEventListener('input', updateEmailPreview);
+var previewId = Math.floor(1000 + Math.random() * 9000);
 function updateEmailPreview() {
   var first = document.getElementById('setupName').value.trim().toLowerCase().replace(/[^a-z]/g,'');
   var last = document.getElementById('setupLast').value.trim().toLowerCase().replace(/[^a-z]/g,'');
-  var email = (first && last) ? first + '.' + last + '@Mgramschools.net' : '___@Mgramschools.net';
+  var email = (first && last) ? first + '.' + last + previewId + '@Mgramschools.net' : '___@Mgramschools.net';
   document.getElementById('setupEmailPreview').textContent = email;
 }
 
@@ -981,11 +982,13 @@ function finishSetup() {
     return;
   }
 
-  // Generate school email
+  // Generate school email with unique ID so no two students share an email
   var emailFirst = first.toLowerCase().replace(/[^a-z]/g,'');
   var emailLast = last.toLowerCase().replace(/[^a-z]/g,'');
-  var schoolEmail = emailFirst + '.' + emailLast + '@Mgramschools.net';
-  var studentId = 'MG' + grade + '-' + Math.floor(10000 + Math.random() * 90000);
+  var uniqueId = localStorage.getItem('vs_uniqueid') || String(previewId);
+  localStorage.setItem('vs_uniqueid', uniqueId);
+  var schoolEmail = emailFirst + '.' + emailLast + uniqueId + '@Mgramschools.net';
+  var studentId = 'MG' + grade + '-' + uniqueId;
 
   localStorage.setItem('vs_grade', grade);
   localStorage.setItem('vs_name', first);
