@@ -138,6 +138,19 @@
       As \(x \to 1^+\), we use \(x + 3\): the right-hand limit is \(4\).<br>
       Since \(2 \neq 4\), the limit <strong>does not exist</strong> at \(x = 1\).
     </p>
+
+    <h2 style="margin-top:32px;">Reading Practice — Imagine the Speed</h2>
+    <div style="background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:2px solid #e2e8f0;border-radius:16px;padding:20px;margin:16px 0;line-height:1.8;font-size:1rem;color:#334155;">
+      <p style="margin-bottom:12px;">
+        Imagine you're driving on a highway. Your speedometer reads <strong>55 mph</strong>, then <strong>60</strong>, then <strong>63</strong>, then <strong>64.5</strong>, then <strong>64.9</strong>. You're getting closer and closer to <strong>65 mph</strong> &mdash; that's the <strong>speed limit</strong>. Even if you never actually hit 65, the number your speed is <em>approaching</em> is 65. In calculus, we call that number the <strong>limit</strong>.
+      </p>
+      <p style="margin-bottom:12px;">
+        Now imagine something strange: two different cars on two different roads are both heading toward the <em>same intersection</em>. One car is approaching from the <strong>west</strong> at <strong>40 mph</strong>. The other is coming from the <strong>east</strong> at <strong>60 mph</strong>. They're heading to the same point, but at <em>different speeds</em>. This is like a <strong>jump discontinuity</strong>: the left-hand limit (from the west) is 40, and the right-hand limit (from the east) is 60. Since <strong>40 &ne; 60</strong>, the overall limit at that intersection <strong>does not exist</strong>.
+      </p>
+      <p style="margin-bottom:0;">
+        But if both cars approached at <strong>50 mph</strong>, then the left and right limits would match. In that case, the limit <strong>does exist</strong> and equals <strong>50</strong>. A limit only exists when <em>both sides agree</em>.
+      </p>
+    </div>
   </section>
 
   <!-- Exercises -->
@@ -163,7 +176,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -172,8 +185,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -183,36 +196,33 @@
 
     const exercises = [
       { type: 'multiple-choice',
-        question: 'At a jump discontinuity, the two-sided limit:',
-        options: ['Equals the function value', 'Does not exist because left ≠ right', 'Is always infinity', 'Equals zero'],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'What notation represents the left-hand limit (approaching from below)?',
-        options: ['\\(\\lim_{x \\to a^+} f(x)\\)', '\\(\\lim_{x \\to a^-} f(x)\\)', '\\(\\lim_{x \\to a} f(x)\\)', '\\(\\lim_{x \\to \\infty} f(x)\\)'],
+        question: '📖 Reading: In the speed analogy, your speedometer reads 55, 60, 63, 64.5, 64.9. What number is the speed approaching?',
+        options: ['64.9', '65', '70', '55'],
         correctIndex: 1 },
       { type: 'true-false',
-        question: 'If \\(\\lim_{x \\to a^-} f(x) = 3\\) and \\(\\lim_{x \\to a^+} f(x) = 3\\), the two-sided limit exists and equals 3.',
+        question: '📖 Reading: According to the passage, a limit is the value you approach — even if you never actually reach it.',
         correctAnswer: true },
-      { type: 'fill-blank',
-        question: 'For the two-sided limit to exist, the left-hand limit must ___ the right-hand limit.',
-        answer: 'equal' },
       { type: 'multiple-choice',
-        question: 'Given \\(f(x) = \\begin{cases} 2x & x < 1 \\\\ x+3 & x \\ge 1 \\end{cases}\\), what is \\(\\lim_{x \\to 1^-} f(x)\\)?',
-        options: ['4', '2', '3', '1'],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'Using the same piecewise function, what is \\(\\lim_{x \\to 1^+} f(x)\\)?',
-        options: ['2', '3', '4', '1'],
+        question: '📖 Reading: In the two-cars analogy, what speed is the car from the west approaching?',
+        options: ['50 mph', '60 mph', '40 mph', '65 mph'],
         correctIndex: 2 },
+      { type: 'fill-blank',
+        question: '📖 Reading: The car from the east approaches at ___ mph.',
+        answer: '60' },
+      { type: 'multiple-choice',
+        question: '📖 Reading: Why does the limit NOT exist at the intersection in the two-cars example?',
+        options: ['Both cars stop', 'The left and right limits are different (40 ≠ 60)', 'The cars crash', 'The speed is too fast'],
+        correctIndex: 1 },
       { type: 'true-false',
-        question: 'For the piecewise example, \\(\\lim_{x \\to 1} f(x)\\) does not exist because \\(2 \\neq 4\\).',
-        correctAnswer: true },
-      { type: 'true-false',
-        question: 'A function can have a jump discontinuity and still have both one-sided limits exist.',
+        question: '📖 Reading: If both cars approached the intersection at 50 mph, the limit WOULD exist and equal 50.',
         correctAnswer: true },
       { type: 'fill-blank',
-        question: 'A jump discontinuity happens when both one-sided limits exist but are ___.',
-        answer: 'different' },
+        question: '📖 Reading: A limit only exists when ___ sides agree.',
+        answer: 'both' },
+      { type: 'multiple-choice',
+        question: '📖 Reading: The two-cars scenario is an analogy for which calculus concept?',
+        options: ['Derivative', 'Jump discontinuity', 'Integral', 'Chain rule'],
+        correctIndex: 1 },
       { type: 'multiple-choice',
         question: 'The superscript "−" in \\(\\lim_{x \\to a^-}\\) means approaching from the:',
         options: ['Right', 'Left', 'Top', 'Bottom'],
