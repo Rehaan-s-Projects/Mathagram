@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading: Imagine the Speed — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+    .reading-passage { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b; border-radius: 16px; padding: 24px; margin: 20px 0; line-height: 1.9; font-size: 1.05rem; color: #1c1917; }
+    .reading-passage p { color: #1c1917; margin-bottom: 14px; }
+    .reading-passage p:last-child { margin-bottom: 0; }
+    .reading-label { display: inline-block; background: #f59e0b; color: #fff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 6px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Reading Practice</div>
+    <h1>📖 Imagine the Speed</h1>
+    <p>Read the passage below carefully, then answer the 8 questions that follow.</p>
+
+    <div class="reading-passage">
+      <div class="reading-label">📖 Reading Passage</div>
+
+      <p>
+        Imagine you are driving on a long highway. You glance at your speedometer and it reads <strong>55 mph</strong>. A minute later it says <strong>60</strong>. Then <strong>63</strong>. Then <strong>64.5</strong>. Then <strong>64.9</strong>. You are getting closer and closer to <strong>65 mph</strong> &mdash; the speed limit posted on the sign ahead. Even if your foot never pushes the car all the way to 65, the number your speed is <em>approaching</em> is 65. In mathematics, we call that number the <strong>limit</strong>.
+      </p>
+
+      <p>
+        A limit does not care whether you actually <em>reach</em> the value. It only cares what value you are <em>heading toward</em>. Your speedometer could read 64.99 and then 64.999 and never quite hit 65, but mathematicians would still say the limit of your speed is 65.
+      </p>
+
+      <p>
+        Now imagine something different. Two cars are heading toward the <strong>same intersection</strong> from opposite directions. The car coming from the <strong>west</strong> is traveling at <strong>40 mph</strong>. The car coming from the <strong>east</strong> is traveling at <strong>60 mph</strong>. Both cars are approaching the same point, but they are approaching it at <em>different speeds</em>.
+      </p>
+
+      <p>
+        In calculus, this situation is called a <strong>jump discontinuity</strong>. The <strong>left-hand limit</strong> (from the west) is 40, and the <strong>right-hand limit</strong> (from the east) is 60. Because <strong>40 &ne; 60</strong>, the two sides do not agree, and so the overall limit at the intersection <strong>does not exist</strong>.
+      </p>
+
+      <p>
+        However, if both cars approached the intersection at exactly <strong>50 mph</strong>, then the left-hand limit and the right-hand limit would be the same. In that case, the limit <strong>does exist</strong> and it equals <strong>50</strong>. A limit only exists when <em>both sides agree on the same value</em>.
+      </p>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <h2>📝 Reading Comprehension Quiz</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: '📖 In the passage, the driver\'s speedometer reads 55, 60, 63, 64.5, and 64.9. What number is the speed approaching?',
+        options: ['64.9', '65', '70', '100'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: '📖 According to the passage, a limit requires you to actually reach the value.',
+        correctAnswer: false },
+      { type: 'fill-blank',
+        question: '📖 The passage says: "Even if your foot never pushes the car all the way to 65, the number your speed is ___ is 65."',
+        answer: 'approaching' },
+      { type: 'multiple-choice',
+        question: '📖 In the two-cars scenario, how fast is the car from the west traveling?',
+        options: ['50 mph', '55 mph', '40 mph', '60 mph'],
+        correctIndex: 2 },
+      { type: 'multiple-choice',
+        question: '📖 Why does the limit NOT exist at the intersection in the two-cars example?',
+        options: ['The cars are too slow', 'The left-hand limit (40) does not equal the right-hand limit (60)', 'The intersection is closed', 'Both cars stop'],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: '📖 The passage states that the two-cars situation is called a "jump ___" in calculus.',
+        answer: 'discontinuity' },
+      { type: 'true-false',
+        question: '📖 According to the passage, if both cars approached at 50 mph, the limit would exist and equal 50.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: '📖 What is the main idea of this passage?',
+        options: ['Speed limits are important for safety', 'A limit is the value a quantity approaches, and it exists only when both sides agree', 'Cars should not drive too fast', 'Mathematics is about driving'],
+        correctIndex: 1 }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'calculus', lessonId: 'reading-1', nextHref: 'lesson-2.html', backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>
