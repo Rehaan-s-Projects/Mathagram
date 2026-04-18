@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Factory — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Factory</h1>
+    <p>How factories work — from raw materials to finished products. Assembly lines, automation, quality control, supply chains, industrial safety, and the future of manufacturing. 20 units, 300 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'What Is a Factory?',['Definition of a Factory','Factories vs Workshops vs Mills','Brief History of Manufacturing','The Industrial Revolution','From Cottage Industry to Mass Production','Types of Factories','Factory Layout & Floor Plans','Factory Workers — Roles & Skills','Factory Tours — What You See','Raw Materials to Finished Goods','Inputs, Processes, Outputs','Factory Economics — Revenue & Cost','Why Factories Matter to Society','Factories Around the World','What Is a Factory? Review']],
+      [2,'The Assembly Line',['Henry Ford & the Moving Assembly Line','How Assembly Lines Work','Division of Labor','Stations & Workstations','Takt Time — The Rhythm of Production','Line Balancing','Conveyor Belts & Material Handling','Batch vs Continuous Production','Just-in-Time (JIT) Manufacturing','Lean Manufacturing Basics','The Toyota Production System','Waste Elimination (Muda)','Kaizen — Continuous Improvement','Assembly Line Ergonomics','Assembly Line Review']],
+      [3,'Raw Materials & Sourcing',['What Are Raw Materials?','Natural vs Synthetic Materials','Metals — Iron, Steel, Aluminum','Plastics — Types & Properties','Wood, Paper & Textiles','Rubber & Composites','Ceramics & Glass','Chemicals & Solvents','Sourcing & Procurement','Supplier Selection','Global Supply Chains','Commodity Markets','Material Testing & Inspection','Sustainable Sourcing','Raw Materials Review']],
+      [4,'Metalworking & Machining',['What Is Metalworking?','Casting — Pouring Molten Metal','Sand Casting','Die Casting','Forging — Shaping with Force','Rolling — Sheets & Bars','Extrusion — Pushing Through a Die','Stamping & Pressing','Welding — Joining Metals','MIG, TIG & Arc Welding','Cutting — Saws, Lasers, Plasma','Drilling & Boring','Turning on a Lathe','Milling Machines','Metalworking Review']],
+      [5,'Plastics & Injection Molding',['How Plastics Are Made','Thermoplastics vs Thermosets','Polyethylene, PVC, ABS, Nylon','Injection Molding Process','The Mold — Design & Tooling','Clamping, Injecting, Cooling, Ejecting','Cycle Time & Efficiency','Blow Molding — Bottles & Containers','Extrusion Molding — Pipes & Tubes','Thermoforming — Trays & Packaging','Rotational Molding','3D Printing Plastics','Plastic Recycling in Factories','Quality Defects — Warping, Flash, Sinks','Plastics Review']],
+      [6,'Electronics Manufacturing',['Printed Circuit Boards (PCBs)','PCB Design & Layers','Etching & Drilling PCBs','Surface Mount Technology (SMT)','Through-Hole Assembly','Pick-and-Place Machines','Reflow Soldering','Wave Soldering','Chip Packaging — DIP, QFP, BGA','Semiconductor Fabrication Overview','Clean Rooms','Testing — ICT & Functional Test','Cable & Wire Harness Assembly','Electrostatic Discharge (ESD) Protection','Electronics Manufacturing Review']],
+      [7,'Food & Beverage Factories',['Food Processing Overview','Cleaning & Sorting Raw Ingredients','Mixing & Blending','Cooking, Baking & Frying','Canning & Bottling','Pasteurization & Sterilization','Freezing & Cold Storage','Packaging — Wrapping, Sealing, Labeling','Dairy Processing — Milk, Cheese, Yogurt','Meat Processing','Beverage Production — Soda, Juice, Water','Brewery & Distillery Basics','Food Safety — HACCP','Allergen Control','Food Factory Review']],
+      [8,'Textile & Garment Factories',['From Fiber to Fabric','Cotton Ginning & Spinning','Weaving & Knitting Machines','Dyeing & Finishing','Pattern Making & Cutting','Sewing Machines & Stitching','Assembly of Garments','Quality Inspection — Stitching, Color','Shoe Manufacturing','Leather Working','Synthetic Fabrics — Polyester, Nylon','Fast Fashion & Factory Speed','Ethical Manufacturing & Fair Trade','Textile Recycling','Textile Factory Review']],
+      [9,'Automobile Manufacturing',['How Cars Are Made — Overview','Body-in-White — Stamping & Welding','Paint Shop — Priming, Painting, Clearcoat','Trim & Final Assembly','Engine Manufacturing','Transmission Assembly','Chassis & Suspension','Electrical Wiring Harness','Glass Installation','Tire Mounting & Alignment','Quality Gates — Inspection Points','End-of-Line Testing','Electric Vehicle Assembly','Battery Pack Manufacturing','Auto Manufacturing Review']],
+      [10,'Quality Control & Inspection',['What Is Quality Control?','Quality vs Quality Assurance','Statistical Process Control (SPC)','Control Charts','Sampling & Acceptance Testing','Six Sigma Basics','DMAIC Process','Root Cause Analysis','Fishbone (Ishikawa) Diagram','5 Whys Technique','Measurement Tools — Calipers, Gauges','Coordinate Measuring Machines (CMM)','Visual Inspection','Non-Destructive Testing (NDT)','Quality Control Review']],
+      [11,'Automation & Robotics',['What Is Factory Automation?','Programmable Logic Controllers (PLC)','Sensors on the Factory Floor','Actuators — Motors, Cylinders, Valves','Industrial Robots — Types','Articulated Robots','SCARA Robots','Cartesian & Delta Robots','Collaborative Robots (Cobots)','Robot Programming Basics','Vision Systems & Machine Vision','Automated Guided Vehicles (AGV)','Conveyor Automation','SCADA Systems','Automation Review']],
+      [12,'Factory Safety',['Why Factory Safety Matters','OSHA & Safety Regulations','Personal Protective Equipment (PPE)','Machine Guarding','Lockout/Tagout (LOTO)','Fire Safety & Extinguishers','Chemical Safety — MSDS/SDS','Noise & Hearing Protection','Ergonomics — Preventing Injury','Forklift Safety','Electrical Safety','Confined Space Entry','Emergency Evacuation Plans','Safety Culture & Training','Factory Safety Review']],
+      [13,'Supply Chain & Logistics',['What Is a Supply Chain?','Suppliers, Manufacturers, Distributors','Inventory Management','Warehouse Operations','Receiving & Shipping','Barcode & RFID Tracking','Packaging for Shipping','Freight — Truck, Rail, Ship, Air','Customs & International Trade','Just-in-Time Delivery','Safety Stock & Reorder Points','Supply Chain Disruptions','Bullwhip Effect','Enterprise Resource Planning (ERP)','Supply Chain Review']],
+      [14,'Energy & Utilities in Factories',['Electricity in the Factory','Power Distribution & Panels','Motors & Drives','Compressed Air Systems','Steam & Boilers','Heating, Ventilation & Air Conditioning','Water Treatment & Usage','Waste Management','Energy Efficiency','Solar & Renewable Energy in Factories','Cogeneration (CHP)','Power Factor Correction','Backup Generators','Utility Cost Management','Energy Review']],
+      [15,'Maintenance & Reliability',['Why Maintenance Matters','Reactive vs Preventive Maintenance','Predictive Maintenance','Total Productive Maintenance (TPM)','Mean Time Between Failures (MTBF)','Mean Time to Repair (MTTR)','Lubrication & Wear','Vibration Analysis','Thermal Imaging','Oil Analysis','Spare Parts Management','Maintenance Work Orders','Computerized Maintenance (CMMS)','Reliability-Centered Maintenance','Maintenance Review']],
+      [16,'Factory Design & Planning',['Facility Location Selection','Building Design & Construction','Production Layout — Product vs Process','Cellular Manufacturing','Material Flow Analysis','Simulation & Modeling','Capacity Planning','Production Scheduling','Master Production Schedule (MPS)','Material Requirements Planning (MRP)','Bottleneck Analysis','Theory of Constraints','Factory Expansion','Greenfield vs Brownfield Sites','Factory Design Review']],
+      [17,'Environmental & Sustainability',['Factory Pollution — Air, Water, Waste','Emissions Control','Wastewater Treatment','Solid Waste & Recycling','Hazardous Waste Handling','ISO 14001 Environmental Management','Carbon Footprint of Manufacturing','Life Cycle Assessment (LCA)','Circular Economy','Sustainable Materials','Green Manufacturing Practices','Zero Waste Factories','Environmental Regulations','Corporate Social Responsibility','Sustainability Review']],
+      [18,'Famous Factories & Case Studies',['Ford River Rouge Complex','Toyota City — Birthplace of Lean','Boeing Everett Factory','Tesla Gigafactory','Foxconn — Electronics at Scale','Samsung Semiconductor Fabs','Coca-Cola Bottling Plants','LEGO Billund Factory','Nike Shoe Factories','IKEA Furniture Manufacturing','SpaceX Rocket Factory','Intel Chip Fabrication','BMW Leipzig — Flexible Manufacturing','Shenzhen — Factory of the World','Famous Factories Review']],
+      [19,'Industry 4.0 & Smart Factories',['What Is Industry 4.0?','Internet of Things (IoT) in Factories','Digital Twins','Cloud Manufacturing','Big Data & Analytics','Artificial Intelligence in Production','Machine Learning for Quality','Cyber-Physical Systems','Edge Computing','5G in Manufacturing','Augmented Reality for Workers','Additive Manufacturing (3D Printing)','Blockchain for Supply Chain','Cybersecurity in Factories','Smart Factory Review']],
+      [20,'Careers & Future of Manufacturing',['Factory Jobs — Blue Collar & Beyond','Engineering Roles — Mechanical, Industrial, Electrical','Technician & Maintenance Careers','Quality Engineer','Supply Chain Manager','Factory Manager','Apprenticeships & Trade Schools','Manufacturing Engineering Degree','Salaries & Job Outlook','Women in Manufacturing','Reshoring — Bringing Factories Home','Automation & the Future Workforce','Micro-Factories & Local Manufacturing','Space Manufacturing — The Final Frontier','Factory Mastery Checkpoint']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'fac-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('factory');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('factory');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
