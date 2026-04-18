@@ -12,6 +12,8 @@ import {
   signOut,
   onAuthStateChanged,
   sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   doc,
@@ -71,6 +73,33 @@ export async function signUp(email, password, displayName, color) {
  */
 export async function signIn(email, password) {
   const { user } = await signInWithEmailAndPassword(auth, email, password);
+  return user;
+}
+
+/**
+ * Sign in with Google account. Creates a Firestore profile if first time.
+ *
+ * @returns {Promise<import('firebase/auth').User>}
+ */
+export async function signInWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  const { user } = await signInWithPopup(auth, provider);
+
+  // Create Firestore profile if it doesn't exist yet
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (!snap.exists()) {
+    const now = new Date().toISOString();
+    await setDoc(doc(db, 'users', user.uid), {
+      displayName: sanitizeText(user.displayName || 'User'),
+      color: 'blue',
+      xp: 0,
+      level: 1,
+      streak: 0,
+      lastActive: now,
+      createdAt: now,
+    });
+  }
+
   return user;
 }
 
