@@ -57,7 +57,10 @@
     .filter-btn[data-filter="data"].active { background: var(--color-data); border-color: var(--color-data); }
     .filter-btn[data-filter="logic"].active { background: var(--color-logic); border-color: var(--color-logic); }
     .filter-btn[data-filter="language"].active { background: var(--color-language); border-color: var(--color-language); }
+    .filter-btn[data-filter="programming"].active { background: #8b5cf6; border-color: #8b5cf6; }
     .filter-btn[data-filter="others"].active { background: var(--color-others); border-color: var(--color-others); }
+    .course-item[data-category="programming"] .category-badge { background: #8b5cf6; }
+    .course-item[data-category="programming"] .accent-bar { background: #8b5cf6; }
     .course-item[data-category="others"] .category-badge { background: var(--color-others); }
     .course-item[data-category="others"] .accent-bar { background: var(--color-others); }
 
@@ -192,6 +195,7 @@
     <button class="filter-btn" data-filter="data">Data Analysis</button>
     <button class="filter-btn" data-filter="logic">Logic</button>
     <button class="filter-btn" data-filter="language">Language</button>
+    <button class="filter-btn" data-filter="programming">Programming &amp; CS</button>
     <button class="filter-btn" data-filter="others">Others</button>
   </div>
 
@@ -291,11 +295,11 @@
     <a href="course/animals/index.html" class="course-item" data-category="science">
       <div class="accent-bar"></div>
       <span class="category-badge">Science</span>
-      <h3>Animals</h3>
-      <p>The entire animal kingdom — from tardigrades to blue whales. Classification, anatomy, behavior, evolution, venomous creatures, deep sea life, and conservation.</p>
+      <h3>Animals &amp; Plants</h3>
+      <p>The animal kingdom and plant world — tardigrades to blue whales, mosses to giant sequoias. Classification, anatomy, photosynthesis, behavior, evolution, and conservation.</p>
       <div class="course-meta">
-        <span>40 units</span>
-        <span>600 lessons</span>
+        <span>60 units</span>
+        <span>900 lessons</span>
       </div>
     </a>
 
@@ -321,9 +325,9 @@
       </div>
     </a>
 
-    <a href="course/digital-circuits/index.html" class="course-item" data-category="science">
+    <a href="course/digital-circuits/index.html" class="course-item" data-category="programming">
       <div class="accent-bar"></div>
-      <span class="category-badge">Science</span>
+      <span class="category-badge">Programming &amp; CS</span>
       <h3>Digital Circuits</h3>
       <p>Explore logic gates, binary arithmetic, sequential logic, FSMs, memory, FPGAs, HDLs, and CPU architecture. 379 lessons across 29 units.</p>
       <div class="course-meta">
@@ -336,10 +340,10 @@
       <div class="accent-bar"></div>
       <span class="category-badge">Science</span>
       <h3>Science Fiction</h3>
-      <p>The real science behind sci-fi — space travel, AI, aliens, time travel, multiverse, robots, cyberpunk, and how fiction becomes reality.</p>
+      <p>The real science behind sci-fi — space travel, AI, aliens, time travel, multiverse, robots, Star Wars, cyberpunk, and how fiction becomes reality.</p>
       <div class="course-meta">
-        <span>30 units</span>
-        <span>450 lessons</span>
+        <span>31 units</span>
+        <span>465 lessons</span>
       </div>
     </a>
 
@@ -409,9 +413,9 @@
       </div>
     </a>
 
-    <a href="course/quantum-computing/index.html" class="course-item" data-category="science">
+    <a href="course/quantum-computing/index.html" class="course-item" data-category="programming">
       <div class="accent-bar"></div>
-      <span class="category-badge">Science</span>
+      <span class="category-badge">Programming &amp; CS</span>
       <h3>Quantum Computing</h3>
       <p>Dive into qubits, superposition, entanglement, quantum gates, algorithms, and real quantum hardware.</p>
       <div class="course-meta">
@@ -517,6 +521,17 @@
       <div class="course-meta">
         <span>6 units</span>
         <span>68 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/viva-insights/index.html" class="course-item" data-category="data">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Data Analysis</span>
+      <h3>Viva Insights</h3>
+      <p>Master Microsoft Viva Insights — workplace analytics, productivity data, wellbeing metrics, collaboration patterns, meeting culture, focus time, and organizational network analysis.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
       </div>
     </a>
 
@@ -869,8 +884,8 @@
       <h3>International Sign</h3>
       <p>Master International Sign — the contact sign language used at international Deaf events, conferences, and travel. Covers ASL, BSL, JSL, and more.</p>
       <div class="course-meta">
-        <span>18 units</span>
-        <span>262 lessons</span>
+        <span>43 units</span>
+        <span>627 lessons</span>
       </div>
     </a>
 
@@ -929,10 +944,10 @@
       </div>
     </a>
 
-    <!-- OTHERS -->
-    <a href="course/algorithmic/index.html" class="course-item" data-category="others">
+    <!-- PROGRAMMING & CS -->
+    <a href="course/algorithmic/index.html" class="course-item" data-category="programming">
       <div class="accent-bar"></div>
-      <span class="category-badge">Others</span>
+      <span class="category-badge">Programming &amp; CS</span>
       <h3>Algorithmic</h3>
       <p>Think like a computer scientist — data structures, sorting, searching, graphs, dynamic programming, and classic algorithms. 300 lessons across 20 units.</p>
       <div class="course-meta">
@@ -941,9 +956,31 @@
       </div>
     </a>
 
-    <a href="course/how-much-storage/index.html" class="course-item" data-category="others">
+    <a href="course/unity/index.html" class="course-item" data-category="programming">
       <div class="accent-bar"></div>
-      <span class="category-badge">Others</span>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>What Is Unity?</h3>
+      <p>Learn the Unity game engine — GameObjects, C# scripting, physics, UI, animation, 2D/3D games, multiplayer, AR/VR, and publishing. 375 lessons across 25 units.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>375 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/blender/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>What Is Blender?</h3>
+      <p>Master Blender — free 3D creation suite. Modeling, sculpting, texturing, animation, rendering, VFX, geometry nodes, and video editing. 375 lessons across 25 units.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>375 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/how-much-storage/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
       <h3>How Much Storage</h3>
       <p>Bits, bytes, files, and drives — understand digital storage from a single bit to exabyte-scale data centers. 225 lessons across 15 units.</p>
       <div class="course-meta">
@@ -952,6 +989,62 @@
       </div>
     </a>
 
+    <a href="course/python-programming/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>Python Programming</h3>
+      <p>Learn Python from scratch — variables, loops, functions, OOP, file I/O, APIs, web scraping, data science, GUI, databases, and real projects.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>375 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/web-development/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>Web Development</h3>
+      <p>Build websites from scratch — HTML, CSS, JavaScript, responsive design, React, Node.js, databases, APIs, and deployment.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>375 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/computer-science/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>Computer Science Fundamentals</h3>
+      <p>How computers work — binary, logic gates, CPU, memory, operating systems, networking, cryptography, and computational thinking.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/cybersecurity/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>Cybersecurity</h3>
+      <p>Defend digital systems — threats, encryption, network security, ethical hacking, penetration testing, forensics, and security operations.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
+      </div>
+    </a>
+
+    <a href="course/artificial-intelligence/index.html" class="course-item" data-category="programming">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Programming &amp; CS</span>
+      <h3>Artificial Intelligence</h3>
+      <p>Understand AI and ML — neural networks, deep learning, NLP, computer vision, transformers, LLMs, generative AI, and ethics.</p>
+      <div class="course-meta">
+        <span>20 units</span>
+        <span>300 lessons</span>
+      </div>
+    </a>
+
+    <!-- OTHERS -->
     <a href="course/about-rehaan/index.html" class="course-item" data-category="others">
       <div class="accent-bar"></div>
       <span class="category-badge">Others</span>
@@ -960,6 +1053,18 @@
       <div class="course-meta">
         <span>5 units</span>
         <span>75 lessons</span>
+      </div>
+    </a>
+
+    <!-- OTHERS -->
+    <a href="course/vids/index.html" class="course-item" data-category="others">
+      <div class="accent-bar"></div>
+      <span class="category-badge">Others</span>
+      <h3>Vids</h3>
+      <p>Video editing companies, online editors, professional tools, and the business of video production. 375 lessons across 25 units.</p>
+      <div class="course-meta">
+        <span>25 units</span>
+        <span>375 lessons</span>
       </div>
     </a>
 
@@ -1035,8 +1140,8 @@
       <h3>Study Skills & Learning</h3>
       <p>Master how to learn — note-taking, time management, memory techniques, focus, and exam strategies.</p>
       <div class="course-meta">
-        <span>29 units</span>
-        <span>434 lessons</span>
+        <span>30 units</span>
+        <span>459 lessons</span>
       </div>
     </a>
 

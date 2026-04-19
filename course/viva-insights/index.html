@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viva Insights — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Viva Insights</h1>
+    <p>Master Microsoft Viva Insights — workplace analytics, productivity data, wellbeing metrics, collaboration patterns, meeting culture, focus time, and organizational network analysis. 20 units, 300 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'What Is Viva Insights?',['Introduction to Microsoft Viva','Viva Insights Overview','Personal vs Manager vs Leader Insights','How Viva Insights Collects Data','Privacy & Data Protection','Microsoft 365 Integration','Viva Insights in Teams','Viva Insights Web App','Dashboard Navigation','Setting Up Your Account','Opting In & Out','Data Sources — Email, Calendar, Chats','Collaboration Signals','What Viva Insights Does NOT Track','Viva Insights Intro Checkpoint']],
+      [2,'Personal Productivity Insights',['Your Personal Dashboard','Focus Time Metrics','Quiet Hours & After-Hours Work','Time in Meetings vs Focus','Email Habits Analysis','Chat & Message Patterns','Daily Briefing Email','Weekly Digest Overview','Productivity Score','Setting Personal Goals','Tracking Your Progress','Focus Plan — Booking Focus Time','Do Not Disturb Automation','Inline Suggestions in Outlook','Personal Insights Checkpoint']],
+      [3,'Wellbeing & Work-Life Balance',['Why Wellbeing Matters at Work','Burnout Detection Signals','After-Hours Work Trends','Weekend Work Patterns','Meeting-Free Days','Lunch Break Tracking','Virtual Commute Feature','Mindfulness & Meditation Exercises','Headspace Integration','Reflection & Gratitude Prompts','Send Later — Respecting Others Time','Quiet Time Settings','Manager Wellbeing Dashboard','Team Wellbeing Trends','Wellbeing Checkpoint']],
+      [4,'Meeting Culture & Effectiveness',['Meeting Time Analysis','Recurring vs One-Time Meetings','Meeting Duration Trends','Large vs Small Meetings','Multitasking in Meetings','Meeting Effectiveness Score','Double-Booked Meetings','Meetings Without Agendas','Shortening Meetings — 25/50 Minute Rule','Meeting-Free Focus Blocks','Declining Unnecessary Meetings','Meeting Habits of Top Performers','Cost of Meetings (Time & Money)','Meeting Culture Best Practices','Meeting Culture Checkpoint']],
+      [5,'Collaboration Patterns',['Who Do You Collaborate With?','Internal vs External Collaboration','Cross-Team Collaboration','Collaboration Network Map','Strong vs Weak Ties','Communication Channels Used','Collaboration Hours per Week','Siloed Teams Detection','Over-Collaboration Warning Signs','Manager Collaboration Patterns','Skip-Level Connections','Breadth vs Depth of Network','Time Spent with Direct Reports','Collaboration Load Balancing','Collaboration Checkpoint']],
+      [6,'Focus Time & Deep Work',['Why Focus Time Matters','Measuring Uninterrupted Focus','Focus Time vs Fragmented Time','Scheduling Focus Blocks','Focus Plan Automation','Protecting Focus Time from Meetings','Notification Management','Flow State & Productivity','Context Switching Cost','Focus Time Goals & Tracking','Focus Time Across Teams','Manager Support for Focus','Best Times for Deep Work','Focus Time ROI','Focus Time Checkpoint']],
+      [7,'Email Analytics',['Email Volume — Sent vs Received','Email Response Time','After-Hours Email Habits','Email Overload Detection','Read vs Unread Rates','Email Thread Length','Large Distribution Lists','CC & BCC Patterns','Email During Meetings','Reducing Email Volume','Email-Free Hours','Batch Processing Email','Email vs Chat — When to Use Which','Email Etiquette from Data','Email Analytics Checkpoint']],
+      [8,'Manager & Leader Insights',['Manager Dashboard Overview','Team Productivity Metrics','Team Meeting Load','Team After-Hours Trends','Team Collaboration Balance','1:1 Meeting Frequency','Manager Coaching Insights','Span of Control Analysis','Team Wellbeing Indicators','Attrition Risk Signals','New Hire Onboarding Metrics','Team Comparison (Anonymized)','Action Plans for Managers','Leading by Example with Data','Manager Insights Checkpoint']],
+      [9,'Organizational Network Analysis (ONA)',['What Is ONA?','Mapping the Informal Organization','Influence Networks','Information Brokers & Connectors','Isolated Employees & Teams','Cross-Functional Connections','Communication Flow Direction','Network Density & Clustering','Identifying Key Collaborators','Silos & Bridges Between Them','Merger & Acquisition Integration','Reorganization Impact Analysis','Remote vs In-Office Networks','Network Health Metrics','ONA Checkpoint']],
+      [10,'Advanced Analytics & Queries',['Viva Insights Advanced — Workplace Analytics','Analyst Workbench Overview','Person Queries','Meeting Queries','Group-to-Group Queries','Peer Comparison Queries','Custom Metrics & Filters','Time Trending Analysis','Benchmarking Across Organizations','Power BI Integration','Building Custom Dashboards','Query Results Interpretation','Statistical Significance in Workplace Data','Data Export & Reporting','Advanced Analytics Checkpoint']],
+      [11,'Privacy, Ethics & Compliance',['Privacy by Design in Viva','Differential Privacy Explained','Minimum Group Size Thresholds','What Data Is Aggregated','Individual vs Aggregate Views','GDPR Compliance','Employee Consent & Transparency','Ethical Use of Workplace Analytics','Surveillance vs Insights — The Line','Manager Access Controls','Data Retention Policies','Audit Logs & Governance','Employee Trust & Communication','Building an Ethical Analytics Culture','Privacy & Ethics Checkpoint']],
+      [12,'Adoption & Change Management',['Introducing Viva Insights to Your Org','Executive Sponsorship','Pilot Program Design','Employee Communication Plan','Training & Onboarding','Addressing Employee Concerns','Champions Network','Measuring Adoption Rates','Feedback Collection & Iteration','Culture Change — From Busy to Effective','Quick Wins for Early Adoption','Scaling from Pilot to Organization','Success Stories & Case Studies','Long-Term Sustainability','Adoption Checkpoint']],
+      [13,'Microsoft Viva Suite Integration',['Viva Learning — Skill Development','Viva Engage — Employee Communities','Viva Goals — OKR Alignment','Viva Topics — Knowledge Management','Viva Connections — Intranet Hub','Viva Amplify — Internal Comms','Viva Pulse — Quick Surveys','Viva Glint — Employee Engagement','Cross-Viva Data Flows','Viva & Microsoft Copilot','Viva in Microsoft Teams','Viva Admin Center','Licensing & Plans','Building a Viva Strategy','Viva Suite Checkpoint']],
+      [14,'Hybrid & Remote Work Analytics',['Measuring Hybrid Work Patterns','Office vs Remote Collaboration','In-Person Meeting Value','Async vs Sync Communication','Time Zone Challenges','Remote Employee Isolation Risk','Hybrid Meeting Effectiveness','Hot-Desking & Space Utilization Data','Return-to-Office Tracking','Flexible Schedule Analysis','Digital Exhaustion Metrics','Home Office Productivity','Travel & Commute Patterns','Designing Hybrid Policies with Data','Hybrid Work Checkpoint']],
+      [15,'Benchmarking & Industry Comparisons',['What Is Benchmarking?','Internal Benchmarking','External Benchmarking Sources','Industry Averages — Meeting Time','Industry Averages — Focus Time','Industry Averages — After-Hours','Company Size Comparisons','Role-Based Benchmarks','Regional & Cultural Differences','Benchmarking Collaboration Load','Setting Realistic Targets','Gap Analysis','Competitive Advantage from Data','Continuous Improvement Cycles','Benchmarking Checkpoint']],
+      [16,'Data Visualization for Insights',['Choosing the Right Chart','Bar Charts for Comparisons','Line Charts for Trends','Heatmaps for Patterns','Network Graphs for Connections','Scatter Plots for Correlations','Pie Charts — When to Use (Rarely)','Dashboard Design Principles','Color & Accessibility','Storytelling with Data','Executive Summary Design','Annotations & Callouts','Interactive Dashboards in Power BI','Presenting Insights to Leadership','Data Visualization Checkpoint']],
+      [17,'Wellbeing Programs & Interventions',['Designing a Wellbeing Program','Meeting-Free Fridays','No-Meeting Blocks','Focus Friday Campaigns','Email-Free Evenings','Manager Wellbeing Training','Team Norms & Working Agreements','Burnout Prevention Strategies','Return from Leave Support','Mental Health Resources Integration','Physical Activity Nudges','Social Connection Initiatives','Measuring Program Impact','Iterating on Wellbeing Programs','Wellbeing Programs Checkpoint']],
+      [18,'Real-World Case Studies',['Case: Reducing Meeting Overload at a Bank','Case: Improving Focus Time at a Tech Company','Case: Hybrid Work Transition at a Consultancy','Case: Onboarding Optimization','Case: Merger Integration & Network Analysis','Case: Burnout Reduction Initiative','Case: Cross-Team Collaboration at Scale','Case: Sales Team Productivity','Case: R&D Innovation Time Protection','Case: Customer Service Team Efficiency','Case: Executive Time Management','Case: DEI & Inclusion Network Analysis','Case: Healthcare Worker Wellbeing','Case: Education Sector Insights','Case Studies Checkpoint']],
+      [19,'Future of Workplace Analytics',['AI-Powered Insights','Copilot & Viva Integration','Predictive Analytics for Retention','Sentiment Analysis from Communications','Real-Time Dashboards','Wearable Data Integration','Neuro-Productivity Research','Four-Day Work Week Data','Gen Z Workplace Expectations','Ethical AI in the Workplace','Decentralized Work Analytics','Skills-Based Organization Analytics','Employee Experience Platforms','The Quantified Workplace','Future of Analytics Checkpoint']],
+      [20,'Capstone: Your Insights Strategy',['Assessing Your Organization','Defining Key Questions','Selecting Metrics That Matter','Building Your First Dashboard','Analyzing Meeting Culture','Measuring Focus & Deep Work','Evaluating Wellbeing','Mapping Collaboration Networks','Identifying Quick Wins','Creating an Action Plan','Communicating Findings','Getting Leadership Buy-In','Implementing Changes','Measuring Impact Over Time','Viva Insights Mastery Checkpoint']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'vi-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('viva-insights');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('viva-insights');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
