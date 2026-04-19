@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vids — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Vids</h1>
+    <p>Video editing companies, online editors, professional tools, and the business of video production. 395 lessons across 26 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is Video Editing?',['History of Video Editing','Film Splicing to Digital','Linear vs Non-Linear Editing','Timeline-Based Editing','The Editing Workflow','Pre-Production Planning','Footage Organization','Rough Cut vs Fine Cut','Export & Delivery','File Formats Explained','Resolution — 720p 1080p 4K 8K','Frame Rates — 24 30 60 FPS','Aspect Ratios — 16:9 9:16 4:3','Codecs — H.264 H.265 ProRes','Video Editing Intro Checkpoint']],
+      [2,'Adobe Premiere Pro',['What Is Premiere Pro?','Premiere Pro Interface Tour','Creating a New Project','Importing Media','The Timeline Panel','Cutting & Trimming Clips','Ripple & Roll Edits','Adding Transitions','Text & Titles','Color Correction Basics','Audio Editing in Premiere','Keyframes & Animation','Multicam Editing','Exporting Your Video','Premiere Pro Checkpoint']],
+      [3,'DaVinci Resolve',['What Is DaVinci Resolve?','Free vs Studio Version','The Cut Page','The Edit Page','The Fusion Page — VFX','The Color Page — Grading','The Fairlight Page — Audio','Importing & Organizing Media','Timeline Editing in Resolve','Nodes & Color Wheels','Power Windows & Tracking','Delivering Your Project','Resolve vs Premiere Pro','DaVinci Resolve for Beginners','DaVinci Resolve Checkpoint']],
+      [4,'Final Cut Pro',['What Is Final Cut Pro?','Mac-Only Ecosystem','The Magnetic Timeline','Importing & Managing Libraries','Cutting & Trimming','Transitions & Effects','Color Grading in FCP','Audio Editing & Roles','Motion Graphics with Motion','Compressor for Export','Multicam in Final Cut','360 Video Editing','Final Cut vs Premiere','Optimized & Proxy Media','Final Cut Pro Checkpoint']],
+      [5,'iMovie',['What Is iMovie?','iMovie on Mac','iMovie on iPhone & iPad','Creating a New Project','Adding Video & Photos','Trimming & Splitting Clips','Adding Music & Sound Effects','Titles & Text','Filters & Color Adjustments','Transitions','Green Screen (Chroma Key)','Trailers — Movie Templates','Sharing & Exporting','iMovie vs Final Cut Pro','iMovie Checkpoint']],
+      [6,'CapCut',['What Is CapCut?','CapCut Mobile App','CapCut Desktop Version','CapCut Online Editor','TikTok Integration','Auto Captions & Subtitles','Trending Effects & Filters','Speed Ramping','Split & Trim','Text & Stickers','Music & Sound Library','Green Screen','Keyframe Animation','Exporting for Social Media','CapCut Checkpoint']],
+      [7,'Canva Video Editor',['What Is Canva?','Canva Video vs Graphic Design','Creating a Video Project','Templates & Layouts','Drag-and-Drop Editing','Adding Text & Animations','Stock Footage & Music','Brand Kit Integration','Collaboration Features','Presenting with Canva','Canva Pro Features','Exporting Video','Canva vs Other Editors','Social Media Sizing','Canva Video Checkpoint']],
+      [8,'Filmora',['What Is Filmora?','Filmora Interface Tour','Importing Media','Basic Cutting & Trimming','Effects & Transitions Library','Split Screen','Motion Tracking','Audio Editing','Color Correction','Text & Titles','Speed Control','AI Features in Filmora','Exporting & Sharing','Filmora vs Premiere Pro','Filmora Checkpoint']],
+      [9,'Sony Vegas / VEGAS Pro',['What Is VEGAS Pro?','VEGAS Pro Interface','Timeline Editing','Video Effects & Compositing','Color Grading in VEGAS','Audio Mixing','Transitions & Motion','Nested Timelines','Stabilization','Motion Tracking','Multicam Editing','Rendering & Export','VEGAS Pro vs Premiere','VEGAS Movie Studio (Beginner)','VEGAS Checkpoint']],
+      [10,'Shotcut & Kdenlive (Free Editors)',['What Is Shotcut?','Shotcut Interface','Filters & Effects in Shotcut','Exporting in Shotcut','What Is Kdenlive?','Kdenlive Interface','Effects & Transitions in Kdenlive','Exporting in Kdenlive','OpenShot — Another Free Option','Olive Editor','Lightworks Free','HitFilm Free','Comparing Free Editors','When to Upgrade to Paid','Free Editors Checkpoint']],
+      [11,'Online Video Editors',['What Are Online Editors?','Clipchamp (Microsoft)','Kapwing','WeVideo','FlexClip','InVideo','Veed.io','Descript','Runway ML','Canva Video (Online)','Adobe Express','Animoto','Biteable','Pros & Cons of Online Editing','Online Editors Checkpoint']],
+      [12,'Mobile Video Editing',['Editing on iPhone','Editing on Android','CapCut Mobile','iMovie Mobile','KineMaster','InShot','VN Video Editor','Splice','Adobe Premiere Rush','LumaFusion (iPad)','PowerDirector Mobile','FilmoraGo','Vertical vs Horizontal Editing','Export Settings for Mobile','Mobile Editing Checkpoint']],
+      [13,'Audio in Video',['Why Audio Matters','Microphone Types — Lav Shotgun Condenser','Recording Clean Audio','Audio Levels & Gain','Noise Removal','EQ — Equalization','Compression & Limiting','Music Licensing & Copyright','Royalty-Free Music Sources','Sound Effects Libraries','Voiceover Recording','Audio Syncing','Podcast-Style Video','Spatial Audio & Surround','Audio Checkpoint']],
+      [14,'Color Grading & Correction',['Color Correction vs Grading','White Balance','Exposure & Contrast','Saturation & Vibrance','Color Wheels — Lift Gamma Gain','LUTs — Lookup Tables','Creating a Cinematic Look','Skin Tone Correction','Matching Shots','Scopes — Waveform Vectorscope','HDR Color Grading','LOG Footage','Color Grading in Resolve','Color Grading in Premiere','Color Checkpoint']],
+      [15,'Motion Graphics & VFX',['What Are Motion Graphics?','After Effects Introduction','Keyframe Animation Basics','Text Animation','Shape Layers','Masks & Mattes','Tracking & Stabilization','Green Screen Compositing','Particle Effects','3D Camera in After Effects','Expressions Basics','Lower Thirds','Logo Animation','Intro & Outro Templates','Motion Graphics Checkpoint']],
+      [16,'Titles, Subtitles & Captions',['Why Titles Matter','Title Design Principles','Lower Thirds Design','Full-Screen Titles','Animated Titles','Subtitle Formats — SRT VTT','Auto-Caption Tools','Manual Caption Editing','Burned-In vs Closed Captions','Accessibility & Subtitles','Multi-Language Subtitles','Caption Styling','YouTube Auto-Captions','TikTok & Instagram Captions','Titles Checkpoint']],
+      [17,'YouTube Video Production',['Planning a YouTube Video','Scripting & Storyboarding','Filming Setup','Lighting for YouTube','Camera Settings','B-Roll Footage','Editing for YouTube','Thumbnails That Click','SEO — Titles Tags Descriptions','End Screens & Cards','YouTube Shorts','Monetization Basics','YouTube Studio Analytics','Growing Your Channel','YouTube Checkpoint']],
+      [18,'TikTok & Short-Form Video',['TikTok Video Format','Filming for Vertical','Trending Sounds & Music','Text Overlays','Transitions & Effects','Duets & Stitches','TikTok Algorithm Basics','Instagram Reels','YouTube Shorts','Snapchat Spotlight','Cross-Posting Strategy','Hook in First 3 Seconds','Engagement & Comments','Analytics & Growth','Short-Form Checkpoint']],
+      [19,'Cinematic Filmmaking',['What Makes It Cinematic?','Camera Movement — Pan Tilt Dolly','Depth of Field','Lighting — Three-Point Setup','Golden Hour Shooting','Slow Motion','Anamorphic Look','Film Grain & Texture','Cinematic Color Grading','Letterboxing','Sound Design for Film','Storyboarding','Shot Composition — Rule of Thirds','Director\'s Vocabulary','Cinematic Checkpoint']],
+      [20,'Animation & Explainer Videos',['What Is Animation?','2D vs 3D Animation','Frame-by-Frame Animation','Motion Tweening','Whiteboard Animation','Explainer Video Structure','Vyond — Online Animation','Animaker','Powtoon','Blender — Free 3D Animation','After Effects for Animation','Character Animation Basics','Lip Sync','Exporting Animated Videos','Animation Checkpoint']],
+      [21,'Screen Recording & Tutorials',['Why Screen Recording?','OBS Studio','Loom','Screencast-O-Matic','Camtasia','Mac Built-In Screen Record','Windows Game Bar','Chrome Extensions','Recording Settings — Resolution FPS','Webcam Overlay','Cursor Highlighting','Editing Screen Recordings','Voiceover for Tutorials','Exporting & Sharing','Screen Recording Checkpoint']],
+      [22,'Video for Business & Marketing',['Video Marketing Strategy','Brand Videos','Product Demos','Testimonial Videos','Social Media Ad Videos','Email Video Marketing','Landing Page Videos','Webinar Recording','Corporate Training Videos','Event Recap Videos','Case Study Videos','Video SEO','Call to Action in Video','Measuring Video ROI','Business Video Checkpoint']],
+      [23,'AI in Video Editing',['AI Video Overview','Auto-Captions with AI','AI Background Removal','AI Upscaling','AI Color Grading','Text-to-Video Tools','Runway ML','Pika Labs','Synthesia — AI Avatars','Descript — AI Audio Editing','AI Music Generation','Deepfake Ethics','AI Video Search','Future of AI Video','AI Video Checkpoint']],
+      [24,'Video Formats, Compression & Delivery',['Container Formats — MP4 MOV MKV AVI','Codecs — H.264 H.265 VP9 AV1','Bitrate — CBR vs VBR','Compression Basics','Lossless vs Lossy','Rendering & Encoding','Proxy Workflows','Cloud Rendering','Streaming Formats — HLS DASH','Adaptive Bitrate Streaming','CDN Delivery','Upload Settings by Platform','Archival & Backup','Storage Solutions','Formats Checkpoint']],
+      [25,'Skillshare',['What Is Skillshare?','Skillshare vs YouTube vs Udemy','How Skillshare Classes Work','Browsing & Discovering Classes','Skillshare for Video Editing','Skillshare for Graphic Design','Skillshare for Illustration','Skillshare for Photography','Skillshare for Animation','Skillshare for Music Production','Skillshare for Writing & Freelancing','Class Projects & Community','Skillshare Teacher Program','Creating Your Own Skillshare Class','Filming a Skillshare Class','Editing a Skillshare Class','Uploading & Publishing','Earning as a Skillshare Teacher','Skillshare Premium vs Free','Skillshare Checkpoint']],
+      [26,'Vids Mastery',['Video Editing History Review','Professional Editors Review','Online & Mobile Editors Review','Audio & Color Review','Motion Graphics Review','Titles & Captions Review','YouTube & Social Media Review','Cinematic & Animation Review','Screen Recording Review','Business Video Review','AI in Video Review','Formats & Delivery Review','Skillshare Review','Building a Portfolio','Getting Hired as an Editor','Vids Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'vid-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('vids');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('vids');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
