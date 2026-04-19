@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programming History — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-programming)">Programming &amp; CS</span>
+    <h1>Programming History</h1>
+    <p>The complete history of computing and programming — from ancient counting devices to modern AI. Pioneers, machines, languages, operating systems, the internet, and the digital revolution. 25 units, 375 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'Ancient Computing',['The Abacus — Earliest Calculator','Babylonian Number System','Egyptian & Roman Numerals','Al-Khwarizmi & the Word "Algorithm"','Napier\'s Bones','The Slide Rule','Pascal\'s Pascaline (1642)','Leibniz\'s Step Reckoner (1694)','Jacquard\'s Loom & Punch Cards','Babbage\'s Difference Engine','Babbage\'s Analytical Engine','Ada Lovelace — First Programmer','Boolean Algebra — George Boole','Hollerith\'s Census Machine (1890)','Ancient Computing Checkpoint']],
+      [2,'Early 20th Century Machines',['Electromechanical Calculators','Vannevar Bush\'s Differential Analyzer','Konrad Zuse — Z1, Z2, Z3','Z3 — First Programmable Computer (1941)','Alan Turing & the Turing Machine','Turing\'s "On Computable Numbers" (1936)','The Enigma Machine','Bletchley Park & Code Breaking','Colossus — First Electronic Computer (1943)','ENIAC (1945) — 30 Tons of Computing','EDVAC & the Stored-Program Concept','Von Neumann Architecture','Manchester Baby — First Stored Program (1948)','EDSAC — First Practical Stored Program','Early Machines Checkpoint']],
+      [3,'The Birth of Programming',['What Is a Programming Language?','Machine Code — Binary Instructions','Assembly Language','Grace Hopper & the First Compiler','A-0 System (1952)','The Word "Bug" — Hopper\'s Moth','FORTRAN — First High-Level Language (1957)','John Backus & IBM','LISP — John McCarthy (1958)','COBOL — Business Computing (1959)','Grace Hopper & COBOL','ALGOL — Algorithm Language (1960)','Backus-Naur Form (BNF)','Early Programming Culture','Birth of Programming Checkpoint']],
+      [4,'Mainframe Era (1950s-1960s)',['What Is a Mainframe?','IBM 701 — Defense Computing','IBM 7090 Series','IBM System/360 (1964) — Game Changer','Time-Sharing Systems','Compatible Time-Sharing System (CTSS)','Multics — Ambitious OS Project','Batch Processing','Punch Card Programming','Magnetic Tape Storage','Disk Drives — RAMAC (1956)','Mainframe Operating Systems','JCL — Job Control Language','Business Computing Revolution','Mainframe Era Checkpoint']],
+      [5,'Minicomputers & the 1960s-70s',['DEC PDP-1 — First Minicomputer','PDP-8 — Affordable Computing','PDP-11 — Workhorse of the 70s','Data General Nova','HP 2100 Series','Minicomputers in Universities','Real-Time Computing','BASIC Language (1964) — Kemeny & Kurtz','Dartmouth Time-Sharing','Interactive Computing','Hewlett-Packard & the Garage','The Hacker Ethic — MIT','Computer Science Becomes a Discipline','ACM & IEEE Founded','Minicomputer Checkpoint']],
+      [6,'The C Language & Unix',['Ken Thompson & Dennis Ritchie','Bell Labs — Innovation Factory','Multics to Unix (1969)','Unix Philosophy — Do One Thing Well','The C Programming Language (1972)','Why C Changed Everything','K&R C — The Book','Unix Pipes & Filters','The Unix File System','Shell Scripting — sh, csh, bash','sed, awk, grep — Text Processing','Unix Spreads to Universities','BSD Unix — Berkeley','AT&T vs BSD — Unix Wars','C & Unix Checkpoint']],
+      [7,'Personal Computer Revolution',['Altair 8800 (1975) — The Spark','MITS & Ed Roberts','Bill Gates & Paul Allen — Altair BASIC','Apple I — Wozniak & Jobs (1976)','Apple II (1977) — Color & Sound','Commodore PET','TRS-80 — Tandy Radio Shack','CP/M Operating System — Gary Kildall','VisiCalc — First Spreadsheet (1979)','IBM PC (1981)','MS-DOS — Microsoft\'s Big Break','IBM PC Clones','Commodore 64 — Best-Selling Computer','Home Computing Culture','PC Revolution Checkpoint']],
+      [8,'Operating Systems History',['What Is an Operating System?','Batch Processing OS','Time-Sharing OS','CP/M — Control Program for Microcomputers','MS-DOS — Command Line Era','Mac OS — Graphical Pioneer (1984)','Xerox PARC & the GUI','Windows 1.0 (1985)','Windows 3.1 — Mass Adoption','Windows 95 — Start Menu Revolution','Windows XP — Stability at Last','Mac OS X — Unix Under the Hood','Linux — Linus Torvalds (1991)','Android & iOS — Mobile OS','Operating Systems Checkpoint']],
+      [9,'Programming Languages Evolution',['Simula — First OOP Language (1967)','Smalltalk — Pure OOP (1972)','Pascal — Niklaus Wirth (1970)','Prolog — Logic Programming (1972)','ML — Type Inference (1973)','Ada — DoD Language (1980)','Objective-C (1984)','C++ — Bjarne Stroustrup (1985)','Perl — Larry Wall (1987)','Haskell — Functional Purity (1990)','Python — Guido van Rossum (1991)','Ruby — Yukihiro Matsumoto (1995)','Java — Sun Microsystems (1995)','JavaScript — Brendan Eich (1995)','Language Evolution Checkpoint']],
+      [10,'The Internet — Origins',['ARPANET — 1969','Packet Switching — Paul Baran','TCP/IP — Vint Cerf & Bob Kahn','Email — Ray Tomlinson (1971)','The @ Symbol','Ethernet — Bob Metcalfe (1973)','Usenet — Early Social Network (1980)','DNS — Domain Name System (1983)','NSFNet — Expanding the Network','Internet Relay Chat (IRC)','Gopher — Pre-Web Information','Tim Berners-Lee & the World Wide Web (1989)','HTML — First Web Language','The First Website (1991)','Internet Origins Checkpoint']],
+      [11,'World Wide Web & Browsers',['Mosaic Browser (1993)','Netscape Navigator (1994)','The Browser Wars — Netscape vs IE','Internet Explorer Dominance','W3C — Web Standards','HTML Evolution — 2.0 to 5','CSS — Cascading Style Sheets (1996)','JavaScript in the Browser','Dynamic HTML (DHTML)','Flash — Macromedia/Adobe','The Dot-Com Boom','The Dot-Com Bust (2000)','Firefox (2004) — Open Source Browser','Chrome (2008) — Google\'s Entry','Web & Browsers Checkpoint']],
+      [12,'Open Source Movement',['What Is Open Source?','Richard Stallman & GNU (1983)','The GNU Manifesto','GPL — General Public License','Free Software vs Open Source','Linux Kernel (1991)','Apache Web Server','MySQL & PostgreSQL','Mozilla Foundation','Wikipedia — Open Knowledge','Git — Linus Torvalds (2005)','GitHub — Social Coding (2008)','Stack Overflow (2008)','Open Source Licenses — MIT, BSD, Apache','Open Source Checkpoint']],
+      [13,'The Rise of the Internet Giants',['Google — Page & Brin (1998)','PageRank Algorithm','Amazon — Jeff Bezos (1994)','Amazon Web Services (AWS)','Facebook — Mark Zuckerberg (2004)','Social Media Revolution','YouTube — Bought by Google (2006)','Twitter / X — Microblogging (2006)','Netflix — Streaming Era','Spotify — Music Streaming','Uber & the Gig Economy','Airbnb — Platform Economy','Apple\'s iPhone (2007) — Mobile Revolution','App Store & Google Play','Internet Giants Checkpoint']],
+      [14,'Modern Programming Languages',['C# — Microsoft (2000)','Scala — JVM Functional (2004)','Clojure — Rich Hickey (2007)','Go — Google (2009)','Rust — Mozilla (2010)','Kotlin — JetBrains (2011)','Swift — Apple (2014)','TypeScript — Microsoft (2012)','Julia — Scientific Computing (2012)','Elixir — Concurrent Programming (2011)','Dart — Google (Flutter)','Zig — Systems Language','Mojo — AI Language','Why New Languages Keep Appearing','Modern Languages Checkpoint']],
+      [15,'Databases & Data Storage',['Flat Files & CSV','Hierarchical Databases','Network Databases','Edgar Codd & Relational Model (1970)','SQL — Structured Query Language','Oracle Database','IBM DB2','Microsoft SQL Server','MySQL — Open Source DB','PostgreSQL — Advanced Open Source','NoSQL Movement','MongoDB — Document Store','Redis — Key-Value Store','Cassandra — Distributed DB','Databases Checkpoint']],
+      [16,'Software Engineering History',['Software Crisis (1960s)','NATO Software Engineering Conference (1968)','Waterfall Model','Structured Programming — Dijkstra','Software Testing Origins','Version Control — RCS, CVS, SVN','Agile Manifesto (2001)','Scrum Framework','Extreme Programming (XP)','Test-Driven Development','Continuous Integration','DevOps Movement','Microservices Architecture','Cloud-Native Development','Software Engineering Checkpoint']],
+      [17,'Video Games & Computing',['Spacewar! (1962) — First Video Game','Pong — Atari (1972)','Arcade Golden Age','Atari 2600 — Home Console','The Video Game Crash (1983)','Nintendo NES — Saving the Industry','Game Boy — Portable Gaming','Doom & Wolfenstein — FPS Genre','PlayStation & 3D Gaming','Online Gaming — MMOs','Xbox Live & PlayStation Network','Mobile Gaming — Angry Birds Era','Unity & Unreal Engine','Indie Game Revolution','Video Games Checkpoint']],
+      [18,'Cybersecurity History',['First Computer Virus — Creeper (1971)','Morris Worm (1988)','ILOVEYOU Virus (2000)','Stuxnet — Cyber Warfare (2010)','RSA Encryption — Rivest, Shamir, Adleman','Public Key Cryptography','PGP — Pretty Good Privacy','SSL/TLS — Secure Web','Firewalls & Intrusion Detection','Phishing & Social Engineering','Data Breaches — Yahoo, Equifax','Ransomware — WannaCry, NotPetya','Bug Bounty Programs','Zero-Day Exploits','Cybersecurity Checkpoint']],
+      [19,'Artificial Intelligence History',['Turing Test (1950)','Dartmouth AI Conference (1956)','Early AI Optimism','ELIZA Chatbot (1966)','Expert Systems (1970s-80s)','AI Winter — Funding Collapse','Neural Networks Revival','Deep Blue vs Kasparov (1997)','Machine Learning Emergence','ImageNet & Deep Learning (2012)','AlphaGo vs Lee Sedol (2016)','GPT & Large Language Models','ChatGPT (2022) — AI Goes Mainstream','Generative AI — Images, Video, Code','AI History Checkpoint']],
+      [20,'Mobile Computing',['Palm Pilot — First PDA (1997)','BlackBerry — Business Mobile','Symbian & Nokia','iPhone Launch (2007)','Android Launch (2008)','App Store Revolution','Mobile Web vs Native Apps','Responsive Web Design','React Native & Flutter','5G & Mobile Broadband','Mobile Payment — Apple Pay, Google Pay','QR Codes','Wearables — Apple Watch, Fitbit','Tablets — iPad & Android','Mobile Computing Checkpoint']],
+      [21,'Cloud Computing',['What Is Cloud Computing?','Mainframe Time-Sharing — The Original Cloud','Amazon EC2 Launch (2006)','AWS — Market Leader','Microsoft Azure','Google Cloud Platform','Infrastructure as a Service (IaaS)','Platform as a Service (PaaS)','Software as a Service (SaaS)','Serverless Computing — Lambda','Containers — Docker (2013)','Kubernetes — Container Orchestration','Multi-Cloud Strategy','Edge Computing','Cloud Computing Checkpoint']],
+      [22,'Pioneers & Legends',['Ada Lovelace — First Programmer','Alan Turing — Father of CS','Grace Hopper — Compiler Queen','John von Neumann — Architecture','Claude Shannon — Information Theory','Douglas Engelbart — Mouse & Demo','Ken Thompson & Dennis Ritchie — Unix & C','Steve Jobs & Steve Wozniak — Apple','Bill Gates — Microsoft Empire','Linus Torvalds — Linux & Git','Tim Berners-Lee — World Wide Web','Guido van Rossum — Python','Margaret Hamilton — Apollo Software','Vint Cerf & Bob Kahn — Internet Fathers','Pioneers Checkpoint']],
+      [23,'The Blockchain & Web3 Era',['What Is Blockchain?','Bitcoin — Satoshi Nakamoto (2008)','How Mining Works','Ethereum — Smart Contracts (2015)','Solidity — Smart Contract Language','DeFi — Decentralized Finance','NFTs — Digital Ownership','DAOs — Decentralized Organizations','Web3 Vision','Crypto Exchanges','Stablecoins','Layer 2 Scaling','Blockchain Beyond Crypto','Regulation & Controversy','Blockchain Checkpoint']],
+      [24,'The Future of Computing',['Quantum Computing — Qubits','IBM & Google Quantum Machines','Neuromorphic Computing','DNA Data Storage','Optical Computing','Brain-Computer Interfaces','Augmented Reality Development','Virtual Reality Platforms','The Metaverse Concept','Autonomous Vehicles & Software','Robotics & ROS','Space Computing — Mars Rovers','Sustainable Computing — Green IT','Ethics in Technology','Future Computing Checkpoint']],
+      [25,'Programming History Mastery',['Ancient Computing Review','Early Machines Review','Birth of Programming Review','Mainframes & Minicomputers Review','C, Unix & the PC Revolution Review','Operating Systems Review','Language Evolution Review','Internet & Web Review','Open Source Review','Tech Giants Review','Modern Languages Review','Databases & Software Engineering Review','Games, Security & AI Review','Mobile, Cloud & Blockchain Review','Programming History Grand Mastery!']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ph-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('programming-history');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('programming-history');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
