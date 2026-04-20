@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrumental — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Instrumental</h1>
+    <p>Learn to play musical instruments — piano, guitar, drums, violin, brass, woodwinds, and more. Techniques, reading music, practice habits, recording, and performing. 25 units, 375 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'Introduction to Instruments',['What Is a Musical Instrument?','Families of Instruments — Strings, Wind, Percussion, Keys','Acoustic vs Electric Instruments','How Sound Is Produced','Pitch, Tone & Timbre','Tuning & Intonation','Choosing Your First Instrument','Renting vs Buying','Left-Handed Instruments','Posture & Holding Your Instrument','Warming Up & Stretching','Practice Habits That Work','Setting a Practice Schedule','Using a Metronome','Introduction Checkpoint']],
+      [2,'Piano & Keyboard',['Parts of the Piano — Keys, Pedals, Hammers','White Keys & Black Keys','Finding Middle C','The Musical Alphabet — A B C D E F G','Right Hand Position','Left Hand Position','Playing Simple Melodies','Reading Treble Clef for Piano','Reading Bass Clef for Piano','Both Hands Together','Major Scales — C, G, D, F','Minor Scales — A, E, D','Basic Chords — C, F, G, Am','Sustain Pedal Technique','Piano Checkpoint']],
+      [3,'Guitar Basics',['Parts of the Guitar — Neck, Body, Strings','Acoustic vs Electric Guitar','String Names — E A D G B E','How to Hold a Guitar','Fretting Notes','Strumming Patterns','Open Chords — G, C, D, Em, Am','Chord Transitions','Reading Guitar Tabs','Power Chords','Barre Chords — F, Bm','Fingerpicking Basics','Capo — What It Does','Tuning Your Guitar','Guitar Basics Checkpoint']],
+      [4,'Drums & Percussion',['Parts of a Drum Kit — Kick, Snare, Hi-Hat, Toms, Cymbals','Holding Drumsticks — Matched & Traditional Grip','The Basic Beat — Rock Pattern','Hi-Hat Patterns — Closed, Open, Pedal','Snare Techniques — Rimshot, Ghost Notes','Kick Drum Patterns','Basic Fills','Time Signatures for Drummers','Reading Drum Notation','Double Bass Drumming','Brushes & Mallets','Paradiddles & Rudiments','Playing with a Click Track','Practice Pad Exercises','Drums Checkpoint']],
+      [5,'Violin & Viola',['Parts of the Violin','Holding the Violin & Bow','Rosin & Bow Care','Open Strings — G, D, A, E','First Position Notes','Bowing Technique — Down Bow & Up Bow','Legato & Detaché','Pizzicato — Plucking','Reading Treble Clef for Violin','Scales — G Major, D Major','Shifting Positions','Vibrato Basics','The Viola — Differences from Violin','Alto Clef for Viola','Violin & Viola Checkpoint']],
+      [6,'Bass Guitar',['Parts of the Bass Guitar','String Names — E A D G','Fingerstyle vs Pick Playing','Fretting Bass Notes','Root Notes & Following Chords','The Walking Bass Line','Slap Bass Technique','Popping Technique','Reading Bass Clef','Bass Scales — Major & Minor Pentatonic','Octave Patterns','Muting Techniques','Playing with a Drummer — The Pocket','Five-String Bass','Bass Guitar Checkpoint']],
+      [7,'Trumpet & Brass',['The Brass Family — Trumpet, Trombone, French Horn, Tuba','How Brass Instruments Work — Buzz & Valves','Parts of a Trumpet','Forming an Embouchure','Producing Your First Sound','Valve Combinations & Fingerings','Playing a Major Scale','Tonguing — Single & Double','Lip Slurs','Dynamics — Soft to Loud','Reading Music for Trumpet','Trumpet Range — Low to High','Mutes — Straight, Cup, Harmon','Trombone — Slide Positions','Brass Checkpoint']],
+      [8,'Flute & Woodwinds',['The Woodwind Family — Flute, Clarinet, Oboe, Bassoon','How Woodwinds Produce Sound','Parts of a Flute','Assembling & Holding the Flute','Producing a Tone — Embouchure','Fingerings — First Octave','Fingerings — Second Octave','Tonguing & Articulation','Breath Support & Air Control','Clarinet Basics — Reed & Mouthpiece','Clarinet Fingerings','Oboe — Double Reed','Recorder — Beginner Woodwind','Piccolo — The High Flute','Woodwinds Checkpoint']],
+      [9,'Saxophone',['Types of Saxophone — Soprano, Alto, Tenor, Baritone','Parts of the Saxophone','Assembling Your Sax','Reed Selection & Care','Forming a Saxophone Embouchure','First Notes & Fingerings','Major Scales on Saxophone','Playing Melodies','Tonguing & Articulation','Altissimo Register','Vibrato on Saxophone','Jazz Saxophone Style','Blues Scale','Improvisation Basics','Saxophone Checkpoint']],
+      [10,'Ukulele',['Types of Ukulele — Soprano, Concert, Tenor, Baritone','Parts of the Ukulele','String Names — G C E A','How to Hold & Strum','Basic Chords — C, F, Am, G','Chord Progressions','Strumming Patterns','Fingerpicking on Ukulele','Reading Ukulele Tabs','Barre Chords on Ukulele','Ukulele vs Guitar — Differences','Hawaiian Slack-Key Style','Ukulele in Pop Music','Singing & Playing Together','Ukulele Checkpoint']],
+      [11,'Harmonica',['Types of Harmonica — Diatonic, Chromatic, Tremolo','How a Harmonica Works — Blow & Draw','Holding the Harmonica','Single Notes vs Chords','The 10-Hole Diatonic Layout','Playing a Major Scale','Bending Notes — The Blues Sound','Tongue Blocking','Cross Harp — Playing in 2nd Position','Blues Harmonica Riffs','Train Sound Effects','Vibrato & Tremolo Techniques','Harmonica in Folk & Country','Chromatic Harmonica Basics','Harmonica Checkpoint']],
+      [12,'Cello & Double Bass',['Parts of the Cello','Sitting Position & Endpin','Holding the Cello Bow','Open Strings — C, G, D, A','First Position Notes','Bowing — Long Tones','Shifting to Higher Positions','Vibrato on Cello','Reading Bass & Tenor Clef','Cello Scales — C Major, G Major','Famous Cello Pieces','Double Bass — The Biggest String','Upright Bass vs Electric Bass','Pizzicato on Double Bass','Cello & Bass Checkpoint']],
+      [13,'Harp & Classical Strings',['Types of Harp — Pedal, Lever, Celtic','How the Harp Works','Hand Position & Plucking','Basic Harp Scales','Arpeggios on Harp','Pedal Changes for Sharps & Flats','Classical Guitar — Nylon Strings','Classical Guitar Technique — Rest Stroke & Free Stroke','Banjo — Five-String Basics','Banjo Rolls — Scruggs Style','Mandolin — Paired Strings','Mandolin Chords & Tremolo','Lute — Historical String Instrument','Zither & Autoharp','Classical Strings Checkpoint']],
+      [14,'Organ & Keyboard Instruments',['Pipe Organ — King of Instruments','How Pipe Organs Work','Organ Manuals & Pedalboard','Organ Stops & Registration','Church Organ Playing','Electric Organ — Hammond B3','Leslie Speaker & Rotating Sound','Synthesizer Basics','Types of Synthesis — Subtractive, FM, Wavetable','Keyboard Workstations','Digital Piano vs Acoustic','MIDI Keyboards','Accordion — Keys & Bellows','Melodica — Blow Keyboard','Organ & Keyboard Checkpoint']],
+      [15,'Percussion Instruments',['Snare Drum Fundamentals','Bass Drum Techniques','Timpani — Tuned Percussion','Xylophone & Marimba','Vibraphone & Glockenspiel','Congas & Bongos','Djembe — West African Drum','Cajón — Box Drum','Tambourine & Shakers','Triangle & Cowbell','Cymbals — Crash, Ride, Hi-Hat','Steel Drums — Trinidad','Tabla — Indian Percussion','Taiko — Japanese Drums','Percussion Checkpoint']],
+      [16,'Electric Guitar & Effects',['Solid Body vs Semi-Hollow','Pickups — Single Coil vs Humbucker','Tone & Volume Controls','Guitar Amplifiers — Tube vs Solid State','Clean vs Distortion','Overdrive & Fuzz Pedals','Delay & Reverb Effects','Chorus, Flanger & Phaser','Wah-Wah Pedal','Looper Pedals','Pedalboard Setup','Palm Muting & Chugging','Hammer-Ons & Pull-Offs','Tapping Technique','Electric Guitar Checkpoint']],
+      [17,'Reading Sheet Music',['The Staff — Five Lines','Treble Clef Notes — E G B D F, F A C E','Bass Clef Notes — G B D F A, A C E G','Note Values — Whole, Half, Quarter, Eighth, Sixteenth','Rests — Matching Note Values','Time Signatures — 4/4, 3/4, 6/8','Dotted Notes & Ties','Key Signatures — Sharps & Flats','Dynamics — pp, p, mp, mf, f, ff','Tempo Markings — Allegro, Andante, Adagio','Repeat Signs & Codas','Accidentals — Sharp, Flat, Natural','Ledger Lines','Sight-Reading Tips','Sheet Music Checkpoint']],
+      [18,'Practice & Technique',['How to Practice Effectively','Slow Practice — Why It Works','Breaking Down Difficult Passages','Muscle Memory & Repetition','Scales as Daily Warmups','Arpeggios & Broken Chords','Finger Independence Exercises','Rhythm Exercises','Ear Training — Intervals','Ear Training — Chords','Playing by Ear','Memorization Techniques','Performance Anxiety — Overcoming Stage Fright','Recording Yourself to Improve','Practice Checkpoint']],
+      [19,'Recording Your Instrument',['Home Recording Basics','Microphone Types — Dynamic, Condenser, Ribbon','Mic Placement for Different Instruments','Audio Interfaces','DAW Software — GarageBand, Logic, Ableton','Recording Levels & Gain','Multitrack Recording','Overdubbing — Layering Parts','EQ & Compression for Instruments','Reverb & Effects in the Mix','Mixing Your Recording','Mastering Basics','Exporting & Sharing','Recording on Your Phone','Recording Checkpoint']],
+      [20,'Singing & Vocals',['The Voice as an Instrument','Vocal Range — Soprano, Alto, Tenor, Bass','Breath Support & Diaphragm','Vocal Warm-Ups','Singing in Tune — Pitch Control','Vibrato — Natural & Controlled','Head Voice vs Chest Voice','Falsetto & Mixed Voice','Diction & Lyrics','Harmonizing — Singing in Parts','Singing with Instruments','Vocal Health & Hydration','Microphone Technique for Singers','Backing Vocals & Layering','Singing Checkpoint']],
+      [21,'Ensemble & Band Playing',['What Is an Ensemble?','Duo, Trio, Quartet & Beyond','Listening to Other Players','Playing in Time Together','Balancing Volume in a Group','Communication — Cues & Eye Contact','Rock Band Setup — Guitar, Bass, Drums, Vocals','Jazz Combo — Sax, Piano, Bass, Drums','Acoustic Jam Sessions','Cover Songs vs Originals','Rehearsal Etiquette','Setting Up for a Gig','Live Sound Basics — PA System','Stage Presence & Performance','Ensemble Checkpoint']],
+      [22,'Orchestra & Classical Ensemble',['What Is an Orchestra?','Sections — Strings, Woodwinds, Brass, Percussion','The Conductor\'s Role','Seating Chart — Who Sits Where','Concertmaster — First Violin','Tuning the Orchestra — Oboe A','Symphony vs Chamber Orchestra','String Quartet','Wind Quintet','Brass Quintet','Concert Band vs Orchestra','Famous Orchestras — Berlin, Vienna, New York','Famous Conductors — Bernstein, Karajan, Dudamel','Attending a Concert — Etiquette','Orchestra Checkpoint']],
+      [23,'World Instruments',['Sitar — Indian Classical','Tabla & Mridangam — Indian Percussion','Erhu — Chinese Two-String Fiddle','Guzheng — Chinese Zither','Koto — Japanese Zither','Shamisen — Japanese Lute','Gamelan — Indonesian Ensemble','Didgeridoo — Australian Wind','Kalimba — African Thumb Piano','Kora — West African Harp','Oud — Middle Eastern Lute','Bouzouki — Greek String','Bagpipes — Scottish Wind','Balalaika — Russian String','World Instruments Checkpoint']],
+      [24,'Digital Instruments & MIDI',['What Is MIDI?','MIDI Controllers — Keys, Pads, Knobs','Virtual Instruments & Plugins','Software Synthesizers','Drum Machines & Beat Pads','Sampling — Using Real Sounds Digitally','Looping & Live Performance','Ableton Push & Launchpad','Electronic Drums — Roland, Alesis','Digital Wind Instruments — EWI, Aerophone','Guitar Modeling — Kemper, Line 6','Amp Simulators','Music Production with MIDI','Performing with Electronics','Digital Instruments Checkpoint']],
+      [25,'Instrumental Mastery',['Piano & Keyboard Review','Guitar & Bass Review','Drums & Percussion Review','Strings — Violin, Cello, Harp Review','Brass & Woodwinds Review','Saxophone & Harmonica Review','Ukulele & World Instruments Review','Reading Sheet Music Review','Practice & Technique Review','Recording & Production Review','Singing & Vocals Review','Ensemble & Orchestra Review','Digital & MIDI Review','Building Your Musical Journey','Instrumental Grand Mastery!']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'inst-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('instrumental');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('instrumental');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
