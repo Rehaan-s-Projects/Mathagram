@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astronomy & Space — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Astronomy & Space</h1>
+    <p>Explore the universe — planets, stars, galaxies, black holes, space missions, telescopes, and the search for alien life. 300 lessons across 20 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Introduction to Astronomy',['What Is Astronomy?','History of Stargazing','Ancient Astronomy — Egypt Greece','Copernicus — Heliocentric Model','Galileo — First Telescope','Kepler — Laws of Planetary Motion','Newton — Gravity','Einstein — General Relativity','Light-Year — Measuring Distance','Electromagnetic Spectrum','Types of Telescopes','Observatories Around the World','Space vs Astronomy','Careers in Astronomy','Astronomy Intro Checkpoint']],
+      [2,'The Solar System',['Our Solar System Overview','The Sun — Our Star','Mercury — Closest to Sun','Venus — Earth's Twin','Earth — The Blue Planet','Mars — The Red Planet','Jupiter — Gas Giant King','Saturn — Rings of Ice','Uranus — Ice Giant Sideways','Neptune — Windy Blue World','Dwarf Planets — Pluto Eris Ceres','Asteroid Belt','Kuiper Belt & Oort Cloud','Comparing the Planets','Solar System Checkpoint']],
+      [3,'The Moon',['Earth's Moon — Overview','Moon Formation — Giant Impact','Lunar Surface — Craters Maria','Moon Phases — New to Full','Eclipses — Solar & Lunar','Tides — Moon's Gravitational Pull','Far Side of the Moon','Apollo Missions — Moon Landing','Moonwalk — First Steps','Lunar Rocks & Samples','Future Moon Bases','Water on the Moon','Artemis Program','Moon in Culture & Mythology','Moon Checkpoint']],
+      [4,'Stars',['What Is a Star?','How Stars Form — Nebulae','Main Sequence Stars','Star Colors & Temperature','Hertzsprung-Russell Diagram','Red Giants & Supergiants','White Dwarfs','Neutron Stars & Pulsars','Supernovae — Star Death','Stellar Nucleosynthesis','Binary Stars','Variable Stars','Star Clusters — Open & Globular','Closest Stars to Earth','Stars Checkpoint']],
+      [5,'Black Holes',['What Is a Black Hole?','How Black Holes Form','Event Horizon','Singularity','Schwarzschild Radius','Stellar Black Holes','Supermassive Black Holes','Sagittarius A* — Our Galaxy's Center','First Black Hole Image — M87','Hawking Radiation','Spaghettification','Time Dilation Near Black Holes','Black Hole Mergers','Wormholes — Theory','Black Holes Checkpoint']],
+      [6,'Galaxies',['What Is a Galaxy?','Milky Way — Our Galaxy','Galaxy Types — Spiral Elliptical Irregular','Andromeda — Nearest Major Galaxy','Galaxy Clusters','Dark Matter in Galaxies','Galaxy Collisions & Mergers','Active Galactic Nuclei','Quasars','Starburst Galaxies','Galaxy Formation & Evolution','Observable Universe — How Many Galaxies','Deep Field Images — Hubble JWST','Large-Scale Structure','Galaxies Checkpoint']],
+      [7,'Cosmology',['What Is Cosmology?','The Big Bang Theory','Evidence — Cosmic Microwave Background','Expansion of the Universe — Hubble','Dark Energy — Accelerating Expansion','Dark Matter — Invisible Mass','Age of the Universe — 13.8 Billion Years','Shape of the Universe','Fate of the Universe — Heat Death','Inflation Theory','Multiverse Hypothesis','Cosmic Timeline','Observable Universe Size','Unsolved Problems','Cosmology Checkpoint']],
+      [8,'Exoplanets',['What Is an Exoplanet?','Detection Methods — Transit','Detection Methods — Radial Velocity','Detection Methods — Direct Imaging','Kepler Space Telescope Discoveries','TESS — Transiting Exoplanet Survey','Hot Jupiters','Super-Earths','Habitable Zone — Goldilocks','TRAPPIST-1 System','Proxima Centauri b','Atmospheres of Exoplanets','Biosignatures','James Webb & Exoplanets','Exoplanets Checkpoint']],
+      [9,'Space Exploration History',['Sputnik — First Satellite 1957','Yuri Gagarin — First Human 1961','John Glenn — First American Orbit','Apollo 11 — Moon Landing 1969','Skylab — First Space Station','Space Shuttle Program','Mir Space Station','International Space Station (ISS)','Mars Rovers — Spirit Opportunity Curiosity','Voyager 1 & 2 — Interstellar','New Horizons — Pluto Flyby','Cassini — Saturn Mission','Rosetta — Comet Landing','Parker Solar Probe','Space History Checkpoint']],
+      [10,'Rockets & Launch',['How Rockets Work — Newton's Third Law','Rocket Fuel — Solid & Liquid','Stages — Multi-Stage Rockets','Saturn V — Moon Rocket','Space Shuttle','SpaceX Falcon 9','SpaceX Starship','Blue Origin New Shepard','Ariane — European Rockets','Soyuz — Russian Workhorse','Launch Sites — Cape Canaveral Baikonur','Reusable Rockets','Orbital Mechanics Basics','Escape Velocity','Rockets Checkpoint']],
+      [11,'Living in Space',['Microgravity Effects on Body','Space Food','Sleeping in Space','Spacewalks — EVA','Space Suits','ISS Daily Life','Exercise in Space','Space Medicine','Radiation Exposure','Psychological Challenges','Communication with Earth','Resupply Missions','Space Toilet','Long-Duration Missions','Living in Space Checkpoint']],
+      [12,'Mars Exploration',['Why Mars?','Mars Atmosphere & Climate','Olympus Mons — Tallest Volcano','Valles Marineris — Grand Canyon x10','Water on Mars — Evidence','Mars Rovers — Perseverance','Ingenuity Helicopter','Mars Sample Return','Terraforming — Could We?','SpaceX Mars Plans','NASA Artemis to Mars','Mars Colonies — Challenges','Mars Radiation','Growing Food on Mars','Mars Checkpoint']],
+      [13,'Moons of the Solar System',['Jupiter's Moons — Galilean Four','Io — Volcanic Moon','Europa — Ocean Under Ice','Ganymede — Largest Moon','Callisto — Ancient Surface','Saturn's Moons — Titan','Titan — Methane Lakes','Enceladus — Ice Geysers','Triton — Neptune's Captured Moon','Charon — Pluto's Moon','Phobos & Deimos — Mars Moons','Miranda — Uranus Moon','Potential for Life on Moons','Future Moon Missions','Moons Checkpoint']],
+      [14,'Telescopes & Instruments',['Refracting Telescopes','Reflecting Telescopes','Radio Telescopes','Hubble Space Telescope','James Webb Space Telescope','Chandra X-Ray Observatory','Spitzer Infrared Telescope','ALMA — Radio Array','Very Large Telescope (VLT)','Extremely Large Telescope (ELT)','Gravitational Wave Detectors — LIGO','Neutrino Telescopes','Backyard Telescopes — Buying Guide','Astrophotography Basics','Telescopes Checkpoint']],
+      [15,'Comets, Asteroids & Meteors',['What Is a Comet?','Comet Structure — Nucleus Coma Tail','Famous Comets — Halley's','Asteroid vs Comet vs Meteor','Asteroid Belt','Near-Earth Objects','Chicxulub — Dinosaur Killer','Planetary Defense — DART Mission','Tunguska Event','Chelyabinsk Meteor 2013','Meteor Showers — Perseids Leonids','Shooting Stars','Meteorites — Rocks from Space','Mining Asteroids','Comets & Asteroids Checkpoint']],
+      [16,'The Sun',['Sun Structure — Core to Corona','Nuclear Fusion — How Sun Shines','Sunspots & Solar Cycle','Solar Flares','Coronal Mass Ejections','Solar Wind','Aurora — Northern Southern Lights','Sun's Magnetic Field','Sun's Lifespan — Red Giant Future','Solar Eclipses','Studying the Sun — SDO','Parker Solar Probe','Solar Energy from Space','Sun vs Other Stars','Sun Checkpoint']],
+      [17,'Search for Extraterrestrial Life',['Drake Equation','Fermi Paradox','SETI — Listening for Signals','Wow! Signal 1977','Extremophiles on Earth','Life on Mars?','Europa & Enceladus — Ocean Worlds','Titan — Chemical Complexity','Exoplanets in Habitable Zone','Biosignatures in Atmospheres','Panspermia Hypothesis','Interstellar Messages — Voyager Golden Record','UFOs & UAPs','Zoo Hypothesis','Alien Life Checkpoint']],
+      [18,'Future of Space',['Artemis — Return to Moon','Gateway — Lunar Space Station','Moon Base Plans','Mars Colony Timeline','Asteroid Mining','Space Tourism','Space Elevators','Interstellar Travel Concepts','Generation Ships','Warp Drive — Alcubierre','Dyson Sphere Concept','O'Neill Cylinders','Starshot — Laser Sails','Kardashev Scale','Future Checkpoint']],
+      [19,'Astronomy Skills',['Night Sky Navigation','Finding North Star — Polaris','Constellations — Seasonal','Using Star Charts & Apps','Binoculars for Astronomy','Setting Up a Telescope','Observing Planets','Observing the Moon','Deep Sky Objects — Nebulae Clusters','Astrophotography — Phone','Astrophotography — DSLR','Light Pollution & Dark Skies','Astronomy Clubs','Citizen Science Projects','Skills Checkpoint']],
+      [20,'Astronomy Mastery',['Solar System Review','Stars & Black Holes Review','Galaxies & Cosmology Review','Exoplanets Review','Space Exploration Review','Rockets & Living in Space Review','Mars & Moons Review','Telescopes Review','Comets & Asteroids Review','The Sun Review','Alien Life Review','Future of Space Review','Night Sky Skills Review','Your Space Journey','Astronomy Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ast-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('astronomy');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('astronomy');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
