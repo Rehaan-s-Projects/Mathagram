@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Igbo — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Igbo</h1>
+    <p>A major language of southeastern Nigeria — spoken by 45+ million Igbo people. Tonal language with rich oral tradition and Nsibidi symbols. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Basics & Greetings",["What Is Igbo?","Where Igbo Is Spoken","Igbo Dialects Overview","Hello — Ndewo","How Are You? — Kedu?","I Am Fine — Adim mma","Thank You — Dalu","Yes — Ee / No — Mba","Please — Biko","Goodbye — Ka omesia","My Name Is — Aha m bu...","Nice to Meet You","Igbo People & Culture","Igbo Numbers 1-5","Basics Checkpoint"]],
+      [2,"Alphabet & Pronunciation",["Igbo Alphabet — 36 Letters","Vowels — 8 Vowels","Consonants","Digraphs — Ch, Gb, Gh, Gw, Kp, Kw, Nw, Ny, Sh","Tone System — High, Low, Downstep","Tone Marks in Writing","Nasalized Vowels","Dotted Letters — Vowel Harmony","Igbo Spelling Rules","Reading Practice","Writing Practice","Listening to Tones","Minimal Pairs with Tone","Nsibidi — Ancient Igbo Script","Alphabet Checkpoint"]],
+      [3,"Numbers & Time",["Numbers 1-10","Numbers 11-20","Numbers 21-100","Hundreds & Thousands","Ordinal Numbers","Days of the Week","Months — Igbo Calendar","Telling Time","Seasons — Dry & Rainy","Market Days — Eke, Orie, Afo, Nkwo","Age & Birthdays","Counting Objects","Money — Naira","Duration & Frequency","Numbers Checkpoint"]],
+      [4,"Everyday Vocabulary",["Family — Ezinaulo","Body Parts — Ahu","Colors — Agba","Animals — Anumanu","Food — Nri","Fruits & Vegetables","Clothing — Akwa","House — Ulo","Weather — Ihu Igwe","City & Village — Obodo","Transportation","Jobs — Olu","School — Ulo Akwukwo","Daily Routine","Vocabulary Checkpoint"]],
+      [5,"Basic Grammar",["Subject Pronouns — M, I, O, Anyi, Unu, Ha","Verb Structure","Present Tense — Na-eme","Negation — Anaghi","Question Words — Kedu, Gini, Onye","Word Order — SVO","Adjectives After Nouns","Plural Formation","Possessives","Demonstratives — Nke a, Nke ahu","Prepositions","Conjunctions — Na, Ma","Gender — No Grammatical Gender","Tone & Meaning Changes","Grammar Checkpoint"]],
+      [6,"Present Tense Verbs",["Common Verbs — Iga (Go)","Ibia (Come)","Iri (Eat)","Inu (Drink)","Ihu (See)","Inu (Hear)","Ima (Know)","Ide (Write)","Igu (Read/Count)","Ikwu (Say)","Ime (Do/Make)","Izu (Buy)","Ire (Sell)","Iru (Carry","Present Tense Checkpoint"]],
+      [7,"Past Tense",["Simple Past Formation","Past with -ru / -lu","Past Negative","Past Questions","Time Expressions — Unyahu (Yesterday)","Telling Stories in Past","Present Perfect","Past Progressive","Irregular Past Forms","Narrating Events","Comparing Tenses","Reading: A Folktale","Past Practice","Short Answers","Past Tense Checkpoint"]],
+      [8,"Future & Compound Tenses",["Future Tense — Ga-eme","Future Plans","Future Predictions","Conditional Sentences","Imperative — Commands","Subjunctive","Passive Construction","Causative Verbs","Serial Verb Construction","Habitual Aspect","Completive Aspect","Tense Review","Mixed Practice","Advanced Conjugation","Future Tense Checkpoint"]],
+      [9,"Food & Market",["Igbo Cuisine Overview","Garri & Eba","Fufu & Soup","Egusi Soup","Ogbono Soup","Jollof Rice — Igbo Style","Suya — Grilled Meat","Palm Wine — Mmanya Nkwu","Kola Nut — Oji","At the Market — Ahia","Bargaining — Igwa onu","Cooking Vocabulary","Ingredients","Food Proverbs","Food Checkpoint"]],
+      [10,"Travel & Directions",["Where Is...? — ...no ebe?","Left — Aka Ekpe","Right — Aka Nri","Straight — Tozuo ihu","Near & Far","At the Airport","At the Hotel","Taxi & Keke","Bus — Ulo Oku","Asking for Help","Tourist Vocabulary","Nigerian Cities","Igboland Geography","Travel Safety","Travel Checkpoint"]],
+      [11,"Home & Daily Life",["My House — Ulo m","Rooms","Morning Routine — Ututu","Afternoon — Ehihie","Evening — Anyasi","Household Chores","Cooking at Home","Visiting Neighbors","Hospitality — Igbo Tradition","Kola Nut Ceremony","Weekend Activities","Hobbies","Family Gatherings","Describing Your Day","Daily Life Checkpoint"]],
+      [12,"Work & Education",["School System in Nigeria","University — Mahadum","Subjects","Teacher — Onye nkuzi","Student — Nwa akwukwo","My Job","Office Vocabulary","Formal Language","Job Interview","Career Goals","Business in Igboland","Apprenticeship — Igba Boi","Market Business","Technology","Work Checkpoint"]],
+      [13,"Health & Body",["Doctor — Dibia Bekee","Traditional Healer — Dibia","I Am Sick — Ahu adighim mma","Body Parts Review","Common Illnesses","Pharmacy","Hospital","Emergency","Herbal Medicine","Malaria Vocabulary","Clean Water & Hygiene","Exercise & Fitness","Mental Health","First Aid","Health Checkpoint"]],
+      [14,"Culture & Traditions",["Igbo Culture Overview","Masquerade — Mmanwu","New Yam Festival — Iri Ji","Traditional Marriage — Igba Nkwu","Age Grades — Otu Ogbo","Title Taking — Ozo, Lolo","Village Meetings — Nzuko","Igbo Proverbs — Ilu","Folktales — Ifo","Music & Dance","Traditional Religion — Odinani","Chi — Personal God","Ancestors — Ndi Ichie","Modern Igbo Identity","Culture Checkpoint"]],
+      [15,"Advanced Grammar",["Complex Sentences","Relative Clauses","Reported Speech","Ideophones","Reduplication","Serial Verbs Advanced","Nominalization","Adverbial Clauses","Emphatic Constructions","Formal Register","Dialectal Differences","Code-Switching Igbo-English","Academic Igbo","Writing Essays","Advanced Grammar Checkpoint"]],
+      [16,"Media & Entertainment",["Nollywood — Nigerian Film","Igbo Nollywood Movies","Igbo Music — Highlife","Modern Igbo Artists","Radio & TV in Igbo","Newspapers & Online Media","Social Media in Igbo","YouTube in Igbo","Podcasts","Igbo Comedy","Literature — Chinua Achebe","Things Fall Apart","Purple Hibiscus — Chimamanda","Half of a Yellow Sun","Media Checkpoint"]],
+      [17,"Igbo Diaspora",["Igbo People Worldwide","Igbo in the Americas — History","Igbo Landing","Igbo Cultural Associations Abroad","Speaking Igbo Abroad","Heritage Speakers","Teaching Children Igbo","Igbo Language Apps","Online Communities","Igbo Festivals Abroad","Preserving Igbo Language","Igbo Identity in Diaspora","Return Visits to Nigeria","Building Fluency from Home","Diaspora Checkpoint"]],
+      [18,"Proverbs & Idioms",["Famous Igbo Proverbs","Proverbs About Wisdom","Proverbs About Community","Proverbs About Hard Work","Proverbs About Patience","Animal Proverbs","Food Proverbs","Family Proverbs","Leadership Proverbs","Humorous Sayings","Idioms in Daily Speech","Proverbs in Palm Wine Conversations","Using Proverbs Correctly","Creating Sentences with Proverbs","Proverbs Checkpoint"]],
+      [19,"Conversation & Reading",["Extended Self-Introduction","Debating Topics","Discussing News","Storytelling Practice","Reading Igbo Texts","Reading Chinua Achebe in Igbo","Writing Letters","Writing Messages","Formal Speech","Informal Chat","Humor & Jokes","Phone Conversations","Group Discussion","Comprehension Practice","Conversation Checkpoint"]],
+      [20,"Igbo Mastery",["Basics & Alphabet Review","Numbers & Vocabulary Review","Grammar & Tenses Review","Food & Travel Review","Home & Work Review","Health & Culture Review","Advanced Grammar Review","Media & Diaspora Review","Proverbs & Idioms Review","Conversation & Reading Review","Igbo Language Today","Igbo in Education","Resources for Learning","Your Igbo Journey","Igbo Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'igb-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('igbo');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('igbo');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
