@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tail Language — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Tail Language</h1>
+    <p>How animals communicate with their tails — cats, dogs, tigers, horses, lizards, fish, birds, and more. Body language, emotions, survival signals, and the science behind tail communication. 20 units, 300 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,"What Is Tail Language?",["Why Animals Have Tails","Tails as Communication Tools","Balance, Movement & Signaling","How Scientists Study Tail Behavior","Tail Anatomy — Bones, Muscles, Nerves","Voluntary vs Involuntary Tail Movement","Emotional Signals Through Tails","Tail Language vs Body Language","Do All Animals Use Their Tails to Communicate?","Tail Evolution — Why Tails Developed","Animals Without Tails — What Happened?","Humans and Tailbones — The Coccyx","Comparing Tail Signals Across Species","Famous Tail Research Studies","Tail Language Intro Checkpoint"]],
+      [2,"Cat Tail Language",["Cat Tail Anatomy","Tail Up — Happy & Confident","Tail Curved Like a Question Mark — Playful","Tail Puffed Up — Scared or Threatened","Tail Tucked Under — Fearful","Slow Tail Swish — Focused & Hunting","Fast Tail Whip — Annoyed or Angry","Tail Wrapped Around You — Affection","Tail Vibrating — Excited to See You","Low Tail Held Still — Stalking Prey","Tail Between Legs — Submission","Tail Twitching at the Tip — Mild Irritation","Sleeping with Tail Over Face — Comfort","Kitten Tail Language — Learning Signals","Cat Tail Checkpoint"]],
+      [3,"Dog Tail Language",["Dog Tail Anatomy — Breed Differences","Tail Wagging Right — Positive Emotion","Tail Wagging Left — Negative Emotion","Fast Wag — Excitement","Slow Wag — Unsure or Cautious","Broad Wag — Friendly & Happy","Tail Tucked — Fear or Anxiety","Tail Straight Out — Alert & Curious","Tail High & Stiff — Dominance","Tail Low & Relaxed — Calm","Helicopter Tail — Pure Joy","Tail Between Legs — Submission","Docked Tails — Communication Challenges","Breed-Specific Tail Shapes","Dog Tail Checkpoint"]],
+      [4,"Big Cat Tail Language",["Tiger Tail Signals","Lion Tail Communication","Lioness Tail During Hunting","Cheetah Tail — Steering at Speed","Leopard Tail — Balance in Trees","Snow Leopard — The Longest Tail","Jaguar Tail Behavior","Cougar & Puma Tail Signals","Tail Twitching Before Pounce","Tail Held High — Dominance Display","Mother Cat Tail — Guiding Cubs","Play Fighting — Tail Signals","Angry Big Cat — Lashing Tail","Relaxed Big Cat — Draped Tail","Big Cat Checkpoint"]],
+      [5,"Horse Tail Language",["Horse Tail Anatomy — Hair vs Dock","Tail Held High — Excitement & Pride","Tail Clamped Down — Fear or Pain","Tail Swishing — Irritation or Flies","Rapid Tail Swinging — Annoyance","Tail Carried to One Side — Relaxed Walking","Tail Raised During Running — Energy","Tail Wringing — Stress or Resistance","Foal Tail Wagging — Nursing Signal","Tail Flagging — Arabian Horse Display","Donkey & Mule Tail Differences","Zebra Tail — Fly Swatting Communication","Grooming & Tail Care","Tail Docking Controversy","Horse Tail Checkpoint"]],
+      [6,"Wolf & Wild Canine Tails",["Wolf Pack Hierarchy Through Tails","Alpha Wolf — Tail Held High","Submissive Wolf — Tail Low","Omega Wolf — Tail Tucked","Tail Wagging in Wolves — Play Invitation","Hunting Formation — Tail Signals","Fox Tail — The Brush","Fox Tail as Blanket & Balance","Coyote Tail Language","African Wild Dog Tails","Dingo Tail Behavior","Jackal Tail Signals","Hyena Tails — Not Canines But Similar","Pack Communication vs Solo Signals","Wild Canine Checkpoint"]],
+      [7,"Primate Tails",["Do All Primates Have Tails?","Prehensile Tails — Grabbing & Hanging","Spider Monkey — Tail as Fifth Limb","Howler Monkey Tail","Capuchin Monkey Tail Use","Ring-Tailed Lemur — Stink Fights","Lemur Tail Signals — Dominance & Territory","Baboon Tail Position — Social Status","Macaque Tail Language","New World vs Old World Monkey Tails","Why Apes Lost Their Tails","Tail Curling — Mood Indicators","Baby Monkeys Holding Mother by Tail","Tail Injuries & Social Impact","Primate Tail Checkpoint"]],
+      [8,"Reptile Tail Language",["Lizard Tail Communication","Iguana Tail Whip — Defense","Gecko Tail Waving — Distraction","Bearded Dragon Tail Position","Chameleon Tail — Grip & Mood","Crocodile Tail — Powerful Weapon","Alligator Tail Slap — Warning","Snake Body Language (No Legs, All Tail)","Rattlesnake Rattle — Tail Warning","Turtle & Tortoise Tails","Komodo Dragon Tail","Skink Tail Drop — Autotomy","Tail Regrowth — How It Works","Dinosaur Tail Communication Theories","Reptile Tail Checkpoint"]],
+      [9,"Bird Tail Language",["Why Birds Have Tail Feathers","Peacock Tail Display — Attraction","Turkey Tail Fan — Dominance","Robin Tail Flick — Alarm","Wagtail — Constant Tail Bobbing","Parrot Tail Fanning — Excitement","Hawk Tail Fanning — Soaring Control","Woodpecker Tail — Bracing Tool","Hummingbird Tail — Steering","Penguin Tail — Prop for Standing","Rooster Tail — Morning Display","Lyrebird — Mimicry & Tail Show","Magpie Long Tail — Balance & Display","Tail Feather Molting — Timing","Bird Tail Checkpoint"]],
+      [10,"Fish & Aquatic Tail Language",["Fish Tail Fin — Caudal Fin Anatomy","Betta Fish Tail Flaring — Aggression","Goldfish Tail Patterns","Shark Tail — Speed & Turns","Whale Tail Slap — Communication","Dolphin Tail Walk — Play","Whale Fluke Patterns — ID","Stingray Tail — Defense","Seahorse Tail — Holding On","Lobster Tail Flip — Escape","Crocodile Tail Propulsion","Otter Tail — Rudder & Signal","Beaver Tail Slap — Danger Warning","Manatee Tail — Gentle Giant","Aquatic Tail Checkpoint"]],
+      [11,"Insect & Arthropod Tails",["Do Insects Have Tails?","Scorpion Tail — Venomous Sting","Scorpion Tail Raised — Threat Display","Earwig Pincers — Tail-Like Defense","Dragonfly Abdomen Curling — Mating","Wasp & Bee Stinger — Modified Tail","Silverfish Tail Bristles","Springtail — Jumping Tail Fork","Lobster & Crayfish Tail Flip","Horseshoe Crab Telson","Praying Mantis Abdomen Signals","Caterpillar Tail Horn — Sphinx Moth","Centipede Rear Legs as Tail Mimics","Evolution of Tail-Like Structures","Insect Tail Checkpoint"]],
+      [12,"Farm & Domestic Animal Tails",["Cow Tail — Fly Swatter & Mood","Pig Tail — Curly When Happy","Pig Tail Biting — Stress Sign","Sheep Tail — Docked vs Natural","Goat Tail — Happy Wagging","Chicken Tail — Rooster vs Hen","Duck Tail Waggle","Rabbit Tail — Cotton Tail Flash Warning","Guinea Pig — Tailless Communication","Hamster Tiny Tail","Ferret Tail — Bottle Brush Excitement","Donkey Tail Swishing","Llama & Alpaca Tail Position","Farm Animal Welfare & Tail Docking","Farm Animal Checkpoint"]],
+      [13,"Rodent & Small Mammal Tails",["Squirrel Tail — Flagging & Warning","Squirrel Tail as Umbrella & Blanket","Rat Tail — Thermoregulation","Mouse Tail — Balance Wire","Beaver Tail — Fat Storage & Alarm","Porcupine Tail — Quill Defense","Chipmunk Tail Flick — Alert","Prairie Dog Tail Language","Opossum Tail — Prehensile Grip","Sugar Glider Tail — Steering","Chinchilla Tail — Fur Slip Escape","Muskrat Tail — Swimming Rudder","Jerboa Long Tail — Desert Balance","Naked Mole Rat — Nearly Tailless","Rodent Tail Checkpoint"]],
+      [14,"Marine Mammal Tails",["Whale Flukes — Horizontal Not Vertical","Humpback Whale Tail Breach","Blue Whale Tail — Massive Power","Orca Tail Slap — Stunning Prey","Sperm Whale Tail Dive","Narwhal — Tusk Not Tail","Dolphin Tail Anatomy","Dolphin Tail Walking on Water","Seal & Sea Lion Flippers as Tails","Walrus Hind Flippers","Dugong Tail — Whale-Like Fluke","Sea Otter Tail — Rudder","Manatee Paddle Tail","Whale Tail ID — Photo Cataloging","Marine Mammal Checkpoint"]],
+      [15,"Tail Adaptations & Evolution",["Why Did Tails Evolve?","Tails for Balance — Tree Dwellers","Tails for Swimming — Aquatic Species","Tails for Flying — Birds & Bats","Tails for Defense — Weapons & Armor","Tails for Thermoregulation — Heat Loss","Tails for Fat Storage — Desert Animals","Prehensile Tails — Gripping Evolution","Autotomy — Self-Amputation Survival","Tail Regeneration — Lizards & Salamanders","Vestigial Tails — Leftover Evolution","Convergent Evolution of Tail Functions","Sexual Selection & Tail Display","Tail Loss in Evolution — Apes & Humans","Tail Evolution Checkpoint"]],
+      [16,"Tail Emotions Decoded",["Happy Tails — What Joy Looks Like","Scared Tails — Fear Responses","Angry Tails — Aggression Warning","Playful Tails — Invitation to Fun","Curious Tails — Interest Signals","Submissive Tails — Yielding Position","Dominant Tails — Power Display","Stressed Tails — Anxiety Signs","Hunting Tails — Focus & Stealth","Maternal Tails — Guiding Young","Mating Tails — Courtship Displays","Pain Tails — Injury Signals","Bored Tails — Restless Movement","Reading Multiple Tail Signals Together","Emotions Checkpoint"]],
+      [17,"Tail Myths & Culture",["Mermaids — Mythical Fish Tails","Dragons — Powerful Tails","Devils & Demons — Pointed Tails","Fox Spirits — Kitsune Nine Tails","Monkey King — Sun Wukong","Peacock in Mythology","Ouroboros — Serpent Eating Its Tail","Tail Superstitions Around the World","Black Cat Tail — Good or Bad Luck?","Donkey Tail Party Game Origins","Pigtails — Hair Named After Tails","Coat Tails & Tail Coats","Fairy Tales with Tail Characters","Tail Idioms — Chasing Your Tail","Myths Checkpoint"]],
+      [18,"Studying Tail Behavior",["Ethology — Animal Behavior Science","Jane Goodall & Primate Observation","Field Research — Watching Tails","Lab Research — Controlled Studies","Video Analysis of Tail Movement","Tail Wagging Speed Measurement","Emotional Mapping from Tail Position","Right vs Left Tail Wagging Studies","Dog Tail Wagging Research (2013)","Cat Tail Position Studies","AI & Machine Learning for Animal Behavior","Citizen Science — Recording Tail Data","Wildlife Camera Traps","Ethics in Animal Research","Research Checkpoint"]],
+      [19,"Tail Language at Home",["Reading Your Cat at Home","Reading Your Dog at Home","Reading Your Pet Rabbit","Reading Your Pet Bird","Reading Your Pet Fish","Multi-Pet Household Tail Signals","When Your Pet is Happy — Tail Signs","When Your Pet is Stressed — Tail Signs","When Your Pet is Sick — Tail Changes","Training with Tail Awareness","Bonding Through Understanding Tails","Photographing Your Pet Tail Language","Teaching Kids About Tail Language","Pet Body Language Beyond Tails","Home Pet Checkpoint"]],
+      [20,"Tail Language Mastery",["Cat Tail Review","Dog Tail Review","Big Cat & Wild Canine Review","Horse & Farm Animal Review","Primate & Rodent Review","Reptile & Bird Review","Fish & Marine Mammal Review","Insect & Arthropod Review","Evolution & Adaptation Review","Emotions & Behavior Review","Myths & Culture Review","Research Methods Review","Pet Tail Language Review","The Universal Language of Tails","Tail Language Grand Mastery!"]]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'tl-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('tail-language');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('tail-language');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
