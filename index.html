@@ -198,18 +198,70 @@
     </div>
   </section>
 
-  <!-- Newsletter Signup -->
+  <!-- Subscribe & Ask -->
   <section style="background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);padding:48px 24px;text-align:center;">
     <div style="max-width:500px;margin:0 auto;">
       <div style="font-size:2rem;margin-bottom:8px;">📬</div>
-      <h2 style="color:#fff;font-size:1.5rem;font-weight:800;margin-bottom:6px;">Stay in the Loop!</h2>
-      <p style="color:rgba(255,255,255,.8);font-size:.9rem;margin-bottom:20px;line-height:1.5;">Get new courses, features, and learning tips from Mathagram. No spam — just education.</p>
-      <form id="newsletterForm" style="display:flex;gap:8px;max-width:420px;margin:0 auto;" onsubmit="return submitNewsletter(event)">
-        <input type="email" id="nlEmail" placeholder="your@email.com" required style="flex:1;padding:12px 16px;font-size:.95rem;border:none;border-radius:10px;font-family:inherit;outline:none;">
-        <button type="submit" style="padding:12px 24px;font-size:.9rem;font-weight:700;background:#fbbf24;color:#1e293b;border:none;border-radius:10px;cursor:pointer;white-space:nowrap;">Subscribe</button>
-      </form>
-      <div id="nlMsg" style="margin-top:12px;font-size:.82rem;color:rgba(255,255,255,.9);display:none;"></div>
-      <p style="color:rgba(255,255,255,.5);font-size:.65rem;margin-top:12px;">By subscribing you agree to receive emails from Mathagram. Unsubscribe anytime.</p>
+      <h2 style="color:#fff;font-size:1.5rem;font-weight:800;margin-bottom:6px;">Subscribe &amp; Ask a Question!</h2>
+      <p style="color:rgba(255,255,255,.8);font-size:.9rem;margin-bottom:20px;line-height:1.5;">Get updates from Mathagram or send us a question. We read every message!</p>
+
+      <!-- Shown when logged in -->
+      <div id="subscribeForm" style="display:none;">
+        <form action="https://formsubmit.co/rashidrehaan6@gmail.com" method="POST" style="display:flex;flex-direction:column;gap:10px;max-width:420px;margin:0 auto;">
+          <input type="hidden" name="_subject" value="New Mathagram Subscriber / Question">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://mathagram.org/index.html">
+          <input type="email" name="email" placeholder="your@email.com" required style="padding:12px 16px;font-size:.95rem;border:none;border-radius:10px;font-family:inherit;outline:none;">
+          <textarea name="message" placeholder="Ask a question or just say hi! (optional)" rows="3" style="padding:12px 16px;font-size:.9rem;border:none;border-radius:10px;font-family:inherit;outline:none;resize:vertical;"></textarea>
+          <button type="submit" style="padding:12px 24px;font-size:.95rem;font-weight:700;background:#fbbf24;color:#1e293b;border:none;border-radius:12px;cursor:pointer;white-space:nowrap;transition:all 0.2s;">Subscribe</button>
+        </form>
+      </div>
+
+      <!-- Shown when NOT logged in -->
+      <div id="subscribeLogin" style="display:none;">
+        <p style="color:rgba(255,255,255,.9);font-size:.95rem;margin-bottom:16px;">Please log in to subscribe and ask questions.</p>
+        <a href="login.html" style="display:inline-block;padding:12px 32px;font-size:.95rem;font-weight:700;background:#fbbf24;color:#1e293b;border:none;border-radius:12px;text-decoration:none;transition:all 0.2s;">Log In to Subscribe</a>
+      </div>
+
+      <p style="color:rgba(255,255,255,.5);font-size:.65rem;margin-top:12px;">Your message goes directly to Rehaan Rashid. No spam — just education.</p>
+    </div>
+  </section>
+
+  <!-- About This Website -->
+  <section style="max-width:900px;margin:0 auto;padding:48px 24px 64px;">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:16px;text-align:center;">About Mathagram.org</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+        <div>
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;">What is Mathagram?</h3>
+          <p style="font-size:.9rem;color:#64748b;line-height:1.7;">Mathagram is a <strong>100% free</strong> online learning platform built by <strong>Rehaan Rashid</strong>. It offers interactive courses in math, science, programming, languages, and more — with AI-powered quizzes, voice characters, and a Duolingo-style learning path. No ads, no paywalls.</p>
+        </div>
+        <div>
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;">Website Details</h3>
+          <ul style="font-size:.88rem;color:#64748b;line-height:2;list-style:none;padding:0;margin:0;">
+            <li><strong>Domain:</strong> mathagram.org</li>
+            <li><strong>Founded:</strong> 2026</li>
+            <li><strong>Creator:</strong> Rehaan Rashid</li>
+            <li><strong>Hosting:</strong> Netlify</li>
+            <li><strong>Backend:</strong> Firebase (Auth & Firestore)</li>
+            <li><strong>Cost:</strong> Free for all users</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;">By the Numbers</h3>
+          <ul style="font-size:.88rem;color:#64748b;line-height:2;list-style:none;padding:0;margin:0;">
+            <li><strong>50+</strong> courses available</li>
+            <li><strong>10,000+</strong> lessons</li>
+            <li><strong>28+</strong> languages</li>
+            <li><strong>8</strong> AI voice characters</li>
+            <li><strong>6</strong> exercise types</li>
+            <li><strong>100%</strong> free, forever</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:center;">
+        <p style="font-size:.82rem;color:#94a3b8;">mathagram.org &mdash; Education for everyone, everywhere.</p>
+      </div>
     </div>
   </section>
 
@@ -235,12 +287,19 @@
   <!-- Scripts -->
   <script type="module">
     import { initNav } from './js/nav.js';
+    import { onAuthChange } from './js/auth.js';
     initNav('');
     import { initLoadingAnimation } from './js/lighthouse.js';
     import { initRitaChat } from './js/rita-chat.js';
     initLoadingAnimation();
     initRitaChat('');
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Show subscribe form only when logged in
+    onAuthChange((user) => {
+      document.getElementById('subscribeForm').style.display = user ? 'block' : 'none';
+      document.getElementById('subscribeLogin').style.display = user ? 'none' : 'block';
+    });
 
     // Register service worker for PWA
     if ('serviceWorker' in navigator) {
