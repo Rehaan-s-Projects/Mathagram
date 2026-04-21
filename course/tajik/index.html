@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tajik — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Tajik</h1>
+    <p>Learn Tajik (Tojiki) — the official language of Tajikistan. A Persian dialect written in Cyrillic script. Greetings, grammar, vocabulary, culture, and conversation. 20 units, 300 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,"Basics & Greetings",["What Is Tajik?","Tajik vs Farsi vs Dari","Cyrillic Script for Tajik","The Tajik Alphabet — 35 Letters","Vowels in Tajik","Consonants in Tajik","Greeting — Salom (Hello)","How Are You? — Shomo chi hel?","Thank You — Rahmat","Yes & No — Ha va Ne","Please — Lutfan","Goodbye — Xayr","My Name Is — Nomi man...","Nice to Meet You","Basics Checkpoint"]],
+      [2,"Pronunciation & Script",["Reading Cyrillic Letters","Letters Unique to Tajik","Short vs Long Vowels","Stress Patterns","Pronouncing Consonant Clusters","Writing Your Name in Cyrillic","Handwriting Practice","Typing in Tajik","Common Letter Combinations","Silent Letters","Loanwords from Russian","Loanwords from Arabic","Sound Changes in Speech","Pronunciation Drills","Script Checkpoint"]],
+      [3,"Numbers & Counting",["Numbers 1-10","Numbers 11-20","Numbers 21-100","Numbers 100-1000","Ordinal Numbers — First, Second","Telling Time — Soat chand?","Days of the Week","Months of the Year","Seasons","Calendar & Dates","Prices & Money — Somoni","Counting Objects","Phone Numbers","Math Vocabulary","Numbers Checkpoint"]],
+      [4,"Everyday Vocabulary",["Family Members","Body Parts","Colors","Animals","Food & Drink","Fruits & Vegetables","Clothing","Home & Furniture","School & Education","Weather","City & Directions","Transportation","Jobs & Occupations","Daily Routine","Vocabulary Checkpoint"]],
+      [5,"Basic Grammar",["Subject Pronouns — Man, Tu, U","Verb Infinitives","Present Tense — Budan (To Be)","Present Tense — Doshtun (To Have)","Sentence Word Order — SOV","Negation — Ne","Question Formation","Adjective Placement — Before Noun","Ezafe Construction","Plural Forms — Ho","Possessive Markers","Demonstratives — In, On","Prepositions","Postpositions","Grammar Basics Checkpoint"]],
+      [6,"Present Tense Verbs",["Verb Stems — Present & Past","Conjugation Patterns","Kardan — To Do","Raftan — To Go","Omadan — To Come","Khondan — To Read","Navishtan — To Write","Guftun — To Say","Khordan — To Eat","Nushidan — To Drink","Didon — To See","Shunidan — To Hear","Donistun — To Know","Irregular Verbs","Present Tense Checkpoint"]],
+      [7,"Past Tense",["Simple Past Formation","Past Tense of Budan","Past Tense of Kardan","Past Tense of Raftan","Past Tense Negative","Past Continuous","Present Perfect — ...Ast","Past Perfect","Time Expressions — Diruz, Porsol","Telling Stories in Past","Irregular Past Forms","Question in Past Tense","Short Answers","Past Tense Practice","Past Tense Checkpoint"]],
+      [8,"Food & Restaurant",["Tajik Cuisine Overview","Osh — National Dish (Plov)","Qurutob — Bread & Yogurt","Sambusa — Meat Pastry","Non — Tajik Bread","Tea Culture — Choy","Ordering Food","At the Restaurant — Menu","Asking for the Bill","Food Preferences — I Like","Cooking Vocabulary","Spices & Ingredients","Market Shopping","Recipes in Tajik","Food Checkpoint"]],
+      [9,"Shopping & Market",["At the Bazaar","Asking Prices — In chand ast?","Bargaining — Kam kuned","Clothing Shopping","Grocery Shopping","Electronics & Goods","Sizes & Measurements","Too Expensive — Qimat ast","I Want to Buy — Man mekhohum","Payment — Cash & Card","Receipt — Kvitansiya","Returning Items","Market Etiquette","Common Shopping Phrases","Shopping Checkpoint"]],
+      [10,"Travel & Directions",["Where Is...? — ...Ku ast?","Left, Right, Straight — Chap, Rost, Rast","Near & Far — Nazdik, Dur","At the Airport","At the Hotel","Taxi & Transportation","Train & Bus","Asking for Help","Tourist Vocabulary","Visiting Dushanbe","Visiting Khujand","Pamir Highway","Mountain Vocabulary","Travel Safety Phrases","Travel Checkpoint"]],
+      [11,"Home & Daily Life",["My House — Honai Man","Rooms of the House","Morning Routine","Afternoon Activities","Evening & Night","Household Chores","Cooking at Home","Watching TV","Using the Phone","Visiting Neighbors","Inviting Guests","Tajik Hospitality — Mehmonnavozi","Weekend Activities","Hobbies & Free Time","Daily Life Checkpoint"]],
+      [12,"Work & Education",["School System in Tajikistan","University — Donishgoh","Subjects & Classes","Teacher & Student","My Job — Kori Man","Office Vocabulary","Computer & Internet","Writing a Letter","Formal vs Informal Register","Job Interview Basics","Salary & Payment","Work Schedule","Colleagues & Teamwork","Career Goals","Work Checkpoint"]],
+      [13,"Health & Body",["Doctor Visit — Nazdi Tabib","I Am Sick — Man bemoram","Body Parts Review","Common Illnesses","Pharmacy — Dorukhona","Medicine Vocabulary","Emergency — Yori!","Hospital — Bemoriston","Dentist","Eye Doctor","Healthy Lifestyle","Exercise & Sports","Mental Health Vocabulary","First Aid","Health Checkpoint"]],
+      [14,"Culture & Traditions",["Tajik Identity & History","Navruz — Persian New Year","Wedding Traditions","Funeral Customs","Music — Shashmaqam","Traditional Dance","Tajik Poetry — Rudaki, Hafiz","Silk Road Heritage","Islam in Tajikistan","Soviet Legacy","Traditional Clothing — Chapan, Atlas","Handicrafts & Embroidery","Festivals & Holidays","Tajik Proverbs","Culture Checkpoint"]],
+      [15,"Nature & Geography",["Tajikistan Geography","Pamir Mountains — Roof of the World","Fann Mountains","Lakes — Iskanderkul, Karakul","Rivers — Vakhsh, Panj","Climate & Seasons","Flora & Fauna","National Parks","Agriculture — Cotton, Fruits","Water Resources","Environmental Issues","Earthquake Preparedness","Camping Vocabulary","Nature Photography","Nature Checkpoint"]],
+      [16,"Advanced Grammar",["Future Tense — Mekhohum + Verb","Subjunctive Mood","Conditional — Agar","Passive Voice","Causative Verbs","Compound Verbs","Relative Clauses — Ki","Conjunctions — Va, Ammo, Chunki","Reported Speech","Comparative — -Tar","Superlative — -Tarin","Adverbs of Manner","Formal Written Tajik","Grammar Exceptions","Advanced Grammar Checkpoint"]],
+      [17,"Media & Technology",["Tajik News Sources","Radio & TV in Tajik","Social Media in Tajikistan","Texting & Chat Language","Tajik Keyboard Setup","Watching Tajik Films","Tajik Music — Modern & Traditional","Podcasts in Tajik","Reading Tajik Websites","Online Shopping in Tajikistan","Tech Vocabulary","App & Software Terms","Gaming Vocabulary","Digital Literacy","Media Checkpoint"]],
+      [18,"Conversation Practice",["Introducing Yourself — Extended","Talking About Family","Discussing Weather","Making Plans","Giving Opinions","Agreeing & Disagreeing","Compliments & Responses","Apologizing","Phone Conversations","Formal Meetings","Small Talk — Gapzani","Debate & Discussion","Storytelling","Humor & Jokes in Tajik","Conversation Checkpoint"]],
+      [19,"Reading & Writing",["Reading Tajik Newspapers","Reading Short Stories","Reading Poetry — Ghazal, Ruboiy","Understanding Formal Documents","Writing a Letter — Formal","Writing a Letter — Informal","Writing an Essay","Writing a Resume — CV","Reading Signs & Notices","Menu Reading","Contract & Agreement Terms","Proverbs & Idioms Collection","Tongue Twisters","Creative Writing","Reading & Writing Checkpoint"]],
+      [20,"Tajik Mastery",["Basics & Script Review","Numbers & Vocabulary Review","Grammar Review","Tenses Review","Food & Shopping Review","Travel & Directions Review","Daily Life & Work Review","Health & Culture Review","Nature & Geography Review","Advanced Grammar Review","Media & Conversation Review","Reading & Writing Review","Tajik in the World Today","Your Tajik Journey","Tajik Grand Mastery!"]]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'tj-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('tajik');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('tajik');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
