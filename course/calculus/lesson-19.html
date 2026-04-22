@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -90,90 +91,84 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'multiple-choice',
-        question: 'In the \\varepsilon-\\delta definition, \\varepsilon controls:',
-        options: [
-          'The closeness of x to a',
-          'The closeness of f(x) to L',
-          'The slope of f',
-          'Whether f is continuous'
-        ],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'And \\delta controls:',
-        options: [
-          'The closeness of x to a',
-          'The closeness of f(x) to L',
-          'The derivative',
-          'The integral'
-        ],
-        correctIndex: 0 },
-      { type: 'true-false',
-        question: 'The condition 0 < |x - a| intentionally excludes x = a from the definition.',
-        correctAnswer: true },
-      { type: 'multiple-choice',
-        question: 'To prove lim x\\to2 of (3x+1) = 7, the smallest \\delta that works for a given \\varepsilon is:',
-        options: [
-          '\\delta = \\varepsilon',
-          '\\delta = \\varepsilon/3',
-          '\\delta = 3\\varepsilon',
-          '\\delta = \\varepsilon^2'
-        ],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'For every \\varepsilon > 0 there is a different \\delta that works.',
-        correctAnswer: true },
-      { type: 'fill-blank',
-        question: 'For lim x\\to4 of (2x-1) = 7, pick \\delta = \\varepsilon/___.',
-        answer: '2' },
-      { type: 'multiple-choice',
-        question: '|x - a| < \\delta is equivalent to:',
-        options: [
-          'x = a',
-          'x \\in (a-\\delta,\\ a+\\delta)',
-          'x \\in [a, a+\\delta]',
-          'x > a'
-        ],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'If lim x\\toa of f(x) = L, which statement is TRUE?',
-        options: [
-          'f(a) must equal L.',
-          'For any \\varepsilon > 0, some \\delta forces |f(x)-L| < \\varepsilon whenever 0 < |x-a| < \\delta.',
-          'The function must be differentiable at a.',
-          'f must be a polynomial.'
-        ],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'If a single \\delta works for a specific \\varepsilon, any smaller \\delta also works.',
-        correctAnswer: true },
-      { type: 'multiple-choice',
-        question: 'What does the negation "lim x\\toa of f(x) \\ne L" mean?',
-        options: [
-          'There exists some \\varepsilon > 0 for which no \\delta works.',
-          'Every \\varepsilon fails.',
-          'f is discontinuous.',
-          'a is not in the domain.'
-        ],
-        correctIndex: 0 },
-      { type: 'fill-blank',
-        question: 'For lim x\\to5 of (4x) = 20, a valid choice is \\delta = \\varepsilon/___.',
-        answer: '4' },
-      { type: 'true-false',
-        question: 'The \\varepsilon-\\delta definition requires f to be defined at a.',
-        correctAnswer: false }
+            const exercises = [
+      {
+        type: 'multiple-choice',
+        question: '\\(\\varepsilon\\) controls:',
+        options: ['Closeness of \\(x\\) to \\(a\\)', 'Closeness of \\(f(x)\\) to \\(L\\)', 'Slope', 'Continuity'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\delta\\) controls:',
+        options: ['Closeness of \\(x\\) to \\(a\\)', 'Closeness of \\(f(x)\\) to \\(L\\)', 'Derivative', 'Integral'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: '\\(0<|x-a|\\) excludes \\(x=a\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'For \\(\\lim_{x\\to 2}(3x+1)=7\\), pick:',
+        options: ['\\(\\delta=\\varepsilon\\)', '\\(\\delta=\\varepsilon/3\\)', '\\(\\delta=3\\varepsilon\\)', '\\(\\delta=\\varepsilon^2\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'For every \\(\\varepsilon>0\\) there is a \\(\\delta\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'For \\(\\lim_{x\\to 4}(2x-1)=7\\), pick \\(\\delta=\\varepsilon/\\)___.',
+        answer: '2'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(|x-a|<\\delta\\) means:',
+        options: ['\\(x=a\\)', '\\(x\\in(a-\\delta,a+\\delta)\\)', '\\(x\\in[a,a+\\delta]\\)', '\\(x>a\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'If \\(\\lim_{x\\to a}f(x)=L\\), which is TRUE?',
+        options: ['\\(f(a)\\) must equal \\(L\\)', 'For any \\(\\varepsilon>0\\), some \\(\\delta\\) works', '\\(f\\) differentiable', '\\(f\\) polynomial'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'Smaller \\(\\delta\\) also works.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Negation means:',
+        options: ['Some \\(\\varepsilon>0\\) has no working \\(\\delta\\)', 'Every \\(\\varepsilon\\) fails', 'Discontinuous', '\\(a\\) not in domain'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: 'For \\(\\lim_{x\\to 5}(4x)=20\\), pick \\(\\delta=\\varepsilon/\\)___.',
+        answer: '4'
+      },
+      {
+        type: 'true-false',
+        question: 'The definition requires \\(f\\) defined at \\(a\\).',
+        correctAnswer: false
+      }
     ];
 
     const container = document.getElementById('exercises');

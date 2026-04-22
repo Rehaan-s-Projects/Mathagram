@@ -47,7 +47,7 @@ export function renderPath(container, lessons, completedIds = new Set()) {
       }
       currentUnit = lesson.unit;
       lessonNumInUnit = 0;
-      const categoryLabels = { math: 'Math', science: 'Science', data: 'Data Analysis', logic: 'Logic', language: 'Language', others: 'Others' };
+      const categoryLabels = { math: 'Math', science: 'Science', data: 'Data Analysis', logic: 'Logic', language: 'Language', programming: 'Programming & CS', others: 'Others' };
       const categoryLabel = categoryLabels[lesson.category] || lesson.category || '';
       const header = document.createElement('div');
       header.className = 'path-unit-header';

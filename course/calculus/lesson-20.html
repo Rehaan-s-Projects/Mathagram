@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -91,69 +92,83 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'multiple-choice',
-        question: 'To prove lim x\\to1 of (4x+2) = 6, a valid choice is:',
-        options: ['\\delta = \\varepsilon', '\\delta = \\varepsilon/4', '\\delta = 4\\varepsilon', '\\delta = \\varepsilon^2'],
-        correctIndex: 1 },
-      { type: 'fill-blank',
-        question: 'For lim x\\to0 of (7x) = 0, choose \\delta = \\varepsilon/___.',
-        answer: '7' },
-      { type: 'true-false',
-        question: 'In proving a nonlinear limit, it is common to restrict \\delta \≤ 1 first to bound a troublesome factor.',
-        correctAnswer: true },
-      { type: 'multiple-choice',
-        question: 'In the proof of lim x\\to3 of x^2 = 9, we factored |x^2-9| as:',
-        options: ['|x - 3|^2', '|x-3|\ |x+3|', '|x+3|^2', '|x^2| - 9'],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'What value of \\delta works for lim x\\to3 of x^2 = 9 given \\varepsilon > 0?',
-        options: ['\\min(1,\\ \\varepsilon/7)', '\\varepsilon', '\\varepsilon/3', '\\varepsilon^2'],
-        correctIndex: 0 },
-      { type: 'true-false',
-        question: 'For lim x\\toa of c = c, any \\delta > 0 works.',
-        correctAnswer: true },
-      { type: 'fill-blank',
-        question: 'To prove lim x\\to-2 of (5x+4) = -6, choose \\delta = \\varepsilon/___.',
-        answer: '5' },
-      { type: 'multiple-choice',
-        question: 'Which step is NOT part of a formal \\varepsilon-\\delta proof?',
-        options: [
-          'Let \\varepsilon > 0 be arbitrary.',
-          'Compute the derivative of f.',
-          'Choose a specific \\delta depending on \\varepsilon.',
-          'Verify the implication 0 < |x-a| < \\delta \\Rightarrow |f(x)-L| < \\varepsilon.'
-        ],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'If a \\delta works for \\varepsilon, the same \\delta also works for any smaller \\varepsilon.',
-        correctAnswer: false },
-      { type: 'fill-blank',
-        question: 'In lim x\\to3 of x^2 = 9, bounding |x+3| < ___ when |x-3| < 1 is the key step.',
-        answer: '7' },
-      { type: 'multiple-choice',
-        question: 'Which of these is a valid choice of \\delta for lim x\\to0 of x^2 = 0?',
-        options: ['\\delta = \\varepsilon', '\\delta = \\sqrt(\\varepsilon)', '\\delta = 2\\varepsilon', '\\delta = \\varepsilon^2'],
-        correctIndex: 1 },
-      { type: 'matching',
-        question: 'Match each limit to a working \\delta.',
-        pairs: [
-          { left: 'lim x\\to1 of 2x = 2', right: '\\delta = \\varepsilon/2' },
-          { left: 'lim x\\to5 of 3x = 15', right: '\\delta = \\varepsilon/3' },
-          { left: 'lim x\\to0 of c = c', right: 'any \\delta > 0' },
-          { left: 'lim x\\to3 of x^2 = 9', right: '\\min(1, \\varepsilon/7)' }
-        ] }
+            const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'For \\(\\lim_{x\\to 1}(4x+2)=6\\), pick:',
+        options: ['\\(\\delta=\\varepsilon\\)', '\\(\\delta=\\varepsilon/4\\)', '\\(\\delta=4\\varepsilon\\)', '\\(\\delta=\\varepsilon^2\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'For \\(\\lim_{x\\to 0}(7x)=0\\), choose \\(\\delta=\\varepsilon/\\)___.',
+        answer: '7'
+      },
+      {
+        type: 'true-false',
+        question: 'Restricting \\(\\delta\\le 1\\) first is common for nonlinear limits.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'We factor \\(|x^2-9|\\) as:',
+        options: ['\\(|x-3|^2\\)', '\\(|x-3|\\cdot|x+3|\\)', '\\(|x+3|^2\\)', '\\(|x^2|-9\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Working \\(\\delta\\) for \\(\\lim_{x\\to 3}x^2=9\\):',
+        options: ['\\(\\min(1,\\varepsilon/7)\\)', '\\(\\varepsilon\\)', '\\(\\varepsilon/3\\)', '\\(\\varepsilon^2\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'For \\(\\lim_{x\\to a}c=c\\), any \\(\\delta>0\\) works.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'For \\(\\lim_{x\\to -2}(5x+4)=-6\\), choose \\(\\delta=\\varepsilon/\\)___.',
+        answer: '5'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'NOT part of an \\(\\varepsilon\\)-\\(\\delta\\) proof:',
+        options: ['Let \\(\\varepsilon>0\\)', 'Compute the derivative', 'Choose \\(\\delta\\)', 'Verify implication'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(\\delta\\) works for \\(\\varepsilon\\), it works for smaller \\(\\varepsilon\\).',
+        correctAnswer: false
+      },
+      {
+        type: 'fill-blank',
+        question: 'Bounding \\(|x+3|<\\) ___ when \\(|x-3|<1\\).',
+        answer: '7'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Valid \\(\\delta\\) for \\(\\lim_{x\\to 0}x^2=0\\):',
+        options: ['\\(\\varepsilon\\)', '\\(\\sqrt{\\varepsilon}\\)', '\\(2\\varepsilon\\)', '\\(\\varepsilon^2\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'matching',
+        question: 'Match limit to \\(\\delta\\).',
+        pairs: [{ left: '\\(\\lim 2x=2\\) at \\(x=1\\)', right: '\\(\\varepsilon/2\\)' }, { left: '\\(\\lim 3x=15\\) at \\(x=5\\)', right: '\\(\\varepsilon/3\\)' }, { left: '\\(\\lim c=c\\)', right: 'any \\(\\delta>0\\)' }, { left: '\\(\\lim x^2=9\\) at \\(x=3\\)', right: '\\(\\min(1,\\varepsilon/7)\\)' }]
+      }
     ];
 
     const container = document.getElementById('exercises');

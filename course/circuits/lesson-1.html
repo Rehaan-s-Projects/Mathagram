@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -94,14 +95,14 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 

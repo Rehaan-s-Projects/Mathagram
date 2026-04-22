@@ -613,9 +613,27 @@
 
     // Brain Scan
     let scanRunning = false;
+
+    // Prevent back navigation during scan
+    function lockBack() {
+      history.pushState({ brainScan: true }, '');
+    }
+    function onPopState(e) {
+      if (scanRunning) {
+        // Push state again to block leaving
+        history.pushState({ brainScan: true }, '');
+      }
+    }
+    window.addEventListener('popstate', onPopState);
+
     window.startBrainScan = async function() {
       if (scanRunning) return;
       scanRunning = true;
+      lockBack();
+
+      // Block page unload during scan
+      function blockUnload(e) { e.preventDefault(); e.returnValue = ''; }
+      window.addEventListener('beforeunload', blockUnload);
       const label = document.getElementById('brain-scan-label');
       const sub = document.getElementById('brain-scan-sub');
       const results = document.getElementById('brain-results');
@@ -785,7 +803,7 @@
         'mind-bending-math':['Mind-Bending Math','#ec4899','&#129504;','Prefrontal — Creativity'],
         'beyond-arithmetic':['Beyond Arithmetic','#eab308','&#8734;','Deep Logic Cortex'],
         'math-history':['Math History','#a855f7','&#128218;','Hippocampus — Memory'],
-        'animals':['Animals','#22c55e','&#128062;','Visual Cortex — Recognition'],
+        'animals':['Animals & Plants','#22c55e','&#127793;','Visual Cortex — Recognition'],
         'circuits':['Circuits','#f59e0b','&#9889;','Motor Cortex — Building'],
         'english-grammar':['English','#3b82f6','&#128221;','Broca Area — Language'],
         'catalan':['Catalan','#ec4899','&#127466;','Wernicke Area — Language'],
@@ -816,6 +834,15 @@
         'board-games':['Board Games','#eab308','&#127922;','Strategy Cortex'],
         'how-much-storage':['How Much Storage','#64748b','&#128190;','Memory — Data Recall'],
         'digital-circuits':['Digital Circuits','#f59e0b','&#128187;','Motor Cortex — Building'],
+        'vids':['Vids','#ec4899','&#127909;','Visual Cortex — Media Production'],
+        'unity':['What Is Unity?','#06b6d4','&#127918;','Motor Cortex — Game Dev'],
+        'blender':['What Is Blender?','#f97316','&#127912;','Visual Cortex — 3D Creation'],
+        'python-programming':['Python Programming','#8b5cf6','&#128013;','Frontal Lobe — Coding'],
+        'web-development':['Web Development','#8b5cf6','&#127760;','Frontal Lobe — Web Building'],
+        'computer-science':['Computer Science','#8b5cf6','&#128187;','Frontal Lobe — CS Fundamentals'],
+        'cybersecurity':['Cybersecurity','#8b5cf6','&#128274;','Prefrontal — Security Thinking'],
+        'artificial-intelligence':['Artificial Intelligence','#8b5cf6','&#129302;','Prefrontal — AI & ML'],
+        'pathogens':['Pathogens','#22c55e','&#129440;','Memory — Disease & Immunity'],
         'algorithmic':['Algorithmic','#8b5cf6','&#129504;','Frontal Lobe — Logic & CS'],
       };
 
@@ -940,7 +967,10 @@
         }
       } catch(e) { console.error('IQ history error:', e); }
 
-      setTimeout(() => { scanRunning = false; }, 3000);
+      setTimeout(() => {
+        scanRunning = false;
+        window.removeEventListener('beforeunload', blockUnload);
+      }, 3000);
     };
   </script>
   <style>

@@ -235,10 +235,21 @@
   <div id="emailCard" style="display:none;background:var(--color-white);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:18px 20px;margin-bottom:20px;">
     <h3 style="font-size:1rem;font-weight:700;margin-bottom:10px;">📧 Your School Account</h3>
     <div style="background:var(--color-bg);border-radius:var(--radius);padding:12px 16px;font-family:monospace;font-size:1rem;color:var(--color-primary-dark);margin-bottom:8px;word-break:break-all;" id="schoolEmail">—@Mgramschools.net</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
       <button onclick="copyEmail()" style="padding:6px 14px;font-size:.78rem;font-weight:600;border:2px solid var(--color-border);border-radius:var(--radius);cursor:pointer;background:var(--color-white);font-family:inherit;">📋 Copy Email</button>
       <span id="copyMsg" style="font-size:.75rem;color:#22c55e;font-weight:600;display:none;align-self:center;">Copied!</span>
     </div>
+
+    <!-- Google Account Link -->
+    <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1px solid #7dd3fc;border-radius:10px;padding:14px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <span style="font-weight:700;font-size:.88rem;color:#0c4a6e;">Google Account Linked</span>
+      </div>
+      <div id="googleAccountEmail" style="font-size:.85rem;color:#0369a1;font-family:monospace;margin-bottom:6px;">Loading...</div>
+      <p style="font-size:.72rem;color:#64748b;margin:0;line-height:1.4;">Your Mathagram Schools email is linked to this Google account. Use your Google login to access school features, Google Classroom integration, and cloud storage.</p>
+    </div>
+
     <p style="font-size:.72rem;color:var(--color-text-muted);margin-top:8px;">Student ID: <span id="studentId">—</span> · Grade: <span id="emailGrade">—</span> · <a href="school-account.html" style="color:#3b82f6;text-decoration:underline;">View Full Account →</a></p>
   </div>
 
@@ -294,6 +305,59 @@
     </div>
   </div>
 
+  <!-- Travel Section — Log Out -->
+  <div style="background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border:2px solid #f59e0b;border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;text-align:center;">
+    <img src="assets/characters/gosia.svg" alt="Ms. Gosia" style="width:64px;height:64px;border-radius:50%;border:3px solid #f59e0b;margin-bottom:12px;">
+    <h3 style="font-size:1.1rem;font-weight:800;color:#92400e;margin-bottom:6px;">✈️ Travel & Leave School</h3>
+    <p id="gosiaGoodbye" style="font-size:.9rem;color:#78350f;line-height:1.6;margin-bottom:16px;font-style:italic;">"Planning to go somewhere? Make sure your parents know! Let me know how long you'll be away."</p>
+
+    <!-- Parent confirmation -->
+    <div id="parentCheck" style="background:rgba(255,255,255,.6);border:1px solid #d97706;border-radius:12px;padding:16px;margin-bottom:16px;text-align:left;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.88rem;color:#78350f;line-height:1.5;">
+        <input type="checkbox" id="parentApproval" style="width:20px;height:20px;accent-color:#f59e0b;margin-top:2px;flex-shrink:0;">
+        <span><strong>I have told my parents/guardians</strong> that I am planning to take a break or leave Mathagram. They are aware of my decision.</span>
+      </label>
+    </div>
+
+    <!-- Travel options (hidden until checkbox is checked) -->
+    <div id="travelOptions" style="display:none;">
+      <p style="font-size:.82rem;color:#92400e;font-weight:700;margin-bottom:12px;">How long will you be away?</p>
+
+      <!-- Temporary -->
+      <div style="background:rgba(255,255,255,.7);border:1px solid #d97706;border-radius:12px;padding:16px;margin-bottom:12px;text-align:left;">
+        <h4 style="font-size:.95rem;font-weight:800;color:#92400e;margin-bottom:6px;">🏖️ Temporary Vacation</h4>
+        <p style="font-size:.82rem;color:#78350f;line-height:1.5;margin-bottom:12px;">Take a break — your progress, XP, and lessons will be saved. Gosia will welcome you back when you return!</p>
+        <select id="vacationDuration" style="padding:8px 12px;font-size:.85rem;border:1px solid #d97706;border-radius:8px;background:#fff;font-family:inherit;margin-bottom:10px;width:100%;">
+          <option value="1">1 day — Quick break</option>
+          <option value="3">3 days — Short trip</option>
+          <option value="7" selected>1 week — Family vacation</option>
+          <option value="14">2 weeks — Extended trip</option>
+          <option value="30">1 month — Long vacation</option>
+        </select>
+        <button onclick="temporaryLeave()" style="padding:10px 24px;font-size:.88rem;font-weight:700;background:#f59e0b;color:#fff;border:none;border-radius:10px;cursor:pointer;width:100%;">
+          🏖️ Start Vacation & Log Out
+        </button>
+      </div>
+
+      <!-- Permanent -->
+      <div style="background:rgba(239,68,68,.05);border:1px solid #fca5a5;border-radius:12px;padding:16px;text-align:left;">
+        <h4 style="font-size:.95rem;font-weight:800;color:#dc2626;margin-bottom:6px;">🚪 Leave Permanently</h4>
+        <p style="font-size:.82rem;color:#7f1d1d;line-height:1.5;margin-bottom:8px;">Log out and leave Mathagram. Your account will remain but you won't be active. You can always come back and log in again.</p>
+        <p style="font-size:.75rem;color:#991b1b;margin-bottom:12px;"><strong>Note:</strong> Your streak will reset and you may lose your leaderboard position.</p>
+        <button onclick="permanentLeave()" style="padding:10px 24px;font-size:.88rem;font-weight:700;background:#ef4444;color:#fff;border:none;border-radius:10px;cursor:pointer;width:100%;">
+          🚪 Leave Permanently & Log Out
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick log out (no travel, just going home today) -->
+    <div id="quickLogout" style="margin-top:14px;">
+      <button onclick="logOutSchool()" style="padding:10px 24px;font-size:.85rem;font-weight:600;background:none;border:1px solid #d97706;color:#92400e;border-radius:10px;cursor:pointer;">
+        🚌 Just going home today (quick log out)
+      </button>
+    </div>
+  </div>
+
   <!-- Settings -->
   <div style="text-align:center;margin-bottom:20px;">
     <button onclick="localStorage.clear();location.reload();" style="padding:8px 16px;font-size:.75rem;background:none;border:1px solid var(--color-border);border-radius:var(--radius);cursor:pointer;color:var(--color-text-muted);font-family:inherit;">⚙️ Reset Virtual School Setup</button>
@@ -307,6 +371,123 @@
 </footer>
 
 <script>
+// Gosia goodbye messages — randomized
+var gosiaGoodbyes = [
+  '"Great work today! The school bus is waiting — see you tomorrow!"',
+  '"You did amazing! Go rest your brain — you earned it. Goodbye!"',
+  '"Another day of learning done! I\'m so proud of you. See you next time!"',
+  '"Time to head home! Remember: every lesson makes you smarter. Bye bye!"',
+  '"The bell has rung! Go enjoy your evening — you worked hard today!"',
+  '"Goodbye, scholar! Don\'t forget to review your notes tonight!"',
+  '"School\'s out! You\'re building something incredible — one lesson at a time. See you!"',
+  '"Safe travels home! I\'ll be here tomorrow with more lessons. Goodbye!"',
+  '"What a productive day! Now go relax — you deserve it. See you soon!"',
+  '"Leaving already? That\'s okay — you learned a lot today! Goodbye!"'
+];
+document.getElementById('gosiaGoodbye').textContent = gosiaGoodbyes[Math.floor(Math.random() * gosiaGoodbyes.length)];
+
+// Load Google Account linked to this school email
+async function loadGoogleAccount() {
+  var el = document.getElementById('googleAccountEmail');
+  if (!el) return;
+  try {
+    var config = await import('./js/firebase-config.js');
+    var user = config.auth.currentUser;
+    if (user && user.email) {
+      el.textContent = user.email;
+      // Save link locally
+      localStorage.setItem('vs_google_email', user.email);
+    } else if (localStorage.getItem('vs_google_email')) {
+      el.textContent = localStorage.getItem('vs_google_email');
+    } else {
+      el.textContent = 'Not linked — please log in with Google';
+      el.style.color = '#94a3b8';
+    }
+  } catch(e) {
+    var saved = localStorage.getItem('vs_google_email');
+    el.textContent = saved || 'Not linked';
+  }
+}
+
+// Load Google account on page load if email card is visible
+if (localStorage.getItem('vs_setup') === 'done') {
+  loadGoogleAccount();
+}
+
+// Parent approval checkbox — show travel options when checked
+document.getElementById('parentApproval').addEventListener('change', function() {
+  document.getElementById('travelOptions').style.display = this.checked ? 'block' : 'none';
+  if (this.checked) {
+    document.getElementById('gosiaGoodbye').textContent = '"Your parents are aware — good! Now choose how long you\'ll be away."';
+  } else {
+    document.getElementById('gosiaGoodbye').textContent = '"Please make sure your parents know before you leave. Check the box above!"';
+  }
+});
+
+// Temporary vacation — save return date, log out
+async function temporaryLeave() {
+  var days = parseInt(document.getElementById('vacationDuration').value);
+  var returnDate = new Date();
+  returnDate.setDate(returnDate.getDate() + days);
+  localStorage.setItem('mathagram_vacation_return', returnDate.toISOString());
+  localStorage.setItem('mathagram_vacation_days', days);
+
+  var btn = event.target.closest('button');
+  btn.disabled = true;
+  btn.textContent = '🏖️ Packing your bags...';
+
+  var dayText = days === 1 ? '1 day' : days + ' days';
+  document.getElementById('gosiaGoodbye').textContent = '"Have an amazing ' + dayText + ' vacation! I\'ll be right here waiting for you. Don\'t forget about me! 💜"';
+
+  try {
+    var authMod = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    var config = await import('./js/firebase-config.js');
+    await authMod.signOut(config.auth);
+  } catch(e) {}
+  setTimeout(function() { window.location.href = 'index.html'; }, 2000);
+}
+
+// Permanent leave — log out with farewell
+async function permanentLeave() {
+  if (!confirm('Are you sure you want to leave Mathagram permanently? Your streak will reset. You can always come back and log in again.')) return;
+
+  var btn = event.target.closest('button');
+  btn.disabled = true;
+  btn.textContent = '🚪 Saying goodbye...';
+
+  document.getElementById('gosiaGoodbye').textContent = '"I\'ll miss you so much! Remember — the doors of Mathagram are always open. You\'re welcome back anytime. Goodbye, my dear student! 💜😢"';
+
+  try {
+    var authMod = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    var config = await import('./js/firebase-config.js');
+    // Reset streak in Firestore
+    try {
+      var fireMod = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      var user = config.auth.currentUser;
+      if (user) {
+        await fireMod.updateDoc(fireMod.doc(config.db, 'users', user.uid), { streak: 0 });
+      }
+    } catch(e) {}
+    await authMod.signOut(config.auth);
+  } catch(e) {}
+  localStorage.clear();
+  setTimeout(function() { window.location.href = 'index.html'; }, 2500);
+}
+
+// Log out — Gosia says goodbye, then sign out and redirect (quick)
+async function logOutSchool() {
+  var btn = event.target.closest('button');
+  btn.disabled = true;
+  btn.innerHTML = '🚌 Gosia is waving goodbye...';
+  document.getElementById('gosiaGoodbye').textContent = '"Goodbye! Have a wonderful evening. I\'ll miss you! 💜"';
+  try {
+    var authMod = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    var config = await import('./js/firebase-config.js');
+    await authMod.signOut(config.auth);
+  } catch(e) {}
+  setTimeout(function() { window.location.href = 'index.html'; }, 1500);
+}
+
 // Bus loading — dismiss after 3 seconds
 setTimeout(function(){
   document.getElementById('busScreen').classList.add('hide');
@@ -999,6 +1180,14 @@ function finishSetup() {
   localStorage.setItem('vs_setup', 'done');
   isESY = esy;
   currentGrade = parseInt(grade);
+
+  // If first time setup, redirect to Google account linking page
+  if (!localStorage.getItem('vs_google_setup_shown')) {
+    localStorage.setItem('vs_google_setup_shown', 'true');
+    window.location.href = 'school-google.html';
+    return;
+  }
+
   document.getElementById('setupScreen').style.display = 'none';
   document.getElementById('mainSchool').style.display = 'block';
   // Update UI
@@ -1012,6 +1201,7 @@ function finishSetup() {
   document.getElementById('schoolEmail').textContent = schoolEmail;
   document.getElementById('studentId').textContent = studentId;
   document.getElementById('emailGrade').textContent = grade + (esy ? ' (ESY)' : '');
+  loadGoogleAccount();
   renderSchedule(currentGrade);
   renderAppointments();
   showDailyNotification();

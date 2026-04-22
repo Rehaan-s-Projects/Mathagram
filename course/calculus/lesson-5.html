@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -170,7 +171,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -179,8 +180,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -191,61 +192,40 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 0^+} \\frac{1}{x}\\)?',
-        options: ['0', '+∞', '-∞', 'DNE'],
-        correctIndex: 1
-      },
-      {
-        type: 'multiple-choice',
-        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} \\frac{1}{x}\\)?',
-        options: ['0', '+∞', '-∞', 'DNE'],
-        correctIndex: 3
-      },
-      {
-        type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 3^+} \\frac{1}{x - 3} = \\) ___ (write +infinity, -infinity, or DNE)',
-        answer: '+infinity'
-      },
-      {
-        type: 'true-false',
-        question: '\\(\\displaystyle\\lim_{x \\to 0} \\frac{1}{x^2} = +\\infty\\)',
-        correctAnswer: true
-      },
-      {
-        type: 'matching',
-        question: 'Match each one-sided limit with its value.',
-        pairs: [
-          { left: '\\(\\lim_{x \\to 0^+} \\frac{1}{x}\\)', right: '+∞' },
-          { left: '\\(\\lim_{x \\to 0^-} \\frac{1}{x}\\)', right: '-∞' },
-          { left: '\\(\\lim_{x \\to 2^+} \\frac{1}{(x-2)^2}\\)', right: '+∞' },
-          { left: '\\(\\lim_{x \\to 2^-} \\frac{-1}{x-2}\\)', right: '+∞' }
-        ]
-      },
-      {
-        type: 'listening',
-        spokenText: 'What is the limit as x approaches one from the right of one divided by the quantity x minus one? Choose from: positive infinity, negative infinity, zero, or does not exist.',
-        options: ['+∞', '-∞', '0', 'DNE'],
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 2} (3x^2 - 1)\\)?',
+        options: ['11', '5', '12', '9'],
         correctIndex: 0
       },
       {
         type: 'fill-blank',
-        question: '\\(\\displaystyle\\lim_{x \\to 0^-} \\frac{5}{x^3} = \\) ___ (write +infinity, -infinity, or DNE)',
-        answer: '-infinity'
+        question: '\\(\\displaystyle\\lim_{x \\to 4} \\sqrt{x} = \\) ___',
+        answer: '2'
+      },
+      {
+        type: 'true-false',
+        question: 'You can always evaluate a limit by direct substitution.',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 0} e^x\\)?',
+        options: ['0', '1', 'e', 'undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'matching',
+        question: 'Match each limit with its value.',
+        pairs: [
+          { left: '\\(\\lim_{x \\to 1} x^3\\)', right: '1' },
+          { left: '\\(\\lim_{x \\to \\pi} \\sin(x)\\)', right: '0' },
+          { left: '\\(\\lim_{x \\to 0} \\cos(x)\\)', right: '1' },
+          { left: '\\(\\lim_{x \\to 2} 5\\)', right: '5' }
+        ]
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: \\(\\lim_{x\\to 0^+}\\frac{1}{x} = \\) ___ (write infinity)',
-        answer: 'infinity'
-      },
-      {
-        type: 'fill-blank',
-        question: 'Fill the missing number: \\(\\lim_{x\\to 0^-}\\frac{1}{x^2} = \\) ___ (write infinity)',
-        answer: 'infinity'
-      },
-      {
-        type: 'fill-blank',
-        question: 'Fill the missing number: if left limit = 3 and right limit = 5, then \\(\\lim_{x\\to a} f(x) \\) ___ (write DNE)',
-        answer: 'DNE'
+        question: '\\(\\displaystyle\\lim_{x \\to -1} (x^2 + 2x + 1) = \\) ___',
+        answer: '0'
       }
     ];
 

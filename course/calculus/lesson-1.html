@@ -3,88 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>What Are Integrals — Mathagram</title>
+  <title>Limits by Direct Evaluation — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
   <link rel="stylesheet" href="../../css/characters.css">
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
-    .lesson-content {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 48px 24px 32px;
-    }
-    .lesson-content .chapter-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-primary);
-      margin-bottom: 8px;
-    }
-    .lesson-content h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-    .lesson-content p {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--color-text-secondary);
-      margin-bottom: 16px;
-    }
-    .lesson-content .math-block {
-      text-align: center;
-      margin: 24px 0;
-      font-size: 1.3rem;
-    }
-    .lesson-content ul {
-      margin: 12px 0 20px 20px;
-      color: var(--color-text-secondary);
-      line-height: 1.75;
-    }
-    .exercise-section {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 0 24px 48px;
-    }
-    .exercise-section h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-    .lesson-complete {
-      text-align: center;
-      padding: 40px 24px;
-      background: var(--color-white);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      max-width: 480px;
-      margin: 32px auto;
-      box-shadow: var(--shadow-md);
-    }
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
     .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
     .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
     .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
-    .lesson-complete .xp-earned {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 20px; font-size: 1rem; font-weight: 700;
-      color: var(--color-xp); background: rgba(234,179,8,0.1);
-      border-radius: var(--radius); margin-bottom: 16px;
-    }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
     .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
     .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
   </style>
-<link rel="stylesheet" href="../../css/calculator.css">
+  <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
-
-  <!-- Navigation -->
   <nav class="nav">
     <div class="container">
       <a href="../../index.html" class="nav-logo">
@@ -99,47 +47,37 @@
     </div>
   </nav>
 
-  <!-- Teaching Content -->
   <section class="lesson-content">
-    <div class="chapter-label">Chapter 01</div>
-    <h1>What Are Integrals?</h1>
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits by Direct Evaluation</h1>
 
-    <p>
-      In calculus, an <strong>integral</strong> measures the <em>accumulation</em> of quantities. While derivatives tell us the rate of change at a single point, integrals tell us the total amount that has accumulated over an interval. The most common geometric interpretation is the <strong>area under a curve</strong>.
-    </p>
+    <p>A <strong>limit</strong> describes what value a function approaches as its input approaches some number. We write:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = L$$</div>
+    <p>This reads: "the limit of \(f(x)\) as \(x\) approaches \(a\) equals \(L\)."</p>
 
-    <div class="math-block">
-      $$\int f(x)\, dx$$
-    </div>
+    <p>The simplest way to find a limit is <strong>direct substitution</strong> — just plug in the value of \(a\). If the function is continuous at \(a\) (no holes, no jumps, no vertical asymptotes), then:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = f(a)$$</div>
 
-    <p>Let's break down the notation:</p>
-    <ul>
-      <li>The symbol <strong>\(\int\)</strong> is an elongated "S," standing for <em>summa</em> (Latin for "sum").</li>
-      <li><strong>\(f(x)\)</strong> is the <em>integrand</em> — the function being integrated.</li>
-      <li><strong>\(dx\)</strong> indicates that we are integrating <em>with respect to x</em>.</li>
-    </ul>
+    <p><strong>Example 1.</strong> Find \(\lim_{x \to 3}(2x + 1)\).</p>
+    <p>Plug in \(x = 3\): \(2(3) + 1 = 7\). So the limit is \(7\).</p>
 
-    <p>
-      Think of integration as adding up infinitely many infinitesimally thin rectangles under the curve of \(f(x)\). Each rectangle has height \(f(x)\) and width \(dx\). The integral sums all of these to give the total area.
-    </p>
+    <p><strong>Example 2.</strong> Find \(\lim_{x \to 4} \sqrt{x}\).</p>
+    <p>Plug in: \(\sqrt{4} = 2\). The limit is \(2\).</p>
 
-    <p><strong>Example:</strong></p>
-    <div class="math-block">
-      $$\int x^2\, dx = \frac{x^3}{3} + C$$
-    </div>
-    <p>
-      To integrate \(x^2\), we add \(1\) to the exponent (getting \(x^3\)) and divide by the new exponent (getting \(\frac{x^3}{3}\)). The \(+ C\) is the <strong>constant of integration</strong> &mdash; since derivatives of constants vanish, indefinite integrals always carry an unknown constant.
-    </p>
+    <p><strong>Example 3.</strong> Find \(\lim_{x \to 0} \cos x\).</p>
+    <p>Plug in: \(\cos(0) = 1\). The limit is \(1\).</p>
+
+    <p><strong>When does direct substitution work?</strong> It works for polynomials, rational functions (when the denominator isn't zero), trig functions, exponentials, and logarithms — anywhere the function is continuous at the point.</p>
+
+    <p><strong>When does it fail?</strong> When plugging in gives \(\frac{0}{0}\), \(\frac{\infty}{\infty}\), or an undefined expression. In those cases, you need other techniques (factoring, conjugates, L'Hôpital's Rule) which come in later lessons.</p>
   </section>
 
-  <!-- Exercises -->
   <section class="exercise-section">
     <h2>Practice Exercises</h2>
     <div id="exercises"></div>
     <div id="completion" style="display:none;"></div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
@@ -153,64 +91,58 @@
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-    document.addEventListener("DOMContentLoaded", function() {
+
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+    })();
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
     const exercises = [
-      { type: 'multiple-choice',
-        question: 'An integral measures the:',
-        options: ['Rate of change at a point', 'Accumulation of a quantity over an interval', 'Slope of a tangent line', 'Maximum value of a function'],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'The symbol \\(\\int\\) stands for:',
-        options: ['Infinity', 'Summa (Latin for "sum")', 'Sigma', 'Derivative'],
-        correctIndex: 1 },
-      { type: 'multiple-choice',
-        question: 'In \\(\\int f(x)\\, dx\\), what is \\(f(x)\\) called?',
-        options: ['The integral', 'The derivative', 'The integrand', 'The constant'],
-        correctIndex: 2 },
-      { type: 'true-false',
-        question: 'The "dx" in \\(\\int f(x)\\, dx\\) tells us we are integrating with respect to x.',
-        correctAnswer: true },
-      { type: 'fill-blank',
-        question: 'Using the power rule: \\(\\int x^2\\, dx = \\frac{x^3}{\\text{___}} + C\\). Fill in the denominator.',
-        answer: '3' },
-      { type: 'multiple-choice',
-        question: 'What does the "+ C" represent in an indefinite integral?',
-        options: ['The variable of integration', 'The constant of integration', 'The speed of light', 'The coefficient'],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'Integration can be thought of as summing infinitely many thin rectangles under a curve.',
-        correctAnswer: true },
-      { type: 'multiple-choice',
-        question: 'The most common geometric interpretation of an integral is:',
-        options: ['The slope of a curve', 'The area under a curve', 'The tangent of a curve', 'The length of a curve'],
-        correctIndex: 1 },
-      { type: 'fill-blank',
-        question: 'Each thin rectangle under the curve has height \\(f(x)\\) and width ___.',
-        answer: 'dx' },
-      { type: 'matching',
-        question: 'Match each integral concept to its meaning.',
-        pairs: [
-          { left: '\\(\\int\\)', right: 'Elongated S for "sum"' },
-          { left: '\\(f(x)\\)', right: 'The integrand' },
-          { left: '\\(dx\\)', right: 'With respect to x' },
-          { left: '\\(+ C\\)', right: 'Constant of integration' }
-        ] },
-      { type: 'fill-blank',
-        question: 'The power rule says: to integrate \\(x^n\\), add 1 to the exponent and ___ by the new exponent.',
-        answer: 'divide' },
-      { type: 'true-false',
-        question: 'While derivatives tell us the rate of change, integrals tell us the total accumulation.',
-        correctAnswer: true }
+      {
+        type: 'multiple-choice',
+        question: 'Find \\(\\lim_{x \\to 3}(2x + 1)\\).',
+        options: ['\\(5\\)', '\\(7\\)', '\\(6\\)', '\\(9\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\lim_{x \\to 4} \\sqrt{x} =\\) ___.',
+        answer: '2'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\lim_{x \\to 0} \\cos x =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(-1\\)', 'Undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f\\) is continuous at \\(a\\), then \\(\\lim_{x \\to a} f(x) = f(a)\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\lim_{x \\to 2}(x^2 + 3x) =\\) ___.',
+        answer: '10'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\lim_{x \\to 1} \\frac{x^2 + 1}{x + 1} =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(2\\)', 'Undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Direct substitution fails when plugging in gives:',
+        options: ['A whole number', '\\(\\frac{0}{0}\\)', 'A negative value', 'A fraction'],
+        correctIndex: 1
+      }
     ];
 
     const container = document.getElementById('exercises');
@@ -222,10 +154,9 @@
       showBuddy(c, isCorrect ? 'correct' : 'wrong');
     });
     await showLessonComplete(container, completionDiv, score, { xp,
-      courseId: 'calculus', lessonId: 'lesson-1', nextHref: 'lesson-2.html', backHref: 'index.html'
+      courseId: 'calculus', lessonId: 'lesson-1', nextHref: 'index.html', backHref: 'index.html'
     });
     import { createCalculator } from "../../js/calculator.js"; createCalculator();
-</script>
-
+  </script>
 </body>
 </html>

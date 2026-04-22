@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -99,39 +100,67 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'multiple-choice', question: 'The quotient rule states \\left(\\(\\dfrac{f}{g}\\)\)\' =',
-        options: ['\\(\\dfrac{f\'g+fg\'}{g^2}\\)', '\\(\\dfrac{f\'g-fg\'}{g^2}\\)', '\\(\\dfrac{f\'g\'}{g^2}\\)', '\\(\\dfrac{fg\'-f\'g}{g^2}\\)'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: 'Differentiate h(x)=\\(\\dfrac{x}{x+1}\\).',
-        options: ['\(1)/((x+1)^2)', '\(x)/((x+1)^2)', '\(-1)/((x+1)^2)', '\\(\\dfrac{x+1}{x^2}\\)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Memorize it as: low d-high minus ___ d-low, over low-squared.',
-        answer: 'high' },
-      { type: 'multiple-choice', question: 'Differentiate h(x)=\\(\\dfrac{x^2}{x+1}\\).',
-        options: ['\\(\\dfrac{2x}{x+1}\\)', '\(x^2+2x)/((x+1)^2)', '\(x^2-2x)/((x+1)^2)', '\(2x(x+1))/(x+1)'],
-        correctIndex: 1 },
-      { type: 'true-false', question: 'For \\(\\dfrac{3}{x^2}\\), the power rule is faster than the quotient rule.',
-        correctAnswer: true },
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)\\\left[\\(\\dfrac{\sin x}{x}\\)\] =',
-        options: ['\\(\\dfrac{\cos x}{1}\\)', '\\(\\dfrac{x\cos x - \sin x}{x^2}\\)', '\\(\\dfrac{\cos x - \sin x}{x}\\)', '\\(\\dfrac{\sin x - x\cos x}{x^2}\\)'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'In the quotient rule, the denominator of \\left(\\(\\dfrac{f}{g}\\)\)\' is ___.',
-        answer: 'g^2' },
-      { type: 'true-false', question: 'Swapping f\'g and fg\' in the numerator gives the correct quotient rule.',
-        correctAnswer: false },
-      { type: 'multiple-choice', question: 'Differentiate h(x)=\\(\\dfrac{1}{x^2+1}\\).',
-        options: ['\(-2x)/((x^2+1)^2)', '\(2x)/((x^2+1)^2)', '\(-1)/((x^2+1)^2)', '\(1)/((x^2+1)^2)'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'Differentiate h(x)=\\(\\dfrac{e^x}{x}\\). Numerator becomes e^x x - e^x. Final answer: (xe^x - e^x)/ ___.',
-        answer: 'x^2' },
-      { type: 'matching', question: 'Match each function to its derivative.',
-        pairs: [
-          { left: '\\(\\dfrac{1}{x}\\)', right: '-\\(\\dfrac{1}{x^2}\\)' },
-          { left: '\\(\\dfrac{x}{x+1}\\)', right: '\(1)/((x+1)^2)' },
-          { left: '\\(\\dfrac{x^2}{x}\\)', right: '1' },
-          { left: '\\(\\dfrac{\cos x}{x}\\)', right: '\\(\\dfrac{-x\sin x - \cos x}{x^2}\\)' }
-        ] }
+            const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'The quotient rule states \\(\\left(\\frac{f}{g}\\right)\\prime =\\)',
+        options: ['\\(\\frac{f\\prime g+fg\\prime}{g^2}\\)', '\\(\\frac{f\\prime g-fg\\prime}{g^2}\\)', '\\(\\frac{f\\prime g\\prime}{g^2}\\)', '\\(\\frac{fg\\prime-f\\prime g}{g^2}\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Differentiate \\(h(x)=\\frac{x}{x+1}\\).',
+        options: ['\\(\\frac{1}{(x+1)^2}\\)', '\\(\\frac{x}{(x+1)^2}\\)', '\\(\\frac{-1}{(x+1)^2}\\)', '\\(\\frac{x+1}{x^2}\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: 'Low d-high minus ___ d-low, over low-squared.',
+        answer: 'high'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Differentiate \\(h(x)=\\frac{x^2}{x+1}\\).',
+        options: ['\\(\\frac{2x}{x+1}\\)', '\\(\\frac{x^2+2x}{(x+1)^2}\\)', '\\(\\frac{x^2-2x}{(x+1)^2}\\)', '\\(\\frac{2x(x+1)}{x+1}\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'For \\(\\frac{3}{x^2}\\), the power rule is faster.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\frac{d}{dx}\\left[\\frac{\\sin x}{x}\\right]=\\)',
+        options: ['\\(\\frac{\\cos x}{1}\\)', '\\(\\frac{x\\cos x-\\sin x}{x^2}\\)', '\\(\\frac{\\cos x-\\sin x}{x}\\)', '\\(\\frac{\\sin x-x\\cos x}{x^2}\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'The denominator of \\(\\left(\\frac{f}{g}\\right)\\prime\\) is ___.',
+        answer: 'g^2'
+      },
+      {
+        type: 'true-false',
+        question: 'Swapping the two numerator terms gives the correct quotient rule.',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Differentiate \\(h(x)=\\frac{1}{x^2+1}\\).',
+        options: ['\\(\\frac{-2x}{(x^2+1)^2}\\)', '\\(\\frac{2x}{(x^2+1)^2}\\)', '\\(\\frac{-1}{(x^2+1)^2}\\)', '\\(\\frac{1}{(x^2+1)^2}\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(h(x)=\\frac{e^x}{x}\\). Answer: \\((xe^x-e^x)/\\) ___.',
+        answer: 'x^2'
+      },
+      {
+        type: 'matching',
+        question: 'Match function to derivative.',
+        pairs: [{ left: '\\(\\frac{1}{x}\\)', right: '\\(-\\frac{1}{x^2}\\)' }, { left: '\\(\\frac{x}{x+1}\\)', right: '\\(\\frac{1}{(x+1)^2}\\)' }, { left: '\\(\\frac{x^2}{x}\\)', right: '\\(1\\)' }, { left: '\\(\\frac{\\cos x}{x}\\)', right: '\\(\\frac{-x\\sin x-\\cos x}{x^2}\\)' }]
+      }
     ];
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

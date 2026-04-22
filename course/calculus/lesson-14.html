@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Average Rate of Change — Mathagram</title>
+  <title>Average Rates of Change — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -102,14 +103,14 @@
   <!-- Teaching Content -->
   <section class="lesson-content">
     <div class="chapter-label">Unit 2 &mdash; Derivatives</div>
-    <h1>Average Rate of Change</h1>
+    <h1>Average Rates of Change</h1>
 
     <p>
       Before we can talk about instantaneous rates of change (derivatives), we need to understand the <strong>average rate of change</strong>. It's the slope of the line connecting two points on a graph &mdash; the <strong>secant line</strong>.
     </p>
 
     <div class="math-block">
-      $$\text{Average Rate of Change} = \frac{f(b) - f(a)}{b - a}$$
+      $$\text{Average Rates of Change} = \frac{f(b) - f(a)}{b - a}$$
     </div>
 
     <p>
@@ -160,7 +161,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -169,8 +170,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -244,7 +245,7 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: avg rate of change of f(x) = x² over [1, 3] = (9 − 1)/(3 − 1) = ___',
+        question: 'Fill the missing number: avg rate of change of f(x) = x^2 over [1, 3] = (9 − 1)/(3 − 1) = ___',
         answer: '4'
       },
       {
@@ -254,7 +255,7 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: avg rate of change of f(x) = x³ over [0, 2] = (8 − 0)/(2 − 0) = ___',
+        question: 'Fill the missing number: avg rate of change of f(x) = x^3 over [0, 2] = (8 − 0)/(2 − 0) = ___',
         answer: '4'
       }
     ];

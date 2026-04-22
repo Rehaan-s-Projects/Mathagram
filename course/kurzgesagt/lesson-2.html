@@ -87,6 +87,7 @@
   </style>
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -173,7 +174,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -182,8 +183,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 

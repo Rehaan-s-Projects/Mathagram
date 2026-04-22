@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Google Account — Mathagram Virtual School</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    body { background: #f0f4f8; min-height: 100vh; }
+    .page-wrap { max-width: 520px; margin: 80px auto 48px; padding: 0 24px; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,.08); padding: 40px 32px; text-align: center; }
+    .card .step-badge { display: inline-block; padding: 4px 14px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: #dbeafe; color: #1e40af; border-radius: 999px; margin-bottom: 16px; }
+    .card .icon { font-size: 3rem; margin-bottom: 12px; }
+    .card h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .card p { font-size: .92rem; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 20px; }
+    .school-email-display { background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; font-family: monospace; font-size: .95rem; color: #1e40af; margin-bottom: 20px; word-break: break-all; }
+    .google-btn { display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; font-weight: 700; color: #1f2937; cursor: pointer; transition: all .2s; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 12px; }
+    .google-btn:hover { border-color: #4285F4; box-shadow: 0 4px 16px rgba(66,133,244,.2); transform: translateY(-1px); }
+    .google-btn svg { width: 24px; height: 24px; }
+    .google-btn.linked { background: #dcfce7; border-color: #22c55e; color: #166534; }
+    .linked-email { font-size: .88rem; color: #166534; font-family: monospace; margin-bottom: 16px; background: #f0fdf4; padding: 10px 14px; border-radius: 8px; border: 1px solid #bbf7d0; }
+    .skip-link { display: block; margin-top: 16px; font-size: .85rem; color: var(--color-text-muted); cursor: pointer; text-decoration: underline; }
+    .skip-link:hover { color: var(--color-text); }
+    .continue-btn { display: none; padding: 14px 32px; font-size: 1rem; font-weight: 700; background: #3b82f6; color: #fff; border: none; border-radius: 12px; cursor: pointer; margin-top: 16px; box-shadow: 0 4px 0 #1d4ed8; transition: all .2s; }
+    .continue-btn:hover { transform: translateY(-1px); }
+    .continue-btn.show { display: inline-block; }
+    .gosia-msg { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 12px; padding: 14px; margin-top: 20px; display: flex; align-items: flex-start; gap: 10px; text-align: left; }
+    .gosia-msg img { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
+    .gosia-msg p { font-size: .85rem; color: #78350f; line-height: 1.5; margin: 0; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <a href="/" class="nav-logo">
+      <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+      <span>Mathagram</span>
+    </a>
+    <div class="nav-links">
+      <a href="school.html">Virtual School</a>
+      <a href="courses.html">Courses</a>
+      <a href="login.html" data-auth="login">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="card">
+    <span class="step-badge">Step 2 of 2</span>
+    <div class="icon">🔗</div>
+    <h1>Link Your Google Account</h1>
+    <p>Connect your Google account to your Mathagram School email for full access to school services, cloud storage, and Google Classroom integration.</p>
+
+    <div class="school-email-display" id="schoolEmailDisplay">Loading school email...</div>
+
+    <div id="notLinked">
+      <button class="google-btn" id="googleSignInBtn" onclick="linkGoogle()">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Sign in with Google
+      </button>
+      <p style="font-size:.78rem;color:var(--color-text-muted);">Use your personal Gmail or school Google account.</p>
+    </div>
+
+    <div id="linked" style="display:none;">
+      <div class="google-btn linked">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        ✓ Google Account Linked
+      </div>
+      <div class="linked-email" id="linkedEmailDisplay"></div>
+      <button class="continue-btn show" onclick="window.location.href='school.html'">Continue to Virtual School →</button>
+    </div>
+
+    <span class="skip-link" onclick="window.location.href='school.html'">Skip for now — I'll link later</span>
+
+    <div class="gosia-msg">
+      <img src="assets/characters/gosia.svg" alt="Ms. Gosia">
+      <p id="gosiaText">"Almost done! Link your Google account so you can access Google Classroom, Drive, and all school services with one login."</p>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script type="module">
+  import { initNav } from './js/nav.js';
+  initNav('');
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Show school email
+  const schoolEmail = localStorage.getItem('vs_email') || '—@Mgramschools.net';
+  document.getElementById('schoolEmailDisplay').textContent = schoolEmail;
+
+  // Check if already linked
+  const savedGoogle = localStorage.getItem('vs_google_email');
+  if (savedGoogle) {
+    showLinked(savedGoogle);
+  }
+
+  // Check if already logged in with Firebase
+  try {
+    const { auth } = await import('./js/firebase-config.js');
+    const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email) {
+        localStorage.setItem('vs_google_email', user.email);
+        showLinked(user.email);
+      }
+    });
+  } catch(e) {}
+
+  function showLinked(email) {
+    document.getElementById('notLinked').style.display = 'none';
+    document.getElementById('linked').style.display = 'block';
+    document.getElementById('linkedEmailDisplay').textContent = email;
+    document.getElementById('gosiaText').textContent = '"Perfect! Your Google account is linked. You\'re all set for Virtual School!"';
+  }
+
+  window.linkGoogle = async function() {
+    const btn = document.getElementById('googleSignInBtn');
+    btn.textContent = 'Connecting...';
+    btn.disabled = true;
+    try {
+      const { auth } = await import('./js/firebase-config.js');
+      const { signInWithPopup, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+      localStorage.setItem('vs_google_email', email);
+      showLinked(email);
+    } catch(e) {
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Try Again';
+      btn.disabled = false;
+      document.getElementById('gosiaText').textContent = '"Hmm, something went wrong. Try clicking the button again, or skip for now and link later from your school account page."';
+    }
+  };
+</script>
+
+</body>
+</html>

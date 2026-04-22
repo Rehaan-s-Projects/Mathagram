@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -165,7 +166,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -174,8 +175,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -265,7 +266,7 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: f(x) = x², f\'(3) = ___',
+        question: 'Fill the missing number: f(x) = x^2, f\'(3) = ___',
         answer: '6'
       },
       {
@@ -275,7 +276,7 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: f(x) = x², f\'(−4) = ___',
+        question: 'Fill the missing number: f(x) = x^2, f\'(−4) = ___',
         answer: '-8'
       }
     ];

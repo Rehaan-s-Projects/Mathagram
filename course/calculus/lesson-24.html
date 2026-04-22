@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -109,41 +110,72 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'fill-blank', question: '(fg)\'(1) = f\'(1)g(1) + f(1)g\'(1) = ___.',
-        answer: '10' },
-      { type: 'multiple-choice', question: 'Using the table, (fg)\'(2) = f\'(2)g(2) + f(2)g\'(2) =',
-        options: ['10', '5', '7', '0'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: '\\left(\\(\\dfrac{f}{g}\\)\)\'(2) = ___.',
-        answer: '-10' },
-      { type: 'multiple-choice', question: 'Let h(x) = f(g(x)). Then h\'(1) =',
-        options: ['-2', '2', '3', '-3'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: 'Let h(x) = g(f(x)). Then h\'(2) =',
-        options: ['0', '2', '6', '-1'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: '(f+g)\'(4) = f\'(4) + g\'(4) = ___.',
-        answer: '1' },
-      { type: 'multiple-choice', question: '(3f)\'(1) =',
-        options: ['9', '3', '6', '2'],
-        correctIndex: 0 },
-      { type: 'true-false', question: 'The chain rule (f\\circ g)\' = f\'(g)\\cdot g\' multiplies the two derivatives.',
-        correctAnswer: true },
-      { type: 'fill-blank', question: 'Let h(x)=f(x)\\cdot g(x). Then h\'(4) = f\'(4)g(4)+f(4)g\'(4) = ___.',
-        answer: '9' },
-      { type: 'multiple-choice', question: 'If h(x) = \(g(x)\)^2, then h\'(1) = 2g(1)g\'(1) =',
-        options: ['-8', '8', '4', '-4'],
-        correctIndex: 0 },
-      { type: 'true-false', question: 'For quotient rule on f/g, you divide by g\'(x)^2.',
-        correctAnswer: false },
-      { type: 'matching', question: 'Match each expression at x=1 to its value (using the table).',
-        pairs: [
-          { left: '(fg)\'(1)', right: '10' },
-          { left: '(f+g)\'(1)', right: '2' },
-          { left: '(3g)\'(1)', right: '-3' },
-          { left: 'f\'(1)-g\'(1)', right: '4' }
-        ] }
+            const exercises = [
+      {
+        type: 'fill-blank',
+        question: '\\((fg)\\prime(1)=f\\prime(1)g(1)+f(1)g\\prime(1)=\\) ___.',
+        answer: '10'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\((fg)\\prime(2)=\\)',
+        options: ['\\(10\\)', '\\(5\\)', '\\(7\\)', '\\(0\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\left(\\frac{f}{g}\\right)\\prime(2)=\\) ___.',
+        answer: '-10'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(h(x)=f(g(x))\\). \\(h\\prime(1)=\\)',
+        options: ['\\(-2\\)', '\\(2\\)', '\\(3\\)', '\\(-3\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(h(x)=g(f(x))\\). \\(h\\prime(2)=\\)',
+        options: ['\\(0\\)', '\\(2\\)', '\\(6\\)', '\\(-1\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: '\\((f+g)\\prime(4)=\\) ___.',
+        answer: '1'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\((3f)\\prime(1)=\\)',
+        options: ['\\(9\\)', '\\(3\\)', '\\(6\\)', '\\(2\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'The chain rule multiplies the two derivatives.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(h(x)=f(x)\\cdot g(x)\\). \\(h\\prime(4)=\\) ___.',
+        answer: '9'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(h(x)=(g(x))^2\\). \\(h\\prime(1)=2g(1)g\\prime(1)=\\)',
+        options: ['\\(-8\\)', '\\(8\\)', '\\(4\\)', '\\(-4\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'Quotient rule divides by \\(g\\prime(x)^2\\).',
+        correctAnswer: false
+      },
+      {
+        type: 'matching',
+        question: 'Match at \\(x=1\\).',
+        pairs: [{ left: '\\((fg)\\prime(1)\\)', right: '\\(10\\)' }, { left: '\\((f+g)\\prime(1)\\)', right: '\\(2\\)' }, { left: '\\((3g)\\prime(1)\\)', right: '\\(-3\\)' }, { left: '\\(f\\prime(1)-g\\prime(1)\\)', right: '\\(4\\)' }]
+      }
     ];
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

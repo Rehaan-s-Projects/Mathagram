@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Power Rule &amp; Basic Rules — Mathagram</title>
+  <title>Power Constant and Sum Rules — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
   <link rel="stylesheet" href="../../css/exercises.css">
@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -102,7 +103,7 @@
   <!-- Teaching Content -->
   <section class="lesson-content">
     <div class="chapter-label">Unit 2 &mdash; Derivatives</div>
-    <h1>Power Rule &amp; Basic Rules</h1>
+    <h1>Power Constant and Sum Rules</h1>
 
     <p>
       Using the limit definition every time would be painfully slow. Thankfully, there are <strong>shortcut rules</strong> that let you find derivatives quickly. The most important one is the <strong>Power Rule</strong>.
@@ -173,7 +174,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -182,8 +183,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -216,7 +217,7 @@
       {
         type: 'fill-blank',
         question: 'If \\(f(x) = x^6\\), then \\(f\'(x) = \\) ___.',
-        answer: '6x^5'
+        answer: '\\(6x^5\\)'
       },
       {
         type: 'matching',
@@ -242,7 +243,7 @@
       {
         type: 'fill-blank',
         question: 'The derivative of \\(f(x) = x^{-3}\\) is ___.',
-        answer: '-3x^{-4}'
+        answer: '\\(-3x^{-4}\\)'
       },
       {
         type: 'multiple-choice',
@@ -264,7 +265,7 @@
       {
         type: 'fill-blank',
         question: 'The derivative of \\(f(x) = 10x^2 + 3x - 1\\) is ___.',
-        answer: '20x+3'
+        answer: '\\(20x+3\\)'
       },
       {
         type: 'true-false',
@@ -279,17 +280,17 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: d/dx [x⁶] = 6x^___',
+        question: '\\(Fill the missing number: d/dx [x^6] = 6x^___\\)',
         answer: '5'
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: d/dx [4x³] = ___x²',
+        question: '\\(Fill the missing number: d/dx [4x^3] = ___x^2\\)',
         answer: '12'
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: d/dx [x^10] at x = 1 is ___',
+        question: '\\(Fill the missing number: d/dx [x^10] at x = 1 is ___\\)',
         answer: '10'
       }
     ];

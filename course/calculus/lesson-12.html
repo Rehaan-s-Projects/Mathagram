@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -159,7 +160,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -168,8 +169,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -198,9 +199,9 @@
         type: 'matching',
         question: 'Match each term with its role in the Squeeze Theorem.',
         pairs: [
-          { left: 'Lower bound', right: 'g(x)' },
+          { left: 'Lower bound', right: '\\(g(x)\\)' },
           { left: 'Upper bound', right: 'h(x)' },
-          { left: 'Squeezed function', right: 'f(x)' },
+          { left: 'Squeezed function', right: '\\(f(x)\\)' },
           { left: 'Common limit', right: 'L' }
         ]
       },
@@ -214,16 +215,16 @@
         type: 'ordering',
         question: 'Put the Squeeze Theorem steps in the correct order.',
         items: [
-          'Identify g(x) \u2264 f(x) \u2264 h(x)',
-          'Find lim g(x) as x \u2192 a',
+          '\\(Identify g(x) \u2264 f(x) \u2264 h(x)\\)',
+          '\\(Find lim g(x) as x \u2192 a\\)',
           'Find lim h(x) as x \u2192 a',
           'Verify both limits equal L',
-          'Conclude lim f(x) = L'
+          '\\(Conclude lim f(x) = L\\)'
         ]
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: if 3 ≤ f(x) ≤ 3 + x² as x → 0, then lim f(x) = ___',
+        question: '\\(Fill the missing number: if 3 \\le f(x) \\le 3 + x^2 as x \\to 0, then lim f(x) = ___\\)',
         answer: '3'
       },
       {
@@ -233,7 +234,7 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: if 5 − x² ≤ f(x) ≤ 5 + x² as x → 0, then lim f(x) = ___',
+        question: '\\(Fill the missing number: if 5 − x^2 \\le f(x) \\le 5 + x^2 as x \\to 0, then lim f(x) = ___\\)',
         answer: '5'
       }
     ];

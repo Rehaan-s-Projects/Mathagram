@@ -81,6 +81,7 @@
   </style>
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -155,7 +156,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -164,8 +165,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -177,17 +178,17 @@
       {
         type: 'multiple-choice',
         question: 'Convert 90° to radians.',
-        options: ['π/4', 'π/2', 'π', '2π'],
+        options: ['\\pi/4', '\\pi/2', '\\pi', '2\\pi'],
         correctIndex: 1
       },
       {
         type: 'fill-blank',
         question: '180° = ___ radians',
-        answer: 'π'
+        answer: '\\pi'
       },
       {
         type: 'multiple-choice',
-        question: 'Convert π/4 radians to degrees.',
+        question: 'Convert \\pi/4 radians to degrees.',
         options: ['30°', '45°', '60°', '90°'],
         correctIndex: 1
       },
@@ -200,16 +201,16 @@
         type: 'matching',
         question: 'Match each degree measure with its radian equivalent.',
         pairs: [
-          { left: '30°', right: 'π/6' },
-          { left: '60°', right: 'π/3' },
-          { left: '90°', right: 'π/2' },
-          { left: '360°', right: '2π' }
+          { left: '30°', right: '\\pi/6' },
+          { left: '60°', right: '\\pi/3' },
+          { left: '90°', right: '\\pi/2' },
+          { left: '360°', right: '2\\pi' }
         ]
       },
       {
         type: 'fill-blank',
         question: 'Convert 270° to radians: ___',
-        answer: '3π/2'
+        answer: '3\\pi/2'
       }
     ];
 

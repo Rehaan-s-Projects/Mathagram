@@ -9,25 +9,29 @@
   <style>
     .profile-container { max-width: 560px; margin: 48px auto; padding: 0 24px; text-align: center; }
     .profile-card { background: var(--color-white); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 40px 32px; }
-    .profile-avatar { width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 16px; }
+    .profile-avatar { width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 16px; border: 3px solid var(--color-border); }
     .profile-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
-    .level-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: var(--color-text); font-size: 0.85rem; font-weight: 600; margin: 8px 0 20px; }
-    .stats { display: flex; justify-content: center; gap: 32px; margin-bottom: 28px; }
+    .level-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: #fff; font-size: 0.85rem; font-weight: 600; margin: 8px 0 12px; }
+    .joined-date { font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 16px; }
+    .stats { display: flex; justify-content: center; gap: 32px; margin-bottom: 20px; }
     .stat { text-align: center; }
     .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--color-text); }
-    .stat-label { font-size: 0.8rem; color: var(--color-text-muted); }
-    .focus-btn { padding: 10px 28px; font-size: 0.9rem; font-weight: 700; border-radius: 999px; border: 2px solid var(--color-primary); background: transparent; color: var(--color-primary); cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+    .stat-label { font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .focus-btn { padding: 10px 28px; font-size: 0.9rem; font-weight: 700; border-radius: 999px; border: 2px solid var(--color-primary); background: transparent; color: var(--color-primary); cursor: pointer; transition: all 0.2s; margin: 8px 0 16px; }
     .focus-btn:hover { background: var(--color-primary); color: #fff; }
     .focus-btn.focused { background: var(--color-primary); color: #fff; }
+    .focus-btn.focused:hover { background: transparent; color: var(--color-primary); }
     .posts-section { text-align: left; margin-top: 28px; }
     .posts-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
     .user-post { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 10px; }
     .user-post-text { font-size: 0.9rem; line-height: 1.55; color: var(--color-text); white-space: pre-wrap; word-wrap: break-word; }
     .user-post-meta { font-size: 0.72rem; color: var(--color-text-muted); margin-top: 6px; }
+    .user-post-image { margin-top: 10px; border-radius: var(--radius); max-width: 100%; }
     .not-found { padding: 60px 24px; text-align: center; color: var(--color-text-muted); }
     .not-found h2 { font-size: 1.5rem; margin-bottom: 8px; color: var(--color-text); }
     .back-link { display: inline-block; margin-top: 20px; padding: 10px 24px; background: var(--color-primary); color: #fff; font-weight: 700; border-radius: var(--radius); text-decoration: none; font-size: 0.9rem; }
-    .joined-date { font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 16px; }
+    .loading-spinner { width: 40px; height: 40px; border: 4px solid rgba(0,0,0,0.08); border-top-color: var(--color-primary); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 60px auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -46,7 +50,7 @@
   </nav>
 
   <div id="profileContent" class="profile-container">
-    <div style="padding:60px; text-align:center; color:var(--color-text-muted);">Loading profile...</div>
+    <div class="loading-spinner"></div>
   </div>
 
   <footer class="footer">
@@ -59,7 +63,7 @@
     import { initNav } from '/js/nav.js';
     import { onAuthChange } from '/js/auth.js';
     import { db } from '/js/firebase-config.js';
-    import { collection, query, where, getDocs, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { collection, query, where, getDocs, getDoc, doc, updateDoc, arrayUnion, arrayRemove, increment, limit, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
     document.getElementById('year').textContent = new Date().getFullYear();
     try { initNav('/'); } catch(e) {}
@@ -70,7 +74,6 @@
       return d.innerHTML;
     }
 
-    // Extract name from URL
     const pathParts = window.location.pathname.split('/').filter(Boolean);
     const rawName = pathParts[pathParts.length - 1] || '';
     const displayName = decodeURIComponent(rawName).replace(/_/g, ' ');
@@ -91,8 +94,42 @@
       { level: 8, xp: 1800, title: 'Lighthouse Master' }
     ];
 
-    // Wait for auth to be ready, then load profile
+    let currentUser = null;
+    let profileUid = null;
+    let isFocused = false;
+
+    async function toggleFocus() {
+      if (!currentUser || !profileUid || profileUid === currentUser.uid) return;
+      const btn = document.getElementById('focusBtn');
+      if (!btn) return;
+      btn.disabled = true;
+      try {
+        const myRef = doc(db, 'users', currentUser.uid);
+        const targetRef = doc(db, 'users', profileUid);
+        if (isFocused) {
+          await updateDoc(myRef, { focusing: arrayRemove(profileUid) });
+          await updateDoc(targetRef, { focusers: increment(-1) });
+          isFocused = false;
+          btn.textContent = 'Focus';
+          btn.classList.remove('focused');
+          const fc = document.getElementById('focuserCount');
+          if (fc) fc.textContent = Math.max(0, parseInt(fc.textContent || '0') - 1);
+        } else {
+          await updateDoc(myRef, { focusing: arrayUnion(profileUid) });
+          await updateDoc(targetRef, { focusers: increment(1) });
+          isFocused = true;
+          btn.textContent = 'Focused';
+          btn.classList.add('focused');
+          const fc = document.getElementById('focuserCount');
+          if (fc) fc.textContent = parseInt(fc.textContent || '0') + 1;
+        }
+      } catch(e) { console.error('Focus failed:', e); }
+      btn.disabled = false;
+    }
+    window.toggleProfileFocus = toggleFocus;
+
     onAuthChange(async (user) => {
+      currentUser = user;
       if (!displayName) return;
       try {
         // Find user by displayName
@@ -119,15 +156,32 @@
           return;
         }
 
-        const uid = userDoc.id;
+        profileUid = userDoc.id;
         const data = userDoc.data();
         const color = data.color || 'blue';
         const xp = data.xp || data.totalXP || 0;
+        const focusers = data.focusers || 0;
+        const streak = data.streak || 0;
 
         let current = LEVELS[0];
         for (const l of LEVELS) { if (xp >= l.xp) current = l; }
 
         const joinedDate = data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '';
+
+        // Check if current user is focusing this profile
+        const isOwnProfile = user && profileUid === user.uid;
+        if (user && !isOwnProfile) {
+          try {
+            const mySnap = await getDoc(doc(db, 'users', user.uid));
+            if (mySnap.exists() && mySnap.data().focusing) {
+              isFocused = mySnap.data().focusing.includes(profileUid);
+            }
+          } catch(e) {}
+        }
+
+        const focusBtnHtml = (user && !isOwnProfile)
+          ? `<button class="focus-btn ${isFocused ? 'focused' : ''}" id="focusBtn" onclick="toggleProfileFocus()">${isFocused ? 'Focused' : 'Focus'}</button>`
+          : '';
 
         container.innerHTML = `
           <div class="profile-card">
@@ -137,15 +191,16 @@
             ${joinedDate ? `<div class="joined-date">Joined ${joinedDate}</div>` : ''}
             <div class="stats">
               <div class="stat"><div class="stat-value">${xp}</div><div class="stat-label">Total XP</div></div>
-              <div class="stat"><div class="stat-value">${data.focusers || 0}</div><div class="stat-label">Focusers</div></div>
-              <div class="stat"><div class="stat-value">${data.streak || 0}</div><div class="stat-label">Day Streak</div></div>
+              <div class="stat"><div class="stat-value" id="focuserCount">${focusers}</div><div class="stat-label">Focusers</div></div>
+              <div class="stat"><div class="stat-value">${streak}</div><div class="stat-label">Day Streak</div></div>
             </div>
-            <div class="posts-section" id="userPosts"><h3>Recent Posts</h3><p style="color:var(--color-text-muted); font-size:0.85rem;">Loading posts...</p></div>
+            ${focusBtnHtml}
+            <div class="posts-section" id="userPosts"><h3>Recent Posts</h3><div class="loading-spinner" style="margin:20px auto;width:28px;height:28px;border-width:3px;"></div></div>
           </div>`;
 
         // Load posts
         try {
-          const pq = query(collection(db, 'posts'), where('uid', '==', uid), limit(20));
+          const pq = query(collection(db, 'posts'), where('uid', '==', profileUid), limit(20));
           const pSnap = await getDocs(pq);
           const postsDiv = document.getElementById('userPosts');
           if (pSnap.empty) {
@@ -162,7 +217,11 @@
             let html = '<h3>Recent Posts</h3>';
             posts.forEach(p => {
               const time = p.createdAt ? new Date(p.createdAt.toDate ? p.createdAt.toDate() : p.createdAt.seconds * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-              html += `<div class="user-post"><div class="user-post-text">${esc(p.text)}</div><div class="user-post-meta">${catLabels[p.category] || p.category || ''} &middot; ${time} &middot; ${p.likes || 0} likes</div></div>`;
+              html += `<div class="user-post">
+                <div class="user-post-text">${esc(p.text)}</div>
+                ${p.image ? `<img class="user-post-image" src="${p.image}" alt="Post image" loading="lazy">` : ''}
+                <div class="user-post-meta">${catLabels[p.category] || p.category || ''} &middot; ${time} &middot; ${p.likes || 0} likes</div>
+              </div>`;
             });
             postsDiv.innerHTML = html;
           }

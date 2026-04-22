@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -90,79 +91,83 @@
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'multiple-choice',
-        question: 'IVT requires f to be:',
-        options: ['Differentiable on [a,b]', 'Continuous on [a,b]', 'Polynomial', 'Monotonic'],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'IVT guarantees a unique solution c with f(c) = N.',
-        correctAnswer: false },
-      { type: 'multiple-choice',
-        question: 'For f(x) = x^2 - 3 on [1, 2], which value of N is IVT guaranteed to produce?',
-        options: ['N = -5', 'N = 0', 'N = 5', 'None of these'],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'If f is continuous on [0,4], f(0) = -2, and f(4) = 7, then there is some c \\in (0,4) with f(c) = 3.',
-        correctAnswer: true },
-      { type: 'fill-blank',
-        question: 'For f(x) = x^3 + x - 1, f(0) = -1 and f(1) = ___.',
-        answer: '1' },
-      { type: 'multiple-choice',
-        question: 'Which function is NOT guaranteed to have a zero in [-1, 1] by IVT?',
-        options: [
-          'x^3',
-          'x^2 - 1 (equals 0 at ends)',
-          '\sin x',
-          'x^2 + 1 (always positive)'
-        ],
-        correctIndex: 3 },
-      { type: 'true-false',
-        question: 'IVT can be used to approximate roots by repeatedly narrowing intervals (bisection method).',
-        correctAnswer: true },
-      { type: 'multiple-choice',
-        question: 'For g(x) = \cos x - x, g(0) = 1 and g(1) \\approx -0.46. What does IVT tell us?',
-        options: [
-          'There is a unique c with g(c) = 0.',
-          'There is at least one c \\in (0,1) with \cos c = c.',
-          'g has no roots.',
-          'g is monotonic.'
-        ],
-        correctIndex: 1 },
-      { type: 'fill-blank',
-        question: 'If f is continuous on [2, 5], f(2) = -4 and f(5) = 10, IVT guarantees some c with f(c) = N for any N between -4 and ___.',
-        answer: '10' },
-      { type: 'multiple-choice',
-        question: 'Why does IVT fail to apply to f(x) = 1/x on [-1, 1]?',
-        options: [
-          '1/x is never continuous.',
-          'f is not continuous at x = 0 in [-1, 1].',
-          'It is not a polynomial.',
-          'f(-1) = f(1).'
-        ],
-        correctIndex: 1 },
-      { type: 'true-false',
-        question: 'If f(a) = f(b), IVT tells us f takes every value between f(a) and f(b) on (a,b).',
-        correctAnswer: false },
-      { type: 'matching',
-        question: 'Match each condition for using IVT to show a root exists.',
-        pairs: [
-          { left: 'Continuity requirement', right: 'f continuous on [a,b]' },
-          { left: 'Sign condition', right: 'f(a) and f(b) differ in sign' },
-          { left: 'Conclusion', right: '\\exists\ c \\in (a,b) with f(c)=0' },
-          { left: 'What IVT does NOT say', right: 'How many roots or where they are' }
-        ] }
+            const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'IVT requires \\(f\\) to be:',
+        options: ['Differentiable on \\([a,b]\\)', 'Continuous on \\([a,b]\\)', 'Polynomial', 'Monotonic'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'IVT guarantees a unique solution \\(c\\) with \\(f(c)=N\\).',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'For \\(f(x)=x^2-3\\) on \\([1,2]\\), which \\(N\\) does IVT produce?',
+        options: ['\\(N=-5\\)', '\\(N=0\\)', '\\(N=5\\)', 'None'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f\\) continuous on \\([0,4]\\), \\(f(0)=-2\\), \\(f(4)=7\\), then some \\(c\\) has \\(f(c)=3\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(f(x)=x^3+x-1\\): \\(f(0)=-1\\) and \\(f(1)=\\) ___.',
+        answer: '1'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which is NOT guaranteed a zero in \\([-1,1]\\) by IVT?',
+        options: ['\\(x^3\\)', '\\(x^2-1\\)', '\\(\\sin x\\)', '\\(x^2+1\\) (always positive)'],
+        correctIndex: 3
+      },
+      {
+        type: 'true-false',
+        question: 'IVT can approximate roots by bisection.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(g(x)=\\cos x - x\\), \\(g(0)=1\\), \\(g(1)\\approx -0.46\\). IVT says:',
+        options: ['Unique \\(c\\) with \\(g(c)=0\\)', 'At least one \\(c\\in(0,1)\\) with \\(\\cos c=c\\)', 'No roots', '\\(g\\) is monotonic'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(f\\) continuous on \\([2,5]\\), \\(f(2)=-4\\), \\(f(5)=10\\): works for \\(N\\) between \\(-4\\) and ___.',
+        answer: '10'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Why does IVT fail for \\(f(x)=1/x\\) on \\([-1,1]\\)?',
+        options: ['Never continuous', 'Not continuous at \\(x=0\\)', 'Not polynomial', '\\(f(-1)=f(1)\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f(a)=f(b)\\), IVT says \\(f\\) takes every value between them.',
+        correctAnswer: false
+      },
+      {
+        type: 'matching',
+        question: 'Match IVT conditions.',
+        pairs: [{ left: 'Continuity', right: '\\(f\\) continuous on \\([a,b]\\)' }, { left: 'Sign condition', right: '\\(f(a)\\) and \\(f(b)\\) differ in sign' }, { left: 'Conclusion', right: 'Some \\(c\\) with \\(f(c)=0\\)' }, { left: 'IVT does NOT say', right: 'How many roots' }]
+      }
     ];
 
     const container = document.getElementById('exercises');

@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -99,47 +100,73 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)[\sin y] =',
-        options: ['\cos y', '\cos y\\cdot\\(\\dfrac{dy}{dx}\\)', '-\sin y', '\sin y\\cdot\\(\\dfrac{dy}{dx}\\)'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: '\\(\\dfrac{d}{dx}\\)[\tan y] =',
-        options: ['\sec^2 y', '\sec^2 y\\cdot\\(\\dfrac{dy}{dx}\\)', '\tan y\\cdot\\(\\dfrac{dy}{dx}\\)', '\sec y\tan y\\cdot\\(\\dfrac{dy}{dx}\\)'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: 'From \sin y + x = y, solving gives \\(\\dfrac{dy}{dx}\\) =',
-        options: ['\\(\\dfrac{1}{\cos y - 1}\\)', '\\(\\dfrac{1}{1 - \cos y}\\)', '\cos y', '-\cos y'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: 'From y = x\cos y, \\(\\dfrac{dy}{dx}\\) =',
-        options: ['\cos y', '\\(\\dfrac{\cos y}{1 + x\sin y}\\)', '\\(\\dfrac{\cos y}{1 - x\sin y}\\)', '-x\sin y'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'Differentiating \cos y = x: -\sin y\\(\\dfrac{dy}{dx}\\) = 1, so \\(\\dfrac{dy}{dx}\\) = \-1___.',
-        answer: 'sin y' },
-      { type: 'true-false', question: '\\(\\dfrac{d}{dx}\\)[\cos y] = -\sin y\\cdot\\(\\dfrac{dy}{dx}\\).',
-        correctAnswer: true },
-      { type: 'multiple-choice', question: 'Differentiate \sin(xy) = y. LHS becomes:',
-        options: [
-          '\cos(xy)\\cdot y + x\\(\\dfrac{dy}{dx}\\)',
-          '\cos(xy)\\cdot\(y + x\\(\\dfrac{dy}{dx}\\)\)',
-          '\cos(xy)\\cdot\\(\\dfrac{dy}{dx}\\)',
-          '-\sin(xy)\\cdot y'
-        ],
-        correctIndex: 1 },
-      { type: 'true-false', question: 'For \tan(xy) = x, the derivative of the left side uses both chain rule and product rule on xy.',
-        correctAnswer: true },
-      { type: 'fill-blank', question: 'From \tan(xy) = x, the derivative gives \sec^2(xy)\\cdot\(y + x\\(\\dfrac{dy}{dx}\\)\) = 1. Solving: \\(\\dfrac{dy}{dx}\\) = \\cos^2(xy) - y___.',
-        answer: 'x' },
-      { type: 'multiple-choice', question: 'Differentiate y\sin x = \cos y.',
-        options: [
-          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{-y\cos x}{\sin x + \sin y}\\)',
-          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{y\cos x}{\sin x - \sin y}\\)',
-          '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{\cos y}{\sin x}\\)',
-          '\\(\\dfrac{dy}{dx}\\) = -\sin x'
-        ],
-        correctIndex: 0 },
-      { type: 'true-false', question: 'The approach is the same as polynomial implicit differentiation — only the derivative formulas change.',
-        correctAnswer: true },
-      { type: 'fill-blank', question: 'From \sin y = x, the slope at y=0 is \\(\\dfrac{1}{\cos 0}\\) = ___.',
-        answer: '1' }
+            const exercises = [
+      {
+        type: 'multiple-choice',
+        question: '\\(\\frac{d}{dx}[\\sin y]=\\)',
+        options: ['\\(\\cos y\\)', '\\(\\cos y\\cdot\\frac{dy}{dx}\\)', '\\(-\\sin y\\)', '\\(\\sin y\\cdot\\frac{dy}{dx}\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\frac{d}{dx}[\\tan y]=\\)',
+        options: ['\\(\\sec^2 y\\)', '\\(\\sec^2 y\\cdot\\frac{dy}{dx}\\)', '\\(\\tan y\\cdot\\frac{dy}{dx}\\)', '\\(\\sec y\\tan y\\cdot\\frac{dy}{dx}\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\sin y+x=y\\): \\(\\frac{dy}{dx}=\\)',
+        options: ['\\(\\frac{1}{\\cos y-1}\\)', '\\(\\frac{1}{1-\\cos y}\\)', '\\(\\cos y\\)', '\\(-\\cos y\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(y=x\\cos y\\): \\(\\frac{dy}{dx}=\\)',
+        options: ['\\(\\cos y\\)', '\\(\\frac{\\cos y}{1+x\\sin y}\\)', '\\(\\frac{\\cos y}{1-x\\sin y}\\)', '\\(-x\\sin y\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\cos y=x\\): \\(\\frac{dy}{dx}=\\frac{-1}{\\text{}}\\) ___.',
+        answer: 'sin y'
+      },
+      {
+        type: 'true-false',
+        question: '\\(\\frac{d}{dx}[\\cos y]=-\\sin y\\cdot\\frac{dy}{dx}\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\sin(xy)=y\\). LHS becomes:',
+        options: ['\\(\\cos(xy)\\cdot y+x\\frac{dy}{dx}\\)', '\\(\\cos(xy)\\cdot(y+x\\frac{dy}{dx})\\)', '\\(\\cos(xy)\\cdot\\frac{dy}{dx}\\)', '\\(-\\sin(xy)\\cdot y\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: '\\(\\tan(xy)=x\\) uses chain + product rule on \\(xy\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\tan(xy)=x\\): \\(\\frac{dy}{dx}=\\frac{\\cos^2(xy)-y}{\\text{}}\\) ___.',
+        answer: 'x'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(y\\sin x=\\cos y\\): \\(\\frac{dy}{dx}=\\)',
+        options: ['\\(\\frac{-y\\cos x}{\\sin x+\\sin y}\\)', '\\(\\frac{y\\cos x}{\\sin x-\\sin y}\\)', '\\(\\frac{\\cos y}{\\sin x}\\)', '\\(-\\sin x\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'Same approach as polynomial implicit diff — only formulas change.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\sin y=x\\), slope at \\(y=0\\): \\(\\frac{1}{\\cos 0}=\\) ___.',
+        answer: '1'
+      }
     ];
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

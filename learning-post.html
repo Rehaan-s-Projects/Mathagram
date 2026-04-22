@@ -55,6 +55,31 @@
     /* Main content */
     .posts-container { max-width: 680px; margin: 0 auto; padding: 0 24px 64px; }
 
+    /* Profile section */
+    .my-profile-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0e7490 100%);
+      border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 16px; color: #fff;
+    }
+    .my-profile-card .my-avatar { width: 52px; height: 52px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); cursor: pointer; flex-shrink: 0; }
+    .my-profile-card .my-info { flex: 1; min-width: 0; }
+    .my-profile-card .my-name { font-weight: 800; font-size: 1.05rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .my-profile-card .my-level { font-size: 0.72rem; color: #67e8f9; font-weight: 600; }
+    .my-profile-card .my-stats { display: flex; gap: 16px; flex-shrink: 0; }
+    .my-profile-card .my-stat { text-align: center; }
+    .my-profile-card .my-stat-val { font-weight: 800; font-size: 1.1rem; }
+    .my-profile-card .my-stat-lbl { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+    .my-profile-card .my-view-btn {
+      display: inline-block; padding: 6px 16px; font-size: 0.72rem; font-weight: 700;
+      border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.4); background: transparent;
+      color: #fff; cursor: pointer; transition: all 0.2s; margin-top: 6px; text-decoration: none;
+    }
+    .my-profile-card .my-view-btn:hover { background: rgba(255,255,255,0.15); }
+    @media (max-width: 520px) {
+      .my-profile-card { flex-wrap: wrap; }
+      .my-profile-card .my-stats { width: 100%; justify-content: space-around; margin-top: 8px; }
+    }
+
     /* New post form */
     .new-post-card {
       background: var(--color-white); border: 1px solid var(--color-border);
@@ -371,11 +396,15 @@
     <!-- Filter tabs -->
     <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="focused" style="background:transparent;border-color:var(--color-primary);color:var(--color-primary);">&#128065; Focused</button>
       <button class="filter-tab" data-filter="question">Questions</button>
       <button class="filter-tab" data-filter="tip">Study Tips</button>
       <button class="filter-tab" data-filter="progress">Progress</button>
       <button class="filter-tab" data-filter="discussion">Discussion</button>
     </div>
+
+    <!-- My profile (shown if logged in) -->
+    <div id="myProfileSection"></div>
 
     <!-- New post (shown if logged in) -->
     <div id="newPostSection"></div>
@@ -451,7 +480,21 @@
     let userProfile = null;
     let allPosts = [];
     let currentFilter = 'all';
-    let focusedUsers = new Set(); // UIDs the current user is focusing
+    let focusedUsers = new Set();
+
+    // Quiz choice builder (module scope so submitPost can access it)
+    const quizLabels = ['A','B','C','D','E'];
+    function buildQuizChoices(count) {
+      const container = document.getElementById('quizChoicesContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const label = document.createElement('label');
+        label.style.cssText = 'display:flex; align-items:center; gap:8px;';
+        label.innerHTML = `<input type="radio" name="correctAnswer" value="${i}" ${i === 0 ? 'checked' : ''} style="accent-color:#22c55e;"> <input type="text" class="quiz-choice-input" placeholder="Choice ${quizLabels[i]}" maxlength="100" style="flex:1; padding:8px 12px; border:1px solid var(--color-border); border-radius:8px; font-size:0.88rem; font-family:inherit;">`;
+        container.appendChild(label);
+      }
+    } // UIDs the current user is focusing
 
     // Filter tabs
     document.querySelectorAll('.filter-tab').forEach(tab => {
@@ -466,17 +509,44 @@
     onAuthChange(async (user) => {
       currentUser = user;
       const section = document.getElementById('newPostSection');
+      const profileSection = document.getElementById('myProfileSection');
       if (user) {
         try { userProfile = await getUserProfile(); } catch(e) { userProfile = null; }
-        // Load who this user is focusing
+        // Load user data from Firestore
+        let userData = null;
         try {
           const { db } = await import('./js/firebase-config.js');
           const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
           const snap = await getDoc(doc(db, 'users', user.uid));
-          if (snap.exists() && snap.data().focusing) {
-            focusedUsers = new Set(snap.data().focusing);
+          if (snap.exists()) {
+            userData = snap.data();
+            if (userData.focusing) focusedUsers = new Set(userData.focusing);
           }
         } catch(e) {}
+
+        // Render profile card
+        const color = (userData && userData.color) || (userProfile && userProfile.color) || 'blue';
+        const displayName = (userData && userData.displayName) || user.displayName || 'Learner';
+        const xp = (userData && (userData.xp || userData.totalXP)) || 0;
+        const focusers = (userData && userData.focusers) || 0;
+        const streak = (userData && userData.streak) || 0;
+        const lvl = calculateLevel(xp);
+        const profileURL = `/learning-post/profile/${encodeURIComponent(displayName.replace(/ /g, '_'))}`;
+        profileSection.innerHTML = `
+          <div class="my-profile-card">
+            <img class="my-avatar" src="assets/avatars/${sanitizeHTML(color)}.svg" alt="" onclick="window.location.href='${profileURL}'">
+            <div class="my-info">
+              <div class="my-name">${sanitizeHTML(displayName)}</div>
+              <div class="my-level">Level ${lvl.level} — ${lvl.title}</div>
+              <a href="${profileURL}" class="my-view-btn">View Profile</a>
+            </div>
+            <div class="my-stats">
+              <div class="my-stat"><div class="my-stat-val">${xp}</div><div class="my-stat-lbl">XP</div></div>
+              <div class="my-stat"><div class="my-stat-val">${focusers}</div><div class="my-stat-lbl">Focusers</div></div>
+              <div class="my-stat"><div class="my-stat-val">${streak}</div><div class="my-stat-lbl">Streak</div></div>
+            </div>
+          </div>`;
+
         section.innerHTML = `
           <div class="new-post-card">
             <h3>Share with the community</h3>
@@ -509,7 +579,7 @@
             <div id="imageError"></div>
             <div class="post-actions">
               <span class="char-count"><span id="charCount">0</span>/500</span>
-              <button class="post-submit" id="postSubmit">Post</button>
+              <button class="post-submit" id="postSubmit">Teach</button>
             </div>
           </div>`;
         const textarea = document.getElementById('postText');
@@ -519,18 +589,6 @@
         });
         document.getElementById('postImage').addEventListener('change', handleImageSelect);
         document.getElementById('postSubmit').addEventListener('click', submitPost);
-        // Quiz choice builder
-        const labels = ['A','B','C','D','E'];
-        function buildQuizChoices(count) {
-          const container = document.getElementById('quizChoicesContainer');
-          container.innerHTML = '';
-          for (let i = 0; i < count; i++) {
-            const label = document.createElement('label');
-            label.style.cssText = 'display:flex; align-items:center; gap:8px;';
-            label.innerHTML = `<input type="radio" name="correctAnswer" value="${i}" ${i === 0 ? 'checked' : ''} style="accent-color:#22c55e;"> <input type="text" class="quiz-choice-input" placeholder="Choice ${labels[i]}" maxlength="100" style="flex:1; padding:8px 12px; border:1px solid var(--color-border); border-radius:8px; font-size:0.88rem; font-family:inherit;">`;
-            container.appendChild(label);
-          }
-        }
         // Handle count button clicks
         document.querySelectorAll('.quiz-count-btn').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -555,6 +613,7 @@
         document.getElementById('postText').placeholder = 'Write your question here...';
         buildQuizChoices(2);
       } else {
+        profileSection.innerHTML = '';
         section.innerHTML = `
           <div class="login-prompt">
             <p>Log in to share your learning journey with the community.</p>
@@ -620,19 +679,77 @@
       if (input) input.value = '';
     };
 
+    // Content rules validation — uses word boundaries so "class" doesn't match "ass", etc.
+    const BLOCKED_WORDS = ['fuck','shit','damn','bitch','bastard','dick','pussy','cock','cunt','fag','nigger','nigga','retard','whore','slut','stfu','wtf','lmao','lmfao'];
+    const BLOCKED_REGEX = new RegExp('\\b(' + BLOCKED_WORDS.join('|') + ')\\b', 'i');
+    const PERSONAL_PATTERNS = [/\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/, /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/, /my\s+(address|phone|number|school)\s+is/i, /i\s+live\s+(at|in|on)\s+\d/i];
+    const SOCIAL_PATTERNS = [/discord\.gg/i, /instagram\.com/i, /tiktok\.com/i, /snapchat/i, /follow\s+me\s+(on|at)/i, /my\s+(insta|snap|tiktok|discord|youtube)/i, /add\s+me\s+on/i, /dm\s+me/i];
+    const OFFTOPIC_PATTERNS = [/who\s+wants?\s+to\s+(be|chat|talk|date|hang)/i, /i'?m\s+bored/i, /anyone\s+single/i, /what'?s?\s+your\s+age/i, /how\s+old\s+are\s+you/i];
+
+    function validatePost(text) {
+      const lower = text.toLowerCase();
+      // Check profanity (word boundaries only — "class" won't match "ass")
+      if (BLOCKED_REGEX.test(text)) return { ok: false, msg: 'Your post contains inappropriate language. Please keep it respectful and educational.' };
+      // Check personal info
+      for (const p of PERSONAL_PATTERNS) {
+        if (p.test(text)) return { ok: false, msg: 'Do not share personal information (phone numbers, emails, addresses, school names). Protect your privacy!' };
+      }
+      // Check social media promotion
+      for (const p of SOCIAL_PATTERNS) {
+        if (p.test(text)) return { ok: false, msg: 'No social media links or promotion. This community is for learning only — not for growing followers.' };
+      }
+      // Check off-topic
+      for (const p of OFFTOPIC_PATTERNS) {
+        if (p.test(text)) return { ok: false, msg: 'This post looks off-topic. Learning Post is for educational content only — study tips, questions, and progress updates.' };
+      }
+      // Minimum length — just need at least 1 character
+      if (text.length < 1) return { ok: false, msg: 'Please write something before posting.' };
+      return { ok: true };
+    }
+
+    let lastPostTime = 0;
+
     async function submitPost() {
-      const text = document.getElementById('postText').value.trim();
-      const category = document.getElementById('postCategory').value;
-      if (!text || !currentUser) return;
+      const textEl = document.getElementById('postText');
       const btn = document.getElementById('postSubmit');
+      if (!textEl || !btn) return;
+
+      const text = textEl.value.trim();
+      const category = document.getElementById('postCategory')?.value || 'discussion';
+
+      if (!currentUser) {
+        alert('Please log in to teach.');
+        return;
+      }
+      if (!text) {
+        alert('Please write something before posting.');
+        textEl.focus();
+        return;
+      }
+
+      // Rate limit — 30 seconds between posts
+      const now = Date.now();
+      if (now - lastPostTime < 30000) {
+        const wait = Math.ceil((30000 - (now - lastPostTime)) / 1000);
+        alert('Please wait ' + wait + ' more seconds before posting again.');
+        return;
+      }
+
+      // Validate content against rules
+      const check = validatePost(text);
+      if (!check.ok) {
+        alert(check.msg);
+        return;
+      }
+
       btn.disabled = true;
-      btn.textContent = 'Posting...';
+      btn.textContent = 'Teaching...';
       try {
         const { db } = await import('./js/firebase-config.js');
         const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
         const postData = {
           uid: currentUser.uid,
-          displayName: userProfile?.displayName || 'Anonymous',
+          displayName: userProfile?.displayName || currentUser.displayName || 'Anonymous',
           color: userProfile?.color || 'blue',
           category: category,
           text: text,
@@ -649,7 +766,6 @@
           const choices = Array.from(choiceInputs).map(c => c.value.trim());
           const correctRadio = document.querySelector('input[name="correctAnswer"]:checked');
           const correctIndex = correctRadio ? parseInt(correctRadio.value) : 0;
-          // Only save quiz if at least 2 choices filled
           const filledChoices = choices.filter(c => c.length > 0);
           if (filledChoices.length >= 2) {
             postData.quizChoices = choices;
@@ -657,25 +773,35 @@
           }
         }
         await addDoc(collection(db, 'posts'), postData);
-        document.getElementById('postText').value = '';
+        lastPostTime = Date.now();
+        textEl.value = '';
         document.getElementById('charCount').textContent = '0';
         pendingImageData = null;
         document.getElementById('imagePreview').innerHTML = '';
-        const input = document.getElementById('postImage');
-        if (input) input.value = '';
+        const fileInput = document.getElementById('postImage');
+        if (fileInput) fileInput.value = '';
         // Reset quiz builder
-        document.querySelectorAll('.quiz-count-btn').forEach(b => {
-          b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'var(--color-primary)';
-        });
-        const firstBtn = document.querySelector('.quiz-count-btn[data-count="2"]');
-        firstBtn.classList.add('active'); firstBtn.style.background = 'var(--color-primary)'; firstBtn.style.color = '#fff';
-        buildQuizChoices(2);
+        try {
+          document.querySelectorAll('.quiz-count-btn').forEach(b => {
+            b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'var(--color-primary)';
+          });
+          const firstBtn = document.querySelector('.quiz-count-btn[data-count="2"]');
+          if (firstBtn) { firstBtn.classList.add('active'); firstBtn.style.background = 'var(--color-primary)'; firstBtn.style.color = '#fff'; }
+          buildQuizChoices(2);
+        } catch(e) {}
+        btn.disabled = false;
+        btn.textContent = 'Teach';
+        // Show success briefly
+        btn.textContent = 'Taught!';
+        btn.style.background = '#22c55e';
+        setTimeout(() => { btn.textContent = 'Teach'; btn.style.background = ''; }, 2000);
         loadPosts();
       } catch(e) {
         console.error('Post failed:', e);
+        alert('Something went wrong: ' + (e.message || 'Unknown error') + '. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Teach';
       }
-      btn.disabled = false;
-      btn.textContent = 'Post';
     }
 
     async function loadPosts() {
@@ -709,9 +835,9 @@
       <div class="post-item" style="border:2px solid var(--color-primary); position:relative;">
         <div style="position:absolute; top:12px; right:14px; background:var(--color-primary); color:#fff; font-size:0.6rem; font-weight:800; padding:3px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em;">Pinned</div>
         <div class="post-header">
-          <div class="post-avatar" style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#00e5c8,#00b89f); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1rem; flex-shrink:0;">R</div>
+          <div class="post-avatar" style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#00e5c8,#00b89f); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1rem; flex-shrink:0; cursor:pointer;" onclick="window.location.href='/learning-post/profile/Rehaan_Rashid'">R</div>
           <div class="post-meta">
-            <div class="post-author">Rehaan Rashid <span style="font-size:0.65rem; color:#fff; background:var(--color-primary); padding:2px 8px; border-radius:999px; font-weight:800; margin-left:4px;">CREATOR</span></div>
+            <div class="post-author" style="cursor:pointer" onclick="window.location.href='/learning-post/profile/Rehaan_Rashid'">Rehaan Rashid <span style="font-size:0.65rem; color:#fff; background:var(--color-primary); padding:2px 8px; border-radius:999px; font-weight:800; margin-left:4px;">CREATOR</span></div>
             <div class="post-time">Founder of Mathagram</div>
           </div>
           <span class="post-category-tag" style="background:#8b5cf6">Discussion</span>
@@ -729,7 +855,9 @@ Remember: this is NOT social media. Keep it educational, follow the rules, and l
 
     function renderPosts() {
       const feed = document.getElementById('postsFeed');
-      const filtered = currentFilter === 'all' ? allPosts : allPosts.filter(p => p.category === currentFilter);
+      const filtered = currentFilter === 'all' ? allPosts
+        : currentFilter === 'focused' ? allPosts.filter(p => p.uid && focusedUsers.has(p.uid))
+        : allPosts.filter(p => p.category === currentFilter);
       // Always show Rehaan's pinned post first (on 'all' or 'discussion' filter)
       const showPinned = currentFilter === 'all' || currentFilter === 'discussion';
       const postsHtml = filtered.map(post => {
@@ -745,9 +873,9 @@ Remember: this is NOT social media. Keep it educational, follow the rules, and l
         return `
           <div class="post-item" data-category="${sanitizeHTML(post.category)}">
             <div class="post-header">
-              <img class="post-avatar" src="assets/avatars/${sanitizeHTML(color)}.svg" alt="" ${post.uid ? `onclick="openProfilePopup('${post.uid}')"` : ''}>
+              <img class="post-avatar" src="assets/avatars/${sanitizeHTML(color)}.svg" alt="" style="cursor:pointer" onclick="${post.uid ? `openProfilePopup('${post.uid}')` : `window.location.href='/learning-post/profile/${encodeURIComponent((post.displayName||'').replace(/ /g,'_'))}'`}">
               <div class="post-meta">
-                <div class="post-author" ${post.uid ? `style="cursor:pointer" onclick="openProfilePopup('${post.uid}')"` : ''}>${sanitizeHTML(post.displayName)}</div>
+                <div class="post-author" style="cursor:pointer" onclick="${post.uid ? `openProfilePopup('${post.uid}')` : `window.location.href='/learning-post/profile/${encodeURIComponent((post.displayName||'').replace(/ /g,'_'))}'`}">${sanitizeHTML(post.displayName)}</div>
                 <div class="post-time">${time}</div>
               </div>
               ${focusBtn}

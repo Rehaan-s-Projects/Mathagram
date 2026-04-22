@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -103,47 +104,73 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'multiple-choice', question: 'When we differentiate y^2 with respect to x, we get:',
-        options: ['2y', '2y\ \\(\\dfrac{dy}{dx}\\)', 'y\ \\(\\dfrac{dy}{dx}\\)', '2x'],
-        correctIndex: 1 },
-      { type: 'multiple-choice', question: 'From x^2+y^2=25, \\(\\dfrac{dy}{dx}\\) =',
-        options: ['\\(\\dfrac{x}{y}\\)', '-\\(\\dfrac{x}{y}\\)', '\\(\\dfrac{y}{x}\\)', '-\\(\\dfrac{y}{x}\\)'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'For the circle x^2+y^2=25, the slope at (3,4) is -3/___.',
-        answer: '4' },
-      { type: 'multiple-choice', question: 'Differentiate x^3 + y^3 = 6xy implicitly. The equation becomes:',
-        options: [
-          '3x^2 + 3y^2\\(\\dfrac{dy}{dx}\\) = 6y + 6x\\(\\dfrac{dy}{dx}\\)',
-          '3x^2 + 3y^2 = 6xy',
-          '3x^2\\(\\dfrac{dy}{dx}\\) + 3y^2 = 6x + 6y\\(\\dfrac{dy}{dx}\\)',
-          'x^3 + y^3 = 6x\\(\\dfrac{dy}{dx}\\) + 6y'
-        ],
-        correctIndex: 0 },
-      { type: 'true-false', question: 'Implicit differentiation requires the chain rule on every y-term.',
-        correctAnswer: true },
-      { type: 'multiple-choice', question: 'Differentiate xy = 1 implicitly:',
-        options: ['\\(\\dfrac{dy}{dx}\\) = -\\(\\dfrac{y}{x}\\)', '\\(\\dfrac{dy}{dx}\\) = \\(\\dfrac{y}{x}\\)', '\\(\\dfrac{dy}{dx}\\) = -x/y', '\\(\\dfrac{dy}{dx}\\)=1'],
-        correctIndex: 0 },
-      { type: 'fill-blank', question: 'From y^2 = x, differentiating gives 2y\\(\\dfrac{dy}{dx}\\) = 1, so \\(\\dfrac{dy}{dx}\\) = \1___.',
-        answer: '2y' },
-      { type: 'multiple-choice', question: 'For \sin y = x, \\(\\dfrac{dy}{dx}\\) =',
-        options: ['\cos y', '\\(\\dfrac{1}{\cos y}\\)', '-\cos y', '\sec y \\cdot \sin y'],
-        correctIndex: 1 },
-      { type: 'true-false', question: 'You can always solve explicit curves like y=f(x) using implicit differentiation — it just takes longer.',
-        correctAnswer: true },
-      { type: 'fill-blank', question: 'For x^2 + xy + y^2 = 7, after differentiating: 2x + y + x\\(\\dfrac{dy}{dx}\\) + 2y\\(\\dfrac{dy}{dx}\\) = 0. So \\(\\dfrac{dy}{dx}\\) = \(-(2x+y))/(x+2y). At (1,2), \\(\\dfrac{dy}{dx}\\) = ___ (fraction).',
-        answer: '-4/5' },
-      { type: 'multiple-choice', question: 'Which equation is MOST naturally handled by implicit differentiation?',
-        options: ['y = x^2', 'y = \sin x', 'x^2 + xy + y^2 = 7', 'y = e^x'],
-        correctIndex: 2 },
-      { type: 'matching', question: 'Match each derivative operation to the x-derivative.',
-        pairs: [
-          { left: '\\(\\dfrac{d}{dx}\\)[x^2]', right: '2x' },
-          { left: '\\(\\dfrac{d}{dx}\\)[y^2]', right: '2y\ \\(\\dfrac{dy}{dx}\\)' },
-          { left: '\\(\\dfrac{d}{dx}\\)[xy]', right: 'y + x\ \\(\\dfrac{dy}{dx}\\)' },
-          { left: '\\(\\dfrac{d}{dx}\\)[\sin y]', right: '\cos y \\cdot \\(\\dfrac{dy}{dx}\\)' }
-        ] }
+            const exercises = [
+      {
+        type: 'multiple-choice',
+        question: '\\(\\frac{d}{dx}[y^2]=\\)',
+        options: ['\\(2y\\)', '\\(2y\\frac{dy}{dx}\\)', '\\(y\\frac{dy}{dx}\\)', '\\(2x\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'From \\(x^2+y^2=25\\): \\(\\frac{dy}{dx}=\\)',
+        options: ['\\(\\frac{x}{y}\\)', '\\(-\\frac{x}{y}\\)', '\\(\\frac{y}{x}\\)', '\\(-\\frac{y}{x}\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'Slope at \\((3,4)\\) on \\(x^2+y^2=25\\): \\(-3/\\)___.',
+        answer: '4'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Differentiate \\(x^3+y^3=6xy\\):',
+        options: ['\\(3x^2+3y^2\\frac{dy}{dx}=6y+6x\\frac{dy}{dx}\\)', '\\(3x^2+3y^2=6xy\\)', '\\(3x^2\\frac{dy}{dx}+3y^2=6x+6y\\frac{dy}{dx}\\)', 'None of these'],
+        correctIndex: 0
+      },
+      {
+        type: 'true-false',
+        question: 'Implicit diff requires chain rule on every \\(y\\)-term.',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(xy=1\\): \\(\\frac{dy}{dx}=\\)',
+        options: ['\\(-\\frac{y}{x}\\)', '\\(\\frac{y}{x}\\)', '\\(-x/y\\)', '\\(1\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: 'From \\(y^2=x\\): \\(\\frac{dy}{dx}=\\frac{1}{\\text{}}\\) ___.',
+        answer: '2y'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\sin y=x\\): \\(\\frac{dy}{dx}=\\)',
+        options: ['\\(\\cos y\\)', '\\(\\frac{1}{\\cos y}\\)', '\\(-\\cos y\\)', '\\(\\sec y\\sin y\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'Explicit curves can also use implicit differentiation.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(x^2+xy+y^2=7\\) at \\((1,2)\\): \\(\\frac{dy}{dx}=\\) ___ (fraction).',
+        answer: '-4/5'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Best for implicit diff:',
+        options: ['\\(y=x^2\\)', '\\(y=\\sin x\\)', '\\(x^2+xy+y^2=7\\)', '\\(y=e^x\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'matching',
+        question: 'Match derivative ops.',
+        pairs: [{ left: '\\(\\frac{d}{dx}[x^2]\\)', right: '\\(2x\\)' }, { left: '\\(\\frac{d}{dx}[y^2]\\)', right: '\\(2y\\frac{dy}{dx}\\)' }, { left: '\\(\\frac{d}{dx}[xy]\\)', right: '\\(y+x\\frac{dy}{dx}\\)' }, { left: '\\(\\frac{d}{dx}[\\sin y]\\)', right: '\\(\\cos y\\cdot\\frac{dy}{dx}\\)' }]
+      }
     ];
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -160,7 +161,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -169,8 +170,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -207,7 +208,7 @@
         pairs: [
           { left: 'Function has a hole at \\(x = a\\)', right: 'f(a) is not defined' },
           { left: 'Left and right limits disagree', right: 'Limit does not exist' },
-          { left: 'Limit exists but ≠ f(a)', right: 'Limit ≠ f(a)' },
+          { left: 'Limit exists but \\ne f(a)', right: 'Limit \\ne f(a)' },
           { left: 'Vertical asymptote at \\(x = a\\)', right: 'f(a) is not defined' }
         ]
       },
@@ -227,7 +228,7 @@
         question: 'A rational function \\(\\frac{p(x)}{q(x)}\\) is continuous at \\(x = a\\) provided that:',
         options: [
           'p(a) = 0',
-          'q(a) ≠ 0',
+          'q(a) \\ne 0',
           'p(a) > q(a)',
           'q(a) = 0'
         ],
@@ -240,7 +241,7 @@
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: if f(x) = x² − 3x, then f(5) = ___',
+        question: 'Fill the missing number: if f(x) = x^2 − 3x, then f(5) = ___',
         answer: '10'
       },
       {

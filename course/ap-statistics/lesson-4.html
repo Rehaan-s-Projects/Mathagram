@@ -15,6 +15,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 <nav class="nav"><div class="container">
   <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
@@ -68,14 +69,14 @@
     initRitaChat('../../');
     import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
   import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
-  document.addEventListener("DOMContentLoaded", function() {
+  (function renderMath() {
     if (typeof renderMathInElement !== 'undefined') {
       renderMathInElement(document.body, {
         delimiters: [{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}],
         throwOnError: false
       });
-    }
-  });
+    } else { setTimeout(renderMath, 80); }
+  })();
   document.getElementById('year').textContent = new Date().getFullYear();
 
   initSideCharacter(randomCharacterId(), '../../');

@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
   <nav class="nav">
     <div class="container">
@@ -106,40 +107,71 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     initSideCharacter(randomCharacterId(), '../../');
 
-    const exercises = [
-      { type: 'fill-blank', question: 'For f(x)=x^2-3x, f\'(4) = ___.',
-        answer: '5' },
-      { type: 'multiple-choice', question: 'For f(x)=1/x, f\'(2) =',
-        options: ['\\(\\dfrac{1}{4}\\)', '-\\(\\dfrac{1}{4}\\)', '\\(\\dfrac{1}{2}\\)', '2'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'For f(x)=\sin x, f\'(\\pi) = ___.',
-        answer: '-1' },
-      { type: 'multiple-choice', question: 'For f(x)=x^3, f\'(2) =',
-        options: ['6', '8', '12', '4'],
-        correctIndex: 2 },
-      { type: 'true-false', question: 'f\'(a) gives the slope of the tangent line to y=f(x) at x=a.',
-        correctAnswer: true },
-      { type: 'fill-blank', question: 'For f(x)=\\sqrtx, f\'(9) = \12\\sqrt9 = \1___.',
-        answer: '6' },
-      { type: 'multiple-choice', question: 'For f(x)=e^x, f\'(0) =',
-        options: ['0', '1', 'e', 'Undefined'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'For f(x)=\ln x, f\'(1) = ___.',
-        answer: '1' },
-      { type: 'multiple-choice', question: 'f\'(a) = lim h\\to0 of \(f(a+h) - f(a))/(h) is the:',
-        options: ['Average rate of change', 'Definition of the derivative at a', 'Power rule', 'Quotient rule'],
-        correctIndex: 1 },
-      { type: 'fill-blank', question: 'For f(x)=5x^2, f\'(1) = ___.',
-        answer: '10' },
-      { type: 'true-false', question: 'If f(t) is position, f\'(a) is velocity at time a.',
-        correctAnswer: true },
-      { type: 'matching', question: 'Match each function with f\'(1).',
-        pairs: [
-          { left: 'f(x)=x^2', right: '2' },
-          { left: 'f(x)=x^3', right: '3' },
-          { left: 'f(x)=\\sqrtx', right: '\\(\\dfrac{1}{2}\\)' },
-          { left: 'f(x)=\ln x', right: '1' }
-        ] }
+            const exercises = [
+      {
+        type: 'fill-blank',
+        question: '\\(f(x)=x^2-3x\\): \\(f\\prime(4)=\\) ___.',
+        answer: '5'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(f(x)=1/x\\): \\(f\\prime(2)=\\)',
+        options: ['\\(\\frac{1}{4}\\)', '\\(-\\frac{1}{4}\\)', '\\(\\frac{1}{2}\\)', '\\(2\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(f(x)=\\sin x\\): \\(f\\prime(\\pi)=\\) ___.',
+        answer: '-1'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(f(x)=x^3\\): \\(f\\prime(2)=\\)',
+        options: ['\\(6\\)', '\\(8\\)', '\\(12\\)', '\\(4\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'true-false',
+        question: '\\(f\\prime(a)\\) = slope of tangent at \\(x=a\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(f(x)=\\sqrt{x}\\): \\(f\\prime(9)=\\frac{1}{\\text{}}\\) ___.',
+        answer: '6'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(f(x)=e^x\\): \\(f\\prime(0)=\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(e\\)', 'Undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(f(x)=\\ln x\\): \\(f\\prime(1)=\\) ___.',
+        answer: '1'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(f\\prime(a)=\\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}\\) is the:',
+        options: ['Average rate', 'Definition of derivative at \\(a\\)', 'Power rule', 'Quotient rule'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(f(x)=5x^2\\): \\(f\\prime(1)=\\) ___.',
+        answer: '10'
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f(t)\\) is position, \\(f\\prime(a)\\) is velocity at \\(a\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'matching',
+        question: 'Match \\(f\\prime(1)\\).',
+        pairs: [{ left: '\\(x^2\\)', right: '\\(2\\)' }, { left: '\\(x^3\\)', right: '\\(3\\)' }, { left: '\\(\\sqrt{x}\\)', right: '\\(\\frac{1}{2}\\)' }, { left: '\\(\\ln x\\)', right: '\\(1\\)' }]
+      }
     ];
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');

@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../../css/calculator.css">
 </head>
 <body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
 
   <!-- Navigation -->
@@ -168,7 +169,7 @@
     import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
 
     // KaTeX auto-render
-    document.addEventListener("DOMContentLoaded", function() {
+    (function renderMath() {
       if (typeof renderMathInElement !== 'undefined') {
         renderMathInElement(document.body, {
           delimiters: [
@@ -177,8 +178,8 @@
           ],
           throwOnError: false
         });
-      }
-    });
+      } else { setTimeout(renderMath, 80); }
+  })();
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -189,39 +190,39 @@
     const exercises = [
       {
         type: 'multiple-choice',
-        question: 'What is lim x→2 of (x² − 4) / (x − 2)?',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}\\)?',
         options: ['2', '4', '0', 'undefined'],
         correctIndex: 1
       },
       {
         type: 'multiple-choice',
-        question: 'What is lim x→−1 of (x² − 1) / (x + 1)?',
+        question: 'What is \\(\\displaystyle\\lim_{x \\to -1} \\frac{x^2 - 1}{x + 1}\\)?',
         options: ['-2', '0', '2', 'undefined'],
         correctIndex: 0
       },
       {
         type: 'fill-blank',
-        question: 'lim x→3 of (x² − 9) / (x − 3) = ___',
+        question: '\\(\\displaystyle\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3} = \\) ___',
         answer: '6'
       },
       {
         type: 'fill-blank',
-        question: 'lim x→5 of (x² − 25) / (x − 5) = ___',
+        question: '\\(\\displaystyle\\lim_{x \\to 5} \\frac{x^2 - 25}{x - 5} = \\) ___',
         answer: '10'
       },
       {
         type: 'true-false',
-        question: 'If f(a) is undefined, then lim x→a of f(x) must also be undefined.',
+        question: 'If \\(f(a)\\) is undefined, then \\(\\displaystyle\\lim_{x \\to a} f(x)\\) must also be undefined.',
         correctAnswer: false
       },
       {
         type: 'matching',
         question: 'Match each limit with its value after factoring and canceling.',
         pairs: [
-          { left: 'lim x→1 of (x² − 1)/(x − 1)', right: '2' },
-          { left: 'lim x→4 of (x² − 16)/(x − 4)', right: '8' },
-          { left: 'lim x→−3 of (x² − 9)/(x + 3)', right: '-6' },
-          { left: 'lim x→0 of (x² + 3x)/x', right: '3' }
+          { left: '\\(\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}\\)', right: '2' },
+          { left: '\\(\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4}\\)', right: '8' },
+          { left: '\\(\\lim_{x \\to -3} \\frac{x^2 - 9}{x + 3}\\)', right: '-6' },
+          { left: '\\(\\lim_{x \\to 0} \\frac{x^2 + 3x}{x}\\)', right: '3' }
         ]
       },
       {
@@ -232,23 +233,38 @@
       },
       {
         type: 'multiple-choice',
-        question: 'When direct substitution gives 0 / 0, this is called:',
+        question: 'When direct substitution gives \\(\\frac{0}{0}\\), this is called:',
         options: ['An infinite limit', 'An indeterminate form', 'A divergent limit', 'A continuous function'],
         correctIndex: 1
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: lim x→3 of (x² − 9)/(x − 3) = lim x→3 of (x + 3) = ___',
-        answer: '6'
+        question: '🚗 A car\'s speed near a pothole has a tiny gap in the data at t = 2, but readings around it approach 45 mph. The limit is ___ mph.',
+        answer: '45'
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: lim x→2 of (x² − 4)/(x − 2) = ___',
+        question: '🎢 The coaster height <strong>h(x) = (x^2 − 4)/(x − 2)</strong> has a hole at x = 2, but the limit there equals ___.',
         answer: '4'
       },
       {
         type: 'fill-blank',
-        question: 'Fill the missing number: lim x→1 of (x² − 1)/(x − 1) = ___',
+        question: '🏔️ The altitude function has a single missing point at x = 3 with surrounding values approaching 7 m. lim altitude = ___ m.',
+        answer: '7'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 3}\\frac{x^2 - 9}{x - 3} = \\lim_{x\\to 3}(x + 3) = \\) ___',
+        answer: '6'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 2}\\frac{x^2 - 4}{x - 2} = \\) ___',
+        answer: '4'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: \\(\\lim_{x\\to 1}\\frac{x^2 - 1}{x - 1} = \\) ___',
         answer: '2'
       }
     ];
