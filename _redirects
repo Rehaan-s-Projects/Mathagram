@@ -1,2 +1,6 @@
 /learning-post/learner/*  /learning-post/learner/index.html  200
 /learning-post/profile/*  /learning-post/learner/index.html  200
+/course/english-words-oed/*  /courses.html  301!
+/course/english-words-oed  /courses.html  301!
+/course/spanish-words-rae/*  /courses.html  301!
+/course/spanish-words-rae  /courses.html  301!
