@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Development — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Web Development</h1>
+    <p>Build websites from scratch — HTML, CSS, JavaScript, responsive design, frameworks, APIs, databases, and deployment. 375 lessons across 25 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is the Web?',['How the Internet Works','Client vs Server','HTTP & HTTPS','URLs & Domains','DNS — Domain Name System','Browsers & Rendering','Frontend vs Backend','Full-Stack Development','Web Standards — W3C','Developer Tools — Inspect Element','Local vs Production','Web Hosting Basics','Static vs Dynamic Sites','Career Paths in Web Dev','Web Intro Checkpoint']],
+      [2,'HTML Basics',['What Is HTML?','HTML Document Structure','Headings — h1 to h6','Paragraphs & Text','Bold Italic Underline','Links — a href','Images — img src','Lists — ul ol li','Tables','Forms — input select textarea','Buttons','Div & Span','Semantic HTML — header nav main footer','HTML Comments','HTML Checkpoint']],
+      [3,'HTML Advanced',['Forms Advanced — Validation','Input Types — email number date','Audio & Video','iframes','Meta Tags & SEO','Accessibility — aria','Favicon','Open Graph Tags','HTML Entities','Data Attributes','Dialog Element','Details & Summary','Template Element','HTML Best Practices','HTML Advanced Checkpoint']],
+      [4,'CSS Basics',['What Is CSS?','\1, Internal & External CSS','Selectors — Element Class ID','Colors — Hex RGB HSL','Backgrounds','Font Properties','Text Properties','Box Model — Margin Padding Border','Width & Height','Display — block inline inline-block none','Overflow','CSS Comments','CSS Reset & Normalize','Developer Tools for CSS','CSS Basics Checkpoint']],
+      [5,'CSS Layout',['Position — static relative absolute fixed sticky','Float & Clear','Flexbox — Container','Flexbox — Items','Flexbox — Alignment','CSS Grid — Container','CSS Grid — Items','Grid Template Areas','Centering Things in CSS','Responsive Design Principles','Media Queries','Mobile-First Design','Viewport Units — vw vh','Aspect Ratio','CSS Layout Checkpoint']],
+      [6,'CSS Advanced',['Pseudo-Classes — :hover :focus :nth-child','Pseudo-Elements — ::before ::after','CSS Variables — Custom Properties','Transitions','Animations — @keyframes','Transforms — rotate scale translate','Gradients','Box Shadow & Text Shadow','Filters — blur brightness','Clip-Path','CSS Specificity','!important & When to Avoid','CSS Architecture — BEM','Sass/SCSS Preview','CSS Advanced Checkpoint']],
+      [7,'JavaScript Basics',['What Is JavaScript?','Variables — let const var','Data Types','Operators','String Methods','Template Literals','if-else & switch','for & while Loops','Arrays','Array Methods — push pop shift map filter','Objects','Functions','Arrow Functions','Console Methods','JS Basics Checkpoint']],
+      [8,'JavaScript DOM',['What Is the DOM?','document.querySelector','document.getElementById','Changing Text — textContent innerHTML','Changing Styles','Adding & Removing Classes','Creating Elements','Appending & Removing Elements','Event Listeners — click','Event Object','Form Events — submit input','Keyboard Events','Mouse Events','Event Delegation','DOM Checkpoint']],
+      [9,'JavaScript Advanced',['Scope & Closures','Hoisting','this Keyword','Destructuring','Spread & Rest Operators','Promises','async/await','Fetch API','try-catch with Async','JSON.parse & JSON.stringify','Local Storage','Session Storage','Modules — import export','Error Handling','JS Advanced Checkpoint']],
+      [10,'Responsive Web Design',['What Is Responsive Design?','Viewport Meta Tag','Fluid Layouts','Flexible Images','CSS Media Queries','Breakpoints — Mobile Tablet Desktop','Mobile Navigation — Hamburger Menu','Responsive Typography','Responsive Images — srcset','CSS Grid for Responsive','Flexbox for Responsive','Container Queries','Testing Responsiveness','Performance on Mobile','Responsive Checkpoint']],
+      [11,'CSS Frameworks',['What Is a CSS Framework?','Tailwind CSS — Utility-First','Tailwind Setup','Tailwind — Spacing Colors','Tailwind — Flexbox Grid','Tailwind — Responsive Prefixes','Bootstrap — Component-Based','Bootstrap Grid','Bootstrap Components','Bootstrap Utilities','Bulma','Material UI Preview','Comparing Frameworks','When to Use vs Custom CSS','Frameworks Checkpoint']],
+      [12,'JavaScript Frameworks',['Why Use a Framework?','React — Introduction','React Components','JSX Syntax','Props & State','React Hooks — useState useEffect','Vue.js — Introduction','Vue Components & Templates','Angular — Introduction','Svelte — Introduction','Next.js — React Framework','Nuxt — Vue Framework','Virtual DOM','Comparing Frameworks','JS Frameworks Checkpoint']],
+      [13,'Git & Version Control',['What Is Version Control?','Git — Installation','git init & git clone','git add & git commit','git status & git log','Branches — git branch git checkout','Merging Branches','Merge Conflicts','git push & git pull','GitHub — Remote Repos','Pull Requests','Code Reviews','gitignore','Git Workflow — Feature Branches','Git Checkpoint']],
+      [14,'Node.js & Backend Basics',['What Is Node.js?','Installing Node','npm — Node Package Manager','package.json','Running JS on Server','Express.js — Web Framework','Routes & Endpoints','Middleware','Request & Response','Serving Static Files','Template Engines — EJS','Environment Variables — dotenv','nodemon for Development','REST API with Express','Node.js Checkpoint']],
+      [15,'Databases for Web',['What Is a Database?','SQL vs NoSQL','MySQL/PostgreSQL Basics','MongoDB — Document Database','CRUD Operations','Connecting Node to MongoDB — Mongoose','Schemas & Models','Queries — find create update delete','Firebase — Realtime Database','Firebase Firestore','Supabase','Database Design','Relationships — One-to-Many Many-to-Many','ORMs — Prisma Sequelize','Databases Checkpoint']],
+      [16,'Authentication & Security',['Why Authentication?','Passwords — Hashing with bcrypt','Sessions & Cookies','JWT — JSON Web Tokens','OAuth — Sign in with Google','Firebase Authentication','CORS — Cross-Origin','CSRF Protection','XSS Prevention','SQL Injection Prevention','HTTPS & SSL','Rate Limiting','Input Validation','Security Headers','Security Checkpoint']],
+      [17,'APIs & REST',['What Is an API?','REST Architecture','HTTP Methods — GET POST PUT DELETE','Status Codes','JSON Data Format','Building a REST API','Route Parameters','Query Parameters','Request Body — JSON','Middleware for APIs','API Authentication — API Keys','Pagination','Error Handling in APIs','API Documentation — Swagger','APIs Checkpoint']],
+      [18,'Testing & Debugging',['Console Debugging','Browser DevTools','Breakpoints','Network Tab','Lighthouse — Performance','Unit Testing — Jest','Testing React — React Testing Library','Integration Tests','End-to-End — Cypress','Code Linting — ESLint','Prettier — Code Formatting','TypeScript for Type Safety','Error Tracking — Sentry','Performance Testing','Testing Checkpoint']],
+      [19,'Build Tools & Deployment',['What Are Build Tools?','Vite — Fast Dev Server','Webpack Basics','Babel — JS Transpiler','Minification & Bundling','Environment Variables','CI/CD — Continuous Deployment','Netlify Deployment','Vercel Deployment','GitHub Pages','Docker Basics','Domain Names & DNS','SSL Certificates','Monitoring & Analytics','Deployment Checkpoint']],
+      [20,'Progressive Web Apps',['What Is a PWA?','Service Workers','Cache API','Offline Support','Web App Manifest','Add to Home Screen','Push Notifications','Background Sync','App Shell Architecture','Lighthouse PWA Audit','Workbox Library','Responsive PWA','PWA vs Native Apps','PWA Examples','PWA Checkpoint']],
+      [21,'Web Accessibility',['What Is Accessibility?','WCAG Guidelines','Screen Readers','Semantic HTML for A11y','ARIA Roles & Attributes','Keyboard Navigation','Focus Management','Color Contrast','Alt Text for Images','Form Labels','Skip Navigation','Testing — axe DevTools','Accessible Components','Legal Requirements — ADA','Accessibility Checkpoint']],
+      [22,'Web Performance',['Why Performance Matters','Core Web Vitals — LCP FID CLS','Lazy Loading Images','Code Splitting','Tree Shaking','Image Optimization — WebP AVIF','Font Loading — font-display','Caching Strategies','CDN — Content Delivery Network','Preload Prefetch Preconnect','Critical CSS','Compression — gzip Brotli','HTTP/2 & HTTP/3','Performance Budget','Performance Checkpoint']],
+      [23,'TypeScript',['What Is TypeScript?','Installing TypeScript','Type Annotations','Primitive Types','Arrays & Tuples','Interfaces','Type Aliases','Union & Intersection Types','Enums','Generics','Functions with Types','Classes in TypeScript','Modules','tsconfig.json','TypeScript Checkpoint']],
+      [24,'Full-Stack Projects',['Portfolio Website','Blog with CMS','E-Commerce Store','Social Media Clone','Chat Application','Weather Dashboard','Task Manager — CRUD','URL Shortener','Recipe Finder — API','Quiz App','Landing Page','Dashboard — Charts','Authentication System','Real-Time App — WebSockets','Projects Checkpoint']],
+      [25,'Web Development Mastery',['HTML & CSS Review','JavaScript Review','DOM & Events Review','Responsive Design Review','Frameworks Review','Git & Version Control Review','Backend & Node.js Review','Databases Review','Authentication Review','APIs Review','Testing Review','Deployment Review','Accessibility & Performance Review','Career & Portfolio Advice','Web Dev Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'wd-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('web-development');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('web-development');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

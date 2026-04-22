@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrepreneurship — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Entrepreneurship</h1>
+    <p>Start and grow a business — ideas, planning, marketing, finance, leadership, branding, and scaling from side project to startup. 225 lessons across 15 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is Entrepreneurship?',['Entrepreneur vs Employee','History of Entrepreneurs','Types — Startup Small Business Social','Mindset — Growth vs Fixed','Risk & Reward','Passion vs Problem-Solving','Famous Entrepreneurs — Stories','Failed Entrepreneurs Who Came Back','Side Hustle vs Full-Time','Student Entrepreneurs','Age & Entrepreneurship','Myths About Starting a Business','Skills You Need','Day in the Life','Entrepreneurship Intro Checkpoint']],
+      [2,'Finding Ideas',['Problem-First Thinking','Identifying Pain Points','Brainstorming Techniques','Trend Spotting','Market Gaps','Customer Interviews','Solving Your Own Problem','Copycat + Improvement','Combining Two Ideas','Blue Ocean Strategy','Validating an Idea — Before Building','Lean Startup — Build Measure Learn','Minimum Viable Product (MVP)','Pivot — Knowing When to Change','Ideas Checkpoint']],
+      [3,'Business Planning',['What Is a Business Plan?','Executive Summary','Mission & Vision Statement','Value Proposition','Target Market & Persona','Competitive Analysis','SWOT Analysis','Revenue Model','Cost Structure','Lean Canvas — 1-Page Plan','Milestones & Roadmap','Setting Goals — SMART','KPIs — Key Performance Indicators','Pitching Your Plan','Planning Checkpoint']],
+      [4,'Legal & Structure',['Sole Proprietorship','Partnership','LLC — Limited Liability Company','Corporation — C-Corp S-Corp','Registering a Business Name','EIN — Employer ID Number','Business License & Permits','Intellectual Property — Trademark','Patents','Copyright','Contracts & Agreements','Terms of Service','Privacy Policy','Insurance for Business','Legal Checkpoint']],
+      [5,'Branding & Identity',['What Is a Brand?','Brand vs Logo','Brand Values & Personality','Target Audience for Branding','Naming Your Business','Logo Design Principles','Color Psychology','Typography','Brand Voice & Tone','Brand Guidelines','Consistency Across Platforms','Rebranding — When & How','Personal Branding','Brand Storytelling','Branding Checkpoint']],
+      [6,'Marketing Fundamentals',['Marketing vs Sales vs Advertising','The 4 Ps — Product Price Place Promotion','Target Market Research','Customer Avatar','Unique Selling Proposition','Content Marketing','Email Marketing','Social Media Marketing','SEO — Search Engine Optimization','Paid Ads — Google Facebook','Influencer Marketing','Referral & Word of Mouth','Guerrilla Marketing','Marketing Budget','Marketing Checkpoint']],
+      [7,'Digital Marketing',['Website — Your Digital Home','Landing Pages','Email Lists — Building & Nurturing','Social Media Strategy','Content Calendar','Video Marketing','Blogging for Business','Podcasting','TikTok & Reels for Business','LinkedIn for B2B','Pinterest & Visual Platforms','Analytics — Google Analytics','A/B Testing','Conversion Rate Optimization','Digital Marketing Checkpoint']],
+      [8,'Sales',['What Is Sales?','Sales Funnel — Awareness to Purchase','Cold Outreach — Email & DM','Warm Leads vs Cold Leads','Discovery Calls','Objection Handling','Closing Techniques','Follow-Up Strategy','CRM — Customer Relationship Management','Pricing Strategy','Discounts & Promotions','Upselling & Cross-Selling','B2B vs B2C Sales','Sales Scripts','Sales Checkpoint']],
+      [9,'Finance for Entrepreneurs',['Revenue vs Profit','Fixed vs Variable Costs','Break-Even Point','Cash Flow Management','Bookkeeping Basics','Income Statement','Balance Sheet','Budgeting for a Startup','Funding Options — Bootstrapping','Angel Investors','Venture Capital','Crowdfunding — Kickstarter','Small Business Loans','Financial Projections','Finance Checkpoint']],
+      [10,'Product Development',['Ideation to Launch','User Research','Prototyping','MVP — Minimum Viable Product','User Testing','Iteration & Feedback','Product-Market Fit','Feature Prioritization','Roadmap Planning','Agile Development','Launch Strategy','Beta Testing','Product Metrics','Continuous Improvement','Product Checkpoint']],
+      [11,'Leadership & Team',['Founder as Leader','Hiring First Employees','Co-Founders — Choosing Wisely','Company Culture','Remote Teams','Communication as Leader','Delegation','Conflict Resolution','Motivation & Morale','Firing — When & How','Advisors & Mentors','Board of Directors','Equity & Vesting','Team Building','Leadership Checkpoint']],
+      [12,'Customer Success',['Customer vs User','Customer Support','Help Desk & Ticketing','Chat & Phone Support','Customer Feedback Loops','NPS — Net Promoter Score','Retention vs Acquisition','Churn — Why Customers Leave','Loyalty Programs','Community Building','User Onboarding','Documentation & FAQ','Customer Reviews','Turning Customers into Advocates','Customer Checkpoint']],
+      [13,'Scaling & Growth',['When to Scale','Hiring for Growth','Systems & Processes','Automation','Outsourcing','Partnerships & Alliances','New Markets — Geography','New Products — Expansion','Franchising','Licensing','Acquisition — Buying Other Companies','International Expansion','Growth Hacking','Sustainable Growth vs Burn','Scaling Checkpoint']],
+      [14,'Pitching & Fundraising',['The Pitch Deck — 10-12 Slides','Problem Slide','Solution Slide','Market Size — TAM SAM SOM','Business Model Slide','Traction Slide','Team Slide','Financial Projections Slide','The Ask — How Much & Why','Demo Day','Investor Meetings','Due Diligence','Term Sheets','Accelerators — Y Combinator Techstars','Pitching Checkpoint']],
+      [15,'Entrepreneurship Mastery',['Ideas & Validation Review','Planning & Legal Review','Branding & Marketing Review','Sales & Finance Review','Product Development Review','Leadership & Team Review','Customer Success Review','Scaling Review','Pitching Review','Failure & Resilience','Work-Life Balance','Ethics in Business','Your First Business Plan','Starting Today — Action Steps','Entrepreneurship Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ent-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('entrepreneurship');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('entrepreneurship');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

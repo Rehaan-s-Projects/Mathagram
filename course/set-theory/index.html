@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set Theory — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+    <h1>Set Theory</h1>
+    <p>Sets, operations, relations, functions, cardinality, ordinals, cardinals, and the axioms of ZFC. 15 units, 225 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Naive Set Theory',['What Is a Set?','Roster & Set-Builder Notation','Empty Set — ∅','Membership — ∈','Subsets — ⊆','Proper Subsets — ⊂','Universal Set','Power Set','Venn Diagrams','Set Equality','Finite vs Infinite Sets','Common Number Sets — ℕ ℤ ℚ ℝ','Russell\'s Paradox','Need for Axioms','Naive Sets Checkpoint']],
+      [2,'Set Operations',['Union — ∪','Intersection — ∩','Complement','Set Difference — \','Symmetric Difference — △','Cartesian Product — ×','Indexed Families','Arbitrary Unions & Intersections','De Morgan\'s Laws for Sets','Distributive Laws','Absorption Laws','Partition of a Set','Disjoint Sets','Practice: Operations','Operations Checkpoint']],
+      [3,'Relations',['Ordered Pairs','Cartesian Product Revisited','Binary Relations','Domain & Range','Inverse Relation','Composition of Relations','Reflexive Relations','Symmetric Relations','Transitive Relations','Equivalence Relations','Equivalence Classes','Partitions & Equivalence','Partial Orders','Total Orders','Relations Checkpoint']],
+      [4,'Functions',['What Is a Function?','Domain, Codomain, Range','Injective (One-to-One)','Surjective (Onto)','Bijective','Composition of Functions','Inverse Functions','Image & Preimage','Restriction & Extension','Characteristic Functions','Sequences as Functions','Indexed Families as Functions','Choice Functions','Practice: Function Properties','Functions Checkpoint']],
+      [5,'Cardinality — Finite',['Counting & Bijections','Pigeonhole Principle','Inclusion-Exclusion','Permutations','Combinations','Binomial Coefficients','Pascal\'s Triangle','Finite Cardinality','Comparing Finite Sets','Counting Subsets','Counting Functions','Counting Injections','Counting Surjections','Combinatorial Proofs','Finite Cardinality Checkpoint']],
+      [6,'Cardinality — Infinite',['Countably Infinite — ℵ₀','ℕ and ℤ Same Size','ℕ and ℚ Same Size','Cantor\'s Diagonal Argument','ℝ Is Uncountable','|ℝ| = 2^ℵ₀','Continuum Hypothesis','Schröder-Bernstein Theorem','Countable Unions','Uncountable Sets Examples','Power Set & Cardinality','Cantor\'s Theorem','Beth Numbers','Comparing Infinities','Infinite Cardinality Checkpoint']],
+      [7,'Axiomatic Set Theory — ZFC',['Why Axioms?','Extensionality','Empty Set Axiom','Pairing','Union Axiom','Power Set Axiom','Infinity Axiom','Separation (Comprehension)','Replacement','Foundation (Regularity)','Axiom of Choice','Well-Ordering Theorem','Zorn\'s Lemma','Equivalence of AC, WO, Zorn','ZFC Checkpoint']],
+      [8,'Ordinal Numbers',['Well-Ordered Sets','Order Types','Finite Ordinals — 0,1,2,...','Successor Ordinals','Limit Ordinals — ω','Ordinal Arithmetic — Addition','Ordinal Arithmetic — Multiplication','Ordinal Arithmetic — Exponentiation','Transfinite Induction','Transfinite Recursion','ε₀','Ordinal Hierarchy','Countable Ordinals','Uncountable Ordinals — ω₁','Ordinals Checkpoint']],
+      [9,'Cardinal Numbers',['Cardinal Assignment','Aleph Numbers — ℵ₀, ℵ₁, ...','Cardinal Arithmetic — Addition','Cardinal Arithmetic — Multiplication','Cardinal Arithmetic — Exponentiation','König\'s Theorem','Cofinality','Regular vs Singular Cardinals','GCH — Generalized Continuum Hypothesis','Inaccessible Cardinals (Intro)','Measurable Cardinals (Intro)','Large Cardinals Overview','Independence Results','Continuum Problem','Cardinals Checkpoint']],
+      [10,'Boolean Algebra & Sets',['Boolean Algebra Definition','Set Algebra','Atoms & Atomless','Boolean Homomorphisms','Stone\'s Representation','Filters & Ideals','Ultrafilters','Boolean-Valued Models','Forcing (Conceptual)','Independence of CH','Boolean Algebras in CS','Switching Circuits','Digital Logic Connection','Practice','Boolean Checkpoint']],
+      [11,'Constructive Set Theory',['Constructivism Overview','Intuitionistic Logic Recap','CZF — Constructive ZF','IZF — Intuitionistic ZF','No Law of Excluded Middle','Constructive Functions','Brouwer\'s Contributions','Bishop\'s Constructive Math','Type-Theoretic Sets','HoTT Connection','Computable Sets','Decidable vs Semi-Decidable','Constructive Analysis','Comparison with Classical','Constructive Checkpoint']],
+      [12,'Descriptive Set Theory',['Polish Spaces','Borel Sets','Analytic Sets','Projective Sets','Borel Hierarchy','Baire Category','Perfect Set Property','Lebesgue Measurability','Determinacy','Axiom of Determinacy','Wadge Degrees','Effective Descriptive ST','Applications to Analysis','Applications to Logic','Descriptive Checkpoint']],
+      [13,'Applications',['Sets in Algebra','Sets in Topology','Sets in Analysis','Sets in Probability','Sets in Computer Science','Database Theory','Formal Languages','Automata Theory','Category Theory Connection','Topos Theory (Intro)','Type Theory Connection','Foundations of Mathematics','Philosophy of Sets','Set Theory in Education','Applications Checkpoint']],
+      [14,'History & Philosophy',['Cantor\'s Vision','Dedekind','Zermelo','Fraenkel','Von Neumann','Gödel & L','Cohen & Forcing','Woodin & Large Cardinals','Platonism','Formalism','Intuitionism','Structuralism','Multiverse View','Future of Set Theory','History Checkpoint']],
+      [15,'Mastery',['Naive Set Theory Review','Operations Review','Relations & Functions Review','Cardinality Review','ZFC Review','Ordinals Review','Cardinals Review','Boolean Algebra Review','Proof Techniques','Problem Set Marathon','Open Questions','Self-Assessment','Further Reading','Study Plan','Set Theory Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'set-'+n, title: t, href: '#', unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('set-theory');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('set-theory');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

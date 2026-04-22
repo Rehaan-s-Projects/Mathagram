@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Literacy &amp; Political Rhetoric — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Media Literacy &amp; Political Rhetoric</h1>
+    <p>Learn to analyze political claims, spot propaganda, evaluate sources, understand rhetoric, and think critically about news, social media, and public discourse. 15 units, 225 lessons.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1,'What Is Media Literacy?',['Why Media Literacy Matters','How We Consume Information','Traditional Media vs Digital Media','The Attention Economy','Who Owns the Media?','Media Conglomerates','Independent vs Corporate News','Advertising Revenue & Bias','Public Broadcasting','Journalism Ethics & Standards','The Role of the Free Press','Media Literacy in Schools','Your Personal Media Diet','Evaluating Your Own Biases','Media Literacy Checkpoint']],
+      [2,'How News Is Made',['What Makes Something Newsworthy?','The Newsroom — How Stories Are Chosen','Editors & Gatekeeping','Sources — On the Record vs Off','Press Releases & PR Spin','Wire Services (AP, Reuters, AFP)','Investigative Journalism','Breaking News vs Analysis','Op-Eds vs News Reports','Headlines — Accurate or Clickbait?','Corrections & Retractions','Paywalls & Access to News','Local vs National Coverage','24-Hour News Cycle','News Production Checkpoint']],
+      [3,'Bias in Media',['What Is Media Bias?','Selection Bias — What Gets Covered','Omission Bias — What Gets Left Out','Placement Bias — Where Stories Appear','Headline Bias','Photo & Image Bias','Source Bias — Who Gets Quoted','Confirmation Bias in Readers','Anchoring Bias','Framing Effects','False Balance','Both-Sides-ism','Loaded Language','Tone & Word Choice','Bias Checkpoint']],
+      [4,'Propaganda Techniques',['What Is Propaganda?','History of Propaganda','Bandwagon Effect','Appeal to Fear','Appeal to Authority','Appeal to Emotion','Card Stacking','Glittering Generalities','Name-Calling','Plain Folks Appeal','Transfer Technique','Testimonial','Repetition & Sloganeering','Scapegoating','Propaganda Checkpoint']],
+      [5,'Political Rhetoric — Foundations',['What Is Rhetoric?','Aristotle — Ethos, Pathos, Logos','Ethos — Credibility & Character','Pathos — Emotional Appeal','Logos — Logical Argument','Kairos — Timing & Context','The Rhetorical Triangle','Audience Awareness','Purpose & Persuasion','Rhetorical Questions','Anaphora & Repetition','Antithesis','Metaphor & Analogy in Politics','Storytelling as Persuasion','Rhetoric Foundations Checkpoint']],
+      [6,'Political Speeches — Analysis',['Anatomy of a Political Speech','Lincoln — Gettysburg Address','MLK — I Have a Dream','JFK — Ask Not','FDR — The Only Thing We Have to Fear','Churchill — We Shall Fight on the Beaches','Obama — Yes We Can','Reagan — Tear Down This Wall','Mandela — I Am Prepared to Die','Malala — One Child One Teacher','How Speechwriters Work','Teleprompters & Delivery','Body Language in Politics','Applause Lines & Sound Bites','Speech Analysis Checkpoint']],
+      [7,'Logical Fallacies in Politics',['What Is a Logical Fallacy?','Ad Hominem Attacks','Straw Man Arguments','Red Herring','False Dilemma / False Choice','Slippery Slope','Appeal to Ignorance','Circular Reasoning','Tu Quoque (Whataboutism)','Hasty Generalization','Post Hoc Ergo Propter Hoc','Moving the Goalposts','No True Scotsman','Gish Gallop','Fallacies Checkpoint']],
+      [8,'Fact-Checking & Verification',['Why Fact-Checking Matters','Major Fact-Check Organizations','How Fact-Checkers Work','Rating Systems (True, Mostly True, False)','Checking Statistics & Data','Reverse Image Search','Verifying Video Footage','Geolocation of Photos','Checking Quotes in Context','Detecting Doctored Images','Evaluating Expert Claims','Primary Sources vs Secondary','Cross-Referencing Multiple Sources','When Fact-Checks Disagree','Fact-Checking Checkpoint']],
+      [9,'Misinformation & Disinformation',['Misinformation vs Disinformation','Malinformation — True but Harmful','How False Stories Spread','Viral Mechanics','Bot Networks & Astroturfing','Troll Farms','State-Sponsored Disinformation','Health Misinformation','Election Misinformation','Conspiracy Theories — How They Form','QAnon as a Case Study','Flat Earth as a Case Study','Anti-Vaccine Misinformation','Debunking vs Pre-Bunking','Disinfo Checkpoint']],
+      [10,'Social Media & Politics',['How Algorithms Shape What You See','Filter Bubbles','Echo Chambers','Engagement-Driven Design','Political Ads on Social Media','Micro-Targeting Voters','Memes as Political Tools','Hashtag Activism','Cancel Culture & Public Shaming','Influencers & Political Messaging','Twitter/X, Facebook, TikTok Differences','YouTube Radicalization Pipeline','Reddit & Community Moderation','Platform Responsibility & Section 230','Social Media Checkpoint']],
+      [11,'Elections & Campaign Rhetoric',['How Campaigns Use Rhetoric','Negative Advertising','Dog Whistles','Wedge Issues','Polling — How It Works','Margin of Error','Push Polls','Debate Strategies','Spin Rooms & Post-Debate Framing','October Surprises','Voter Suppression Rhetoric','Gerrymandering Explained','Electoral College Debates','Money in Politics','Elections Checkpoint']],
+      [12,'Deepfakes, AI & the Future',['What Are Deepfakes?','How Deepfake Technology Works','Detecting Deepfakes','AI-Generated Text','ChatGPT & AI-Written News','Synthetic Media','Voice Cloning','Cheap Fakes vs Deep Fakes','AI in Political Campaigns','Automated Propaganda','AI Fact-Checking Tools','Digital Watermarking','Blockchain & Content Verification','Regulation of AI Content','AI & Future Checkpoint']],
+      [13,'International Perspectives',['Press Freedom Index','Censorship Around the World','State-Controlled Media','Al Jazeera — Middle East Perspective','BBC — British Perspective','NHK — Japanese Perspective','CCTV — Chinese State Media','RT — Russian State Media','Media in Authoritarian Regimes','Citizen Journalism Worldwide','\1, Assange','Panama Papers & Investigative Journalism','Media During Conflict','Foreign Correspondents','International Checkpoint']],
+      [14,'Being a Responsible Consumer',['Building a Balanced News Diet','Lateral Reading','SIFT Method (Stop, Investigate, Find, Trace)','CRAAP Test for Sources','Slow News Movement','Subscribing to Quality Journalism','Distinguishing Satire from News','Commenting Responsibly','Sharing Responsibly','Teaching Media Literacy to Others','Digital Citizenship','Protecting Your Data','Recognizing Your Own Biases','Staying Informed Without Burnout','Consumer Checkpoint']],
+      [15,'Capstone: Practice & Projects',['Analyze a News Article','Analyze a Political Speech','Identify Fallacies in a Debate','Fact-Check a Viral Claim','Compare Coverage Across Outlets','Trace a Misinformation Chain','Evaluate a Social Media Post','Write a Media Bias Report','Create a Fact-Check','Design a Media Literacy Lesson','Debate: Should Platforms Moderate?','Reflection: Your Media Habits','Portfolio: Media Literacy Evidence','Final Discussion','Course Mastery Checkpoint']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'mlpr-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('media-literacy-political-rhetoric');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('media-literacy-political-rhetoric');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Unity? — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>What Is Unity?</h1>
+    <p>Learn the Unity game engine from zero — interface, GameObjects, scripting with C#, physics, UI, animation, 2D and 3D game development, and publishing. 375 lessons across 25 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Introduction to Unity',['What Is Unity?','Who Uses Unity?','Unity vs Unreal Engine','Installing Unity Hub','Choosing a Unity Version','Creating Your First Project','The Unity Interface Tour','Scene View & Game View','Hierarchy & Inspector','Project & Console Windows','\1, Pause & Step','Saving Scenes & Projects','Unity Asset Store','Unity Documentation & Learn','Unity Intro Checkpoint']],
+      [2,'GameObjects & Components',['What Is a GameObject?','Transform — Position Rotation Scale','Adding Components','MeshRenderer & MeshFilter','Camera Component','Light Component','Rigidbody Component','Collider Components','Audio Source','Tags & Layers','Prefabs — Reusable Objects','Instantiating Prefabs','Parenting & Child Objects','Enabling & Disabling Components','GameObjects Checkpoint']],
+      [3,'C# Scripting Basics',['What Is C#?','Creating Your First Script','Variables — int float string bool','if/else Statements','for & while Loops','Functions & Methods','MonoBehaviour — Start & Update','Debug.Log — Printing to Console','Public vs Private Variables','GetComponent','Input.GetKey & GetAxis','Vector3 — Positions & Directions','Time.deltaTime','Coroutines — IEnumerator','C# Basics Checkpoint']],
+      [4,'Player Movement',['Moving with Transform.Translate','Rigidbody.AddForce','Rigidbody Velocity','Character Controller','Input System — Old vs New','Keyboard Movement — WASD','Mouse Look — Camera Rotation','Jump Mechanic','Ground Check','Sprint & Crouch','Smooth Movement — Lerp','Third Person Movement','Top-Down Movement','Mobile Touch Input','Player Movement Checkpoint']],
+      [5,'Physics & Collisions',['Unity Physics Engine','Rigidbody Properties — Mass Drag','Gravity & UseGravity','Colliders — Box Sphere Capsule Mesh','Is Trigger vs Is Collider','OnCollisionEnter/Stay/Exit','OnTriggerEnter/Stay/Exit','Physics Materials — Bounce Friction','Raycasting','Layer-Based Collision','Joints — Hinge Spring Fixed','2D Physics — Rigidbody2D','2D Colliders','Physics.OverlapSphere','Physics Checkpoint']],
+      [6,'UI — User Interface',['Canvas & Canvas Scaler','Text & TextMeshPro','Buttons & onClick Events','Images & RawImages','Sliders & Scrollbars','Input Fields','Panels & Layout Groups','Health Bar UI','Score Display','Main Menu Screen','Pause Menu','Game Over Screen','Responsive UI — Anchors','UI Animation','UI Checkpoint']],
+      [7,'Animation',['Animation Window','Animator Controller','Animation Clips','Keyframe Animation','Animation Curves','Animator Parameters','Transitions Between States','Blend Trees','Animation Events','Root Motion','Importing Animations — Mixamo','2D Sprite Animation','Animator Override Controller','Timeline & Cinemachine Intro','Animation Checkpoint']],
+      [8,'Audio',['AudioSource & AudioClip','Playing Sounds — Play PlayOneShot','AudioListener','3D Sound — Spatial Blend','Audio Mixer','Volume Control','Background Music Loop','Sound Effects — Triggers','Audio Zones','Reverb & Echo Effects','Crossfading Music','Audio Snapshots','Microphone Input','Adaptive Audio','Audio Checkpoint']],
+      [9,'2D Game Development',['Setting Up a 2D Project','Sprites & Sprite Renderer','Sprite Sheet & Slice','2D Camera — Orthographic','Tilemap & Tile Palette','2D Physics — Rigidbody2D','2D Colliders & Triggers','2D Movement & Jumping','Platformer Mechanics','Parallax Scrolling','2D Lighting — URP','2D Animation — Sprite Sheets','2D Enemies & AI','2D Collectibles & Score','2D Game Checkpoint']],
+      [10,'3D Game Development',['Setting Up a 3D Project','ProBuilder — 3D Level Design','Terrain System','Terrain Textures & Trees','Skybox & Fog','Lighting — Directional Point Spot','Lightmapping & Baked Lighting','Shadows & Shadow Quality','Post-Processing Stack','Cinemachine Cameras','NavMesh — AI Navigation','NavMeshAgent — Enemy AI','3D Pickups & Doors','First-Person Shooter Basics','3D Game Checkpoint']],
+      [11,'Particles & VFX',['Particle System Overview','Emission — Rate & Bursts','Shape Module','Velocity & Force','Color Over Lifetime','Size Over Lifetime','Renderer — Billboard vs Mesh','Sub Emitters','Collision Module','Trails Module','Fire Effect','Smoke Effect','Explosion Effect','Magic Spell Effect','Particles Checkpoint']],
+      [12,'Materials & Shaders',['What Are Materials?','Standard Shader','Albedo, Metallic, Smoothness','Normal Maps','Emission Maps','Transparent & Cutout','URP vs HDRP Materials','Shader Graph — Visual Shaders','Custom Shader Basics','Water Shader','Glow & Outline Shader','Toon Shader','Dissolve Effect','Texture Tiling & Offset','Materials Checkpoint']],
+      [13,'Prefabs & Level Design',['Prefab Workflow','Prefab Variants','Nested Prefabs','Level Design Principles','Blockout / Greyboxing','Modular Level Pieces','Placing Props & Details','Spawn Points','Checkpoints & Save Points','Doors & Keys','Moving Platforms','Elevators & Lifts','Destructible Objects','Level Streaming','Level Design Checkpoint']],
+      [14,'Enemy AI',['AI Design Patterns','Finite State Machine (FSM)','Patrol Behavior','Chase Behavior','Attack Behavior','NavMeshAgent for Enemies','Line of Sight — Raycasting','Detection Radius','Health System — Enemy','Damage & Death','Spawn Enemies','Wave System','Boss Patterns','AI Difficulty Scaling','Enemy AI Checkpoint']],
+      [15,'Inventory & Items',['Item ScriptableObject','Inventory System Design','Adding & Removing Items','UI Inventory Display','Drag & Drop Items','Equipment Slots','Consumable Items — Potions','Weapons — Melee & Ranged','Item Pickup in World','Loot Drops','Crafting System','Shop & Currency','Save/Load Inventory','Item Rarity & Stats','Inventory Checkpoint']],
+      [16,'Saving & Loading',['PlayerPrefs — Simple Save','JSON Serialization','Saving to File','Loading from File','Save Slots','Auto-Save System','Saving Player Position','Saving Inventory','Saving Game Progress','Binary Serialization','ScriptableObject Data','Cloud Save — Unity Services','Save File Encryption','Save UI — Save/Load Menu','Saving Checkpoint']],
+      [17,'Multiplayer Basics',['Local Multiplayer','Split Screen','Online Multiplayer Concepts','Client-Server Architecture','Peer-to-Peer','Unity Netcode for GameObjects','NetworkManager','Network Spawning','Network Transform Sync','RPCs — Remote Procedure Calls','Lobby & Matchmaking','Chat System','Latency & Lag Compensation','Testing Multiplayer','Multiplayer Checkpoint']],
+      [18,'Mobile Game Development',['Mobile Project Setup','Touch Input','Gyroscope & Accelerometer','Mobile UI Design','Performance Optimization','Texture Compression','LOD — Level of Detail','Object Pooling','Draw Call Batching','Mobile Ads — Unity Ads','In-App Purchases','Push Notifications','App Icon & Splash Screen','Building for Android & iOS','Mobile Checkpoint']],
+      [19,'AR & VR',['What Is AR?','AR Foundation','Image Tracking','Plane Detection','AR Object Placement','What Is VR?','XR Interaction Toolkit','VR Hand Tracking','VR Locomotion — Teleport','VR Grab & Throw','VR UI Interaction','Oculus Quest Setup','SteamVR Setup','Performance for VR','AR & VR Checkpoint']],
+      [20,'Publishing Your Game',['Building for Windows','Building for Mac','Building for WebGL','Building for Android','Building for iOS','Build Settings & Player Settings','Resolution & Quality','Splash Screen & Icons','Debugging Builds','Testing & QA','Publishing on Steam','Publishing on itch.io','Publishing on Google Play','Publishing on App Store','Publishing Checkpoint']],
+      [21,'Version Control & Teams',['Why Version Control?','Git Basics for Unity','GitIgnore for Unity','Unity Collaborate / Plastic SCM','Branching & Merging','Resolving Merge Conflicts','Working in Teams','Naming Conventions','Folder Structure Best Practices','Code Reviews','Agile & Scrum for Games','Game Design Documents','Playtesting','Bug Tracking','Version Control Checkpoint']],
+      [22,'Optimization & Performance',['Profiler Window','CPU vs GPU Bottleneck','Draw Calls & Batching','Occlusion Culling','LOD Groups','Object Pooling','Texture Atlasing','Mesh Optimization','Garbage Collection','Async Loading — Addressables','Memory Management','Frame Rate Targets','Mobile Optimization','Build Size Reduction','Optimization Checkpoint']],
+      [23,'Advanced C# for Unity',['Classes & Inheritance','Interfaces','Abstract Classes','Generics','Events & Delegates','UnityEvents','Singleton Pattern','Observer Pattern','Object Pooling Pattern','SOLID Principles','LINQ Queries','Async/Await in Unity','Custom Editor Scripts','Property Drawers','Advanced C# Checkpoint']],
+      [24,'Game Genres & Projects',['Platformer Project','Endless Runner','Puzzle Game','Tower Defense','RPG — Role Playing Game','FPS — First Person Shooter','Racing Game','Card Game','Idle/Clicker Game','Survival Game','Simulation Game','Fighting Game','Strategy Game','Horror Game','Game Genres Checkpoint']],
+      [25,'Unity Mastery',['Interface & Workflow Review','GameObjects & Components Review','C# Scripting Review','Physics & Collisions Review','UI & Animation Review','2D & 3D Development Review','Particles & Materials Review','AI & Enemy Design Review','Inventory & Save Systems Review','Multiplayer Review','Mobile & AR/VR Review','Publishing Review','Optimization Review','Portfolio & Career Advice','Unity Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'un-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('unity');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('unity');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

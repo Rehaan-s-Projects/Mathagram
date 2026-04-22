@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Blender? — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>What Is Blender?</h1>
+    <p>Master Blender — the free, open-source 3D creation suite. Modeling, sculpting, texturing, animation, rendering, VFX, and video editing. 375 lessons across 25 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Introduction to Blender',['What Is Blender?','Who Uses Blender?','Blender vs Maya vs 3ds Max','Downloading & Installing Blender','Blender Interface Tour','3D Viewport Navigation','Orbit Pan Zoom','Numpad Views — Front Top Side','Properties Panel','Outliner & Scene Collection','Preferences & Themes','Saving & Opening Files','Blender File Formats — .blend','Blender Community & Resources','Blender Intro Checkpoint']],
+      [2,'Basic 3D Navigation',['Object Mode vs Edit Mode','Selecting Objects','Moving Objects — G Key','Rotating Objects — R Key','Scaling Objects — S Key','Axis Constraints — X Y Z','Precise Transforms — Type Numbers','Pivot Point','3D Cursor','Snap to Grid','Duplicate — Shift+D','Delete — X Key','Undo & Redo','Viewport Shading Modes','Navigation Checkpoint']],
+      [3,'Mesh Modeling Basics',['What Is a Mesh?','Vertices Edges Faces','Adding Primitives — Cube Sphere Cylinder','Edit Mode — Vertex Edge Face Select','Extrude — E Key','Inset Faces — I Key','Loop Cut — Ctrl+R','Bevel — Ctrl+B','Merge Vertices','Fill & Grid Fill','Knife Tool','Proportional Editing','Normals & Recalculating','Smooth vs Flat Shading','Mesh Basics Checkpoint']],
+      [4,'Modifiers',['What Are Modifiers?','Subdivision Surface','Mirror Modifier','Array Modifier','Boolean Modifier','Solidify Modifier','Bevel Modifier','Screw Modifier','Decimate Modifier','Lattice Modifier','Shrinkwrap Modifier','Simple Deform — Twist Bend Taper','Curve Modifier','Applying Modifiers','Modifiers Checkpoint']],
+      [5,'Sculpting',['Sculpt Mode Overview','Sculpting Brushes','Draw Brush','Clay Strips Brush','Smooth Brush','Grab Brush','Inflate Brush','Crease Brush','Pinch Brush','Flatten Brush','Mask Brush','Dynamic Topology (Dyntopo)','Multires Sculpting','Remeshing','Sculpting Checkpoint']],
+      [6,'Materials & Textures',['What Are Materials?','Principled BSDF Shader','Base Color','Metallic & Roughness','Specular & Clearcoat','Emission — Glowing Materials','Subsurface Scattering — Skin','Alpha & Transparency','What Are Textures?','UV Unwrapping Basics','Applying Image Textures','Procedural Textures — Noise Voronoi','Normal Maps & Bump Maps','Texture Painting','Materials Checkpoint']],
+      [7,'UV Unwrapping',['What Is UV Unwrapping?','UV Editor','Marking Seams','Unwrap Methods — Smart UV Project','Cube Projection','Cylinder & Sphere Projection','Straighten & Align UVs','UV Islands & Packing','Stretching & Distortion','Checker Texture for Testing','UV Unwrapping Complex Models','UDIM Tiles','Texture Atlas','UV Tips & Best Practices','UV Checkpoint']],
+      [8,'Lighting',['Types of Lights — Point Sun Spot Area','Light Properties — Color Intensity','Shadow Settings','HDRI Environment Lighting','World Background','Three-Point Lighting Setup','Studio Lighting','Outdoor Lighting','Volumetric Lighting — God Rays','Light Linking','Sun Position Addon','IES Light Profiles','Blackbody Node — Color Temperature','Lighting for Animation','Lighting Checkpoint']],
+      [9,'Camera & Rendering',['Camera Basics','Focal Length & FOV','Depth of Field','Camera Tracking — Track To','Render Engines — Eevee vs Cycles','Eevee — Real-Time Rendering','Cycles — Path Tracing','Render Settings — Resolution Samples','Denoising','Render Layers & Passes','Compositing Basics','Color Management','Output Formats — PNG EXR','Batch Rendering','Rendering Checkpoint']],
+      [10,'Animation Basics',['Timeline & Keyframes','Inserting Keyframes — I Key','Graph Editor','Dope Sheet','Interpolation — Linear Bezier','Moving & Scaling Keyframes','Animation Curves','Object Animation — Location Rotation Scale','Path Animation — Follow Path','Bouncing Ball Exercise','Camera Animation','Looping Animations','NLA Editor — Non-Linear','Baking Animation','Animation Basics Checkpoint']],
+      [11,'Rigging & Armatures',['What Is Rigging?','Armature Object','Adding Bones','Bone Hierarchy — Parent-Child','Pose Mode','Forward Kinematics (FK)','Inverse Kinematics (IK)','Weight Painting','Automatic Weights','Bone Constraints','Custom Bone Shapes','Rigify Addon','Face Rigging Basics','Rigging a Simple Character','Rigging Checkpoint']],
+      [12,'Character Modeling',['Character Design Reference','Blocking Out the Body','Head & Face Topology','Eyes & Eyelids','Nose & Mouth','Ears','Hands & Fingers','Feet','Clothing & Accessories','Hair — Particle Hair','Hair — Curves','Retopology','Edge Flow for Animation','Low-Poly Character','Character Modeling Checkpoint']],
+      [13,'Hard Surface Modeling',['What Is Hard Surface?','Boolean Workflow','Edge Flow for Hard Surface','Panel Lines & Details','Screws & Bolts','Weapons — Sword Gun','Vehicles — Car Basics','Robots & Mechs','Architecture — Buildings','Furniture','Electronics — Phone Laptop','Kitbashing','Non-Destructive Workflow','Subdivision Surface Modeling','Hard Surface Checkpoint']],
+      [14,'Environment & Scene Design',['Planning a Scene','Ground & Terrain','Trees & Vegetation','Rocks & Cliffs','Water — Ocean Modifier','Sky — HDRI & Procedural','Buildings & Structures','Streets & Roads','Props & Details','Particle Systems — Grass','Scatter — Geometry Nodes','Atmospheric Effects — Fog Mist','Camera Composition','Color Grading in Compositor','Environment Checkpoint']],
+      [15,'Geometry Nodes',['What Are Geometry Nodes?','Node Editor Basics','Point Distribute / Instance','Attribute Nodes','Math & Vector Nodes','Mesh Primitives in Nodes','Curves in Geometry Nodes','Random & Noise','Scattering Objects','Procedural Terrain','Procedural Buildings','L-Systems — Trees','Array with Geometry Nodes','Animation with Geo Nodes','Geometry Nodes Checkpoint']],
+      [16,'Shader Nodes',['Shader Editor Overview','Principled BSDF Revisited','Mix Shader','Texture Coordinate & Mapping','Image Texture Node','Noise Texture','Voronoi Texture','Wave Texture','Gradient Texture','Color Ramp','Bump & Normal Map Nodes','Fresnel Effect','Glass & Refraction','Procedural Wood & Marble','Shader Nodes Checkpoint']],
+      [17,'Compositing & Post-Processing',['Compositor Node Editor','Render Layers Input','Backdrop & Viewer Node','Blur & Glare','Color Balance & Curves','Lens Distortion','Vignette','Fog Glow','Chromatic Aberration','Depth of Field — Post','Green Screen Keying','Masking','Combining Render Passes','Final Color Grade','Compositing Checkpoint']],
+      [18,'Video Editing in Blender',['Video Sequence Editor (VSE)','Importing Video & Audio','Cutting & Trimming Strips','Transitions — Cross Fade Wipe','Text Strips','Speed Control','Color Grading Strips','Audio Mixing','Rendering Video Output','VSE vs External Editors','Adding Effects','Proxy for Performance','Subtitles','Keyframing in VSE','Video Editing Checkpoint']],
+      [19,'VFX & Motion Tracking',['Motion Tracking Overview','Camera Tracking — Solve','Setting Up Tracking Scene','Inserting 3D Objects into Footage','Planar Tracking','Object Tracking','Masking for VFX','Smoke & Fire Simulation','Fluid Simulation','Cloth Simulation','Rigid Body Simulation','Soft Body','Particle VFX — Rain Snow Sparks','Compositing VFX','VFX Checkpoint']],
+      [20,'Simulation & Physics',['Physics in Blender','Rigid Body — Active & Passive','Rigid Body Constraints','Cloth Simulation','Cloth Settings — Stiffness','Fluid Simulation — Mantaflow','Liquid Domain','Smoke & Gas','Quick Effects','Soft Body Physics','Particle Systems — Emission','Force Fields — Wind Turbulence','Baking Simulations','Dynamic Paint','Simulation Checkpoint']],
+      [21,'Grease Pencil — 2D in 3D',['What Is Grease Pencil?','Drawing in 3D Space','Grease Pencil Materials','Layers & Strokes','Onion Skinning','Frame-by-Frame Animation','Grease Pencil Modifiers','Grease Pencil Effects','2D Animation Workflow','Storyboarding','Cutout Animation','Interpolation','Grease Pencil & 3D Together','Rendering 2D Animation','Grease Pencil Checkpoint']],
+      [22,'Addons & Customization',['What Are Addons?','Built-In Addons','Installing Third-Party Addons','Node Wrangler','Loop Tools','Hard Ops & BoxCutter','Auto Rig Pro','Animation Nodes','FLIP Fluids','Custom Shortcuts','Workspace Layouts','Startup File Customization','Python Console','Writing Simple Scripts','Addons Checkpoint']],
+      [23,'Python Scripting in Blender',['Blender Python API','Running Scripts','Accessing Objects via bpy','Creating Objects with Code','Modifying Properties','Automating Tasks','Custom Operators','Custom Panels','Script Templates','Batch Processing','Generating Geometry','Animation via Script','Addon Development Basics','Scripting Best Practices','Python Checkpoint']],
+      [24,'Career & Portfolio',['Building a 3D Portfolio','ArtStation & Sketchfab','Showreel / Demo Reel','Industry Roles — Modeler Animator TD','Game Industry — 3D for Games','Film & VFX Industry','Architecture Visualization','Product Visualization','Freelancing with Blender','3D Printing from Blender','NFT & Digital Art','YouTube & Content Creation','Blender Certifications','Community — BlenderArtists DevTalk','Career Checkpoint']],
+      [25,'Blender Mastery',['Interface & Navigation Review','Modeling Review','Sculpting Review','Materials & UV Review','Lighting & Rendering Review','Animation & Rigging Review','Character & Hard Surface Review','Environment Design Review','Geometry & Shader Nodes Review','Compositing Review','Video Editing Review','VFX & Simulation Review','Grease Pencil Review','Python & Addons Review','Blender Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'bl-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('blender');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('blender');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

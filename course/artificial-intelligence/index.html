@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artificial Intelligence — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Artificial Intelligence</h1>
+    <p>Understand AI and machine learning — neural networks, deep learning, NLP, computer vision, reinforcement learning, and AI ethics. 300 lessons across 20 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is AI?",["Defining Artificial Intelligence","History of AI — Dartmouth 1956","AI Winter & Revival","Narrow AI vs General AI","AI in Daily Life","Siri Alexa Google Assistant","Recommendation Systems","Self-Driving Cars","AI in Healthcare","AI in Gaming","AI vs Machine Learning vs Deep Learning","The Turing Test","Chinese Room Argument","AI Hype vs Reality","AI Intro Checkpoint"]],
+      [2,"Math for AI",["Why Math Matters for AI","Linear Algebra — Vectors","Linear Algebra — Matrices","Matrix Operations","Dot Product","Probability Basics","Conditional Probability","Bayes Theorem","Statistics — Mean Median Mode","Standard Deviation & Variance","Calculus — Derivatives for AI","Gradient & Slope","Partial Derivatives","Optimization — Finding Minimum","Math for AI Checkpoint"]],
+      [3,"Python for AI",["Python Setup for AI","NumPy for AI","Pandas for AI","Matplotlib & Seaborn","Jupyter Notebooks","Data Loading — CSV JSON","Data Cleaning","Feature Engineering","Train/Test Split","Scikit-Learn Overview","Model Evaluation Metrics","Cross-Validation","Pipelines","Saving Models — pickle joblib","Python for AI Checkpoint"]],
+      [4,"Machine Learning Basics",["What Is Machine Learning?","Types — Supervised Unsupervised Reinforcement","Training vs Testing","Features & Labels","Overfitting & Underfitting","Bias-Variance Tradeoff","Model Selection","Hyperparameter Tuning","Cross-Validation","Evaluation Metrics — Accuracy Precision Recall F1","Confusion Matrix","ROC Curve & AUC","Learning Curves","ML Workflow","ML Basics Checkpoint"]],
+      [5,"Supervised Learning — Regression",["What Is Regression?","Linear Regression","Cost Function — MSE","Gradient Descent","Multiple Linear Regression","Polynomial Regression","Regularization — L1 Lasso","Regularization — L2 Ridge","Feature Scaling","Feature Selection","Residual Analysis","R-Squared","Regression with Scikit-Learn","House Price Prediction Project","Regression Checkpoint"]],
+      [6,"Supervised Learning — Classification",["What Is Classification?","Logistic Regression","Decision Trees","Random Forests","K-Nearest Neighbors (KNN)","Support Vector Machines (SVM)","Naive Bayes","Ensemble Methods — Bagging","Ensemble Methods — Boosting","XGBoost","Gradient Boosting","Classification Metrics","Multi-Class Classification","Spam Detector Project","Classification Checkpoint"]],
+      [7,"Unsupervised Learning",["What Is Unsupervised Learning?","K-Means Clustering","How K-Means Works","Choosing K — Elbow Method","Hierarchical Clustering","DBSCAN","Dimensionality Reduction","PCA — Principal Component Analysis, t-SNE Visualization","Anomaly Detection","Association Rules","Market Basket Analysis","Customer Segmentation Project","Autoencoders Preview","Unsupervised Checkpoint"]],
+      [8,"Neural Networks",["What Is a Neural Network?","Biological vs Artificial Neurons","Perceptron","Activation Functions — Sigmoid ReLU","Multi-Layer Perceptron","Forward Propagation","Loss Functions","Backpropagation","Gradient Descent for NNs","Learning Rate","Batch Size & Epochs","Vanishing Gradient Problem","Weight Initialization","Dropout — Regularization","Neural Networks Checkpoint"]],
+      [9,"Deep Learning",["What Is Deep Learning?","Deep vs Shallow Networks","TensorFlow Introduction","Keras — High-Level API","PyTorch Introduction","Building a Neural Network","Training & Validation","GPU Acceleration — CUDA","Batch Normalization","Transfer Learning","Model Architecture Design","Hyperparameter Optimization","Callbacks — Early Stopping","Model Deployment Basics","Deep Learning Checkpoint"]],
+      [10,"Convolutional Neural Networks",["What Are CNNs?","Image as Matrix","Convolution Operation","Filters & Feature Maps","Pooling — Max & Average","Stride & Padding","CNN Architecture","Classic CNNs — LeNet AlexNet VGG","ResNet — Skip Connections","Inception — GoogLeNet","Image Classification","Object Detection — YOLO","Image Segmentation","Data Augmentation","CNN Checkpoint"]],
+      [11,"Recurrent Neural Networks",["What Are RNNs?","Sequential Data","Vanilla RNN","Hidden State","Vanishing Gradient in RNNs","LSTM — Long Short-Term Memory","LSTM Cell — Gates","GRU — Gated Recurrent Unit","Bidirectional RNNs","Sequence-to-Sequence Models","Time Series Prediction","Text Generation","Attention Mechanism","Encoder-Decoder Architecture","RNN Checkpoint"]],
+      [12,"Natural Language Processing",["What Is NLP?","Text Preprocessing — Tokenization","Stopword Removal","Stemming & Lemmatization","Bag of Words","TF-IDF","Word Embeddings — Word2Vec","GloVe Embeddings","Sentiment Analysis","Named Entity Recognition","Text Classification","Machine Translation","Chatbots — Rule-Based","Chatbots — ML-Based","NLP Checkpoint"]],
+      [13,"Transformers & LLMs",["Attention Is All You Need","Self-Attention Mechanism","Multi-Head Attention","Positional Encoding","Transformer Architecture","BERT — Bidirectional Encoding","GPT — Generative Pre-Training","GPT-2 GPT-3 GPT-4","Fine-Tuning LLMs","Prompt Engineering","ChatGPT & Claude","Tokenization — BPE","Hallucination Problem","Open Source LLMs — LLaMA Mistral","Transformers Checkpoint"]],
+      [14,"Computer Vision",["What Is Computer Vision?","Image Processing Basics","Edge Detection","Feature Detection — SIFT SURF","Image Classification Pipeline","Object Detection","Semantic Segmentation","Instance Segmentation","Pose Estimation","Face Detection & Recognition","OCR — Optical Character Recognition","Video Analysis","OpenCV Library","Medical Imaging","Vision Checkpoint"]],
+      [15,"Reinforcement Learning",["What Is Reinforcement Learning?","Agent Environment State Action Reward","Exploration vs Exploitation","Markov Decision Process","Value Functions","Q-Learning","Deep Q-Network (DQN)","Policy Gradient","Actor-Critic Methods","Multi-Armed Bandit","OpenAI Gym","Game Playing — Atari","AlphaGo & AlphaZero","Robotics Applications","RL Checkpoint"]],
+      [16,"Generative AI",["What Is Generative AI?","GANs — Generative Adversarial Networks","Generator vs Discriminator","Training GANs","DCGAN","StyleGAN — Face Generation","Image-to-Image Translation — Pix2Pix","CycleGAN","Variational Autoencoders (VAE)","Diffusion Models","Stable Diffusion","DALL-E & Midjourney","Text-to-Video","Music Generation","Generative AI Checkpoint"]],
+      [17,"AI Ethics & Fairness",["Why AI Ethics?","Bias in Training Data","Algorithmic Fairness","Facial Recognition Bias","AI & Privacy","Explainable AI (XAI)","Black Box Problem","LIME & SHAP — Interpretability","AI Regulation — EU AI Act","Deepfakes & Misinformation","AI & Job Displacement","Autonomous Weapons","AI Alignment Problem","Responsible AI Development","Ethics Checkpoint"]],
+      [18,"AI in Practice",["AI Product Development","Data Collection & Labeling","MLOps — ML Operations","Model Monitoring","A/B Testing for ML","Feature Stores","ML Pipelines","Edge AI — On-Device ML","TinyML — Microcontrollers","AutoML","No-Code AI Tools","AI as a Service — AWS Azure GCP","Scaling AI Systems","Technical Debt in ML","AI in Practice Checkpoint"]],
+      [19,"AI Research & Future",["Current AI Research","Foundation Models","Multimodal AI","AI Agents","Self-Supervised Learning","Few-Shot & Zero-Shot Learning","Neuromorphic Computing","AI & Neuroscience","Artificial General Intelligence (AGI)","AI Safety Research","Alignment Problem","AI Governance","Open Source vs Closed AI","Predictions for AI Future","Research Checkpoint"]],
+      [20,"AI Mastery",["Math & Python Review","ML Basics Review","Regression & Classification Review","Unsupervised Learning Review","Neural Networks Review","CNNs & Computer Vision Review","RNNs & NLP Review","Transformers & LLMs Review","Reinforcement Learning Review","Generative AI Review","Ethics & Fairness Review","AI in Practice Review","Research & Future Review","Building Your AI Portfolio","AI Grand Mastery!"]],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ai-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('artificial-intelligence');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('artificial-intelligence');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

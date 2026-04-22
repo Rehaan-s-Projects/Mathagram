@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Theory — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+    <h1>Decision Theory</h1>
+    <p>Rational choice, expected utility, risk, Bayesian reasoning, behavioral economics, and multi-criteria decisions. 15 units, 225 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations of Decision',['What Is Decision Theory?','Descriptive vs Normative vs Prescriptive','Decisions Under Certainty','Decisions Under Risk','Decisions Under Uncertainty','Outcomes & Consequences','Actions & Alternatives','States of the World','Payoff Matrices','Decision Trees','Dominance','Admissibility','Rational Choice','Bounded Rationality','Foundations Checkpoint']],
+      [2,'Expected Value',['What Is Expected Value?','Calculating EV','EV for Simple Gambles','EV for Complex Gambles','EV in Business','EV in Gambling','EV in Insurance','Fair Games','Risk-Neutral Agents','Limitations of EV','St. Petersburg Paradox','Infinite EV Problems','EV vs Other Criteria','Practice: EV Calculations','EV Checkpoint']],
+      [3,'Utility Theory',['What Is Utility?','Ordinal vs Cardinal Utility','Preferences & Axioms','Completeness','Transitivity','Independence','Continuity','Von Neumann-Morgenstern Theorem','Expected Utility Theory','Utility Functions','Risk Aversion','Risk Seeking','Risk Neutrality','Measuring Utility','Utility Checkpoint']],
+      [4,'Risk & Uncertainty',['Risk vs Uncertainty (Knight)','Probability Assessment','Subjective Probability','Maximin','Maximax','Minimax Regret','Hurwicz Criterion','Laplace Criterion','Sensitivity Analysis','Robust Decisions','Ambiguity Aversion','Ellsberg Paradox','Model Uncertainty','Practice: Criteria Comparison','Risk Checkpoint']],
+      [5,'Bayesian Decision Theory',['Bayes\' Theorem Review','Prior Probabilities','Likelihood','Posterior Probabilities','Bayesian Updating','Value of Information','Perfect Information','Imperfect Information','Sequential Decisions','Decision Trees with Bayes','Medical Diagnosis Example','Legal Reasoning Example','Scientific Inference','Practice: Bayesian Decisions','Bayesian Checkpoint']],
+      [6,'Behavioral Decision Theory',['Heuristics & Biases','Prospect Theory','Loss Aversion','Reference Dependence','Framing Effects','Anchoring','Availability Heuristic','Representativeness','Overconfidence','Status Quo Bias','Endowment Effect','Sunk Cost Fallacy','Mental Accounting','Nudge Theory','Behavioral Checkpoint']],
+      [7,'Multi-Criteria Decisions',['What Are MCDM?','Weighted Sum Model','AHP — Analytic Hierarchy Process','ELECTRE','TOPSIS','Pareto Optimality','Trade-Offs','Lexicographic Ordering','Value Functions','Swing Weights','Sensitivity Analysis','Group MCDM','Consensus Methods','Practice: MCDM','Multi-Criteria Checkpoint']],
+      [8,'Game Theory Connections',['Strategic Decisions','Nash Equilibrium Recap','Mixed Strategies','Sequential Games','Bargaining','Mechanism Design','Auction Theory','Voting Theory','Social Choice','Arrow\'s Theorem','Gibbard-Satterthwaite','Fair Division','Matching Markets','Practice','Game Theory Checkpoint']],
+      [9,'Decision Analysis Tools',['Influence Diagrams','Sensitivity Charts','Tornado Diagrams','Monte Carlo Simulation','Scenario Planning','Real Options','Portfolio Theory','Value at Risk','Break-Even Analysis','Cost-Benefit Analysis','ROI Calculations','Decision Software','Spreadsheet Modeling','Practice: Tools','Tools Checkpoint']],
+      [10,'Ethics & Decision Making',['Consequentialism & Decisions','Deontological Constraints','Rights & Decisions','Fairness Criteria','Distributive Justice','Rawls\' Veil of Ignorance','Utilitarian Calculation','Trolley Problem Revisited','Moral Uncertainty','Ethical AI Decisions','Medical Ethics & Triage','Environmental Decisions','Intergenerational Justice','Practice: Ethical Cases','Ethics Checkpoint']],
+      [11,'Decisions Under Deep Uncertainty',['What Is Deep Uncertainty?','Scenario Discovery','Robust Decision Making','Adaptive Strategies','Info-Gap Theory','Precautionary Principle','Black Swans','Fat Tails','Resilience Thinking','Climate Change Decisions','Pandemic Planning','Technology Assessment','Long-Term Planning','Practice','Deep Uncertainty Checkpoint']],
+      [12,'Group & Organizational Decisions',['Individual vs Group','Groupthink','Delphi Method','Nominal Group Technique','Brainstorming Rules','Devils Advocate','Red Teaming','Structured Analytic Techniques','Organizational Decision Processes','Garbage Can Model','Incrementalism','Satisficing','Bureaucratic Models','Practice','Group Checkpoint']],
+      [13,'AI & Algorithmic Decisions',['Automated Decision Making','Recommendation Systems','Credit Scoring','Hiring Algorithms','Predictive Policing','Algorithmic Bias','Fairness in ML','Explainability','Human-in-the-Loop','Decision Support Systems','Expert Systems','Reinforcement Learning & Decisions','AI Safety','Alignment Problem','AI Checkpoint']],
+      [14,'Personal Decision Making',['Career Decisions','Financial Decisions','Health Decisions','Relationship Decisions','Education Choices','Where to Live','Major Purchases','Time Allocation','Information Overload','Decision Fatigue','Regret Minimization','Pre-Mortem Analysis','Personal Decision Framework','Journaling Decisions','Personal Checkpoint']],
+      [15,'Mastery',['Theory Review','Tools Review','Practice Problems','Case Studies','Decision Portfolio','Research Frontiers','Books & Resources','Self-Assessment','Teaching Decision Theory','Consulting Applications','Policy Applications','Personal Application','Final Case Study','Reflection','Decision Theory Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dec-'+n, title: t, href: '#', unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('decision-theory');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('decision-theory');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

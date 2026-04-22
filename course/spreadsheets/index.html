@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spreadsheets & Excel — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Spreadsheets & Excel</h1>
+    <p>Master spreadsheets — Excel, Google Sheets, formulas, pivot tables, charts, VLOOKUP, macros, and data analysis. 300 lessons across 20 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Getting Started',['What Is a Spreadsheet?','Excel vs Google Sheets','Interface Tour — Cells Rows Columns','Entering Data','Selecting & Navigating','Formatting — Bold Italic Colors','Number Formats — Currency Percent Date','Column Width & Row Height','Freezing Panes','Workbooks & Worksheets','Saving & File Formats — xlsx csv','Undo Redo & Autosave','Keyboard Shortcuts — Essential','Templates','Getting Started Checkpoint']],
+      [2,'Basic Formulas',['What Is a Formula?','SUM — Adding Numbers','AVERAGE — Mean','COUNT & COUNTA','MIN & MAX','Cell References — A1 B2','Relative vs Absolute References — $','AutoFill & Flash Fill','Order of Operations','Parentheses in Formulas','Basic Arithmetic — + - * /','Percentage Calculations','Difference & Percent Change','Rounding — ROUND ROUNDUP ROUNDDOWN','Basic Formulas Checkpoint']],
+      [3,'Text & Date Functions',['CONCATENATE & CONCAT','TEXTJOIN','LEFT RIGHT MID','LEN — Text Length','UPPER LOWER PROPER','TRIM — Remove Spaces','FIND & SEARCH','SUBSTITUTE & REPLACE','TEXT Function — Custom Formatting','TODAY & NOW','YEAR MONTH DAY','DATEDIF — Date Difference','WEEKDAY & WORKDAY','EDATE & EOMONTH','Text & Date Checkpoint']],
+      [4,'Logical Functions',['IF Function — Basic','Nested IF','AND & OR','IF with AND/OR','IFS — Multiple Conditions','SWITCH Function','IFERROR — Handle Errors','ISBLANK ISNUMBER ISTEXT','TRUE & FALSE','Conditional Counting — COUNTIF','COUNTIFS — Multiple Criteria','Conditional Sum — SUMIF','SUMIFS — Multiple Criteria','AVERAGEIF & AVERAGEIFS','Logical Functions Checkpoint']],
+      [5,'Lookup Functions',['VLOOKUP — Vertical Lookup','VLOOKUP — Exact vs Approximate','HLOOKUP — Horizontal','INDEX Function','MATCH Function','INDEX-MATCH Combo','XLOOKUP — Modern Replacement','XLOOKUP — Multiple Criteria','Nested Lookups','Lookup Errors — #N/A','CHOOSE Function','INDIRECT Function','Dynamic References','Lookup Best Practices','Lookup Checkpoint']],
+      [6,'Sorting & Filtering',['Sort A-Z & Z-A','Sort by Multiple Columns','Custom Sort Orders','AutoFilter','Filter by Value','Filter by Color','Advanced Filter','Remove Duplicates','Subtotals','Sort by Cell Color','Filter & Formula Interaction','Slicers — Visual Filters','SORT Function (Dynamic)','FILTER Function (Dynamic)','Sorting & Filtering Checkpoint']],
+      [7,'Charts & Visualization',['Column & Bar Charts','Line Charts','Pie & Donut Charts','Scatter Plots','Area Charts','Combo Charts','Sparklines — Mini Charts','Chart Titles & Labels','Axis Formatting','Data Labels','Trendlines','Chart Colors & Themes','Conditional Formatting — Basics','Conditional Formatting — Data Bars Icon Sets','Charts Checkpoint']],
+      [8,'Pivot Tables',['What Is a Pivot Table?','Creating Your First Pivot','Row & Column Fields','Value Fields — Sum Average Count','Filters in Pivot Tables','Grouping — Dates Numbers','Calculated Fields','Pivot Table Formatting','Refresh & Update','Pivot Charts','Slicers with Pivot Tables','Multiple Consolidation Ranges','Drill Down — Detail Data','Pivot Table Best Practices','Pivot Tables Checkpoint']],
+      [9,'Data Cleaning',['Why Clean Data?','Removing Duplicates','TRIM — Extra Spaces','CLEAN — Non-Printable Characters','Find & Replace','Text to Columns','Fixing Date Formats','Standardizing Text — UPPER PROPER','Handling Blank Cells','Data Validation — Drop-Downs','Input Restrictions','Error Checking','Spell Check','Flash Fill for Patterns','Data Cleaning Checkpoint']],
+      [10,'Advanced Formulas',['SUMPRODUCT','Array Formulas — Ctrl+Shift+Enter','Dynamic Arrays — Spill','UNIQUE Function','SORT & SORTBY','FILTER Function','SEQUENCE','RANDARRAY','LET Function — Named Calculations','LAMBDA — Custom Functions','BYROW & BYCOL','MAP & REDUCE','Recursive LAMBDA','Error Handling in Complex Formulas','Advanced Formulas Checkpoint']],
+      [11,'Financial Functions',['PMT — Loan Payments','FV — Future Value','PV — Present Value','RATE — Interest Rate','NPER — Number of Periods','NPV — Net Present Value','IRR — Internal Rate of Return','SLN — Straight Line Depreciation','DB — Declining Balance','Compound Interest Calculations','Amortization Schedule','Break-Even Analysis','Budget Templates','Financial Modeling Basics','Financial Checkpoint']],
+      [12,'Statistical Functions',['MEDIAN','MODE','STDEV — Standard Deviation','VAR — Variance','PERCENTILE & QUARTILE','RANK','LARGE & SMALL','FREQUENCY','CORREL — Correlation','FORECAST','TREND','GROWTH','Confidence Intervals','Descriptive Statistics Tool','Statistical Checkpoint']],
+      [13,'What-If Analysis',['Goal Seek','Data Tables — One Variable','Data Tables — Two Variable','Scenario Manager','Solver Add-In','Sensitivity Analysis','Monte Carlo Simulation Basics','Decision Trees in Spreadsheets','Break-Even with Goal Seek','Optimization with Solver','Constraint Setup','Scenario Reports','Forecast Sheets','What-If Best Practices','What-If Checkpoint']],
+      [14,'Macros & VBA Basics',['What Are Macros?','Recording a Macro','Running a Macro','Macro Security Settings','VBA Editor — Introduction','Variables in VBA','If-Then-Else in VBA','Loops — For Next Do While','MsgBox & InputBox','Working with Ranges','Formatting with VBA','Automating Reports','UserForms — Custom Dialogs','Debugging VBA','Macros Checkpoint']],
+      [15,'Google Sheets Specific',['Google Sheets vs Excel','ARRAYFORMULA','IMPORTRANGE','IMPORTDATA & IMPORTHTML','QUERY Function — SQL-Like','GOOGLEFINANCE','Google Forms & Sheets','Apps Script — JavaScript for Sheets','Triggers & Automation','Collaboration — Sharing & Permissions','Version History','Add-Ons','Connected Sheets — BigQuery','Publishing & Embedding','Google Sheets Checkpoint']],
+      [16,'Power Query',['What Is Power Query?','Getting Data — From File Web Database','Query Editor Interface','Removing Columns & Rows','Filtering in Power Query','Changing Data Types','Splitting & Merging Columns','Pivot & Unpivot','Append Queries — Stack Tables','Merge Queries — Join Tables','Grouping & Aggregating','Custom Columns — M Language','Refresh & Load Settings','Power Query Best Practices','Power Query Checkpoint']],
+      [17,'Power Pivot & Data Model',['What Is Power Pivot?','Data Model — Multiple Tables','Relationships — Primary Foreign Keys','DAX — Data Analysis Expressions','CALCULATE Function','SUMX & AVERAGEX','Time Intelligence — YTD QTD','RELATED & RELATEDTABLE','Measures vs Calculated Columns','KPIs — Key Performance Indicators','Star Schema Design','Hierarchies','Power Pivot vs Pivot Tables','Performance Tips','Power Pivot Checkpoint']],
+      [18,'Dashboard Design',['What Is a Dashboard?','Planning Your Dashboard','KPI Selection','Chart Selection for Dashboards','Color Theory for Data','Layout & Grid','Interactive Elements — Slicers','Drop-Down Controlled Charts','Dynamic Titles','Sparklines in Dashboards','Gauge Charts','Scorecard Design','Print-Friendly Dashboards','Dashboard Maintenance','Dashboard Checkpoint']],
+      [19,'Real-World Projects',['Sales Report — Monthly','Budget Tracker — Personal','Inventory Management','Student Gradebook','Employee Attendance','Project Timeline — Gantt','Invoice Template','Expense Report','Survey Data Analysis','Customer Database','Workout Tracker','Recipe Cost Calculator','Stock Portfolio Tracker','Weather Data Analysis','Projects Checkpoint']],
+      [20,'Spreadsheets Mastery',['Formulas & Functions Review','Lookups Review','Pivot Tables Review','Charts & Visualization Review','Data Cleaning Review','Financial & Statistical Review','What-If Analysis Review','Macros & VBA Review','Google Sheets Review','Power Query & Pivot Review','Dashboard Design Review','Real-World Applications','Certification Prep — MOS','Career with Spreadsheets','Spreadsheets Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ss-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('spreadsheets');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('spreadsheets');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

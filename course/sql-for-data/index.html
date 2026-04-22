@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL for Data Analysis — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>SQL for Data Analysis</h1>
+    <p>Query databases like a pro — SELECT, JOIN, GROUP BY, subqueries, window functions, and real-world data analysis with SQL. 225 lessons across 15 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Introduction to SQL',['What Is SQL?','Databases & Tables','Rows & Columns','SQL vs Spreadsheets','Relational Databases','MySQL PostgreSQL SQLite','Installing a Database','SQL Editors — DBeaver DataGrip','Your First Query','SQL Syntax Rules','Comments in SQL','Case Sensitivity','Semicolons & Formatting','Practice Databases — Chinook Sakila','SQL Intro Checkpoint']],
+      [2,'SELECT & Filtering',['SELECT — Choose Columns','SELECT * — All Columns','WHERE — Filter Rows','Comparison Operators = != > <','AND & OR','NOT','BETWEEN','IN — List of Values','LIKE — Pattern Matching','Wildcards — % _','IS NULL & IS NOT NULL','DISTINCT — Unique Values','LIMIT & OFFSET','ORDER BY — Sorting','SELECT Checkpoint']],
+      [3,'Aggregate Functions',['COUNT','SUM','AVG','MIN & MAX','GROUP BY','GROUP BY Multiple Columns','HAVING — Filter Groups','COUNT DISTINCT','Aggregate with WHERE','Aggregate with NULL','Combining Aggregates','Nested Aggregates','ROUND with Aggregates','Real-World Aggregation Examples','Aggregates Checkpoint']],
+      [4,'Joins',['What Is a JOIN?','INNER JOIN','LEFT JOIN','RIGHT JOIN','FULL OUTER JOIN','CROSS JOIN','Self Join','Multiple Joins','Join Conditions — ON','Join vs WHERE','Table Aliases','Joining 3+ Tables','Join Performance','Choosing the Right Join','Joins Checkpoint']],
+      [5,'Subqueries',['What Is a Subquery?','Subquery in WHERE','Subquery in FROM','Subquery in SELECT','Correlated Subqueries','EXISTS & NOT EXISTS','IN with Subquery','ANY & ALL','Scalar Subqueries','Subquery vs JOIN','Common Table Expressions (CTE)','WITH Clause','Recursive CTEs','Subquery Best Practices','Subqueries Checkpoint']],
+      [6,'Data Modification',['INSERT INTO','INSERT Multiple Rows','UPDATE — Modify Data','UPDATE with WHERE','DELETE — Remove Rows','DELETE with JOIN','TRUNCATE vs DELETE','CREATE TABLE','ALTER TABLE — Add Drop Columns','DROP TABLE','Data Types — INT VARCHAR DATE','Constraints — NOT NULL UNIQUE','Primary Keys','Foreign Keys','Data Modification Checkpoint']],
+      [7,'String Functions',['CONCAT & ||','LENGTH & CHAR_LENGTH','UPPER & LOWER','TRIM LTRIM RTRIM','SUBSTRING','REPLACE','REVERSE','LEFT & RIGHT','POSITION & LOCATE','REPEAT','LPAD & RPAD','CAST — Type Conversion','COALESCE — First Non-NULL','String Aggregation — GROUP_CONCAT','String Functions Checkpoint']],
+      [8,'Date & Time Functions',['Date Data Types','CURRENT_DATE & CURRENT_TIMESTAMP','EXTRACT — Year Month Day','DATE_ADD & DATE_SUB','DATEDIFF','DATE_FORMAT','YEAR MONTH DAY Functions','Day of Week','Truncating Dates — DATE_TRUNC','Time Zones','Timestamp vs Date','Age Calculation','Date Ranges in WHERE','Calendar Tables','Date Functions Checkpoint']],
+      [9,'Window Functions',['What Are Window Functions?','OVER Clause','PARTITION BY','ORDER BY in Window','ROW_NUMBER','RANK & DENSE_RANK','NTILE — Percentile Groups','LAG & LEAD','FIRST_VALUE & LAST_VALUE','SUM OVER — Running Total','AVG OVER — Moving Average','COUNT OVER','ROWS & RANGE Frames','Window vs GROUP BY','Window Functions Checkpoint']],
+      [10,'Advanced Queries',['CASE WHEN — Conditional Logic','CASE in SELECT','CASE in WHERE & ORDER BY','UNION & UNION ALL','INTERSECT & EXCEPT','Pivoting Data','Unpivoting Data','JSON in SQL','ARRAY Data Type','Regular Expressions in SQL','Temporary Tables','Views — Virtual Tables','Materialized Views','Stored Procedures Basics','Advanced Queries Checkpoint']],
+      [11,'Performance & Optimization',['Query Execution Plan — EXPLAIN','Indexes — What & Why','Creating Indexes','Composite Indexes','Index Types — B-Tree Hash','When NOT to Index','Query Optimization Tips','Avoiding SELECT *','Reducing Joins','Partitioning Tables','Caching Strategies','Batch Operations','Monitoring Slow Queries','Database Normalization Revisited','Performance Checkpoint']],
+      [12,'Data Analysis with SQL',['Exploratory Data Analysis','Descriptive Statistics in SQL','Frequency Distribution','Percentile Analysis','Cohort Analysis','Retention Analysis','Funnel Analysis','Time Series Analysis','Year-over-Year Comparison','Month-over-Month Growth','Top-N Analysis','Pareto Analysis — 80/20 Rule','A/B Test Results in SQL','Reporting Queries','Data Analysis Checkpoint']],
+      [13,'SQL for Business Intelligence',['Sales Analysis Queries','Revenue by Region/Product','Customer Segmentation','RFM Analysis — Recency Frequency Monetary','Churn Analysis','LTV — Lifetime Value','Inventory Analysis','Employee Analytics','Marketing Attribution','Financial Reporting','KPI Dashboards Queries','Executive Summary Queries','Ad-Hoc Analysis','Automated Reports','BI Checkpoint']],
+      [14,'SQL & Python/Tools',['SQL in Python — sqlite3','SQLAlchemy — ORM','Pandas read_sql','Connecting to PostgreSQL from Python','Jupyter + SQL — Magic Commands','dbt — Data Build Tool','Airflow — Scheduling Queries','Metabase — Open Source BI','Tableau & SQL','Power BI & SQL','Google BigQuery','AWS Redshift','Snowflake','Data Pipeline Basics','SQL & Tools Checkpoint']],
+      [15,'SQL Mastery',['SELECT & Filtering Review','Aggregates & GROUP BY Review','Joins Review','Subqueries & CTEs Review','Data Modification Review','String & Date Functions Review','Window Functions Review','Advanced Queries Review','Performance Review','Data Analysis Review','Business Intelligence Review','SQL & Python Review','Certification Prep','Career with SQL','SQL Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sq-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('sql-for-data');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('sql-for-data');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

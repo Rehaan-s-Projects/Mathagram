@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryptography & Logic — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+    <h1>Cryptography & Logic</h1>
+    <p>Codes, ciphers, encryption, hashing, digital signatures, and the math &amp; logic behind modern cryptography. 15 units, 225 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'History of Codes',['Ancient Ciphers','Caesar Cipher','Scytale','Atbash Cipher','Substitution Ciphers','Vigenère Cipher','Frequency Analysis','Al-Kindi\'s Breakthrough','Renaissance Codes','Enigma Machine','Bletchley Park','Alan Turing & Bombe','Navajo Code Talkers','Cold War Cryptography','History Checkpoint']],
+      [2,'Classical Ciphers',['Monoalphabetic Substitution','Polyalphabetic Substitution','Transposition Ciphers','Rail Fence Cipher','Columnar Transposition','Playfair Cipher','Hill Cipher','Affine Cipher','Beaufort Cipher','Autokey Cipher','Running Key','Book Cipher','One-Time Pad','Vernam Cipher','Classical Checkpoint']],
+      [3,'Number Theory for Crypto',['Modular Arithmetic','GCD & Extended Euclidean','Multiplicative Inverses','Euler\'s Totient','Fermat\'s Little Theorem','Chinese Remainder Theorem','Primitive Roots','Discrete Logarithm','Quadratic Residues','Primality Testing','Prime Generation','Factoring Difficulty','Big Numbers','Practice: Modular Math','Number Theory Checkpoint']],
+      [4,'Symmetric Encryption',['Block vs Stream Ciphers','DES — Data Encryption Standard','Triple DES','AES — Advanced Encryption Standard','AES Internals — SubBytes, ShiftRows','MixColumns & AddRoundKey','Modes — ECB, CBC, CTR','Stream Ciphers — RC4','ChaCha20','Key Scheduling','Padding','Authenticated Encryption','GCM Mode','Practice: AES','Symmetric Checkpoint']],
+      [5,'Asymmetric Encryption',['Public Key Concept','Diffie-Hellman Key Exchange','RSA Algorithm','RSA Key Generation','RSA Encryption/Decryption','RSA Security','ElGamal','Elliptic Curve Basics','ECC — Elliptic Curve Cryptography','ECDH','Key Sizes Comparison','Hybrid Encryption','Key Management','Practice: RSA','Asymmetric Checkpoint']],
+      [6,'Hash Functions',['What Is a Hash?','Properties — Preimage Resistance','Collision Resistance','Avalanche Effect','MD5 (Broken)','SHA-1 (Deprecated)','SHA-256','SHA-3 / Keccak','HMAC','Password Hashing — bcrypt, scrypt','Argon2','Merkle Trees','Hash in Blockchain','Practice: Hashing','Hash Checkpoint']],
+      [7,'Digital Signatures',['What Is a Digital Signature?','RSA Signatures','DSA','ECDSA','EdDSA','Signature Verification','Non-Repudiation','Certificate Authorities','X.509 Certificates','PKI — Public Key Infrastructure','TLS/SSL Handshake','Code Signing','Document Signing','Practice','Signatures Checkpoint']],
+      [8,'Protocols',['Key Exchange Protocols','SSL/TLS','SSH','PGP / GPG','Signal Protocol','End-to-End Encryption','Zero-Knowledge Proofs','ZKP Examples','Commitment Schemes','Secret Sharing — Shamir','Threshold Cryptography','Oblivious Transfer','Secure Multi-Party Computation','Practice','Protocols Checkpoint']],
+      [9,'Boolean Logic & Crypto',['XOR in Encryption','AND, OR, NOT Gates','Boolean Functions','S-Boxes','P-Boxes','Feistel Networks','Confusion & Diffusion','Avalanche Criterion','Linear Cryptanalysis','Differential Cryptanalysis','Boolean Masking','Side-Channel Attacks','Countermeasures','Practice','Boolean Crypto Checkpoint']],
+      [10,'Information Theory & Crypto',['Shannon\'s Theory','Entropy','Perfect Secrecy','Unicity Distance','Redundancy','Compression & Encryption','Randomness','PRNG vs TRNG','CSPRNG','Entropy Sources','Random Number Testing','Information Leakage','Covert Channels','Practice','Info Theory Checkpoint']],
+      [11,'Cryptanalysis',['Types of Attacks','Known Plaintext','Chosen Plaintext','Ciphertext Only','Brute Force','Frequency Analysis','Kasiski Examination','Index of Coincidence','Meet-in-the-Middle','Birthday Attack','Side-Channel Attacks','Timing Attacks','Power Analysis','Social Engineering','Cryptanalysis Checkpoint']],
+      [12,'Blockchain & Crypto',['What Is Blockchain?','Bitcoin Overview','Proof of Work','Mining','Merkle Trees in Blockchain','Transactions & UTXO','Ethereum & Smart Contracts','Proof of Stake','Consensus Mechanisms','Privacy Coins','Zero-Knowledge in Blockchain','Decentralized Identity','NFTs (Technical)','DeFi Basics','Blockchain Checkpoint']],
+      [13,'Post-Quantum Cryptography',['Quantum Computing Threat','Shor\'s Algorithm','Grover\'s Algorithm','Lattice-Based Crypto','Code-Based Crypto','Multivariate Crypto','Hash-Based Signatures','NIST PQC Standards','CRYSTALS-Kyber','CRYSTALS-Dilithium','FALCON','SPHINCS+','Quantum Key Distribution','Migration Planning','Post-Quantum Checkpoint']],
+      [14,'Crypto in Practice',['HTTPS Everywhere','Password Managers','2FA & MFA','Secure Messaging','Encrypted Email','VPNs','Disk Encryption','Secure Deletion','Key Ceremonies','Bug Bounties','Responsible Disclosure','Crypto Libraries','Common Mistakes','Security Audits','Practice Checkpoint']],
+      [15,'Mastery',['Classical Review','Symmetric Review','Asymmetric Review','Hash Review','Signature Review','Protocol Review','Cryptanalysis Review','Blockchain Review','PQC Review','Capture the Flag','Crypto Challenges','Self-Assessment','Career in Crypto','Resources','Cryptography Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cry-'+n, title: t, href: '#', unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('cryptography-logic');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('cryptography-logic');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

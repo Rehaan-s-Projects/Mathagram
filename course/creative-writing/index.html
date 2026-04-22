@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Writing — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Creative Writing</h1>
+    <p>Tell stories that matter — fiction, poetry, screenwriting, worldbuilding, characters, dialogue, and getting published. 225 lessons across 15 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Foundations of Writing",["Why Write?","Finding Your Voice","Freewriting — Just Start","Show Dont Tell","Sensory Details — Sight Sound Touch","Active vs Passive Voice","Point of View — 1st 2nd 3rd","Tense — Past vs Present","Tone & Mood","Writing Routine & Discipline","Overcoming Writers Block","Reading as a Writer","Journaling for Ideas","Writing Communities","Foundations Checkpoint"]],
+      [2,"Character Creation",["What Makes a Good Character?","Protagonist & Antagonist","Character Arc — Growth","Backstory & Motivation","Physical Description","Personality Traits","Flaws & Vulnerabilities","Character Voice — How They Talk","Supporting Characters","Character Relationships","Archetypes — Hero Mentor Trickster","Anti-Heroes","Villains with Depth","Character Sheets & Profiles","Character Checkpoint"]],
+      [3,"Plot & Structure",["What Is Plot?","Three-Act Structure","The Heros Journey","Rising Action & Climax","Falling Action & Resolution","Conflict Types — Internal External","Subplot Weaving","Pacing — Fast vs Slow","Tension & Suspense","Foreshadowing","Plot Twists","Beginnings — Hooks","Endings — Satisfying","Outlining vs Pantsing","Plot Checkpoint"]],
+      [4,"Dialogue",["Why Dialogue Matters","Natural-Sounding Speech","Dialogue Tags — Said vs Others","Subtext — Whats Not Said","Character Voice in Dialogue","Exposition Through Conversation","Conflict in Dialogue","Dialect & Accent","Internal Monologue","Group Conversations","Phone & Text Conversations","Dialogue Formatting","Dialogue Pacing","Common Dialogue Mistakes","Dialogue Checkpoint"]],
+      [5,"Setting & Worldbuilding",["Setting as Character","Time Period Research","Geography & Climate","Culture & Society","Magic Systems & Rules","Technology Level","Economy & Politics","Religion & Mythology","Flora & Fauna","Maps & Visual Aids","History of Your World","Integrating Setting Naturally","Avoid Info-Dumps","Worldbuilding Worksheets","Setting Checkpoint"]],
+      [6,"Short Stories",["What Is a Short Story?","Flash Fiction — Under 1000 Words","Opening Lines That Hook","Single Scene Stories","The Twist Ending","Slice of Life","Emotional Core","Economy of Words","Short Story Structure","Revision for Brevity","Markets & Submissions","Famous Short Story Writers","Writing Prompts Practice","Your First Short Story","Short Stories Checkpoint"]],
+      [7,"Novel Writing",["Planning a Novel","Chapter Structure","Word Count Goals — NaNoWriMo","First Draft — Just Finish","Scene vs Chapter","Multiple POV Novels","Series Planning","Middle of the Novel — The Sag","Maintaining Momentum","Beta Readers","Revision Strategies","Kill Your Darlings","Novel Query Letters","Finding an Agent","Novel Checkpoint"]],
+      [8,"Poetry",["What Is Poetry?","Free Verse","Haiku","Sonnet","Limerick","Rhyme & Rhythm","Meter — Iambic Pentameter","Metaphor & Simile","Imagery","Line Breaks Matter","Stanza Structure","Performance Poetry — Slam","Found Poetry","Ekphrastic Poetry — Art Inspired","Poetry Checkpoint"]],
+      [9,"Screenwriting",["Script Format — Slug Lines","Scene Headings","Action Lines","Character Introductions","Dialogue in Scripts","Parentheticals","Transitions","Three-Act Structure for Film","Cold Open & Teaser","TV Episode Structure","Pilot Scripts","Short Film Scripts","Screenplay Software — Final Draft","Selling a Script","Screenwriting Checkpoint"]],
+      [10,"Genre Writing",["Fantasy Writing","Science Fiction Writing","Horror & Thriller","Mystery & Detective","Romance","Historical Fiction","Comedy Writing","Literary Fiction","Young Adult (YA)","Middle Grade","Dystopian Fiction","Magical Realism","Combining Genres","Genre Conventions & Subversion","Genre Checkpoint"]],
+      [11,"Non-Fiction & Essays",["Personal Essays","Memoir Writing","Persuasive Writing","Narrative Non-Fiction","Research & Fact-Checking","Interviews for Writing","Op-Eds & Columns","Travel Writing","Food Writing","Nature Writing","Biography","True Crime","Self-Help Writing","Pitching Non-Fiction","Non-Fiction Checkpoint"]],
+      [12,"Revision & Editing",["First Draft vs Final Draft","Self-Editing Techniques","Reading Aloud","Cutting Unnecessary Words","Strengthening Verbs","Fixing Passive Voice","Consistency Checks","Beta Reader Feedback","Writing Groups & Critique","Professional Editing Types","Copy Editing vs Developmental","Proofreading","Style Guides","When to Stop Revising","Revision Checkpoint"]],
+      [13,"Publishing",["Traditional vs Self-Publishing","Literary Agents","Query Letters","Synopsis Writing","Manuscript Formatting","Submission Guidelines","Rejection & Persistence","Self-Publishing Platforms — Amazon KDP","Cover Design","ISBN & Copyright","Marketing Your Book","Author Platform & Social Media","Book Launch Strategy","Reviews & Promotion","Publishing Checkpoint"]],
+      [14,"Writing for Digital",["Blogging","Newsletter Writing","Social Media Writing","Copywriting Basics","SEO Writing","Content Marketing","Microfiction — Twitter Stories","Wattpad & Online Platforms","Writing for Games","Interactive Fiction","Podcast Scripts","YouTube Scripts","Writing for Apps","Freelance Writing","Digital Writing Checkpoint"]],
+      [15,"Creative Writing Mastery",["Foundations Review","Character & Dialogue Review","Plot & Structure Review","Setting & Worldbuilding Review","Short Stories & Novels Review","Poetry & Screenwriting Review","Genre Writing Review","Non-Fiction Review","Revision & Editing Review","Publishing Review","Digital Writing Review","Your Author Brand","Writing Portfolio","Lifelong Writing Habits","Creative Writing Mastery!"]],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cw-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('creative-writing');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('creative-writing');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Programming — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Python Programming</h1>
+    <p>Learn Python from scratch — variables, loops, functions, OOP, file I/O, libraries, web scraping, data science, and building real projects. 375 lessons across 25 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is Python?',['Why Learn Python?','Installing Python','Python REPL & IDLE','Your First Program — Hello World','Comments in Code','Python vs Other Languages','Python 2 vs Python 3','Running .py Files','Indentation Matters','The Zen of Python','Online Python Editors','Jupyter Notebooks','VS Code for Python','Debugging Print Statements','Python Intro Checkpoint']],
+      [2,'Variables & Data Types',['What Are Variables?','Naming Variables','Integers','Floats','Strings','Booleans','Type Checking — type()','Type Conversion — int() str() float()','None Type','Constants Convention','f-Strings — Formatted Strings','String Methods','String Slicing','Multiple Assignment','Variables Checkpoint']],
+      [3,'Operators & Expressions',['Arithmetic Operators + - * / // % **','Comparison Operators == != > < >= <=','Logical Operators and or not','Assignment Operators += -= *= /=','Operator Precedence','String Concatenation +','String Repetition *','Membership — in not in','Identity — is is not','Bitwise Operators','Ternary Operator','Chained Comparisons','Expressions vs Statements','Math Module — sqrt pow','Operators Checkpoint']],
+      [4,'Input & Output',['print() Function','sep and end Parameters','input() Function','Converting Input to Numbers','Formatted Output — f-Strings','Format Specifiers — :.2f','Escape Characters — \n \t','Raw Strings','Multi-line Strings','String Formatting — .format()','Reading Multiple Inputs','Password Input — getpass','Clearing the Screen','Simple Calculator Project','Input Output Checkpoint']],
+      [5,'Conditionals',['if Statement','if-else','if-elif-else','Nested if','Truthy and Falsy Values','Comparing Strings','Multiple Conditions — and or','not Operator','Match-Case (Python 3.10+)','Short-Circuit Evaluation','Conditional Expressions (Ternary)','Guard Clauses','Error Handling Preview — try','Grade Calculator Project','Conditionals Checkpoint']],
+      [6,'Loops',['while Loop','Infinite Loops & break','continue Statement','for Loop','range() Function','Looping Through Strings','Nested Loops','Loop with else','enumerate()','zip() — Parallel Loops','List Comprehensions Preview','while True Pattern','Counting & Summing Patterns','Multiplication Table Project','Loops Checkpoint']],
+      [7,'Lists',['Creating Lists','Indexing & Slicing','Modifying Lists','append() & extend()','insert() & remove()','pop() & del','Sorting — sort() & sorted()','Reversing','List Length — len()','in Operator','List Comprehensions','Nested Lists — 2D','Copying Lists — Shallow vs Deep','Unpacking Lists','Lists Checkpoint']],
+      [8,'Tuples, Sets & Dictionaries',['Tuples — Immutable Lists','Tuple Packing & Unpacking','Named Tuples','Sets — Unique Elements','Set Operations — Union Intersection Difference','Frozen Sets','Dictionaries — Key-Value Pairs','Accessing & Modifying Dicts','Dict Methods — keys() values() items()','Nested Dictionaries','Dictionary Comprehensions','defaultdict & Counter','When to Use What','JSON & Dictionaries','Collections Checkpoint']],
+      [9,'Functions',['Defining Functions — def','Parameters & Arguments','Return Values','Default Parameters','Keyword Arguments','*args — Variable Arguments','**kwargs — Keyword Variable Args','Docstrings','Scope — Local vs Global','Lambda Functions','map() filter() reduce()','Recursion','Decorators Introduction','Type Hints','Functions Checkpoint']],
+      [10,'Strings In Depth',['String Immutability','Common Methods — upper lower strip split join','find() & replace()','startswith() & endswith()','Regular Expressions — re Module','re.search() & re.findall()','re.sub() — Find & Replace','Character Classes \d \w \s','Quantifiers * + ? {}','Groups & Capturing','Raw Strings for Regex','String Encoding — UTF-8','Palindrome Checker Project','Password Validator Project','Strings Checkpoint']],
+      [11,'File Handling',['Opening Files — open()','Reading Files — read() readline() readlines()','Writing Files — write()','Appending to Files','with Statement — Context Manager','File Modes — r w a rb wb','CSV Files — csv Module','Reading CSV','Writing CSV','JSON Files — json Module','Reading JSON','Writing JSON','File Paths — os.path','Deleting Files — os.remove','File Handling Checkpoint']],
+      [12,'Error Handling',['What Are Exceptions?','try-except','Catching Specific Exceptions','Multiple except Blocks','else & finally','Raising Exceptions — raise','Custom Exceptions','assert Statement','Common Exceptions — ValueError TypeError','FileNotFoundError','IndexError & KeyError','Traceback Reading','Logging — logging Module','Debugging with pdb','Error Handling Checkpoint']],
+      [13,'Object-Oriented Programming',['What Is OOP?','Classes & Objects','__init__ Method','Instance Variables','Methods','self Parameter','Class Variables','Inheritance','Method Overriding','super()','Multiple Inheritance','Encapsulation — Private Variables','Properties — @property','Magic Methods — __str__ __repr__ __len__','OOP Checkpoint']],
+      [14,'Advanced OOP',['Abstract Classes — abc','Interfaces in Python','Polymorphism','Composition vs Inheritance','Static Methods — @staticmethod','Class Methods — @classmethod','Dataclasses','__slots__ — Memory Optimization','Operator Overloading','Iterators — __iter__ __next__','Generators — yield','Context Managers — __enter__ __exit__','Mixins','Design Patterns — Singleton Factory','Advanced OOP Checkpoint']],
+      [15,'Modules & Packages',['What Are Modules?','import Statement','from ... import ...','as — Aliasing','Creating Your Own Module','__name__ == "__main__"','Packages — __init__.py','Standard Library Overview','os Module','sys Module','datetime Module','random Module','math Module','Installing Packages — pip','Modules Checkpoint']],
+      [16,'Working with APIs',['What Is an API?','HTTP Methods — GET POST PUT DELETE','Status Codes — 200 404 500','requests Library','Making GET Requests','Parsing JSON Responses','Query Parameters','Headers & Authentication','API Keys','POST Requests — Sending Data','Rate Limiting','Error Handling for APIs','REST API Design','Weather API Project','APIs Checkpoint']],
+      [17,'Web Scraping',['What Is Web Scraping?','HTML Basics for Scraping','BeautifulSoup — Installation','Parsing HTML','Finding Elements — find() find_all()','CSS Selectors','Extracting Text & Attributes','Navigating the DOM','Handling Pagination','Scraping Tables','Saving Scraped Data to CSV','Requests + BeautifulSoup Workflow','robots.txt & Ethics','Selenium — Dynamic Pages','Web Scraping Checkpoint']],
+      [18,'Data Science Basics',['What Is Data Science?','NumPy — Arrays','NumPy — Operations','NumPy — Indexing & Slicing','Pandas — Series','Pandas — DataFrames','Reading CSV with Pandas','Data Cleaning — Missing Values','Filtering & Selecting Data','Groupby & Aggregation','Matplotlib — Line Plots','Matplotlib — Bar & Scatter Plots','Matplotlib — Customization','Data Visualization Best Practices','Data Science Checkpoint']],
+      [19,'GUI Programming',['What Is a GUI?','Tkinter — Built-In GUI','Creating a Window','Labels & Buttons','Entry Fields','Layout — pack grid place','Event Handling','Message Boxes','Menus','Canvas — Drawing','Frames & Widgets','Calculator GUI Project','To-Do List GUI','Custom Themes — ttk','GUI Checkpoint']],
+      [20,'Database & SQL',['What Is a Database?','SQLite — Built Into Python','Creating a Database','Creating Tables','INSERT — Adding Data','SELECT — Querying Data','WHERE — Filtering','UPDATE & DELETE','ORDER BY & LIMIT','JOIN — Combining Tables','Aggregate Functions — COUNT SUM AVG','sqlite3 Module in Python','CRUD Application','SQL Injection Prevention','Database Checkpoint']],
+      [21,'Testing',['Why Test?','unittest Module','Writing Test Cases','setUp & tearDown','Assertions — assertEqual assertTrue','Testing Exceptions','pytest — Modern Testing','Fixtures in pytest','Mocking — unittest.mock','Test Coverage','TDD — Test-Driven Development','Integration Tests','Testing Best Practices','CI/CD Preview','Testing Checkpoint']],
+      [22,'Concurrency & Async',['What Is Concurrency?','Threading Module','Creating Threads','Thread Synchronization — Lock','Multiprocessing Module','Process vs Thread','asyncio — Async/Await','Coroutines','Event Loop','Async HTTP — aiohttp','Concurrent.futures','ThreadPoolExecutor','ProcessPoolExecutor','When to Use What','Concurrency Checkpoint']],
+      [23,'Python Projects',['Number Guessing Game','Rock Paper Scissors','Hangman','Tic-Tac-Toe','Quiz Application','Password Generator','Contact Book','Expense Tracker','Web Scraper Project','API Dashboard','Chat Bot — Simple','File Organizer','Alarm Clock','Snake Game — Pygame','Projects Checkpoint']],
+      [24,'Advanced Topics',['Decorators In Depth','Metaclasses','Descriptors','Memory Management & Garbage Collection','CPython Internals','Cython — C Extensions','Type Checking — mypy','Virtual Environments — venv','Poetry & Pipenv','Docker for Python','Packaging — setup.py & pyproject.toml','Publishing to PyPI','Python Performance Tips','Python 3.12+ Features','Advanced Checkpoint']],
+      [25,'Python Mastery',['Variables & Types Review','Control Flow Review','Data Structures Review','Functions Review','OOP Review','File Handling Review','Error Handling Review','Modules & Packages Review','APIs & Web Scraping Review','Data Science Review','GUI & Database Review','Testing Review','Concurrency Review','Projects & Career Advice','Python Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'py-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('python-programming');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('python-programming');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

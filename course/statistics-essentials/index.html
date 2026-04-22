@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics Essentials — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Statistics Essentials</h1>
+    <p>Think with data — descriptive stats, probability, distributions, hypothesis testing, confidence intervals, and real-world applications. 300 lessons across 20 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Statistics?",["Why Statistics Matters","Population vs Sample","Descriptive vs Inferential","Variables — Quantitative vs Categorical","Levels of Measurement — Nominal Ordinal Interval Ratio","Data Collection Methods","Surveys & Questionnaires","Observational vs Experimental","Sampling Methods — Random Stratified Cluster","Bias in Data Collection","Census vs Sample","Statistical Software Overview","Notation & Symbols","Ethics in Statistics","Statistics Intro Checkpoint"]],
+      [2,"Descriptive Statistics",["Mean — Average","Median — Middle Value","Mode — Most Frequent","Weighted Mean","Trimmed Mean","Range","Interquartile Range (IQR)","Variance","Standard Deviation","Coefficient of Variation","Percentiles & Quartiles","Five-Number Summary","Skewness","Kurtosis","Descriptive Checkpoint"]],
+      [3,"Data Visualization for Stats",["Frequency Tables","Histograms","Stem-and-Leaf Plots","Dot Plots","Box Plots (Box & Whisker)","Bar Charts for Categories","Pie Charts","Scatter Plots","Line Graphs","Cumulative Frequency","Ogive Curves","Pareto Charts","Heat Maps","Choosing the Right Display","Visualization Checkpoint"]],
+      [4,"Probability Fundamentals",["What Is Probability?","Sample Space & Events","Probability Scale — 0 to 1","Theoretical vs Experimental","Law of Large Numbers","Complementary Events","Addition Rule — OR","Multiplication Rule — AND","Independent Events","Dependent Events","Conditional Probability","Bayes Theorem","Counting Principle","Permutations & Combinations","Probability Checkpoint"]],
+      [5,"Probability Distributions",["What Is a Distribution?","Discrete vs Continuous","Probability Mass Function","Probability Density Function","Expected Value","Variance of a Distribution","Binomial Distribution","Binomial Problems","Poisson Distribution","Geometric Distribution","Uniform Distribution","Exponential Distribution","Normal Distribution — Bell Curve","Standard Normal — Z-Scores","Distributions Checkpoint"]],
+      [6,"Normal Distribution Deep Dive",["Properties of Normal Curve","68-95-99.7 Rule (Empirical)","Z-Scores — Standardizing","Z-Table — Finding Probabilities","Finding Values from Probabilities","Normal Approximation to Binomial","Central Limit Theorem","CLT — Why It Matters","Sampling Distribution of the Mean","Standard Error","Q-Q Plots — Testing Normality","Skewed Distributions","Transformations — Log Square Root","Real-World Normal Examples","Normal Distribution Checkpoint"]],
+      [7,"Confidence Intervals",["Point Estimate vs Interval","What Is a Confidence Interval?","Confidence Level — 90% 95% 99%","Margin of Error","CI for Mean — Known Sigma","CI for Mean — Unknown Sigma (t)","CI for Proportion","Sample Size Determination","Interpreting Confidence Intervals","Common Misconceptions","Width of Interval","One-Sided Intervals","CI for Difference of Means","CI for Difference of Proportions","Confidence Intervals Checkpoint"]],
+      [8,"Hypothesis Testing — Basics",["What Is Hypothesis Testing?","Null & Alternative Hypothesis","One-Tailed vs Two-Tailed","Significance Level — Alpha","Test Statistic","P-Value — What It Means","Rejecting vs Failing to Reject","Type I Error — False Positive","Type II Error — False Negative","Power of a Test","Effect Size","Statistical vs Practical Significance","Steps of Hypothesis Testing","Common Mistakes","Hypothesis Basics Checkpoint"]],
+      [9,"Hypothesis Testing — One Sample",["Z-Test for Mean","T-Test for Mean","Choosing Z vs T","One-Sample Proportion Test","Testing a Claim About Mean","Testing a Claim About Proportion","P-Value Method","Critical Value Method","Confidence Interval Method","Assumptions & Conditions","Sample Size & Power","Two-Tailed Example","One-Tailed Example","Real-World Applications","One-Sample Checkpoint"]],
+      [10,"Hypothesis Testing — Two Samples",["Comparing Two Means — Independent","Pooled vs Unpooled T-Test","Paired T-Test — Matched Pairs","Comparing Two Proportions","Difference of Means — CI","Difference of Proportions — CI","F-Test — Comparing Variances","When to Use Each Test","Assumptions for Two-Sample","Effect Size for Two Groups","Practical Examples — A/B Testing","Medical Trial Example","Before-After Studies","Reporting Results","Two-Sample Checkpoint"]],
+      [11,"Chi-Square Tests",["What Is Chi-Square?","Chi-Square Goodness of Fit","Observed vs Expected Frequencies","Degrees of Freedom","Chi-Square Test of Independence","Contingency Tables","Calculating Chi-Square Statistic","P-Value from Chi-Square","Conditions & Assumptions","Fishers Exact Test — Small Samples","Yates Correction","Effect Size — Cramers V","Chi-Square in Research","Real-World Examples","Chi-Square Checkpoint"]],
+      [12,"ANOVA",["What Is ANOVA?","One-Way ANOVA","Between vs Within Variation","F-Statistic","ANOVA Table","Assumptions — Normality Equal Variance","Post-Hoc Tests — Tukey","Bonferroni Correction","Two-Way ANOVA","Interaction Effects","Repeated Measures ANOVA","Effect Size — Eta Squared","Kruskal-Wallis — Non-Parametric","ANOVA vs Multiple T-Tests","ANOVA Checkpoint"]],
+      [13,"Correlation & Regression",["Correlation — What & Why","Pearson Correlation Coefficient — r","Interpreting r","Correlation vs Causation","Scatter Plots & Trend","Simple Linear Regression","Least Squares Method","Slope & Intercept","R-Squared — Coefficient of Determination","Residuals & Residual Plots","Assumptions of Regression","Outliers & Influential Points","Prediction & Extrapolation","Multiple Regression Preview","Regression Checkpoint"]],
+      [14,"Non-Parametric Statistics",["What Is Non-Parametric?","When to Use Non-Parametric","Sign Test","Wilcoxon Signed-Rank","Mann-Whitney U Test","Kruskal-Wallis H Test","Spearman Rank Correlation","Friedman Test","Moods Median Test","Runs Test — Randomness","Bootstrapping","Permutation Tests","Advantages & Disadvantages","Choosing Parametric vs Non-Parametric","Non-Parametric Checkpoint"]],
+      [15,"Bayesian Statistics",["Frequentist vs Bayesian","Prior Probability","Likelihood","Posterior Probability","Bayes Theorem Revisited","Updating Beliefs with Data","Conjugate Priors","Beta-Binomial Model","Bayesian vs Classical Inference","Credible Intervals vs Confidence","MCMC — Markov Chain Monte Carlo","Bayesian in Practice","Bayesian A/B Testing","Pros & Cons of Bayesian","Bayesian Checkpoint"]],
+      [16,"Experimental Design",["Why Design Matters","Control Group","Treatment Group","Randomization","Blinding — Single & Double","Placebo Effect","Blocking","Factorial Design","Latin Square","Crossover Design","Sample Size Planning","Internal & External Validity","Confounding Variables","Replication","Experimental Design Checkpoint"]],
+      [17,"Time Series Analysis",["What Is a Time Series?","Trend — Long-Term Direction","Seasonality — Repeating Patterns","Cyclical Patterns","Noise — Random Variation","Moving Averages — Simple","Exponential Smoothing","Decomposition — Trend + Season + Residual","Autocorrelation","Stationarity","Differencing","ARIMA Model Basics","Forecasting with ARIMA","Forecast Accuracy — MAE RMSE","Time Series Checkpoint"]],
+      [18,"Survey & Sampling Methods",["Survey Design Principles","Question Types — Open Closed Likert","Leading & Loaded Questions","Response Bias","Non-Response Bias","Simple Random Sampling","Stratified Sampling","Cluster Sampling","Systematic Sampling","Convenience Sampling","Snowball Sampling","Sampling Error","Margin of Error Calculation","Sample Size Calculators","Survey Checkpoint"]],
+      [19,"Statistics in Real Life",["Statistics in Medicine — Clinical Trials","Statistics in Sports — Sabermetrics","Statistics in Business — A/B Testing","Statistics in Politics — Polls","Statistics in Criminal Justice","Statistics in Education","Statistics in Environmental Science","Quality Control — Six Sigma","Actuarial Science — Insurance","Epidemiology Statistics","Social Science Research","Marketing Analytics","Financial Risk Analysis, \1","Damned Lies & Statistics","Real Life Checkpoint"]],
+      [20,"Statistics Mastery",["Descriptive Stats Review","Probability Review","Distributions Review","Normal & CLT Review","Confidence Intervals Review","Hypothesis Testing Review","Chi-Square & ANOVA Review","Correlation & Regression Review","Non-Parametric Review","Bayesian Review","Experimental Design Review","Time Series Review","Survey Methods Review","Career in Statistics","Statistics Grand Mastery!"]],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ste-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('statistics-essentials');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('statistics-essentials');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

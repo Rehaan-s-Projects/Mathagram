@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Ethics & Privacy — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Data Ethics & Privacy</h1>
+    <p>Use data responsibly — privacy laws, bias, consent, surveillance, algorithmic fairness, and the human side of data. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Why Data Ethics?",["What Is Data Ethics?","Data as Power","History — Census & Surveillance","Cambridge Analytica Scandal","Snowden & NSA","Data Breaches — Equifax Yahoo","Who Owns Your Data?","Ethical Frameworks — Consequentialism Deontology","Stakeholders in Data Ethics","Tech Company Responsibility","Government Role","Individual Rights","Data Literacy for Citizens","Career in Data Ethics","Data Ethics Intro Checkpoint"]],
+      [2,"Privacy Fundamentals",["What Is Privacy?","Information Privacy","Physical vs Digital Privacy","Right to Privacy — History","Reasonable Expectation of Privacy","Privacy by Design","Privacy by Default","Data Minimization","Purpose Limitation","Storage Limitation","Anonymization","Pseudonymization","De-identification","Re-identification Risks","Privacy Checkpoint"]],
+      [3,"Privacy Laws & Regulations",["GDPR — EU General Data Protection","CCPA — California Consumer Privacy","COPPA — Childrens Privacy (USA)","HIPAA — Health Data","FERPA — Student Records","PIPEDA — Canada","LGPD — Brazil","POPIA — South Africa","Data Protection Authorities","Right to Access","Right to Erasure — Forget Me","Data Portability","Consent Requirements","Cross-Border Data Transfer","Privacy Laws Checkpoint"]],
+      [4,"Consent & Transparency",["What Is Informed Consent?","Opt-In vs Opt-Out","Cookie Consent Banners","Privacy Policies — Who Reads Them?","Terms of Service","Dark Patterns — Tricking Users","Consent Fatigue","Childrens Consent","Dynamic Consent","Transparency Reports","Algorithmic Transparency","Explainability","Right to Explanation","Accountability Frameworks","Consent Checkpoint"]],
+      [5,"Bias in Data & Algorithms",["What Is Algorithmic Bias?","Training Data Bias","Historical Bias","Sampling Bias","Measurement Bias","Confirmation Bias","Racial Bias in Facial Recognition","Gender Bias in NLP","Bias in Hiring Algorithms","Bias in Criminal Justice — COMPAS","Bias in Healthcare","Detecting Bias","Mitigating Bias","Fairness Metrics","Bias Checkpoint"]],
+      [6,"Surveillance & Tracking",["Digital Surveillance — Who Watches?","Browser Tracking — Cookies Fingerprinting","Location Tracking — GPS Cell Tower","Social Media Surveillance","Workplace Monitoring","Government Surveillance Programs","CCTV & Facial Recognition","Smart Home Devices Listening","ISP Tracking","Ad Tech — Real-Time Bidding","Data Brokers","Surveillance Capitalism","China Social Credit System","Pushback — Privacy Tools VPN Tor","Surveillance Checkpoint"]],
+      [7,"AI Ethics & Fairness",["AI Decision-Making — Who Decides?","Autonomous Weapons","Self-Driving Car Trolley Problem","Deepfakes & Misinformation","AI in Hiring — Fair?","AI in Lending — Discrimination?","AI in Policing — Predictive","AI in Healthcare — Life & Death","Black Box Problem","Explainable AI (XAI)","AI Regulation — EU AI Act","Responsible AI Principles","AI Ethics Boards","Human-in-the-Loop","AI Ethics Checkpoint"]],
+      [8,"Data in Research & Journalism",["Research Ethics — Informed Consent","IRB — Institutional Review Board","Tuskegee Study — Historical Horror","Facebook Emotional Contagion Study","A/B Testing Ethics","Open Data & Reproducibility","Data Journalism Ethics","Source Protection","Fact-Checking Data","Misrepresenting Statistics","Cherry-Picking Data, p-Hacking & Publication Bias","Data Sharing vs Privacy","Responsible Disclosure","Research Ethics Checkpoint"]],
+      [9,"Corporate Data Responsibility",["Data Governance","Chief Data Officer Role","Data Stewardship","Data Quality & Integrity","Data Retention Policies","Breach Response Plan","Employee Data Training","Third-Party Data Sharing","Vendor Risk Management","Ethical Marketing Data Use","Customer Trust","ESG & Data — Environmental Social Governance","B-Corp & Ethical Business","Whistleblowing","Corporate Checkpoint"]],
+      [10,"Data Ethics Mastery",["Privacy Fundamentals Review","Laws & Regulations Review","Consent & Transparency Review","Bias & Fairness Review","Surveillance Review","AI Ethics Review","Research & Journalism Review","Corporate Responsibility Review","Your Personal Data Audit","Advocacy & Action","Teaching Others About Privacy","Data Ethics in Your Career","Building Ethical Products","The Future of Data Rights","Data Ethics Grand Mastery!"]],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'de-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('data-ethics');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('data-ethics');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

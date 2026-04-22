@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking & Nutrition — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Cooking & Nutrition</h1>
+    <p>Learn to cook and eat well — kitchen skills, recipes, food science, meal planning, nutrition, diets, and cuisines from around the world. 300 lessons across 20 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Kitchen Basics',['Kitchen Safety Rules','Knife Skills — Chop Dice Mince','Measuring — Cups Tablespoons Grams','Cooking Methods — Boil Fry Bake Roast','Stove vs Oven vs Microwave','Essential Kitchen Tools','Cutting Board & Sanitization','Reading a Recipe','Mise en Place — Prep First','Substitutions & Adjustments','Kitchen Organization','Grocery Shopping Tips','Food Storage — Fridge Pantry Freezer','Cleaning as You Cook','Kitchen Basics Checkpoint']],
+      [2,'Nutrition Fundamentals',['What Is Nutrition?','Macronutrients — Carbs Protein Fat','Micronutrients — Vitamins & Minerals','Calories & Energy Balance','Reading Nutrition Labels','Daily Recommended Values','Water & Hydration','Fiber & Digestion','Cholesterol & Fats — Good vs Bad','Sugar — Natural vs Added','Sodium & Salt','Portion Sizes','MyPlate Guidelines','Balanced Meals','Nutrition Checkpoint']],
+      [3,'Breakfast & Brunch',['Scrambled Eggs — Perfect Technique','Omelettes & Frittatas','Pancakes & Waffles from Scratch','French Toast','Smoothies & Smoothie Bowls','Overnight Oats','Avocado Toast Variations','Breakfast Burritos','Granola & Yogurt Parfait','Bagels & Cream Cheese','Hash Browns & Home Fries','Eggs Benedict','Crepes','Breakfast Meal Prep','Breakfast Checkpoint']],
+      [4,'Lunch & Sandwiches',['The Perfect Sandwich','Grilled Cheese Variations','Wraps & Burritos','Salads — Building a Good One','Soup from Scratch — Basics','Quesadillas','Pasta Salad','Rice Bowls','Pita & Hummus','BLT & Club Sandwiches','Ramen — Instant to Homemade','Bento Box Style','Meal Prep for School/Work','Quick 15-Minute Lunches','Lunch Checkpoint']],
+      [5,'Dinner Staples',['Pasta — Boiling & Saucing','Rice — Fluffy Every Time','Roast Chicken','Stir-Fry Basics','Tacos & Filling Ideas','Baked Salmon','One-Pan Sheet Dinners','Slow Cooker Meals','Burgers — Homemade','Pizza Dough from Scratch','Meatballs & Sauce','Mac and Cheese — Homemade','Curry — Basic Recipe','Fried Rice','Dinner Checkpoint']],
+      [6,'Baking Basics',['How Baking Works — Science','Flour Types','Leavening — Baking Soda vs Powder','Butter Sugar Eggs — Roles','Chocolate Chip Cookies','Banana Bread','Brownies','Muffins & Cupcakes','Pie Crust','Cake Layers — Vanilla','Frosting & Icing','Bread — Simple Loaf','Cinnamon Rolls','Baking Troubleshooting','Baking Checkpoint']],
+      [7,'World Cuisines — Americas',['Mexican — Enchiladas Tamales','American — BBQ & Soul Food','Brazilian — Feijoada','Cajun & Creole','Peruvian — Ceviche','Caribbean — Jerk Chicken','Tex-Mex Fusion','Canadian — Poutine','Argentinian — Asado','Colombian — Arepas','Cuban — Ropa Vieja','Hawaiian — Poke Bowls','Southern Comfort Food','Street Food Americas','Americas Checkpoint']],
+      [8,'World Cuisines — Europe',['Italian — Pasta Risotto Pizza','French — Ratatouille Crepes','Spanish — Paella Tapas','Greek — Gyros Moussaka','British — Fish & Chips','German — Schnitzel Pretzels','Polish — Pierogi','Turkish — Kebabs Baklava','Scandinavian — Smorgasbord','Portuguese — Pasteis de Nata','Hungarian — Goulash','Swiss — Fondue','Irish — Stew Soda Bread','Mediterranean Diet','Europe Checkpoint']],
+      [9,'World Cuisines — Asia',['Japanese — Sushi Ramen Teriyaki','Chinese — Dumplings Kung Pao','Indian — Curry Naan Biryani','Thai — Pad Thai Green Curry','Korean — Bibimbap Kimchi','Vietnamese — Pho Banh Mi','Filipino — Adobo Lumpia','Indonesian — Nasi Goreng','Malaysian — Laksa Satay','Middle Eastern — Shawarma Falafel','Lebanese — Tabbouleh','Pakistani — Biryani Nihari','Bangladeshi — Hilsa Fish','Central Asian — Plov','Asia Checkpoint']],
+      [10,'World Cuisines — Africa',['Moroccan — Tagine Couscous','Ethiopian — Injera & Wot','Nigerian — Jollof Rice','South African — Bobotie Biltong','Egyptian — Koshari','Ghanaian — Fufu','Kenyan — Ugali Nyama Choma','Senegalese — Thieboudienne','Tunisian — Brik','Tanzanian — Pilau','Somali — Canjeero','Cameroon — Ndole','North African Spices','West African Stews','Africa Checkpoint']],
+      [11,'Vegetarian & Vegan Cooking',['Why Plant-Based?','Protein Sources — Beans Tofu Tempeh','Meat Substitutes','Dairy Alternatives','Egg Replacements in Baking','Vegan Pasta Dishes','Buddha Bowls','Veggie Burgers — Homemade','Tofu — Pressing & Cooking','Lentil Soup & Dal','Vegan Desserts','Plant-Based Meal Prep','Iron & B12 for Vegans','Complete Proteins','Vegetarian Checkpoint']],
+      [12,'Food Science',['Maillard Reaction — Browning','Caramelization','Emulsions — Mayo & Vinaigrette','Gluten — What It Does','Fermentation — Bread Yogurt Kimchi','Acids & Bases in Cooking','Why Onions Make You Cry','Salt — Beyond Flavor','Temperature & Cooking Speed','Smoke Point of Oils','Starch Gelatinization','Protein Denaturation','Freezing & Texture','Food Preservation Methods','Food Science Checkpoint']],
+      [13,'Meal Planning & Budgeting',['Why Meal Plan?','Weekly Meal Prep','Shopping Lists','Buying in Bulk','Seasonal Produce','Store Brands vs Name Brands','Avoiding Food Waste','Freezer Meals','Batch Cooking','Cooking on a Student Budget','Dollar Store Cooking','Leftovers — Creative Reuse','Pantry Staples Checklist','30-Minute Meals','Meal Planning Checkpoint']],
+      [14,'Special Diets',['Gluten-Free Cooking','Dairy-Free Cooking','Keto Diet Basics','Paleo Diet Basics','Mediterranean Diet','DASH Diet — Heart Health','Low-FODMAP — Gut Health','Allergies — Nut Egg Shellfish','Diabetic-Friendly Meals','Low-Sodium Cooking','Anti-Inflammatory Foods','Intermittent Fasting Meals','Sports Nutrition','Cooking for Picky Eaters','Special Diets Checkpoint']],
+      [15,'Drinks & Beverages',['Tea Types & Brewing','Coffee Basics — Brewing Methods','Smoothies & Juices','Lemonade & Infused Water','Hot Chocolate — From Scratch','Milkshakes','Iced Tea & Cold Brew','Mocktails — Non-Alcoholic','Bubble Tea (Boba)','Energy Drinks — Health Impact','Sports Drinks vs Water','Kombucha','Lassi & Ayran','Agua Fresca','Drinks Checkpoint']],
+      [16,'Snacks & Appetizers',['Hummus & Dips','Guacamole','Bruschetta','Deviled Eggs','Spring Rolls','Popcorn Seasoning Ideas','Nachos','Stuffed Mushrooms','Cheese Board Building','Fruit Platters','Energy Balls','Trail Mix — Custom','Chips & Salsa','Mini Quiche','Snacks Checkpoint']],
+      [17,'Desserts & Sweets',['Ice Cream — No-Churn','Cheesecake — Baked & No-Bake','Tiramisu','Panna Cotta','Chocolate Mousse','Apple Pie','Creme Brulee','Churros','Macarons','Baklava','Mochi','Flan','Trifle','Fruit Tarts','Desserts Checkpoint']],
+      [18,'Food Safety & Hygiene',['Handwashing — When & How','Cross-Contamination','Temperature Danger Zone','Cooking Temperatures — Meat','Refrigerator Safety — 40F','Freezer Burn Prevention','Food Expiration Dates','Leftovers — How Long?','Foodborne Illness — Salmonella E.coli','Allergen Awareness','Clean Kitchen Practices','Safe Thawing Methods','Picnic & Outdoor Food Safety','Restaurant Hygiene Ratings','Food Safety Checkpoint']],
+      [19,'Cooking as a Career',['Chef vs Cook','Culinary School — Worth It?','Kitchen Brigade System','Restaurant Types','Line Cook to Head Chef','Pastry Chef Path','Food Truck Business','Private Chef & Catering','Food Blogging & YouTube','Cookbook Writing','Food Photography','Food Styling','Recipe Development','Restaurant Management','Career Checkpoint']],
+      [20,'Cooking Mastery',['Kitchen Skills Review','Nutrition Review','Breakfast & Lunch Review','Dinner & Baking Review','World Cuisines Review','Vegetarian & Vegan Review','Food Science Review','Meal Planning Review','Special Diets Review','Drinks & Snacks Review','Desserts Review','Food Safety Review','Career Review','Your Signature Dish','Cooking Grand Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cook-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('cooking-nutrition');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('cooking-nutrition');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

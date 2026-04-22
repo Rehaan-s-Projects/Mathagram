@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathogens — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Pathogens</h1>
+    <p>Understand the microscopic world that causes disease — bacteria, viruses, fungi, parasites, the immune system, vaccines, antibiotics, pandemics, and epidemiology. 375 lessons across 25 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Are Pathogens?",["Defining Pathogens","Living vs Non-Living Pathogens","Types — Bacteria Viruses Fungi Parasites Prions","Kochs Postulates","Germ Theory of Disease — Pasteur","How Pathogens Spread","Reservoirs & Vectors","Infection vs Disease","Incubation Period","Acute vs Chronic Infections","Opportunistic Infections","Zoonotic Diseases — Animal to Human","Emerging & Re-Emerging Pathogens","One Health Approach","Pathogens Intro Checkpoint"]],
+      [2,"Bacteria",["What Are Bacteria?","Prokaryotic Cell Structure","Cell Wall — Gram-Positive vs Gram-Negative","Bacterial Shapes — Cocci Bacilli Spirilla","Binary Fission — How Bacteria Reproduce","Bacterial Growth Curve","Aerobic vs Anaerobic","Endospores — Survival Mode","Biofilms","Normal Flora — Good Bacteria","Pathogenic Bacteria Overview","Staphylococcus — Skin Infections","Streptococcus — Strep Throat","E. coli — Friend & Foe","Bacteria Checkpoint"]],
+      [3,"Bacteria — Major Diseases",["Tuberculosis (TB) — Mycobacterium","Cholera — Vibrio cholerae","Plague — Yersinia pestis","Tetanus — Clostridium tetani","Botulism — Clostridium botulinum","MRSA — Antibiotic Resistant Staph","Salmonella — Food Poisoning","Lyme Disease — Borrelia","H. pylori — Stomach Ulcers","Meningitis — Neisseria","Pneumonia — Streptococcus pneumoniae","Typhoid Fever — Salmonella typhi","Leprosy — Mycobacterium leprae","Whooping Cough — Bordetella pertussis","Bacterial Diseases Checkpoint"]],
+      [4,"Viruses — Structure & Replication",["What Is a Virus?","Not Alive — Why?","Virus Structure — Capsid Envelope Genome","DNA vs RNA Viruses","Lytic Cycle — Destroy the Cell","Lysogenic Cycle — Hide Inside","Viral Tropism — Target Cells","How Viruses Mutate","Antigenic Drift vs Shift","Retroviruses — RNA to DNA","Bacteriophages — Viruses That Kill Bacteria","Viral Load & Shedding","Latent Infections — Hiding","Oncogenic Viruses — Cancer Causing","Virus Structure Checkpoint"]],
+      [5,"Viruses — Major Diseases",["Influenza — The Flu","COVID-19 — SARS-CoV-2","HIV/AIDS","Ebola","Rabies","Measles","Smallpox — Eradicated","Polio","Dengue Fever","Zika Virus","Hepatitis — A B C","Norovirus — Stomach Bug","HPV — Human Papillomavirus","Chickenpox & Shingles — Varicella","Viral Diseases Checkpoint"]],
+      [6,"Fungi — Structure & Diseases",["What Are Fungi?","Eukaryotic Cell Structure","Yeasts vs Molds vs Mushrooms","Hyphae & Mycelium","Fungal Reproduction — Spores","Candida — Yeast Infections","Aspergillus — Lung Infections","Ringworm — Not a Worm","Athletes Foot — Tinea pedis","Histoplasmosis — Soil Fungus","Cryptococcus — Meningitis in Immunocompromised","Valley Fever — Coccidioides","Fungal Nail Infections","Antifungal Drugs — How They Work","Fungi Checkpoint"]],
+      [7,"Parasites — Protozoa",["What Are Protozoa?","Single-Celled Eukaryotes","Malaria — Plasmodium","Malaria Lifecycle — Mosquito to Human","Amoebic Dysentery — Entamoeba","Giardia — Waterborne","Toxoplasma — Cat Parasite","Sleeping Sickness — Trypanosoma","Chagas Disease","Leishmaniasis — Sandfly","Cryptosporidium — Water","Trichomoniasis — STI","Babesiosis — Tick-Borne","Diagnosis — Blood Smears & PCR","Protozoa Checkpoint"]],
+      [8,"Parasites — Helminths & Ectoparasites",["What Are Helminths?","Roundworms — Ascaris","Hookworms — Soil Transmitted","Tapeworms — Segments & Lifecycle","Pinworms — Common in Children","Schistosomiasis — Blood Flukes","Guinea Worm — Nearly Eradicated","Filarial Worms — Elephantiasis","Trichinella — Raw Meat","Ectoparasites — Living on the Outside","Head Lice","Body Lice & Disease","Scabies — Mites","Ticks & Tick-Borne Diseases","Helminths Checkpoint"]],
+      [9,"Prions",["What Are Prions?","Misfolded Proteins","Not Bacteria Not Virus","Mad Cow Disease — BSE","Creutzfeldt-Jakob Disease (CJD)","Variant CJD — Human BSE","Kuru — Fore People","Scrapie — Sheep","Chronic Wasting Disease — Deer","How Prions Spread","No Cure — Why?","Prion Resistance to Sterilization","Detection Methods","Prion Research — Stanley Prusiner","Prions Checkpoint"]],
+      [10,"The Immune System — Innate",["What Is Immunity?","First Line — Skin & Mucous Membranes","Stomach Acid","Tears Saliva — Lysozyme","Inflammation — Redness Heat Swelling","Fever — Raising Temperature","White Blood Cells — Leukocytes","Neutrophils — First Responders","Macrophages — Big Eaters","Natural Killer (NK) Cells","Complement System","Interferons — Antiviral Proteins","Phagocytosis — Engulfing Pathogens","Pattern Recognition Receptors","Innate Immunity Checkpoint"]],
+      [11,"The Immune System — Adaptive",["Adaptive vs Innate","Antigens — Foreign Markers","B Cells — Antibody Factories","Antibodies — IgG IgM IgA IgE","T Helper Cells — CD4","Cytotoxic T Cells — CD8 Killers","Memory Cells — Long-Term Protection","Clonal Selection","Primary vs Secondary Response","MHC — Presenting Antigens","Humoral vs Cell-Mediated Immunity","Passive Immunity — Mother to Baby","Active Immunity — Infection or Vaccine","Immunological Memory","Adaptive Immunity Checkpoint"]],
+      [12,"Vaccines",["History of Vaccines — Edward Jenner","How Vaccines Work","Live Attenuated Vaccines — MMR","Inactivated Vaccines — Flu","Subunit Vaccines — Hepatitis B","Toxoid Vaccines — Tetanus, mRNA Vaccines — COVID-19","Viral Vector Vaccines — AstraZeneca","Conjugate Vaccines","Vaccine Schedule — CDC","Herd Immunity","Vaccine Safety & Testing — Phase 1 2 3","Adjuvants — Boosting Response","Myths vs Facts","Vaccines Checkpoint"]],
+      [13,"Antibiotics & Antimicrobials",["Discovery of Penicillin — Fleming","How Antibiotics Work","Cell Wall Inhibitors — Penicillin","Protein Synthesis Inhibitors — Tetracycline","DNA Replication Inhibitors — Fluoroquinolones","Broad vs Narrow Spectrum","Antibiotic Resistance — How It Happens","MRSA & Superbugs","Misuse & Overuse of Antibiotics","Antibiotic Stewardship","Antiviral Drugs — How They Differ","Antifungal Drugs","Antiparasitic Drugs","Future — Phage Therapy","Antibiotics Checkpoint"]],
+      [14,"Epidemiology",["What Is Epidemiology?","John Snow — Father of Epidemiology","Endemic vs Epidemic vs Pandemic","Incidence vs Prevalence","R0 — Reproduction Number","Herd Immunity Threshold","Contact Tracing","Outbreak Investigation Steps","Surveillance Systems — WHO CDC","Case Fatality Rate vs Infection Fatality Rate","Mortality & Morbidity","Risk Factors & Odds Ratios","Cohort vs Case-Control Studies","Data Visualization — Epi Curves","Epidemiology Checkpoint"]],
+      [15,"Historic Pandemics",["Plague of Athens — 430 BC","Black Death — 1347-1351","Smallpox in the Americas — 1500s","Great Plague of London — 1665","1918 Spanish Flu","Asian Flu — 1957","Hong Kong Flu — 1968","HIV/AIDS Pandemic — 1980s","SARS — 2003","H1N1 Swine Flu — 2009","MERS — 2012","Ebola Outbreak — 2014","Zika — 2015-2016","COVID-19 — 2019-2023","Pandemics Checkpoint"]],
+      [16,"Transmission & Prevention",["Direct Contact Transmission","Droplet Transmission","Airborne Transmission","Fecal-Oral Route","Vector-Borne — Mosquitoes Ticks","Foodborne Transmission","Waterborne Transmission","Sexual Transmission","Vertical — Mother to Child","Handwashing — Most Effective Prevention","Masks & Respiratory Hygiene","Water Sanitation","Food Safety — Cooking Temperatures","Quarantine & Isolation","Transmission Checkpoint"]],
+      [17,"Laboratory Techniques",["Microscopy — Light & Electron","Gram Staining","Bacterial Culture — Agar Plates","Colony Morphology","Antibiotic Sensitivity Testing","PCR — Polymerase Chain Reaction","ELISA — Antibody Detection","Rapid Antigen Tests","Blood Cultures","Viral Culture — Cell Lines","Sequencing — Whole Genome","Biosafety Levels — BSL 1-4","Aseptic Technique","Lab Safety with Pathogens","Lab Techniques Checkpoint"]],
+      [18,"Immune Disorders",["Allergies — Overreaction","Anaphylaxis — Severe Allergy","Asthma — Airway Inflammation","Autoimmune Diseases — Self Attack","Rheumatoid Arthritis","Lupus — Systemic","Type 1 Diabetes — Autoimmune","Multiple Sclerosis","Celiac Disease","Immunodeficiency — Weak Immune System","HIV & AIDS — Destroying CD4","SCID — Bubble Boy Disease","Transplant Rejection","Immunosuppressive Drugs","Immune Disorders Checkpoint"]],
+      [19,"Microbiome & Good Microbes",["What Is the Microbiome?","Gut Microbiome — Trillions of Bacteria","Skin Microbiome","Oral Microbiome","Probiotics — Beneficial Bacteria","Prebiotics — Feeding Good Bacteria","Fermented Foods — Yogurt Kimchi Kombucha","Microbiome & Mental Health — Gut-Brain Axis","Antibiotics & Microbiome Disruption","Fecal Microbiota Transplant (FMT)","Microbiome & Obesity","Microbiome & Immunity","Infant Microbiome — Birth Method","Microbiome Research — Future","Microbiome Checkpoint"]],
+      [20,"Bioterrorism & Biosecurity",["What Is Bioterrorism?","Category A Agents — Anthrax Smallpox Plague","Category B — Brucella Q Fever","Category C — Emerging Threats","History — Anthrax Letters 2001","Dual-Use Research Concerns","Gain-of-Function Research — Debate","Bioweapons Convention (BWC)","Detection & Surveillance","Emergency Response — CDC Strategic National Stockpile","Decontamination Procedures","Lab Biosecurity","Synthetic Biology Risks","Global Health Security Agenda","Biosecurity Checkpoint"]],
+      [21,"Tropical & Neglected Diseases",["What Are Neglected Tropical Diseases?","Malaria — Global Burden","Dengue — Expanding Range","Chagas Disease — Americas","Schistosomiasis — Africa Asia","Trachoma — Leading Infectious Blindness","River Blindness — Onchocerciasis","Lymphatic Filariasis — Elephantiasis","Rabies — Preventable but Fatal","Leishmaniasis — Sandfly Bites","Soil-Transmitted Helminths","Guinea Worm — Nearly Eradicated","Buruli Ulcer","WHO Roadmap for NTDs","Tropical Diseases Checkpoint"]],
+      [22,"Antimicrobial Resistance Crisis",["What Is AMR?","How Resistance Develops","Horizontal Gene Transfer","Plasmids & Resistance Genes","MRSA — Methicillin-Resistant Staph","VRSA — Vancomycin-Resistant","CRE — Carbapenem-Resistant","XDR & PDR Tuberculosis","Resistant Malaria","Resistant Gonorrhea","Agricultural Antibiotic Use","Global Action Plan on AMR","New Antibiotic Development Pipeline","Alternatives — Phage Therapy Antimicrobial Peptides","AMR Checkpoint"]],
+      [23,"Virology Advanced",["Virus Classification — Baltimore System, dsDNA Viruses — Herpes Pox, ssDNA Viruses — Parvo, dsRNA Viruses — Rota","Positive-Sense ssRNA — Corona Flavi","Negative-Sense ssRNA — Influenza Ebola","Retroviruses — HIV","Reverse Transcriptase","Giant Viruses — Mimivirus","Virophages — Viruses of Viruses","Endogenous Retroviruses — In Our DNA","Viral Evolution & Phylogenetics","Metagenomics — Discovering New Viruses","Viral Ecology — Ocean Viruses","Virology Advanced Checkpoint"]],
+      [24,"Global Health & Disease Eradication",["Smallpox Eradication — 1980","Polio — Almost Eradicated","Guinea Worm — Carter Center","Measles Elimination Efforts","Malaria — Roll Back Malaria","HIV/AIDS — PEPFAR & Global Fund","TB — DOTS Strategy","Vaccination Campaigns — Gavi","Clean Water & Sanitation — SDG 6","Pandemic Preparedness — CEPI","WHO International Health Regulations","One Health — Human Animal Environment","Health Equity & Access","Future Disease Eradication Targets","Global Health Checkpoint"]],
+      [25,"Pathogens Mastery",["Bacteria Review","Viruses Review","Fungi Review","Protozoa & Helminths Review","Prions Review","Innate & Adaptive Immunity Review","Vaccines Review","Antibiotics & Resistance Review","Epidemiology Review","Historic Pandemics Review","Transmission & Prevention Review","Lab Techniques Review","Immune Disorders & Microbiome Review","Global Health & Biosecurity Review","Pathogens Grand Mastery!"]],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'path-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('pathogens');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('pathogens');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

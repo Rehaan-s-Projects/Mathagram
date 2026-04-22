@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paradoxes & Puzzles — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+    <h1>Paradoxes & Puzzles</h1>
+    <p>Classic logical paradoxes, math puzzles, brain teasers, and thought experiments that challenge your reasoning. 15 units, 225 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is a Paradox?',['Defining Paradox','Paradox vs Contradiction','Paradox vs Fallacy','Veridical Paradoxes','Falsidical Paradoxes','Antinomies','Why Paradoxes Matter','Paradoxes in History','Greek Paradoxes','Medieval Paradoxes','Modern Paradoxes','Paradoxes in Pop Culture','How to Analyze a Paradox','Common Responses to Paradoxes','Intro Checkpoint']],
+      [2,'Zeno\'s Paradoxes',['Achilles & the Tortoise','The Dichotomy','The Arrow','The Stadium','Infinite Series Solution','Calculus & Limits','Supertasks','Thomson\'s Lamp','Ross-Littlewood Paradox','Physical vs Mathematical','Quantum Zeno Effect','Bernadete\'s Paradox','Modern Interpretations','Infinity & Motion','Zeno Checkpoint']],
+      [3,'Self-Reference Paradoxes',['The Liar Paradox','Strengthened Liar','Epimenides','Russell\'s Paradox','Barber Paradox','Grelling-Nelson','Berry\'s Paradox','Richard\'s Paradox','Curry\'s Paradox','Yablo\'s Paradox','Quine\'s Paradox','Gödel Sentence (Informal)','Tarski\'s Theorem (Informal)','Resolving Self-Reference','Self-Reference Checkpoint']],
+      [4,'Probability Paradoxes',['Monty Hall Problem','Birthday Paradox','Bertrand\'s Box','Two Envelopes','Boy or Girl Paradox','Sleeping Beauty','St. Petersburg Paradox','Gambler\'s Fallacy','Simpson\'s Paradox','Berkson\'s Paradox','Base Rate Fallacy','Inspection Paradox','Nontransitive Dice','Exchange Paradox','Probability Checkpoint']],
+      [5,'Decision & Strategy Paradoxes',['Prisoner\'s Dilemma','Newcomb\'s Paradox','Kavka\'s Toxin Puzzle','Buridan\'s Ass','Paradox of the Court','Ship of Theseus','Sorites Paradox (Heap)','Paradox of Tolerance','Abilene Paradox','Braess\'s Paradox','Ellsberg Paradox','Allais Paradox','Arrow\'s Impossibility','Gibbard-Satterthwaite','Decision Checkpoint']],
+      [6,'Time & Space Paradoxes',['Grandfather Paradox','Bootstrap Paradox','Predestination Paradox','Fermi Paradox','Twin Paradox (Relativity)','Ladder Paradox','Bell\'s Spaceship','Olbers\' Paradox','Boltzmann Brain','Raven Paradox','Grue & Bleen (Goodman)','Unexpected Hanging','Surprise Exam','Time Travel Logic','Time & Space Checkpoint']],
+      [7,'Infinity Paradoxes',['Hilbert\'s Hotel','Galileo\'s Paradox','Cantor\'s Diagonal','Banach-Tarski','Dartboard Paradox','Gabriel\'s Horn','Coastline Paradox','Grandi\'s Series','1 + 2 + 3 + ... = −1/12?','Zeno Revisited','Supertasks','Infinite Regress','Actual vs Potential Infinity','Skolem\'s Paradox','Infinity Checkpoint']],
+      [8,'Classic Math Puzzles',['River Crossing Puzzles','Tower of Hanoi','Knights & Knaves','Bridges of Königsberg','Four Color Theorem (Puzzle)','Magic Squares','Latin Squares','Sudoku Logic','KenKen','Cryptarithmetic','Matchstick Puzzles','Dissection Puzzles','Packing Problems','Combinatorial Puzzles','Math Puzzles Checkpoint']],
+      [9,'Logic Puzzles',['Syllogism Puzzles','Truth-Teller & Liar','Einstein\'s Riddle','Zebra Puzzle','Logic Grid Puzzles','Constraint Satisfaction','Nonogram Logic','Masyu','Kakuro','Hashi (Bridges)','Slitherlink','Nurikabe','Star Battle','Puzzle-Solving Strategies','Logic Puzzles Checkpoint']],
+      [10,'Thought Experiments',['Trolley Problem','Chinese Room','Mary\'s Room','Philosophical Zombies','Brain in a Vat','Plato\'s Cave','Descartes\' Demon','Laplace\'s Demon','Maxwell\'s Demon','Schrödinger\'s Cat','Wigner\'s Friend','Theseus\' Ship Extended','Swampman','Teleporter Problem','Thought Experiments Checkpoint']],
+      [11,'Game Theory Puzzles',['Prisoner\'s Dilemma Strategies','Iterated PD','Tit-for-Tat','Chicken Game','Battle of the Sexes','Stag Hunt','Ultimatum Game','Dictator Game','Centipede Game','Pirate Puzzle','Hat Puzzles','100 Prisoners Problem','Blue-Eyed Islanders','Common Knowledge','Game Puzzles Checkpoint']],
+      [12,'Visual & Geometric Paradoxes',['Impossible Objects — Escher','Penrose Triangle','Penrose Stairs','Necker Cube','Müller-Lyer Illusion','Missing Square Puzzle','Fibonacci Square Puzzle','Curry\'s Triangle','Hooper\'s Paradox','Shepard Tables','Checker Shadow Illusion','Rotating Snakes','Impossible Trident','Paradoxical Tessellations','Visual Checkpoint']],
+      [13,'Word & Language Paradoxes',['Eubulides','Protagoras\' Paradox','Catch-22','Paradox of Fiction','Paradox of Suspense','Paradox of Horror','Raven Paradox','Grue Problem','Vagueness Paradoxes','Heap Revisited','Borderline Cases','Fuzzy Logic Solutions','Contextualism','Supervaluationism','Language Checkpoint']],
+      [14,'Modern & Open Paradoxes',['Simulation Argument','Pascal\'s Mugging','Newcomb Revisited','Sleeping Beauty Wars','Doomsday Argument','Anthropic Reasoning','Fine-Tuning Paradox','Fermi Paradox Revisited','AI Alignment Paradoxes','Paradox of Choice','Information Paradox (Black Holes)','Quantum Paradoxes','Measurement Problem','Unsolved Puzzles','Modern Checkpoint']],
+      [15,'Mastery',['Paradox Types Review','Puzzle Strategies Review','Favorite Paradoxes','Creating Your Own Puzzles','Paradoxes in Research','Paradoxes in Teaching','Competitive Puzzle Solving','Speed Puzzle Challenge','Marathon Puzzle Set','Philosophy of Paradox','Books & Resources','Communities & Competitions','Self-Assessment','Reflection','Paradoxes Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'par-'+n, title: t, href: '#', unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('paradoxes-puzzles');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('paradoxes-puzzles');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

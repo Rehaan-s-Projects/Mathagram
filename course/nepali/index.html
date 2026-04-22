@@ -32,7 +32,7 @@
   <header class="course-header">
     <span class="course-badge" style="background:var(--color-language)">Language</span>
     <h1>Nepali</h1>
-    <p>The official language of Nepal. 55 units, 832 lessons — from Devanagari script to advanced fluency with culture, history, and Himalayan life.</p>
+    <p>The official language of Nepal. 60 units, 885 lessons — from Devanagari script to advanced fluency with culture, history, and Himalayan life.</p>
   </header>
   <div id="learning-path" class="path-container"></div>
   <footer class="footer">
@@ -102,6 +102,11 @@
       [53,'Nepali Sign Language Preview',['Nepali Sign Language — नेपाली साङ्केतिक भाषा','Deaf Community in Nepal','Basic Greetings in NSL','Numbers in NSL','Family Signs','Food & Drink Signs','School & Education Signs','Common Verbs in NSL','Expressing Emotions','Asking Questions in NSL','Fingerspelling Nepali','Deaf Culture in Nepal','Resources for Learning NSL','Inclusion & Accessibility','NSL Checkpoint']],
       [54,'Nepali Current Affairs',['Nepal\'s Economy — अर्थतन्त्र','Tourism Industry — पर्यटन','Remittance Economy — विप्रेषण','Agriculture — कृषि','Hydropower — जलविद्युत','Education Challenges','Healthcare System','Infrastructure Development','Technology Growth','Social Issues','Gender Equality — लैंगिक समानता','Youth Unemployment','Federal System','Nepal in Global Context','Current Affairs Checkpoint']],
       [55,'Nepali Mastery',['Comprehensive Grammar Review','Vocabulary Mastery Test 1','Vocabulary Mastery Test 2','Vocabulary Mastery Test 3','Reading Comprehension Final 1','Reading Comprehension Final 2','Listening Comprehension Final','Writing Skills Assessment','Speaking Assessment','Cultural Knowledge Exam','History & Geography Final','Translation Final','Conversation Marathon','Pronunciation Final','Nepali Mastery Certification!']],
+    ,
+      [56,"Nepali at the Market",["Shopping for Food","Clothing Store","Electronics Shop","Bargaining & Prices","Asking for Sizes","Comparing Products","Payment Methods","Returns & Exchanges","Online Shopping Vocabulary","Market Culture","Street Vendors","Gift Shopping","Window Shopping","Shopping Phrases","Market Checkpoint"]],
+      [57,"Nepali Travel & Tourism",["At the Airport","At the Hotel","Public Transportation","Asking Directions","Booking Reservations","At the Restaurant Abroad","Emergency Phrases","Sightseeing Vocabulary","Taking Photos","Currency Exchange","Customs & Immigration","Travel Insurance","Packing Vocabulary","Travel Blog Writing","Travel Checkpoint"]],
+      [58,"Nepali Sports & Fitness",["Football & Soccer","Basketball","Swimming","Running & Jogging","Gym Vocabulary","Traditional Sports","Olympic Sports","Team Sports","Individual Sports","Watching Sports","Sports Commentary","Fitness Goals","Exercise Routine","Competition Vocabulary","Sports Checkpoint"]],
+      [59,"Nepali Technology",["Computer Basics","Smartphone Vocabulary","Internet & Social Media","Email & Messaging","Apps & Software","Video Games","Streaming & Media","Online Safety","Tech Support Phrases","Programming Terms","AI & Robots","Smart Home","Photography","Digital Vocabulary","Technology Checkpoint"]]
     ];
     let n = 0;
     const lessons = []; units.forEach(([u, name, titles]) => { titles.forEach((t, i) => { n++; lessons.push({ id: 'np-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 }); }); });
