@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Development — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Game Development</h1>
+    <p>Make games end-to-end — Unity & Unreal Engine, Godot, C# for Unity, GDScript, game design principles, level design, sprite animation, 3D modeling, physics, AI, networking, sound design, shipping to Steam & consoles. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Game Design Fundamentals",["Game Design Fundamentals — Lesson 1","Game Design Fundamentals — Lesson 2","Game Design Fundamentals — Lesson 3","Game Design Fundamentals — Lesson 4","Game Design Fundamentals — Lesson 5","Game Design Fundamentals — Lesson 6","Game Design Fundamentals — Lesson 7","Game Design Fundamentals — Lesson 8","Game Design Fundamentals — Lesson 9","Game Design Fundamentals — Lesson 10","Game Design Fundamentals — Lesson 11","Game Design Fundamentals — Lesson 12","Game Design Fundamentals — Lesson 13","Game Design Fundamentals — Lesson 14","Game Design Fundamentals Checkpoint"]],
+      [2,"Unity Engine Basics",["Unity Engine Basics — Lesson 1","Unity Engine Basics — Lesson 2","Unity Engine Basics — Lesson 3","Unity Engine Basics — Lesson 4","Unity Engine Basics — Lesson 5","Unity Engine Basics — Lesson 6","Unity Engine Basics — Lesson 7","Unity Engine Basics — Lesson 8","Unity Engine Basics — Lesson 9","Unity Engine Basics — Lesson 10","Unity Engine Basics — Lesson 11","Unity Engine Basics — Lesson 12","Unity Engine Basics — Lesson 13","Unity Engine Basics — Lesson 14","Unity Engine Basics Checkpoint"]],
+      [3,"C# for Unity",["C# for Unity — Lesson 1","C# for Unity — Lesson 2","C# for Unity — Lesson 3","C# for Unity — Lesson 4","C# for Unity — Lesson 5","C# for Unity — Lesson 6","C# for Unity — Lesson 7","C# for Unity — Lesson 8","C# for Unity — Lesson 9","C# for Unity — Lesson 10","C# for Unity — Lesson 11","C# for Unity — Lesson 12","C# for Unity — Lesson 13","C# for Unity — Lesson 14","C# for Unity Checkpoint"]],
+      [4,"Unreal Engine Basics",["Unreal Engine Basics — Lesson 1","Unreal Engine Basics — Lesson 2","Unreal Engine Basics — Lesson 3","Unreal Engine Basics — Lesson 4","Unreal Engine Basics — Lesson 5","Unreal Engine Basics — Lesson 6","Unreal Engine Basics — Lesson 7","Unreal Engine Basics — Lesson 8","Unreal Engine Basics — Lesson 9","Unreal Engine Basics — Lesson 10","Unreal Engine Basics — Lesson 11","Unreal Engine Basics — Lesson 12","Unreal Engine Basics — Lesson 13","Unreal Engine Basics — Lesson 14","Unreal Engine Basics Checkpoint"]],
+      [5,"Blueprints in Unreal",["Blueprints in Unreal — Lesson 1","Blueprints in Unreal — Lesson 2","Blueprints in Unreal — Lesson 3","Blueprints in Unreal — Lesson 4","Blueprints in Unreal — Lesson 5","Blueprints in Unreal — Lesson 6","Blueprints in Unreal — Lesson 7","Blueprints in Unreal — Lesson 8","Blueprints in Unreal — Lesson 9","Blueprints in Unreal — Lesson 10","Blueprints in Unreal — Lesson 11","Blueprints in Unreal — Lesson 12","Blueprints in Unreal — Lesson 13","Blueprints in Unreal — Lesson 14","Blueprints in Unreal Checkpoint"]],
+      [6,"Godot Engine",["Godot Engine — Lesson 1","Godot Engine — Lesson 2","Godot Engine — Lesson 3","Godot Engine — Lesson 4","Godot Engine — Lesson 5","Godot Engine — Lesson 6","Godot Engine — Lesson 7","Godot Engine — Lesson 8","Godot Engine — Lesson 9","Godot Engine — Lesson 10","Godot Engine — Lesson 11","Godot Engine — Lesson 12","Godot Engine — Lesson 13","Godot Engine — Lesson 14","Godot Engine Checkpoint"]],
+      [7,"GDScript",["GDScript — Lesson 1","GDScript — Lesson 2","GDScript — Lesson 3","GDScript — Lesson 4","GDScript — Lesson 5","GDScript — Lesson 6","GDScript — Lesson 7","GDScript — Lesson 8","GDScript — Lesson 9","GDScript — Lesson 10","GDScript — Lesson 11","GDScript — Lesson 12","GDScript — Lesson 13","GDScript — Lesson 14","GDScript Checkpoint"]],
+      [8,"2D Game Development",["2D Game Development — Lesson 1","2D Game Development — Lesson 2","2D Game Development — Lesson 3","2D Game Development — Lesson 4","2D Game Development — Lesson 5","2D Game Development — Lesson 6","2D Game Development — Lesson 7","2D Game Development — Lesson 8","2D Game Development — Lesson 9","2D Game Development — Lesson 10","2D Game Development — Lesson 11","2D Game Development — Lesson 12","2D Game Development — Lesson 13","2D Game Development — Lesson 14","2D Game Development Checkpoint"]],
+      [9,"3D Game Development",["3D Game Development — Lesson 1","3D Game Development — Lesson 2","3D Game Development — Lesson 3","3D Game Development — Lesson 4","3D Game Development — Lesson 5","3D Game Development — Lesson 6","3D Game Development — Lesson 7","3D Game Development — Lesson 8","3D Game Development — Lesson 9","3D Game Development — Lesson 10","3D Game Development — Lesson 11","3D Game Development — Lesson 12","3D Game Development — Lesson 13","3D Game Development — Lesson 14","3D Game Development Checkpoint"]],
+      [10,"Sprite Animation",["Sprite Animation — Lesson 1","Sprite Animation — Lesson 2","Sprite Animation — Lesson 3","Sprite Animation — Lesson 4","Sprite Animation — Lesson 5","Sprite Animation — Lesson 6","Sprite Animation — Lesson 7","Sprite Animation — Lesson 8","Sprite Animation — Lesson 9","Sprite Animation — Lesson 10","Sprite Animation — Lesson 11","Sprite Animation — Lesson 12","Sprite Animation — Lesson 13","Sprite Animation — Lesson 14","Sprite Animation Checkpoint"]],
+      [11,"Tilemap & Level Design",["Tilemap & Level Design — Lesson 1","Tilemap & Level Design — Lesson 2","Tilemap & Level Design — Lesson 3","Tilemap & Level Design — Lesson 4","Tilemap & Level Design — Lesson 5","Tilemap & Level Design — Lesson 6","Tilemap & Level Design — Lesson 7","Tilemap & Level Design — Lesson 8","Tilemap & Level Design — Lesson 9","Tilemap & Level Design — Lesson 10","Tilemap & Level Design — Lesson 11","Tilemap & Level Design — Lesson 12","Tilemap & Level Design — Lesson 13","Tilemap & Level Design — Lesson 14","Tilemap & Level Design Checkpoint"]],
+      [12,"Game Physics",["Game Physics — Lesson 1","Game Physics — Lesson 2","Game Physics — Lesson 3","Game Physics — Lesson 4","Game Physics — Lesson 5","Game Physics — Lesson 6","Game Physics — Lesson 7","Game Physics — Lesson 8","Game Physics — Lesson 9","Game Physics — Lesson 10","Game Physics — Lesson 11","Game Physics — Lesson 12","Game Physics — Lesson 13","Game Physics — Lesson 14","Game Physics Checkpoint"]],
+      [13,"Game AI — Pathfinding & Behavior",["Game AI — Pathfinding & Behavior — Lesson 1","Game AI — Pathfinding & Behavior — Lesson 2","Game AI — Pathfinding & Behavior — Lesson 3","Game AI — Pathfinding & Behavior — Lesson 4","Game AI — Pathfinding & Behavior — Lesson 5","Game AI — Pathfinding & Behavior — Lesson 6","Game AI — Pathfinding & Behavior — Lesson 7","Game AI — Pathfinding & Behavior — Lesson 8","Game AI — Pathfinding & Behavior — Lesson 9","Game AI — Pathfinding & Behavior — Lesson 10","Game AI — Pathfinding & Behavior — Lesson 11","Game AI — Pathfinding & Behavior — Lesson 12","Game AI — Pathfinding & Behavior — Lesson 13","Game AI — Pathfinding & Behavior — Lesson 14","Game AI — Pathfinding & Behavior Checkpoint"]],
+      [14,"Networking & Multiplayer",["Networking & Multiplayer — Lesson 1","Networking & Multiplayer — Lesson 2","Networking & Multiplayer — Lesson 3","Networking & Multiplayer — Lesson 4","Networking & Multiplayer — Lesson 5","Networking & Multiplayer — Lesson 6","Networking & Multiplayer — Lesson 7","Networking & Multiplayer — Lesson 8","Networking & Multiplayer — Lesson 9","Networking & Multiplayer — Lesson 10","Networking & Multiplayer — Lesson 11","Networking & Multiplayer — Lesson 12","Networking & Multiplayer — Lesson 13","Networking & Multiplayer — Lesson 14","Networking & Multiplayer Checkpoint"]],
+      [15,"Sound Design & Music",["Sound Design & Music — Lesson 1","Sound Design & Music — Lesson 2","Sound Design & Music — Lesson 3","Sound Design & Music — Lesson 4","Sound Design & Music — Lesson 5","Sound Design & Music — Lesson 6","Sound Design & Music — Lesson 7","Sound Design & Music — Lesson 8","Sound Design & Music — Lesson 9","Sound Design & Music — Lesson 10","Sound Design & Music — Lesson 11","Sound Design & Music — Lesson 12","Sound Design & Music — Lesson 13","Sound Design & Music — Lesson 14","Sound Design & Music Checkpoint"]],
+      [16,"Shaders & VFX",["Shaders & VFX — Lesson 1","Shaders & VFX — Lesson 2","Shaders & VFX — Lesson 3","Shaders & VFX — Lesson 4","Shaders & VFX — Lesson 5","Shaders & VFX — Lesson 6","Shaders & VFX — Lesson 7","Shaders & VFX — Lesson 8","Shaders & VFX — Lesson 9","Shaders & VFX — Lesson 10","Shaders & VFX — Lesson 11","Shaders & VFX — Lesson 12","Shaders & VFX — Lesson 13","Shaders & VFX — Lesson 14","Shaders & VFX Checkpoint"]],
+      [17,"Game Monetization",["Game Monetization — Lesson 1","Game Monetization — Lesson 2","Game Monetization — Lesson 3","Game Monetization — Lesson 4","Game Monetization — Lesson 5","Game Monetization — Lesson 6","Game Monetization — Lesson 7","Game Monetization — Lesson 8","Game Monetization — Lesson 9","Game Monetization — Lesson 10","Game Monetization — Lesson 11","Game Monetization — Lesson 12","Game Monetization — Lesson 13","Game Monetization — Lesson 14","Game Monetization Checkpoint"]],
+      [18,"Steam & Console Shipping",["Steam & Console Shipping — Lesson 1","Steam & Console Shipping — Lesson 2","Steam & Console Shipping — Lesson 3","Steam & Console Shipping — Lesson 4","Steam & Console Shipping — Lesson 5","Steam & Console Shipping — Lesson 6","Steam & Console Shipping — Lesson 7","Steam & Console Shipping — Lesson 8","Steam & Console Shipping — Lesson 9","Steam & Console Shipping — Lesson 10","Steam & Console Shipping — Lesson 11","Steam & Console Shipping — Lesson 12","Steam & Console Shipping — Lesson 13","Steam & Console Shipping — Lesson 14","Steam & Console Shipping Checkpoint"]],
+      [19,"Indie Game Marketing",["Indie Game Marketing — Lesson 1","Indie Game Marketing — Lesson 2","Indie Game Marketing — Lesson 3","Indie Game Marketing — Lesson 4","Indie Game Marketing — Lesson 5","Indie Game Marketing — Lesson 6","Indie Game Marketing — Lesson 7","Indie Game Marketing — Lesson 8","Indie Game Marketing — Lesson 9","Indie Game Marketing — Lesson 10","Indie Game Marketing — Lesson 11","Indie Game Marketing — Lesson 12","Indie Game Marketing — Lesson 13","Indie Game Marketing — Lesson 14","Indie Game Marketing Checkpoint"]],
+      [20,"Game Dev Mastery",["Game Dev Mastery — Lesson 1","Game Dev Mastery — Lesson 2","Game Dev Mastery — Lesson 3","Game Dev Mastery — Lesson 4","Game Dev Mastery — Lesson 5","Game Dev Mastery — Lesson 6","Game Dev Mastery — Lesson 7","Game Dev Mastery — Lesson 8","Game Dev Mastery — Lesson 9","Game Dev Mastery — Lesson 10","Game Dev Mastery — Lesson 11","Game Dev Mastery — Lesson 12","Game Dev Mastery — Lesson 13","Game Dev Mastery — Lesson 14","Game Dev Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'gd-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('game-development');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('game-development');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microbiology — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Microbiology</h1>
+    <p>The microbial world — bacteria, archaea, viruses, fungi, protozoa, the human microbiome, antibiotics & resistance, fermentation, pathogens, vaccines, and microbiology lab techniques. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Microbiology?",["What Is Microbiology? — Lesson 1","What Is Microbiology? — Lesson 2","What Is Microbiology? — Lesson 3","What Is Microbiology? — Lesson 4","What Is Microbiology? — Lesson 5","What Is Microbiology? — Lesson 6","What Is Microbiology? — Lesson 7","What Is Microbiology? — Lesson 8","What Is Microbiology? — Lesson 9","What Is Microbiology? — Lesson 10","What Is Microbiology? — Lesson 11","What Is Microbiology? — Lesson 12","What Is Microbiology? — Lesson 13","What Is Microbiology? — Lesson 14","What Is Microbiology? Checkpoint"]],
+      [2,"Bacteria — Structure & Diversity",["Bacteria — Structure & Diversity — Lesson 1","Bacteria — Structure & Diversity — Lesson 2","Bacteria — Structure & Diversity — Lesson 3","Bacteria — Structure & Diversity — Lesson 4","Bacteria — Structure & Diversity — Lesson 5","Bacteria — Structure & Diversity — Lesson 6","Bacteria — Structure & Diversity — Lesson 7","Bacteria — Structure & Diversity — Lesson 8","Bacteria — Structure & Diversity — Lesson 9","Bacteria — Structure & Diversity — Lesson 10","Bacteria — Structure & Diversity — Lesson 11","Bacteria — Structure & Diversity — Lesson 12","Bacteria — Structure & Diversity — Lesson 13","Bacteria — Structure & Diversity — Lesson 14","Bacteria — Structure & Diversity Checkpoint"]],
+      [3,"Archaea — Extremophiles",["Archaea — Extremophiles — Lesson 1","Archaea — Extremophiles — Lesson 2","Archaea — Extremophiles — Lesson 3","Archaea — Extremophiles — Lesson 4","Archaea — Extremophiles — Lesson 5","Archaea — Extremophiles — Lesson 6","Archaea — Extremophiles — Lesson 7","Archaea — Extremophiles — Lesson 8","Archaea — Extremophiles — Lesson 9","Archaea — Extremophiles — Lesson 10","Archaea — Extremophiles — Lesson 11","Archaea — Extremophiles — Lesson 12","Archaea — Extremophiles — Lesson 13","Archaea — Extremophiles — Lesson 14","Archaea — Extremophiles Checkpoint"]],
+      [4,"Viruses — Structure & Replication",["Viruses — Structure & Replication — Lesson 1","Viruses — Structure & Replication — Lesson 2","Viruses — Structure & Replication — Lesson 3","Viruses — Structure & Replication — Lesson 4","Viruses — Structure & Replication — Lesson 5","Viruses — Structure & Replication — Lesson 6","Viruses — Structure & Replication — Lesson 7","Viruses — Structure & Replication — Lesson 8","Viruses — Structure & Replication — Lesson 9","Viruses — Structure & Replication — Lesson 10","Viruses — Structure & Replication — Lesson 11","Viruses — Structure & Replication — Lesson 12","Viruses — Structure & Replication — Lesson 13","Viruses — Structure & Replication — Lesson 14","Viruses — Structure & Replication Checkpoint"]],
+      [5,"Bacteriophages",["Bacteriophages — Lesson 1","Bacteriophages — Lesson 2","Bacteriophages — Lesson 3","Bacteriophages — Lesson 4","Bacteriophages — Lesson 5","Bacteriophages — Lesson 6","Bacteriophages — Lesson 7","Bacteriophages — Lesson 8","Bacteriophages — Lesson 9","Bacteriophages — Lesson 10","Bacteriophages — Lesson 11","Bacteriophages — Lesson 12","Bacteriophages — Lesson 13","Bacteriophages — Lesson 14","Bacteriophages Checkpoint"]],
+      [6,"Fungi — Yeasts, Molds, Mushrooms",["Fungi — Yeasts, Molds, Mushrooms — Lesson 1","Fungi — Yeasts, Molds, Mushrooms — Lesson 2","Fungi — Yeasts, Molds, Mushrooms — Lesson 3","Fungi — Yeasts, Molds, Mushrooms — Lesson 4","Fungi — Yeasts, Molds, Mushrooms — Lesson 5","Fungi — Yeasts, Molds, Mushrooms — Lesson 6","Fungi — Yeasts, Molds, Mushrooms — Lesson 7","Fungi — Yeasts, Molds, Mushrooms — Lesson 8","Fungi — Yeasts, Molds, Mushrooms — Lesson 9","Fungi — Yeasts, Molds, Mushrooms — Lesson 10","Fungi — Yeasts, Molds, Mushrooms — Lesson 11","Fungi — Yeasts, Molds, Mushrooms — Lesson 12","Fungi — Yeasts, Molds, Mushrooms — Lesson 13","Fungi — Yeasts, Molds, Mushrooms — Lesson 14","Fungi — Yeasts, Molds, Mushrooms Checkpoint"]],
+      [7,"Protozoa & Amoebae",["Protozoa & Amoebae — Lesson 1","Protozoa & Amoebae — Lesson 2","Protozoa & Amoebae — Lesson 3","Protozoa & Amoebae — Lesson 4","Protozoa & Amoebae — Lesson 5","Protozoa & Amoebae — Lesson 6","Protozoa & Amoebae — Lesson 7","Protozoa & Amoebae — Lesson 8","Protozoa & Amoebae — Lesson 9","Protozoa & Amoebae — Lesson 10","Protozoa & Amoebae — Lesson 11","Protozoa & Amoebae — Lesson 12","Protozoa & Amoebae — Lesson 13","Protozoa & Amoebae — Lesson 14","Protozoa & Amoebae Checkpoint"]],
+      [8,"Algae",["Algae — Lesson 1","Algae — Lesson 2","Algae — Lesson 3","Algae — Lesson 4","Algae — Lesson 5","Algae — Lesson 6","Algae — Lesson 7","Algae — Lesson 8","Algae — Lesson 9","Algae — Lesson 10","Algae — Lesson 11","Algae — Lesson 12","Algae — Lesson 13","Algae — Lesson 14","Algae Checkpoint"]],
+      [9,"The Human Microbiome",["The Human Microbiome — Lesson 1","The Human Microbiome — Lesson 2","The Human Microbiome — Lesson 3","The Human Microbiome — Lesson 4","The Human Microbiome — Lesson 5","The Human Microbiome — Lesson 6","The Human Microbiome — Lesson 7","The Human Microbiome — Lesson 8","The Human Microbiome — Lesson 9","The Human Microbiome — Lesson 10","The Human Microbiome — Lesson 11","The Human Microbiome — Lesson 12","The Human Microbiome — Lesson 13","The Human Microbiome — Lesson 14","The Human Microbiome Checkpoint"]],
+      [10,"Pathogens & Disease",["Pathogens & Disease — Lesson 1","Pathogens & Disease — Lesson 2","Pathogens & Disease — Lesson 3","Pathogens & Disease — Lesson 4","Pathogens & Disease — Lesson 5","Pathogens & Disease — Lesson 6","Pathogens & Disease — Lesson 7","Pathogens & Disease — Lesson 8","Pathogens & Disease — Lesson 9","Pathogens & Disease — Lesson 10","Pathogens & Disease — Lesson 11","Pathogens & Disease — Lesson 12","Pathogens & Disease — Lesson 13","Pathogens & Disease — Lesson 14","Pathogens & Disease Checkpoint"]],
+      [11,"Antibiotics — How They Work",["Antibiotics — How They Work — Lesson 1","Antibiotics — How They Work — Lesson 2","Antibiotics — How They Work — Lesson 3","Antibiotics — How They Work — Lesson 4","Antibiotics — How They Work — Lesson 5","Antibiotics — How They Work — Lesson 6","Antibiotics — How They Work — Lesson 7","Antibiotics — How They Work — Lesson 8","Antibiotics — How They Work — Lesson 9","Antibiotics — How They Work — Lesson 10","Antibiotics — How They Work — Lesson 11","Antibiotics — How They Work — Lesson 12","Antibiotics — How They Work — Lesson 13","Antibiotics — How They Work — Lesson 14","Antibiotics — How They Work Checkpoint"]],
+      [12,"Antibiotic Resistance",["Antibiotic Resistance — Lesson 1","Antibiotic Resistance — Lesson 2","Antibiotic Resistance — Lesson 3","Antibiotic Resistance — Lesson 4","Antibiotic Resistance — Lesson 5","Antibiotic Resistance — Lesson 6","Antibiotic Resistance — Lesson 7","Antibiotic Resistance — Lesson 8","Antibiotic Resistance — Lesson 9","Antibiotic Resistance — Lesson 10","Antibiotic Resistance — Lesson 11","Antibiotic Resistance — Lesson 12","Antibiotic Resistance — Lesson 13","Antibiotic Resistance — Lesson 14","Antibiotic Resistance Checkpoint"]],
+      [13,"Vaccines & Immunization",["Vaccines & Immunization — Lesson 1","Vaccines & Immunization — Lesson 2","Vaccines & Immunization — Lesson 3","Vaccines & Immunization — Lesson 4","Vaccines & Immunization — Lesson 5","Vaccines & Immunization — Lesson 6","Vaccines & Immunization — Lesson 7","Vaccines & Immunization — Lesson 8","Vaccines & Immunization — Lesson 9","Vaccines & Immunization — Lesson 10","Vaccines & Immunization — Lesson 11","Vaccines & Immunization — Lesson 12","Vaccines & Immunization — Lesson 13","Vaccines & Immunization — Lesson 14","Vaccines & Immunization Checkpoint"]],
+      [14,"Fermentation — Yogurt, Beer, Bread",["Fermentation — Yogurt, Beer, Bread — Lesson 1","Fermentation — Yogurt, Beer, Bread — Lesson 2","Fermentation — Yogurt, Beer, Bread — Lesson 3","Fermentation — Yogurt, Beer, Bread — Lesson 4","Fermentation — Yogurt, Beer, Bread — Lesson 5","Fermentation — Yogurt, Beer, Bread — Lesson 6","Fermentation — Yogurt, Beer, Bread — Lesson 7","Fermentation — Yogurt, Beer, Bread — Lesson 8","Fermentation — Yogurt, Beer, Bread — Lesson 9","Fermentation — Yogurt, Beer, Bread — Lesson 10","Fermentation — Yogurt, Beer, Bread — Lesson 11","Fermentation — Yogurt, Beer, Bread — Lesson 12","Fermentation — Yogurt, Beer, Bread — Lesson 13","Fermentation — Yogurt, Beer, Bread — Lesson 14","Fermentation — Yogurt, Beer, Bread Checkpoint"]],
+      [15,"Microbial Genetics",["Microbial Genetics — Lesson 1","Microbial Genetics — Lesson 2","Microbial Genetics — Lesson 3","Microbial Genetics — Lesson 4","Microbial Genetics — Lesson 5","Microbial Genetics — Lesson 6","Microbial Genetics — Lesson 7","Microbial Genetics — Lesson 8","Microbial Genetics — Lesson 9","Microbial Genetics — Lesson 10","Microbial Genetics — Lesson 11","Microbial Genetics — Lesson 12","Microbial Genetics — Lesson 13","Microbial Genetics — Lesson 14","Microbial Genetics Checkpoint"]],
+      [16,"Bioremediation",["Bioremediation — Lesson 1","Bioremediation — Lesson 2","Bioremediation — Lesson 3","Bioremediation — Lesson 4","Bioremediation — Lesson 5","Bioremediation — Lesson 6","Bioremediation — Lesson 7","Bioremediation — Lesson 8","Bioremediation — Lesson 9","Bioremediation — Lesson 10","Bioremediation — Lesson 11","Bioremediation — Lesson 12","Bioremediation — Lesson 13","Bioremediation — Lesson 14","Bioremediation Checkpoint"]],
+      [17,"Microbiology Lab Techniques",["Microbiology Lab Techniques — Lesson 1","Microbiology Lab Techniques — Lesson 2","Microbiology Lab Techniques — Lesson 3","Microbiology Lab Techniques — Lesson 4","Microbiology Lab Techniques — Lesson 5","Microbiology Lab Techniques — Lesson 6","Microbiology Lab Techniques — Lesson 7","Microbiology Lab Techniques — Lesson 8","Microbiology Lab Techniques — Lesson 9","Microbiology Lab Techniques — Lesson 10","Microbiology Lab Techniques — Lesson 11","Microbiology Lab Techniques — Lesson 12","Microbiology Lab Techniques — Lesson 13","Microbiology Lab Techniques — Lesson 14","Microbiology Lab Techniques Checkpoint"]],
+      [18,"Gram Staining & PCR",["Gram Staining & PCR — Lesson 1","Gram Staining & PCR — Lesson 2","Gram Staining & PCR — Lesson 3","Gram Staining & PCR — Lesson 4","Gram Staining & PCR — Lesson 5","Gram Staining & PCR — Lesson 6","Gram Staining & PCR — Lesson 7","Gram Staining & PCR — Lesson 8","Gram Staining & PCR — Lesson 9","Gram Staining & PCR — Lesson 10","Gram Staining & PCR — Lesson 11","Gram Staining & PCR — Lesson 12","Gram Staining & PCR — Lesson 13","Gram Staining & PCR — Lesson 14","Gram Staining & PCR Checkpoint"]],
+      [19,"Famous Microbiologists — Pasteur, Koch, Fleming",["Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 1","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 2","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 3","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 4","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 5","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 6","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 7","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 8","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 9","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 10","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 11","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 12","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 13","Famous Microbiologists — Pasteur, Koch, Fleming — Lesson 14","Famous Microbiologists — Pasteur, Koch, Fleming Checkpoint"]],
+      [20,"Microbiology Mastery",["Microbiology Mastery — Lesson 1","Microbiology Mastery — Lesson 2","Microbiology Mastery — Lesson 3","Microbiology Mastery — Lesson 4","Microbiology Mastery — Lesson 5","Microbiology Mastery — Lesson 6","Microbiology Mastery — Lesson 7","Microbiology Mastery — Lesson 8","Microbiology Mastery — Lesson 9","Microbiology Mastery — Lesson 10","Microbiology Mastery — Lesson 11","Microbiology Mastery — Lesson 12","Microbiology Mastery — Lesson 13","Microbiology Mastery — Lesson 14","Microbiology Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'micro-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('microbiology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('microbiology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

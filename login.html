@@ -93,6 +93,145 @@
     .error-msg.show {
       display: block;
     }
+
+    /* Warning banner — appears at 5-9 failed sign-in attempts on the same email */
+    .login-warning {
+      display: none;
+      margin: 14px 0 4px;
+      padding: 12px 14px;
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #78350f;
+      line-height: 1.5;
+    }
+    .login-warning.show { display: block; animation: fade-in 0.25s ease; }
+    .login-warning strong { color: #92400e; }
+    .login-warning .triangle { font-size: 1rem; margin-right: 4px; }
+    .login-warning .reset-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(180, 83, 9, 0.4);
+      font-size: 0.82rem;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .login-warning .reset-btn {
+      background: #b45309;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .login-warning .reset-btn:hover:not(:disabled) { background: #92400e; }
+    .login-warning .reset-btn:disabled { background: #9ca3af; cursor: not-allowed; opacity: 0.7; }
+    .login-warning .reset-status { font-weight: 700; }
+    .login-warning .reset-status.ok { color: #166534; }
+    .login-warning .reset-status.error { color: #b91c1c; }
+    @keyframes fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cooldown overlay on the Sign In button — 30s lockout after each failure at 5+ attempts */
+    .cooldown-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 8px;
+      background: #94a3b8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: not-allowed;
+      display: none;
+      font-family: inherit;
+    }
+    .cooldown-btn.show { display: block; }
+    .cooldown-btn .countdown { font-variant-numeric: tabular-nums; }
+
+    /* Math challenge — appears after 10 failed sign-in attempts on the same email */
+    .math-challenge {
+      display: none;
+      margin: 14px 0 4px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .math-challenge.show { display: block; animation: shake-in 0.4s ease; }
+    @keyframes shake-in {
+      0% { transform: translateX(0); opacity: 0; }
+      30% { transform: translateX(-6px); opacity: 1; }
+      60% { transform: translateX(4px); }
+      100% { transform: translateX(0); }
+    }
+    .math-challenge .lock-row {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 8px;
+      color: #92400e;
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+    .math-challenge .lock-row .icon { font-size: 1.2rem; }
+    .math-challenge .help {
+      font-size: 0.78rem;
+      color: #78350f;
+      margin: 0 0 12px;
+      line-height: 1.5;
+    }
+    .math-challenge .equation {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      color: #1f2937;
+      margin: 6px 0 14px;
+      letter-spacing: 0.04em;
+    }
+    .math-challenge .equation b { color: #b45309; font-weight: 700; }
+    .math-challenge .answer-row {
+      display: flex; gap: 8px; justify-content: center; align-items: center;
+      flex-wrap: wrap;
+    }
+    .math-challenge input[type="number"] {
+      width: 110px; padding: 10px 12px;
+      border: 2px solid #f59e0b; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; text-align: center;
+      background: #fff; color: #1f2937;
+      outline: none; -moz-appearance: textfield;
+    }
+    .math-challenge input[type="number"]::-webkit-outer-spin-button,
+    .math-challenge input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none; margin: 0;
+    }
+    .math-challenge input[type="number"]:focus { box-shadow: 0 0 0 4px rgba(245,158,11,0.25); }
+    .math-challenge .verify-btn {
+      padding: 10px 20px; border-radius: 8px;
+      background: #f59e0b; color: #1f2937; border: none;
+      font-weight: 800; font-size: 0.92rem; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    .math-challenge .verify-btn:hover { background: #d97706; }
+    .math-challenge .new-btn {
+      background: transparent; color: #92400e;
+      border: 1px solid #d97706; padding: 8px 12px;
+      border-radius: 8px; font-size: 0.78rem; cursor: pointer;
+      font-family: inherit; font-weight: 600;
+    }
+    .math-challenge .new-btn:hover { background: rgba(245,158,11,0.15); }
+    .math-challenge .feedback {
+      margin-top: 10px;
+      font-size: 0.85rem; font-weight: 700;
+      min-height: 18px;
+    }
+    .math-challenge .feedback.wrong { color: #b91c1c; animation: shake-in 0.3s; }
+    .math-challenge .feedback.right { color: #166534; }
+    .math-challenge.locked .verify-btn,
+    .math-challenge.locked input { opacity: 0.6; pointer-events: none; }
     .google-btn {
       width: 100%;
       display: flex;
@@ -191,7 +330,29 @@
             <label for="signin-password">Password</label>
             <input type="password" id="signin-password" required autocomplete="current-password">
           </div>
-          <button type="submit" class="btn btn-primary">Sign In</button>
+          <button type="submit" class="btn btn-primary" id="signin-submit">Sign In</button>
+          <button type="button" class="cooldown-btn" id="cooldown-btn" disabled>Locked — try again in <span class="countdown" id="cooldown-secs">30</span>s</button>
+          <div class="login-warning" id="login-warning" role="alert">
+            <span class="triangle">⚠️</span>
+            <strong>Warning — <span id="warn-count">5</span> failed sign-in attempts.</strong>
+            After 10 fails, you'll need to solve a math problem to continue. Each failed attempt at this stage adds a 30-second lockout.
+            <div class="reset-row">
+              Forgot your password?
+              <button type="button" class="reset-btn" id="reset-pw-btn">Reset it &rarr;</button>
+              <span class="reset-status" id="reset-pw-status" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="math-challenge" id="math-challenge" role="region" aria-label="Security check">
+            <div class="lock-row"><span class="icon">🔒</span> <span>Too many failed attempts — solve to continue</span></div>
+            <p class="help">Your email has failed sign-in <strong id="mc-attempts">10</strong> times. Solve the equation below to prove you're human, then try again.</p>
+            <div class="equation" id="mc-equation"></div>
+            <div class="answer-row">
+              <input type="number" id="mc-answer" placeholder="x = ?" autocomplete="off" inputmode="numeric">
+              <button type="button" class="verify-btn" id="mc-verify-btn">Verify</button>
+              <button type="button" class="new-btn" id="mc-new-btn" title="Generate a new equation">↻ New</button>
+            </div>
+            <p class="feedback" id="mc-feedback"></p>
+          </div>
           <p id="signin-error" class="error-msg"></p>
         </form>
       </div>
@@ -260,7 +421,7 @@
   <script type="module">
     import { initNav } from './js/nav.js';
     initNav('');
-    import { signUp, signIn, signInWithGoogle, onAuthChange } from './js/auth.js';
+    import { signUp, signIn, signInWithGoogle, resetPassword, onAuthChange } from './js/auth.js';
 
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -311,12 +472,255 @@
     const signinForm = document.getElementById('signin-form');
     const signinError = document.getElementById('signin-error');
 
+    // ===== Anti-brute-force escalation =====
+    //   1–4 fails:    normal
+    //   5–9 fails:    yellow warning banner + 30-second cooldown after each fail
+    //   10–14 fails:  easy calculus problem (power-rule derivative)
+    //   15+ fails:    difficult AP Statistics problem (z-score / combinations / SE)
+    const WARN_THRESHOLD = 5;
+    const FAIL_THRESHOLD = 10;
+    const STATS_THRESHOLD = 15;
+    const COOLDOWN_MS = 30000;
+    const submitBtn = document.getElementById('signin-submit');
+    const cooldownBtn = document.getElementById('cooldown-btn');
+    const cooldownSecsEl = document.getElementById('cooldown-secs');
+    const warningEl = document.getElementById('login-warning');
+    const warnCountEl = document.getElementById('warn-count');
+    const resetPwBtn = document.getElementById('reset-pw-btn');
+    const resetPwStatus = document.getElementById('reset-pw-status');
+
+    // "Reset password" button inside the warning banner — only meaningful at 5+ fails
+    // since the banner itself only appears at that point. Sends a Firebase password
+    // reset email to whatever address is currently typed in the email field.
+    resetPwBtn.addEventListener('click', async () => {
+      const email = (document.getElementById('signin-email').value || '').trim();
+      resetPwStatus.className = 'reset-status';
+      resetPwStatus.textContent = '';
+      if (!email) {
+        resetPwStatus.className = 'reset-status error';
+        resetPwStatus.textContent = 'Type your email above first.';
+        document.getElementById('signin-email').focus();
+        return;
+      }
+      resetPwBtn.disabled = true;
+      resetPwBtn.textContent = 'Sending…';
+      try {
+        await resetPassword(email);
+        resetPwStatus.className = 'reset-status ok';
+        resetPwStatus.textContent = '✓ Reset link sent to ' + email + '. Check your inbox.';
+        resetPwBtn.textContent = 'Sent ✓';
+      } catch (err) {
+        resetPwStatus.className = 'reset-status error';
+        resetPwStatus.textContent = (err && err.message) ? err.message.replace(/^Firebase: /, '') : 'Could not send reset email.';
+        resetPwBtn.disabled = false;
+        resetPwBtn.textContent = 'Reset it →';
+      }
+    });
+
+    function cooldownKey(email) { return 'mathagram_login_cooldown_' + (email || '').trim().toLowerCase(); }
+    function getCooldownUntil(email) { try { return parseInt(localStorage.getItem(cooldownKey(email)) || '0', 10) || 0; } catch (e) { return 0; } }
+    function setCooldownUntil(email, ts) { try { localStorage.setItem(cooldownKey(email), String(ts)); } catch (e) {} }
+    function clearCooldown(email) { try { localStorage.removeItem(cooldownKey(email)); } catch (e) {} }
+
+    let cooldownTimer = null;
+    function startCooldownDisplay(untilTs) {
+      submitBtn.style.display = 'none';
+      cooldownBtn.classList.add('show');
+      function tick() {
+        const remaining = Math.max(0, untilTs - Date.now());
+        cooldownSecsEl.textContent = Math.ceil(remaining / 1000);
+        if (remaining <= 0) {
+          clearInterval(cooldownTimer);
+          cooldownTimer = null;
+          submitBtn.style.display = '';
+          cooldownBtn.classList.remove('show');
+        }
+      }
+      tick();
+      if (cooldownTimer) clearInterval(cooldownTimer);
+      cooldownTimer = setInterval(tick, 200);
+    }
+    function applyEscalationFor(email) {
+      const fails = getAttempts(email);
+      const cooldownUntil = getCooldownUntil(email);
+      // Hide everything by default, then re-show whichever stage applies
+      warningEl.classList.remove('show');
+      if (fails >= FAIL_THRESHOLD) {
+        // Math challenge takes over (handled separately below)
+        return;
+      }
+      if (fails >= WARN_THRESHOLD) {
+        warnCountEl.textContent = fails;
+        warningEl.classList.add('show');
+        resetResetBtn();
+      }
+      // Cooldown countdown overrides the submit button until it elapses
+      if (cooldownUntil > Date.now()) {
+        startCooldownDisplay(cooldownUntil);
+      }
+    }
+    // Re-enable the "Reset it →" button so a returning user can resend if needed
+    function resetResetBtn() {
+      resetPwBtn.disabled = false;
+      resetPwBtn.textContent = 'Reset it →';
+    }
+
+    const challengeBox = document.getElementById('math-challenge');
+    const eqEl = document.getElementById('mc-equation');
+    const answerEl = document.getElementById('mc-answer');
+    const verifyBtn = document.getElementById('mc-verify-btn');
+    const newBtn = document.getElementById('mc-new-btn');
+    const feedbackEl = document.getElementById('mc-feedback');
+    const attemptsEl = document.getElementById('mc-attempts');
+    let challengeAnswer = null;          // current required integer answer
+    let challengePassed = false;          // one-shot — clears after a sign-in attempt
+    function attemptKey(email) { return 'mathagram_login_attempts_' + (email || '').trim().toLowerCase(); }
+    function getAttempts(email) { try { return parseInt(localStorage.getItem(attemptKey(email)) || '0', 10) || 0; } catch (e) { return 0; } }
+    function setAttempts(email, n) { try { localStorage.setItem(attemptKey(email), String(n)); } catch (e) {} }
+    function clearAttempts(email) { try { localStorage.removeItem(attemptKey(email)); } catch (e) {} }
+
+    function randInt(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function factorial(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+    function ncr(n, k) { return factorial(n) / (factorial(k) * factorial(n - k)); }
+
+    // ----- Tier 2: easy calculus (10–14 fails) -----
+    function makeCalcChallenge() {
+      // Power-rule derivative at a point: f(x) = a·xⁿ → f′(b) = a·n·b^(n-1)
+      const a = randInt(2, 6);
+      const n = randInt(2, 4);
+      const b = randInt(2, 5);
+      challengeAnswer = a * n * Math.pow(b, n - 1);
+      const fxExp = 'x<sup>' + n + '</sup>';
+      eqEl.innerHTML = 'f(x) = <b>' + a + fxExp + '</b> &nbsp;→&nbsp; f′(' + b + ') = ?';
+      lockHelpText('Solve this calculus problem to continue. (Power rule: d/dx[axⁿ] = a·n·xⁿ⁻¹.)');
+    }
+
+    // ----- Tier 3: difficult AP Statistics (15+ fails) -----
+    function makeStatsChallenge() {
+      const kind = pick(['z', 'se', 'ncr', 'variance']);
+      if (kind === 'z') {
+        // z-score: z = (x − μ) / σ — pick params so z is a small positive integer
+        const mu = randInt(40, 80);
+        const sigma = pick([4, 5, 6, 8, 10]);
+        const z = randInt(2, 4);
+        const x = mu + z * sigma;
+        challengeAnswer = z;
+        eqEl.innerHTML = 'A population has μ = <b>' + mu + '</b>, σ = <b>' + sigma + '</b>.<br>What is the <i>z</i>-score for x = <b>' + x + '</b>?';
+      } else if (kind === 'se') {
+        // SE of the mean: σ / √n — pick perfect-square n so result is integer
+        const sqrtN = pick([2, 3, 4, 5]);
+        const n = sqrtN * sqrtN;
+        const result = randInt(2, 7);
+        const sigma = result * sqrtN;
+        challengeAnswer = result;
+        eqEl.innerHTML = 'A sample of size n = <b>' + n + '</b> is drawn from a population with σ = <b>' + sigma + '</b>.<br>What is the standard error of the sample mean (SE = σ/√n)?';
+      } else if (kind === 'ncr') {
+        // Combinations C(n, k)
+        const n = randInt(5, 9);
+        const k = randInt(2, Math.min(4, n - 1));
+        challengeAnswer = ncr(n, k);
+        eqEl.innerHTML = 'How many ways can you choose <b>' + k + '</b> items from <b>' + n + '</b>?<br>(Compute <i>C(' + n + ', ' + k + ')</i>.)';
+      } else {
+        // Population variance of a small dataset (sum of squared deviations / N)
+        const datasets = [
+          { d: [2, 4, 6, 8], mean: 5, ss: 20, n: 4 },     // var = 5
+          { d: [1, 3, 5, 7], mean: 4, ss: 20, n: 4 },     // var = 5
+          { d: [3, 6, 9, 12], mean: 7.5, ss: 45, n: 4 },  // var = 11.25 — skip
+          { d: [10, 20, 30], mean: 20, ss: 200, n: 3 },   // var ≈ 66.67 — skip
+          { d: [4, 8, 12], mean: 8, ss: 32, n: 4 },       // skip
+          { d: [2, 4, 6], mean: 4, ss: 8, n: 4 },         // skip
+        ].filter(s => Number.isInteger(s.ss / s.n));
+        const ds = pick(datasets);
+        challengeAnswer = ds.ss / ds.n;
+        eqEl.innerHTML = 'Find the <b>population variance</b> of {' + ds.d.join(', ') + '}. <br>(σ² = Σ(xᵢ − μ)² / N)';
+      }
+      lockHelpText('Solve this AP Statistics problem to continue.');
+    }
+
+    // ----- Helper: set the lock-row + help text on the challenge box -----
+    function lockHelpText(helpText) {
+      const lockRow = challengeBox.querySelector('.lock-row span:not(.icon)');
+      const helpEl = challengeBox.querySelector('.help');
+      if (lockRow) lockRow.textContent = 'Too many failed attempts — solve to continue';
+      if (helpEl) helpEl.innerHTML = '<strong>' + helpText + '</strong>';
+    }
+
+    // Pick the right tier of challenge based on the failure count for this email
+    function makeChallengeFor(email) {
+      answerEl.value = '';
+      feedbackEl.className = 'feedback';
+      feedbackEl.textContent = '';
+      challengePassed = false;
+      challengeBox.classList.remove('locked');
+      const fails = getAttempts(email);
+      if (fails >= STATS_THRESHOLD) {
+        makeStatsChallenge();
+      } else {
+        makeCalcChallenge();
+      }
+    }
+
+    function showChallengeFor(email) {
+      const fails = getAttempts(email);
+      attemptsEl.textContent = fails;
+      makeChallengeFor(email);
+      challengeBox.classList.add('show');
+      setTimeout(() => answerEl.focus(), 50);
+    }
+    function hideChallenge() {
+      challengeBox.classList.remove('show');
+      challengePassed = false;
+    }
+
+    verifyBtn.addEventListener('click', () => {
+      if (answerEl.value.trim() === '') return;
+      const guess = parseInt(answerEl.value, 10);
+      if (guess === challengeAnswer) {
+        challengePassed = true;
+        feedbackEl.className = 'feedback right';
+        feedbackEl.textContent = '✓ Correct — you may try signing in once.';
+        challengeBox.classList.add('locked');
+      } else {
+        feedbackEl.className = 'feedback wrong';
+        feedbackEl.textContent = '✗ Wrong — generating a new problem…';
+        setTimeout(() => {
+          const email = document.getElementById('signin-email').value;
+          makeChallengeFor(email);
+        }, 800);
+      }
+    });
+    newBtn.addEventListener('click', () => {
+      const email = document.getElementById('signin-email').value;
+      makeChallengeFor(email);
+    });
+    answerEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); verifyBtn.click(); }
+    });
+
     signinForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       signinError.classList.remove('show');
 
       const email = document.getElementById('signin-email').value;
       const password = document.getElementById('signin-password').value;
+
+      // Gate 1 — 30-second cooldown (active at 5+ fails)
+      const cdUntil = getCooldownUntil(email);
+      if (cdUntil > Date.now()) {
+        startCooldownDisplay(cdUntil);
+        const remaining = Math.ceil((cdUntil - Date.now()) / 1000);
+        signinError.textContent = 'Locked — wait ' + remaining + 's before retrying.';
+        signinError.classList.add('show');
+        return;
+      }
+      // Gate 2 — math challenge (active at 10+ fails)
+      if (getAttempts(email) >= FAIL_THRESHOLD && !challengePassed) {
+        showChallengeFor(email);
+        signinError.textContent = 'Solve the math problem above before trying again.';
+        signinError.classList.add('show');
+        return;
+      }
 
       try {
         await signIn(email, password);
@@ -352,10 +756,51 @@
           }
         }
 
+        // Successful sign-in — reset everything for this email
+        clearAttempts(email);
+        clearCooldown(email);
+        warningEl.classList.remove('show');
+        hideChallenge();
+
         window.location.href = 'profile.html';
       } catch (err) {
+        // Failed sign-in — bump counter and apply escalation
+        const fails = getAttempts(email) + 1;
+        setAttempts(email, fails);
+        // Consume the one-shot challenge pass (force a new challenge for the next try)
+        challengePassed = false;
+
         signinError.textContent = err.message;
         signinError.classList.add('show');
+
+        // 5+ fails: show warning banner AND start a 30-second cooldown
+        if (fails >= WARN_THRESHOLD && fails < FAIL_THRESHOLD) {
+          warnCountEl.textContent = fails;
+          warningEl.classList.add('show');
+          resetResetBtn();
+          const until = Date.now() + COOLDOWN_MS;
+          setCooldownUntil(email, until);
+          startCooldownDisplay(until);
+        }
+        // 10+ fails: math challenge takes over (cooldown no longer needed once they're past 10)
+        if (fails >= FAIL_THRESHOLD) {
+          warningEl.classList.remove('show');
+          clearCooldown(email);
+          showChallengeFor(email);
+        }
+      }
+    });
+
+    // If the user switches to an email that's already in trouble, apply the
+    // matching escalation state proactively (warning banner, cooldown, or challenge).
+    document.getElementById('signin-email').addEventListener('change', (e) => {
+      const email = e.target.value;
+      if (getAttempts(email) >= FAIL_THRESHOLD) {
+        warningEl.classList.remove('show');
+        showChallengeFor(email);
+      } else {
+        hideChallenge();
+        applyEscalationFor(email);
       }
     });
 

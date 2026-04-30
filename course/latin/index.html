@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latin — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Latin</h1>
+    <p>Classical Latin from scratch — five declensions, four conjugations, ablative absolute, subjunctive, Cicero, Caesar, Virgil, Ovid, ecclesiastical Latin, legal Latin, and the foundation of Romance languages. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Latin Pronunciation",["Latin Pronunciation — Lesson 1","Latin Pronunciation — Lesson 2","Latin Pronunciation — Lesson 3","Latin Pronunciation — Lesson 4","Latin Pronunciation — Lesson 5","Latin Pronunciation — Lesson 6","Latin Pronunciation — Lesson 7","Latin Pronunciation — Lesson 8","Latin Pronunciation — Lesson 9","Latin Pronunciation — Lesson 10","Latin Pronunciation — Lesson 11","Latin Pronunciation — Lesson 12","Latin Pronunciation — Lesson 13","Latin Pronunciation — Lesson 14","Latin Pronunciation Checkpoint"]],
+      [2,"First Declension Nouns",["First Declension Nouns — Lesson 1","First Declension Nouns — Lesson 2","First Declension Nouns — Lesson 3","First Declension Nouns — Lesson 4","First Declension Nouns — Lesson 5","First Declension Nouns — Lesson 6","First Declension Nouns — Lesson 7","First Declension Nouns — Lesson 8","First Declension Nouns — Lesson 9","First Declension Nouns — Lesson 10","First Declension Nouns — Lesson 11","First Declension Nouns — Lesson 12","First Declension Nouns — Lesson 13","First Declension Nouns — Lesson 14","First Declension Nouns Checkpoint"]],
+      [3,"Second Declension",["Second Declension — Lesson 1","Second Declension — Lesson 2","Second Declension — Lesson 3","Second Declension — Lesson 4","Second Declension — Lesson 5","Second Declension — Lesson 6","Second Declension — Lesson 7","Second Declension — Lesson 8","Second Declension — Lesson 9","Second Declension — Lesson 10","Second Declension — Lesson 11","Second Declension — Lesson 12","Second Declension — Lesson 13","Second Declension — Lesson 14","Second Declension Checkpoint"]],
+      [4,"Third Declension",["Third Declension — Lesson 1","Third Declension — Lesson 2","Third Declension — Lesson 3","Third Declension — Lesson 4","Third Declension — Lesson 5","Third Declension — Lesson 6","Third Declension — Lesson 7","Third Declension — Lesson 8","Third Declension — Lesson 9","Third Declension — Lesson 10","Third Declension — Lesson 11","Third Declension — Lesson 12","Third Declension — Lesson 13","Third Declension — Lesson 14","Third Declension Checkpoint"]],
+      [5,"Fourth & Fifth Declensions",["Fourth & Fifth Declensions — Lesson 1","Fourth & Fifth Declensions — Lesson 2","Fourth & Fifth Declensions — Lesson 3","Fourth & Fifth Declensions — Lesson 4","Fourth & Fifth Declensions — Lesson 5","Fourth & Fifth Declensions — Lesson 6","Fourth & Fifth Declensions — Lesson 7","Fourth & Fifth Declensions — Lesson 8","Fourth & Fifth Declensions — Lesson 9","Fourth & Fifth Declensions — Lesson 10","Fourth & Fifth Declensions — Lesson 11","Fourth & Fifth Declensions — Lesson 12","Fourth & Fifth Declensions — Lesson 13","Fourth & Fifth Declensions — Lesson 14","Fourth & Fifth Declensions Checkpoint"]],
+      [6,"Adjectives & Agreement",["Adjectives & Agreement — Lesson 1","Adjectives & Agreement — Lesson 2","Adjectives & Agreement — Lesson 3","Adjectives & Agreement — Lesson 4","Adjectives & Agreement — Lesson 5","Adjectives & Agreement — Lesson 6","Adjectives & Agreement — Lesson 7","Adjectives & Agreement — Lesson 8","Adjectives & Agreement — Lesson 9","Adjectives & Agreement — Lesson 10","Adjectives & Agreement — Lesson 11","Adjectives & Agreement — Lesson 12","Adjectives & Agreement — Lesson 13","Adjectives & Agreement — Lesson 14","Adjectives & Agreement Checkpoint"]],
+      [7,"First Conjugation Verbs",["First Conjugation Verbs — Lesson 1","First Conjugation Verbs — Lesson 2","First Conjugation Verbs — Lesson 3","First Conjugation Verbs — Lesson 4","First Conjugation Verbs — Lesson 5","First Conjugation Verbs — Lesson 6","First Conjugation Verbs — Lesson 7","First Conjugation Verbs — Lesson 8","First Conjugation Verbs — Lesson 9","First Conjugation Verbs — Lesson 10","First Conjugation Verbs — Lesson 11","First Conjugation Verbs — Lesson 12","First Conjugation Verbs — Lesson 13","First Conjugation Verbs — Lesson 14","First Conjugation Verbs Checkpoint"]],
+      [8,"Second & Third Conjugations",["Second & Third Conjugations — Lesson 1","Second & Third Conjugations — Lesson 2","Second & Third Conjugations — Lesson 3","Second & Third Conjugations — Lesson 4","Second & Third Conjugations — Lesson 5","Second & Third Conjugations — Lesson 6","Second & Third Conjugations — Lesson 7","Second & Third Conjugations — Lesson 8","Second & Third Conjugations — Lesson 9","Second & Third Conjugations — Lesson 10","Second & Third Conjugations — Lesson 11","Second & Third Conjugations — Lesson 12","Second & Third Conjugations — Lesson 13","Second & Third Conjugations — Lesson 14","Second & Third Conjugations Checkpoint"]],
+      [9,"Fourth Conjugation",["Fourth Conjugation — Lesson 1","Fourth Conjugation — Lesson 2","Fourth Conjugation — Lesson 3","Fourth Conjugation — Lesson 4","Fourth Conjugation — Lesson 5","Fourth Conjugation — Lesson 6","Fourth Conjugation — Lesson 7","Fourth Conjugation — Lesson 8","Fourth Conjugation — Lesson 9","Fourth Conjugation — Lesson 10","Fourth Conjugation — Lesson 11","Fourth Conjugation — Lesson 12","Fourth Conjugation — Lesson 13","Fourth Conjugation — Lesson 14","Fourth Conjugation Checkpoint"]],
+      [10,"Imperfect & Future Tenses",["Imperfect & Future Tenses — Lesson 1","Imperfect & Future Tenses — Lesson 2","Imperfect & Future Tenses — Lesson 3","Imperfect & Future Tenses — Lesson 4","Imperfect & Future Tenses — Lesson 5","Imperfect & Future Tenses — Lesson 6","Imperfect & Future Tenses — Lesson 7","Imperfect & Future Tenses — Lesson 8","Imperfect & Future Tenses — Lesson 9","Imperfect & Future Tenses — Lesson 10","Imperfect & Future Tenses — Lesson 11","Imperfect & Future Tenses — Lesson 12","Imperfect & Future Tenses — Lesson 13","Imperfect & Future Tenses — Lesson 14","Imperfect & Future Tenses Checkpoint"]],
+      [11,"Perfect Tenses",["Perfect Tenses — Lesson 1","Perfect Tenses — Lesson 2","Perfect Tenses — Lesson 3","Perfect Tenses — Lesson 4","Perfect Tenses — Lesson 5","Perfect Tenses — Lesson 6","Perfect Tenses — Lesson 7","Perfect Tenses — Lesson 8","Perfect Tenses — Lesson 9","Perfect Tenses — Lesson 10","Perfect Tenses — Lesson 11","Perfect Tenses — Lesson 12","Perfect Tenses — Lesson 13","Perfect Tenses — Lesson 14","Perfect Tenses Checkpoint"]],
+      [12,"Subjunctive Mood",["Subjunctive Mood — Lesson 1","Subjunctive Mood — Lesson 2","Subjunctive Mood — Lesson 3","Subjunctive Mood — Lesson 4","Subjunctive Mood — Lesson 5","Subjunctive Mood — Lesson 6","Subjunctive Mood — Lesson 7","Subjunctive Mood — Lesson 8","Subjunctive Mood — Lesson 9","Subjunctive Mood — Lesson 10","Subjunctive Mood — Lesson 11","Subjunctive Mood — Lesson 12","Subjunctive Mood — Lesson 13","Subjunctive Mood — Lesson 14","Subjunctive Mood Checkpoint"]],
+      [13,"Ablative Absolute",["Ablative Absolute — Lesson 1","Ablative Absolute — Lesson 2","Ablative Absolute — Lesson 3","Ablative Absolute — Lesson 4","Ablative Absolute — Lesson 5","Ablative Absolute — Lesson 6","Ablative Absolute — Lesson 7","Ablative Absolute — Lesson 8","Ablative Absolute — Lesson 9","Ablative Absolute — Lesson 10","Ablative Absolute — Lesson 11","Ablative Absolute — Lesson 12","Ablative Absolute — Lesson 13","Ablative Absolute — Lesson 14","Ablative Absolute Checkpoint"]],
+      [14,"Indirect Speech",["Indirect Speech — Lesson 1","Indirect Speech — Lesson 2","Indirect Speech — Lesson 3","Indirect Speech — Lesson 4","Indirect Speech — Lesson 5","Indirect Speech — Lesson 6","Indirect Speech — Lesson 7","Indirect Speech — Lesson 8","Indirect Speech — Lesson 9","Indirect Speech — Lesson 10","Indirect Speech — Lesson 11","Indirect Speech — Lesson 12","Indirect Speech — Lesson 13","Indirect Speech — Lesson 14","Indirect Speech Checkpoint"]],
+      [15,"Caesar — De Bello Gallico",["Caesar — De Bello Gallico — Lesson 1","Caesar — De Bello Gallico — Lesson 2","Caesar — De Bello Gallico — Lesson 3","Caesar — De Bello Gallico — Lesson 4","Caesar — De Bello Gallico — Lesson 5","Caesar — De Bello Gallico — Lesson 6","Caesar — De Bello Gallico — Lesson 7","Caesar — De Bello Gallico — Lesson 8","Caesar — De Bello Gallico — Lesson 9","Caesar — De Bello Gallico — Lesson 10","Caesar — De Bello Gallico — Lesson 11","Caesar — De Bello Gallico — Lesson 12","Caesar — De Bello Gallico — Lesson 13","Caesar — De Bello Gallico — Lesson 14","Caesar — De Bello Gallico Checkpoint"]],
+      [16,"Cicero — Orations",["Cicero — Orations — Lesson 1","Cicero — Orations — Lesson 2","Cicero — Orations — Lesson 3","Cicero — Orations — Lesson 4","Cicero — Orations — Lesson 5","Cicero — Orations — Lesson 6","Cicero — Orations — Lesson 7","Cicero — Orations — Lesson 8","Cicero — Orations — Lesson 9","Cicero — Orations — Lesson 10","Cicero — Orations — Lesson 11","Cicero — Orations — Lesson 12","Cicero — Orations — Lesson 13","Cicero — Orations — Lesson 14","Cicero — Orations Checkpoint"]],
+      [17,"Virgil — Aeneid",["Virgil — Aeneid — Lesson 1","Virgil — Aeneid — Lesson 2","Virgil — Aeneid — Lesson 3","Virgil — Aeneid — Lesson 4","Virgil — Aeneid — Lesson 5","Virgil — Aeneid — Lesson 6","Virgil — Aeneid — Lesson 7","Virgil — Aeneid — Lesson 8","Virgil — Aeneid — Lesson 9","Virgil — Aeneid — Lesson 10","Virgil — Aeneid — Lesson 11","Virgil — Aeneid — Lesson 12","Virgil — Aeneid — Lesson 13","Virgil — Aeneid — Lesson 14","Virgil — Aeneid Checkpoint"]],
+      [18,"Ovid — Metamorphoses",["Ovid — Metamorphoses — Lesson 1","Ovid — Metamorphoses — Lesson 2","Ovid — Metamorphoses — Lesson 3","Ovid — Metamorphoses — Lesson 4","Ovid — Metamorphoses — Lesson 5","Ovid — Metamorphoses — Lesson 6","Ovid — Metamorphoses — Lesson 7","Ovid — Metamorphoses — Lesson 8","Ovid — Metamorphoses — Lesson 9","Ovid — Metamorphoses — Lesson 10","Ovid — Metamorphoses — Lesson 11","Ovid — Metamorphoses — Lesson 12","Ovid — Metamorphoses — Lesson 13","Ovid — Metamorphoses — Lesson 14","Ovid — Metamorphoses Checkpoint"]],
+      [19,"Ecclesiastical & Legal Latin",["Ecclesiastical & Legal Latin — Lesson 1","Ecclesiastical & Legal Latin — Lesson 2","Ecclesiastical & Legal Latin — Lesson 3","Ecclesiastical & Legal Latin — Lesson 4","Ecclesiastical & Legal Latin — Lesson 5","Ecclesiastical & Legal Latin — Lesson 6","Ecclesiastical & Legal Latin — Lesson 7","Ecclesiastical & Legal Latin — Lesson 8","Ecclesiastical & Legal Latin — Lesson 9","Ecclesiastical & Legal Latin — Lesson 10","Ecclesiastical & Legal Latin — Lesson 11","Ecclesiastical & Legal Latin — Lesson 12","Ecclesiastical & Legal Latin — Lesson 13","Ecclesiastical & Legal Latin — Lesson 14","Ecclesiastical & Legal Latin Checkpoint"]],
+      [20,"Latin Mastery",["Latin Mastery — Lesson 1","Latin Mastery — Lesson 2","Latin Mastery — Lesson 3","Latin Mastery — Lesson 4","Latin Mastery — Lesson 5","Latin Mastery — Lesson 6","Latin Mastery — Lesson 7","Latin Mastery — Lesson 8","Latin Mastery — Lesson 9","Latin Mastery — Lesson 10","Latin Mastery — Lesson 11","Latin Mastery — Lesson 12","Latin Mastery — Lesson 13","Latin Mastery — Lesson 14","Latin Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'lat-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('latin');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('latin');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

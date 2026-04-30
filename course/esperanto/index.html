@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esperanto — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Esperanto</h1>
+    <p>L.L. Zamenhof's international auxiliary language — fully regular grammar (no exceptions), 16 rules, vocabulary roots from Romance, Germanic, and Slavic languages, the green star, and the global Esperanto community. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Zamenhof & Esperanto Origin",["Zamenhof & Esperanto Origin — Lesson 1","Zamenhof & Esperanto Origin — Lesson 2","Zamenhof & Esperanto Origin — Lesson 3","Zamenhof & Esperanto Origin — Lesson 4","Zamenhof & Esperanto Origin — Lesson 5","Zamenhof & Esperanto Origin — Lesson 6","Zamenhof & Esperanto Origin — Lesson 7","Zamenhof & Esperanto Origin — Lesson 8","Zamenhof & Esperanto Origin — Lesson 9","Zamenhof & Esperanto Origin — Lesson 10","Zamenhof & Esperanto Origin — Lesson 11","Zamenhof & Esperanto Origin — Lesson 12","Zamenhof & Esperanto Origin — Lesson 13","Zamenhof & Esperanto Origin — Lesson 14","Zamenhof & Esperanto Origin Checkpoint"]],
+      [2,"The 16 Rules",["The 16 Rules — Lesson 1","The 16 Rules — Lesson 2","The 16 Rules — Lesson 3","The 16 Rules — Lesson 4","The 16 Rules — Lesson 5","The 16 Rules — Lesson 6","The 16 Rules — Lesson 7","The 16 Rules — Lesson 8","The 16 Rules — Lesson 9","The 16 Rules — Lesson 10","The 16 Rules — Lesson 11","The 16 Rules — Lesson 12","The 16 Rules — Lesson 13","The 16 Rules — Lesson 14","The 16 Rules Checkpoint"]],
+      [3,"Esperanto Pronunciation",["Esperanto Pronunciation — Lesson 1","Esperanto Pronunciation — Lesson 2","Esperanto Pronunciation — Lesson 3","Esperanto Pronunciation — Lesson 4","Esperanto Pronunciation — Lesson 5","Esperanto Pronunciation — Lesson 6","Esperanto Pronunciation — Lesson 7","Esperanto Pronunciation — Lesson 8","Esperanto Pronunciation — Lesson 9","Esperanto Pronunciation — Lesson 10","Esperanto Pronunciation — Lesson 11","Esperanto Pronunciation — Lesson 12","Esperanto Pronunciation — Lesson 13","Esperanto Pronunciation — Lesson 14","Esperanto Pronunciation Checkpoint"]],
+      [4,"Nouns — -o ending",["Nouns — -o ending — Lesson 1","Nouns — -o ending — Lesson 2","Nouns — -o ending — Lesson 3","Nouns — -o ending — Lesson 4","Nouns — -o ending — Lesson 5","Nouns — -o ending — Lesson 6","Nouns — -o ending — Lesson 7","Nouns — -o ending — Lesson 8","Nouns — -o ending — Lesson 9","Nouns — -o ending — Lesson 10","Nouns — -o ending — Lesson 11","Nouns — -o ending — Lesson 12","Nouns — -o ending — Lesson 13","Nouns — -o ending — Lesson 14","Nouns — -o ending Checkpoint"]],
+      [5,"Adjectives — -a ending",["Adjectives — -a ending — Lesson 1","Adjectives — -a ending — Lesson 2","Adjectives — -a ending — Lesson 3","Adjectives — -a ending — Lesson 4","Adjectives — -a ending — Lesson 5","Adjectives — -a ending — Lesson 6","Adjectives — -a ending — Lesson 7","Adjectives — -a ending — Lesson 8","Adjectives — -a ending — Lesson 9","Adjectives — -a ending — Lesson 10","Adjectives — -a ending — Lesson 11","Adjectives — -a ending — Lesson 12","Adjectives — -a ending — Lesson 13","Adjectives — -a ending — Lesson 14","Adjectives — -a ending Checkpoint"]],
+      [6,"Adverbs — -e ending",["Adverbs — -e ending — Lesson 1","Adverbs — -e ending — Lesson 2","Adverbs — -e ending — Lesson 3","Adverbs — -e ending — Lesson 4","Adverbs — -e ending — Lesson 5","Adverbs — -e ending — Lesson 6","Adverbs — -e ending — Lesson 7","Adverbs — -e ending — Lesson 8","Adverbs — -e ending — Lesson 9","Adverbs — -e ending — Lesson 10","Adverbs — -e ending — Lesson 11","Adverbs — -e ending — Lesson 12","Adverbs — -e ending — Lesson 13","Adverbs — -e ending — Lesson 14","Adverbs — -e ending Checkpoint"]],
+      [7,"Verbs — -as -is -os endings",["Verbs — -as -is -os endings — Lesson 1","Verbs — -as -is -os endings — Lesson 2","Verbs — -as -is -os endings — Lesson 3","Verbs — -as -is -os endings — Lesson 4","Verbs — -as -is -os endings — Lesson 5","Verbs — -as -is -os endings — Lesson 6","Verbs — -as -is -os endings — Lesson 7","Verbs — -as -is -os endings — Lesson 8","Verbs — -as -is -os endings — Lesson 9","Verbs — -as -is -os endings — Lesson 10","Verbs — -as -is -os endings — Lesson 11","Verbs — -as -is -os endings — Lesson 12","Verbs — -as -is -os endings — Lesson 13","Verbs — -as -is -os endings — Lesson 14","Verbs — -as -is -os endings Checkpoint"]],
+      [8,"Pronouns",["Pronouns — Lesson 1","Pronouns — Lesson 2","Pronouns — Lesson 3","Pronouns — Lesson 4","Pronouns — Lesson 5","Pronouns — Lesson 6","Pronouns — Lesson 7","Pronouns — Lesson 8","Pronouns — Lesson 9","Pronouns — Lesson 10","Pronouns — Lesson 11","Pronouns — Lesson 12","Pronouns — Lesson 13","Pronouns — Lesson 14","Pronouns Checkpoint"]],
+      [9,"Numbers & Time",["Numbers & Time — Lesson 1","Numbers & Time — Lesson 2","Numbers & Time — Lesson 3","Numbers & Time — Lesson 4","Numbers & Time — Lesson 5","Numbers & Time — Lesson 6","Numbers & Time — Lesson 7","Numbers & Time — Lesson 8","Numbers & Time — Lesson 9","Numbers & Time — Lesson 10","Numbers & Time — Lesson 11","Numbers & Time — Lesson 12","Numbers & Time — Lesson 13","Numbers & Time — Lesson 14","Numbers & Time Checkpoint"]],
+      [10,"Word Building — Affixes",["Word Building — Affixes — Lesson 1","Word Building — Affixes — Lesson 2","Word Building — Affixes — Lesson 3","Word Building — Affixes — Lesson 4","Word Building — Affixes — Lesson 5","Word Building — Affixes — Lesson 6","Word Building — Affixes — Lesson 7","Word Building — Affixes — Lesson 8","Word Building — Affixes — Lesson 9","Word Building — Affixes — Lesson 10","Word Building — Affixes — Lesson 11","Word Building — Affixes — Lesson 12","Word Building — Affixes — Lesson 13","Word Building — Affixes — Lesson 14","Word Building — Affixes Checkpoint"]],
+      [11,"Correlatives Table",["Correlatives Table — Lesson 1","Correlatives Table — Lesson 2","Correlatives Table — Lesson 3","Correlatives Table — Lesson 4","Correlatives Table — Lesson 5","Correlatives Table — Lesson 6","Correlatives Table — Lesson 7","Correlatives Table — Lesson 8","Correlatives Table — Lesson 9","Correlatives Table — Lesson 10","Correlatives Table — Lesson 11","Correlatives Table — Lesson 12","Correlatives Table — Lesson 13","Correlatives Table — Lesson 14","Correlatives Table Checkpoint"]],
+      [12,"Accusative Case — -n",["Accusative Case — -n — Lesson 1","Accusative Case — -n — Lesson 2","Accusative Case — -n — Lesson 3","Accusative Case — -n — Lesson 4","Accusative Case — -n — Lesson 5","Accusative Case — -n — Lesson 6","Accusative Case — -n — Lesson 7","Accusative Case — -n — Lesson 8","Accusative Case — -n — Lesson 9","Accusative Case — -n — Lesson 10","Accusative Case — -n — Lesson 11","Accusative Case — -n — Lesson 12","Accusative Case — -n — Lesson 13","Accusative Case — -n — Lesson 14","Accusative Case — -n Checkpoint"]],
+      [13,"Conditional & Imperative",["Conditional & Imperative — Lesson 1","Conditional & Imperative — Lesson 2","Conditional & Imperative — Lesson 3","Conditional & Imperative — Lesson 4","Conditional & Imperative — Lesson 5","Conditional & Imperative — Lesson 6","Conditional & Imperative — Lesson 7","Conditional & Imperative — Lesson 8","Conditional & Imperative — Lesson 9","Conditional & Imperative — Lesson 10","Conditional & Imperative — Lesson 11","Conditional & Imperative — Lesson 12","Conditional & Imperative — Lesson 13","Conditional & Imperative — Lesson 14","Conditional & Imperative Checkpoint"]],
+      [14,"Reading Esperanto",["Reading Esperanto — Lesson 1","Reading Esperanto — Lesson 2","Reading Esperanto — Lesson 3","Reading Esperanto — Lesson 4","Reading Esperanto — Lesson 5","Reading Esperanto — Lesson 6","Reading Esperanto — Lesson 7","Reading Esperanto — Lesson 8","Reading Esperanto — Lesson 9","Reading Esperanto — Lesson 10","Reading Esperanto — Lesson 11","Reading Esperanto — Lesson 12","Reading Esperanto — Lesson 13","Reading Esperanto — Lesson 14","Reading Esperanto Checkpoint"]],
+      [15,"Writing Esperanto",["Writing Esperanto — Lesson 1","Writing Esperanto — Lesson 2","Writing Esperanto — Lesson 3","Writing Esperanto — Lesson 4","Writing Esperanto — Lesson 5","Writing Esperanto — Lesson 6","Writing Esperanto — Lesson 7","Writing Esperanto — Lesson 8","Writing Esperanto — Lesson 9","Writing Esperanto — Lesson 10","Writing Esperanto — Lesson 11","Writing Esperanto — Lesson 12","Writing Esperanto — Lesson 13","Writing Esperanto — Lesson 14","Writing Esperanto Checkpoint"]],
+      [16,"Esperanto Music & Literature",["Esperanto Music & Literature — Lesson 1","Esperanto Music & Literature — Lesson 2","Esperanto Music & Literature — Lesson 3","Esperanto Music & Literature — Lesson 4","Esperanto Music & Literature — Lesson 5","Esperanto Music & Literature — Lesson 6","Esperanto Music & Literature — Lesson 7","Esperanto Music & Literature — Lesson 8","Esperanto Music & Literature — Lesson 9","Esperanto Music & Literature — Lesson 10","Esperanto Music & Literature — Lesson 11","Esperanto Music & Literature — Lesson 12","Esperanto Music & Literature — Lesson 13","Esperanto Music & Literature — Lesson 14","Esperanto Music & Literature Checkpoint"]],
+      [17,"UEA & World Congresses",["UEA & World Congresses — Lesson 1","UEA & World Congresses — Lesson 2","UEA & World Congresses — Lesson 3","UEA & World Congresses — Lesson 4","UEA & World Congresses — Lesson 5","UEA & World Congresses — Lesson 6","UEA & World Congresses — Lesson 7","UEA & World Congresses — Lesson 8","UEA & World Congresses — Lesson 9","UEA & World Congresses — Lesson 10","UEA & World Congresses — Lesson 11","UEA & World Congresses — Lesson 12","UEA & World Congresses — Lesson 13","UEA & World Congresses — Lesson 14","UEA & World Congresses Checkpoint"]],
+      [18,"Esperanto Online — Lernu, Duolingo",["Esperanto Online — Lernu, Duolingo — Lesson 1","Esperanto Online — Lernu, Duolingo — Lesson 2","Esperanto Online — Lernu, Duolingo — Lesson 3","Esperanto Online — Lernu, Duolingo — Lesson 4","Esperanto Online — Lernu, Duolingo — Lesson 5","Esperanto Online — Lernu, Duolingo — Lesson 6","Esperanto Online — Lernu, Duolingo — Lesson 7","Esperanto Online — Lernu, Duolingo — Lesson 8","Esperanto Online — Lernu, Duolingo — Lesson 9","Esperanto Online — Lernu, Duolingo — Lesson 10","Esperanto Online — Lernu, Duolingo — Lesson 11","Esperanto Online — Lernu, Duolingo — Lesson 12","Esperanto Online — Lernu, Duolingo — Lesson 13","Esperanto Online — Lernu, Duolingo — Lesson 14","Esperanto Online — Lernu, Duolingo Checkpoint"]],
+      [19,"Famous Esperanto Speakers",["Famous Esperanto Speakers — Lesson 1","Famous Esperanto Speakers — Lesson 2","Famous Esperanto Speakers — Lesson 3","Famous Esperanto Speakers — Lesson 4","Famous Esperanto Speakers — Lesson 5","Famous Esperanto Speakers — Lesson 6","Famous Esperanto Speakers — Lesson 7","Famous Esperanto Speakers — Lesson 8","Famous Esperanto Speakers — Lesson 9","Famous Esperanto Speakers — Lesson 10","Famous Esperanto Speakers — Lesson 11","Famous Esperanto Speakers — Lesson 12","Famous Esperanto Speakers — Lesson 13","Famous Esperanto Speakers — Lesson 14","Famous Esperanto Speakers Checkpoint"]],
+      [20,"Esperanto Mastery",["Esperanto Mastery — Lesson 1","Esperanto Mastery — Lesson 2","Esperanto Mastery — Lesson 3","Esperanto Mastery — Lesson 4","Esperanto Mastery — Lesson 5","Esperanto Mastery — Lesson 6","Esperanto Mastery — Lesson 7","Esperanto Mastery — Lesson 8","Esperanto Mastery — Lesson 9","Esperanto Mastery — Lesson 10","Esperanto Mastery — Lesson 11","Esperanto Mastery — Lesson 12","Esperanto Mastery — Lesson 13","Esperanto Mastery — Lesson 14","Esperanto Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'esp-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('esperanto');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('esperanto');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

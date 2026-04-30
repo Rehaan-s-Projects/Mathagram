@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anatomy & Physiology — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Anatomy & Physiology</h1>
+    <p>How the human body works — every system from skeletal to nervous to endocrine. Anatomical terminology, organs, tissues, homeostasis, common diseases, and clinical applications. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Anatomical Terminology",["Anatomical Terminology — Lesson 1","Anatomical Terminology — Lesson 2","Anatomical Terminology — Lesson 3","Anatomical Terminology — Lesson 4","Anatomical Terminology — Lesson 5","Anatomical Terminology — Lesson 6","Anatomical Terminology — Lesson 7","Anatomical Terminology — Lesson 8","Anatomical Terminology — Lesson 9","Anatomical Terminology — Lesson 10","Anatomical Terminology — Lesson 11","Anatomical Terminology — Lesson 12","Anatomical Terminology — Lesson 13","Anatomical Terminology — Lesson 14","Anatomical Terminology Checkpoint"]],
+      [2,"Cells & Tissues",["Cells & Tissues — Lesson 1","Cells & Tissues — Lesson 2","Cells & Tissues — Lesson 3","Cells & Tissues — Lesson 4","Cells & Tissues — Lesson 5","Cells & Tissues — Lesson 6","Cells & Tissues — Lesson 7","Cells & Tissues — Lesson 8","Cells & Tissues — Lesson 9","Cells & Tissues — Lesson 10","Cells & Tissues — Lesson 11","Cells & Tissues — Lesson 12","Cells & Tissues — Lesson 13","Cells & Tissues — Lesson 14","Cells & Tissues Checkpoint"]],
+      [3,"Skeletal System",["Skeletal System — Lesson 1","Skeletal System — Lesson 2","Skeletal System — Lesson 3","Skeletal System — Lesson 4","Skeletal System — Lesson 5","Skeletal System — Lesson 6","Skeletal System — Lesson 7","Skeletal System — Lesson 8","Skeletal System — Lesson 9","Skeletal System — Lesson 10","Skeletal System — Lesson 11","Skeletal System — Lesson 12","Skeletal System — Lesson 13","Skeletal System — Lesson 14","Skeletal System Checkpoint"]],
+      [4,"Muscular System",["Muscular System — Lesson 1","Muscular System — Lesson 2","Muscular System — Lesson 3","Muscular System — Lesson 4","Muscular System — Lesson 5","Muscular System — Lesson 6","Muscular System — Lesson 7","Muscular System — Lesson 8","Muscular System — Lesson 9","Muscular System — Lesson 10","Muscular System — Lesson 11","Muscular System — Lesson 12","Muscular System — Lesson 13","Muscular System — Lesson 14","Muscular System Checkpoint"]],
+      [5,"Nervous System Overview",["Nervous System Overview — Lesson 1","Nervous System Overview — Lesson 2","Nervous System Overview — Lesson 3","Nervous System Overview — Lesson 4","Nervous System Overview — Lesson 5","Nervous System Overview — Lesson 6","Nervous System Overview — Lesson 7","Nervous System Overview — Lesson 8","Nervous System Overview — Lesson 9","Nervous System Overview — Lesson 10","Nervous System Overview — Lesson 11","Nervous System Overview — Lesson 12","Nervous System Overview — Lesson 13","Nervous System Overview — Lesson 14","Nervous System Overview Checkpoint"]],
+      [6,"Brain & Spinal Cord",["Brain & Spinal Cord — Lesson 1","Brain & Spinal Cord — Lesson 2","Brain & Spinal Cord — Lesson 3","Brain & Spinal Cord — Lesson 4","Brain & Spinal Cord — Lesson 5","Brain & Spinal Cord — Lesson 6","Brain & Spinal Cord — Lesson 7","Brain & Spinal Cord — Lesson 8","Brain & Spinal Cord — Lesson 9","Brain & Spinal Cord — Lesson 10","Brain & Spinal Cord — Lesson 11","Brain & Spinal Cord — Lesson 12","Brain & Spinal Cord — Lesson 13","Brain & Spinal Cord — Lesson 14","Brain & Spinal Cord Checkpoint"]],
+      [7,"Cranial Nerves",["Cranial Nerves — Lesson 1","Cranial Nerves — Lesson 2","Cranial Nerves — Lesson 3","Cranial Nerves — Lesson 4","Cranial Nerves — Lesson 5","Cranial Nerves — Lesson 6","Cranial Nerves — Lesson 7","Cranial Nerves — Lesson 8","Cranial Nerves — Lesson 9","Cranial Nerves — Lesson 10","Cranial Nerves — Lesson 11","Cranial Nerves — Lesson 12","Cranial Nerves — Lesson 13","Cranial Nerves — Lesson 14","Cranial Nerves Checkpoint"]],
+      [8,"Cardiovascular System",["Cardiovascular System — Lesson 1","Cardiovascular System — Lesson 2","Cardiovascular System — Lesson 3","Cardiovascular System — Lesson 4","Cardiovascular System — Lesson 5","Cardiovascular System — Lesson 6","Cardiovascular System — Lesson 7","Cardiovascular System — Lesson 8","Cardiovascular System — Lesson 9","Cardiovascular System — Lesson 10","Cardiovascular System — Lesson 11","Cardiovascular System — Lesson 12","Cardiovascular System — Lesson 13","Cardiovascular System — Lesson 14","Cardiovascular System Checkpoint"]],
+      [9,"Heart & Blood Vessels",["Heart & Blood Vessels — Lesson 1","Heart & Blood Vessels — Lesson 2","Heart & Blood Vessels — Lesson 3","Heart & Blood Vessels — Lesson 4","Heart & Blood Vessels — Lesson 5","Heart & Blood Vessels — Lesson 6","Heart & Blood Vessels — Lesson 7","Heart & Blood Vessels — Lesson 8","Heart & Blood Vessels — Lesson 9","Heart & Blood Vessels — Lesson 10","Heart & Blood Vessels — Lesson 11","Heart & Blood Vessels — Lesson 12","Heart & Blood Vessels — Lesson 13","Heart & Blood Vessels — Lesson 14","Heart & Blood Vessels Checkpoint"]],
+      [10,"Respiratory System",["Respiratory System — Lesson 1","Respiratory System — Lesson 2","Respiratory System — Lesson 3","Respiratory System — Lesson 4","Respiratory System — Lesson 5","Respiratory System — Lesson 6","Respiratory System — Lesson 7","Respiratory System — Lesson 8","Respiratory System — Lesson 9","Respiratory System — Lesson 10","Respiratory System — Lesson 11","Respiratory System — Lesson 12","Respiratory System — Lesson 13","Respiratory System — Lesson 14","Respiratory System Checkpoint"]],
+      [11,"Digestive System",["Digestive System — Lesson 1","Digestive System — Lesson 2","Digestive System — Lesson 3","Digestive System — Lesson 4","Digestive System — Lesson 5","Digestive System — Lesson 6","Digestive System — Lesson 7","Digestive System — Lesson 8","Digestive System — Lesson 9","Digestive System — Lesson 10","Digestive System — Lesson 11","Digestive System — Lesson 12","Digestive System — Lesson 13","Digestive System — Lesson 14","Digestive System Checkpoint"]],
+      [12,"Liver, Pancreas, Gallbladder",["Liver, Pancreas, Gallbladder — Lesson 1","Liver, Pancreas, Gallbladder — Lesson 2","Liver, Pancreas, Gallbladder — Lesson 3","Liver, Pancreas, Gallbladder — Lesson 4","Liver, Pancreas, Gallbladder — Lesson 5","Liver, Pancreas, Gallbladder — Lesson 6","Liver, Pancreas, Gallbladder — Lesson 7","Liver, Pancreas, Gallbladder — Lesson 8","Liver, Pancreas, Gallbladder — Lesson 9","Liver, Pancreas, Gallbladder — Lesson 10","Liver, Pancreas, Gallbladder — Lesson 11","Liver, Pancreas, Gallbladder — Lesson 12","Liver, Pancreas, Gallbladder — Lesson 13","Liver, Pancreas, Gallbladder — Lesson 14","Liver, Pancreas, Gallbladder Checkpoint"]],
+      [13,"Urinary System",["Urinary System — Lesson 1","Urinary System — Lesson 2","Urinary System — Lesson 3","Urinary System — Lesson 4","Urinary System — Lesson 5","Urinary System — Lesson 6","Urinary System — Lesson 7","Urinary System — Lesson 8","Urinary System — Lesson 9","Urinary System — Lesson 10","Urinary System — Lesson 11","Urinary System — Lesson 12","Urinary System — Lesson 13","Urinary System — Lesson 14","Urinary System Checkpoint"]],
+      [14,"Endocrine System",["Endocrine System — Lesson 1","Endocrine System — Lesson 2","Endocrine System — Lesson 3","Endocrine System — Lesson 4","Endocrine System — Lesson 5","Endocrine System — Lesson 6","Endocrine System — Lesson 7","Endocrine System — Lesson 8","Endocrine System — Lesson 9","Endocrine System — Lesson 10","Endocrine System — Lesson 11","Endocrine System — Lesson 12","Endocrine System — Lesson 13","Endocrine System — Lesson 14","Endocrine System Checkpoint"]],
+      [15,"Reproductive System",["Reproductive System — Lesson 1","Reproductive System — Lesson 2","Reproductive System — Lesson 3","Reproductive System — Lesson 4","Reproductive System — Lesson 5","Reproductive System — Lesson 6","Reproductive System — Lesson 7","Reproductive System — Lesson 8","Reproductive System — Lesson 9","Reproductive System — Lesson 10","Reproductive System — Lesson 11","Reproductive System — Lesson 12","Reproductive System — Lesson 13","Reproductive System — Lesson 14","Reproductive System Checkpoint"]],
+      [16,"Lymphatic & Immune",["Lymphatic & Immune — Lesson 1","Lymphatic & Immune — Lesson 2","Lymphatic & Immune — Lesson 3","Lymphatic & Immune — Lesson 4","Lymphatic & Immune — Lesson 5","Lymphatic & Immune — Lesson 6","Lymphatic & Immune — Lesson 7","Lymphatic & Immune — Lesson 8","Lymphatic & Immune — Lesson 9","Lymphatic & Immune — Lesson 10","Lymphatic & Immune — Lesson 11","Lymphatic & Immune — Lesson 12","Lymphatic & Immune — Lesson 13","Lymphatic & Immune — Lesson 14","Lymphatic & Immune Checkpoint"]],
+      [17,"Sensory Organs",["Sensory Organs — Lesson 1","Sensory Organs — Lesson 2","Sensory Organs — Lesson 3","Sensory Organs — Lesson 4","Sensory Organs — Lesson 5","Sensory Organs — Lesson 6","Sensory Organs — Lesson 7","Sensory Organs — Lesson 8","Sensory Organs — Lesson 9","Sensory Organs — Lesson 10","Sensory Organs — Lesson 11","Sensory Organs — Lesson 12","Sensory Organs — Lesson 13","Sensory Organs — Lesson 14","Sensory Organs Checkpoint"]],
+      [18,"Skin & Integumentary",["Skin & Integumentary — Lesson 1","Skin & Integumentary — Lesson 2","Skin & Integumentary — Lesson 3","Skin & Integumentary — Lesson 4","Skin & Integumentary — Lesson 5","Skin & Integumentary — Lesson 6","Skin & Integumentary — Lesson 7","Skin & Integumentary — Lesson 8","Skin & Integumentary — Lesson 9","Skin & Integumentary — Lesson 10","Skin & Integumentary — Lesson 11","Skin & Integumentary — Lesson 12","Skin & Integumentary — Lesson 13","Skin & Integumentary — Lesson 14","Skin & Integumentary Checkpoint"]],
+      [19,"Homeostasis & Disease",["Homeostasis & Disease — Lesson 1","Homeostasis & Disease — Lesson 2","Homeostasis & Disease — Lesson 3","Homeostasis & Disease — Lesson 4","Homeostasis & Disease — Lesson 5","Homeostasis & Disease — Lesson 6","Homeostasis & Disease — Lesson 7","Homeostasis & Disease — Lesson 8","Homeostasis & Disease — Lesson 9","Homeostasis & Disease — Lesson 10","Homeostasis & Disease — Lesson 11","Homeostasis & Disease — Lesson 12","Homeostasis & Disease — Lesson 13","Homeostasis & Disease — Lesson 14","Homeostasis & Disease Checkpoint"]],
+      [20,"Anatomy & Physiology Mastery",["Anatomy & Physiology Mastery — Lesson 1","Anatomy & Physiology Mastery — Lesson 2","Anatomy & Physiology Mastery — Lesson 3","Anatomy & Physiology Mastery — Lesson 4","Anatomy & Physiology Mastery — Lesson 5","Anatomy & Physiology Mastery — Lesson 6","Anatomy & Physiology Mastery — Lesson 7","Anatomy & Physiology Mastery — Lesson 8","Anatomy & Physiology Mastery — Lesson 9","Anatomy & Physiology Mastery — Lesson 10","Anatomy & Physiology Mastery — Lesson 11","Anatomy & Physiology Mastery — Lesson 12","Anatomy & Physiology Mastery — Lesson 13","Anatomy & Physiology Mastery — Lesson 14","Anatomy & Physiology Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ap-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('anatomy-physiology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('anatomy-physiology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

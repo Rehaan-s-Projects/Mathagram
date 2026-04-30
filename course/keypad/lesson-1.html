@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>10-Key Drill — Keypad Practice</title>
+<title>1 and 0 — Keypad Lesson 1</title>
 <link rel="icon" href="../../assets/lighthouse/logo.svg">
 <link rel="stylesheet" href="../../css/global.css">
 <style>
@@ -75,8 +75,8 @@ header p { color: #94a3b8; max-width: 520px; margin: 0 auto; line-height: 1.55; 
 <main class="wrap">
   <header>
     <span class="badge">Keypad Practice · Lesson 1</span>
-    <h1>10-Key Drill — Speed & Accuracy</h1>
-    <p>Type the digits below using your numeric keypad (or the on-screen keys). Speed is measured in <strong>KPH</strong> (keystrokes per hour) and accuracy as a percentage. Aim for <strong>8,000+ KPH</strong> at <strong>97%+ accuracy</strong>.</p>
+    <h1>1 and 0 — The First Two Keys</h1>
+    <p>Your first lesson covers just <strong>1</strong> and <strong>0</strong>. Press the <strong>1</strong> key with your top-row pinky and the <strong>0</strong> key with your thumb (numpad) or top-row pinky. Build muscle memory before adding more digits. Aim for <strong>97%+ accuracy</strong>.</p>
   </header>
 
   <div class="hud">
@@ -148,10 +148,12 @@ header p { color: #94a3b8; max-width: 520px; margin: 0 auto; line-height: 1.55; 
   let finished = false;
   let timerHandle = null;
 
+  // Lesson 1 — only 1 and 0 keys
+  const ALLOWED = ['1', '0'];
   function generateTarget(n) {
     let s = '';
     for (let i = 0; i < n; i++) {
-      s += String(Math.floor(Math.random() * 10));
+      s += ALLOWED[Math.floor(Math.random() * ALLOWED.length)];
     }
     return s;
   }

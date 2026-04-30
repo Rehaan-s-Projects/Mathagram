@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Biology — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Marine Biology</h1>
+    <p>Life in the oceans — coral reefs, deep-sea creatures, marine mammals, sharks, plankton, ocean ecosystems, marine conservation, climate change impact, scuba research, and the abyssal zone. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Marine Biology?",["What Is Marine Biology? — Lesson 1","What Is Marine Biology? — Lesson 2","What Is Marine Biology? — Lesson 3","What Is Marine Biology? — Lesson 4","What Is Marine Biology? — Lesson 5","What Is Marine Biology? — Lesson 6","What Is Marine Biology? — Lesson 7","What Is Marine Biology? — Lesson 8","What Is Marine Biology? — Lesson 9","What Is Marine Biology? — Lesson 10","What Is Marine Biology? — Lesson 11","What Is Marine Biology? — Lesson 12","What Is Marine Biology? — Lesson 13","What Is Marine Biology? — Lesson 14","What Is Marine Biology? Checkpoint"]],
+      [2,"Ocean Zones — Sunlight to Abyssal",["Ocean Zones — Sunlight to Abyssal — Lesson 1","Ocean Zones — Sunlight to Abyssal — Lesson 2","Ocean Zones — Sunlight to Abyssal — Lesson 3","Ocean Zones — Sunlight to Abyssal — Lesson 4","Ocean Zones — Sunlight to Abyssal — Lesson 5","Ocean Zones — Sunlight to Abyssal — Lesson 6","Ocean Zones — Sunlight to Abyssal — Lesson 7","Ocean Zones — Sunlight to Abyssal — Lesson 8","Ocean Zones — Sunlight to Abyssal — Lesson 9","Ocean Zones — Sunlight to Abyssal — Lesson 10","Ocean Zones — Sunlight to Abyssal — Lesson 11","Ocean Zones — Sunlight to Abyssal — Lesson 12","Ocean Zones — Sunlight to Abyssal — Lesson 13","Ocean Zones — Sunlight to Abyssal — Lesson 14","Ocean Zones — Sunlight to Abyssal Checkpoint"]],
+      [3,"Plankton — Phyto & Zoo",["Plankton — Phyto & Zoo — Lesson 1","Plankton — Phyto & Zoo — Lesson 2","Plankton — Phyto & Zoo — Lesson 3","Plankton — Phyto & Zoo — Lesson 4","Plankton — Phyto & Zoo — Lesson 5","Plankton — Phyto & Zoo — Lesson 6","Plankton — Phyto & Zoo — Lesson 7","Plankton — Phyto & Zoo — Lesson 8","Plankton — Phyto & Zoo — Lesson 9","Plankton — Phyto & Zoo — Lesson 10","Plankton — Phyto & Zoo — Lesson 11","Plankton — Phyto & Zoo — Lesson 12","Plankton — Phyto & Zoo — Lesson 13","Plankton — Phyto & Zoo — Lesson 14","Plankton — Phyto & Zoo Checkpoint"]],
+      [4,"Coral Reefs",["Coral Reefs — Lesson 1","Coral Reefs — Lesson 2","Coral Reefs — Lesson 3","Coral Reefs — Lesson 4","Coral Reefs — Lesson 5","Coral Reefs — Lesson 6","Coral Reefs — Lesson 7","Coral Reefs — Lesson 8","Coral Reefs — Lesson 9","Coral Reefs — Lesson 10","Coral Reefs — Lesson 11","Coral Reefs — Lesson 12","Coral Reefs — Lesson 13","Coral Reefs — Lesson 14","Coral Reefs Checkpoint"]],
+      [5,"Mangroves & Seagrass",["Mangroves & Seagrass — Lesson 1","Mangroves & Seagrass — Lesson 2","Mangroves & Seagrass — Lesson 3","Mangroves & Seagrass — Lesson 4","Mangroves & Seagrass — Lesson 5","Mangroves & Seagrass — Lesson 6","Mangroves & Seagrass — Lesson 7","Mangroves & Seagrass — Lesson 8","Mangroves & Seagrass — Lesson 9","Mangroves & Seagrass — Lesson 10","Mangroves & Seagrass — Lesson 11","Mangroves & Seagrass — Lesson 12","Mangroves & Seagrass — Lesson 13","Mangroves & Seagrass — Lesson 14","Mangroves & Seagrass Checkpoint"]],
+      [6,"Marine Invertebrates",["Marine Invertebrates — Lesson 1","Marine Invertebrates — Lesson 2","Marine Invertebrates — Lesson 3","Marine Invertebrates — Lesson 4","Marine Invertebrates — Lesson 5","Marine Invertebrates — Lesson 6","Marine Invertebrates — Lesson 7","Marine Invertebrates — Lesson 8","Marine Invertebrates — Lesson 9","Marine Invertebrates — Lesson 10","Marine Invertebrates — Lesson 11","Marine Invertebrates — Lesson 12","Marine Invertebrates — Lesson 13","Marine Invertebrates — Lesson 14","Marine Invertebrates Checkpoint"]],
+      [7,"Fish — Diversity & Anatomy",["Fish — Diversity & Anatomy — Lesson 1","Fish — Diversity & Anatomy — Lesson 2","Fish — Diversity & Anatomy — Lesson 3","Fish — Diversity & Anatomy — Lesson 4","Fish — Diversity & Anatomy — Lesson 5","Fish — Diversity & Anatomy — Lesson 6","Fish — Diversity & Anatomy — Lesson 7","Fish — Diversity & Anatomy — Lesson 8","Fish — Diversity & Anatomy — Lesson 9","Fish — Diversity & Anatomy — Lesson 10","Fish — Diversity & Anatomy — Lesson 11","Fish — Diversity & Anatomy — Lesson 12","Fish — Diversity & Anatomy — Lesson 13","Fish — Diversity & Anatomy — Lesson 14","Fish — Diversity & Anatomy Checkpoint"]],
+      [8,"Sharks & Rays",["Sharks & Rays — Lesson 1","Sharks & Rays — Lesson 2","Sharks & Rays — Lesson 3","Sharks & Rays — Lesson 4","Sharks & Rays — Lesson 5","Sharks & Rays — Lesson 6","Sharks & Rays — Lesson 7","Sharks & Rays — Lesson 8","Sharks & Rays — Lesson 9","Sharks & Rays — Lesson 10","Sharks & Rays — Lesson 11","Sharks & Rays — Lesson 12","Sharks & Rays — Lesson 13","Sharks & Rays — Lesson 14","Sharks & Rays Checkpoint"]],
+      [9,"Marine Mammals — Whales, Dolphins",["Marine Mammals — Whales, Dolphins — Lesson 1","Marine Mammals — Whales, Dolphins — Lesson 2","Marine Mammals — Whales, Dolphins — Lesson 3","Marine Mammals — Whales, Dolphins — Lesson 4","Marine Mammals — Whales, Dolphins — Lesson 5","Marine Mammals — Whales, Dolphins — Lesson 6","Marine Mammals — Whales, Dolphins — Lesson 7","Marine Mammals — Whales, Dolphins — Lesson 8","Marine Mammals — Whales, Dolphins — Lesson 9","Marine Mammals — Whales, Dolphins — Lesson 10","Marine Mammals — Whales, Dolphins — Lesson 11","Marine Mammals — Whales, Dolphins — Lesson 12","Marine Mammals — Whales, Dolphins — Lesson 13","Marine Mammals — Whales, Dolphins — Lesson 14","Marine Mammals — Whales, Dolphins Checkpoint"]],
+      [10,"Pinnipeds — Seals, Sea Lions",["Pinnipeds — Seals, Sea Lions — Lesson 1","Pinnipeds — Seals, Sea Lions — Lesson 2","Pinnipeds — Seals, Sea Lions — Lesson 3","Pinnipeds — Seals, Sea Lions — Lesson 4","Pinnipeds — Seals, Sea Lions — Lesson 5","Pinnipeds — Seals, Sea Lions — Lesson 6","Pinnipeds — Seals, Sea Lions — Lesson 7","Pinnipeds — Seals, Sea Lions — Lesson 8","Pinnipeds — Seals, Sea Lions — Lesson 9","Pinnipeds — Seals, Sea Lions — Lesson 10","Pinnipeds — Seals, Sea Lions — Lesson 11","Pinnipeds — Seals, Sea Lions — Lesson 12","Pinnipeds — Seals, Sea Lions — Lesson 13","Pinnipeds — Seals, Sea Lions — Lesson 14","Pinnipeds — Seals, Sea Lions Checkpoint"]],
+      [11,"Sea Turtles",["Sea Turtles — Lesson 1","Sea Turtles — Lesson 2","Sea Turtles — Lesson 3","Sea Turtles — Lesson 4","Sea Turtles — Lesson 5","Sea Turtles — Lesson 6","Sea Turtles — Lesson 7","Sea Turtles — Lesson 8","Sea Turtles — Lesson 9","Sea Turtles — Lesson 10","Sea Turtles — Lesson 11","Sea Turtles — Lesson 12","Sea Turtles — Lesson 13","Sea Turtles — Lesson 14","Sea Turtles Checkpoint"]],
+      [12,"Cephalopods — Octopus, Squid",["Cephalopods — Octopus, Squid — Lesson 1","Cephalopods — Octopus, Squid — Lesson 2","Cephalopods — Octopus, Squid — Lesson 3","Cephalopods — Octopus, Squid — Lesson 4","Cephalopods — Octopus, Squid — Lesson 5","Cephalopods — Octopus, Squid — Lesson 6","Cephalopods — Octopus, Squid — Lesson 7","Cephalopods — Octopus, Squid — Lesson 8","Cephalopods — Octopus, Squid — Lesson 9","Cephalopods — Octopus, Squid — Lesson 10","Cephalopods — Octopus, Squid — Lesson 11","Cephalopods — Octopus, Squid — Lesson 12","Cephalopods — Octopus, Squid — Lesson 13","Cephalopods — Octopus, Squid — Lesson 14","Cephalopods — Octopus, Squid Checkpoint"]],
+      [13,"Deep-Sea Life",["Deep-Sea Life — Lesson 1","Deep-Sea Life — Lesson 2","Deep-Sea Life — Lesson 3","Deep-Sea Life — Lesson 4","Deep-Sea Life — Lesson 5","Deep-Sea Life — Lesson 6","Deep-Sea Life — Lesson 7","Deep-Sea Life — Lesson 8","Deep-Sea Life — Lesson 9","Deep-Sea Life — Lesson 10","Deep-Sea Life — Lesson 11","Deep-Sea Life — Lesson 12","Deep-Sea Life — Lesson 13","Deep-Sea Life — Lesson 14","Deep-Sea Life Checkpoint"]],
+      [14,"Hydrothermal Vents",["Hydrothermal Vents — Lesson 1","Hydrothermal Vents — Lesson 2","Hydrothermal Vents — Lesson 3","Hydrothermal Vents — Lesson 4","Hydrothermal Vents — Lesson 5","Hydrothermal Vents — Lesson 6","Hydrothermal Vents — Lesson 7","Hydrothermal Vents — Lesson 8","Hydrothermal Vents — Lesson 9","Hydrothermal Vents — Lesson 10","Hydrothermal Vents — Lesson 11","Hydrothermal Vents — Lesson 12","Hydrothermal Vents — Lesson 13","Hydrothermal Vents — Lesson 14","Hydrothermal Vents Checkpoint"]],
+      [15,"Marine Microbiology",["Marine Microbiology — Lesson 1","Marine Microbiology — Lesson 2","Marine Microbiology — Lesson 3","Marine Microbiology — Lesson 4","Marine Microbiology — Lesson 5","Marine Microbiology — Lesson 6","Marine Microbiology — Lesson 7","Marine Microbiology — Lesson 8","Marine Microbiology — Lesson 9","Marine Microbiology — Lesson 10","Marine Microbiology — Lesson 11","Marine Microbiology — Lesson 12","Marine Microbiology — Lesson 13","Marine Microbiology — Lesson 14","Marine Microbiology Checkpoint"]],
+      [16,"Tides & Currents",["Tides & Currents — Lesson 1","Tides & Currents — Lesson 2","Tides & Currents — Lesson 3","Tides & Currents — Lesson 4","Tides & Currents — Lesson 5","Tides & Currents — Lesson 6","Tides & Currents — Lesson 7","Tides & Currents — Lesson 8","Tides & Currents — Lesson 9","Tides & Currents — Lesson 10","Tides & Currents — Lesson 11","Tides & Currents — Lesson 12","Tides & Currents — Lesson 13","Tides & Currents — Lesson 14","Tides & Currents Checkpoint"]],
+      [17,"Climate Change & Oceans",["Climate Change & Oceans — Lesson 1","Climate Change & Oceans — Lesson 2","Climate Change & Oceans — Lesson 3","Climate Change & Oceans — Lesson 4","Climate Change & Oceans — Lesson 5","Climate Change & Oceans — Lesson 6","Climate Change & Oceans — Lesson 7","Climate Change & Oceans — Lesson 8","Climate Change & Oceans — Lesson 9","Climate Change & Oceans — Lesson 10","Climate Change & Oceans — Lesson 11","Climate Change & Oceans — Lesson 12","Climate Change & Oceans — Lesson 13","Climate Change & Oceans — Lesson 14","Climate Change & Oceans Checkpoint"]],
+      [18,"Marine Conservation",["Marine Conservation — Lesson 1","Marine Conservation — Lesson 2","Marine Conservation — Lesson 3","Marine Conservation — Lesson 4","Marine Conservation — Lesson 5","Marine Conservation — Lesson 6","Marine Conservation — Lesson 7","Marine Conservation — Lesson 8","Marine Conservation — Lesson 9","Marine Conservation — Lesson 10","Marine Conservation — Lesson 11","Marine Conservation — Lesson 12","Marine Conservation — Lesson 13","Marine Conservation — Lesson 14","Marine Conservation Checkpoint"]],
+      [19,"Scuba & Research Methods",["Scuba & Research Methods — Lesson 1","Scuba & Research Methods — Lesson 2","Scuba & Research Methods — Lesson 3","Scuba & Research Methods — Lesson 4","Scuba & Research Methods — Lesson 5","Scuba & Research Methods — Lesson 6","Scuba & Research Methods — Lesson 7","Scuba & Research Methods — Lesson 8","Scuba & Research Methods — Lesson 9","Scuba & Research Methods — Lesson 10","Scuba & Research Methods — Lesson 11","Scuba & Research Methods — Lesson 12","Scuba & Research Methods — Lesson 13","Scuba & Research Methods — Lesson 14","Scuba & Research Methods Checkpoint"]],
+      [20,"Marine Biology Mastery",["Marine Biology Mastery — Lesson 1","Marine Biology Mastery — Lesson 2","Marine Biology Mastery — Lesson 3","Marine Biology Mastery — Lesson 4","Marine Biology Mastery — Lesson 5","Marine Biology Mastery — Lesson 6","Marine Biology Mastery — Lesson 7","Marine Biology Mastery — Lesson 8","Marine Biology Mastery — Lesson 9","Marine Biology Mastery — Lesson 10","Marine Biology Mastery — Lesson 11","Marine Biology Mastery — Lesson 12","Marine Biology Mastery — Lesson 13","Marine Biology Mastery — Lesson 14","Marine Biology Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'mar-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('marine-biology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('marine-biology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

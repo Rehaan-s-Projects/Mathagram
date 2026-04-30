@@ -12,6 +12,7 @@ import {
   signOut,
   onAuthStateChanged,
   sendEmailVerification,
+  sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -110,6 +111,17 @@ export async function signInWithGoogle() {
  */
 export async function logOut() {
   await signOut(auth);
+}
+
+/**
+ * Send a password-reset email to the given address.
+ * Throws if the email is malformed or Firebase rejects the request.
+ *
+ * @param {string} email
+ * @returns {Promise<void>}
+ */
+export async function resetPassword(email) {
+  await sendPasswordResetEmail(auth, email);
 }
 
 /**

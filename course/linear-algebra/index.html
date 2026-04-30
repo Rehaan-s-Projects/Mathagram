@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Algebra — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>Linear Algebra</h1>
+    <p>Vectors, matrices, and the geometry of equations — vector spaces, linear transformations, eigenvalues & eigenvectors, determinants, orthogonality, SVD, PCA, applications in graphics, ML, quantum mechanics, and economics. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Vectors & Vector Operations",["Vectors & Vector Operations — Lesson 1","Vectors & Vector Operations — Lesson 2","Vectors & Vector Operations — Lesson 3","Vectors & Vector Operations — Lesson 4","Vectors & Vector Operations — Lesson 5","Vectors & Vector Operations — Lesson 6","Vectors & Vector Operations — Lesson 7","Vectors & Vector Operations — Lesson 8","Vectors & Vector Operations — Lesson 9","Vectors & Vector Operations — Lesson 10","Vectors & Vector Operations — Lesson 11","Vectors & Vector Operations — Lesson 12","Vectors & Vector Operations — Lesson 13","Vectors & Vector Operations — Lesson 14","Vectors & Vector Operations Checkpoint"]],
+      [2,"Matrix Basics",["Matrix Basics — Lesson 1","Matrix Basics — Lesson 2","Matrix Basics — Lesson 3","Matrix Basics — Lesson 4","Matrix Basics — Lesson 5","Matrix Basics — Lesson 6","Matrix Basics — Lesson 7","Matrix Basics — Lesson 8","Matrix Basics — Lesson 9","Matrix Basics — Lesson 10","Matrix Basics — Lesson 11","Matrix Basics — Lesson 12","Matrix Basics — Lesson 13","Matrix Basics — Lesson 14","Matrix Basics Checkpoint"]],
+      [3,"Matrix Multiplication",["Matrix Multiplication — Lesson 1","Matrix Multiplication — Lesson 2","Matrix Multiplication — Lesson 3","Matrix Multiplication — Lesson 4","Matrix Multiplication — Lesson 5","Matrix Multiplication — Lesson 6","Matrix Multiplication — Lesson 7","Matrix Multiplication — Lesson 8","Matrix Multiplication — Lesson 9","Matrix Multiplication — Lesson 10","Matrix Multiplication — Lesson 11","Matrix Multiplication — Lesson 12","Matrix Multiplication — Lesson 13","Matrix Multiplication — Lesson 14","Matrix Multiplication Checkpoint"]],
+      [4,"Systems of Linear Equations",["Systems of Linear Equations — Lesson 1","Systems of Linear Equations — Lesson 2","Systems of Linear Equations — Lesson 3","Systems of Linear Equations — Lesson 4","Systems of Linear Equations — Lesson 5","Systems of Linear Equations — Lesson 6","Systems of Linear Equations — Lesson 7","Systems of Linear Equations — Lesson 8","Systems of Linear Equations — Lesson 9","Systems of Linear Equations — Lesson 10","Systems of Linear Equations — Lesson 11","Systems of Linear Equations — Lesson 12","Systems of Linear Equations — Lesson 13","Systems of Linear Equations — Lesson 14","Systems of Linear Equations Checkpoint"]],
+      [5,"Gaussian Elimination",["Gaussian Elimination — Lesson 1","Gaussian Elimination — Lesson 2","Gaussian Elimination — Lesson 3","Gaussian Elimination — Lesson 4","Gaussian Elimination — Lesson 5","Gaussian Elimination — Lesson 6","Gaussian Elimination — Lesson 7","Gaussian Elimination — Lesson 8","Gaussian Elimination — Lesson 9","Gaussian Elimination — Lesson 10","Gaussian Elimination — Lesson 11","Gaussian Elimination — Lesson 12","Gaussian Elimination — Lesson 13","Gaussian Elimination — Lesson 14","Gaussian Elimination Checkpoint"]],
+      [6,"Vector Spaces",["Vector Spaces — Lesson 1","Vector Spaces — Lesson 2","Vector Spaces — Lesson 3","Vector Spaces — Lesson 4","Vector Spaces — Lesson 5","Vector Spaces — Lesson 6","Vector Spaces — Lesson 7","Vector Spaces — Lesson 8","Vector Spaces — Lesson 9","Vector Spaces — Lesson 10","Vector Spaces — Lesson 11","Vector Spaces — Lesson 12","Vector Spaces — Lesson 13","Vector Spaces — Lesson 14","Vector Spaces Checkpoint"]],
+      [7,"Subspaces",["Subspaces — Lesson 1","Subspaces — Lesson 2","Subspaces — Lesson 3","Subspaces — Lesson 4","Subspaces — Lesson 5","Subspaces — Lesson 6","Subspaces — Lesson 7","Subspaces — Lesson 8","Subspaces — Lesson 9","Subspaces — Lesson 10","Subspaces — Lesson 11","Subspaces — Lesson 12","Subspaces — Lesson 13","Subspaces — Lesson 14","Subspaces Checkpoint"]],
+      [8,"Basis & Dimension",["Basis & Dimension — Lesson 1","Basis & Dimension — Lesson 2","Basis & Dimension — Lesson 3","Basis & Dimension — Lesson 4","Basis & Dimension — Lesson 5","Basis & Dimension — Lesson 6","Basis & Dimension — Lesson 7","Basis & Dimension — Lesson 8","Basis & Dimension — Lesson 9","Basis & Dimension — Lesson 10","Basis & Dimension — Lesson 11","Basis & Dimension — Lesson 12","Basis & Dimension — Lesson 13","Basis & Dimension — Lesson 14","Basis & Dimension Checkpoint"]],
+      [9,"Linear Independence",["Linear Independence — Lesson 1","Linear Independence — Lesson 2","Linear Independence — Lesson 3","Linear Independence — Lesson 4","Linear Independence — Lesson 5","Linear Independence — Lesson 6","Linear Independence — Lesson 7","Linear Independence — Lesson 8","Linear Independence — Lesson 9","Linear Independence — Lesson 10","Linear Independence — Lesson 11","Linear Independence — Lesson 12","Linear Independence — Lesson 13","Linear Independence — Lesson 14","Linear Independence Checkpoint"]],
+      [10,"Linear Transformations",["Linear Transformations — Lesson 1","Linear Transformations — Lesson 2","Linear Transformations — Lesson 3","Linear Transformations — Lesson 4","Linear Transformations — Lesson 5","Linear Transformations — Lesson 6","Linear Transformations — Lesson 7","Linear Transformations — Lesson 8","Linear Transformations — Lesson 9","Linear Transformations — Lesson 10","Linear Transformations — Lesson 11","Linear Transformations — Lesson 12","Linear Transformations — Lesson 13","Linear Transformations — Lesson 14","Linear Transformations Checkpoint"]],
+      [11,"Determinants",["Determinants — Lesson 1","Determinants — Lesson 2","Determinants — Lesson 3","Determinants — Lesson 4","Determinants — Lesson 5","Determinants — Lesson 6","Determinants — Lesson 7","Determinants — Lesson 8","Determinants — Lesson 9","Determinants — Lesson 10","Determinants — Lesson 11","Determinants — Lesson 12","Determinants — Lesson 13","Determinants — Lesson 14","Determinants Checkpoint"]],
+      [12,"Inverse Matrices",["Inverse Matrices — Lesson 1","Inverse Matrices — Lesson 2","Inverse Matrices — Lesson 3","Inverse Matrices — Lesson 4","Inverse Matrices — Lesson 5","Inverse Matrices — Lesson 6","Inverse Matrices — Lesson 7","Inverse Matrices — Lesson 8","Inverse Matrices — Lesson 9","Inverse Matrices — Lesson 10","Inverse Matrices — Lesson 11","Inverse Matrices — Lesson 12","Inverse Matrices — Lesson 13","Inverse Matrices — Lesson 14","Inverse Matrices Checkpoint"]],
+      [13,"Eigenvalues & Eigenvectors",["Eigenvalues & Eigenvectors — Lesson 1","Eigenvalues & Eigenvectors — Lesson 2","Eigenvalues & Eigenvectors — Lesson 3","Eigenvalues & Eigenvectors — Lesson 4","Eigenvalues & Eigenvectors — Lesson 5","Eigenvalues & Eigenvectors — Lesson 6","Eigenvalues & Eigenvectors — Lesson 7","Eigenvalues & Eigenvectors — Lesson 8","Eigenvalues & Eigenvectors — Lesson 9","Eigenvalues & Eigenvectors — Lesson 10","Eigenvalues & Eigenvectors — Lesson 11","Eigenvalues & Eigenvectors — Lesson 12","Eigenvalues & Eigenvectors — Lesson 13","Eigenvalues & Eigenvectors — Lesson 14","Eigenvalues & Eigenvectors Checkpoint"]],
+      [14,"Diagonalization",["Diagonalization — Lesson 1","Diagonalization — Lesson 2","Diagonalization — Lesson 3","Diagonalization — Lesson 4","Diagonalization — Lesson 5","Diagonalization — Lesson 6","Diagonalization — Lesson 7","Diagonalization — Lesson 8","Diagonalization — Lesson 9","Diagonalization — Lesson 10","Diagonalization — Lesson 11","Diagonalization — Lesson 12","Diagonalization — Lesson 13","Diagonalization — Lesson 14","Diagonalization Checkpoint"]],
+      [15,"Orthogonality & Projections",["Orthogonality & Projections — Lesson 1","Orthogonality & Projections — Lesson 2","Orthogonality & Projections — Lesson 3","Orthogonality & Projections — Lesson 4","Orthogonality & Projections — Lesson 5","Orthogonality & Projections — Lesson 6","Orthogonality & Projections — Lesson 7","Orthogonality & Projections — Lesson 8","Orthogonality & Projections — Lesson 9","Orthogonality & Projections — Lesson 10","Orthogonality & Projections — Lesson 11","Orthogonality & Projections — Lesson 12","Orthogonality & Projections — Lesson 13","Orthogonality & Projections — Lesson 14","Orthogonality & Projections Checkpoint"]],
+      [16,"Gram-Schmidt",["Gram-Schmidt — Lesson 1","Gram-Schmidt — Lesson 2","Gram-Schmidt — Lesson 3","Gram-Schmidt — Lesson 4","Gram-Schmidt — Lesson 5","Gram-Schmidt — Lesson 6","Gram-Schmidt — Lesson 7","Gram-Schmidt — Lesson 8","Gram-Schmidt — Lesson 9","Gram-Schmidt — Lesson 10","Gram-Schmidt — Lesson 11","Gram-Schmidt — Lesson 12","Gram-Schmidt — Lesson 13","Gram-Schmidt — Lesson 14","Gram-Schmidt Checkpoint"]],
+      [17,"Singular Value Decomposition",["Singular Value Decomposition — Lesson 1","Singular Value Decomposition — Lesson 2","Singular Value Decomposition — Lesson 3","Singular Value Decomposition — Lesson 4","Singular Value Decomposition — Lesson 5","Singular Value Decomposition — Lesson 6","Singular Value Decomposition — Lesson 7","Singular Value Decomposition — Lesson 8","Singular Value Decomposition — Lesson 9","Singular Value Decomposition — Lesson 10","Singular Value Decomposition — Lesson 11","Singular Value Decomposition — Lesson 12","Singular Value Decomposition — Lesson 13","Singular Value Decomposition — Lesson 14","Singular Value Decomposition Checkpoint"]],
+      [18,"PCA — Principal Component Analysis",["PCA — Principal Component Analysis — Lesson 1","PCA — Principal Component Analysis — Lesson 2","PCA — Principal Component Analysis — Lesson 3","PCA — Principal Component Analysis — Lesson 4","PCA — Principal Component Analysis — Lesson 5","PCA — Principal Component Analysis — Lesson 6","PCA — Principal Component Analysis — Lesson 7","PCA — Principal Component Analysis — Lesson 8","PCA — Principal Component Analysis — Lesson 9","PCA — Principal Component Analysis — Lesson 10","PCA — Principal Component Analysis — Lesson 11","PCA — Principal Component Analysis — Lesson 12","PCA — Principal Component Analysis — Lesson 13","PCA — Principal Component Analysis — Lesson 14","PCA — Principal Component Analysis Checkpoint"]],
+      [19,"Applications — Graphics, ML, Quantum",["Applications — Graphics, ML, Quantum — Lesson 1","Applications — Graphics, ML, Quantum — Lesson 2","Applications — Graphics, ML, Quantum — Lesson 3","Applications — Graphics, ML, Quantum — Lesson 4","Applications — Graphics, ML, Quantum — Lesson 5","Applications — Graphics, ML, Quantum — Lesson 6","Applications — Graphics, ML, Quantum — Lesson 7","Applications — Graphics, ML, Quantum — Lesson 8","Applications — Graphics, ML, Quantum — Lesson 9","Applications — Graphics, ML, Quantum — Lesson 10","Applications — Graphics, ML, Quantum — Lesson 11","Applications — Graphics, ML, Quantum — Lesson 12","Applications — Graphics, ML, Quantum — Lesson 13","Applications — Graphics, ML, Quantum — Lesson 14","Applications — Graphics, ML, Quantum Checkpoint"]],
+      [20,"Linear Algebra Mastery",["Linear Algebra Mastery — Lesson 1","Linear Algebra Mastery — Lesson 2","Linear Algebra Mastery — Lesson 3","Linear Algebra Mastery — Lesson 4","Linear Algebra Mastery — Lesson 5","Linear Algebra Mastery — Lesson 6","Linear Algebra Mastery — Lesson 7","Linear Algebra Mastery — Lesson 8","Linear Algebra Mastery — Lesson 9","Linear Algebra Mastery — Lesson 10","Linear Algebra Mastery — Lesson 11","Linear Algebra Mastery — Lesson 12","Linear Algebra Mastery — Lesson 13","Linear Algebra Mastery — Lesson 14","Linear Algebra Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'la-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('linear-algebra');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('linear-algebra');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

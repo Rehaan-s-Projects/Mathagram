@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Development — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Mobile Development</h1>
+    <p>Build iOS & Android apps — Swift, SwiftUI, Kotlin, Jetpack Compose, React Native, Flutter, mobile UX, navigation, state management, networking, persistence, push notifications, App Store / Play Store deployment. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"iOS vs Android Overview",["iOS vs Android Overview — Lesson 1","iOS vs Android Overview — Lesson 2","iOS vs Android Overview — Lesson 3","iOS vs Android Overview — Lesson 4","iOS vs Android Overview — Lesson 5","iOS vs Android Overview — Lesson 6","iOS vs Android Overview — Lesson 7","iOS vs Android Overview — Lesson 8","iOS vs Android Overview — Lesson 9","iOS vs Android Overview — Lesson 10","iOS vs Android Overview — Lesson 11","iOS vs Android Overview — Lesson 12","iOS vs Android Overview — Lesson 13","iOS vs Android Overview — Lesson 14","iOS vs Android Overview Checkpoint"]],
+      [2,"Swift Fundamentals",["Swift Fundamentals — Lesson 1","Swift Fundamentals — Lesson 2","Swift Fundamentals — Lesson 3","Swift Fundamentals — Lesson 4","Swift Fundamentals — Lesson 5","Swift Fundamentals — Lesson 6","Swift Fundamentals — Lesson 7","Swift Fundamentals — Lesson 8","Swift Fundamentals — Lesson 9","Swift Fundamentals — Lesson 10","Swift Fundamentals — Lesson 11","Swift Fundamentals — Lesson 12","Swift Fundamentals — Lesson 13","Swift Fundamentals — Lesson 14","Swift Fundamentals Checkpoint"]],
+      [3,"SwiftUI Views",["SwiftUI Views — Lesson 1","SwiftUI Views — Lesson 2","SwiftUI Views — Lesson 3","SwiftUI Views — Lesson 4","SwiftUI Views — Lesson 5","SwiftUI Views — Lesson 6","SwiftUI Views — Lesson 7","SwiftUI Views — Lesson 8","SwiftUI Views — Lesson 9","SwiftUI Views — Lesson 10","SwiftUI Views — Lesson 11","SwiftUI Views — Lesson 12","SwiftUI Views — Lesson 13","SwiftUI Views — Lesson 14","SwiftUI Views Checkpoint"]],
+      [4,"SwiftUI State Management",["SwiftUI State Management — Lesson 1","SwiftUI State Management — Lesson 2","SwiftUI State Management — Lesson 3","SwiftUI State Management — Lesson 4","SwiftUI State Management — Lesson 5","SwiftUI State Management — Lesson 6","SwiftUI State Management — Lesson 7","SwiftUI State Management — Lesson 8","SwiftUI State Management — Lesson 9","SwiftUI State Management — Lesson 10","SwiftUI State Management — Lesson 11","SwiftUI State Management — Lesson 12","SwiftUI State Management — Lesson 13","SwiftUI State Management — Lesson 14","SwiftUI State Management Checkpoint"]],
+      [5,"iOS Navigation",["iOS Navigation — Lesson 1","iOS Navigation — Lesson 2","iOS Navigation — Lesson 3","iOS Navigation — Lesson 4","iOS Navigation — Lesson 5","iOS Navigation — Lesson 6","iOS Navigation — Lesson 7","iOS Navigation — Lesson 8","iOS Navigation — Lesson 9","iOS Navigation — Lesson 10","iOS Navigation — Lesson 11","iOS Navigation — Lesson 12","iOS Navigation — Lesson 13","iOS Navigation — Lesson 14","iOS Navigation Checkpoint"]],
+      [6,"Kotlin Fundamentals",["Kotlin Fundamentals — Lesson 1","Kotlin Fundamentals — Lesson 2","Kotlin Fundamentals — Lesson 3","Kotlin Fundamentals — Lesson 4","Kotlin Fundamentals — Lesson 5","Kotlin Fundamentals — Lesson 6","Kotlin Fundamentals — Lesson 7","Kotlin Fundamentals — Lesson 8","Kotlin Fundamentals — Lesson 9","Kotlin Fundamentals — Lesson 10","Kotlin Fundamentals — Lesson 11","Kotlin Fundamentals — Lesson 12","Kotlin Fundamentals — Lesson 13","Kotlin Fundamentals — Lesson 14","Kotlin Fundamentals Checkpoint"]],
+      [7,"Jetpack Compose",["Jetpack Compose — Lesson 1","Jetpack Compose — Lesson 2","Jetpack Compose — Lesson 3","Jetpack Compose — Lesson 4","Jetpack Compose — Lesson 5","Jetpack Compose — Lesson 6","Jetpack Compose — Lesson 7","Jetpack Compose — Lesson 8","Jetpack Compose — Lesson 9","Jetpack Compose — Lesson 10","Jetpack Compose — Lesson 11","Jetpack Compose — Lesson 12","Jetpack Compose — Lesson 13","Jetpack Compose — Lesson 14","Jetpack Compose Checkpoint"]],
+      [8,"Android Navigation",["Android Navigation — Lesson 1","Android Navigation — Lesson 2","Android Navigation — Lesson 3","Android Navigation — Lesson 4","Android Navigation — Lesson 5","Android Navigation — Lesson 6","Android Navigation — Lesson 7","Android Navigation — Lesson 8","Android Navigation — Lesson 9","Android Navigation — Lesson 10","Android Navigation — Lesson 11","Android Navigation — Lesson 12","Android Navigation — Lesson 13","Android Navigation — Lesson 14","Android Navigation Checkpoint"]],
+      [9,"React Native Basics",["React Native Basics — Lesson 1","React Native Basics — Lesson 2","React Native Basics — Lesson 3","React Native Basics — Lesson 4","React Native Basics — Lesson 5","React Native Basics — Lesson 6","React Native Basics — Lesson 7","React Native Basics — Lesson 8","React Native Basics — Lesson 9","React Native Basics — Lesson 10","React Native Basics — Lesson 11","React Native Basics — Lesson 12","React Native Basics — Lesson 13","React Native Basics — Lesson 14","React Native Basics Checkpoint"]],
+      [10,"Flutter & Dart",["Flutter & Dart — Lesson 1","Flutter & Dart — Lesson 2","Flutter & Dart — Lesson 3","Flutter & Dart — Lesson 4","Flutter & Dart — Lesson 5","Flutter & Dart — Lesson 6","Flutter & Dart — Lesson 7","Flutter & Dart — Lesson 8","Flutter & Dart — Lesson 9","Flutter & Dart — Lesson 10","Flutter & Dart — Lesson 11","Flutter & Dart — Lesson 12","Flutter & Dart — Lesson 13","Flutter & Dart — Lesson 14","Flutter & Dart Checkpoint"]],
+      [11,"Mobile UX Patterns",["Mobile UX Patterns — Lesson 1","Mobile UX Patterns — Lesson 2","Mobile UX Patterns — Lesson 3","Mobile UX Patterns — Lesson 4","Mobile UX Patterns — Lesson 5","Mobile UX Patterns — Lesson 6","Mobile UX Patterns — Lesson 7","Mobile UX Patterns — Lesson 8","Mobile UX Patterns — Lesson 9","Mobile UX Patterns — Lesson 10","Mobile UX Patterns — Lesson 11","Mobile UX Patterns — Lesson 12","Mobile UX Patterns — Lesson 13","Mobile UX Patterns — Lesson 14","Mobile UX Patterns Checkpoint"]],
+      [12,"Networking — REST & GraphQL",["Networking — REST & GraphQL — Lesson 1","Networking — REST & GraphQL — Lesson 2","Networking — REST & GraphQL — Lesson 3","Networking — REST & GraphQL — Lesson 4","Networking — REST & GraphQL — Lesson 5","Networking — REST & GraphQL — Lesson 6","Networking — REST & GraphQL — Lesson 7","Networking — REST & GraphQL — Lesson 8","Networking — REST & GraphQL — Lesson 9","Networking — REST & GraphQL — Lesson 10","Networking — REST & GraphQL — Lesson 11","Networking — REST & GraphQL — Lesson 12","Networking — REST & GraphQL — Lesson 13","Networking — REST & GraphQL — Lesson 14","Networking — REST & GraphQL Checkpoint"]],
+      [13,"Persistence — Core Data, Room",["Persistence — Core Data, Room — Lesson 1","Persistence — Core Data, Room — Lesson 2","Persistence — Core Data, Room — Lesson 3","Persistence — Core Data, Room — Lesson 4","Persistence — Core Data, Room — Lesson 5","Persistence — Core Data, Room — Lesson 6","Persistence — Core Data, Room — Lesson 7","Persistence — Core Data, Room — Lesson 8","Persistence — Core Data, Room — Lesson 9","Persistence — Core Data, Room — Lesson 10","Persistence — Core Data, Room — Lesson 11","Persistence — Core Data, Room — Lesson 12","Persistence — Core Data, Room — Lesson 13","Persistence — Core Data, Room — Lesson 14","Persistence — Core Data, Room Checkpoint"]],
+      [14,"Push Notifications",["Push Notifications — Lesson 1","Push Notifications — Lesson 2","Push Notifications — Lesson 3","Push Notifications — Lesson 4","Push Notifications — Lesson 5","Push Notifications — Lesson 6","Push Notifications — Lesson 7","Push Notifications — Lesson 8","Push Notifications — Lesson 9","Push Notifications — Lesson 10","Push Notifications — Lesson 11","Push Notifications — Lesson 12","Push Notifications — Lesson 13","Push Notifications — Lesson 14","Push Notifications Checkpoint"]],
+      [15,"In-App Purchases",["In-App Purchases — Lesson 1","In-App Purchases — Lesson 2","In-App Purchases — Lesson 3","In-App Purchases — Lesson 4","In-App Purchases — Lesson 5","In-App Purchases — Lesson 6","In-App Purchases — Lesson 7","In-App Purchases — Lesson 8","In-App Purchases — Lesson 9","In-App Purchases — Lesson 10","In-App Purchases — Lesson 11","In-App Purchases — Lesson 12","In-App Purchases — Lesson 13","In-App Purchases — Lesson 14","In-App Purchases Checkpoint"]],
+      [16,"Authentication & OAuth",["Authentication & OAuth — Lesson 1","Authentication & OAuth — Lesson 2","Authentication & OAuth — Lesson 3","Authentication & OAuth — Lesson 4","Authentication & OAuth — Lesson 5","Authentication & OAuth — Lesson 6","Authentication & OAuth — Lesson 7","Authentication & OAuth — Lesson 8","Authentication & OAuth — Lesson 9","Authentication & OAuth — Lesson 10","Authentication & OAuth — Lesson 11","Authentication & OAuth — Lesson 12","Authentication & OAuth — Lesson 13","Authentication & OAuth — Lesson 14","Authentication & OAuth Checkpoint"]],
+      [17,"App Store Submission",["App Store Submission — Lesson 1","App Store Submission — Lesson 2","App Store Submission — Lesson 3","App Store Submission — Lesson 4","App Store Submission — Lesson 5","App Store Submission — Lesson 6","App Store Submission — Lesson 7","App Store Submission — Lesson 8","App Store Submission — Lesson 9","App Store Submission — Lesson 10","App Store Submission — Lesson 11","App Store Submission — Lesson 12","App Store Submission — Lesson 13","App Store Submission — Lesson 14","App Store Submission Checkpoint"]],
+      [18,"Play Store Submission",["Play Store Submission — Lesson 1","Play Store Submission — Lesson 2","Play Store Submission — Lesson 3","Play Store Submission — Lesson 4","Play Store Submission — Lesson 5","Play Store Submission — Lesson 6","Play Store Submission — Lesson 7","Play Store Submission — Lesson 8","Play Store Submission — Lesson 9","Play Store Submission — Lesson 10","Play Store Submission — Lesson 11","Play Store Submission — Lesson 12","Play Store Submission — Lesson 13","Play Store Submission — Lesson 14","Play Store Submission Checkpoint"]],
+      [19,"Mobile Performance & Profiling",["Mobile Performance & Profiling — Lesson 1","Mobile Performance & Profiling — Lesson 2","Mobile Performance & Profiling — Lesson 3","Mobile Performance & Profiling — Lesson 4","Mobile Performance & Profiling — Lesson 5","Mobile Performance & Profiling — Lesson 6","Mobile Performance & Profiling — Lesson 7","Mobile Performance & Profiling — Lesson 8","Mobile Performance & Profiling — Lesson 9","Mobile Performance & Profiling — Lesson 10","Mobile Performance & Profiling — Lesson 11","Mobile Performance & Profiling — Lesson 12","Mobile Performance & Profiling — Lesson 13","Mobile Performance & Profiling — Lesson 14","Mobile Performance & Profiling Checkpoint"]],
+      [20,"Mobile Dev Mastery",["Mobile Dev Mastery — Lesson 1","Mobile Dev Mastery — Lesson 2","Mobile Dev Mastery — Lesson 3","Mobile Dev Mastery — Lesson 4","Mobile Dev Mastery — Lesson 5","Mobile Dev Mastery — Lesson 6","Mobile Dev Mastery — Lesson 7","Mobile Dev Mastery — Lesson 8","Mobile Dev Mastery — Lesson 9","Mobile Dev Mastery — Lesson 10","Mobile Dev Mastery — Lesson 11","Mobile Dev Mastery — Lesson 12","Mobile Dev Mastery — Lesson 13","Mobile Dev Mastery — Lesson 14","Mobile Dev Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'mob-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('mobile-development');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('mobile-development');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
