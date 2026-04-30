@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mando'a — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Mando'a</h1>
+    <p>The language of the Mandalorians from Star Wars — Karen Traviss's creation. Phonology, alphabet, grammar, family vocabulary, the Resol'nare, battle phrases, and full cultural fluency. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Mando'a Foundations",["What Is Mando'a?","Karen Traviss & Mando'a","Mandalorian Culture Overview","Mandalore the Planet","Mandalorian History","Pre-Disney Canon vs Legends","Boba Fett & The Mandalorian","Mando'a in Films & TV","Mando'a in Video Games","Online Mando'a Communities","Resol'nare — The Six Actions","Beskar & Iron Vocabulary","Mandalorian Clans","Aliit Ori'shya Tal'din","Foundations Checkpoint"]],
+      [2,"Phonology & Alphabet",["Mando'a Sound Inventory","Vowels — a e i o u","Diphthongs","Consonants","Apostrophe (Glottal Stop)","Stress Patterns","Mandalorian Aurebesh","Mando'a Romanization","Pronouncing 'aliit'","Pronouncing 'vode'","Pronouncing 'beskar'","Pronouncing 'jate'","Common Pronunciation Mistakes","Audio Listening Drills","Phonology Checkpoint"]],
+      [3,"Greetings & Common Phrases",["Su cuy'gar — Hello","Ret'urcye mhi — Goodbye","Vor entye — Thank You","Vor'e — Thanks","K'oyacyi — Cheers / Stay Alive","Olarom — Welcome","Nayc — No","Elek — Yes","Tion'jor — Why","Tion'ad — Who","Mhi solus tome — We Are Together","Vode an — All Brothers","Mando'a Pleasantries","Polite Requests","Greetings Checkpoint"]],
+      [4,"Pronouns & Basic Verbs",["Ni — I","Gar — You","Kaysh — He/She","Mhi — We","Cuyir — To Be","Nuhoyir — Not To Be","Liser — Can / Be Able","Ven — Will (future)","Ru — Past Tense Marker","Adyc — Now / Present","Verb Endings","Subject-Verb Agreement","Negation","Verb Conjugation Drills","Verbs Checkpoint"]],
+      [5,"Nouns, Adjectives & Adverbs",["Singular vs Plural","Plural Suffix '-e'","Possession","Adjective Placement","Comparing Adjectives","Common Adjectives — Jate Dush","Adverbs of Time","Adverbs of Place","Numbers 1-10","Numbers 11-100","Colors — Ranov'la","Sizes — Ori'la Tsikala","Counting Things","Word Order with Modifiers","Nouns & Adjectives Checkpoint"]],
+      [6,"Sentence Structure",["Subject-Verb-Object","Question Formation","Yes/No Questions","Wh-Questions","Negation in Sentences","Imperatives — Commands","Compound Sentences","Connectors — Bal Bid Cuun","Conditional Sentences","Subordinate Clauses","Topic-Comment","Emphasizing Words","Common Sentence Templates","Translation Practice","Syntax Checkpoint"]],
+      [7,"Family & Relationships",["Aliit — Family / Clan","Buir — Parent","Ba'vodu — Uncle","Vod — Brother / Sister","Ad — Child","Riduur — Spouse","Burc'ya — Friend","Verd — Warrior","Ori'vod — Big Brother","Ad'ika — Little One","Cyar'ika — Beloved","Family Naming Conventions","Adoption Phrase — Ni kar'tayl gai sa'ad","Funeral & Mourning Phrases","Family Checkpoint"]],
+      [8,"Honor & Battle Vocabulary",["Mand'alor — The Sole Ruler","Beskar'gam — Beskar Armor","Beviin — Battle Cry","Kandosii — Awesome / Indomitable","Oya — Hunting Cry / Live!","Hut'uun — Coward","Aruetii — Outsider / Traitor","Verd'ika — Cadet","Akaan — War","Mar'eyi — Find Yourself","Mando'a Curses","Insults & Strong Language","Battle Commands","Sworn Oaths","Honor & Battle Checkpoint"]],
+      [9,"Mandalorian Culture & Resol'nare",["Resol'nare Tenet 1 — Wear Armor","Resol'nare Tenet 2 — Speak the Language","Resol'nare Tenet 3 — Defend Yourself & Family","Resol'nare Tenet 4 — Raise Children Mandalorian","Resol'nare Tenet 5 — Contribute to Welfare","Resol'nare Tenet 6 — Rally to Mand'alor","Mandalorian Holidays","Death of Jaster Mereel","Mandalorian Cuisine","Tihaar Drink","Mandalorian Music","Vode An Anthem","This Is The Way","Foundling Customs","Culture Checkpoint"]],
+      [10,"Mando'a Mastery",["Reading Mandalorian Texts","Mando'a Songs","Mando'a Poetry","Translating Earth Phrases","Conversational Practice","Tabletop Roleplay in Mando'a","Mando'a in Cosplay","Karen Traviss Books","Mandalorian.com Resources","Vode An Communities","Discord Servers","YouTube Channels","Continued Learning","Tion'ad hukaat'kama? — Who Watches Your Back?","Mando'a Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'mando-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('mando-a');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('mando-a');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

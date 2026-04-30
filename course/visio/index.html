@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visio — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Visio</h1>
+    <p>Master Microsoft Visio — the diagramming tool used by IT teams, engineers, architects, business analysts, and educators. Flowcharts, swimlanes, org charts, network diagrams, floor plans, BPMN, UML, AWS &amp; Azure architecture, data-linked shapes, custom stencils, Visio for the Web, and integration with Teams, SharePoint, Word, and Excel. 25 units, 375 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Microsoft Visio?",["Visio at a Glance","A Brief History — From Shapeware to Microsoft","Visio vs Lucidchart vs Draw.io vs Miro","When Visio Wins","When NOT to Use Visio","The Visio File Formats — VSDX, VSSX, VSTX","Vector vs Raster — Why It Matters","Visio in the Microsoft 365 Family","Who Uses Visio — Personas","Famous Diagram Types Visio Excels At","System Requirements","Installing Visio","Activating with a Microsoft 365 Account","Opening Your First Diagram","Visio Foundations Checkpoint"]],
+      [2,"Visio Editions & Plans",["Visio Plan 1 — Web Only","Visio Plan 2 — Desktop + Web","Visio in Microsoft 365 — Free Tier","Visio Standard vs Professional (Legacy)","Visio Pro for Office 365","Subscription vs One-Time Purchase","Education & Nonprofit Pricing","Volume Licensing","Visio Trial","Switching Plans","Visio for Mac (Browser-Only)","Visio on iPad & iPhone","Visio Viewer (Free)","Comparing to Lucidchart Pricing","Editions Checkpoint"]],
+      [3,"The Visio Interface",["The Ribbon — Home, Insert, Design, Data, Process, Review, View","The Shapes Pane","The Drawing Canvas","Page Tabs","Status Bar","Quick Access Toolbar","Backstage View","Side-by-Side Window Layouts","Zoom & Pan","Rulers & Grid","Guides & Guide Lines","Snap & Glue Settings","Themes Gallery","Containers & Lists","Interface Checkpoint"]],
+      [4,"Shapes & Stencils",["What Is a Shape?","Master Shapes vs Instances","Built-In Stencils","Searching for Shapes","Adding Shapes from the Web","My Shapes — Custom Stencils","Stencil File Format (.vssx)","Quick Shapes Mini Toolbar","Resizing Shapes — Handles","Rotating & Flipping","Grouping & Ungrouping","Aligning & Distributing","Layering — Bring to Front, Send to Back","Smart Shapes Behaviors","Shapes & Stencils Checkpoint"]],
+      [5,"Connectors",["The Connector Tool","Dynamic vs Static Connectors","Glue Points (Connection Points)","Adding Connection Points","Routing Styles — Right-Angle, Curved, Straight","Re-Routing Around Obstacles","Connector Labels","Arrowhead Styles","Multi-Line Labels","Connector Color & Weight","Auto-Connect","Reverse Connector Direction","Hyperlinks on Connectors","Custom Connector Themes","Connectors Checkpoint"]],
+      [6,"Page Setup & Backgrounds",["Page Size — Letter, A4, Custom","Portrait vs Landscape","Multiple Pages in One File","Background Pages","Borders & Title Blocks","Page Re-Ordering","Foreground vs Background","Print Setup","Print Preview","Print to PDF","Headers & Footers","Page Numbering","Page Breaks","Reorder & Rename Tabs","Page Setup Checkpoint"]],
+      [7,"Themes, Styles & Visual Design",["Theme Gallery","Variant Colors","Theme Effects — Shadow, Gradient, Bevel","Custom Theme Colors","Embedded Fonts","Quick Styles","Shape Fill & Outline","Text Formatting","Live Preview","Format Painter","Layer Visibility","Visibility Settings per Page","Stylish Diagram Tips","Brand Compliance","Themes Checkpoint"]],
+      [8,"Flowcharts",["Flowchart Symbols — ANSI Standard","Start & End Shapes","Process Box","Decision Diamond","Document Shape","Connectors with Yes/No Labels","Branching Logic","Loop Patterns","Subprocess Shapes","On-Page & Off-Page References","Building a Login Flow","Building a Sales Funnel","Common Flowchart Mistakes","Best Practices for Readability","Flowcharts Checkpoint"]],
+      [9,"Cross-Functional Flowcharts (Swimlanes)",["Swimlane Concept","Adding Swimlanes","Horizontal vs Vertical Lanes","Phase Headers","Re-Ordering Lanes","Resizing Lanes","Auto-Resize Behavior","Cross-Functional Templates","Hand-Off Patterns","Showing Time on the Lane","Sub-Swimlanes","Container Shapes vs Swimlanes","Practical Example — Order Fulfillment","BPMN vs Cross-Functional Flowchart","Swimlanes Checkpoint"]],
+      [10,"Org Charts",["Org Chart Wizard","Manual Org Chart Building","Position Types — Executive, Manager, Position","Importing from Excel","Importing from Active Directory","Importing from Microsoft Entra ID","Photo Fields","Layout Options — Horizontal, Vertical, Hybrid","Synchronizing Sub-Charts","Hyperlinking to Profile Pages","Compare Two Versions","Custom Fields & Tooltips","Hide Subordinates Option","Synchronizing With M365","Org Charts Checkpoint"]],
+      [11,"Network Diagrams",["Basic Network Stencils","Detailed Network Stencils","Server Rack Layouts","Cisco Stencils — Free Add-On","Switches, Routers, Firewalls","WAN, LAN, DMZ Layouts","Cloud Network Topologies","Connection Labels — IP, VLAN","Color-Coding Subnets","Symbol Legends","Network Documentation Templates","Reverse-Engineering an Existing Network","Network Diagrams in IT Audits","Network Diagram Best Practices","Network Diagrams Checkpoint"]],
+      [12,"Floor Plans & Office Layouts",["Floor Plan Stencils","Walls, Doors, Windows","Furniture Stencils","Room Dimensions & Scale","Setting Drawing Scale","Measuring Tools","Layers — Walls, Furniture, Electrical","Plumbing Symbols","Electrical Symbols","HVAC Symbols","Site Plans","Office Seating Charts","Emergency Exit Diagrams","Tech-Equipped Conference Rooms","Floor Plans Checkpoint"]],
+      [13,"BPMN Diagrams",["What Is BPMN 2.0?","Activities — Tasks & Subprocesses","Events — Start, Intermediate, End","Gateways — XOR, OR, AND","Pools & Lanes","Message Flows","Sequence Flows","Data Objects & Data Stores","Annotations","Compensation Events","Boundary Events","Call Activities","BPMN Best Practices","Validating BPMN in Visio","BPMN Checkpoint"]],
+      [14,"UML Diagrams",["UML Overview","Class Diagrams","Use Case Diagrams","Sequence Diagrams","Activity Diagrams","State Machine Diagrams","Component Diagrams","Deployment Diagrams","Object Diagrams","Package Diagrams","Communication Diagrams","Timing Diagrams","Stereotypes & Profiles","UML Best Practices","UML Checkpoint"]],
+      [15,"AWS, Azure & Cloud Architecture",["Microsoft Azure Stencil Set","AWS Architecture Stencils (Community + Official)","Google Cloud Stencils","Container & Kubernetes Shapes","Serverless Architecture Diagrams","Azure Reference Architectures","AWS Well-Architected Diagrams","Hybrid Cloud Diagrams","Multi-Cloud Topologies","Cost-Annotated Architectures","CI/CD Pipeline Diagrams","Data Pipeline Diagrams","Mapping to ARM / CloudFormation","Cloud Diagram Best Practices","Cloud Architecture Checkpoint"]],
+      [16,"Data Linking — Excel & Other Sources",["Why Link Data to Shapes?","Linking Excel Workbooks","Linking SharePoint Lists","Linking Access Databases","Linking SQL Server","Linking OData Feeds","Auto-Refresh Behavior","Mapping Columns to Shape Data","Updating Shape Position by Data","Filtering Linked Data","Edge Cases & Errors","Performance with Large Datasets","Combining Multiple Sources","Auditing Linked Diagrams","Data Linking Checkpoint"]],
+      [17,"Data Graphics",["What Are Data Graphics?","Text Callouts","Data Bars","Icon Sets","Color by Value","Conditional Formatting Rules","Custom Data Graphics","Legend Generation","Multiple Data Graphics on One Shape","Status Indicators (Red/Yellow/Green)","Live Dashboards from Excel","Editing Existing Data Graphics","Best Practices for Visual Hierarchy","Common Data Graphics Mistakes","Data Graphics Checkpoint"]],
+      [18,"Visio for the Web",["Opening Visio in a Browser","Web vs Desktop Feature Differences","Real-Time Co-Authoring","Comments & @Mentions","Mobile-Friendly Editing","Sharing via OneDrive","Sharing via SharePoint","Browser Performance","Visio Web Limitations","Visio Online Templates","Diagram Search in the Web","Embedding Visio Web Diagrams","Compatibility with Desktop Files","Migrating Desktop Files to Web","Visio Web Checkpoint"]],
+      [19,"Visio Mobile & Visio Viewer",["Visio Mobile Apps — iOS & Android","Visio Viewer for Free","Tap-to-Pan & Pinch-to-Zoom","Annotating on Mobile","Read-Only Sharing","Screenshots & Markup","Surface Pen Annotations","Sharing Mobile-Edited Files","Sync Conflicts","Mobile Stencil Limitations","When Mobile Wins","Mobile Best Practices","Visio Viewer for Non-Subscribers","Sending VSDX to Visio Viewer","Mobile & Viewer Checkpoint"]],
+      [20,"Sharing & Collaboration",["Sharing via OneDrive","Sharing via SharePoint","Real-Time Co-Authoring","Track Changes & Versions","Restore Previous Version","Comments & Replies","@Mentions in Visio","Permission Levels — View vs Edit","External Sharing","Sharing in Microsoft Teams","Sharing in Outlook","Embedding in OneNote","Approval Workflows","Audit Logs","Sharing & Collab Checkpoint"]],
+      [21,"Embedding in Teams, SharePoint & Word",["Adding Visio to Teams Tab","Visio in Microsoft Teams Channels","Embedding in SharePoint Pages","Embed Code Snippets","Visio in Word — Linked vs Embedded","Visio in PowerPoint","Visio in Excel","Visio in OneNote","Updating Embedded Diagrams","Read-Only Embeds","Iframe Embeds","Web Part for SharePoint","Embedding in Confluence","Embedding in Notion","Embedding Checkpoint"]],
+      [22,"Exporting & Publishing",["Export to PDF","Export to PNG, JPG, SVG","Export to AutoCAD DWG","Export to HTML","Export to Web Page","Print Tiling","High-Resolution Export","Export to PowerPoint","Save As Web Page","Publish to SharePoint","Publish via Visio Online","Embed Code for Sharing","Bulk Export Multiple Pages","Export Best Practices","Export & Publishing Checkpoint"]],
+      [23,"Custom Stencils & Templates",["Creating Your Own Stencil","Saving Master Shapes","Editing Shape Properties","Shape Data Definitions","Custom Connection Points","Adding Hyperlinks to Master Shapes","Stencil Distribution","Sharing Stencils via SharePoint","Saving as Template (.vstx)","Template vs Drawing","Brand Templates for Companies","Open-Source Stencil Libraries","ShapeSheet Customization","Macros & ShapeSheet Formulas","Custom Stencils Checkpoint"]],
+      [24,"Visio for Specific Industries",["IT — Network & Server Documentation","IT — Datacenter Layouts","Engineering — P&ID Diagrams","Engineering — Electrical Schematics","Architecture — Floor Plans & Site Plans","Construction — Project Schedules","Healthcare — Patient Flow & Hospital Layouts","Healthcare — HIPAA Process Maps","Education — Lesson Plans & Concept Maps","Marketing — Customer Journey Maps","HR — Org Charts & Onboarding Flows","Finance — Process Compliance","Manufacturing — Factory Layouts","Government — Workflow Documentation","Industries Checkpoint"]],
+      [25,"Visio Mastery",["Editions & Interface Review","Shapes, Stencils & Connectors Review","Themes & Page Setup Review","Flowcharts & Swimlanes Review","Org Charts & Network Diagrams Review","Floor Plans Review","BPMN & UML Review","Cloud Architecture Review","Data Linking & Data Graphics Review","Visio Web & Mobile Review","Sharing & Embedding Review","Exporting & Publishing Review","Custom Stencils Review","Industry Use Cases Review","Visio Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'vis-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('visio');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('visio');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

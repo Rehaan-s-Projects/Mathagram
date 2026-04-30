@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beekeeping — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Beekeeping</h1>
+    <p>From bee biology and hive equipment to seasonal management, honey harvest, queen rearing, pollination services, and selling. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Bee Biology",["Honey Bee Anatomy","Apis mellifera","Caste System","Queen Bee","Worker Bees","Drones","Bee Lifecycle","Larva to Adult","Pheromones","Waggle Dance","Communication","Foraging","Bee Vision & Smell","Stinging Behavior","Bee Biology Checkpoint"]],
+      [2,"Hive Anatomy",["Langstroth Hive","Top-Bar Hive","Warré Hive","Flow Hive","Brood Box","Honey Supers","Frames","Foundation","Foundationless","Inner & Outer Cover","Bottom Board","Entrance Reducer","Queen Excluder","Slatted Rack","Hive Anatomy Checkpoint"]],
+      [3,"Equipment & Gear",["Bee Suit","Veil","Gloves","Smoker","Hive Tool","Frame Grip","Bee Brush","Marking Pen","Queen Cages","Pollen Trap","Feeder Types","Treatments — Oxalic Acid","Hive Stand","Apiary Layout","Equipment Checkpoint"]],
+      [4,"Starting a Colony",["Sourcing Bees","Package Bees","Nucleus Colonies","Swarms","Catching Swarms","Installing a Package","Releasing the Queen","First Inspection","Feeding New Colonies","Apiary Site Selection","Local Regulations","Neighbor Considerations","Beginner Mistakes","Mentor Networks","Starting Out Checkpoint"]],
+      [5,"Inspections",["Frequency","Best Times","Reading the Brood Pattern","Eggs vs Larvae","Queen Spotting","Drone Brood","Honey Stores","Pollen Stores","Disease Signs","Smoke Strategy","Note-Taking","Hive Records","Photography","Calm Hive Behavior","Inspections Checkpoint"]],
+      [6,"Seasonal Management",["Spring Build-Up","Swarm Prevention","Summer Honey Flow","Adding Supers","Late Summer Dearth","Fall Preparation","Winter Clusters","Wintering Strategies","Mouse Guards","Insulating Hives","Spring Reversal","Splitting Hives","Combining Weak Hives","Year-Round Calendar","Seasonal Checkpoint"]],
+      [7,"Honey Harvest",["When to Harvest","Pulling Supers","Bee Escapes","Fume Boards","Uncapping Frames","Heated Knife","Cold Knife","Extractors — Tangential","Extractors — Radial","Filtering Honey","Bottling","Crystallization","Cut Comb","Chunk Honey","Honey Harvest Checkpoint"]],
+      [8,"Pests & Diseases",["Varroa Mites","Mite Counts — Sugar Roll","Mite Counts — Alcohol Wash","Treatment Options","American Foulbrood","European Foulbrood","Nosema","Chalkbrood","Small Hive Beetle","Wax Moth","Hornets & Yellow Jackets","Mice & Skunks","IPM Approach","When to Burn a Hive","Pests Checkpoint"]],
+      [9,"Queen Rearing & Specialty Beekeeping",["Why Rear Queens?","Grafting Method","Doolittle Method","Jenter / Nicot System","Mating Nucs","Open Mating vs II","Marking Queens","Selling Queens","Honey Varietals","Comb Honey","Cut Comb","Chunk Honey","Mead-Making","Pollination Services","Specialty Checkpoint"]],
+      [10,"Selling, Ethics & Mastery",["Cottage Food Laws","Labeling Honey","Farmers Markets","Honey Wholesale","Honey Tasting","Beeswax Products","Lip Balm & Candles","Propolis Tinctures","Royal Jelly","Bee Etiquette","Native Pollinator Conservation","Treatment-Free Debate","Beekeeping Books","Joining a Bee Club","Beekeeping Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'bee-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('beekeeping');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('beekeeping');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

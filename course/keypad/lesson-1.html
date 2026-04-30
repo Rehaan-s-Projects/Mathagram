@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>10-Key Drill — Keypad Practice</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+body { background: #0f172a; color: #e2e8f0; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; }
+.wrap { max-width: 720px; margin: 64px auto 80px; padding: 0 16px; }
+header { text-align: center; margin-bottom: 24px; }
+.badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: #8b5cf6; font-family: inherit; }
+header h1 { font-size: 1.8rem; font-weight: 800; margin: 4px 0 8px; color: #fff; font-family: -apple-system, system-ui, sans-serif; }
+header p { color: #94a3b8; max-width: 520px; margin: 0 auto; line-height: 1.55; font-family: -apple-system, system-ui, sans-serif; font-size: 0.95rem; }
+
+.hud { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+.stat { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px 14px; text-align: center; }
+.stat .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 4px; font-family: -apple-system, system-ui, sans-serif; }
+.stat .value { font-size: 1.4rem; font-weight: 800; color: #f1f5f9; }
+.stat.kph .value { color: #22d3ee; }
+.stat.accuracy .value { color: #86efac; }
+.stat.timer .value { color: #fcd34d; }
+
+.target-line { background: #1e293b; border: 2px solid #334155; border-radius: 12px; padding: 24px; text-align: center; font-size: 2rem; letter-spacing: 0.4em; margin-bottom: 12px; min-height: 70px; }
+.target-line .digit { display: inline-block; padding: 0 4px; transition: color 0.1s, transform 0.1s; }
+.target-line .digit.done { color: #475569; }
+.target-line .digit.current { color: #fcd34d; transform: scale(1.2); text-shadow: 0 0 12px rgba(252,211,77,0.5); }
+.target-line .digit.wrong { color: #ef4444; }
+
+.input-display { background: #0f172a; border: 2px dashed #334155; border-radius: 10px; padding: 14px; min-height: 56px; text-align: center; font-size: 1.4rem; letter-spacing: 0.3em; color: #cbd5e1; margin-bottom: 24px; }
+
+.numpad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 320px; margin: 0 auto 24px; }
+.key { background: #1e293b; border: 2px solid #334155; border-radius: 8px; padding: 18px 0; text-align: center; font-size: 1.3rem; font-weight: 700; color: #e2e8f0; transition: all 0.08s; user-select: none; }
+.key.wide { grid-column: span 2; }
+.key.tall { grid-row: span 2; }
+.key.active { background: #8b5cf6; border-color: #a78bfa; transform: translateY(2px); box-shadow: 0 0 16px rgba(139,92,246,0.5); }
+.key.correct-flash { background: #16a34a; border-color: #22c55e; }
+.key.wrong-flash { background: #dc2626; border-color: #ef4444; animation: shake 0.2s; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+.key.op { color: #fcd34d; }
+.key.enter { background: #1e293b; color: #86efac; }
+
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+.btn { background: #22c55e; color: #042f0f; border: none; padding: 11px 22px; border-radius: 8px; font-weight: 800; font-size: 0.95rem; cursor: pointer; font-family: inherit; transition: transform 0.1s, background 0.15s; }
+.btn:hover { background: #16a34a; transform: translateY(-1px); }
+.btn.secondary { background: #334155; color: #e2e8f0; }
+.btn.secondary:hover { background: #475569; }
+.btn.outline { background: transparent; color: #94a3b8; border: 1px solid #334155; }
+.btn.outline:hover { color: #fff; border-color: #64748b; }
+
+.complete { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 28px 24px; text-align: center; margin-top: 18px; display: none; font-family: -apple-system, system-ui, sans-serif; }
+.complete.show { display: block; animation: fade-up 0.3s ease; }
+@keyframes fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.complete h2 { font-size: 2.4rem; margin: 0 0 6px; color: #fcd34d; }
+.complete .stars { font-size: 1.8rem; letter-spacing: 6px; margin-bottom: 6px; }
+.complete .summary { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 18px; line-height: 1.6; }
+.complete .summary strong { color: #fff; }
+
+.note { font-size: 0.78rem; color: #64748b; text-align: center; margin: 14px 0 0; font-family: -apple-system, system-ui, sans-serif; }
+.footer-nav { text-align: center; margin-top: 24px; font-family: -apple-system, system-ui, sans-serif; }
+.footer-nav a { color: #8b5cf6; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+.footer-nav a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script type="module" src="../../js/lesson-loader.js"></script>
+<script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="index.html">Keypad</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+
+<main class="wrap">
+  <header>
+    <span class="badge">Keypad Practice · Lesson 1</span>
+    <h1>10-Key Drill — Speed & Accuracy</h1>
+    <p>Type the digits below using your numeric keypad (or the on-screen keys). Speed is measured in <strong>KPH</strong> (keystrokes per hour) and accuracy as a percentage. Aim for <strong>8,000+ KPH</strong> at <strong>97%+ accuracy</strong>.</p>
+  </header>
+
+  <div class="hud">
+    <div class="stat timer"><div class="label">Time</div><div class="value" id="time-val">0.0s</div></div>
+    <div class="stat"><div class="label">Progress</div><div class="value" id="progress-val">0 / 30</div></div>
+    <div class="stat kph"><div class="label">KPH</div><div class="value" id="kph-val">0</div></div>
+    <div class="stat accuracy"><div class="label">Accuracy</div><div class="value" id="acc-val">100%</div></div>
+  </div>
+
+  <div class="target-line" id="target"></div>
+  <div class="input-display" id="input-display">Press any number key to begin…</div>
+
+  <div class="numpad" id="numpad">
+    <div class="key" data-key="7">7</div>
+    <div class="key" data-key="8">8</div>
+    <div class="key" data-key="9">9</div>
+    <div class="key op" data-key="/">÷</div>
+    <div class="key" data-key="4">4</div>
+    <div class="key" data-key="5">5</div>
+    <div class="key" data-key="6">6</div>
+    <div class="key op" data-key="*">×</div>
+    <div class="key" data-key="1">1</div>
+    <div class="key" data-key="2">2</div>
+    <div class="key" data-key="3">3</div>
+    <div class="key op" data-key="-">−</div>
+    <div class="key wide" data-key="0">0</div>
+    <div class="key" data-key=".">.</div>
+    <div class="key op" data-key="+">+</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn" id="restart-btn">↻ New Drill</button>
+    <button class="btn secondary" id="length-btn">30 digits</button>
+  </div>
+
+  <p class="note">Tip — touch-type with your right hand: index on 4, middle on 5, ring on 6, thumb on 0, pinky on Enter.</p>
+
+  <div class="complete" id="complete"></div>
+
+  <div class="footer-nav">
+    <a href="index.html">← Back to Keypad course</a>
+  </div>
+</main>
+
+<script type="module">
+  import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+  import { onAuthChange } from '../../js/auth.js';
+
+  const targetEl = document.getElementById('target');
+  const inputDisplayEl = document.getElementById('input-display');
+  const timeVal = document.getElementById('time-val');
+  const progressVal = document.getElementById('progress-val');
+  const kphVal = document.getElementById('kph-val');
+  const accVal = document.getElementById('acc-val');
+  const restartBtn = document.getElementById('restart-btn');
+  const lengthBtn = document.getElementById('length-btn');
+  const completeEl = document.getElementById('complete');
+  const numpad = document.getElementById('numpad');
+
+  const lengthOptions = [15, 30, 60, 100];
+  let lengthIdx = 1;
+  let totalLen = lengthOptions[lengthIdx];
+
+  let target = '';
+  let pos = 0;
+  let mistakes = 0;
+  let totalKeystrokes = 0;
+  let started = null;
+  let finished = false;
+  let timerHandle = null;
+
+  function generateTarget(n) {
+    let s = '';
+    for (let i = 0; i < n; i++) {
+      s += String(Math.floor(Math.random() * 10));
+    }
+    return s;
+  }
+
+  function renderTarget() {
+    targetEl.innerHTML = '';
+    for (let i = 0; i < target.length; i++) {
+      const d = document.createElement('span');
+      d.className = 'digit';
+      if (i < pos) d.classList.add('done');
+      else if (i === pos) d.classList.add('current');
+      d.textContent = target[i];
+      targetEl.appendChild(d);
+    }
+    progressVal.textContent = pos + ' / ' + totalLen;
+  }
+
+  function updateLiveStats() {
+    if (started === null || finished) return;
+    const elapsed = (performance.now() - started) / 1000;
+    timeVal.textContent = elapsed.toFixed(1) + 's';
+    if (totalKeystrokes > 0 && elapsed > 0) {
+      const kph = Math.round((totalKeystrokes / elapsed) * 3600);
+      kphVal.textContent = kph.toLocaleString();
+    }
+    const correct = totalKeystrokes - mistakes;
+    const acc = totalKeystrokes > 0 ? Math.round((correct / totalKeystrokes) * 100) : 100;
+    accVal.textContent = acc + '%';
+  }
+
+  function flashKey(keyChar, kind) {
+    const el = numpad.querySelector('[data-key="' + keyChar + '"]');
+    if (!el) return;
+    el.classList.add(kind === 'correct' ? 'correct-flash' : 'wrong-flash');
+    setTimeout(() => el.classList.remove('correct-flash', 'wrong-flash'), 180);
+  }
+
+  function activateKey(keyChar) {
+    const el = numpad.querySelector('[data-key="' + keyChar + '"]');
+    if (!el) return;
+    el.classList.add('active');
+    setTimeout(() => el.classList.remove('active'), 100);
+  }
+
+  function handleKey(keyChar) {
+    if (finished) return;
+    activateKey(keyChar);
+    // Only digits count toward this drill — operators flash but don't advance.
+    if (!/^[0-9]$/.test(keyChar)) {
+      flashKey(keyChar, 'wrong');
+      return;
+    }
+    if (started === null) {
+      started = performance.now();
+      timerHandle = setInterval(updateLiveStats, 100);
+      inputDisplayEl.textContent = '';
+    }
+    totalKeystrokes++;
+    const expected = target[pos];
+    if (keyChar === expected) {
+      flashKey(keyChar, 'correct');
+      pos++;
+      inputDisplayEl.textContent = target.slice(0, pos).replace(/(.{5})/g, '$1 ').trim();
+      renderTarget();
+      if (pos >= totalLen) finish();
+    } else {
+      mistakes++;
+      flashKey(keyChar, 'wrong');
+      const digits = targetEl.querySelectorAll('.digit');
+      if (digits[pos]) {
+        digits[pos].classList.add('wrong');
+        setTimeout(() => digits[pos].classList.remove('wrong'), 180);
+      }
+    }
+    updateLiveStats();
+  }
+
+  function finish() {
+    finished = true;
+    clearInterval(timerHandle);
+    const elapsed = (performance.now() - started) / 1000;
+    const kph = Math.round((totalKeystrokes / elapsed) * 3600);
+    const correct = totalKeystrokes - mistakes;
+    const acc = Math.round((correct / totalKeystrokes) * 100);
+    // Score blends accuracy and KPH benchmarks (8000 KPH = full speed credit)
+    const speedScore = Math.min(100, Math.round((kph / 8000) * 100));
+    const finalScore = Math.round(acc * 0.7 + speedScore * 0.3);
+    const grade = calculateGrade(finalScore);
+    const xp = calculateXP(finalScore);
+    completeEl.innerHTML =
+      '<h2>' + grade.grade + '</h2>' +
+      '<div class="stars">' + '⭐'.repeat(grade.stars) + '☆'.repeat(3 - grade.stars) + '</div>' +
+      '<div class="summary">' +
+      '<strong>' + kph.toLocaleString() + ' KPH</strong> · ' +
+      '<strong>' + acc + '%</strong> accuracy · ' +
+      '<strong>' + elapsed.toFixed(1) + 's</strong> · ' +
+      '<strong>' + mistakes + '</strong> mistake' + (mistakes === 1 ? '' : 's') +
+      '<br>+' + xp + ' XP earned' +
+      '</div>' +
+      '<button class="btn" id="again-btn">↻ Try Again</button>';
+    completeEl.classList.add('show');
+    document.getElementById('again-btn').addEventListener('click', restart);
+    onAuthChange(async (u) => { if (u) await saveLessonResult('keypad', 'lesson-1', finalScore, xp); });
+  }
+
+  function restart() {
+    target = generateTarget(totalLen);
+    pos = 0;
+    mistakes = 0;
+    totalKeystrokes = 0;
+    started = null;
+    finished = false;
+    clearInterval(timerHandle);
+    timeVal.textContent = '0.0s';
+    kphVal.textContent = '0';
+    accVal.textContent = '100%';
+    inputDisplayEl.textContent = 'Press any number key to begin…';
+    completeEl.classList.remove('show');
+    completeEl.innerHTML = '';
+    renderTarget();
+  }
+
+  // Keyboard input — capture keypad, top-row, AND on-screen taps
+  document.addEventListener('keydown', (e) => {
+    if (finished && e.key !== 'Tab') {
+      // Allow restart from keyboard too
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); restart(); }
+      return;
+    }
+    const key = e.key;
+    if (/^[0-9]$/.test(key)) { e.preventDefault(); handleKey(key); }
+    else if (key === '.' || key === '+' || key === '-' || key === '*' || key === '/') { handleKey(key); }
+  });
+
+  // On-screen numpad
+  numpad.addEventListener('click', (e) => {
+    const key = e.target.closest('[data-key]');
+    if (!key) return;
+    handleKey(key.dataset.key);
+  });
+
+  restartBtn.addEventListener('click', restart);
+  lengthBtn.addEventListener('click', () => {
+    lengthIdx = (lengthIdx + 1) % lengthOptions.length;
+    totalLen = lengthOptions[lengthIdx];
+    lengthBtn.textContent = totalLen + ' digits';
+    restart();
+  });
+
+  // Init
+  restart();
+</script>
+</body>
+</html>

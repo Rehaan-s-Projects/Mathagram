@@ -28,7 +28,8 @@ export function renderPath(container, lessons, completedIds = new Set()) {
   container.appendChild(progress);
 
   // Inject practice & reading nodes into the lesson list
-  const enriched = injectSkillNodes(lessons);
+  // (skip if any lesson opts out via skipSkillNodes — e.g. Typing Skills)
+  const enriched = lessons.some(l => l.skipSkillNodes) ? lessons : injectSkillNodes(lessons);
 
   let currentUnit = null;
   let foundCurrent = false;
@@ -125,14 +126,17 @@ function flushRow(container, nodes, rowIndex) {
 
     let icon = '';
     if (n.state === 'locked') {
-      icon = n.type === 'practice' ? '🎧' : n.type === 'reading' ? '📖' : '🔒';
+      icon = n.type === 'practice' ? '🎧' : n.type === 'reading' ? '📖' : (n.customIcon || '🔒');
     } else if (n.state === 'current') {
-      icon = n.type === 'practice' ? '🎧' : n.type === 'reading' ? '📖' : n.checkpoint ? '⭐' : String(n.index + 1);
+      icon = n.type === 'practice' ? '🎧' : n.type === 'reading' ? '📖' : n.checkpoint ? '⭐' : (n.customIcon || String(n.index + 1));
     } else {
       icon = ''; // completed — CSS ::after handles it
     }
 
-    if (n.state === 'locked') {
+    // Lessons with a real page (href !== '#') are always clickable, even if locked.
+    const hasRealPage = n.type !== 'practice' && n.type !== 'reading' && n.href && n.href !== '#';
+
+    if (n.state === 'locked' && !hasRealPage) {
       nodeEl.innerHTML = `
         <div class="${classes}">${icon}</div>
         <span class="path-label">${n.title}</span>
@@ -209,6 +213,8 @@ function injectSkillNodes(lessons) {
 /**
  * Get completed lesson IDs for a user from Firestore + local session.
  * Merges Firebase progress (logged in) with sessionStorage (Incognito).
+ * Hard 4-second timeout on the Firebase fetch so the learning path always
+ * renders even if Firestore / gstatic CDN is unreachable.
  */
 export async function getCompletedLessons(courseId) {
   const ids = new Set();
@@ -219,17 +225,17 @@ export async function getCompletedLessons(courseId) {
     local.forEach(id => ids.add(id));
   } catch(e) {}
 
-  // Also check Firebase if logged in
-  try {
-    const { auth } = await import('./firebase-config.js');
-    const { db } = await import('./firebase-config.js');
+  // Also check Firebase if logged in — but never let it block rendering
+  const firebaseFetch = (async () => {
+    const { auth, db } = await import('./firebase-config.js');
     const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const user = auth.currentUser;
-    if (user) {
-      const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
-      snap.forEach(doc => ids.add(doc.id));
-    }
-  } catch (e) {}
+    if (!user) return;
+    const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
+    snap.forEach(doc => ids.add(doc.id));
+  })();
+  const timeout = new Promise((resolve) => setTimeout(resolve, 4000));
+  try { await Promise.race([firebaseFetch, timeout]); } catch (e) {}
 
   return ids;
 }

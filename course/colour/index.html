@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colo(u)r — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Colo(u)r</h1>
+    <p>The math, science, and weirdness of color — multiplying and dividing colors, blending modes, RGB and CMYK, color spaces (LAB, OKLAB, XYZ), color theory, impossible colors, Vantablack, YInMn blue, pigment history, structural color in nature, tetrachromacy, color blindness, metamerism, and how cultures name color. 25 units, 375 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Color?",["Color as Wavelength","Color as Perception","The Difference Between Light & Pigment","Spectral vs Non-Spectral Color","Color & The Brain","Why Pink Doesn't Exist as a Wavelength","The Three Receptor Cells (Cones)","Rod Cells & Night Vision","Color Constancy","Why a Banana Stays Yellow Indoors & Outdoors","The Dress — White/Gold or Blue/Black","Color Words Across Languages","Color in Other Animals","Color Constancy Failures","Color Foundations Checkpoint"]],
+      [2,"The Visible Spectrum",["Newton's Prism Experiment","Wavelengths 380–700 nm","Why 7 Colors? — Newton's Choice","Infrared & Ultraviolet","Why Bees See Differently","Spectral Dispersion in Rainbows","Double Rainbows","Refraction & Color","Diffraction & Color","Atmospheric Scattering","Why the Sky Is Blue","Why Sunsets Are Red","Green Flash at Sunset","Mirages & Color","Spectrum Checkpoint"]],
+      [3,"Light, Eye & Brain",["The Anatomy of the Eye","Photoreceptors — Rods & Cones","Three Cone Types — S, M, L","Color Opponency Theory","Lateral Geniculate Nucleus","Visual Cortex V4 — Color Processing","After-Images","Color Adaptation","Chromatic Aberration","The Purkinje Effect","Mach Bands","Lateral Inhibition","Color & Memory","Newborn Color Vision","Eye-Brain Checkpoint"]],
+      [4,"RGB — Additive Color Math",["Red + Green + Blue = White","Why Screens Use RGB","RGB Triplets — (255,0,0)","8-Bit vs 10-Bit RGB","sRGB vs Adobe RGB","Display P3","Rec. 709 & Rec. 2020","HDR Color","RGB Cube","Linear RGB vs Gamma-Corrected","RGB Addition Examples","Saturating to White","Negative Light? — Cancellation","Subpixel Layouts","RGB Checkpoint"]],
+      [5,"CMYK — Subtractive Color Math",["Cyan + Magenta + Yellow = Black (Theory)","Why K (Black) Is Added","Subtractive Mixing — Pigments","CMYK in Printing","Color Separations","Halftones & Dot Patterns","Out-of-Gamut Colors","Spot Colors vs Process","CMYK Limits — No Bright Orange","Soft Proofing","ICC Profiles","Rich Black vs Pure Black","CMYK Conversion Issues","Pantone vs CMYK","CMYK Checkpoint"]],
+      [6,"Multiplying Colors",["What Multiplication Means in Color","Per-Channel Multiplication","Multiply in 0–1 Space","Multiply Blend Mode","Why Multiply Always Darkens","White × Anything = Anything","Black × Anything = Black","Multiply with Premultiplied Alpha","Multiply for Shadows in Art","Photoshop's Multiply","CSS mix-blend-mode: multiply","Color Burn — Multiply's Cousin","Multiply on Photos","Multiply Math Practice","Multiply Checkpoint"]],
+      [7,"Dividing Colors",["What Division Means in Color","Per-Channel Division","Avoiding Divide-by-Zero","Color Dodge as Inverse Divide","Division for Recovering Highlights","Dividing for Color Correction","White-Balance via Division","Dividing for Flat-Field Correction (Photography)","Division in HDR Tone Mapping","Division in Photometric Stereo","Color Burn vs Color Dodge","Dividing Premultiplied Alpha","Dividing in Linear vs Gamma Space","Division Math Practice","Division Checkpoint"]],
+      [8,"Adding & Subtracting Colors",["Add — Lighten Blend Mode","Linear Dodge — True Add","Why Add Saturates Easily","Subtract Blend Mode","Difference Mode","Exclusion Mode","Add for Light Effects","Add for Glow & Bloom","Subtract for Difference Maps","Subtract for Background Removal","Vector Color Math","Negative Colors? — Modeling","Pre-Clamping & Wrapping","Adding to White (No Effect)","Add/Subtract Checkpoint"]],
+      [9,"Blending Modes Deep Dive",["Normal","Multiply","Screen","Overlay","Soft Light","Hard Light","Linear Light","Vivid Light","Pin Light","Color Dodge","Color Burn","Difference","Hue, Saturation, Color, Luminosity","Why Order Matters","Blending Modes Checkpoint"]],
+      [10,"HSL, HSV & HCL",["Hue, Saturation, Lightness","Hue Wheel — 0° to 360°","Saturation as Distance from Gray","Lightness vs Brightness vs Value","HSV vs HSL — Differences","HCL — Perceptually Uniform","Picking Colors in HSL","Why HSL Isn't Perceptual","Rotating Hue","Desaturating to Grayscale","Tweaking Saturation Without Hue Shift","Pastel Colors via HSL","Vivid Colors via HSL","CSS hsl() Function","HSL Checkpoint"]],
+      [11,"CIE LAB, XYZ & OKLAB",["CIE 1931 XYZ — The Foundation","CIE xy Chromaticity Diagram","White Point — D65, D50","CIE LAB — Perceptual Uniformity","L* (Lightness), a* (Green-Red), b* (Blue-Yellow)","Delta E — Color Difference","OKLAB & OKLCH — Modern Perceptual","Why OKLAB Is Better than HSL","Gradients in OKLAB","CIE Lu*v* Color Space","CIE Lab to RGB Conversion","Gamut Mapping","White Point Adaptation — Bradford","Munsell System","CIE LAB Checkpoint"]],
+      [12,"Hex Color Codes & Web Colors",["Hex Format — #RRGGBB","Short Form — #RGB","Hex with Alpha — #RRGGBBAA","Named CSS Colors — 147 Names","Why #FF0000 Is Pure Red","Hex to RGB Conversion","CSS Variables for Colors","Tailwind Color Palette","Material Design Colors","Bootstrap Colors","System Colors — currentColor","color-mix() in CSS","Hex Trivia — #BADA55","Hex Word Colors — #C0FFEE","Hex Codes Checkpoint"]],
+      [13,"Color Wheels — Newton to Itten",["Newton's Original 7-Color Wheel","Goethe's Color Wheel","Munsell's 3D Color Tree","Itten's 12-Color Wheel","Faber Birren Wheel","RGB vs RYB Wheels","Why RYB Wheel Is Wrong (and Used Anyway)","Hering Opponent Wheel","Albers' Color Squares","Modern Hue Wheels","Wheel for Painters","Wheel for Designers","Wheel for Web","Building Your Own Wheel","Color Wheels Checkpoint"]],
+      [14,"Color Theory — Harmonies",["Complementary","Split Complementary","Analogous","Triadic","Tetradic","Square","Monochromatic","Color Discord","Color Tension","60-30-10 Rule","Dominant + Accent","Warm vs Cool Pairings","Earth Tone Palettes","Neon Palettes","Harmonies Checkpoint"]],
+      [15,"Color Illusions",["Simultaneous Contrast","Bezold Effect","Munker–White Illusion","Checker Shadow Illusion","The Dress (Blue/Black or White/Gold)","Cornsweet Illusion","Watercolor Illusion","Chromatic Adaptation Illusions","After-Image Demos","Negative After-Images","McCollough Effect","Bezold–Brücke Hue Shift","Helmholtz–Kohlrausch Effect","Why These Illusions Exist","Illusions Checkpoint"]],
+      [16,"Impossible Colors (Chimerical)",["What Are Chimerical Colors?","Stygian Blue — Black + Saturated","Self-Luminous Red","Hyperbolic Orange","Forbidden Colors — Red-Green & Yellow-Blue","Crane & Piantanida Experiment","Adapted Eye Tricks","Why Pink Isn't on the Spectrum","Magenta as a Brain Construct","Why Brown Doesn't Exist as a Wavelength","Optical Mixing","Color Constructed by the Brain","Imaginary Primaries","Visualizing Impossible Colors","Impossible Colors Checkpoint"]],
+      [17,"Vantablack & The Blackest Blacks",["What Is Vantablack?","Carbon Nanotubes — How They Trap Light","99.965% Light Absorption","Anish Kapoor Controversy","Stuart Semple's Pinkest Pink","Black 2.0 & Black 3.0","Singularity Black","MIT's Even-Blacker Black","Musou Black Paint","Painting With Vantablack","Photographing Vantablack","Vantablack vs Old-Master Blacks","Why Black Is Hard","Pure Black vs Rich Black in Print","Blackest Black Checkpoint"]],
+      [18,"YInMn Blue & New Pigments",["YInMn Blue — Discovered 2009","Mas Subramanian's Lab Accident","Why YInMn Is Special","Cobalt Blue — Old Standby","International Klein Blue","Han Blue & Han Purple","Egyptian Blue","Maya Blue","Indigo's Plant Origin","Cochineal Red — From Bugs","Lapis Lazuli & Ultramarine","Synthetic Ultramarine","Indian Yellow — Cow Urine","Tyrian Purple — Sea Snails","New Pigments Checkpoint"]],
+      [19,"Pigment History",["Cave Paintings — Ochre","Egyptian Blue — First Synthetic","Tyrian Purple — Royal Color","Lapis Lazuli — More Costly than Gold","Ultramarine in Renaissance","Vermilion — Cinnabar","Mummy Brown — Real Mummies","Lead White — Toxic Beauty","Schweinfurt Green — Arsenic Green","Prussian Blue — 1704","Cobalt Blue — 1802","Synthetic Ultramarine — 1828","Mauve — Perkin 1856","Phthalo Blue & Green","Pigment History Checkpoint"]],
+      [20,"Structural Color in Nature",["What Is Structural Color?","Thin-Film Interference","Diffraction Grating in Nature","Photonic Crystals","Morpho Butterfly Wings","Peacock Feathers","Hummingbird Iridescence","Blue Tarantula","Beetle Iridescence","Cuttlefish Color Change","Octopus Skin","Why Blue Is Rare in Nature","Glass Frog Transparency","Mirror Eyes — Scallops","Structural Color Checkpoint"]],
+      [21,"Tetrachromacy, Color Blindness & Animal Vision",["Most Humans Are Trichromats","Tetrachromacy — Four Cones","Concetta Antico — Tetrachromat Artist","How Many Tetrachromats Exist?","Mantis Shrimp — 16 Cone Types?","Bee UV Vision","Bird Tetrachromacy","Snake Infrared Pits","Dichromat Color Blindness","Protanopia, Deuteranopia, Tritanopia","Anomalous Trichromacy","Monochromacy — Total Color Blindness","Color-Blind-Friendly Palettes","Genetic Basis of Color Vision","Animal Vision Checkpoint"]],
+      [22,"Color Naming Across Cultures",["Berlin & Kay Hierarchy","Languages With 2 Color Words","Languages With 11+ Color Words","Russian — Two Blues (Goluboy/Siniy)","Japanese — Ao for Blue/Green","Greek — Glaukós","Welsh — Glas","Himba — Few Color Words","Color & Cognition Studies","Color Linguistic Relativity","Sky Color Across Cultures","Pink — A Recent Word","Brown's Lateness as a Word","Universal vs Relative","Cultural Color Checkpoint"]],
+      [23,"Pantone & Color Standards",["Pantone Matching System (PMS)","Pantone Color of the Year","Spot Color in Print","Pantone vs CMYK","Pantone Goe System","RAL Color System","NCS — Natural Color System","Munsell Color System","Federal Standard 595","ICC Profiles","Spectrophotometer Use","Color Calibration — Monitor","Color-Critical Workflow","ColorChecker Charts","Standards Checkpoint"]],
+      [24,"Spectral, Metameric & Imaginary Colors",["Spectral Color (Pure Wavelength)","Non-Spectral Colors — Magenta, Pink","Metamerism — Same Color, Different Spectra","Metameric Failure Under Different Lights","CIE Color Matching Functions","Imaginary / Theoretical Primaries","Pointer's Gamut — Real Object Colors","Locus of Spectral Colors","Purple Line","Stockman & Sharpe Cone Fundamentals","Why HDR Pushes Toward Spectral","Wide Gamut Displays","Laser Light & Pure Spectral","Color Beyond Vision","Spectral Checkpoint"]],
+      [25,"Colo(u)r Mastery",["RGB & CMYK Math Final","Multiply, Divide, Add, Subtract Final","Blending Modes Final","Color Spaces — HSL, LAB, OKLAB Final","Color Wheels & Harmonies Final","Color Illusions Final","Impossible Colors Final","Vantablack & New Pigments Final","Pigment History Final","Structural Color Final","Color Vision & Tetrachromacy Final","Color Linguistics Final","Standards & Pantone Final","Spectral & Metameric Final","Colo(u)r Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dc-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('colour');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('colour');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

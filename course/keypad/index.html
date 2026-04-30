@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keypad Practice — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Keypad Practice</h1>
+    <p>Master every keypad — the 10-key numeric pad, phone (T9) keypads, hex keypads, calculator pads, ATM PIN pads, cash registers, and modern programmable macropads (Stream Deck, Elgato, custom QMK macropads). Touch-typing drills, KPH (keystrokes per hour) speed training, accuracy work, ergonomics, and real-world data-entry workflows. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is a Keypad?",["Keypad vs Keyboard","Why Keypads Exist","Numeric Keypad — The 10-Key","Phone Keypad — DTMF","Hex Keypad","Calculator Keypads","ATM PIN Pads","Cash Register Keypads","POS Terminal Keypads","Programmable Macropads","Keypads in Industrial Equipment","Keypads in Medical Devices","Keypads in Cars (Door Locks, Climate)","Keypads in Pop Culture","Keypad Foundations Checkpoint"]],
+      [2,"Numeric Keypad Anatomy",["Layout — 4×5 Grid","The Number Row 7-8-9","The Middle Row 4-5-6","The Bottom Row 1-2-3","The Zero Row","Plus, Minus, Star, Slash","Enter Key","Decimal & Period","Num Lock — On vs Off","Why Phone Keypads Are Inverted","The 5 Key Bump","Light vs Dark Bump Markers","Numpad Variants on Laptops","Standalone vs Built-In","Anatomy Checkpoint"]],
+      [3,"10-Key Touch Typing — Home Position",["Hand Placement","Thumb on Zero","Index Finger on 4","Middle Finger on 5","Ring Finger on 6","Pinky on Enter","Reaching to 7-8-9","Reaching to 1-2-3","Reaching to + - *","Wrist Posture","Keeping Eyes on Screen","Building Muscle Memory","Common Beginner Mistakes","Daily Practice Routine","Home Position Checkpoint"]],
+      [4,"10-Key Drills — Numbers 0-9",["Drill — Repeating 0","Drill — Repeating 1","Drill — Repeating 2","Drill — Repeating 3","Drill — Repeating 4","Drill — Repeating 5","Drill — Repeating 6","Drill — Repeating 7","Drill — Repeating 8","Drill — Repeating 9","Drill — Counting 0-9","Drill — Random Single Digits","Drill — Two-Digit Numbers","Drill — Three-Digit Numbers","Numbers Drill Checkpoint"]],
+      [5,"Decimal Numbers & Operators",["Decimal Point Drills","Currency — \\$1,234.56","Adding with +","Subtracting with -","Multiplying with *","Dividing with /","Order of Operations on Numpad","Negative Numbers","Percent Calculations","Tax Calculations","Tip Calculations","Sales Receipts","Bookkeeping Drills","Excel Cell Entry","Operators Checkpoint"]],
+      [6,"Num Lock & Function Modes",["Num Lock On — Numbers","Num Lock Off — Arrow & Navigation Keys","Insert / Delete / Home / End / PgUp / PgDn","Toggling Num Lock","Boot-Up Num Lock Behavior","Num Lock on Wireless Keyboards","Mac Keyboards Without Num Lock","Switching Modes Mid-Workflow","Re-Mapping with QMK","Re-Mapping with VIA","Numpad Shortcuts in Excel","Numpad Shortcuts in Calc","Numpad in Photoshop","Numpad in Premiere Pro","Function Modes Checkpoint"]],
+      [7,"Phone Keypad Layout (T9)",["T9 — Text on 9 Keys","Phone Keypad History","Why Phone Pads Are Inverted","Letters per Key — abc, def, ghi, jkl, mno, pqrs, tuv, wxyz","The 1 Key — Punctuation","The 0 Key — Space","The * & # Keys","Multi-Tap Method","T9 Predictive Method","Word & Phrase Disambiguation","Custom Dictionary Adds","SMS Standard Length","Modern Smartphone Keypads","Numeric vs Alpha Mode Toggle","Phone Keypad Checkpoint"]],
+      [8,"T9 Predictive Text Practice",["Single-Word T9 Drills","Sentence T9 Drills","Common SMS Abbreviations","T9 vs Swype Comparison","T9 vs QWERTY Comparison","T9 Speed Records","Avoiding T9 Errors","T9 on Feature Phones","T9 on iOS & Android","Older Adult T9 Use","Texting Without Looking","Voice-to-T9 Hybrid","T9 in Pop Culture (Texting Era)","Modern Keypad Phones — KaiOS","T9 Practice Checkpoint"]],
+      [9,"Hex Keypad — 0-F",["Hexadecimal Number System","16-Key Hex Layout","Mapping 0-9 + A-F","Hex Keypad in Embedded Dev","Microcontroller Test Hex Pads","Hex Keypads in Programming","Decoding Hex by Hand","Converting Hex to Decimal","Converting Hex to Binary","Bit-Pair Practice","Color Codes — #FFFFFF","Memory Addresses","Hex Drills","Hex Pad with Arduino","Hex Keypad Checkpoint"]],
+      [10,"Calculator Keypads",["Standard Calculator Layout","Scientific Calculator Layout","Graphing Calculator Layout — TI-84","HP RPN Calculators","Reverse Polish Notation Drills","Casio fx-Series","Texas Instruments Layout","Memory Keys — M+, M-, MR","Percent Key","Square Root Key","Pi Key","Trig Function Keys","Programming Calculator Keypads","Online Calculator Speed Tests","Calculator Checkpoint"]],
+      [11,"Cash Register & POS Keypads",["Traditional Cash Register Layout","Square Terminal Layout","Clover POS Layout","Lightspeed POS","NCR & Toshiba Registers","Quick-Item Buttons","Department Keys","Cash, Credit, Check Buttons","Tendering Workflows","Refund Workflow","Discount Keys","No-Sale & Drawer Open","Tax Override","Daily Z-Reading","POS Keypad Checkpoint"]],
+      [12,"ATM PIN Pads",["EPP — Encrypted PIN Pad Standard","ATM Layout 1-2-3 Top","Random PIN Pad Layouts","Tactile Bumps for Accessibility","Anti-Skimming Designs","PCI PIN Security","Voice-Guided ATMs","Drive-Thru ATM Pads","Wheelchair-Height ATMs","Spaced PIN Entry","Decoy Number Pads","Shoulder-Surfing Defense","ATM Keypad Materials","Hardware Tampering Detection","ATM PIN Pad Checkpoint"]],
+      [13,"Macropads & Programmable Keypads",["What Is a Macropad?","Stream Deck — Elgato","Stream Deck Profiles","Loupedeck — Photo Editing","Razer Tartarus","Logitech G13 (Discontinued)","Custom QMK Macropads","Adafruit MacroPad RP2040","Sayobit Sayodevice","KMK on macropads","Hot-Swap Macropads","DIY Macropad Builds","Macropad PCB Design","Macropad Programming","Macropads Checkpoint"]],
+      [14,"Stream Deck Practice",["Stream Deck Mini, MK.2, XL","Profile Switching","Folder Navigation","Multi-Action Triggers","Hotkey Macros","OBS Integration","Twitch Chat Triggers","Discord Push-to-Talk Toggle","Spotify Controls","Color Coding Buttons","Custom Icons","Streaming Workflow","Productivity Workflow","Editing Workflow","Stream Deck Checkpoint"]],
+      [15,"10-Key Speed Tests (KPH)",["What Is KPH? — Keystrokes Per Hour","8,000 KPH — Industry Standard","10,000 KPH — Pro Level","12,000 KPH — Elite","KPH vs WPM","TestMyTyping.com Numeric","TenKeyTutor","Typing.com 10-Key","Practice Test Sites","Building from 4,000 to 8,000 KPH","Burst Speed vs Sustained","Numeric WPM Records","Data Entry Job Requirements","KPH Improvement Plan","Speed Tests Checkpoint"]],
+      [16,"Data Entry Speed Drills",["Phone Number Drills","Address Drills","Zip Code Drills","Social Security Numbers (Mock)","Credit Card Mock Numbers","Long Number Strings","Random Number Sequences","Mixed Numbers + Decimals","Time-Pressure Drills","Random Item Numbers","Inventory SKU Practice","Account Number Practice","Speed-Building Routine","Tracking Your Progress","Data Entry Checkpoint"]],
+      [17,"Accuracy & Error Prevention",["Why Accuracy Beats Speed","Common 10-Key Errors","Misreading 0 vs 8","Misreading 1 vs 7","Transposition Errors","Slowing Down to Speed Up","Verification Workflow","Double-Entry Verification","Self-Audit Drills","Error Logs","Reading Aloud","Visual Confirmation","Numeric Keypad Auto-Correct","Backspace Discipline","Accuracy Checkpoint"]],
+      [18,"Numpad Shortcuts & Alt Codes",["Alt Codes Overview","Common Alt Codes — © ™ ® °","Alt Codes for Em Dash","Alt Codes for Accents","Currency Alt Codes — £ ¥ €","Math Symbols — ÷ ± ≠","Greek Letters — α β γ","Smiley Faces — ☺ ☻","Geometric Shapes — ■ □ ▲","Numpad in Excel — F-Keys","Numpad Macros in QMK","Numpad as Mouse Keys (Accessibility)","International Diacritics","Unicode Hex Input","Alt Codes Checkpoint"]],
+      [19,"Ergonomic Keypad Use",["Keypad Position — Left vs Right","Detached Numpads","Tilt Angle for Numpad","Wrist Rest for Numpad","Wireless Numpads","Bluetooth Numpads","Foot Switches Pairing","Anti-RSI Stretches","Keypad Use & Carpal Tunnel","Switching Hands","Standing Desk Numpad","Numpad with Trackball","Numpad with Tablet","Posture Reminders","Ergonomics Checkpoint"]],
+      [20,"Keypad Mastery",["10-Key Speed Review","T9 Phone Keypad Review","Hex Keypad Review","Calculator Keypad Review","POS & ATM Keypad Review","Macropad Review","Stream Deck Review","KPH Speed Review","Data Entry Drills Review","Accuracy & Error Prevention Review","Alt Codes Review","Ergonomics Review","Picking the Right Keypad for Your Job","Career — Data Entry, Accounting, Bookkeeping","Keypad Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'kp-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    // First lesson is the live 10-key drill (real keypad practice in the browser)
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('keypad');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('keypad');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

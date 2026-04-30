@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drawing &amp; Sketching — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Drawing &amp; Sketching</h1>
+    <p>Train your eye and hand — line, value, perspective, anatomy, gesture, portraits, landscapes, and urban sketching with pencil, charcoal, ink, and pen. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Materials",["Graphite Pencils — H to B","Charcoal","Conté Crayons","Pen & Ink","Markers","Brush Pens","Sketchbooks","Tooth of Paper","Erasers — Kneaded & Vinyl","Blending Stumps","Sharpeners","Drawing Boards","Travel Kits","Digital Drawing","Materials Checkpoint"]],
+      [2,"Line & Mark Making",["Continuous Line","Contour Drawing","Blind Contour","Cross-Contour","Hatching","Cross-Hatching","Stippling","Scribbling","Gestural Lines","Mass Drawing","Line Weight","Energy in Lines","Line Quality Variations","Mark-Making Drills","Line Checkpoint"]],
+      [3,"Value & Shading",["Value Scale","Highlight Halftone Shadow","Cast Shadow","Form Shadow","Reflected Light","Sphere Study","Cube Study","Cylinder Study","Cone Study","Combining Forms","Squinting Trick","Black & White Photo Reference","Notan Studies","Dramatic Lighting","Value Checkpoint"]],
+      [4,"Perspective",["1-Point Perspective","2-Point Perspective","3-Point Perspective","Eye Level & Horizon","Vanishing Points","Foreshortening","Atmospheric Perspective","Cube in Space","Boxing-Out Forms","Curvilinear Perspective","Drawing Stairs","Drawing Streets","Drawing Interiors","Common Perspective Mistakes","Perspective Checkpoint"]],
+      [5,"Figure Drawing",["Skeleton Basics","Proportions — 8 Heads","Gesture (1-2 min)","Long Pose","Mannequinization","Loomis Method","Reilly Method","Anatomy of the Torso","Arms & Hands","Legs & Feet","Drapery","Foreshortening Figures","Life Drawing Etiquette","Memory Sketches","Figure Drawing Checkpoint"]],
+      [6,"Portrait Drawing",["Skull Anatomy","Head Proportions","Loomis Head","Eyes","Nose","Mouth","Ears","Hair","Likeness","Three-Quarter View","Profile View","Expressions","Aging the Face","Self-Portrait","Portrait Checkpoint"]],
+      [7,"Still Life",["Setting Up a Still Life","Composition Rules","Negative Space","Drawing Drapery","Drawing Glass","Drawing Metal","Fruit & Organic Forms","Cast Studies","Bargue Plates","Sight-Size Method","Comparative Measurement","Plumb Lines","Lost & Found Edges","Refining a Drawing","Still Life Checkpoint"]],
+      [8,"Landscape Drawing",["Trees","Foliage Texture","Rocks","Water","Skies","Clouds","Mountains","Architecture in Landscape","Foreground Middleground Background","Atmospheric Depth","Plein Air Setup","Quick Studies","Color Notes","Composition in Landscape","Landscape Checkpoint"]],
+      [9,"Urban Sketching",["Urban Sketcher's Manifesto","Travel Sketchbook","Quick Capture","Adding Watercolor","Crowds & Figures","Vehicles","Buildings","Signage & Lettering","Cafés & Interiors","Markets","Sketching from Public Transit","Sketchbook Page Layout","Color Notes On Location","Memory Drawings","Urban Sketching Checkpoint"]],
+      [10,"Style, Portfolio & Mastery",["Developing a Style","Master Studies","Reference Use Ethics","Daily Sketchbook Habit","Drawing from Imagination","Visual Library","Sharing on Instagram","Patreon for Artists","Selling Originals","Selling Prints","Commissions","Drawing for Animation","Drawing for Concept Art","Drawing for Comics","Drawing Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'draw-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('drawing-sketching');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('drawing-sketching');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

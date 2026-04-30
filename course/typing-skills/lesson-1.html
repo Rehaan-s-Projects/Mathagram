@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F and J Keys — One at a Time — Typing Skills</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    .lesson-page { max-width: 880px; margin: 0 auto; padding: 64px 16px 96px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: #8b5cf6; }
+    .lesson-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
+    .lesson-header p  { color: var(--color-text-secondary); max-width: 620px; margin: 4px auto 0; line-height: 1.55; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 720px; margin: 0 auto 18px; }
+    .stat { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px; text-align: center; }
+    .stat .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-secondary, #aaa); margin-bottom: 4px; }
+    .stat .value { font-size: 1.4rem; font-weight: 800; color: #fff; }
+
+    /* Big "Press X" prompt */
+    .prompt-card { background: var(--color-surface, #1a1a1a); border: 2px solid rgba(139,92,246,0.35); border-radius: 18px; padding: 36px 24px; max-width: 720px; margin: 0 auto 18px; text-align: center; transition: border-color 0.15s, transform 0.1s; }
+    .prompt-card.correct { border-color: #22c55e; animation: pop 0.3s; }
+    .prompt-card.wrong   { border-color: #ef4444; animation: shake 0.3s; }
+    @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+    .prompt-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary, #aaa); margin-bottom: 8px; }
+    .prompt-key { font-family: 'SF Mono', Monaco, monospace; font-size: 6rem; font-weight: 800; color: #fff; line-height: 1; margin: 4px 0 8px; }
+    .prompt-finger { color: #c4b5fd; font-size: 1rem; font-weight: 600; }
+
+    /* Drill text strip */
+    .drill-text-card { max-width: 720px; margin: 0 auto 16px; padding: 16px 22px; background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; text-align: center; }
+    .drill-text-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary, #aaa); margin-bottom: 8px; }
+    .drill-text { font-family: 'SF Mono', Monaco, monospace; font-size: 1.8rem; line-height: 1.4; letter-spacing: 0.18em; word-break: break-all; }
+    .drill-text .ch { display: inline-block; padding: 1px 4px; border-radius: 4px; color: var(--color-text-secondary, #888); transition: all 0.1s; }
+    .drill-text .ch.done { color: #86efac; }
+    .drill-text .ch.cur  { background: #8b5cf6; color: #fff; box-shadow: 0 0 10px rgba(139,92,246,0.5); animation: blink 1s ease-in-out infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+    /* Progress bar */
+    .progress-bar { max-width: 720px; height: 8px; margin: 0 auto 14px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd); transition: width 0.3s; width: 0%; }
+
+    .controls { text-align: center; margin: 18px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: inherit; transition: transform 0.1s, background 0.15s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: #8b5cf6; color: #fff; }
+    .btn.primary:hover { background: #7c3aed; }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #fff; }
+
+    /* Mini keyboard diagram */
+    .keyboard { max-width: 720px; margin: 0 auto 24px; padding: 16px; background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
+    .keyboard h3 { text-align: center; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary, #aaa); margin: 0 0 12px; }
+    .row { display: flex; justify-content: center; gap: 4px; margin-bottom: 4px; }
+    .key { display: flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 0 8px; background: #2a2a2a; border-radius: 6px; font-family: 'SF Mono', monospace; font-size: 0.9rem; font-weight: 600; color: #ddd; border: 2px solid transparent; transition: all 0.1s; }
+    .key.home { background: #3a3a3a; }
+    .key.target { background: #8b5cf6; color: #fff; border-color: #c4b5fd; box-shadow: 0 0 8px rgba(139,92,246,0.5); }
+    .key.target.now { background: #fde047; color: #1a1a1a; border-color: #fde047; transform: scale(1.08); }
+    .key.target.bump::after { content: '·'; position: absolute; }
+    .key.pressed { transform: translateY(2px) scale(0.96); background: #fde047; color: #1a1a1a; border-color: #fde047; }
+    .key.xwide { min-width: 100px; }
+
+    .complete { max-width: 720px; margin: 0 auto; padding: 24px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.45); border-radius: 14px; text-align: center; display: none; }
+    .complete.show { display: block; }
+    .complete h2 { color: #86efac; margin: 0 0 8px; font-size: 1.4rem; }
+    .complete .score-row { display: flex; gap: 24px; justify-content: center; margin: 14px 0 18px; flex-wrap: wrap; }
+    .complete .score-row span.lbl { display: block; font-size: 0.7rem; color: var(--color-text-secondary, #aaa); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; margin-bottom: 2px; }
+    .complete .score-row span.val { display: block; font-size: 1.4rem; color: #fff; font-weight: 800; }
+
+    .footer-nav { text-align: center; margin-top: 28px; }
+    .footer-nav a { color: #8b5cf6; text-decoration: none; font-weight: 600; }
+
+    .hint { max-width: 720px; margin: 0 auto 14px; text-align: center; font-size: 0.92rem; color: var(--color-text-secondary, #aaa); }
+    .hint strong { color: #c4b5fd; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">Typing Skills · Unit 1 · Lesson 1</span>
+      <h1>F and J Keys — One at a Time</h1>
+      <p>Place your <strong>left index</strong> on F and your <strong>right index</strong> on J. Press the key shown — keep your fingers on the home row.</p>
+    </header>
+
+    <div class="hint">
+      Just <strong>press the key on your keyboard</strong> — no need to click anywhere. <strong>No spacebar</strong> in this drill, just F and J in sequence.
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="label">Drill</div><div class="value" id="drill-num">1 / 6</div></div>
+      <div class="stat"><div class="label">Correct</div><div class="value" id="correct-num">0</div></div>
+      <div class="stat"><div class="label">Misses</div><div class="value" id="miss-num">0</div></div>
+      <div class="stat"><div class="label">Accuracy</div><div class="value" id="acc-num">100%</div></div>
+    </div>
+
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+
+    <div class="drill-text-card">
+      <div class="drill-text-label">Type this</div>
+      <div id="drill-text" class="drill-text"></div>
+    </div>
+
+    <section id="prompt" class="prompt-card">
+      <div class="prompt-label">Press the key</div>
+      <div id="prompt-key" class="prompt-key">F</div>
+      <div id="prompt-finger" class="prompt-finger">Use your <strong>left index</strong> finger</div>
+    </section>
+
+    <div class="controls">
+      <button id="reset-btn" class="btn secondary">↻ Reset Drill</button>
+      <button id="continue-btn" class="btn primary" style="display: none;">Continue to Lesson 2 →</button>
+    </div>
+
+    <section class="keyboard">
+      <h3>Home Row · F &amp; J have the bumps</h3>
+      <div class="row"><div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div></div>
+      <div class="row"><div class="key home">A</div><div class="key home">S</div><div class="key home">D</div><div id="kf" class="key home target">F</div><div class="key home">G</div><div class="key home">H</div><div id="kj" class="key home target">J</div><div class="key home">K</div><div class="key home">L</div><div class="key home">;</div></div>
+      <div class="row"><div class="key">Z</div><div class="key">X</div><div class="key">C</div><div class="key">V</div><div class="key">B</div><div class="key">N</div><div class="key">M</div><div class="key">,</div><div class="key">.</div><div class="key">/</div></div>
+      <div class="row"><div class="key xwide">space</div></div>
+    </section>
+
+    <section id="complete" class="complete">
+      <h2>🎉 Drill Complete!</h2>
+      <div class="score-row">
+        <div><span class="lbl">Correct</span><span class="val" id="final-correct">0</span></div>
+        <div><span class="lbl">Misses</span><span class="val" id="final-miss">0</span></div>
+        <div><span class="lbl">Accuracy</span><span class="val" id="final-acc">100%</span></div>
+      </div>
+      <div class="controls" style="margin: 0;">
+        <button id="again-btn" class="btn secondary">Try Again</button>
+        <button id="next-drill-btn" class="btn primary">Next Drill →</button>
+      </div>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Typing Skills</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // Continuous F/J drills — no spaces, no spacebar.
+    const DRILLS = [
+      'ffjffjfjf',
+      'ffffffff',
+      'jjjjjjjj',
+      'fjfjfjfj',
+      'ffjjffjj',
+      'fjjffjjffjjf',
+    ];
+
+    let drillIdx = 0;
+    let pos = 0;             // index into the (non-space) characters of the drill
+    let chars = [];          // current drill's letters only (no spaces)
+    let correct = 0;
+    let misses = 0;
+    let done = false;
+
+    const promptCard = document.getElementById('prompt');
+    const promptKey  = document.getElementById('prompt-key');
+    const promptFinger = document.getElementById('prompt-finger');
+    const drillTextEl = document.getElementById('drill-text');
+    const fillEl     = document.getElementById('progress-fill');
+    const drillNum   = document.getElementById('drill-num');
+    const correctNum = document.getElementById('correct-num');
+    const missNum    = document.getElementById('miss-num');
+    const accNum     = document.getElementById('acc-num');
+    const completeEl = document.getElementById('complete');
+    const kf = document.getElementById('kf');
+    const kj = document.getElementById('kj');
+
+    function fingerHint(ch) {
+      if (ch === 'f') return 'Use your <strong>left index</strong> finger';
+      if (ch === 'j') return 'Use your <strong>right index</strong> finger';
+      return '';
+    }
+
+    function renderDrillText() {
+      drillTextEl.innerHTML = '';
+      chars.forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.className = 'ch';
+        if (i < pos) span.classList.add('done');
+        else if (i === pos) span.classList.add('cur');
+        span.textContent = ch;
+        drillTextEl.appendChild(span);
+      });
+    }
+
+    function updateStats() {
+      correctNum.textContent = correct;
+      missNum.textContent = misses;
+      const total = correct + misses;
+      const acc = total === 0 ? 100 : Math.round((correct / total) * 100);
+      accNum.textContent = acc + '%';
+    }
+
+    function highlightTargetKey(ch) {
+      kf.classList.remove('now');
+      kj.classList.remove('now');
+      if (ch === 'f') kf.classList.add('now');
+      else if (ch === 'j') kj.classList.add('now');
+    }
+
+    function flashKeyPressed(ch) {
+      const k = ch === 'f' ? kf : ch === 'j' ? kj : null;
+      if (!k) return;
+      k.classList.add('pressed');
+      setTimeout(() => k.classList.remove('pressed'), 130);
+    }
+
+    function loadDrill(i) {
+      drillIdx = i;
+      const raw = DRILLS[i];
+      chars = raw.split('').filter(c => c !== ' ');
+      pos = 0;
+      correct = 0;
+      misses = 0;
+      done = false;
+      drillNum.textContent = `${i + 1} / ${DRILLS.length}`;
+      completeEl.classList.remove('show');
+      promptCard.classList.remove('correct', 'wrong');
+      updatePrompt();
+      renderDrillText();
+      updateStats();
+      updateProgress();
+    }
+
+    function updatePrompt() {
+      const ch = chars[pos];
+      promptKey.textContent = ch ? ch.toUpperCase() : '✓';
+      promptFinger.innerHTML = fingerHint(ch);
+      highlightTargetKey(ch);
+    }
+
+    function updateProgress() {
+      const pct = chars.length === 0 ? 0 : (pos / chars.length) * 100;
+      fillEl.style.width = pct + '%';
+    }
+
+    function flashPrompt(ok) {
+      promptCard.classList.remove('correct', 'wrong');
+      void promptCard.offsetWidth;
+      promptCard.classList.add(ok ? 'correct' : 'wrong');
+    }
+
+    function complete() {
+      done = true;
+      const total = correct + misses;
+      const acc = total === 0 ? 100 : Math.round((correct / total) * 100);
+      document.getElementById('final-correct').textContent = correct;
+      document.getElementById('final-miss').textContent = misses;
+      document.getElementById('final-acc').textContent = acc + '%';
+      completeEl.classList.add('show');
+      const nextBtn = document.getElementById('next-drill-btn');
+      if (drillIdx < DRILLS.length - 1) {
+        nextBtn.textContent = `Next Drill (${drillIdx + 2} of ${DRILLS.length}) →`;
+        nextBtn.style.display = 'inline-block';
+      } else {
+        nextBtn.style.display = 'none';
+        document.getElementById('continue-btn').style.display = 'inline-block';
+      }
+    }
+
+    // Document-level keypress capture — no input box needed
+    document.addEventListener('keydown', (e) => {
+      if (done) return;
+      // Ignore modifier keys, function keys, etc.
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      const key = e.key.toLowerCase();
+      // Only react to single-char keys
+      if (key.length !== 1) return;
+      const expected = chars[pos];
+      if (!expected) return;
+      e.preventDefault();
+      if (key === expected) {
+        correct++;
+        flashKeyPressed(key);
+        flashPrompt(true);
+        pos++;
+        updateStats();
+        renderDrillText();
+        updateProgress();
+        if (pos >= chars.length) {
+          setTimeout(complete, 200);
+        } else {
+          updatePrompt();
+        }
+      } else {
+        misses++;
+        flashPrompt(false);
+        updateStats();
+      }
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => loadDrill(drillIdx));
+    document.getElementById('again-btn').addEventListener('click', () => loadDrill(drillIdx));
+    document.getElementById('next-drill-btn').addEventListener('click', () => {
+      if (drillIdx < DRILLS.length - 1) loadDrill(drillIdx + 1);
+    });
+    document.getElementById('continue-btn').addEventListener('click', () => {
+      window.location.href = 'lesson-2.html';
+    });
+
+    // Init
+    loadDrill(0);
+  </script>
+</body>
+</html>

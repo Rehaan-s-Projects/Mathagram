@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genetics — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Genetics</h1>
+    <p>DNA, genes, and inheritance — Mendel's laws, Punnett squares, mutations, replication, transcription, translation, gene regulation, genetic diseases, CRISPR, gene editing, population genetics, epigenetics, and genome sequencing. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Genetics?",["Genetics Defined","History of Genetics","Mendel's Discovery","DNA Discovery — Watson & Crick","Rosalind Franklin's Photo 51","Cracking the Genetic Code","Human Genome Project","Branches of Genetics","Genetics vs Genomics","Heredity Concept","Variation Sources","Why Genetics Matters","Genetic Counseling","Ethical Issues Preview","Genetics Foundations Checkpoint"]],
+      [2,"DNA Structure",["Double Helix","Sugar-Phosphate Backbone","Bases — A, T, G, C","Base Pairing","Antiparallel Strands","Major Groove vs Minor Groove","Hydrogen Bonds","Chargaff's Rules","X-Ray Crystallography","B-Form vs A-Form vs Z-Form","Plasmid DNA","Mitochondrial DNA","Chloroplast DNA","Telomeres","DNA Structure Checkpoint"]],
+      [3,"Genes & Chromosomes",["Gene Definition","Locus","Allele","Chromosome Structure","Chromatin","Histones","Nucleosomes","Karyotype","Autosomes","Sex Chromosomes — X, Y","Diploid vs Haploid","Homologous Chromosomes","Heterochromatin vs Euchromatin","Karyotyping","Genes Checkpoint"]],
+      [4,"Mendelian Genetics",["Mendel's Pea Experiments","Law of Segregation","Law of Independent Assortment","Genotype vs Phenotype","Homozygous vs Heterozygous","Dominant vs Recessive","Mono-hybrid Cross","Di-hybrid Cross","3:1 Ratio","9:3:3:1 Ratio","Test Cross","Pedigree Analysis","Family History","Mendelian Inheritance Patterns","Mendelian Checkpoint"]],
+      [5,"Punnett Squares",["Single-Trait Punnett","Two-Trait Punnett","Probability Method","Forked-Line Method","X-Linked Punnett","Codominance Squares","Blood Type Punnett","Multiple Alleles","Lethal Alleles","Practice Problems","Three-Trait Crosses","Backcrosses","Self-Pollination","Punnett Limitations","Punnett Checkpoint"]],
+      [6,"Genetic Variation",["Sources of Variation","Mutation","Recombination","Independent Assortment","Random Fertilization","Gene Flow","Genetic Drift","Founder Effect","Bottleneck Effect","Hardy-Weinberg Equilibrium","Allele Frequencies","Heterozygote Advantage","Balanced Polymorphism","Cline","Variation Checkpoint"]],
+      [7,"Mutations",["Point Mutations","Substitution","Insertion","Deletion","Frameshift","Silent Mutation","Missense","Nonsense","Chromosomal Mutations","Inversion","Translocation","Duplication","Aneuploidy","Causes of Mutation","Mutations Checkpoint"]],
+      [8,"DNA Replication",["Semiconservative Replication","Origins of Replication","DNA Polymerase","Helicase","Primase","Leading Strand","Lagging Strand","Okazaki Fragments","DNA Ligase","Topoisomerase","Telomerase","Proofreading","Mismatch Repair","Replication Errors","Replication Checkpoint"]],
+      [9,"Transcription",["RNA vs DNA","RNA Polymerase","Promoter","Terminator","mRNA","tRNA","rRNA","RNA Processing","5' Cap","Poly-A Tail","Splicing","Introns vs Exons","Alternative Splicing","Reverse Transcription","Transcription Checkpoint"]],
+      [10,"Translation",["Ribosome Structure","Genetic Code","Codons & Anticodons","Wobble Hypothesis","Initiation","Elongation","Termination","Polypeptide Folding","Chaperones","Post-Translational Modification","Signal Peptides","Membrane Proteins","Secreted Proteins","Translation Errors","Translation Checkpoint"]],
+      [11,"Gene Regulation",["Why Regulate Genes","Operons — lac, trp","Inducible vs Repressible","Eukaryotic Regulation","Transcription Factors","Enhancers","Silencers","Chromatin Remodeling","DNA Methylation","Histone Modification","RNA Interference","miRNA","siRNA","Lon Non-Coding RNA","Gene Regulation Checkpoint"]],
+      [12,"Genetic Diseases",["Cystic Fibrosis","Sickle Cell Anemia","Huntington's Disease","Hemophilia","Tay-Sachs","Phenylketonuria","Down Syndrome","Turner Syndrome","Klinefelter","Marfan Syndrome","Color Blindness","BRCA Mutations","Mitochondrial Diseases","Genetic Testing","Diseases Checkpoint"]],
+      [13,"CRISPR & Gene Editing",["What Is CRISPR?","Cas9 Enzyme","Guide RNA","CRISPR History","Doudna & Charpentier","Genome Editing Steps","CRISPR Applications","CRISPR Therapy","Sickle Cell Cure","Designer Babies Debate","Off-Target Effects","CRISPR Babies Scandal","Base Editing","Prime Editing","CRISPR Checkpoint"]],
+      [14,"Genetic Engineering",["Recombinant DNA","Plasmid Vectors","Restriction Enzymes","DNA Ligase Use","Gel Electrophoresis","PCR — Polymerase Chain Reaction","Cloning","Transgenic Organisms","Bt Crops","Roundup Ready Crops","GMO Debate","Insulin Production","Glofish","Gene Therapy","Engineering Checkpoint"]],
+      [15,"Population Genetics",["Allele Frequency","Genotype Frequency","Hardy-Weinberg Equation","Selection Pressure","Genetic Drift","Migration","Non-Random Mating","Bottleneck Events","Founder Effects","Inbreeding","Outbreeding","Effective Population Size","FST — Population Differentiation","Coalescent Theory","Pop Genetics Checkpoint"]],
+      [16,"Epigenetics",["What Is Epigenetics?","DNA Methylation","Histone Acetylation","Chromatin States","Imprinting","X-Inactivation","Lyon Hypothesis","Transgenerational Inheritance","Dutch Famine Study","Agouti Mice","Identical Twin Differences","Cancer Epigenetics","Diet & Epigenetics","Stress & Epigenetics","Epigenetics Checkpoint"]],
+      [17,"Mitochondrial DNA",["Mitochondrial Genome","Maternal Inheritance","Mitochondrial Eve","Heteroplasmy","Mitochondrial Diseases","Lactic Acidosis","MELAS Syndrome","mtDNA in Forensics","mtDNA Phylogeny","Haplogroups","Three-Parent IVF","Mitochondrial Replacement","Disease Inheritance","Mitochondrial Aging","mtDNA Checkpoint"]],
+      [18,"Ancient DNA",["aDNA Field","Svante Pääbo","Neanderthal Genome","Denisovans","Hominin Interbreeding","Mammoth DNA","Wooly Mammoth Revival","aDNA Methods","Contamination Issues","Permafrost Preservation","aDNA from Bones","aDNA from Sediments","aDNA from Hair","Population Movements","Ancient DNA Checkpoint"]],
+      [19,"Genome Sequencing",["Sanger Sequencing","Next-Gen Sequencing","Illumina","Oxford Nanopore","PacBio","Whole-Genome Sequencing","Whole-Exome Sequencing","RNA-Seq","Single-Cell Sequencing","Long-Read Sequencing","Cost Drop — From $3B to $200","23andMe","Personal Genomics","Privacy Concerns","Sequencing Checkpoint"]],
+      [20,"Genetics Mastery",["DNA & Chromosomes Final","Mendelian Final","Mutations Final","Replication & Transcription Final","Translation Final","Gene Regulation Final","Genetic Diseases Final","CRISPR & Engineering Final","Population Genetics Final","Epigenetics Final","Mitochondrial DNA Final","Ancient DNA Final","Genome Sequencing Final","Ethics in Genetics","Genetics Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'gen-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('genetics');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('genetics');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

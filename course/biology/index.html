@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biology — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Biology</h1>
+    <p>The science of life — cells, DNA, evolution, genetics, anatomy, plants, animals, fungi & microbes, ecology, biodiversity, immune system, reproduction, animal behavior, and the systems that make every living thing work. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Life?",["Defining Life","Domains of Life — Bacteria, Archaea, Eukarya","Six Kingdoms","Characteristics of Living Things","Levels of Biological Organization","Biology vs Other Sciences","Major Branches of Biology","Carbon as Building Block","Water — Life's Solvent","Macromolecules — Carbs, Lipids, Proteins, Nucleic Acids","ATP — Cellular Currency","Origin of Life Hypotheses","Miller-Urey Experiment","Extremophiles","Life Foundations Checkpoint"]],
+      [2,"Cell Biology",["Cell Theory","Prokaryotic vs Eukaryotic","Cell Membrane","Nucleus","Mitochondria","Endoplasmic Reticulum","Golgi Apparatus","Lysosomes","Ribosomes","Cytoskeleton","Plant Cell — Cell Wall, Vacuole, Chloroplasts","Animal vs Plant Cells","Cell Communication","Microscopy Techniques","Cell Biology Checkpoint"]],
+      [3,"Cellular Respiration & Photosynthesis",["Glycolysis","Krebs Cycle","Electron Transport Chain","ATP Yield","Anaerobic Respiration","Fermentation","Photosynthesis Overview","Chloroplast Anatomy","Light-Dependent Reactions","Calvin Cycle","C3 vs C4 vs CAM Plants","Chlorophyll","Cellular Energy Flow","Coupled Reactions","Energy Checkpoint"]],
+      [4,"DNA & Genetics Basics",["DNA Structure — Double Helix","Watson, Crick & Franklin","Bases — A, T, G, C","Base Pairing","Genes & Chromosomes","Genome","DNA Replication","Semiconservative Replication","RNA Types — mRNA, tRNA, rRNA","Transcription","Translation","Genetic Code","Codons & Anticodons","Mutations","DNA Basics Checkpoint"]],
+      [5,"Mitosis & Meiosis",["Cell Cycle","Interphase","Mitosis Phases — Prophase, Metaphase, Anaphase, Telophase","Cytokinesis","Meiosis Overview","Crossing Over","Independent Assortment","Diploid vs Haploid","Gametogenesis","Spermatogenesis","Oogenesis","Karyotype","Aneuploidy — Down Syndrome","Cancer & Cell Division","Division Checkpoint"]],
+      [6,"Evolution & Natural Selection",["Darwin & Wallace","Voyage of the Beagle","Natural Selection","Variation","Heritability","Differential Reproduction","Adaptation","Speciation","Allopatric Speciation","Sympatric Speciation","Convergent Evolution","Divergent Evolution","Coevolution","Sexual Selection","Evolution Checkpoint"]],
+      [7,"Mendelian Genetics",["Gregor Mendel","Pea Plant Experiments","Genotype vs Phenotype","Dominant vs Recessive","Punnett Squares","Mono-hybrid Cross","Di-hybrid Cross","Test Cross","Incomplete Dominance","Codominance","Multiple Alleles — Blood Type","Polygenic Inheritance","Sex-Linked Traits","Pedigree Analysis","Mendelian Checkpoint"]],
+      [8,"Molecular Biology",["Central Dogma","RNA Splicing","Introns vs Exons","Promoters & Enhancers","Operons — lac, trp","Gene Regulation","Transcription Factors","Epigenetics","DNA Methylation","Histone Modification","RNA Interference","Reverse Transcription","Polymerase Chain Reaction","CRISPR Basics","Molecular Bio Checkpoint"]],
+      [9,"Anatomy & Physiology Overview",["Skeletal System","Muscular System","Circulatory System","Respiratory System","Digestive System","Nervous System","Endocrine System","Reproductive System","Urinary System","Lymphatic System","Integumentary System","Homeostasis","Negative Feedback","Tissues — Epithelial, Connective, Muscle, Nervous","Anatomy Checkpoint"]],
+      [10,"Plants — Botany Basics",["Plant Cell Wall","Photosynthesis Review","Roots","Stems","Leaves","Flowers","Fruits","Seeds","Pollination","Plant Hormones","Phototropism","Gravitropism","Vascular Plants","Non-Vascular Plants","Botany Checkpoint"]],
+      [11,"Animals — Zoology Basics",["Animal Phyla","Invertebrates Overview","Vertebrates Overview","Fish","Amphibians","Reptiles","Birds","Mammals","Animal Body Plans","Body Symmetry","Coelom","Animal Reproduction","Animal Development","Animal Behavior","Zoology Checkpoint"]],
+      [12,"Fungi & Microbes",["Fungi Kingdom","Yeasts & Molds","Mushroom Anatomy","Decomposers","Mycorrhizae","Bacteria — Shapes & Types","Gram-Positive vs Gram-Negative","Archaea","Protists","Algae","Viruses — Are They Alive?","Bacteriophages","Microbiome","Pathogens","Microbes Checkpoint"]],
+      [13,"Ecosystems & Ecology",["Biotic vs Abiotic","Population Ecology","Community Ecology","Ecosystem","Biome","Food Chain","Food Web","Trophic Levels","Energy Pyramid","Predator-Prey","Competition","Mutualism","Commensalism","Parasitism","Ecology Checkpoint"]],
+      [14,"Biodiversity",["Levels of Biodiversity","Genetic Diversity","Species Diversity","Ecosystem Diversity","Hotspots","Mass Extinctions","Sixth Extinction","IUCN Red List","Conservation Biology","Habitat Destruction","Invasive Species","Biodiversity & Climate","Ex Situ Conservation","In Situ Conservation","Biodiversity Checkpoint"]],
+      [15,"Biogeochemical Cycles",["Water Cycle","Carbon Cycle","Nitrogen Cycle","Phosphorus Cycle","Sulfur Cycle","Oxygen Cycle","Decomposition","Photosynthesis-Respiration Loop","Human Impact on Cycles","Eutrophication","Acid Rain","Greenhouse Effect","Cycles & Climate","Nutrient Cycling in Soil","Cycles Checkpoint"]],
+      [16,"Animal Behavior",["Innate vs Learned","Imprinting — Lorenz","Conditioning","Classical Conditioning","Operant Conditioning","Migration","Hibernation","Communication","Pheromones","Mating Systems","Parental Care","Altruism","Inclusive Fitness","Tool Use in Animals","Behavior Checkpoint"]],
+      [17,"Reproduction & Development",["Asexual Reproduction","Sexual Reproduction","Gamete Formation","Fertilization","Cleavage","Blastula","Gastrulation","Organogenesis","Stem Cells","Embryonic Development","Birth & Hatching","Metamorphosis","Aging & Senescence","Stem Cell Therapy","Reproduction Checkpoint"]],
+      [18,"Immune System",["Innate Immunity","Adaptive Immunity","White Blood Cells","Antibodies","T Cells","B Cells","Antigens","Vaccines","Allergies","Autoimmune Disease","HIV/AIDS","Inflammation","Fever","Lymphatic System","Immune Checkpoint"]],
+      [19,"Diseases & Pathology",["Infectious Diseases","Pandemics","Epidemiology Basics","Cancer","Cardiovascular Disease","Diabetes","Genetic Disorders","Mental Health Diseases","Neurodegenerative Disease","Pharmacology","Antibiotics","Antibiotic Resistance","Vaccines for Disease","Public Health","Pathology Checkpoint"]],
+      [20,"Biology Mastery",["Cell Biology Final","Genetics Final","Evolution Final","Anatomy & Physiology Final","Ecology Final","Botany Final","Zoology Final","Microbes & Fungi Final","Immunology Final","Pathology Final","Biotechnology Final","Conservation Final","Biology Olympiad Prep","Lifelong Naturalist","Biology Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'bio-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('biology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('biology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Woodworking — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Woodworking</h1>
+    <p>From the safety of your shop to dovetailed boxes and hand-cut joinery — wood selection, tools, joinery, furniture, carving, finishing, and selling. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Shop Setup & Safety",["Shop Layout","Lighting","Dust Collection","Hearing Protection","Eye Protection","Respirators","Push Sticks","Lockout Tag-Out","Fire Safety","First Aid","Beginner Safety Rules","Sharp vs Dull Blades","Tear-Out Awareness","Workshop Etiquette","Safety Checkpoint"]],
+      [2,"Wood Species & Lumber",["Hardwood vs Softwood","Oak","Maple","Walnut","Cherry","Pine","Mahogany","Plywood","MDF","Particleboard","Reading Lumber Stamps","Grain Direction","Defects to Avoid","Wood Movement","Lumber Checkpoint"]],
+      [3,"Hand Tools",["Hand Plane Anatomy","Smoothing Plane","Block Plane","Jointer Plane","Chisels","Mallets","Hand Saws","Crosscut vs Rip","Japanese Saws","Marking Knife","Squares","Marking Gauge","Sharpening Stones","Tuning a Plane","Hand Tools Checkpoint"]],
+      [4,"Power Tools",["Table Saw","Miter Saw","Band Saw","Jointer","Thickness Planer","Router","Router Tables","Drill Press","Random Orbit Sander","Belt Sander","Track Saw","Lathe Intro","CNC Intro","Cordless Drill","Power Tools Checkpoint"]],
+      [5,"Joinery — Hand-Cut",["Butt Joint","Miter Joint","Lap Joint","Half-Lap","Mortise & Tenon","Through Tenon","Wedged Tenon","Dovetail Through","Dovetail Half-Blind","Box Joints","Sliding Dovetail","Bridle Joint","Dado","Rabbet","Joinery Checkpoint"]],
+      [6,"Joinery — Machine",["Pocket Holes","Biscuits","Dominos","Loose Tenons","Router Mortising","Router Dovetails","Box Joint Jigs","Drawer Lock Bits","Splines","Edge Banding","Plywood Joinery","Knockdown Hardware","Cam Locks","Pocket Hole Jigs","Machine Joinery Checkpoint"]],
+      [7,"Furniture Making",["Cutting Boards","Stools","Side Tables","Dining Tables","Chairs","Bed Frames","Bookcases","Cabinets","Drawers","Shaker Style","Mid-Century Modern","Krenov Style","Japanese Joinery Style","Live Edge","Furniture Checkpoint"]],
+      [8,"Carving & Turning",["Whittling Basics","Relief Carving","Chip Carving","Spoon Carving","Lovespoons","Lathe Setup","Spindle Turning","Bowl Turning","Hollow Forms","Pen Turning","Segmented Bowls","Texturing","Power Carving","Carving Tools","Carving Checkpoint"]],
+      [9,"Finishing",["Sanding Progression","Filling Gaps","Stains","Dyes","Oil Finishes","Wax Finishes","Shellac","Lacquer","Polyurethane","Water-Based vs Oil-Based","Spray Finishing","French Polishing","Distressing","Repairing Finishes","Finishing Checkpoint"]],
+      [10,"Selling & Mastery",["Pricing Your Work","Photographing Furniture","Etsy & Local Markets","Commission Work","Building a Portfolio","YouTube as a Woodworker","Teaching Classes","Insurance for Shops","Tax Considerations","Sustainable Sourcing","Reclaimed Wood","Heirloom Quality","Master Craftsman Mindset","Lifetime of Skill","Woodworking Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'wood-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('woodworking');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('woodworking');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

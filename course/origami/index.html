@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Origami — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Origami</h1>
+    <p>The Japanese art of paper folding — from simple cranes and frogs to modular kusudama, tessellations, and wet-folded sculpture. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Origami Foundations",["History of Origami","Paper Types","Kami Paper","Washi Paper","Foil Paper","Tools of Origami","Symbols & Diagrams","Mountain & Valley Folds","Reverse Folds","Squash Folds","Petal Folds","Sink Folds","Crease Patterns","Practice Habits","Foundations Checkpoint"]],
+      [2,"Classic Bases",["Preliminary Base","Water Bomb Base","Bird Base","Frog Base","Fish Base","Square Base","Kite Base","Triangle Base","Diamond Base","Windmill Base","Using Bases","Base Combinations","Inside Out Folds","Base Troubleshooting","Bases Checkpoint"]],
+      [3,"Classic Models",["The Crane","The Lotus","The Jumping Frog","The Crow","The Lily","The Water Bomb","The Fortune Teller","The Paper Plane","The Boat","The Cup","The Samurai Helmet","The Star Box","The Crane Variations","1000 Cranes Tradition","Classic Models Checkpoint"]],
+      [4,"Animals",["Elephant","Dog","Cat","Butterfly","Swan","Rabbit","Horse","Giraffe","Penguin","Turtle","Fox","Owl","Dragon Simple","Peacock","Animals Checkpoint"]],
+      [5,"Flowers & Plants",["Tulip","Rose","Kusudama Flower","Lily Flower","Iris","Daffodil","Cherry Blossom","Lotus Flower","Bouquet Arrangement","Leaf","Tree","Mushroom","Cactus","Bamboo","Flowers Checkpoint"]],
+      [6,"Modular Origami",["What Is Modular?","Sonobe Unit","Cube from Sonobe","Stellated Octahedron","Kusudama Ball","Thirty Unit Ball","PHiZZ Units","Electra","Five Intersecting Tetrahedra","Paper Clips","Assembly Techniques","Module Variety","Glue vs Locking","Troubleshooting Modules","Modular Checkpoint"]],
+      [7,"Wet Folding",["What Is Wet Folding?","Paper Selection","Moisture Control","Sculpting Curves","Shaping Animals","Akira Yoshizawa Style","Drying Techniques","Protecting the Paper","Finish Sprays","Combining Wet & Dry","Wet Fold Bear","Wet Fold Elephant","Wet Fold Horse","Wet Fold Swan","Wet Folding Checkpoint"]],
+      [8,"Tessellations",["Tessellation Basics","Crease Patterns","Flagstone Tessellation","Hex Twist","Square Twist","Spread Hex","Back-lighting Tessellations","Designing Your Own","Precreasing","Collapsing a Tessellation","Robert Lang Designs","Eric Gjerde Style","Tomoko Fuse","Pre-creasing Tools","Tessellations Checkpoint"]],
+      [9,"Kirigami & Paper Crafts",["What Is Kirigami?","Pop-Up Cards","Symmetric Kirigami","Snowflakes","Paper Chains","Accordion Fold","Diorama Building","Layered Cards","Kirigami Animals","Paper Architecture","Japanese Screens","Quilling Basics","Paper Sculpture","Recycled Paper Art","Kirigami Checkpoint"]],
+      [10,"Mastery & Design",["Designing Original Models","Box-Pleating","Computational Origami","Origami in Science","Origami in Engineering","Space Origami","Medical Origami","Origami Artists","Origami Competitions","Origami Books","Teaching Origami","Display & Framing","Preservation","Community & Conventions","Origami Grand Mastery!"]],
+      [11,"Paper Selection & Quality",["Kami — Standard Origami Paper","Tant Paper","Tissue-Foil Paper","Methylcellulose Treatment","Washi — Japanese Handmade","Lokta Paper","Elephant Hide Paper","Mulberry Paper","Foil-Backed Paper","Double-Sided Paper","Paper Weights — gsm","Paper Sizes — Standard 15cm","Square Cutting","Color Choice","Paper Selection Checkpoint"]],
+      [12,"Cranes & Their Variants",["Classic Crane (Tsuru)","1000 Cranes — Senbazuru","Sadako's Story","Bird Base Foundation","Flapping Crane","Pegasus Crane","Phoenix Crane","Two-Headed Crane","Connected Cranes (Hiden Senbazuru Orikata)","Peace Crane Tradition","Crane in Japanese Culture","Modular Crane","Mini Crane","Giant Crane","Cranes Checkpoint"]],
+      [13,"Origami Mathematics",["Geometry of Folding","Flat-Foldability","Crease Patterns","Mountain & Valley Folds","Layering & Stacking","Mathematical Origami Theorems","Computational Folding","Origami Equivalent of Compass","Origami Doubling the Cube","Origami Trisecting an Angle","Huzita-Hatori Axioms","Origami vs Euclidean Constructions","Fold-and-Cut Theorem","Mathematical Origami Books","Math Checkpoint"]],
+      [14,"Maekawa's & Kawasaki's Theorems",["Maekawa's Theorem","Difference of Mountain & Valley = ±2","Kawasaki's Theorem","Sum of Alternate Angles","Local Flat-Foldability","Necessary vs Sufficient Conditions","Single-Vertex Flat-Folds","Multi-Vertex Crease Patterns","Kawasaki Justin Theorem","Proof Outlines","Counter-Examples","Applications in Design","Theorems in Tessellation Design","Origami Math Practice","Theorems Checkpoint"]],
+      [15,"Crease Pattern Reading",["What Is a Crease Pattern?","Mountain Lines (Solid)","Valley Lines (Dashed)","Cut Lines","Reference Points","Pre-Crease Order","Collapsing a CP","Box-Pleated CPs","Twist Folds in CPs","Reading Lang's CPs","Reading Maekawa's CPs","From CP to Final Model","TreeMaker Software","Origamizer Software","CP Reading Checkpoint"]],
+      [16,"Yoshizawa-Randlett System",["Akira Yoshizawa Origin","Sam Randlett's Adaptation","Mountain & Valley Notation","Arrow Notation","Reverse Folds","Petal Folds","Squash Folds","Sink Folds","Outside Reverse","Inside Reverse","Open Sink","Closed Sink","Fold-and-Unfold","X-Ray Lines","Diagram System Checkpoint"]],
+      [17,"Akira Yoshizawa — The Master",["Born 1911 — Died 2005","Origami as Fine Art","Wet Folding Inventor","Yoshizawa-Randlett System","Sasebo Heart Crane","Yoshizawa Models","Cultural Ambassador","Showed at MoMA 1955","Yoshizawa Books","Yoshizawa Style","Tribute Fold-Ins","Yoshizawa Foundation","Influence on Modern Origami","Quotes & Philosophy","Yoshizawa Checkpoint"]],
+      [18,"Robert Lang — Engineer",["Robert Lang — Physicist & Folder","TreeMaker Software","Tree Theory","Solo Folder Approach","Lang's Insects","Lang's Cuckoo Clock","Lang's Dragon","Origami in Engineering","NASA Eyeglass Telescope","Heart Stent Design","Folding Solar Panels","Algorithm-Driven Design","Books — Origami Design Secrets","TED Talks","Lang Checkpoint"]],
+      [19,"Tomoko Fuse — Modular Master",["Tomoko Fuse Bio","Modular Origami Pioneer","Kusudama Designs","Polyhedron Folding","Octahedron Modules","Sonobe Variations","Fuse Boxes","Fuse Letterfolds","Stylized Modular Animals","Spiral Origami","Fuse's Books — Many Series","Teaching Modular","Fuse's Influence","Modern Modular Followers","Fuse Checkpoint"]],
+      [20,"Origami Insects",["Lang's Cicada","Beetle","Butterfly","Praying Mantis","Ant","Spider (Arachnid)","Dragonfly","Bee","Moth","Wasp","Centipede","Stag Beetle","Tarantula","Cricket","Insects Checkpoint"]],
+      [21,"Origami Birds",["Bird Base Foundation","Flapping Bird","Eagle","Owl","Penguin","Parrot","Peacock","Swan","Goose","Chicken","Crow","Hummingbird","Pelican","Toucan","Birds Checkpoint"]],
+      [22,"Origami Mammals",["Pig","Cat","Dog","Horse","Cow","Elephant","Lion","Tiger","Mouse","Bear","Rabbit","Fox","Wolf","Whale","Mammals Checkpoint"]],
+      [23,"Origami Reptiles & Sea Creatures",["Crab","Octopus","Fish","Whale","Shark","Snake","Turtle","Frog (Jumping)","Iguana","Crocodile","Goldfish","Seahorse","Lobster","Starfish","Sea Creatures Checkpoint"]],
+      [24,"Origami Dragons",["Western Dragon Basics","Eastern Long Dragon","Tomoko Fuse Dragon","Lang's Dragon","Satoshi Kamiya's Dragon","Hideo Komatsu's Dragon","Dragon Wing Patterns","Dragon Scales — Tessellation","Dragon Tail","Pre-Folded Dragon Bases","Box-Pleated Dragons","Dragon Eyes","Dragon Display","Dragon Mythology","Dragons Checkpoint"]],
+      [25,"Box-Pleating",["What Is Box-Pleating?","22.5° Crease Pattern","Common Box-Pleated Models","Lang's Box-Pleat Method","Box-Pleating Software","Pre-Crease Steps","Collapsing Box-Pleated CPs","River Patterns","Stub Patterns","Box-Pleat for Insects","Box-Pleat for Bugs","Box-Pleat for Robots","Box-Pleat Tessellations","Difficulty Tier Box-Pleating","Box-Pleating Checkpoint"]],
+      [26,"Origami Stars",["Five-Pointed Star","Six-Pointed Star","Lucky Stars","Modular Star","Stitched Star","Origami Christmas Star","Origami Star of David","Origami Compass Star","Origami Sea Star","Robin Glynn Stars","Carmen Sprung Stars","Hanging Stars","Pop-Up Stars","Folded Star Wreath","Stars Checkpoint"]],
+      [27,"Origami Boxes & Containers",["Masu Box","Sonobe Cube","Tomoko Fuse Box","Twist Box","Letter Fold Box","Heart Box","Treasure Box","Star Box","Octagonal Box","Hexagonal Box","Tetra Box","Lid & Base Pairs","Gift Box Origami","Box Decorations","Boxes Checkpoint"]],
+      [28,"Origami Hearts & Letters",["Simple Heart","Heart Envelope","Heart Bookmark","Heart Box","Beating Heart (Action)","Heart with Wings","Letter Folds — Bermuda","Crane Letter","Shirt Fold","Boat Letter","Heart Letterfold","Origami Confetti","Origami Greeting Cards","Origami Bouquets","Hearts & Letters Checkpoint"]],
+      [29,"Origami Action Models",["Flapping Crane","Jumping Frog","Talking Crow","Pecking Bird","Galloping Horse","Inflatable Cube","Yakko-san","Shooting Bird","Spinning Top","Pop-Up Cube","Snapping Mouth","Boat","Ninja Star (Shuriken)","Fortune Teller","Action Models Checkpoint"]],
+      [30,"Christmas & Holiday Origami",["Origami Tree","Origami Ornaments","Star of Bethlehem","Origami Wreath","Christmas Stocking","Origami Reindeer","Origami Santa","Origami Snowflake","Origami Angel","Origami Bell","Origami Candy Cane","Hanukkah Dreidel","Diwali Diya","Easter Bunny","Holiday Checkpoint"]],
+      [31,"Tessellation Mathematics",["What Is Tessellation Origami?","Twist Folds","Hexagonal Twists","Square Twists","Eric Gjerde Tessellations","Joel Cooper","Polly Verity","Twist Box vs Tessellation","Pre-Crease Strategy","Wet-Folded Tessellations","Lit-Up Tessellations","Tessellation Pattern Library","Tessellation Mathematics","Tessellation Software","Tessellation Checkpoint"]],
+      [32,"Modular Kusudama",["Kusudama Origin","30-Module Kusudama","60-Module Sphere","Sonobe Sphere","Star Sonobe","Curler Units","Polypompholyx","Bascetta Star","Magic Rose Cube","Curlicue Modules","Floral Kusudama","Spiked Kusudama","Hanging Kusudama","Massive Kusudama","Kusudama Checkpoint"]],
+      [33,"Pop-Up & Engineering Origami",["Pop-Up Cards","V-Folds","Parallel Folds","Box Pop-Ups","Pop-Up Engineering","Architectural Pop-Ups","Star Pop-Ups","Layered Pop-Ups","Pop-Up Books","Robert Sabuda Style","Animated Pop-Ups","Pop-Up Tools","Cutting Templates","Engineering Origami Books","Pop-Up Checkpoint"]],
+      [34,"Origami in Engineering & Space",["Miura Fold — Solar Panels","Eyeglass Telescope (NASA)","Folded Mirror Designs","Starshade Origami","Star-shaped Telescope","Folded Antennas","Inflatable Habitats","Mars Lander Folding","Origami Sieve Filters","Origami Robotics","Self-Folding Origami","Magnetic Origami","Origami Drones","Origami in Aerospace","Engineering Checkpoint"]],
+      [35,"Origami in Medicine",["Heart Stent Folding","Folded Surgical Tools","Origami Pills","Folded Drug Delivery","Origami Microsurgery","Vascular Folding","Tracheal Stents","Self-Expanding Implants","Origami Bandage Designs","Folded Lab-on-Chip","Origami Medical Devices","Robotic Origami Surgery","Origami in Dentistry","Folded Prosthetics","Medical Checkpoint"]],
+      [36,"Origami Festivals & Community",["OrigamiUSA","British Origami Society","Japan Origami Academic Society","Origami Tanteidan","Conventions — OrigamiUSA Annual","Italy Origami Convention","France's Mouvement Français","CDO Italy","Origami Day — November 11","Origami Weekend","Online Communities — r/origami","Origami YouTube","Origami Instagram","Teaching Workshops","Community Checkpoint"]],
+      [37,"Origami Supreme Mastery",["Foundations Final","Bases Final","Animals Final","Flowers & Plants Final","Modular Final","Wet-Folding Final","Tessellation Final","Box-Pleating Final","Action Models Final","Crease Pattern Reading Final","Mathematical Origami Final","Designing Your Own","Recording Time-Lapses","Building a Portfolio","Origami Supreme Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ori-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('origami');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('origami');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

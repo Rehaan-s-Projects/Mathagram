@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geology & Earth Science — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Geology & Earth Science</h1>
+    <p>How Earth works — the planet's layers, plate tectonics, rocks & minerals, volcanoes, earthquakes, mountains, rivers, glaciers, deserts, caves, fossils, geological time, oceans, atmosphere, and Earth's magnetic field. 50 units, 750 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Geology?",["Geology Defined","Branches of Geology","Uniformitarianism","Catastrophism","Geological Time Concept","James Hutton — Father of Geology","Charles Lyell","Alfred Wegener","Plate Tectonic Revolution","Geology vs Geophysics","Field Geology","Lab Geology","Hydrogeology","Mining & Petroleum Geology","Geology Foundations Checkpoint"]],
+      [2,"Earth's Layers",["Crust — Continental & Oceanic","Lithosphere","Asthenosphere","Mantle","Outer Core","Inner Core","Mohorovičić Discontinuity","Gutenberg Discontinuity","Lehmann Discontinuity","Seismic Wave Evidence","Earth's Density","Mantle Convection","Crustal Composition","Heat Flow","Earth's Layers Checkpoint"]],
+      [3,"Plate Tectonics",["Continental Drift Hypothesis","Seafloor Spreading","Plate Boundaries","Divergent Boundaries","Convergent Boundaries","Transform Boundaries","Subduction Zones","Mid-Ocean Ridges","Hot Spots","Hawaii's Origin","Plate Driving Forces","Wadati-Benioff Zones","Pangaea","Future Supercontinent — Pangaea Ultima","Plate Tectonics Checkpoint"]],
+      [4,"Rocks — Igneous, Sedimentary, Metamorphic",["Rock Cycle","Igneous Rock Formation","Intrusive vs Extrusive","Granite vs Basalt","Volcanic Rocks","Sedimentary Rock Formation","Sandstone","Shale","Limestone","Coal","Metamorphic Rock Formation","Foliated vs Non-Foliated","Marble","Slate","Rocks Checkpoint"]],
+      [5,"Minerals",["What Is a Mineral?","Crystal Structure","Mineral Properties","Hardness — Mohs Scale","Cleavage","Fracture","Streak","Luster","Color","Quartz","Feldspar","Mica","Calcite","Pyrite","Minerals Checkpoint"]],
+      [6,"Volcanoes",["Volcano Anatomy","Magma vs Lava","Shield Volcanoes","Stratovolcanoes","Cinder Cones","Calderas","Volcanic Eruptions","VEI Scale","Pyroclastic Flows","Lahars","Famous Eruptions — Vesuvius","Mt. St. Helens","Krakatoa","Monitoring Volcanoes","Volcanoes Checkpoint"]],
+      [7,"Earthquakes",["Earthquake Causes","Faults — Strike-Slip, Normal, Reverse","Focus & Epicenter","Seismic Waves — P, S, Surface","Seismographs","Richter Scale","Moment Magnitude","Mercalli Intensity","Tsunami Generation","Liquefaction","Famous Earthquakes — San Francisco 1906","Tōhoku 2011","Earthquake Prediction","Earthquake Engineering","Earthquakes Checkpoint"]],
+      [8,"Mountains",["Mountain Building — Orogeny","Folded Mountains","Fault-Block Mountains","Volcanic Mountains","Dome Mountains","Himalayas — India-Asia Collision","Andes","Rockies","Alps","Appalachians","Erosion of Mountains","Glacial Sculpting","Mountain Climates","Tectonic Settings","Mountains Checkpoint"]],
+      [9,"Rivers & Erosion",["Hydrologic Cycle","Watersheds","River Stages — Youthful, Mature, Old","Meanders","Oxbow Lakes","Floodplains","Deltas","Erosion Mechanisms","Weathering","Mass Wasting","Landslides","Rockfalls","Mudflows","Karst Erosion","Rivers Checkpoint"]],
+      [10,"Glaciers & Ice",["Glacier Formation","Continental Ice Sheets","Alpine Glaciers","Glacial Erosion","U-Shaped Valleys","Cirques","Moraines","Eskers","Drumlins","Ice Ages","Pleistocene Epoch","Periglacial Environments","Permafrost","Modern Glacial Retreat","Glaciers Checkpoint"]],
+      [11,"Deserts",["Desert Climate","Hot vs Cold Deserts","Sand Dunes","Wind Erosion","Desert Pavement","Yardangs","Oases","Wadis","Salt Flats","Famous Deserts — Sahara","Atacama","Antarctica as Desert","Desert Plants & Animals","Desertification","Deserts Checkpoint"]],
+      [12,"Caves & Karst",["Karst Topography","Cave Formation","Dissolution Caves","Lava Tubes","Sea Caves","Stalactites","Stalagmites","Speleothems","Sinkholes","Carlsbad Caverns","Mammoth Cave","Cenotes","Cave Biology","Speleology","Caves Checkpoint"]],
+      [13,"Geological Time",["Relative Dating","Absolute Dating","Radiometric Dating","Carbon-14","Uranium-Lead","Geological Timescale","Eons — Hadean, Archean, Proterozoic, Phanerozoic","Eras — Paleozoic, Mesozoic, Cenozoic","Periods","Epochs","Mass Extinctions","Stratigraphy","Index Fossils","Anthropocene Debate","Time Checkpoint"]],
+      [14,"Fossils",["Fossilization","Body Fossils","Trace Fossils","Petrification","Amber","Tar Pits","Fossil Index","Famous Fossil Sites","Burgess Shale","Solnhofen — Archaeopteryx","La Brea","Cambrian Explosion","Ediacaran Fauna","Living Fossils","Fossils Checkpoint"]],
+      [15,"Continental Drift",["Wegener's Hypothesis","Pangaea","Pangaea Breakup","Gondwana","Laurasia","Tethys Ocean","Continental Reconstructions","Magnetic Reversals","Apparent Polar Wander","Hotspot Tracks","Continental Crust Recycling","Suspect Terranes","Wilson Cycle","Future Plate Motions","Drift Checkpoint"]],
+      [16,"Soil Formation",["Soil Profile","O Horizon","A Horizon","B Horizon","C Horizon","Soil Texture","Sand, Silt, Clay","Soil pH","Soil Microbes","Humus","Pedogenesis","Soil Erosion","Dust Bowl","Soil Conservation","Soil Checkpoint"]],
+      [17,"Oceans & Seafloor",["Ocean Basins","Continental Shelves","Continental Slopes","Abyssal Plains","Mid-Ocean Ridges","Trenches — Marianas","Seamounts","Hydrothermal Vents","Sea Level Change","Ocean Currents","Thermohaline Circulation","Salinity","Ocean Sediments","Oceanic Crust Age","Oceans Checkpoint"]],
+      [18,"Atmosphere",["Atmospheric Layers","Troposphere","Stratosphere","Mesosphere","Thermosphere","Composition — N2, O2, Ar","Greenhouse Gases","Ozone Layer","Atmospheric Pressure","Wind Origin","Coriolis Effect","Climate vs Weather","Atmospheric Evolution","Loss of Atmosphere — Mars","Atmosphere Checkpoint"]],
+      [19,"Earth's Magnetic Field",["Geomagnetic Field","Magnetic Poles","Magnetic Field Reversals","Geodynamo","Outer Core Convection","Magnetosphere","Solar Wind Interaction","Aurora Borealis","Aurora Australis","Geomagnetic Storms","Compass Navigation","Magnetic Anomalies","Paleomagnetism","Field Strength Decreasing","Magnetism Checkpoint"]],
+      [20,"Geology Mastery",["Earth Layers Final","Plate Tectonics Final","Rocks & Minerals Final","Volcanoes & Earthquakes Final","Mountain & River Systems Final","Glaciers & Deserts Final","Geological Time Final","Fossils Final","Atmosphere & Oceans Final","Magnetic Field Final","Field Identification Skills","Reading Geological Maps","Mineral ID Practical","Field Trip Planning","Geology Grand Mastery!"]],
+      [21,"Crystallography",["Crystal Systems","Cubic System","Tetragonal System","Orthorhombic System","Monoclinic System","Triclinic System","Hexagonal System","Trigonal System","Crystal Habits","Crystal Twinning","Cleavage Planes","Lattice Structure","Bravais Lattices","X-Ray Diffraction","Crystallography Checkpoint"]],
+      [22,"Mineral Families — Silicates",["Silica Tetrahedron","Olivine — Single Tetrahedra","Pyroxene — Single Chains","Amphibole — Double Chains","Mica — Sheets","Feldspar — Frameworks","Quartz — Frameworks","Garnet","Zircon","Tourmaline","Beryl","Topaz","Talc","Kaolinite","Silicates Checkpoint"]],
+      [23,"Mineral Families — Non-Silicates",["Native Elements — Gold, Copper","Sulfides — Pyrite, Galena","Halides — Halite, Fluorite","Oxides — Hematite, Magnetite","Carbonates — Calcite, Dolomite","Sulfates — Gypsum, Anhydrite","Phosphates — Apatite","Hydroxides — Goethite","Borates","Tungstates","Vanadates","Chromates","Mineral Identification","Mineral Streak Test","Non-Silicates Checkpoint"]],
+      [24,"Gemstones & Gemology",["Diamond","Ruby & Sapphire (Corundum)","Emerald (Beryl)","Topaz Gems","Garnet Varieties","Opal","Pearl","Jade — Jadeite & Nephrite","Turquoise","Lapis Lazuli","Amethyst","Citrine","Tanzanite","Famous Gemstones — Hope, Cullinan","Gemology Checkpoint"]],
+      [25,"Igneous Petrology",["Magma Composition","Bowen's Reaction Series","Mafic vs Felsic","Intrusive Rocks — Plutons","Batholiths","Stocks, Dikes, Sills","Extrusive Rocks","Pyroclastic Rocks","Granite","Diorite","Gabbro","Peridotite","Rhyolite","Andesite","Igneous Checkpoint"]],
+      [26,"Sedimentary Petrology",["Clastic Sediment","Chemical Sediment","Biogenic Sediment","Sandstone","Shale","Conglomerate","Breccia","Limestone","Chert","Coal","Evaporites","Diagenesis","Lithification","Cementation","Sedimentary Checkpoint"]],
+      [27,"Metamorphic Petrology",["Heat & Pressure","Contact Metamorphism","Regional Metamorphism","Dynamic Metamorphism","Hydrothermal Metamorphism","Foliation","Slate","Phyllite","Schist","Gneiss","Quartzite","Marble","Eclogite","Blueschist","Metamorphic Checkpoint"]],
+      [28,"Stratigraphy & Sedimentary Environments",["Law of Superposition","Original Horizontality","Lateral Continuity","Cross-Cutting","Inclusions","Unconformities","Disconformity","Angular Unconformity","Nonconformity","River Deposits","Lake Deposits","Beach & Marine","Deltaic Deposits","Glacial Deposits","Stratigraphy Checkpoint"]],
+      [29,"Hydrogeology — Groundwater",["Aquifer","Aquitard","Water Table","Confined vs Unconfined Aquifers","Porosity","Permeability","Darcy's Law","Springs","Artesian Wells","Cone of Depression","Saltwater Intrusion","Groundwater Contamination","Karst Aquifers","Ogallala Aquifer","Hydrogeology Checkpoint"]],
+      [30,"Hydrology & The Water Cycle",["Hydrologic Cycle","Evaporation","Transpiration","Condensation","Precipitation","Runoff","Infiltration","Watersheds","Drainage Patterns","Stream Discharge","Hydrographs","Floods Hydrology","Droughts","River Systems","Hydrology Checkpoint"]],
+      [31,"Coastal Geology",["Tides","Tidal Range","Wave Action","Longshore Drift","Beach Profile","Dunes — Coastal","Cliffs & Headlands","Sea Stacks & Arches","Spits & Tombolos","Barrier Islands","Estuaries","Lagoons","Mangroves","Coastal Erosion","Coastal Checkpoint"]],
+      [32,"Geomorphology — Landforms",["Plateaus","Canyons","Mesas & Buttes","Badlands","Volcanic Landforms","Glacial Landforms","Karst Landforms","River Landforms","Coastal Landforms","Aeolian Landforms","Tectonic Landforms","Mass Wasting Features","Reading Topographic Maps","DEM — Digital Elevation","Geomorphology Checkpoint"]],
+      [33,"Karst Geomorphology",["Karst Defined","Sinkholes","Tower Karst","Cone Karst","Polje","Doline","Uvala","Karst Springs","Cave Systems","Stalactites","Stalagmites","Flowstone","Famous Karst Areas — Guilin","Yucatán Cenotes","Karst Checkpoint"]],
+      [34,"Coral Reefs & Lagoons",["Coral Polyps","Reef Builders","Fringing Reefs","Barrier Reefs","Atolls","Great Barrier Reef","Belize Barrier Reef","Coral Bleaching","Reef Geology","Carbonate Sediment","Coral Reef Ecology","Coral Reef Threats","Coral Reef Conservation","Reef Drilling Studies","Reefs Checkpoint"]],
+      [35,"Lakes & Wetlands",["Lake Formation","Glacial Lakes","Tectonic Lakes","Volcanic Lakes","Oxbow Lakes","Eutrophic vs Oligotrophic","Lake Stratification","Lake Turnover","Wetlands Defined","Marshes","Swamps","Bogs","Fens","Wetland Hydrology","Lakes & Wetlands Checkpoint"]],
+      [36,"Tsunamis",["Tsunami Generation","Subduction Zone Tsunamis","Landslide Tsunamis","Volcanic Tsunamis","Tsunami Wave Propagation","Wave Trains","Run-Up","Drawback","2004 Indian Ocean","2011 Tōhoku","Lisbon 1755","Tsunami Warning Systems","DART Buoys","Evacuation Routes","Tsunami Checkpoint"]],
+      [37,"Floods & Flood Geology",["Flood Types","River Flooding","Flash Floods","Coastal Flooding","Storm Surge","Flood Frequency","Floodplain Maps","100-Year Floods","Levees","Dams & Flood Control","Catastrophic Flooding — Missoula","Channeled Scablands","Black Sea Flood Hypothesis","Flood Damage","Floods Checkpoint"]],
+      [38,"Ice Ages",["Ice Age Concept","Pleistocene Glaciations","Last Glacial Maximum","Milankovitch Cycles","Eccentricity","Obliquity","Precession","Snowball Earth","Cryogenian Period","Ice Cores","Younger Dryas","Holocene Climate","Future Ice Ages","Anthropogenic Influence","Ice Ages Checkpoint"]],
+      [39,"Mass Extinctions",["Big Five Extinctions","Ordovician-Silurian","Late Devonian","Permian-Triassic — The Great Dying","Triassic-Jurassic","Cretaceous-Paleogene","K-Pg Boundary","Chicxulub Impact","Iridium Anomaly","Volcanic Causes — Siberian Traps","Recovery After Extinction","Adaptive Radiation","Sixth Extinction Hypothesis","Background Extinction Rate","Extinctions Checkpoint"]],
+      [40,"Mesozoic Era — Age of Dinosaurs",["Triassic Period","Jurassic Period","Cretaceous Period","Pangaea Breakup","Dinosaur Origins","Sauropods","Theropods","Ornithischians","Pterosaurs","Marine Reptiles","Bird Origins","Mammals in Mesozoic","Flowering Plant Origins","K-Pg Extinction","Mesozoic Checkpoint"]],
+      [41,"Cenozoic Era",["Paleogene","Neogene","Quaternary","Mammalian Radiation","Whales' Land Origins","Horse Evolution","Primate Evolution","Hominin Evolution","Grasslands Spread","Glacial Cycles","Ice Age Megafauna","Pleistocene Extinctions","Holocene","Anthropocene","Cenozoic Checkpoint"]],
+      [42,"Famous Geological Sites",["Grand Canyon","Yellowstone Caldera","Mt. Everest","Iceland — Mid-Atlantic Ridge","Hawaiian Islands","Galápagos","Great Barrier Reef","Sahara","Antarctica Dry Valleys","Atacama Desert","Lake Baikal","Dead Sea","Salar de Uyuni","Cliffs of Moher","Famous Sites Checkpoint"]],
+      [43,"Economic Geology — Ore Deposits",["Ore vs Mineral","Economic Concentration","Hydrothermal Deposits","Magmatic Deposits","Sedimentary Deposits","Placer Deposits","Banded Iron Formations","Porphyry Copper","Vein Deposits","Skarn Deposits","Massive Sulfide Deposits","Gold Mining History","Rare Earth Elements","Critical Minerals","Ore Deposits Checkpoint"]],
+      [44,"Petroleum & Coal Geology",["Hydrocarbon Formation","Source Rocks","Reservoir Rocks","Cap Rocks","Trap Types","Anticlinal Traps","Fault Traps","Stratigraphic Traps","Conventional vs Unconventional","Shale Oil & Gas","Fracking","Oil Sands","Coal Formation","Coal Ranks","Petroleum Checkpoint"]],
+      [45,"Geothermal Energy & Resources",["Geothermal Gradient","Hot Springs","Geysers","Old Faithful","Geothermal Plants","Iceland Geothermal","Enhanced Geothermal","Ground-Source Heat Pumps","Volcanic Geothermal","Hot Dry Rock","Geothermal Risks","Geothermal Future","Heat Mining","Iceland Energy Independence","Geothermal Checkpoint"]],
+      [46,"Engineering Geology",["Soil Mechanics","Rock Mechanics","Slope Stability","Landslide Risk","Foundation Engineering","Tunneling","Dam Construction","Highway Geology","Building Codes & Geology","Earthquake-Resistant Design","Liquefaction Hazards","Subsidence","Site Investigation","Geotechnical Reports","Engineering Geology Checkpoint"]],
+      [47,"Environmental Geology",["Natural Hazards","Volcanic Hazards","Seismic Hazards","Landslide Hazards","Flood Hazards","Pollution & Geology","Acid Mine Drainage","Soil Contamination","Waste Disposal","Nuclear Waste Storage","Radon Gas","Asbestos","Mercury Pollution","Environmental Impact Assessment","Environmental Geology Checkpoint"]],
+      [48,"Geophysics & Seismology",["Seismic Refraction","Seismic Reflection","Gravity Surveys","Magnetic Surveys","Electrical Resistivity","Ground Penetrating Radar","Seismograph Networks","Earthquake Location — Triangulation","Focal Mechanisms","Beachball Diagrams","Tomography","Earth's Free Oscillations","Borehole Geophysics","Marine Geophysics","Geophysics Checkpoint"]],
+      [49,"Planetary Geology — Mars, Moon, Asteroids",["Comparative Planetology","Lunar Geology","Apollo Samples","Lunar Mare","Lunar Highlands","Mars Geology","Olympus Mons","Valles Marineris","Mars Water History","Mars Rovers","Mercury — Caloris Basin","Venus — Tessera Terrain","Asteroid Geology","Comet Geology","Planetary Geology Checkpoint"]],
+      [50,"Geology Supreme Mastery",["Mineralogy & Petrology Final","Volcanoes & Earthquakes Final","Plate Tectonics Final","Geological Time & Fossils Final","Hydrogeology & Hydrology Final","Coastal & Glacial Final","Geomorphology Final","Mass Extinctions Final","Mesozoic & Cenozoic Final","Economic Geology Final","Petroleum & Geothermal Final","Engineering & Environmental Final","Geophysics Final","Planetary Geology Final","Geology Supreme Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'geo-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('geology-earth-science');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('geology-earth-science');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

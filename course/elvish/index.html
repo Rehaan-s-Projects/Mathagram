@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elvish — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Elvish</h1>
+    <p>The Elvish languages of Middle-earth — Quenya and Sindarin — crafted by J.R.R. Tolkien. Tengwar script, Cirth runes, grammar, vocabulary, poetry, Namárië, songs of Rivendell and Lothlórien, and etymology of the Eldar. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Introduction to Elvish",["The Elves of Middle-earth","Tolkien the Philologist","Quenya — High-Elven","Sindarin — Grey-Elven","Other Elvish Languages","Elvish Language Family Tree","Primary World vs Secondary World","Why Tolkien Invented Elvish","Finnish & Welsh Inspirations","Key Texts — Silmarillion, LOTR","Elvish in the Films","Learning Approach","Pronouncing Elvish","Resources — Helge Fauskanger","Introduction Checkpoint"]],
+      [2,"Quenya vs Sindarin",["Kindred Languages","Quenya Phonology","Sindarin Phonology","Lexical Differences","Grammar Differences","Who Speaks What","Elendil Speaks Quenya","Wood-Elves Speak Sindarin","Quenya as Latin of Elves","Sindarin as Everyday Elvish","Mixing Quenya & Sindarin","Sample Word Comparisons","Historical Divergence","Cognates","Q vs S Checkpoint"]],
+      [3,"Tengwar Script",["Fëanor's Invention","Tengwar Alphabet","Tengwar Modes","Classical Mode","Mode of Beleriand","English Mode","Tengwar Shapes — Téma Rows","Tyelpetéma, Parmatéma","Diacritical Marks — Tehtar","Punctuation","Writing Your Name in Tengwar","Elvish Calligraphy","Famous Tengwar Inscriptions","The One Ring Inscription","Tengwar Checkpoint"]],
+      [4,"Cirth Runes",["Dwarvish & Elvish Runes","Cirth Daeron","Angerthas Moria","Consonant Runes","Vowel Runes","Rune Shapes","Door of Durin Inscription","Book of Mazarbul","Runes in the Hobbit","Moon-Letters","Reading Runes","Writing in Cirth","Comparing Cirth to Tengwar","Rune Inscriptions in Films","Cirth Checkpoint"]],
+      [5,"Quenya Phonology",["Vowels — 5 Pure Vowels","Long vs Short Vowels","Diphthongs","Consonants","Stops — p, t, k","Nasals — m, n","Fricatives — s, h","Liquids — l, r","Consonant Clusters","Accent & Stress","Rhythm of Quenya","Euphony","Pronunciation Rules","Practice with Words","Quenya Phonology Checkpoint"]],
+      [6,"Sindarin Phonology",["Sindarin Vowel System","Umlaut — I-Affection","A-Affection","Consonant Mutation","Lenition — Soft Mutation","Nasal Mutation","Stop Mutation","Mixed Mutation","Consonant Clusters","Final Vowel Dropping","Accent Rules","Example Phonological Changes","Mithrandir — Phonology at Work","Reading Sindarin Aloud","Sindarin Phonology Checkpoint"]],
+      [7,"Greetings — Mae govannen & Aiya",["Aiya — Quenya Hail","Mae govannen — Sindarin Well Met","Elen síla lúmenn' omentielvo","Namárië — Farewell in Quenya","Navaer — Farewell in Sindarin","Alae — Behold","Hiril vuin — My Lady","Hir nín — My Lord","Suilad — Greetings","Good Morning — Aurë","Good Night — Lómë","Thank You — Hannon le","Please — Iest","Excuse Me","Greetings Checkpoint"]],
+      [8,"Nouns & Declensions",["Noun Classes","Quenya Cases — 10 Cases","Nominative","Accusative","Genitive","Possessive","Dative","Allative — To","Ablative — From","Locative — In","Instrumental","Sindarin Nouns","Pluralization Patterns","Collective Plurals","Nouns Checkpoint"]],
+      [9,"Pronouns",["Personal Pronouns — Quenya","Ni — I","Ci — You","Se — He/She","Me — We","Le — You (polite)","Te — They","Sindarin Pronouns","Im — I","Ci — You","Sindarin Polite Forms","Possessive Pronouns","Reflexive Pronouns","Demonstratives — Sina, Tana","Pronouns Checkpoint"]],
+      [10,"Adjectives",["Adjective Placement","Agreement with Nouns","Quenya Adjectives","Sindarin Adjectives","Colors — Malinornë (Golden)","Size Adjectives — Túra (Great)","Comparative Forms","Superlative — An- Prefix","Negative Adjectives","Describing Places — Imladris","Describing Elves","Describing Nature","Practice Sentences","Common Adjectives","Adjectives Checkpoint"]],
+      [11,"Verbs — Conjugation",["Quenya Verb Classes","Basic Verbs vs Derived Verbs","Present Tense","Past Tense","Perfect Tense","Future Tense","Aorist","Imperative","Participles","Gerunds","Sindarin Verbs","Irregular Verbs","Common Verb Stems","Conjugation Practice","Verbs Checkpoint"]],
+      [12,"Numbers & Counting",["One — Er (Quenya), Er (Sindarin)","Two — Atta, Tad","Three — Neldë, Neledh","Four — Canta, Canad","Five — Lempë, Leben","Six — Enquë, Eneg","Seven — Otso, Odog","Eight — Tolto, Toloth","Nine — Nertë, Neder","Ten — Cainen, Pae","Teens","Twenties & Beyond","Hundreds","Ordinals","Numbers Checkpoint"]],
+      [13,"Middle-earth Vocabulary",["Ring — Corma","Sword — Macil","Mountain — Oron","River — Sírë","Forest — Taurë","Star — Elen","Moon — Isil","Sun — Anar","Tree — Alda","Leaf — Lassë","Stone — Sarn","Water — Nen","Fire — Naur","Wind — Súrë","Vocabulary Checkpoint"]],
+      [14,"Elvish Calligraphy",["Tengwar Strokes","Pen & Brush","Classical Calligraphy","Flowing Strokes","Book Hand vs Formal","Decorative Flourishes","Illuminated Letters","Ring Inscription Style","Writing Namárië","Writing A Elbereth","Writing Door of Durin","Practice Your Name","Sample Phrases","Artistic Variations","Calligraphy Checkpoint"]],
+      [15,"Poetry — Namárië",["Galadriel's Lament","Line-by-Line Reading","Ai! laurië lantar lassi súrinen","Yéni únótimë","Ve falmalinnar","Elves of Lórien","Sorrow Motif","Translation","Meter & Rhythm","Grammar Analysis","Vocabulary Deep Dive","Cultural Context","Reciting Namárië","Memorization","Namárië Checkpoint"]],
+      [16,"Songs of Rivendell & Lothlórien",["Rivendell Songs","A Elbereth Gilthoniel","Invocation to the Star-Kindler","Lothlórien Songs","Galadriel's Song","Eldar Songs","Eärendil Was a Mariner","Beren & Lúthien","Song of the Wood-Elves","Drinking Songs","Lullabies","Warrior Songs","Funeral Songs","Wedding Songs","Songs Checkpoint"]],
+      [17,"Etymology & Tolkien's Method",["Primary World Roots","Indo-European Parallels","Finnish Influence on Quenya","Welsh Influence on Sindarin","Valarin Ancestor","Proto-Eldarin","Common Eldarin","Sound Shifts","Tengwa Evolution","Creating New Words","The Etymologies","PE — Parma Eldalamberon","VT — Vinyar Tengwar","Continuous Invention","Etymology Checkpoint"]],
+      [18,"Famous Phrases from LOTR",["One Ring to Rule Them All","Ash nazg durbatulûk — Black Speech","The Road Goes Ever On","A Elbereth Gilthoniel","Mae govannen, Legolas","Aiya Eärendil","Gurth an Glamhoth","Hannon le","Elen síla lúmenn' omentielvo","Aragorn's Coronation","Farewell of Galadriel","Gandalf's Phrases","Elrond's Council","Movie vs Book Lines","Phrases Checkpoint"]],
+      [19,"Writing Elvish Verse",["Elvish Meter","Alliterative Verse","Rhyming Couplets","Line Length","Caesura","Imagery — Stars, Trees","Composing Your Own Song","Lament Form","Praise Poem","Wedding Poem","Farewell Poem","Tengwar Inscription","Sindarin vs Quenya Choice","Polishing Verse","Verse Checkpoint"]],
+      [20,"Elvish Mastery",["Tengwar Script Final","Cirth Runes Final","Quenya Grammar Final","Sindarin Grammar Final","Vocabulary Final","Reading Comprehension","Namárië Recitation","A Elbereth Recitation","Writing an Elvish Poem","Translation Challenge","Calligraphy Final","Cultural Competency","Etymology Challenge","Final Composition","Elvish Mastery — Na vedui!"]],
+      [21,"Telerin & Other Elvish Branches",["Eldarin Family Tree","Common Eldarin","Vanyarin Branch","Noldorin Branch","Telerin Branch","Sindarin from Telerin","Nandorin (Wood-Elves)","Avarin (Refusers)","Silvan Elvish","Dialect Differences","Telerin Phonology","Vanyarin Vocabulary","Mithrim Sindarin","North Sindarin","Branches Checkpoint"]],
+      [22,"Quenya Vocabulary Deep Dive",["Quenya Numbers Beyond Ten","Family Vocabulary — atar, amil","Body Parts — máquet, tál","Days of the Week — Aldëa","Months — Narvinyë","Seasons — Coirë, Lairë","Weather — Súrë, Lossë","Stars — Eleni, Tintallë","Colors — Carnë, Ninquë","Animals — Roquen, Aiwë","Plants — Alda, Lassë","Food — Massa, Limpë","Time — Lúmë, Yén","Emotions — Alassë, Nyérë","Quenya Vocab Checkpoint"]],
+      [23,"Sindarin Vocabulary Deep Dive",["Sindarin Numbers","Family Vocabulary — adar, naneth","Body Parts — orf, tâl","Days of the Week","Months in Sindarin","Seasons — Iavas, Laer","Weather — Sûl, Loss","Stars — Elenath","Colors — Caran, Nim","Animals — Roch, Aew","Plants — Galadh, Las","Food — Bass, Limpe","Time — Lû, Idhrinn","Emotions — Glass, Nîr","Sindarin Vocab Checkpoint"]],
+      [24,"Quenya Verb System Advanced",["Aorist Tense","Present Continuous","Past Tense — Strong & Weak","Perfect Tense","Future Tense","Imperative — Á + Stem","Infinitive Forms","Participles — Active & Passive","Gerunds","Pronominal Suffixes on Verbs","Object Pronouns Attached","Negative Verb Forms","Subjunctive","Causatives","Quenya Verbs Checkpoint"]],
+      [25,"Sindarin Verb System Advanced",["Sindarin Verb Classes","Strong vs Weak Verbs","Present Tense","Past Tense","Perfect Tense","Future Tense","Imperative","Past Participles","Gerundial Forms","Pronominal Endings","Negative Verb Forms","Mutations Triggered by Verbs","Common Irregular Verbs","Verb Practice","Sindarin Verbs Checkpoint"]],
+      [26,"Quenya Sentence Structure",["Word Order — SVO Default","Free Word Order via Cases","Topicalization","Compound Nouns","Genitive Constructions","Possessive Suffixes","Adjective Placement","Question Formation","Interrogative Words — Mana","Negation Patterns","Subordinate Clauses","Relative Clauses","Conjunctions — Ar, Mal","Sample Sentences","Quenya Syntax Checkpoint"]],
+      [27,"Sindarin Mutation Practice",["Soft Mutation (Lenition)","Nasal Mutation","Stop Mutation","Mixed Mutation","Liquid Mutation","Mutation Triggers","Mutation Tables","Mutation in Common Phrases","Practice with Articles","Practice with Prepositions","Practice with Pronouns","Mutation Pitfalls","Mutation in Names","Mutation Recap","Mutations Checkpoint"]],
+      [28,"Eärendil & Lay of Beren",["Eärendil Was a Mariner — Bilbo's Song","Stanza Analysis","Vocabulary in the Song","Rhyme & Meter","Lay of Leithian — Beren & Lúthien","Heroic Verse Form","Lúthien's Singing","Tinúviel Etymology","Beren's Quest","Silmaril Vocabulary","Reciting the Lay","Cultural Importance","Tolkien's Inspirations","Performance Tips","Lays Checkpoint"]],
+      [29,"Galadriel's Song & The Phial",["Aiya Eärendil Elenion Ancalima","Phial of Galadriel","Light of Eärendil","Galadriel's Song in Lothlórien","Aragorn's Naming","Treebeard's Lullaby","Mirror of Galadriel","Frodo's Gift Phrases","Sam's Recitation in Cirith Ungol","Translation Practice","Reciting Word by Word","Galadriel's Sindarin","Galadriel's Quenya","Songs Compilation","Galadriel Checkpoint"]],
+      [30,"Names of Middle-earth Characters",["Aragorn — Royal Tree","Arwen — Noble Maiden","Legolas — Green Leaves","Galadriel — Maiden Crowned with Radiance","Elrond — Star-Dome","Glorfindel — Golden-Hair","Celeborn — Silver-Tree","Eärendil — Sea-Lover","Lúthien — Daughter of Twilight","Beren — Bold","Túrin — Master of Victory","Fingon, Finrod, Finarfin","Maedhros, Maglor","Telperion & Laurelin (Trees)","Names Checkpoint"]],
+      [31,"Elvish Place Names",["Imladris — Cloven Valley (Rivendell)","Lothlórien — Dreamflower","Caras Galadhon","Mirkwood — Taur-nu-Fuin","Doriath","Gondolin — Hidden Rock","Nargothrond","Beleriand","Aman — Blessed Realm","Valinor","Eldamar","Tirion","Avathar","Helcar Sea","Place Names Checkpoint"]],
+      [32,"Reading Tengwar Inscriptions",["The Ring Inscription Letter-by-Letter","Door of Durin Translation","Eärendil's Star Map","Book of Mazarbul","Title Pages of LOTR","Aragorn's Name in Tengwar","Frodo's Name in Tengwar","Bilbo's Name in Tengwar","Reading the One Ring Tehtar","Practice Tengwar Reading","Tengwar Calligraphy Master","Famous Inscriptions Decoded","Tengwar Tattoos","Modern Tengwar Inscriptions","Tengwar Reading Checkpoint"]],
+      [33,"Elvish Supreme Mastery",["Branches & Dialects Final","Vocabulary Final — Quenya & Sindarin","Verb System Final","Mutations Final","Lays & Songs Final","Elvish Supreme Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ev-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('elvish');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('elvish');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

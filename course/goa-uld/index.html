@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goa'uld — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Goa'uld</h1>
+    <p>The tongue of the System Lords from Stargate — Egyptian-derived phonology, hieroglyphic script, the Jaffa & Tok'ra dialects, command phrases, mythology, and full parasitic-empire fluency. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Goa'uld Foundations",["What Is Goa'uld?","Stargate Franchise Overview","SG-1 vs Atlantis vs Universe","The Goa'uld as a Species","Origins on P3X-888","Symbiote Biology","Goa'uld vs Tok'ra","System Lords Overview","The Empire of Ra","Cheops Voiceprint","Why Goa'uld Sounds Egyptian","Goa'uld in the Films & TV","Documentation & Fan Sources","Why Learn Goa'uld?","Foundations Checkpoint"]],
+      [2,"Phonology & Hieroglyphs",["Goa'uld Sound Inventory","Vowels","Consonants","Glottal Stop (apostrophe)","Stress Patterns","Cantillating Goa'uld","Goa'uld Hieroglyphic Script","Egyptian-Derived Glyphs","Reading Direction","Stargate Address Glyphs","Cartouche Names","Pronouncing 'Kel'mac'","Pronouncing 'Jaffa'","Pronouncing 'Tau'ri'","Phonology Checkpoint"]],
+      [3,"System Lords & Their Names",["Ra — The Sun God","Apophis — The Serpent","Anubis","Ba'al","Cronus","Hathor","Sokar","Yu the Great","Osiris & Isis","Heru'ur","Setesh","Olokun","Ares","Family Trees of System Lords","System Lords Checkpoint"]],
+      [4,"Common Goa'uld Phrases",["Kek mas tek — You Will Die","Shak'tel — Stand Down","Chel'nak — Excellent","Tal mal tiak — Speak Truthfully","Tal'shiak — Bow / Submit","Kal'mah — Hidden Place","Kree — Move / Attention","Shel'kek nem'ron — I Die Free","Kalach shal tek — A Long Life","Tek ma'tek — Hello","Tek'ma'te — Greetings","Shol'va — Traitor","Tau'ri — People of the First World","Naq quel — Stay","Common Phrases Checkpoint"]],
+      [5,"Greetings & Commands",["Tek'ma'te — Greetings","Tal'mok — Welcome","Mok'tar — Approach","Kree taka — Move Forward","Kel sha — Halt","Kalach — Live","Hak'taur — Strong One","Shel'na kek — Surrender","Onak — Soldier","Hashak'kree — Attack","Diplomatic Phrases","Threats & Insults","Polite Negotiation","Sworn Oaths","Greetings Checkpoint"]],
+      [6,"Verbs & Sentence Structure",["Verb Roots","Past / Present / Future Markers","Imperative Form","Negation — 'Lo'","Subject Pronouns","Object Pronouns","Possessive Constructions","Word Order","Topic-Comment in Goa'uld","Yes/No Questions","Wh-Questions","Subordinate Clauses","Conditionals","Composing Sentences","Syntax Checkpoint"]],
+      [7,"Honorifics & Titles",["Lord — 'Tau'","God — 'Mok'tar'","System Lord — 'Mas Mas'","First Prime — 'Pri'mata'","Beloved — 'Beloved Son'","Slave — 'Lo'taur'","Servant — 'Lo'tar'","Free Jaffa — 'Sho'va'","Symbiote — 'Mok'","Host — 'Hosc'","Queen — 'Goa'uld Queen'","Pharaoh-Style Titles","Naming the Symbiote","Family Titles","Honorifics Checkpoint"]],
+      [8,"Jaffa Vocabulary",["Jaffa Caste System","Symbiote Pouch","Prim'ta — The Larva","Kel'mac (Kelno'reem)","Bashaak — Combat Training","Staff Weapon — 'Ma'tok'","Zat'nik'tel","Tretonin — Free Jaffa Cure","Jaffa Honor","Death Before Dishonor","Jaffa Greeting","Jaffa Markings — 'Hara'kesh'","Master Bra'tac","Free Jaffa Nation","Jaffa Checkpoint"]],
+      [9,"Tok'ra & Other Variants",["Tok'ra — Children of Ra","Tok'ra Linguistic Differences","Tok'ra Greetings","Tok'ra Tunnel Crystals","Selmak","Garshaw","Anise","Tok'ra Symbiote-Host Bond","Hak'tyl Resistance","Ancient Influence","Asgard Loanwords","Wraith Loanwords","Cross-Cultural Phrases","Translating Tok'ra Texts","Variants Checkpoint"]],
+      [10,"Goa'uld Mastery",["Translating Stargate Episodes","Reading Cartouches","Writing Hieroglyphic Goa'uld","Composing Poetry","Goa'uld Songs","Cosplay & LARP","Stargate Fan Communities","SG-1 Reference Compendia","Wikia & Fan Wikis","Continued Study","Tek ma te — Final Greeting","Kek mas tek — Final Threat","Shel'kek nem'ron — A Free Death","Living the Empire","Goa'uld Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'goa-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('goa-uld');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('goa-uld');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

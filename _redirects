@@ -4,3 +4,22 @@
 /course/english-words-oed  /courses.html  301!
 /course/spanish-words-rae/*  /courses.html  301!
 /course/spanish-words-rae  /courses.html  301!
+/course/difficult-colors/*  /course/colour/:splat  301!
+/course/difficult-colors  /course/colour/  301!
+# /course/color and /course/colour are the same URL — rewrite (200), not redirect (301).
+# The user's URL stays unchanged; the content from /course/colour/ is served either way.
+/course/color/*  /course/colour/:splat  200
+/course/color  /course/colour/index.html  200
+
+# Hate-slur troll URL traps — redirect to the existing strike-system warning page.
+# Slurs appear here in Netlify's redirect config only; never rendered as content.
+# violation.html reads ?strike= and ?reason= and shows Edam's Strike 1 warning UI,
+# auto-logs the user out at strikes 2/3, and clears local data at strike 3.
+/course/nigga/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/course/nigga    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/course/nigger/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/course/nigger    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/nigga/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/nigga    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/nigger/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/nigger    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!

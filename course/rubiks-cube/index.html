@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rubik's Cube &amp; Speedcubing — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Rubik's Cube &amp; Speedcubing</h1>
+    <p>Solve the cube in seconds — beginner method, full CFOP, alternative methods (Roux, ZZ), big cubes, blindfolded, one-handed, and competition prep. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Cube Anatomy & History",["History — Ernő Rubik","Center Pieces","Edge Pieces","Corner Pieces","Layers","Cube States","God's Number (20)","Notation R L U D F B","Prime Notation","Double Turns","M E S Slice Moves","Cube Hardware","Speed Cubes vs Stickered","Lubrication & Tension","Cube Anatomy Checkpoint"]],
+      [2,"Beginner Method",["White Cross","White Cross — Fingertricks","White Corners","First Two Layers Concept","Second Layer Edges","Yellow Cross","Yellow Edges Permutation","Yellow Corners Position","Yellow Corners Orientation","Common Beginner Errors","Practice Cube Setup","Average Solve Time","Beginner Times Goals","Transition to Intermediate","Beginner Checkpoint"]],
+      [3,"CFOP — Cross",["What Is CFOP?","Cross Solutions","Inspection Time","Look-Ahead","Solving Cross in 8 Moves","X-Cross","Bad Habits to Avoid","Color Neutrality","One-Color vs Two-Color","Cross Drills","Slow Solves","Cross on Bottom","Sub-3 Cross","Cross Look-Ahead","CFOP Cross Checkpoint"]],
+      [4,"CFOP — F2L",["F2L Concept","41 Standard Cases","F2L Algorithms","Pair Insertion","Empty Slot Insertion","Inverted Pair","Connected Pair","Disconnected Pair","Misoriented Edge Cases","Multislotting","Look-Ahead During F2L","Slot Switching","X-Cross to F2L","Drill — One Pair Solves","F2L Checkpoint"]],
+      [5,"CFOP — OLL",["OLL Concept","57 OLL Cases","Two-Look OLL","Cross Edges Cases","Corner Orientation Cases","Sune & Anti-Sune","Diagonal & Adjacent","Headlights & Bowtie","Predicting OLL","Algorithm Optimization","OLL Trainer Apps","COLL","ZBLL Preview","OLL Practice","OLL Checkpoint"]],
+      [6,"CFOP — PLL",["PLL Concept","21 PLL Cases","Two-Look PLL","Edge Permutation","Corner Permutation","T-Perm","J-Perm","Y-Perm","H-Perm & Z-Perm","U-Perm","R-Perm","Predicting PLL","PLL Recognition","Algorithm Selection","PLL Checkpoint"]],
+      [7,"Alternative Methods",["Roux Method","Roux — First Block","Roux — Second Block","Roux — CMLL","Roux — LSE","ZZ Method","ZZ — EOLine","ZZ — F2L","ZZ — LL","Petrus Method","Heise Method","Mehta Method","Combining Methods","Method Choice","Alt Methods Checkpoint"]],
+      [8,"Big Cubes & Variants",["4x4 Anatomy","Centers on 4x4","Edges on 4x4","Parity Cases","5x5 Method","6x6 & 7x7","Pyraminx","Megaminx","Skewb","Square-1","Mirror Cube","Ghost Cube","Gear Cube","Mastermorphix","Variants Checkpoint"]],
+      [9,"Speedcubing Disciplines",["Average of 5","Best of 3","One-Handed (OH)","Feet (Discontinued)","Blindfolded (BLD) — 3-Style","Multi-BLD","Fewest Moves Challenge (FMC)","Solving with Closed Eyes","Lookahead Drills","Smartcube Apps","Tracking Times — csTimer","WCA Regulations","Competing — First Comp","Mental Game","Disciplines Checkpoint"]],
+      [10,"Mastery & Community",["Sub-30 Tips","Sub-20 Tips","Sub-15 Tips","Sub-10 Roadmap","Sub-7 World Class","Famous Cubers","Competition Etiquette","Online Communities","SpeedSolving Forum","Reddit r/Cubers","YouTube Channels","Cube Hardware Trends","Building a Practice Schedule","Mental Health & Practice","Speedcubing Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cube-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('rubiks-cube');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('rubiks-cube');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

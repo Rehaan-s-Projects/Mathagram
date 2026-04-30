@@ -30,7 +30,7 @@
     </div>
   </nav>
   <header class="course-header">
-    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
     <h1>Digital Circuits</h1>
     <p>Logic gates, binary arithmetic, sequential logic, FSMs, memory, FPGAs, HDLs, and CPU architecture. 406 lessons across 29 units.</p>
   </header>
@@ -82,7 +82,7 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'dc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'dc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {

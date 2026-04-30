@@ -30,7 +30,7 @@
     </div>
   </nav>
   <header class="course-header">
-    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
     <h1>How Much Storage</h1>
     <p>Bits, bytes, files, and drives — understand digital storage from a single bit to exabyte-scale data centers. 225 lessons across 15 units.</p>
   </header>
@@ -68,7 +68,7 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'hms-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'hms-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {

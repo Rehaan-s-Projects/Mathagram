@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Command Block (Minecraft) — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Command Block (Minecraft)</h1>
+    <p>Code in Minecraft with command blocks — coordinates, selectors, /execute, scoreboards, NBT, datapacks, redstone, and full mini-game maps. 615 lessons across 41 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Command Block Foundations",["What Is a Command Block?","Enabling Cheats & /give","Impulse Command Block","Repeat Command Block","Chain Command Block","Always Active vs Needs Redstone","Conditional vs Unconditional","Block Facing & Arrows","Reading Block Output","Comparator Output","Command Block Permissions","Operator Levels","First Command Block Build","Common Command Block Mistakes","Foundations Checkpoint"]],
+      [2,"Coordinates & Selectors",["World Coordinates (X Y Z)","Relative Coordinates (~)","Local Coordinates (^)","The Tilde Explained","The Caret Explained","Target Selector @p","Target Selector @a","Target Selector @r","Target Selector @e","Target Selector @s","Selector Arguments [type=]","Selector Arguments [distance=]","Selector Arguments [tag=]","Selector Limits [limit=]","Coordinates & Selectors Checkpoint"]],
+      [3,"Essential Commands",["/say & /tellraw Basics","/give Items","/give with NBT","/clear Items","/tp Teleport","/setblock","/fill","/clone","/effect","/enchant","/gamemode","/time set","/weather","/difficulty","Essential Commands Checkpoint"]],
+      [4,"The /execute Command",["/execute Anatomy","execute as","execute at","execute positioned","execute rotated","execute facing","execute aligned","execute anchored","execute in (dimension)","execute if block","execute if entity","execute if score","execute unless","execute store","/execute Checkpoint"]],
+      [5,"Scoreboards & Variables",["What Is a Scoreboard?","/scoreboard objectives add","Score Criteria — dummy","Built-in Criteria (deaths kills)","/scoreboard players set","/scoreboard players add","/scoreboard players operation","Math with Scoreboards","Constants & Globals","Conditional Logic with Scores","Display Slots — sidebar list","Trigger Objectives","Player Stats Tracking","Common Scoreboard Patterns","Scoreboards Checkpoint"]],
+      [6,"NBT Data & Tags",["What Is NBT?","Reading NBT with /data get","/data merge","/data modify set","/data modify append","Item NBT Basics","Custom Names & Lore","CustomModelData","Entity NBT","Block Entity NBT","Storage NBT","Tag-based Targeting","/tag Commands","NBT Path Syntax","NBT & Tags Checkpoint"]],
+      [7,"Summoning & Effects",["/summon Basics","Summon with NBT","Summon Custom Mobs","Riding & Passengers","ArmorStand Summon","Invisible ArmorStands as Markers","/particle Basics","Particle Patterns","/effect give","/effect with Levels","Hidden Effects","/playsound","Sound Sources & Categories","/stopsound","Summoning & Effects Checkpoint"]],
+      [8,"Text & /tellraw JSON",["JSON Text Format","/tellraw Syntax","Color Codes","Bold Italic Underline","Hover Events","Click Events","Run Command on Click","Open URL on Click","Score Component","Selector Component","Translate Component","Keybind Component","Title & Subtitle","/title Commands","Text & /tellraw Checkpoint"]],
+      [9,"Loops & Logic",["Repeat Always Active","Chain Reactions","Pulse Detection","Tick vs Game Tick","One-Shot Triggers","Counters with Scoreboards","If/Else with /execute","Loops with Conditional Chain","Wait/Delay Patterns","State Machines","Random Outcomes","Random Drop Tables","Cooldown Timers","Tick Optimization","Loops & Logic Checkpoint"]],
+      [10,"Datapacks & Functions",["What Is a Datapack?","Datapack Folder Structure","pack.mcmeta","Creating Functions","Calling Functions with /function","Function Tags — load & tick","Loot Tables","Predicates","Custom Recipes","Custom Advancements","Worldgen Datapacks","Tag Files","Datapack Reload","Distributing Datapacks","Datapacks Checkpoint"]],
+      [11,"Redstone + Command Blocks",["Redstone Refresher","Powering a Command Block","Button & Pressure Plate Triggers","Comparator Reading Output","Hopper Clocks","Detecting Items in Hoppers","Redstone Torch Logic","Pulse Extenders","Hidden Doors with Commands","Player Detection Pads","Item Frame Locks","Tripwire Triggers","Redstone vs /execute","Hybrid Builds","Redstone Hybrid Checkpoint"]],
+      [12,"Advanced Selectors",["Selector Argument [scores=]","Selector Argument [team=]","Selector Argument [name=]","Selector Argument [predicate=]","Selector Argument [nbt=]","Selector Argument [advancements=]","Selector Argument [gamemode=]","Selector Argument [level=]","Sorting [sort=nearest]","Sorting [sort=furthest]","Sorting [sort=random]","Sorting [sort=arbitrary]","Volume [dx= dy= dz=]","Negation Operators (=!)","Advanced Selectors Checkpoint"]],
+      [13,"Coordinate Math & Vectors",["World Origin (0 0 0)","Y-axis Height Range","Distance Between Points","Direction Vectors","Rotation (yaw pitch)","Eye Position","Block Position vs Entity Position","Center of Block (~0.5)","Local Coordinates Math","Raycast Basics","Computing Velocity","Position Storage in Scoreboards","Decimal Precision","Coordinate Conversion","Coordinate Math Checkpoint"]],
+      [14,"/execute Mastery",["Multiple Subcommand Chains","execute as @e at @s","execute store success","execute store result","execute store score","execute store entity","execute store block","execute store bossbar","execute facing entity","execute facing position","execute rotated as","execute anchored eyes vs feet","execute on (1.20+)","Combining 5+ Subcommands","/execute Mastery Checkpoint"]],
+      [15,"Scoreboard Advanced Math",["Operations += and -=","Operations *= and /=","Operation %= (Modulo)","Operation = (Assignment)","Operation < and > (Min/Max)","Operation >< (Swap)","Multiplying with Constants","Dividing with Constants","Square Root via Iteration","Random Numbers via Selector","Floor & Ceiling Tricks","Negative Number Handling","Big Number Tricks","Decimal Approximation","Scoreboard Math Checkpoint"]],
+      [16,"NBT Path Mastery",["Root NBT Path","Compound Tag Access","List Tag Access","List Filter [{}]","Index Access [0]","Last Index [-1]","Nested Compound Paths","ItemStack Path","Inventory Path","EnderItems Path","ArmorItems List","HandItems List","Attributes List","ActiveEffects List","NBT Path Checkpoint"]],
+      [17,"/data Modify Operations",["/data merge entity","/data merge block","/data modify ... set value","/data modify ... set from","/data modify ... merge from","/data modify ... append","/data modify ... prepend","/data modify ... insert","/data remove","/data get with scale","Storing /data in Storage","Cross-Entity Data Copy","Block to Entity Copy","Entity to Block Copy","/data Operations Checkpoint"]],
+      [18,"Custom Summon Deep",["Summon with Tags","Summon with CustomName","Summon Invulnerable","Summon NoAI","Summon with Passengers","Summon Riding Stack","Summon Marker Entity","Summon Falling Block","Summon Item Entity","Summon Lightning Bolt","Summon Area Effect Cloud","Summon Primed TNT","Summon Firework Rocket","Summon Custom-Named Mob","Custom Summon Checkpoint"]],
+      [19,"ArmorStand Programming",["ArmorStand as Position Marker","Invisible ArmorStands","ArmorStand with Helmet","Hologram Effects","Multi-Line Holograms","ArmorStand Pose (Arms Legs)","Small ArmorStands","Marker ArmorStand (NoBase)","Equipping with /item replace","ArmorStand Animations","Floating Custom Heads","Display Entities (1.19.4+)","Text Display Entities","Item Display Entities","ArmorStand Checkpoint"]],
+      [20,"Particle Systems & Animations",["Particle Types Catalog","Particle Speed & Count","Force Mode (force vs normal)","dust Particle (Custom Color)","block & item Particles","Lines & Trails","Circles via Math","Spheres via Math","Spirals","Particle Beams","Animated Patterns over Ticks","Particle Performance Tips","Camera-Aware Particles","Particle Predicates","Particle Animations Checkpoint"]],
+      [21,"Custom Sound Design",["/playsound at Position","Targeting Players","Volume & Pitch","Sound Categories","Custom Resource Pack Sounds","Pitch as Note Scale","Layered Sound Design","Distance Falloff","Stop & Cancel Sounds","Music Discs in Commands","Building Songs Tick by Tick","Note Block Equivalents","Cinematic Sound Cues","Subtitles & UI Hints","Sound Design Checkpoint"]],
+      [22,"/tellraw Mastery",["Multi-line Messages","Translatable Strings","Conditional Hover Sections","Inline Score Display","Inline Selector Display","Click suggest_command","Click change_page","Click copy_to_clipboard","Insertion (shift-click)","Hover with show_item","Hover with show_entity","Page Books with Commands","Sign Text via /data","Custom Chat Formats","/tellraw Mastery Checkpoint"]],
+      [23,"Bossbar System",["/bossbar add","/bossbar set name","/bossbar set color","/bossbar set style","/bossbar set max","/bossbar set value","/bossbar set players","/bossbar set visible","/bossbar list","/bossbar remove","Bossbars as Timers","Bossbars as Progress","Multi-Bossbar Stacks","Bossbar Animations","Bossbar Checkpoint"]],
+      [24,"Custom Items with NBT",["Custom Display Name","Lore Lines","CustomModelData","Item Enchantments","Hide Flags","Unbreakable Items","AttributeModifiers","Custom Damage","Custom Tools","Custom Armor Trims","PotionEffects on Items","CanDestroy Tag","CanPlaceOn Tag","Item Tags & Detection","Custom Items Checkpoint"]],
+      [25,"Custom Mobs Deep",["Setting Mob Attributes","Custom Health","Custom Speed","Custom Damage Output","PersistenceRequired","Silent Mobs","NoGravity Mobs","Custom Equipment","DropChances","Active & Hidden Effects","Riding & Stacks Deep","Tag-based Behavior","Detecting Mob Death","Custom Spawn Eggs","Custom Mobs Checkpoint"]],
+      [26,"Damage & Combat Systems",["/damage Command","Damage Types","Custom Damage Sources","Bypass Armor","True Damage","Detecting Hits via stat","Detecting Player Hits","Knockback Control","Critical Hit Detection","Custom Death Messages","Last-Hit Tracking","Damage over Time","Healing Effects","Combat Tagging Players","Damage Systems Checkpoint"]],
+      [27,"Inventory Manipulation",["/clear Specific Items","/item replace entity","/item replace block","/item modify","Loot via /loot","Loot Table References","Loot give","Loot insert","Loot replace block","Loot replace entity","Detecting Slot Contents","Hopper Detection","Inventory Slot Numbers","Equipment Slots","Inventory Checkpoint"]],
+      [28,"Loot Tables Deep",["Loot Table JSON Structure","Pools & Rolls","Entries — item tag group","Functions — set_count set_nbt","Conditions — random_chance killed_by_player","Bonus Rolls","Weighted Entries","Quality Modifier","Sequence vs Group","Alternative Entries","Looting Enchantment Logic","Conditional Drops by Tool","Custom Block Drops","Empty Pool Trick","Loot Tables Checkpoint"]],
+      [29,"Predicates Deep",["What Are Predicates?","Predicate JSON Structure","entity_properties","block_state_property","location_check","weather_check","time_check","random_chance","match_tool","damage_source_properties","Inverted Predicates","Alternative Predicates","Predicates in /execute if","Predicates in Loot","Predicates Checkpoint"]],
+      [30,"Custom Recipes",["Recipe JSON Structure","Crafting Shaped","Crafting Shapeless","Smelting Recipes","Blasting Recipes","Smoking Recipes","Campfire Recipes","Stonecutter Recipes","Smithing Transform","Smithing Trim","NBT-Result Recipes","Tag-based Ingredients","Recipe Unlocks","Recipe Books","Custom Recipes Checkpoint"]],
+      [31,"Custom Advancements",["Advancement JSON Structure","Display & Icon","Frame Types — task goal challenge","Trigger — impossible","Trigger — inventory_changed","Trigger — player_killed_entity","Trigger — location","Trigger — bred_animals","Trigger — consume_item","Reward — recipes","Reward — function","Hidden Advancements","Advancement Trees","Tab Backgrounds","Advancements Checkpoint"]],
+      [32,"Worldgen Datapacks",["Biome JSON Basics","Custom Trees","Custom Structures","Structure NBT Files","Configured Features","Placed Features","Density Functions","Surface Rules","Dimension JSON","Custom Dimensions","Noise Settings","Cave Carvers","Ore Generation","Spawn Settings","Worldgen Checkpoint"]],
+      [33,"Function Tags & Modules",["load.json Function Tag","tick.json Function Tag","Function Namespaces","Calling Other Functions","Recursion (Tail Calls)","Function Macros","Macro Arguments","$(...) Substitution","Reusable Module Patterns","Library Datapacks","Versioning Datapacks","Datapack Dependencies","Cross-Datapack Calls","Module Best Practices","Function Tags Checkpoint"]],
+      [34,"Storage NBT Tricks",["/data * storage","Persistent Variables","Storage Namespaces","Lists in Storage","Compound Maps in Storage","Function Macros from Storage","Counters in Storage","Queues & Stacks","Player Data in Storage","World State in Storage","Storage vs Scoreboard","Atomic Updates","Reset & Cleanup","Backup Storage Patterns","Storage Checkpoint"]],
+      [35,"UUID & Selector Tricks",["What Is a UUID?","UUID Format (Int Array)","Storing Player UUIDs","Tag-based Identity","ScoreHolder Names","Fake Players in Scoreboards","Self-Reference @s","Multi-Entity Loops","Distinguishing Players","Detecting Disconnections","First-Login Detection","Op Detection","UUID for Persistence","Selector Optimization","UUID Tricks Checkpoint"]],
+      [36,"Time & Tick Systems",["1 Tick = 0.05s","/schedule function","schedule append vs replace","Long-Running Schedules","Tick Counters","Timer Display","Real-Time vs Game-Time","Day/Night Detection","Phase-Based Logic","Cooldown Implementation","Recurring Events","One-Off Delayed Events","Tick-Per-Second Awareness","Avoiding Tick Lag","Time & Tick Checkpoint"]],
+      [37,"Random & Probability",["Random with @r","Random with [sort=random]","Random Score via Operations","LootTable random_chance","predicate random_chance","Weighted Random Tables","Coin Flip Pattern","Dice Roll Pattern","Shuffle a List","Random Position in Cube","Random Position in Sphere","Spawning at Random Player","Avoiding Bias","Seeded Determinism","Random & Probability Checkpoint"]],
+      [38,"Pathfinding & AI Tricks",["Vanilla Pathfinding","Disabling AI (NoAI)","Custom Movement via Commands","Step-by-Step Walk","Teleport-Based Movement","Raycast Movement","Avoid Lava/Water Logic","Path on Track Markers","Follow Player Pattern","Flee Pattern","Patrol Routes","Marker Waypoints","Smooth Interpolation","Display Entity Tween","AI Tricks Checkpoint"]],
+      [39,"Boss Fight Engineering",["Boss Concept Design","Phase-Based Bosses","HP Threshold Triggers","Boss Attack Patterns","Boss Summons (Adds)","Boss AoE Attacks","Boss Projectiles","Boss Teleport Mechanics","Boss Bar Integration","Death Cinematics","Loot Drop Cinematics","Boss Reset on Wipe","Multi-Boss Coordination","Difficulty Scaling","Boss Engineering Checkpoint"]],
+      [40,"Performance & Optimization",["Reducing Tick-Function Cost","Avoiding @e Globally","Cached Selectors","Tag-Based Entity Pools","Function Splitting","schedule for Throttling","Reducing Particle Counts","Async-Style Patterns","Profiling Functions","/forceload chunks","Chunk Boundary Issues","Memory of Datapacks","Reload-Safe Patterns","Multiplayer Performance","Optimization Checkpoint"]],
+      [41,"Mini-Game & Map Making",["Map Concept Design","Lobbies & Spawn Areas","Team Assignment","Kit Loadouts","Score Display","Win Conditions","Spectator Mode","Custom Death Messages","Boss Fights with NBT","Parkour Triggers","PvP Arenas","Reset Buttons","Map Polish & Resource Packs","Publishing Your Map","Map Making Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cmd-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('command-block');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('command-block');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

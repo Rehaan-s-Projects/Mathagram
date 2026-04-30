@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Othello — The Board & Setup</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/characters.css">
+<style>
+body { background:#f8f9fa; }
+.wrap { max-width:520px; margin:70px auto 40px; text-align:center; padding:16px; }
+h1 { font-size:1.5rem; margin-bottom:6px; }
+.sub { color:#555; font-size:0.95rem; margin-bottom:14px; font-weight:500; line-height:1.5; }
+.bar { height:10px; background:#e0e0e0; border-radius:5px; margin-bottom:18px; }
+.fill { height:100%; background:#58cc02; border-radius:5px; transition:width 0.3s; }
+.counter { font-weight:700; margin-bottom:10px; color:#374151; }
+.target-label { font-size:0.85rem; font-weight:700; color:#1e3a8a; background:#dbeafe; padding:6px 12px; border-radius:6px; display:inline-block; margin-bottom:10px; }
+
+table { border-collapse:collapse; margin:0 auto 16px; border:4px solid #14532d; box-shadow:0 6px 18px rgba(0,0,0,0.2); }
+td { width:50px; height:50px; text-align:center; vertical-align:middle; padding:0; background:#15803d; border:1px solid #052e16; position:relative; }
+
+.disc-w, .disc-b {
+  display:inline-block; width:36px; height:36px; border-radius:50%;
+  box-shadow:0 2px 4px rgba(0,0,0,0.4);
+}
+.disc-w { background:radial-gradient(circle at 35% 35%, #fff, #d1d5db); border:2px solid #374151; }
+.disc-b { background:radial-gradient(circle at 35% 35%, #4b5563, #0a0a0a); border:2px solid #000; }
+
+.target {
+  display:inline-block; width:32px; height:32px; border-radius:50%;
+  cursor:pointer; border:4px solid #fbbf24;
+  animation:pulse 0.8s infinite;
+}
+.target:hover { transform:scale(1.2); background:rgba(251,191,36,0.5); }
+@keyframes pulse {
+  0%,100% { background:rgba(251,191,36,0.2); }
+  50% { background:rgba(251,191,36,0.5); }
+}
+.click-hit { position:absolute; inset:0; cursor:pointer; }
+
+.coords-row, .coords-col { font-size:0.7rem; font-weight:700; color:#374151; }
+
+.msg { padding:14px; border-radius:10px; margin:12px 0; font-weight:700; font-size:1rem; }
+.msg-ok { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
+.msg-no { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
+.btn { padding:12px 32px; font-size:1.05rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; margin-top:10px; box-shadow:0 4px 0 #46a302; text-decoration:none; display:inline-block; }
+.btn:hover { background:#46a302; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+
+<div class="wrap">
+<h1>Othello — The Board & Setup</h1>
+<p class="sub">Othello starts with <strong>four discs</strong> in the center forming an X pattern.<br>Tap each <span style="color:#fbbf24;font-weight:800">YELLOW CIRCLE</span> to place the next disc.</p>
+<div class="bar"><div class="fill" id="bar"></div></div>
+<div class="counter" id="counter">0 / 4 discs placed</div>
+<div class="target-label" id="next-label">Place a White disc on d4</div>
+<div id="game"></div>
+<div id="msg"></div>
+</div>
+
+<script>
+if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})}); }
+if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}); }
+</script>
+<script type="module">
+import { initNav } from '../../js/nav.js';
+import { initRitaChat } from '../../js/rita-chat.js';
+initNav('../../');
+initRitaChat('../../');
+import { showBuddy, initSideCharacter } from '../../js/characters.js';
+import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+import { onAuthChange } from '../../js/auth.js';
+initSideCharacter('william', '../../');
+
+// Othello starting position (rows 0-7, cols 0-7; standard notation a1-h8 maps row 7=1, col 0=a)
+// Standard: d4 white, e4 black, d5 black, e5 white
+// In array (row, col): (3,3) white, (3,4) black, (4,3) black, (4,4) white
+const sequence = [
+  {r:3, c:3, color:'w', label:'d5'},
+  {r:3, c:4, color:'b', label:'e5'},
+  {r:4, c:3, color:'b', label:'d4'},
+  {r:4, c:4, color:'w', label:'e4'},
+];
+const TOTAL = sequence.length;
+
+let placed = []; // {r,c,color}
+let mistakes = 0;
+let cur = 0;
+
+function colorName(c){ return c==='w' ? 'White' : 'Black'; }
+
+window.tap = function(r, c) {
+  const target = sequence[cur];
+  if (r === target.r && c === target.c) {
+    placed.push({r, c, color: target.color});
+    cur++;
+    showBuddy('william','correct');
+    if (cur >= TOTAL) {
+      finish();
+    } else {
+      render();
+    }
+  } else {
+    mistakes++;
+    showBuddy('william','wrong');
+    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong square. Tap the YELLOW circle on ' + target.label + '.</div>';
+    setTimeout(()=>{ document.getElementById('msg').innerHTML=''; }, 900);
+  }
+};
+
+function render() {
+  document.getElementById('bar').style.width = (cur/TOTAL*100)+'%';
+  document.getElementById('counter').textContent = cur + ' / ' + TOTAL + ' discs placed';
+  if (cur < TOTAL) {
+    const t = sequence[cur];
+    document.getElementById('next-label').textContent = 'Place a ' + colorName(t.color) + ' disc on ' + t.label;
+  }
+
+  let h = '<table>';
+  // header row with column letters
+  h += '<tr><td style="background:transparent;border:none;width:18px;"></td>';
+  for (let c=0;c<8;c++) h += '<td class="coords-col" style="background:transparent;border:none;height:18px;">'+'abcdefgh'[c]+'</td>';
+  h += '</tr>';
+  for (let r=0;r<8;r++) {
+    h += '<tr>';
+    h += '<td class="coords-row" style="background:transparent;border:none;width:18px;">'+(8-r)+'</td>';
+    for (let c=0;c<8;c++) {
+      let inner = '';
+      const p = placed.find(x => x.r===r && x.c===c);
+      if (p) {
+        inner = '<div class="disc-' + p.color + '"></div>';
+      } else if (cur < TOTAL && sequence[cur].r === r && sequence[cur].c === c) {
+        inner = '<div class="target" onclick="tap('+r+','+c+')"></div>';
+      } else {
+        inner = '<div class="click-hit" onclick="tap('+r+','+c+')"></div>';
+      }
+      h += '<td>'+inner+'</td>';
+    }
+    h += '</tr>';
+  }
+  h += '</table>';
+  document.getElementById('game').innerHTML = h;
+}
+
+function finish() {
+  document.getElementById('bar').style.width = '100%';
+  document.getElementById('counter').textContent = TOTAL + ' / ' + TOTAL + ' discs placed';
+  document.getElementById('next-label').textContent = 'Othello board ready!';
+
+  const pct = Math.max(0, 100 - mistakes * 10);
+  const g = calculateGrade(pct);
+  const xp = calculateXP(pct);
+  document.getElementById('msg').innerHTML =
+    '<h2 style="font-size:2.5rem;margin:16px 0">'+g.grade+'</h2>' +
+    '<div style="font-size:2.5rem">'+'⭐'.repeat(g.stars)+'☆'.repeat(3-g.stars)+'</div>' +
+    '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+'+xp+' XP</div>' +
+    '<p style="margin:10px 0;color:#888">' + (mistakes===0 ? 'Perfect setup!' : mistakes + ' mistake' + (mistakes===1?'':'s')) + '</p>' +
+    '<a href="index.html" class="btn">Back to Course</a>';
+  showBuddy('william', pct===100 ? 'perfect' : 'correct');
+  onAuthChange(async function(u){ if(u) await saveLessonResult('board-games','setup-othello',pct); });
+}
+
+render();
+</script>
+</body>
+</html>

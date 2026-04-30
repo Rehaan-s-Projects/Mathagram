@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Science — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Sleep Science</h1>
+    <p>Why we sleep — circadian rhythms, REM and deep sleep, dreaming, insomnia, sleep apnea, jet lag, shift work, sleep tech, and the practical science of sleeping better. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Why We Sleep",["A Brief History of Sleep","Sleep Across the Animal Kingdom","Why Did Sleep Evolve?","Memory Consolidation","Glymphatic System & Brain Cleaning","Hormone Regulation in Sleep","Immunity & Sleep","Sleep & Learning","Matthew Walker's Research","Sleep & Lifespan","Sleep Deprivation Effects","Acute vs Chronic Sleep Loss","Sleep & Mental Health","Sleep Across Cultures","Sleep Foundations Checkpoint"]],
+      [2,"Sleep Architecture",["NREM vs REM","Stage 1 (N1)","Stage 2 (N2)","Stage 3 (N3) — Deep Sleep","REM Sleep","Sleep Cycle (~90 min)","First Half vs Second Half of Night","Slow-Wave Activity","Spindles & K-Complexes","Theta & Delta Waves","Sawtooth Waves in REM","Microarousals","Sleep Inertia","Polysomnography","Sleep Architecture Checkpoint"]],
+      [3,"Circadian Rhythm",["Suprachiasmatic Nucleus (SCN)","Melatonin","Cortisol Curve","Body Temperature Rhythm","Light as Zeitgeber","Morning Light","Blue Light","Chronotype — Lark vs Owl","DLMO — Dim Light Melatonin Onset","Phase Response Curve","Free-Running Period","Social Jet Lag","Aging & Circadian Shifts","Circadian Disruption Effects","Circadian Checkpoint"]],
+      [4,"Sleep Hygiene",["Consistent Schedule","Bedtime Routine","Bedroom Environment","Cool Temperature","Darkness & Blackout","Quiet & White Noise","Mattress Choice","Pillow Choice","Light Exposure During Day","Caffeine Half-Life","Alcohol & Sleep","Nicotine & Sleep","Heavy Meals at Night","Screens Before Bed","Sleep Hygiene Checkpoint"]],
+      [5,"Insomnia",["What Is Insomnia?","Onset vs Maintenance","Acute vs Chronic","Stress-Related Insomnia","Anxiety & Insomnia","Sleep Restriction Therapy","Stimulus Control","Cognitive Restructuring","CBT-I (Gold Standard)","Sleep Apps for CBT-I","Pharmacology Overview","Z-Drugs","Melatonin Use","When to See a Specialist","Insomnia Checkpoint"]],
+      [6,"Sleep Disorders",["Sleep Apnea — OSA","CPAP Therapy","Central Sleep Apnea","Narcolepsy","Cataplexy","Restless Legs Syndrome","Periodic Limb Movement","REM Behavior Disorder","Night Terrors","Sleepwalking","Bruxism","Sleep Paralysis","Hypersomnia","Idiopathic Hypersomnia","Sleep Disorders Checkpoint"]],
+      [7,"Dreaming",["What Are Dreams?","REM vs NREM Dreams","Dream Recall","Dream Journals","Lucid Dreaming Basics","WILD & MILD Techniques","Reality Checks","Common Dream Themes","Nightmares","Nightmare Disorder","Image Rehearsal Therapy","Dreaming & Memory","Activation-Synthesis Theory","Threat Simulation Theory","Dreaming Checkpoint"]],
+      [8,"Sleep & Performance",["Sleep & Athletic Performance","Sleep & Cognition","Sleep & Reaction Time","Sleep & Decision Making","Sleep & Mood","Power Naps","NSDR (Non-Sleep Deep Rest)","Caffeine Naps","Polyphasic Sleep","Uberman Schedule (Caution)","Biphasic Sleep","Siestas","Shift Work","Jet Lag Strategies","Performance Checkpoint"]],
+      [9,"Sleep Across Life Stages",["Newborn Sleep","Infant Sleep Cycles","Toddler Sleep","Child Sleep","Teen Phase Delay","Young Adult Sleep","Pregnancy Sleep","Menopause & Sleep","Older Adult Sleep","Sleep & Dementia","Sleep & Alzheimer's","Pediatric Sleep Disorders","Co-Sleeping Debate","Cultural Differences","Lifespan Checkpoint"]],
+      [10,"Sleep Tech & Mastery",["Wearables — Oura Whoop","Smart Beds","Smart Alarms","Sleep Trackers — Accuracy","White Noise Machines","Light Therapy","Weighted Blankets","Smart Lighting","Cooling Mattress Pads","Sleep Apps","Tracking Your Own Data","When Tech Hurts (Orthosomnia)","Sleep Books","Sleep Studies — In-Lab vs Home","Sleep Science Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sleep-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('sleep-science');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('sleep-science');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

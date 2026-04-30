@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuroscience — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Neuroscience</h1>
+    <p>How the nervous system works — neurons, synapses, action potentials, neurotransmitters, brain anatomy, vision & hearing, motor control, memory, emotion, sleep, neurological disorders, neuroplasticity, and brain-computer interfaces. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"The Nervous System",["Central vs Peripheral","Brain Overview","Spinal Cord","Cranial Nerves","Spinal Nerves","Autonomic Nervous System","Sympathetic — Fight or Flight","Parasympathetic — Rest & Digest","Enteric Nervous System","Glia vs Neurons","Astrocytes","Microglia","Oligodendrocytes","Schwann Cells","Nervous System Checkpoint"]],
+      [2,"Neurons",["Neuron Anatomy","Soma","Dendrites","Axon","Axon Hillock","Myelin Sheath","Nodes of Ranvier","Axon Terminals","Sensory Neurons","Motor Neurons","Interneurons","Pyramidal Cells","Purkinje Cells","Mirror Neurons","Neurons Checkpoint"]],
+      [3,"Synapses",["Chemical vs Electrical Synapses","Presynaptic Terminal","Synaptic Cleft","Postsynaptic Membrane","Synaptic Vesicles","Calcium Influx","Neurotransmitter Release","Receptors","Reuptake","Enzymatic Breakdown","Long-Term Potentiation","Long-Term Depression","Synaptic Plasticity","Hebbian Learning","Synapses Checkpoint"]],
+      [4,"Action Potentials",["Resting Membrane Potential","Sodium-Potassium Pump","Depolarization","Threshold","Action Potential Phases","Repolarization","Hyperpolarization","Refractory Period","All-or-Nothing","Saltatory Conduction","Conduction Velocity","Voltage-Gated Channels","Patch Clamp Recording","Multiple Sclerosis Demyelination","Action Potential Checkpoint"]],
+      [5,"Neurotransmitters",["Glutamate — Main Excitatory","GABA — Main Inhibitory","Dopamine","Serotonin","Norepinephrine","Epinephrine","Acetylcholine","Glycine","Histamine","Endorphins","Substance P","Anandamide","Neuropeptide Y","Oxytocin","Neurotransmitters Checkpoint"]],
+      [6,"Brain Anatomy",["Forebrain","Midbrain","Hindbrain","Cerebrum","Cerebellum","Thalamus","Hypothalamus","Basal Ganglia","Corpus Callosum","Limbic System","Brainstem","Pons","Medulla","Reticular Formation","Brain Anatomy Checkpoint"]],
+      [7,"Cerebrum",["Cortex Layers","Frontal Lobe","Parietal Lobe","Temporal Lobe","Occipital Lobe","Insular Cortex","Cingulate Cortex","Gyri & Sulci","Brodmann Areas","Cortical Columns","Left vs Right Hemisphere","Hemispheric Specialization","Split-Brain Studies","Lateralization","Cerebrum Checkpoint"]],
+      [8,"Cerebellum",["Cerebellum Structure","Cerebellar Cortex","Purkinje Cells","Climbing Fibers","Mossy Fibers","Motor Coordination","Balance","Posture","Motor Learning","Cerebellar Lesions — Ataxia","Vestibular Connections","Eye Movements","Recent Cognitive Roles","Cerebellum & Speech","Cerebellum Checkpoint"]],
+      [9,"Brainstem",["Midbrain","Pons","Medulla Oblongata","Reticular Formation","Cranial Nerves","Vital Functions Control","Heart Rate","Breathing","Blood Pressure","Sleep-Wake Regulation","Reflexes","Locked-In Syndrome","Brainstem Strokes","Brainstem Death","Brainstem Checkpoint"]],
+      [10,"Hippocampus & Memory",["Hippocampus Anatomy","CA1, CA2, CA3","Dentate Gyrus","Entorhinal Cortex","Place Cells","Grid Cells","Episodic Memory","Spatial Memory","H.M. Patient","Henry Molaison","Long-Term Potentiation","Memory Consolidation","Sleep & Memory","Alzheimer's Hippocampus","Memory Checkpoint"]],
+      [11,"Amygdala & Emotion",["Amygdala Anatomy","Fear Response","Fight or Flight","Pavlovian Conditioning","Emotional Memory","Anxiety","PTSD","Limbic System Role","Insular Cortex Disgust","Anger Pathways","Joy & Reward","Sadness Pathways","Empathy","Mirror Neurons in Emotion","Emotion Checkpoint"]],
+      [12,"Vision & Visual Cortex",["Eye Anatomy","Retina","Photoreceptors","Optic Nerve","Optic Chiasm","LGN","V1 — Primary Visual Cortex","V2, V3, V4, V5","Dorsal Stream — Where","Ventral Stream — What","Color Processing","Motion Processing","Face Processing — FFA","Visual Illusions","Vision Checkpoint"]],
+      [13,"Hearing & Auditory Cortex",["Outer Ear","Middle Ear","Cochlea","Hair Cells","Tonotopic Organization","Auditory Nerve","Brainstem Auditory","Inferior Colliculus","Medial Geniculate","A1 — Primary Auditory","Sound Localization","Pitch Perception","Music Processing","Speech Processing","Hearing Checkpoint"]],
+      [14,"Touch & Somatosensory",["Touch Receptors","Pacinian Corpuscles","Meissner's Corpuscles","Merkel Disks","Ruffini Endings","Free Nerve Endings","Pain","Temperature","Spinothalamic Tract","Dorsal Column","Somatosensory Cortex","Homunculus","Phantom Limb","Two-Point Discrimination","Touch Checkpoint"]],
+      [15,"Motor Control",["Motor Cortex","Premotor Cortex","Supplementary Motor Area","Pyramidal Tract","Extrapyramidal","Basal Ganglia","Cerebellum's Role","Spinal Reflexes","Stretch Reflex","Withdrawal Reflex","Central Pattern Generators","Walking","Grasping","Parkinson's Motor Issues","Motor Checkpoint"]],
+      [16,"Sleep & Circadian Rhythms",["Sleep Stages — N1, N2, N3, REM","Circadian Rhythm","Suprachiasmatic Nucleus","Melatonin","Sleep Cycle","Sleep Spindles","K-Complexes","Slow Waves","REM Sleep","Dreams","Sleep & Memory","Sleep Disorders","Insomnia","Narcolepsy","Sleep Checkpoint"]],
+      [17,"Neurological Disorders",["Alzheimer's","Parkinson's","Huntington's","Multiple Sclerosis","ALS","Epilepsy","Stroke","Traumatic Brain Injury","Migraine","Schizophrenia Brain Changes","Depression Neurobiology","Autism Spectrum","ADHD","Tourette's","Disorders Checkpoint"]],
+      [18,"Neuroplasticity",["What Is Neuroplasticity?","Hebbian Learning","Long-Term Potentiation Revisited","Synaptic Pruning","Critical Periods","Adult Neurogenesis","Hippocampal Neurogenesis","Phantom Limbs & Plasticity","London Taxi Driver Hippocampi","Stroke Recovery","Brain Training","Plasticity & Learning","Plasticity & Aging","Plasticity Limits","Plasticity Checkpoint"]],
+      [19,"Brain-Computer Interfaces",["BCI Concept","Invasive vs Non-Invasive","EEG","ECoG","Single-Unit Recording","Utah Array","Neuralink","Brain-to-Robot Arm","Brain-to-Speech","Cochlear Implants","Retinal Implants","Deep Brain Stimulation","Closed-Loop BCI","Ethical Concerns","BCI Checkpoint"]],
+      [20,"Neuroscience Mastery",["Neurons & Synapses Final","Action Potentials Final","Neurotransmitters Final","Brain Anatomy Final","Vision & Hearing Final","Motor Control Final","Memory & Emotion Final","Sleep Final","Disorders Final","Plasticity Final","BCI Final","Reading Brain Imaging","Famous Patients (HM, Phineas Gage)","Neuroscience Methods","Neuroscience Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ns-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('neuroscience');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('neuroscience');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

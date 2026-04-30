@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Created at MIT — Mitchel Resnick — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    .l2-page { max-width: 760px; margin: 0 auto; padding: 64px 16px 96px; }
+    .l2-header { text-align: center; margin-bottom: 28px; }
+    .l2-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: #8b5cf6; }
+    .l2-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .l2-header p { color: var(--color-text-secondary); max-width: 620px; margin: 4px auto 0; line-height: 1.6; }
+
+    .diego-row { display: flex; gap: 14px; align-items: flex-start; margin: 0 auto 24px; }
+    .diego-avatar { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; background: rgba(139,92,246,0.12); border: 2px solid #8b5cf6; padding: 4px; display: flex; align-items: center; justify-content: center; }
+    .diego-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .diego-bubble { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(139,92,246,0.35); border-radius: 14px; border-bottom-left-radius: 4px; padding: 14px 18px; color: var(--color-text-primary, #fff); line-height: 1.55; flex: 1; position: relative; }
+    .diego-bubble::before { content: ''; position: absolute; left: -10px; top: 18px; width: 0; height: 0; border-style: solid; border-width: 8px 12px 8px 0; border-color: transparent rgba(139,92,246,0.35) transparent transparent; }
+    .diego-bubble strong { color: #c4b5fd; }
+
+    .lesson-card { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 24px; line-height: 1.7; color: var(--color-text-primary, #fff); }
+    .lesson-card h2 { font-size: 1.25rem; margin: 0 0 12px; color: #c4b5fd; }
+    .lesson-card p { margin: 0 0 12px; }
+    .lesson-card blockquote { border-left: 3px solid #8b5cf6; padding-left: 14px; margin: 14px 0; color: var(--color-text-secondary, #aaa); font-style: italic; }
+
+    .nav-row { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; margin-top: 28px; }
+    .nav-btn { display: inline-block; padding: 11px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.95rem; transition: transform 0.1s, background 0.15s; }
+    .nav-btn:hover { transform: translateY(-1px); }
+    .nav-back { background: rgba(255,255,255,0.08); color: var(--color-text-primary, #fff); }
+    .nav-back:hover { background: rgba(255,255,255,0.14); }
+    .nav-course { background: #8b5cf6; color: #fff; }
+    .nav-course:hover { background: #7c3aed; }
+
+    /* ---- Quiz sandbox (Brilliant "Thinking in Code" style — Lesson 2 challenge) ---- */
+    .quiz-divider { display: flex; align-items: center; gap: 14px; margin: 56px auto 24px; max-width: 1100px; }
+    .quiz-divider .line { flex: 1; height: 1px; background: rgba(255,255,255,0.12); }
+    .quiz-divider .label { font-size: 0.85rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #5eead4; }
+
+    .tic-page { padding: 0 16px; max-width: 1100px; margin: 0 auto; }
+    .tic-header { text-align: center; margin-bottom: 24px; }
+    .tic-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: #14b8a6; }
+    .tic-header h2 { font-size: 1.6rem; font-weight: 800; margin: 4px 0; color: var(--color-text-primary, #fff); }
+    .tic-header p { color: var(--color-text-secondary); max-width: 640px; margin: 4px auto 0; line-height: 1.6; }
+
+    .tic-prompt { background: var(--color-surface, #1a1a1a); color: var(--color-text-primary, #fff); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; border-left: 4px solid #14b8a6; }
+    .tic-prompt strong { color: #5eead4; }
+
+    .tic-board { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    @media (max-width: 880px) { .tic-board { grid-template-columns: 1fr; } }
+
+    .tic-pane { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; }
+    .tic-pane h3 { font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-secondary, #aaa); }
+
+    .stage { display: grid; gap: 2px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; aspect-ratio: 1; max-width: 460px; margin: 0 auto; }
+    .cell { background: #2a2a2a; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 22px; position: relative; }
+    .cell.wall { background: #444; }
+    .cell.goal::before { content: '🐟'; font-size: 28px; }
+    .player { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; transition: transform 0.4s cubic-bezier(.5,1.6,.5,1); }
+    .player.facing-up    { transform: rotate(0deg); }
+    .player.facing-right { transform: rotate(90deg); }
+    .player.facing-down  { transform: rotate(180deg); }
+    .player.facing-left  { transform: rotate(270deg); }
+
+    .stage-controls { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+    .btn { padding: 9px 18px; border: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: transform 0.1s, opacity 0.2s; font-family: inherit; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-run { background: #22c55e; color: #fff; }
+    .btn-reset { background: rgba(255,255,255,0.08); color: var(--color-text-primary, #fff); }
+    .btn-clear { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+    .palette, .code-area { display: flex; flex-direction: column; gap: 8px; min-height: 60px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 2px dashed transparent; }
+    .code-area { min-height: 240px; border-color: rgba(20,184,166,0.30); }
+    .code-area.drag-over { border-color: #14b8a6; background: rgba(20,184,166,0.08); }
+
+    .block { padding: 10px 14px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; font-size: 0.92rem; font-weight: 600; cursor: grab; user-select: none; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.1s, opacity 0.2s; color: #fff; }
+    .block:active { cursor: grabbing; }
+    .block.dragging { opacity: 0.5; }
+    .block .icon { font-size: 1.1em; }
+    .block.move    { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .block.turn-l  { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .block.turn-r  { background: linear-gradient(135deg, #ec4899, #db2777); }
+    .block.repeat  { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+    .block.executing { outline: 3px solid #fde047; box-shadow: 0 0 12px rgba(253,224,71,0.5); }
+
+    .repeat-block { padding: 0; flex-direction: column; align-items: stretch; gap: 0; }
+    .repeat-header { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+    .repeat-header .count-input { width: 44px; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.3); color: #fff; font-family: inherit; font-weight: 700; text-align: center; font-size: 0.9rem; }
+    .repeat-body { padding: 6px 14px 12px 26px; min-height: 36px; display: flex; flex-direction: column; gap: 6px; border-left: 3px solid rgba(255,255,255,0.3); margin-left: 14px; border-bottom-left-radius: 8px; }
+    .repeat-body.drag-over { background: rgba(255,255,255,0.06); }
+
+    .delete-btn { margin-left: auto; background: rgba(0,0,0,0.3); border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .delete-btn:hover { background: rgba(239,68,68,0.7); }
+
+    .status { text-align: center; padding: 14px; border-radius: 8px; font-weight: 600; margin-top: 14px; min-height: 22px; }
+    .status.win  { background: rgba(34,197,94,0.15); color: #86efac; }
+    .status.fail { background: rgba(239,68,68,0.15); color: #fca5a5; }
+    .status.info { background: rgba(20,184,166,0.10); color: #5eead4; }
+
+    .empty-hint { color: var(--color-text-secondary, #888); font-size: 0.85rem; font-style: italic; padding: 10px; text-align: center; pointer-events: none; }
+
+    .goal-stats { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; font-size: 0.85rem; }
+    .goal-stat { padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,0.06); color: #cbd5e1; font-weight: 600; }
+    .goal-stat.par { background: rgba(34,197,94,0.18); color: #86efac; }
+    .goal-stat.over { background: rgba(245,158,11,0.18); color: #fcd34d; }
+
+    /* Quiz Diego (teal accent to match the loop block) */
+    .quiz-diego-row { display: flex; gap: 14px; align-items: flex-start; margin: 0 auto 24px; }
+    .quiz-diego-avatar { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; background: rgba(20,184,166,0.12); border: 2px solid #14b8a6; padding: 4px; display: flex; align-items: center; justify-content: center; }
+    .quiz-diego-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .quiz-diego-bubble { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(20,184,166,0.4); border-radius: 14px; border-bottom-left-radius: 4px; padding: 14px 18px; color: var(--color-text-primary, #fff); line-height: 1.55; flex: 1; position: relative; box-shadow: 0 2px 8px rgba(20,184,166,0.12); }
+    .quiz-diego-bubble::before { content: ''; position: absolute; left: -10px; top: 18px; width: 0; height: 0; border-style: solid; border-width: 8px 12px 8px 0; border-color: transparent rgba(20,184,166,0.4) transparent transparent; }
+    .quiz-diego-bubble strong { color: #5eead4; }
+    .quiz-diego-bubble.win  { border-color: rgba(34,197,94,0.5); }
+    .quiz-diego-bubble.win::before  { border-right-color: rgba(34,197,94,0.5); }
+    .quiz-diego-bubble.fail { border-color: rgba(239,68,68,0.5); }
+    .quiz-diego-bubble.fail::before { border-right-color: rgba(239,68,68,0.5); }
+    .quiz-diego-bubble { animation: quiz-diego-pulse 0.4s ease; }
+    @keyframes quiz-diego-pulse { from { transform: translateX(-4px); opacity: 0.6; } to { transform: translateX(0); opacity: 1; } }
+
+    .next-cta { display: none; max-width: 760px; margin: 28px auto 0; padding: 22px 24px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.45); border-radius: 14px; text-align: center; animation: next-rise 0.4s ease; }
+    .next-cta.show { display: block; }
+    @keyframes next-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .next-cta p { color: #86efac; margin: 0 0 14px; font-weight: 600; font-size: 1.02rem; }
+    .next-page-btn { display: inline-block; background: #22c55e; color: #042f0f; text-decoration: none; padding: 12px 26px; border-radius: 10px; font-weight: 800; font-size: 1rem; font-family: inherit; transition: transform 0.1s, background 0.15s; border: none; cursor: pointer; }
+    .next-page-btn:hover { background: #16a34a; transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="l2-page">
+    <header class="l2-header">
+      <span class="l2-badge">Scratch · Unit 1 · Lesson 2</span>
+      <h1>Created at MIT — Mitchel Resnick</h1>
+      <p>Where Scratch came from and the idea behind it.</p>
+    </header>
+
+    <div class="diego-row">
+      <div class="diego-avatar"><img src="../../assets/characters/diego.svg" alt="Diego"></div>
+      <div class="diego-bubble">
+        <strong>Diego:</strong> Nice work on Lesson 1! Now let's zoom out for a moment. Where did Scratch even come from? It was built at the <strong>MIT Media Lab</strong> by Mitchel Resnick's team — and the idea was bigger than just teaching kids to code.
+      </div>
+    </div>
+
+    <article class="lesson-card">
+      <h2>The "Lifelong Kindergarten" idea</h2>
+      <p>Mitchel Resnick leads a research group at MIT called <em>Lifelong Kindergarten</em>. The premise: the playful, project-based way kindergartners learn — building, making mistakes, sharing — is exactly how everyone, at any age, should learn creative, complex skills. Scratch was designed around that idea.</p>
+
+      <p>Scratch first launched in 2007. Resnick's design rules became famous in the world of educational software:</p>
+
+      <blockquote>
+        Low floor, high ceiling, wide walls.<br>
+        — easy to start, room to grow, and lots of different things you can build.
+      </blockquote>
+
+      <h2>Why blocks?</h2>
+      <p>Resnick's team picked drag-and-drop blocks for a reason: blocks <strong>fit together only when they make grammatical sense</strong>. You can never write a syntax error in Scratch. That removes the punctuation and typo problems that block beginners in text languages, and lets you focus on the <em>logic</em> — exactly the thing you practiced in Lesson 1.</p>
+
+      <h2>The "4 P's"</h2>
+      <p>Resnick describes Scratch's design philosophy with four words:</p>
+      <ul>
+        <li><strong>Projects</strong> — learn by making things you care about</li>
+        <li><strong>Passion</strong> — work on what excites you</li>
+        <li><strong>Peers</strong> — share, remix, and learn together</li>
+        <li><strong>Play</strong> — experiment freely and follow your curiosity</li>
+      </ul>
+
+      <p>Every Scratch project you'll make in this course leans on these ideas — including the coding challenge below.</p>
+    </article>
+  </main>
+
+  <!-- ============================================================
+       Quiz — second coding map: longer L-corridor, demonstrates loops
+       ============================================================ -->
+  <div class="quiz-divider">
+    <div class="line"></div>
+    <span class="label">Try It · Coding Challenge</span>
+    <div class="line"></div>
+  </div>
+
+  <main class="tic-page">
+    <header class="tic-header">
+      <span class="tic-badge">Loops Make Code Shorter</span>
+      <h2>Catch the fish in 5 blocks or fewer</h2>
+      <p>Same idea as Lesson 1 — but on a longer L-shaped corridor. You can solve it with twelve Move blocks plus a turn… or wrap them in <strong>Repeat</strong> to compress the program into a few blocks. Resnick's "low floor, high ceiling" right here.</p>
+    </header>
+
+    <div class="quiz-diego-row">
+      <div class="quiz-diego-avatar"><img src="../../assets/characters/diego.svg" alt="Diego"></div>
+      <div>
+        <div id="diego-bubble-q" class="quiz-diego-bubble">
+          <strong>Diego:</strong> The cat needs to walk <em>6 squares up</em>, then turn right, then walk <em>6 squares across</em>. You could stack twelve Move blocks plus a turn — or you could wrap each run of six in a single <strong>Repeat 6 Times</strong> block. That's a <em>loop</em>, and it's one of the four ideas behind every program ever written. Aim for <strong>5 blocks</strong>.
+        </div>
+      </div>
+    </div>
+
+    <div class="tic-prompt">
+      <strong>Challenge:</strong> Guide the cat (🐱) up the left wall and across the top to the fish (🐟). The cat starts facing up. <strong>Par: 5 blocks.</strong>
+    </div>
+
+    <div class="tic-board">
+      <section class="tic-pane">
+        <h3>Stage</h3>
+        <div id="stage" class="stage" style="grid-template-columns: repeat(7, 1fr);"></div>
+        <div class="goal-stats">
+          <span class="goal-stat" id="block-count">Blocks used: 0</span>
+          <span class="goal-stat" id="par-stat">Par: 5</span>
+        </div>
+        <div class="stage-controls">
+          <button id="run-btn"   class="btn btn-run">▶ Run</button>
+          <button id="reset-btn" class="btn btn-reset">↻ Reset</button>
+          <button id="clear-btn" class="btn btn-clear">🗑 Clear Code</button>
+        </div>
+        <div id="status" class="status info">Drag blocks from the palette into the code area.</div>
+      </section>
+
+      <section class="tic-pane">
+        <h3>Block Palette</h3>
+        <div id="palette" class="palette">
+          <div class="block move"   draggable="true" data-block="move"   ><span class="icon">⬆</span>Move Forward</div>
+          <div class="block turn-l" draggable="true" data-block="turn-l" ><span class="icon">↺</span>Turn Left</div>
+          <div class="block turn-r" draggable="true" data-block="turn-r" ><span class="icon">↻</span>Turn Right</div>
+          <div class="block repeat" draggable="true" data-block="repeat" ><span class="icon">🔁</span>Repeat&nbsp;<input class="count-input" type="number" min="1" max="20" value="6" disabled>&nbsp;Times</div>
+        </div>
+
+        <h3 style="margin-top: 18px;">Your Program</h3>
+        <div id="code-area" class="code-area" data-target="root">
+          <div class="empty-hint">Drag blocks here…</div>
+        </div>
+      </section>
+    </div>
+
+    <section id="next-cta" class="next-cta">
+      <p>🎓 Lesson 2 complete — you used a loop to compress your program.</p>
+      <a id="next-page-btn" class="next-page-btn" href="lesson-3.html">Next Page →</a>
+    </section>
+
+    <div class="nav-row">
+      <a href="lesson-1.html" class="nav-btn nav-back">← Back to Lesson 1</a>
+      <a href="index.html"    class="nav-btn nav-course">Back to Course →</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ============================================================
+    // Coding-quiz sandbox — same engine as lesson-1, new map.
+    // 7×7 stage with an L-shaped corridor (col 0 + row 0 walkable).
+    // Par: 5 top-level blocks (Repeat 6 {Move}, Turn R, Repeat 6 {Move}).
+    // ============================================================
+    const COLS = 7, ROWS = 7;
+    const START = { x: 0, y: 6, dir: 0 };          // bottom-left, facing up
+    const GOAL  = { x: 6, y: 0 };                  // top-right
+    const WALLS = new Set();
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        if (x === 0 || y === 0) continue;
+        WALLS.add(`${x},${y}`);
+      }
+    }
+    const PAR = 5;
+    const DIRS = [
+      { dx: 0, dy: -1, name: 'up' },
+      { dx: 1, dy:  0, name: 'right' },
+      { dx: 0, dy:  1, name: 'down' },
+      { dx: -1, dy: 0, name: 'left' }
+    ];
+
+    let player = { ...START };
+    let running = false;
+
+    const stage = document.getElementById('stage');
+    const codeArea = document.getElementById('code-area');
+    const status = document.getElementById('status');
+    const runBtn = document.getElementById('run-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const blockCountEl = document.getElementById('block-count');
+    const parStatEl = document.getElementById('par-stat');
+    const diegoBubble = document.getElementById('diego-bubble-q');
+
+    function buildStage() {
+      stage.innerHTML = '';
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.dataset.x = x; cell.dataset.y = y;
+          if (WALLS.has(`${x},${y}`)) cell.classList.add('wall');
+          if (x === GOAL.x && y === GOAL.y) cell.classList.add('goal');
+          stage.appendChild(cell);
+        }
+      }
+      placePlayer();
+    }
+    function placePlayer() {
+      document.querySelectorAll('.player').forEach(p => p.remove());
+      const cell = stage.children[player.y * COLS + player.x];
+      if (!cell) return;
+      const sprite = document.createElement('div');
+      sprite.className = `player facing-${DIRS[player.dir].name}`;
+      sprite.textContent = '🐱';
+      cell.appendChild(sprite);
+    }
+
+    let dragged = null;
+    function makeBlockEl(type, count) {
+      const el = document.createElement('div');
+      el.className = 'block ' + type + (type === 'repeat' ? ' repeat-block' : '');
+      el.draggable = true;
+      el.dataset.block = type;
+      if (type === 'repeat') {
+        el.innerHTML = `
+          <div class="repeat-header">
+            <span class="icon">🔁</span>Repeat
+            <input class="count-input" type="number" min="1" max="20" value="${count || 6}">
+            Times
+            <button class="delete-btn" title="Remove">×</button>
+          </div>
+          <div class="repeat-body" data-target="repeat-body">
+            <div class="empty-hint">Drop blocks here…</div>
+          </div>`;
+        attachDropTarget(el.querySelector('.repeat-body'));
+      } else {
+        const labels = { 'move': ['⬆','Move Forward'], 'turn-l': ['↺','Turn Left'], 'turn-r': ['↻','Turn Right'] }[type];
+        el.innerHTML = `<span class="icon">${labels[0]}</span>${labels[1]}<button class="delete-btn" title="Remove">×</button>`;
+      }
+      el.addEventListener('dragstart', (e) => {
+        dragged = { type, fromPalette: false, sourceEl: el };
+        el.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', type);
+      });
+      el.addEventListener('dragend', () => { el.classList.remove('dragging'); dragged = null; updateBlockCount(); });
+      el.querySelector('.delete-btn').addEventListener('click', () => {
+        el.remove(); refreshHints(); updateBlockCount();
+        setStatus('info', 'Drag blocks from the palette into the code area.');
+      });
+      const inp = el.querySelector('.count-input');
+      if (inp && !inp.disabled) inp.addEventListener('input', updateBlockCount);
+      return el;
+    }
+    document.querySelectorAll('#palette .block').forEach(srcEl => {
+      srcEl.addEventListener('dragstart', (e) => {
+        dragged = { type: srcEl.dataset.block, fromPalette: true, sourceEl: srcEl };
+        srcEl.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('text/plain', srcEl.dataset.block);
+      });
+      srcEl.addEventListener('dragend', () => { srcEl.classList.remove('dragging'); dragged = null; });
+    });
+    function attachDropTarget(target) {
+      target.addEventListener('dragover', (e) => { e.preventDefault(); target.classList.add('drag-over'); });
+      target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
+      target.addEventListener('drop', (e) => {
+        e.preventDefault();
+        target.classList.remove('drag-over');
+        if (!dragged) return;
+        let newEl;
+        if (dragged.fromPalette) newEl = makeBlockEl(dragged.type);
+        else { if (dragged.sourceEl.contains(target)) return; newEl = dragged.sourceEl; }
+        const hint = target.querySelector(':scope > .empty-hint');
+        if (hint) hint.remove();
+        target.appendChild(newEl);
+        refreshHints(); updateBlockCount();
+      });
+    }
+    attachDropTarget(codeArea);
+    function refreshHints() {
+      document.querySelectorAll('[data-target]').forEach(t => {
+        const hasChildBlock = t.querySelector(':scope > .block');
+        const hasHint = t.querySelector(':scope > .empty-hint');
+        if (!hasChildBlock && !hasHint) {
+          const hint = document.createElement('div');
+          hint.className = 'empty-hint';
+          hint.textContent = t.dataset.target === 'repeat-body' ? 'Drop blocks here…' : 'Drag blocks here…';
+          t.appendChild(hint);
+        }
+        if (hasChildBlock && hasHint) hasHint.remove();
+      });
+    }
+    function updateBlockCount() {
+      const topLevel = codeArea.querySelectorAll(':scope > .block').length;
+      blockCountEl.textContent = 'Blocks used: ' + topLevel;
+      if (topLevel === 0) { parStatEl.className = 'goal-stat'; parStatEl.textContent = 'Par: ' + PAR; }
+      else if (topLevel <= PAR) { parStatEl.className = 'goal-stat par'; parStatEl.textContent = 'Par: ' + PAR + ' ✓'; }
+      else { parStatEl.className = 'goal-stat over'; parStatEl.textContent = 'Par: ' + PAR + ' (over by ' + (topLevel - PAR) + ')'; }
+    }
+    function readProgram(target) {
+      const out = [];
+      target.querySelectorAll(':scope > .block').forEach(el => {
+        const type = el.dataset.block;
+        if (type === 'repeat') {
+          const count = Math.max(1, Math.min(20, parseInt(el.querySelector('.count-input').value, 10) || 1));
+          out.push({ type, count, body: readProgram(el.querySelector('.repeat-body')), el });
+        } else {
+          out.push({ type, el });
+        }
+      });
+      return out;
+    }
+    function setDiego(kind, html) {
+      diegoBubble.classList.remove('win', 'fail');
+      if (kind === 'win' || kind === 'fail') diegoBubble.classList.add(kind);
+      diegoBubble.style.animation = 'none'; void diegoBubble.offsetWidth; diegoBubble.style.animation = '';
+      diegoBubble.innerHTML = html;
+    }
+    function setStatus(kind, msg) { status.className = 'status ' + kind; status.textContent = msg; }
+    function step(action) {
+      if (action === 'turn-l') { player.dir = (player.dir + 3) % 4; }
+      else if (action === 'turn-r') { player.dir = (player.dir + 1) % 4; }
+      else if (action === 'move') {
+        const d = DIRS[player.dir];
+        const nx = player.x + d.dx, ny = player.y + d.dy;
+        if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) return { error: 'You walked off the stage.' };
+        if (WALLS.has(`${nx},${ny}`)) return { error: 'Bumped into a wall.' };
+        player.x = nx; player.y = ny;
+      }
+      placePlayer();
+      return {};
+    }
+    async function runProgram(blocks) {
+      for (const b of blocks) {
+        if (!running) return { halted: true };
+        b.el.classList.add('executing');
+        await new Promise(r => setTimeout(r, 90));
+        if (b.type === 'repeat') {
+          for (let i = 0; i < b.count; i++) {
+            const r = await runProgram(b.body);
+            if (r.halted || r.error) { b.el.classList.remove('executing'); return r; }
+          }
+        } else {
+          const r = step(b.type);
+          await new Promise(r => setTimeout(r, 270));
+          if (r.error) { b.el.classList.remove('executing'); return r; }
+        }
+        b.el.classList.remove('executing');
+      }
+      return {};
+    }
+    runBtn.addEventListener('click', async () => {
+      if (running) return;
+      player = { ...START };
+      placePlayer();
+      const program = readProgram(codeArea);
+      if (program.length === 0) { setStatus('info', 'Add some blocks first!'); return; }
+      const topLevel = codeArea.querySelectorAll(':scope > .block').length;
+      running = true;
+      runBtn.disabled = true;
+      setStatus('info', 'Running…');
+      const result = await runProgram(program);
+      running = false;
+      runBtn.disabled = false;
+      if (result.error) {
+        setStatus('fail', '❌ ' + result.error + ' Press Reset and try again.');
+        setDiego('fail', "<strong>Diego:</strong> " + result.error.replace(/\.$/, '') + ". The corridor is L-shaped — straight up the left edge, then right across the top. Trace each block in your head before pressing Run.");
+      } else if (player.x === GOAL.x && player.y === GOAL.y) {
+        if (topLevel <= PAR) {
+          setStatus('win',  '🎉 Hit par with ' + topLevel + ' blocks — that is loop thinking!');
+          setDiego('win', "<strong>Diego:</strong> 🎉 Excellent — " + topLevel + " blocks. That's the power of a loop. The same idea scales to a million repetitions: write the line once, tell the computer how many times to run it. Hit Next Page when you're ready.");
+        } else {
+          setStatus('win',  '🎉 The cat caught the fish in ' + topLevel + ' blocks. Try again under par (' + PAR + ').');
+          setDiego('win', "<strong>Diego:</strong> 🎉 The cat made it in " + topLevel + " blocks — but I bet you can do it in " + PAR + " or fewer. Wrap the six Move Forward blocks in a single Repeat 6 Times block. That's a <em>loop</em>.");
+        }
+        revealNext();
+      } else {
+        setStatus('fail', "The cat didn't catch the fish — keep trying.");
+        setDiego('fail', "<strong>Diego:</strong> Close, but the cat ended at the wrong square. The corridor only opens along the left edge and the top edge — anywhere else is a wall. Adjust your blocks and try again.");
+      }
+    });
+    resetBtn.addEventListener('click', () => {
+      running = false;
+      player = { ...START };
+      placePlayer();
+      setStatus('info', 'Stage reset. Press Run to try again.');
+      setDiego('', "<strong>Diego:</strong> Stage reset. Cat is back at the bottom-left, ready when you are.");
+    });
+    clearBtn.addEventListener('click', () => {
+      codeArea.querySelectorAll(':scope > .block').forEach(el => el.remove());
+      refreshHints(); updateBlockCount();
+      setStatus('info', 'Code cleared. Drag new blocks to start.');
+      setDiego('', "<strong>Diego:</strong> Cleared! Try the loop approach this time — one Repeat 6 block does the work of six Move Forward blocks.");
+    });
+    const nextCta = document.getElementById('next-cta');
+    let nextShown = false;
+    function revealNext() {
+      if (nextShown) return;
+      nextShown = true;
+      nextCta.classList.add('show');
+      nextCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    buildStage();
+    updateBlockCount();
+  </script>
+</body>
+</html>

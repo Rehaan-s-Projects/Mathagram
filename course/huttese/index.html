@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huttese — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Huttese</h1>
+    <p>The galactic trade tongue of Tatooine, Jabba's Palace, and the Star Wars underworld — Ben Burtt's Quechua-inspired creation. Greetings, bargaining, smuggler slang, pod racing, Hutt cartel politics, every famous quote (Han, Greedo, Watto, Jabba, Boba Fett), and the culture of Mos Eisley. 36 units, 538 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Introduction to Huttese",["The Language of Hutts","Galactic Basic vs Huttese","Where Huttese Is Spoken","Hutt Society Overview","Why Learn Huttese","Famous Huttese Speakers","Huttese in Episodes I–IX","Huttese in The Mandalorian","Huttese in The Book of Boba Fett","Huttese in Solo","Huttese in Clone Wars","Huttese in Rebels","Reference Materials & Wookieepedia","Cultural Sensitivity (Fictional)","Huttese Foundations Checkpoint"]],
+      [2,"Ben Burtt — Sound Designer Origin",["Ben Burtt — Lucasfilm's Sound Wizard","Recording Animal Sounds","Building Wookiee Voice","R2-D2's Voice","Origin of Huttese Sounds","Burtt's Linguistic Inspirations","Huttese vs Other Star Wars Languages","Larry Ward — Voice of Greedo & Jabba","On-Set Translation","Subtitle Choices","Audio Layering","Tatooine Soundscapes","Burtt's Books","Sound Design Tradition","Origin Checkpoint"]],
+      [3,"Quechua & Languages of Inspiration",["Quechua — Andean Indigenous Language","Burtt's Trip to Peru","Why Quechua Worked","Other Inspirations — Tagalog","Other Inspirations — Tibetan","Phonetic Borrowings","Modified for Alien Feel","Pitch & Cadence","Vowel Patterns","Consonant Patterns","Comparison with Real Quechua","Inspiration vs Invention","Other Films Using Quechua","Linguistic Authenticity","Inspiration Checkpoint"]],
+      [4,"Huttese Sounds & Pronunciation",["Huttese Vowels","Huttese Consonants","Glottal Stops","Aspirated Sounds","Trilled R","H Sound","K vs G","Stress Patterns","Cadence & Rhythm","Hutt Voice Modulation","Whistles & Clicks","Body Sounds in Hutt","Recording Yourself","Mimicking Burtt's Cadence","Sounds Checkpoint"]],
+      [5,"Common Greetings — H'chu apenkee!",["H'chu apenkee — Hello","H'chu — General Greeting","Bo shuda — Greetings","Mee jewz ku — Goodbye","Coo ya maya staga — Howdy","Hi chuba da naga? — What did you bring?","Choowa — Hi","Achuta — Hi (informal)","Chowbaso — Welcome","Kava doompa? — How are you?","Doompa! — Wait!","Yatuka — Friend","Bizz boola — Be calm","Wanga — Greetings (Watto)","Greetings Checkpoint"]],
+      [6,"Yes, No & Confirmation",["Hee — Yes","Peetch — No","Tagwa — Yes (variant)","No bata tu tu — No problem","Kava — Maybe","Cheespa — Please","Choo bazz — Thank You","Chuba — Hey/You","Naga — Make","Banthak — Cool","Banta poodoo — Bantha fodder!","Foo — Affirmative","Dak — Negative","Chode — Quiet","Yes/No Checkpoint"]],
+      [7,"Counting in Huttese",["Bo — One","Dopa — Two","Duka — Three","Fwanta — Four","Pricha — Five","Krenko — Six","Ka — Seven","Chowa — Eight","Bunko — Nine","Botoo — Ten","Bo Botoo — Twenty","Choppa Botoo — Hundred","Bunko Botoo — Thousand","Counting Credits","Counting Checkpoint"]],
+      [8,"Time & Days",["Standard Time vs Tatooine Time","Two Suns of Tatooine","Day Cycle","Galactic Standard Calendar","Years — Standard","Days of the Week (Standard)","Past Tense Markers","Future Tense Markers","Soon — Bee","Now — Choota","Yesterday — Beecho","Tomorrow — Beecho choota","Hours — Stondas","Minutes & Seconds","Time Checkpoint"]],
+      [9,"Politeness & Insults",["Cheespa — Please","Choo bazz — Thank You","Mooka — You're Welcome","Sleemo — Slime/Scumbag","Stoopa — Idiot","Bo Shuda — Hello","Ee chu ta — Insult Variant","Sleemo — Negative","Skocha kloonkee! — Fast!","Goolie chock! — Watch It!","Stupa! — Fool!","Kung — Scum","Lorda — Lord","Mighty — Tu","Politeness Checkpoint"]],
+      [10,"Bargaining & Trade",["How Many Credits?","Wopa wamma — Buy or Sell","Wee shahnit — Too Expensive","Bargain Phrases","Watto's Phrases","Barter Etiquette","Trade Goods Vocabulary","Currency Names","Hutt Cartel Markets","Black Market Vocabulary","Smuggler Negotiations","Slave Auctions (Lore Context)","Spice Trade","Weapon Sales","Trade Checkpoint"]],
+      [11,"Threats & Underworld Slang",["Boska! — Let's go!","Bargon u noa-a-uyat! — Death!","Yatuka — Friend (Sarcastic)","Yotuka — Death","Tah-da! — Reveal","Greedo's Threats","Han Solo Replies","Bounty Hunter Slang","Sleemo — Variants","Crime Boss Talk","Smuggler Threats","Kessel Run Slang","Spice Slang","Cartel Hierarchy Words","Underworld Checkpoint"]],
+      [12,"Family & Body Vocabulary",["Father — Aiwha","Mother — Mai","Son — Daku","Daughter — Mura","Brother — Bos","Sister — Ku","Family — Naga","Head — Oka","Eye — Tih","Hand — Manga","Foot — Pal","Heart — Charra","Blood — Ratta","Body — Gan","Family/Body Checkpoint"]],
+      [13,"Animals of the Galaxy",["Bantha","Eopie","Dewback","Krayt Dragon","Womp Rat","Sarlacc","Tauntaun","Ronto","Ewok (As Animals to Hutts)","Wookiee","Rancor","Acklay","Sand People (Tuskens)","Mynock","Animals Checkpoint"]],
+      [14,"Food & Drink Vocabulary",["Klatooine Paddy Frog","Live Grub","Spiced Wine","Bantha Steak","Blue Milk","Womp Rat Meat","Dewback Eggs","Ronto Wraps","Mos Eisley Cantina Drinks","Smuggler's Brew","Hutt Delicacies","Salt Crystals","Tatooine Vegetables","Worrt — Spotted Frog","Food Checkpoint"]],
+      [15,"Money — Wupiupi & Truguts",["Wupiupi — Common Coin","Trugut — Mid Coin","Peggat — Larger","Galactic Credits","Hutt Currency vs Republic","Wupiupi Slang","Counting Credits","Bargaining Phrases","Bribes — Common Amounts","Bounties","Smuggling Fees","Slave Bond Pricing (Lore)","Spice Currency","Black Market Pricing","Money Checkpoint"]],
+      [16,"Pronouns",["Mi — I","Mee — Me","Cha — You (singular)","Wam — You (plural)","Mu — He/She","Hodgaba — They","Ours — Cha mu","Possessive Forms","Reflexive Forms","Demonstratives — This/That","Interrogatives — Who, What","Polite Pronoun Form","Underworld Forms","Hutt Royal Form","Pronouns Checkpoint"]],
+      [17,"Verbs — Common Verbs",["Boska — To Go","Yotuka — To Die","Wopa — To Buy","Wamma — To Sell","Bargon — To Hunt","Choota — To Be","Naga — To Make","Doompa — To Stop","Chuba — To Bring","Bee — To Come","Stoopa — To Insult","Skocha — To Hurry","Tah-da — To Reveal","Conjugation Patterns","Verbs Checkpoint"]],
+      [18,"Nouns",["Hutta — Hutt","Sleemo — Slime","Bantha — Bantha","Wamma — Goods","Spice — Spice","Crystal — Crystal","Saber — Saber","Speeder — Speeder","Cantina — Cantina","Palace — Palace","Sand — Sand","Sun — Sun","Moon — Moon","Star — Star","Nouns Checkpoint"]],
+      [19,"Adjectives",["Big — Bahn","Small — Pee","Hot — Lal","Cold — Cool","Old — Sten","Young — Mooga","Fast — Skocha","Slow — Mwa","Strong — Hutt","Weak — Pi","Rich — Wamma","Poor — Stoopa","Beautiful — Bo","Ugly — Sleemo","Adjectives Checkpoint"]],
+      [20,"Sentence Structure",["Subject-Object-Verb","Question Formation","Negation","Compound Sentences","Conditional Sentences","Reported Speech","Polite Imperatives","Threat Imperatives","Trade Phrases","Question Words","Yes/No Questions","Tag Questions","Word Order Flexibility","Translation Practice","Syntax Checkpoint"]],
+      [21,"Famous Huttese Quotes — Han & Greedo",["Greedo's Cantina Threat","Going somewhere, Solo?","Soong peetch alay","Han Replies","Won't be long now","Boska — Let's Go","Last Words","Who Shot First Debate","Subtitled Translations","Body Language","Tonal Mockery","Cantina Vocabulary","Smuggler Greeting Phrases","Tatooine Showdown Phrases","Han/Greedo Checkpoint"]],
+      [22,"Famous Huttese Quotes — Watto",["Wanga — Hello","Mind tricks Don't Work","Coona tee-tocky malia?","No money no parts no deal!","Outlander!","Hutt Slug","Watto's Bargaining","Watto's Insults","Slave Trading Phrases","Pod Racing Lingo","Toydarian Accent","Watto vs Qui-Gon","Money-Counting","Watto's Backstory","Watto Checkpoint"]],
+      [23,"Famous Huttese Quotes — Jabba",["Bo Shuda — Greetings","Han, Mi sah-coba — Han, my boy","Tan-tan — Calm","Hutt Roar","Threat Phrases","Boba Fett, my favorite","Solo, my old friend","Princess Leia Insults","C-3PO Translation","Smiling Hutt Phrases","Jabba's Palace Vocab","Throne Room Phrases","Sail Barge Phrases","Carbonite Sentence","Jabba Checkpoint"]],
+      [24,"Famous Huttese Quotes — Boba & Bounty Hunters",["Boba Fett's Phrases","Bargain Hunter Slang","Cad Bane Phrases","IG-88 Droid Speak","Dengar's Threats","Bossk Hisses","Greedo's Background","Zuckuss & 4-LOM","Embo's Silence","Aurra Sing","Bounty Hunter Code","Hunter's Communication","Tracking Vocabulary","Capture Phrases","Bounty Hunter Checkpoint"]],
+      [25,"Tatooine Setting & Culture",["Two Suns","Twin Sunset","Sand & Dunes","Krayt Dragons","Tusken Raiders","Jawas","Moisture Farms","Mos Espa","Mos Eisley","Mos Pelgo","Anchorhead","Beggar's Canyon","Pod Racing Tracks","Tusken Customs","Tatooine Checkpoint"]],
+      [26,"Mos Eisley Cantina Vocabulary",["Cantina","Bartender — Wuher","Customer Phrases","Drink Orders","Sabacc Game Vocabulary","Music — Modal Nodes","Figrin D'an","Booth & Table Phrases","Don't Like You — Ee chu ta","Wretched Hive","Han's Booth","Smuggler Code","Stormtrooper Avoidance","Cantina Brawl Phrases","Cantina Checkpoint"]],
+      [27,"Jabba's Palace Vocabulary",["Palace Layout","Throne Room","Rancor Pit","Sail Barge","Bib Fortuna's Phrases","Salacious Crumb","Oola","Slave Leia Vocabulary","Carbonite Chamber","Boba Fett Trophy Wall","Drink Servings","Hookah & Spice","Music — Max Rebo Band","Decoration Vocabulary","Palace Checkpoint"]],
+      [28,"Hutt Cartel Politics",["Hutt Council","Big Five","Jabba Desilijic Tiure","Gardulla the Hutt","Borvo the Hutt","Ziro the Hutt","Hutt Clans","Cartel Loyalty","Cartel vs Empire","Cartel vs Republic","Spice Trade Routes","Slave Trade","Smuggling Routes","Bounty Contracts","Cartel Checkpoint"]],
+      [29,"Smuggler Slang",["Smuggler Code","Kessel Run Slang","Parsec Bragging","Hyperdrive Mods","Cargo Manifest Phrases","Customs Inspection Talk","Bribing Phrases","Imperial Avoidance","Hutt Contract Negotiation","Han Solo's Slang","Lando Calrissian's Slang","Chewbacca's Reactions","Cloud City Talk","Pirate vs Smuggler","Smuggler Checkpoint"]],
+      [30,"Pod Racing Vocabulary",["Pod Racer","Engine — Repulsor","Boonta Eve Classic","Mos Espa Arena","Anakin's Pod","Sebulba's Pod","Race Commentary","Race Phrases","Crash & Burn Slang","Track Vocabulary","Two Boonta Speeders","Tatooine Audience Cheers","Pit Crew Phrases","Watto's Bookmaking","Pod Racing Checkpoint"]],
+      [31,"Rancor & Beasts",["Rancor — Pit Beast","Acklay — Geonosis","Reek","Nexu","Sarlacc","Krayt Dragon","Womp Rat","Bantha","Dewback","Mynock","Space Slug","Wampa","Tauntaun","Eopie","Beasts Checkpoint"]],
+      [32,"Clone Wars Era Huttese",["Clone Wars Animated Series","Ziro the Hutt's Phrases","Hutt Council Meetings","Cad Bane Crossover","Asajj Ventress Phrases","Pre Vizsla","Hondo Ohnaka","Pirate Phrases","Republic vs Cartel","Anakin & Padmé in Tatooine","Coruscant Underworld","Clone Trooper Phrases","Hutt Slogan","Sundered Heart","Clone Wars Checkpoint"]],
+      [33,"Mandalorian Era Huttese",["The Mandalorian Show","Mando Speak","Boba Fett Returns","Fennec Shand Phrases","Bib Fortuna's Death","Boba Fett Takes Throne","Tatooine in Mandalorian","Cobb Vanth","Mos Pelgo Phrases","Krayt Dragon Hunt","Tusken Friendship","Razor Crest","The Marshal","Boba Fett's Legacy","Mando Era Checkpoint"]],
+      [34,"Solo / Han's Background",["Han Solo Origins","Corellia","Imperial Academy","Chewbacca Meets Han","Lando Meets Han","Sabacc Game","Falcon Heist","Kessel Run","Crimson Dawn Cartel","Dryden Vos Phrases","Qi'ra Phrases","Maul Cameo","Beckett's Phrases","Solo Standalone","Solo Checkpoint"]],
+      [35,"Modern Star Wars Huttese",["Sequels Era","Maz Kanata","Babu Frik","Kijimi","Resistance Era","First Order","Underworld in Sequels","Modern Translations","Updates to Huttese","Boba Fett TV Series","Andor Series","Cassian's Underworld","Disney+ Era","Future Star Wars","Modern Era Checkpoint"]],
+      [36,"Huttese Mastery",["Pronunciation Final","Vocabulary Final","Grammar Final","Famous Quotes Final","Tatooine Culture Final","Smuggler Slang Final","Hutt Cartel Final","Translation Challenge","Compose a Smuggler Greeting","Compose a Threat","Read Watto's Phrases","Read Jabba's Phrases","Huttese Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'hut-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('huttese');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('huttese');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

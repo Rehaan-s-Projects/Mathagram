@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photography — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Photography</h1>
+    <p>From exposure triangle to composition, portrait to landscape, post-processing to portfolio — and a deep dive into the cameras themselves: DSLR vs mirrorless, sensor sizes, lenses, brand systems (Canon, Nikon, Sony, Fujifilm, Leica), maintenance, tripods & gimbals, smartphone &amp; computational photography, action &amp; drone &amp; 360° cameras, and film &amp; vintage gear. 300 lessons across 20 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Camera Basics",["What Is a Camera?","DSLR vs Mirrorless","Smartphone Cameras","Film vs Digital","Sensor Size","Full Frame vs Crop","Lens Types","Prime vs Zoom","Kit Lenses","Tripods & Stabilizers","Memory Cards","Batteries & Power","Camera Care","Holding the Camera","Camera Basics Checkpoint"]],
+      [2,"The Exposure Triangle",["What Is Exposure?","Aperture Basics","f-Stops Explained","Shutter Speed Basics","Freezing Motion","Motion Blur","ISO Basics","Noise & Grain","Balancing the Triangle","Manual Mode","Aperture Priority","Shutter Priority","Exposure Compensation","Light Meters","Exposure Triangle Checkpoint"]],
+      [3,"Composition",["Rule of Thirds","Leading Lines","Framing","Symmetry & Patterns","Negative Space","Fill the Frame","Foreground & Background","Depth Layers","Color Theory","Complementary Colors","Golden Ratio","Breaking the Rules","Storytelling in Frames","Cropping Philosophy","Composition Checkpoint"]],
+      [4,"Lighting",["Natural Light","Golden Hour","Blue Hour","Harsh Sunlight","Overcast Days","Backlighting","Side Lighting","Rim Light","Fill Light","Window Light","Flash Basics","On-Camera Flash","Off-Camera Flash","Light Modifiers","Lighting Checkpoint"]],
+      [5,"Portrait Photography",["Connecting with Subjects","Posing Basics","Headshots","Environmental Portraits","Group Shots","Couples","Children","Pets as Portraits","Self-Portraits","Catchlights","Lens Choice for Portraits","Backgrounds","Skin Tones","Mood & Atmosphere","Portrait Checkpoint"]],
+      [6,"Landscape Photography",["Scouting Locations","Planning with Weather","Wide Angle Work","Hyperfocal Distance","Long Exposures","ND Filters","Graduated ND","Polarizing Filters","Water & Reflections","Mountains","Forests","Seascapes","Desert","Cityscapes","Landscape Checkpoint"]],
+      [7,"Street & Documentary",["Street Ethics","Invisible Photography","Zone Focusing","Hyperfocal Street","Storytelling Moments","Candid vs Posed","Black & White Street","Night Street","Event Coverage","Photojournalism","Safety on the Street","Legal Considerations","Editing Documentary","Iconic Street Photographers","Street Checkpoint"]],
+      [8,"Specialized Genres",["Wildlife Photography","Macro Photography","Sports Photography","Astrophotography","Architecture","Food Photography","Product Photography","Fashion","Wedding","Travel","Fine Art","Underwater","Aerial & Drone","Black & White","Genres Checkpoint"]],
+      [9,"Post-Processing",["Choosing Software","Lightroom Basics","Library Module","Basic Panel","Tone Curves","HSL Panel","Split Toning","Detail & Sharpening","Lens Corrections","Photoshop Essentials","Layers & Masks","Dodge & Burn","Frequency Separation","Retouching Portraits","Post-Processing Checkpoint"]],
+      [10,"Camera Bodies — DSLR vs Mirrorless vs Compact",["Anatomy of a Camera Body","DSLR — Optical Viewfinder & Mirror Box","Mirrorless — Electronic Viewfinder","Why Mirrorless Won the 2020s","Compact / Point-and-Shoot Cameras","Bridge Cameras","Rangefinder Cameras","Medium Format Bodies","Modular Cinema Cameras","Weather Sealing Explained","In-Body Image Stabilization (IBIS)","Dual Card Slots","Articulating vs Tilting Screens","Buying Used vs New Bodies","Camera Bodies Checkpoint"]],
+      [11,"Sensor Sizes & Image Quality",["What a Sensor Actually Does","CMOS vs CCD vs BSI vs Stacked","Full Frame Sensor","APS-C Sensor","Micro Four Thirds","1-Inch Sensor","Smartphone Sensors","Medium Format Sensor","Large Format & View Cameras","Crop Factor Math","Pixel Pitch & Low-Light Performance","Dynamic Range Explained","Bit Depth — 8, 12, 14, 16","Color Filter Arrays — Bayer & X-Trans","Sensor Sizes Checkpoint"]],
+      [12,"Lenses Deep Dive",["Anatomy of a Lens","Prime Lens Pros & Cons","Zoom Lens Pros & Cons","Wide-Angle Lenses","Standard 35mm & 50mm","Short Telephoto — 85mm Portrait","Telephoto — 70-200mm","Super Telephoto — 400mm+","Macro Lenses","Tilt-Shift Lenses","Fisheye Lenses","Lens Mounts — EF, RF, Z, E, X, L","Adapting Lenses Across Mounts","Reading MTF Charts","Lenses Deep Dive Checkpoint"]],
+      [13,"Camera Modes & Metering",["Auto Mode","Program (P) Mode","Aperture Priority (A/Av)","Shutter Priority (S/Tv)","Manual (M) Mode","Bulb Mode","Custom Modes (C1/C2/C3)","Evaluative / Matrix Metering","Center-Weighted Metering","Spot Metering","Highlight-Weighted Metering","Exposure Compensation Workflow","Auto-Bracketing","Histogram Reading","Modes & Metering Checkpoint"]],
+      [14,"Camera Brands & Systems",["Canon — EF, RF, EOS R","Nikon — F-Mount & Z-Mount","Sony — A7 / A1 / FX Series","Fujifilm — X & GFX","Leica — M, Q, SL","Panasonic — Lumix S & Micro Four Thirds","Olympus / OM System","Pentax — DSLR Holdouts","Sigma — fp & Foveon","Hasselblad — X & H","Phase One — Medium Format","RED, ARRI, Blackmagic — Cinema","Choosing a System","Switching Systems","Brands & Systems Checkpoint"]],
+      [15,"Camera Maintenance & Care",["Daily Cleaning Habits","Lens Cleaning Cloths & Pens","Sensor Cleaning — Wet vs Dry Swabs","Self-Cleaning Sensor Modes","Dust on Sensor — Diagnosing","Mirror Box Cleaning (DSLR)","Storage — Dry Cabinets & Silica","Humidity & Mold Prevention","Cold Weather Care","Hot Weather Care","Travel Protection","Insurance for Gear","Repair vs Replace","Firmware Updates","Maintenance Checkpoint"]],
+      [16,"Tripods, Gimbals & Accessories",["Tripod Anatomy — Legs, Head, Plate","Aluminum vs Carbon Fiber","Ball Heads vs Geared vs Pan-Tilt","L-Brackets & Quick Release","Travel Tripods","Monopods","Gimbal Heads for Wildlife","Handheld Gimbal Stabilizers","Filter Systems — Screw-In vs Square","Polarizers, ND, Grad ND, UV","Remote Triggers & Intervalometers","Camera Bags & Backpacks","Hard Cases — Pelican","Cleaning Kit Essentials","Accessories Checkpoint"]],
+      [17,"Smartphone & Computational Photography",["Why Phones Replaced Compact Cameras","iPhone Camera System","Pixel Camera & Computational Pipeline","Samsung Galaxy Cameras","Computational HDR","Night Mode — Multi-Frame Stacking","Portrait Mode & Depth Estimation","ProRAW & Apple Log","Smartphone Lens Attachments","Gimbals for Phones — DJI Osmo","Mobile Editing — Lightroom Mobile, Snapseed","Halide & Pro Camera Apps","Social-First Workflow","Limitations of Phone Cameras","Smartphone Photography Checkpoint"]],
+      [18,"Action, Drone & 360° Cameras",["GoPro Hero Series","Insta360 Action Cameras","DJI Osmo Action","Mounting Action Cams","Underwater Housings","Drone Photography Basics","DJI Mavic & Mini Series","Autel & Skydio Drones","Drone Laws & FAA Part 107","Aerial Composition","360° Cameras — Insta360 X & Theta","Reframing 360° Footage","VR & Immersive Capture","Stabilization Tricks","Action & Drone Checkpoint"]],
+      [19,"Film Cameras & Vintage Gear",["Why Shoot Film in the 2020s?","35mm SLRs — Canon AE-1, Nikon FM2, Pentax K1000","Rangefinder Film Cameras — Leica M","Medium Format Film — Hasselblad, Mamiya, Pentax 67","Large Format & View Cameras","Instant Film — Polaroid & Instax","Film Stocks — Portra, Ektar, HP5, Tri-X","ISO, Reciprocity Failure & Pushing/Pulling","Loading & Unloading Film","Light Meters for Film","Developing at Home — C-41, B&W","Scanning Negatives","Buying Vintage Gear","Film & Digital Hybrid Workflows","Film & Vintage Checkpoint"]],
+      [20,"Portfolio & Career",["Building a Portfolio","Editing Your Work","Printing Photos","Framing & Display","Selling Prints","Stock Photography","Client Work","Contracts & Pricing","Social Media Presence","Instagram Strategy","Personal Projects","Photography Books","Exhibitions","Lifelong Photographer","Photography Grand Mastery!"]],
+      [21,"iPhone Camera Mastery",["The Camera App Walkthrough","Photo vs Portrait vs Panorama","Live Photos","Tap to Focus & Lock","Exposure Slider","HDR Auto","Burst Mode","Timer & Volume Shutter","Front Camera Mastery","Selfie Composition","Apple's ISP & Smart HDR","ProRAW Toggle","Apple ProRes Video","Macro Mode","iPhone Camera Checkpoint"]],
+      [22,"iPhone Pro Modes — ProRAW & ProRes",["What Is ProRAW?","Linear DNG Format","ProRAW vs ProRAW Max","Editing ProRAW in Lightroom","ProRAW File Sizes","When to Shoot ProRAW","ProRes Video Format","ProRes 422 vs HQ vs LT","ProRes Storage Needs","External SSD Recording","Apple Log","Cinematic Mode","Action Mode","Photographic Styles","ProRAW & ProRes Checkpoint"]],
+      [23,"Android Camera Apps",["Google Pixel Camera","Pixel Top Shot","Pixel Magic Eraser","Pixel Best Take","Pixel Magic Editor","Samsung Camera App","Samsung Pro Mode","Samsung Expert RAW","Xiaomi Camera & Leica Modes","OnePlus Hasselblad Color","Sony Xperia Photo Pro","ASUS Zenfone Camera","Honor & Vivo Cameras","GCam Ports","Android Camera Apps Checkpoint"]],
+      [24,"Computational Photography Concepts",["What Is Computational Photography?","Multi-Frame Image Stacking","Smart HDR Pipeline","Deep Fusion (Apple)","Night Sight (Google)","Semantic Segmentation","Pixel Binning Explained","Tetracell, Nonacell","Bokeh from Depth Maps","Astrophotography Mode","Super Res Zoom","Magic Eraser AI","Generative Fill on Phones","Why Phones Beat DSLRs Sometimes","Computational Photo Checkpoint"]],
+      [25,"Night Mode & Low-Light on Phones",["Why Phone Sensors Struggle","Long Exposure Stacking","Pixel Night Sight Pipeline","iPhone Night Mode","Samsung Night Mode","Tripod-Aware Night Mode","Astrophotography on Pixel","Holding Still Tips","Anti-Banding for Indoor","Bright Star Photography","Light Pollution Tips","Manual Night Apps","Bracketing Approach","Editing Low-Light Phone Pics","Night Mode Checkpoint"]],
+      [26,"Phone Lenses — Wide, Tele, Macro",["Ultrawide 0.5x","Main 1x","Telephoto 2x, 3x, 5x, 10x","Periscope Lens Design","Optical vs Digital Zoom","Variable Aperture Phones","Macro Mode Explained","Macro Auto-Switch","Distortion at Edges","Stitching Wide Shots","Field of View by Focal","When to Use Each Lens","Lens Smudge Diagnosis","Lens Cleaning","Phone Lenses Checkpoint"]],
+      [27,"Phone Portrait & Cinematic Mode",["Portrait Mode Basics","Subject vs Background","Studio, Contour, Stage Lighting","Editing Bokeh After","Pet & Object Portrait","Portrait Mode Limits","Hair & Glasses Edges","Cinematic Mode Video","Rack Focus on Phone","Editing Cinematic Mode","Auto Focus Choice","Portrait + Live Photo","Filmic Pro Equivalent","Best Practices","Portrait/Cinematic Checkpoint"]],
+      [28,"Phone Video — 4K, ProRes, Dolby Vision",["1080p vs 4K vs 4K60","Bitrate Settings","ProRes Video Internal","Apple Log Profile","Dolby Vision HDR","HDR10+ on Samsung","Locking Focus & Exposure","White Balance Lock","Anamorphic Mode","Slow Motion (240fps)","Time-Lapse","Hyperlapse Apps","Audio with External Mic","Video Stabilization","Phone Video Checkpoint"]],
+      [29,"Phone Editing — Lightroom Mobile & Snapseed",["Lightroom Mobile Tour","Sync with Lightroom Desktop","Lightroom Presets on Mobile","Selective Edits — Brushes","Healing Tool on Phone","Snapseed Tools","Snapseed Selective","Snapseed Stacks","Snapseed Glamour Glow","Snapseed Healing","Tone Curves on Phone","Mask & Brush in Lightroom","Phone Tethered Tablet","Cloud Sync Pitfalls","Lightroom/Snapseed Checkpoint"]],
+      [30,"Phone Editing — VSCO, Darkroom, Filmic",["VSCO Filter Workflow","VSCO Film Emulation","Darkroom Pro Features","Darkroom Color Tools","Filmic Pro Cinematography","Halide Camera App","Hipstamatic Vintage","ProCamera Manual","TouchRetouch","Pixelmator Photo","Affinity Photo on iPad","Capture One Pro Mobile","Mobile Photoshop","Comparing Editing Apps","Phone Editing Apps Checkpoint"]],
+      [31,"Phone Accessories — Gimbals, Lenses, Mics",["DJI Osmo Mobile","Zhiyun Smooth","Insta360 Flow","Moment Lens System","Sandmarc Lenses","ShiftCam Lenses","Anamorphic Lens Adapter","Tripod Mounts for Phones","Gorillapod for Phone","RØDE VideoMic Me","Sennheiser MKE 200","Wireless Lavalier Mics","MagSafe Mounts","Battery Grips","Phone Accessories Checkpoint"]],
+      [32,"Pro Phone Photography Workflow",["Pre-Production Planning","Locations & Apps","Sun Calculator Apps","Tide & Weather Apps","Battery & Storage Strategy","Cloud Backup On-the-Go","Tethered Phone Shooting","On-Set with iPad Pro","Color Calibration with X-Rite","Delivering Phone Photos to Clients","Print Quality from Phone","Magazine Covers Shot on Phone","iPhone-Only Workflows","Phone vs Pro Camera Decision Tree","Pro Phone Workflow Checkpoint"]],
+      [33,"Wedding Photography",["Pre-Wedding Consultation","Shot List Standards","First Look Setup","Detail Shots — Rings, Dress","Bridal Portraits","Groom Portraits","Family Group Shots","Reception Coverage","First Dance","Cake & Toasts","Editing & Delivery","Wedding Albums","Pricing Packages","Backup Workflow","Wedding Checkpoint"]],
+      [34,"Wildlife & Bird Photography",["Telephoto Lens Selection","Hide & Blind Setup","Tracking AF Settings","Burst Mode for Action","Bird in Flight Technique","Eye-Tracking AF","Patience as Skill","Ethics — Don't Disturb","Lighting in Forest","Backlit Subjects","Wildlife Composition","Print Sales","Field Bags & Gear","Travel for Wildlife","Wildlife Checkpoint"]],
+      [35,"Sports Photography",["Shutter Speed for Action","Fast AF Servo","Pre-Focus Technique","Panning Motion","Shooting from Sidelines","Press Pass Etiquette","Indoor Court Lighting","Outdoor Field Lighting","Action Peak Capture","Editing Sports Quickly","Tagging for Wire Service","Press Photo Standards","Stadium Long Lenses","Sports Storytelling","Sports Checkpoint"]],
+      [36,"Macro & Close-Up",["True Macro Defined — 1:1","Macro Lens Choices","Extension Tubes","Reverse Lens Mounting","Focus Stacking","Tripod & Rail Setup","Ring Light vs Twin Flash","Diffusers for Macro","Insect Macro Ethics","Flower Macro","Water Drop Photography","Texture & Pattern","Magnification Math","Editing Macro Color","Macro Checkpoint"]],
+      [37,"Astrophotography Deep Dive",["Wide-Field vs Telescope","500 Rule for Star Trails","NPF Rule (Modern)","Star Tracker Mounts","Polar Alignment","Stacking with DeepSkyStacker","Sequator for Beginners","Light Pollution Filters","Bortle Scale","Milky Way Season","Moon Photography","Solar Eclipse Photography","Lunar Eclipse","Aurora Borealis","Astrophoto Checkpoint"]],
+      [38,"Architecture & Real Estate",["Tilt-Shift Lens Use","Vertical Lines Correction","Wide Angle Choices","Interior Lighting Setup","HDR for Real Estate","Window Pull Compositing","Drone Aerials for Real Estate","Twilight Exteriors","Editing Interiors","White Balance Mixed Light","Pano for Wide Rooms","Floor Plan Renders","Architectural Detail","Famous Buildings Permits","Architecture Checkpoint"]],
+      [39,"Food & Drink Photography",["Overhead Flat Lay","45-Degree Angle","Side-On Beverage Shot","Natural Light Setup","Diffusing Window Light","Bounce Cards","Steam & Sauce Drips","Plating Techniques","Drink Photography","Beer & Cocktail Highlights","Backdrop Selection","Props & Linens","Editing Food Color","Restaurant Client Workflow","Food Checkpoint"]],
+      [40,"Concert & Event Photography",["Stage Lighting Realities","Mixed Color Temperatures","High ISO Strategy","Pit Photography","First Three Songs Rule","No Flash Etiquette","Crowd Shots","Backstage Access","Musician Portraits","Editing Concert Color","Selling to Bands","Festival Photography","Press Pass Process","Storage for Multi-Day Events","Concert Checkpoint"]],
+      [41,"Studio Lighting Setup",["Strobes vs Continuous","Key, Fill, Hair, Background","One-Light Setup","Two-Light Setup","Three-Light Setup","Rembrandt Lighting","Loop Lighting","Butterfly Lighting","Split Lighting","Clamshell Beauty","Soft Box vs Umbrella","Beauty Dish","Snoots & Grids","Color Gels","Studio Lighting Checkpoint"]],
+      [42,"Off-Camera Flash",["TTL vs Manual","Hot Shoe vs Trigger","Wireless TTL Systems","Godox AD200 / V1","Profoto B10","High Speed Sync","Second Curtain Sync","Bare Bulb vs Modifier","Outdoor Sun Balance","Strobist Workflow","Flash Power Math","Inverse Square Law","Battery Pack Strategy","Multi-Flash Setups","OCF Checkpoint"]],
+      [43,"Natural Light Mastery",["Golden Hour","Blue Hour","Open Shade","Backlight & Rim","Window Light Direction","Diffusing Harsh Sun","Reflector Use","Negative Fill","Indoor Available Light","Cloudy Day Soft Light","Sunset Color Math","Dawn vs Dusk","Spotlight Light Pools","Reading Light Direction","Natural Light Checkpoint"]],
+      [44,"Long Exposure & Light Painting",["Tripod Stability","ND Filters — 6, 10, 16 Stops","Variable ND","Long Exposure Math","Bulb Mode","Smooth Water","Cloud Streaks","Star Trails","Light Painting Steel Wool","Light Painting LED","Pixelstick Drawings","Subject Standing Still","Stacking Long Exposures","Cable Releases","Long Exposure Checkpoint"]],
+      [45,"HDR Photography",["What Is HDR?","Bracketing Stops","3 vs 5 vs 7 Bracket","Auto Bracket on Camera","Tripod Stability","Lightroom HDR Merge","Photomatix Workflow","Aurora HDR","Halo Avoidance","Realistic vs Surreal HDR","Single-RAW HDR","Real Estate HDR","Sunset HDR","HDR for Print","HDR Checkpoint"]],
+      [46,"Adobe Lightroom Deep Dive",["Catalog Setup","Folders vs Collections","Importing & Backup","Develop Module Tour","Tone & Color Panel","HSL & Color Mixer","Tone Curve","Detail & Sharpening","Lens Corrections","Transform Panel","Profiles & Presets","Masking — Subject, Sky, Brush","Linear Gradient","Radial Gradient","Lightroom Checkpoint"]],
+      [47,"Photoshop for Photographers",["Layers & Masks","Curves Adjustment","Levels Adjustment","Hue/Saturation","Color Balance","Frequency Separation","Dodging & Burning","Spot Healing & Clone","Content-Aware Fill","Generative Fill","Smart Objects","Camera Raw Filter","Compositing Skies","Sharpening — Smart Sharpen","Photoshop Checkpoint"]],
+      [48,"Color Grading & LUTs",["What Is Color Grading?","Color Wheels","Three-Way Color Correction","Split Toning","LUTs Explained","Loading LUTs in Lightroom","Loading LUTs in Photoshop","Free LUT Sources","Cinematic Looks","Teal & Orange","Moody Film Looks","Faded Film Looks","Custom LUT Creation","DaVinci Resolve for Color","Color Grading Checkpoint"]],
+      [49,"Print, Frame & Display",["Print Resolution — 300 DPI","Soft Proofing","ICC Profile Selection","Paper Types — Matte, Luster, Baryta","Edge-to-Edge vs Border","Mounting Options","Float Mount","Acrylic vs Glass","Frame Materials","Hanging at Eye Line","Gallery Wall Layout","Lighting for Prints","Archival Storage","Selling Limited Editions","Print & Display Checkpoint"]],
+      [50,"Photography Supreme Mastery",["Camera & Exposure Final","Composition & Light Final","Genre Mastery Final","Phone Photography Final","Computational Photography Final","Studio Lighting Final","Lightroom & Photoshop Final","Color Grading Final","Print & Display Final","Building Your Photography Voice","Career Strategy","Lifelong Practice","Personal Project Pitch","Photography Mentorship","Photography Supreme Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'photo-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('photography');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('photography');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz — Introduction to ML — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    .quiz-page { max-width: 760px; margin: 0 auto; padding: 64px 16px 96px; }
+    .quiz-header { text-align: center; margin-bottom: 28px; }
+    .quiz-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: var(--color-data, #3b82f6); }
+    .quiz-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .quiz-header p { color: var(--color-text-secondary); max-width: 560px; margin: 4px auto 0; line-height: 1.6; }
+
+    .progress-bar { height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #6366f1); transition: width 0.4s ease; }
+
+    .qcard { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 24px; }
+    .qprogress { font-size: 0.78rem; color: var(--color-text-secondary, #aaa); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .qtitle { font-size: 1.15rem; font-weight: 700; line-height: 1.5; margin: 0 0 18px; color: var(--color-text-primary, #fff); }
+    .qopts { display: flex; flex-direction: column; gap: 10px; }
+    .qopt { padding: 12px 16px; background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.10); border-radius: 10px; cursor: pointer; transition: all 0.15s; font-family: inherit; font-size: 0.95rem; color: var(--color-text-primary, #fff); text-align: left; }
+    .qopt:hover:not(:disabled) { border-color: #3b82f6; background: rgba(59,130,246,0.1); }
+    .qopt:disabled { cursor: default; }
+    .qopt.correct { border-color: #22c55e; background: rgba(34,197,94,0.18); color: #86efac; }
+    .qopt.wrong { border-color: #ef4444; background: rgba(239,68,68,0.18); color: #fca5a5; }
+
+    .qexplain { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 0.92rem; line-height: 1.55; display: none; }
+    .qexplain.show { display: block; }
+    .qexplain.correct { background: rgba(34,197,94,0.10); color: #86efac; border-left: 3px solid #22c55e; }
+    .qexplain.wrong   { background: rgba(239,68,68,0.10); color: #fca5a5; border-left: 3px solid #ef4444; }
+
+    .qactions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
+    .qbtn { padding: 10px 22px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; border: none; transition: background 0.15s, transform 0.1s; }
+    .qbtn:hover { transform: translateY(-1px); }
+    .qbtn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .qbtn.primary { background: #3b82f6; color: #fff; }
+    .qbtn.primary:hover:not(:disabled) { background: #2563eb; }
+
+    .summary { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(34,197,94,0.45); border-radius: 14px; padding: 28px; text-align: center; }
+    .summary h2 { font-size: 1.5rem; font-weight: 800; margin: 0 0 8px; color: #86efac; }
+    .summary .score { font-size: 2.5rem; font-weight: 800; margin: 12px 0; color: #fff; }
+    .summary .score small { font-size: 1.1rem; color: var(--color-text-secondary, #aaa); font-weight: 500; }
+    .summary p { color: var(--color-text-primary, #fff); line-height: 1.6; max-width: 480px; margin: 8px auto 16px; }
+    .summary .actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .summary a, .summary button { text-decoration: none; display: inline-block; }
+
+    .footer-nav { text-align: center; margin-top: 32px; }
+    .footer-nav a { color: #3b82f6; text-decoration: none; font-weight: 600; }
+    .footer-nav a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="quiz-page">
+    <header class="quiz-header">
+      <span class="quiz-badge">Clustering &amp; Classification · Unit 28</span>
+      <h1>Quiz — Introduction to ML</h1>
+      <p>Eight questions on the basics of machine learning. Pick the best answer for each — you'll see the explanation immediately.</p>
+    </header>
+
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width: 20%"></div></div>
+
+    <section id="qcard" class="qcard"></section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to course</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    const QUESTIONS = [
+      {
+        q: "What is the difference between supervised and unsupervised learning?",
+        opts: [
+          "Supervised uses labeled data; unsupervised finds patterns in unlabeled data",
+          "Supervised is faster; unsupervised is slower",
+          "Supervised only works on text; unsupervised only works on images",
+          "There's no real difference — they're just different names"
+        ],
+        correct: 0,
+        explain: {
+          ok: "Right. In supervised learning the training data has known labels (the correct answer). In unsupervised learning there are no labels — the model has to find structure on its own (e.g. K-means clusters).",
+          no: "The defining difference is labels: supervised learning trains on data where the answer is known; unsupervised learning has no labels and must discover structure itself."
+        }
+      },
+      {
+        q: "Which task is a CLASSIFICATION problem (not regression)?",
+        opts: [
+          "Predicting tomorrow's temperature in degrees",
+          "Estimating house price from square footage",
+          "Deciding whether an email is spam or not spam",
+          "Predicting how many minutes a bus is delayed"
+        ],
+        correct: 2,
+        explain: {
+          ok: "Exactly. Classification predicts a discrete category (spam / not spam). Regression predicts a continuous number (temperature, price, minutes).",
+          no: "Classification = predict a category. Regression = predict a number. Spam-or-not-spam is a category, so it's classification."
+        }
+      },
+      {
+        q: "What is a 'feature' in machine learning?",
+        opts: [
+          "A bug that's been turned into a marketing point",
+          "An individual measurable property of the data — a column in your dataset",
+          "The final prediction the model outputs",
+          "A type of neural network layer"
+        ],
+        correct: 1,
+        explain: {
+          ok: "Yes — a feature is one input variable. If you're predicting house price, features might be square footage, number of rooms, year built, etc.",
+          no: "A feature is one input variable — a single measurable property of each example in your dataset (a 'column'). The model's output is called a prediction or label, not a feature."
+        }
+      },
+      {
+        q: "A model gets 100% accuracy on training data but 60% on new data. This is most likely:",
+        opts: [
+          "Underfitting — the model is too simple",
+          "Overfitting — the model memorized the training set instead of learning the pattern",
+          "Perfect performance",
+          "A data leakage issue with the labels"
+        ],
+        correct: 1,
+        explain: {
+          ok: "Correct. When the model performs much better on training data than on unseen data, it has overfit — memorized noise in the training set rather than learning the underlying signal.",
+          no: "Big gap between training accuracy and test accuracy is the textbook sign of overfitting. The model memorized the training data and can't generalize."
+        }
+      },
+      {
+        q: "Which of the following is an UNSUPERVISED learning algorithm?",
+        opts: [
+          "Logistic regression",
+          "Decision tree",
+          "K-Means clustering",
+          "Random forest"
+        ],
+        correct: 2,
+        explain: {
+          ok: "Yes. K-Means groups data into clusters without using any labels — it discovers structure. Logistic regression, decision trees, and random forests all need labeled data to train, so they're supervised.",
+          no: "K-Means is the unsupervised one — it groups data without labels. Logistic regression, decision trees, and random forests are all supervised (they require labels)."
+        }
+      },
+      {
+        q: "What does 'training a model' actually mean?",
+        opts: [
+          "Renaming the dataset",
+          "Adjusting the model's internal parameters so its predictions match the labeled examples as closely as possible",
+          "Compressing the data",
+          "Choosing a programming language"
+        ],
+        correct: 1,
+        explain: {
+          ok: "Right. Training is the optimization process: tune the model's parameters (weights, splits, coefficients) so its predictions on the training data minimize a loss function.",
+          no: "Training = adjusting the model's parameters so its outputs get closer to the correct labels, usually by minimizing a loss function via gradient descent or a similar procedure."
+        }
+      },
+      {
+        q: "Which metric directly answers: 'Of all the items the model labeled positive, what fraction were actually positive?'",
+        opts: [
+          "Recall",
+          "Precision",
+          "Accuracy",
+          "F1 score"
+        ],
+        correct: 1,
+        explain: {
+          ok: "Correct. Precision = true positives ÷ predicted positives. It's about the quality of the positive predictions you make.",
+          no: "Precision asks: of the items I predicted positive, how many were really positive? Recall asks the opposite: of all the actual positives, how many did I catch?"
+        }
+      },
+      {
+        q: "Why is high accuracy alone a misleading metric on a dataset where 99% of examples are class A and 1% are class B?",
+        opts: [
+          "Because accuracy can't be computed on imbalanced data",
+          "Because a model that always predicts class A gets 99% accuracy without learning anything useful",
+          "Because the data is too small",
+          "Because class B is harder to compute"
+        ],
+        correct: 1,
+        explain: {
+          ok: "Exactly. With heavy class imbalance, naively predicting the majority class wins on accuracy but is useless. You need precision/recall, F1, or class-balanced metrics.",
+          no: "On imbalanced data a trivial 'always predict the majority' classifier gets very high accuracy but has zero usefulness. That's why precision, recall, F1, and ROC curves matter."
+        }
+      }
+    ];
+
+    const qcard = document.getElementById('qcard');
+    const progressFill = document.getElementById('progress-fill');
+    let idx = 0;
+    let score = 0;
+    let answered = false;
+
+    function render() {
+      const item = QUESTIONS[idx];
+      progressFill.style.width = `${((idx) / QUESTIONS.length) * 100}%`;
+      qcard.innerHTML = `
+        <div class="qprogress">Question ${idx + 1} of ${QUESTIONS.length}</div>
+        <h2 class="qtitle">${item.q}</h2>
+        <div class="qopts" id="qopts"></div>
+        <div class="qexplain" id="qexplain"></div>
+        <div class="qactions">
+          <button id="next-btn" class="qbtn primary" disabled>${idx === QUESTIONS.length - 1 ? 'Finish' : 'Next →'}</button>
+        </div>`;
+      const opts = document.getElementById('qopts');
+      const nextBtn = document.getElementById('next-btn');
+      const explain = document.getElementById('qexplain');
+      answered = false;
+
+      item.opts.forEach((text, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'qopt';
+        btn.type = 'button';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          if (answered) return;
+          answered = true;
+          const allBtns = opts.querySelectorAll('.qopt');
+          allBtns.forEach((b, j) => {
+            b.disabled = true;
+            if (j === item.correct) b.classList.add('correct');
+            if (j === i && i !== item.correct) b.classList.add('wrong');
+          });
+          const isCorrect = i === item.correct;
+          if (isCorrect) score++;
+          explain.className = 'qexplain show ' + (isCorrect ? 'correct' : 'wrong');
+          explain.textContent = isCorrect ? item.explain.ok : item.explain.no;
+          nextBtn.disabled = false;
+        });
+        opts.appendChild(btn);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if (idx < QUESTIONS.length - 1) {
+          idx++;
+          render();
+        } else {
+          finish();
+        }
+      });
+    }
+
+    function finish() {
+      progressFill.style.width = '100%';
+      const pct = Math.round((score / QUESTIONS.length) * 100);
+      const message = pct === 100 ? "Perfect score — you've nailed the foundations." :
+                      pct >= 80  ? "Strong work. The fundamentals are clearly clicking." :
+                      pct >= 60  ? "Solid attempt. Worth re-reading the early lessons before moving on." :
+                                   "Keep going — review the intro lessons and try again.";
+      qcard.outerHTML = `
+        <section class="summary">
+          <h2>Quiz Complete</h2>
+          <div class="score">${score} / ${QUESTIONS.length} <small>(${pct}%)</small></div>
+          <p>${message}</p>
+          <div class="actions">
+            <button id="retry-btn" class="qbtn primary">Try Again</button>
+            <a class="qbtn primary" style="background:rgba(59,130,246,0.2); color:#bfdbfe;" href="index.html">Back to Course →</a>
+          </div>
+        </section>`;
+      document.getElementById('retry-btn').addEventListener('click', () => location.reload());
+    }
+
+    render();
+  </script>
+</body>
+</html>

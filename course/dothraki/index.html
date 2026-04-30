@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dothraki — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Dothraki</h1>
+    <p>The language of the Dothraki horselords from Game of Thrones — created by linguist David J. Peterson. Grammar, vocabulary, culture, khaleesi speeches, famous quotes, and the nomadic world of the Dothraki Sea. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Introduction to Dothraki",["Who Are the Dothraki?","David J Peterson — The Creator","Dothraki in the Books vs Show","Language Construction Goals","Dothraki Sea — Their Homeland","Khalasar Structure","Why Learn Dothraki?","Learning Approach","Resources & Dictionaries","Essos Geography","Arakh & Stallion Imagery","Horse Culture","Dothraki Society","Setting in Game of Thrones","Introduction Checkpoint"]],
+      [2,"Alphabet & Pronunciation",["Dothraki Sounds Overview","Consonants","Uvular Sounds — q, kh","The Trilled R","Vowels — a, e, i, o","No U — The Vowel Rule","Stress Patterns","Syllable Structure","Transliteration","Pronouncing Khaleesi","Pronouncing Arakh","Pronouncing Athjilar","Common Mispronunciations","Listening Practice","Alphabet Checkpoint"]],
+      [3,"Greetings & Basic Phrases",["M'athchomaroon — Hello","Hajas — Be Strong","Hash yer dothrae chek? — Are you well?","Anha dothrak chek — I am well","San athchomari yeraan — Thanks","Fonas chek — Hunt well","Dothralat — To Ride","Khalakka dothrae — A Prince Rides","Yer dothrae chek — You Ride Well","Introducing Yourself","Asking Names","Polite Forms","Common Exchanges","Short Dialogues","Greetings Checkpoint"]],
+      [4,"Nouns — Animate vs Inanimate",["Animate Class","Inanimate Class","Why the Distinction Matters","Animate Endings","Inanimate Endings","Plural Formation","Case System Overview","Nominative Case","Accusative Case","Genitive Case","Allative Case","Ablative Case","Noun Declension Tables","Practice with Real Words","Nouns Checkpoint"]],
+      [5,"Pronouns",["Personal Pronouns","Anha — I","Yer — You (singular)","Me — He/She","Kisha — We","Yeri — You (plural)","Mori — They","Possessive Pronouns","Anni — My","Yeri — Your","Mae — His/Her","Reflexive Forms","Demonstratives — Jin, Rek","Interrogative Pronouns","Pronouns Checkpoint"]],
+      [6,"Adjectives",["Adjective Placement","Agreement with Nouns","Size Adjectives — Zhey, Hrakkar","Color Adjectives","Quality Adjectives — Chek","Comparative Forms","Superlative Forms","Negative Adjectives","Common Adjectives","Describing People","Describing Horses","Describing Weapons","Adjective Chains","Practice Sentences","Adjectives Checkpoint"]],
+      [7,"Verbs — Present Tense",["Verb Classes","Regular Present Tense","Dothralat — to ride","Vezhven — mighty/great","Conjugation Patterns","First Person Forms","Second Person Forms","Third Person Forms","Plural Forms","Common Verbs","Verbs of Motion","Verbs of Being","Negation with Vos","Present Tense Practice","Present Checkpoint"]],
+      [8,"Verbs — Past & Future",["Past Tense Formation","Aorist Preterite","Pluperfect","Future Tense — vo","Future of Intention","Perfect Aspect","Participles","Gerunds","Irregular Past Forms","Common Past Phrases","Common Future Phrases","Mixing Tenses","Narrative Past","Time Adverbs — Asshekh, Asshekhqoyi","Past & Future Checkpoint"]],
+      [9,"Commands & Requests",["Imperative Forms","Tell Someone to Ride — Dothras","Tell Someone to Stop","Polite Requests","Negative Commands","Hortatives — Let us","Jussives — Let him","Khaleesi Commands","Battle Cries","Common Orders","Horse Commands","Warrior Commands","Softening Commands","Formal Requests","Commands Checkpoint"]],
+      [10,"Numbers & Counting",["One to Ten — At, Akat, Sen...","Eleven to Twenty","Tens — Thirty, Forty","Hundreds — Chisen","Thousands","Ordinal Numbers","Fractions — Half","How Many Horses?","Counting People","Counting Arakhs","Age Expressions","Time Expressions — Days","Seasons Counting","Quantities","Numbers Checkpoint"]],
+      [11,"Horses & Nomadic Life",["Hrazef — Horse","Vezh — Stallion","Lhazareen Horses","Horse Colors","Saddle & Gear","Arakh — Curved Sword","Bow & Arrow","Riding Vocabulary","Horse Care","Stallion Breeding","Dothraki Sea Environment","Grasslands","Rivers","Weather","Horses Checkpoint"]],
+      [12,"Food, Drink & Daily Vocabulary",["Food — Adakhat","Horsemeat — Zhavvorsa","Fermented Mare's Milk","Bread","Fish","Drink — Drekkat","Water — Havon","Fire — Vorsa","Cooking","Feast — Olajak","Hunt — Fonat","Meals","Common Foods","Ceremonial Foods","Food Checkpoint"]],
+      [13,"Family & Relationships",["Ave — Father","Mai — Mother","Qoy — Blood","Zhey — Family Member","Khal — Lord/Leader","Khaleesi — Lady/Queen","Khalakka — Prince","Dozgikh — Enemy","Friend — Okeo","Brother — Vokk","Sister — Ki","Wife — Chiori","Husband — Mahrazh","Children","Family Checkpoint"]],
+      [14,"Weapons & Warfare",["Arakh — Curved Sword","Bow — Aggendat","Arrow — Okraseroon","Shield — Mitashi","Spear — Noreth","Dagger — Chakat","Battle — Azh","War Cry","Charging Formation","Siege Vocabulary","Warrior Ranks","Bloodriders","Kos","Battle Commands","Warfare Checkpoint"]],
+      [15,"Rituals & Customs",["The Stallion That Mounts the World","Vaes Dothrak — Sacred City","Dosh Khaleen — Council of Crones","Weddings","Funerals","Coming of Age","Khal's Death","Braiding Customs","Tattoos","Dohaeris — To Serve","Honor Codes","Oaths","Taboos","Naming Children","Rituals Checkpoint"]],
+      [16,"Khal & Khaleesi — Leadership",["Choosing a Khal","Khal's Duties","Khaleesi's Role","Khalasar Hierarchy","Sworn Bloodriders","Handmaidens","Political Alliances","Drogo & Daenerys","Khal Moro","Famous Khals","Succession Crisis","Throne Imagery","Mother of Dragons","Unburnt Queen","Leadership Checkpoint"]],
+      [17,"Proverbs & Sayings",["It Is Known — Me nem nesa","The Stallion Who Mounts the World","Only Death Can Pay for Life","Blood of My Blood","Athchomar Chomakaan — Respect","Vezh Fin Saja Rhaesheseres","Common Wisdom","Horse Proverbs","War Sayings","Love Sayings","Faith Sayings","Weather Sayings","Cultural Values","Curses & Insults","Proverbs Checkpoint"]],
+      [18,"Famous Quotes from GoT",["Khaleesi's Speeches","Drogo's Vows","Blood of My Blood — Full Phrase","Ki Fin Yeni — What's Happening","Hash Shafka Dothrae Chek","Anha Vazhak Maan Rek Jin","Oath Phrases","Battle Quotes","Tender Moments","Farewell Lines","Introduction Speeches","Celebration Lines","Moment of Death","Threats","Quotes Checkpoint"]],
+      [19,"Writing Sentences",["Simple Sentence Structure","Subject-Verb-Object","Word Order Flexibility","Compound Sentences","Complex Sentences","Relative Clauses","Conditional Sentences","Reported Speech","Questions","Exclamations","Negation","Translation Practice — English to Dothraki","Translation Practice — Dothraki to English","Story Writing","Sentences Checkpoint"]],
+      [20,"Dothraki Mastery",["Alphabet & Pronunciation Final","Grammar Final","Vocabulary Final","Reading Comprehension","Khaleesi Speech Practice","Warrior Dialogue Practice","Writing a Short Story","Translation Challenge","Cultural Competency","Famous Quotes Recognition","Proverbs Recognition","Final Speech Composition","Oral Practice","Cultural Immersion","Dothraki Mastery — Athchomar!"]],
+      [21,"Dothraki Sea Geography",["Rhaesheser — The Great Grass Sea","Skahazadhan — The River","Forat — The Cliffs","The Womb of the World — Mother of Mountains","Bay of Servants","Slaver's Bay Borders","Lhazar — Land of Lambs","Qohor Forest","Free Cities Beyond","Salt Sea Shore","Fertile Lands & Camps","Khalasar Migration Routes","Trade Crossings","Sacred Lakes","Geography Checkpoint"]],
+      [22,"Vaes Dothrak — Sacred City",["The Only City","Mother of Mountains View","No Bloodshed Law","Western & Eastern Markets","The Horse Gate — Stone Stallions","Dosh Khaleen Hall","Bath of the Womb","Foreign Captives' Quarter","Slave Markets","Trade with Free Cities","Religious Ceremonies","Khal's Funeral Rites","Stallion Sacrifices","Festivals","Vaes Dothrak Checkpoint"]],
+      [23,"Songs & Music",["Anha Dothras — Songs of Riding","Rakh — Boy's Songs","Jin Yala — Wedding Songs","Funeral Laments","Battle Chants","Children's Lullabies","Drum Rhythms","Shrieking Cries","Praise Songs to Khals","Mother of Dragons Songs","Call & Response","Solo Recitation","Stallion Hymns","Storytelling Cadence","Music Checkpoint"]],
+      [24,"Storytelling Tradition",["Oral Histories of the Khalasar","Khal Drogo Legends","First Khal Mythology","Stallion Who Mounts the World Prophecy","Khalasar Origins","Tales of Conquest","Stories of the Wise","Children's Tales","Cautionary Tales","Heroic Cycles","Khaleesi Legends","Bloodrider Sagas","Memorizing Long Poems","Reciting Before the Khalasar","Storytelling Checkpoint"]],
+      [25,"Body Parts & Anatomy",["Ohazho — Head","Tih — Eye","Tihat — Eyes (plural)","Loly — Mouth","Idit — Hand","Idiy — Hands","Qoy — Blood","Hasi — Heart","Ohlah — Belly","Adra — Tongue","Vorsa — Fire (figurative — passion)","Lekh — Tongue/Language","Naqis — Nose","Khekh — Tooth","Anatomy Checkpoint"]],
+      [26,"Colors & Patterns",["Lentat — Black","Khado — Red","Yala — Green","Athasar — Yellow","Vorsasoa — Fire-Colored (Orange)","Eyak — White","Eyaki — Pale","Zeisai — Brown","Esinarat — Light","Esina — Dark","Patterns on Tents","Horse Color Vocabulary","War Paint Colors","Tattoo Vocabulary","Colors Checkpoint"]],
+      [27,"Time, Weather & Seasons",["Asshekh — Today","Zhilakh — Yesterday","Sumokh — Tomorrow","Asfir — Soon","Asto — Always","Os — Time","Athyora — Year","Krazaaj — Mountain (cold)","Vorsa — Heat","Eshne — Wind","Zhavvorsa — Hot Sun","Athasar — Day","Lomekh — Night","Krazaajofan — Storm","Time Checkpoint"]],
+      [28,"Animals of Essos",["Hrazef — Horse","Rhoa — Foal","Zhavvorsa — Mare in Heat","Loqathi — Wolf","Zhavorsa Khado — Red Lion","Rhaesh — Beast","Tongo — Falcon","Khorish — Eagle","Astakh — Snake","Khado Hrazef — Red Horse","Lazareen Sheep","Bear","Antelope","Vulture","Animals Checkpoint"]],
+      [29,"Plants & The Steppe",["Hrana — Grass","Rhaesheser — Grass Sea","Yala Hrana — Green Grass","Hrana Drozhi — Tall Grass","Eshna — Wind in Grass","Vezh — Stallion","Khovi — Watering Hole","Lakhe — Spring","Sajo — Stream","Krazaaj — Mountain","Khaqari — Desert","Yera — Edge","Alesh — Trail","Riverbank","Steppe Checkpoint"]],
+      [30,"Conversation Practice — Marketplace",["Greeting a Vendor","Yer Ezas Anna? — Will You Sell?","Asking the Price — Fini Anha Vivvelat?","Bargaining Phrases","San Anha Vivvelak — How Much I Pay","Refusing Politely","Counter Offers","Common Goods Vocabulary","Buying Horses","Buying Weapons","Buying Food","Buying Cloth","Asking for Quality","Saying Goodbye to Vendor","Marketplace Checkpoint"]],
+      [31,"Dothraki Grand Mastery",["Geography Final Review","Vaes Dothrak Final Review","Songs & Music Final Review","Storytelling Final Review","Body & Anatomy Review","Colors & Patterns Review","Time & Weather Review","Animals & Plants Review","Marketplace Conversation Final","Cultural Customs Final","Speak for 5 Minutes","Listen to Native Recording","Translate a Long Passage","Compose a Khaleesi Speech","Write Your Own Saga","Athchomar Chomakaan — Final Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dk-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('dothraki');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('dothraki');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -80,6 +80,22 @@
     for (let i = 0; i < 5 && i < lessons.length; i++) {
       lessons[i].href = 'lesson-' + (i+1) + '.html';
     }
+    // Wire the interactive "Board & Setup" lesson per game to its own piece-placing page.
+    // Each game has a different starting position, so each setup lives in its own file.
+    const setupByUnit = {
+      1:  'setup-checkers.html',           // Checkers — "The Board & Setup"
+      2:  'setup-backgammon.html',         // Backgammon — "The Board & Setup"
+      5:  'setup-othello.html',            // Othello — "The Board & Setup"
+      13: 'setup-othello.html',            // Reversi/Othello — "Board Setup & Rules"
+      15: 'setup-nine-mens-morris.html',   // Nine Men's Morris — "Board Setup"
+      17: 'setup-stratego.html'            // Stratego — "Board Setup & Deployment"
+    };
+    lessons.forEach(l => {
+      const isSetup = /Board.*Setup|Setup.*Rules|Setup.*Deployment/.test(l.title);
+      if (isSetup && setupByUnit[l.unit]) {
+        l.href = setupByUnit[l.unit];
+      }
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = await getCompletedLessons('board-games');

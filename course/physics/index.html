@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Physics</h1>
+    <p>From mechanics to relativity to quantum — Newton's laws, energy & momentum, waves, sound, optics, electromagnetism (Maxwell's equations), thermodynamics, special & general relativity, quantum mechanics, and particle physics. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Physics?",["Physics as Description of Nature","Branches of Physics","Scientific Method in Physics","Famous Physicists","Galileo & the Birth of Physics","Newton's Revolution","Einstein's Revolutions","Quantum Revolution","Theory vs Experiment","Models & Approximations","Mathematics as Physics' Language","Limits of Physics","Physics in Everyday Life","Pseudoscience vs Physics","Physics Foundations Checkpoint"]],
+      [2,"Units & Measurement",["SI Base Units","Derived Units","Unit Conversion","Dimensional Analysis","Significant Figures","Errors & Uncertainty","Standard Form / Scientific Notation","Estimation & Fermi Problems","The Mole","Length Standards","Mass Standards","Time Standards","Temperature Standards","Imperial vs Metric","Measurement Checkpoint"]],
+      [3,"Mechanics — Motion & Forces",["Position, Velocity, Acceleration","1D Kinematics","Equations of Motion","Free Fall","Projectile Motion","Reference Frames","Vectors","Vector Addition","Vector Components","Relative Motion","Circular Motion","Centripetal Acceleration","Angular Velocity","Force as Vector","Mechanics Foundations Checkpoint"]],
+      [4,"Newton's Laws",["First Law — Inertia","Second Law — F=ma","Third Law — Action-Reaction","Free-Body Diagrams","Friction","Tension","Normal Force","Inclined Planes","Pulleys","Atwood Machine","Air Resistance","Banking & Curves","Apparent Weight","Elevator Problems","Newton's Laws Checkpoint"]],
+      [5,"Energy, Work & Power",["Work — F·d","Kinetic Energy","Potential Energy","Conservation of Energy","Power","Efficiency","Spring Potential Energy","Hooke's Law","Work-Energy Theorem","Conservative Forces","Non-Conservative Forces","Energy in Collisions","Energy Diagrams","Mechanical Advantage","Energy Checkpoint"]],
+      [6,"Momentum & Collisions",["Linear Momentum","Conservation of Momentum","Impulse","Elastic Collisions","Inelastic Collisions","Perfectly Inelastic","Center of Mass","Rocket Propulsion","2D Collisions","Coefficient of Restitution","Ballistic Pendulum","Recoil","Momentum vs Energy","Real-World Collisions","Momentum Checkpoint"]],
+      [7,"Rotational Motion",["Angular Position","Angular Velocity","Angular Acceleration","Moment of Inertia","Torque","Rotational Kinetic Energy","Angular Momentum","Conservation of Angular Momentum","Gyroscopes","Precession","Rolling Without Slipping","Static Equilibrium","Center of Mass Rotation","Coriolis Effect","Rotation Checkpoint"]],
+      [8,"Gravitation",["Newton's Law of Gravitation","Gravitational Field","Surface Gravity","Orbital Mechanics","Kepler's Three Laws","Escape Velocity","Geosynchronous Orbits","Tidal Forces","Roche Limit","Lagrange Points","Three-Body Problem","Gravitational Slingshot","Gravity on Other Planets","Cavendish Experiment","Gravity Checkpoint"]],
+      [9,"Waves & Oscillations",["Simple Harmonic Motion","Pendulum","Spring Oscillation","Damped Oscillation","Driven Oscillation","Resonance","Wave Equation","Transverse vs Longitudinal","Wavelength, Frequency, Speed","Superposition","Standing Waves","Beats","Doppler Effect","Wave Reflection & Refraction","Waves Checkpoint"]],
+      [10,"Sound",["Sound as Pressure Wave","Speed of Sound","Pitch & Frequency","Loudness & Decibels","Resonant Cavities","Musical Instruments — Strings","Musical Instruments — Pipes","Hearing Range","Ultrasound","Infrasound","Doppler in Sound","Sonic Boom","Acoustics","Echolocation","Sound Checkpoint"]],
+      [11,"Light & Optics",["Light as Wave","Light as Particle","Speed of Light","Reflection","Refraction","Snell's Law","Total Internal Reflection","Lenses","Mirrors","Magnification","Diffraction","Interference","Polarization","Color & Spectrum","Optics Checkpoint"]],
+      [12,"Electricity Basics",["Electric Charge","Conductors vs Insulators","Coulomb's Law","Electric Field","Electric Potential","Voltage","Capacitors","Capacitance","Current","Resistance","Ohm's Law","Series vs Parallel","Kirchhoff's Laws","Power in Circuits","Electricity Checkpoint"]],
+      [13,"Magnetism",["Magnetic Field","Permanent Magnets","Magnetic Force on Charge","Magnetic Force on Current","Right-Hand Rule","Solenoids","Electromagnets","Magnetic Flux","Faraday's Law","Lenz's Law","Inductance","Transformers","Earth's Magnetic Field","Aurora","Magnetism Checkpoint"]],
+      [14,"Electromagnetism — Maxwell's Equations",["Gauss's Law for Electricity","Gauss's Law for Magnetism","Faraday's Law","Ampère-Maxwell Law","Displacement Current","EM Wave Equation","Speed of Light from Maxwell","EM Spectrum","Radio Waves","Microwaves","Infrared","Visible Light","Ultraviolet","X-Rays & Gamma","Maxwell Checkpoint"]],
+      [15,"Thermodynamics",["Temperature","Heat","Thermal Equilibrium","Zeroth Law","First Law — Conservation","Heat Capacity","Latent Heat","Thermal Expansion","Ideal Gas Law","Kinetic Theory","Second Law","Entropy","Heat Engines","Refrigerators","Thermo Checkpoint"]],
+      [16,"Special Relativity",["Postulates of Special Relativity","Speed of Light Invariant","Time Dilation","Length Contraction","Simultaneity","Lorentz Transformations","Relativistic Velocity Addition","Twin Paradox","Relativistic Momentum","Relativistic Energy","E=mc²","Mass-Energy Equivalence","Spacetime Diagrams","Light Cones","Special Relativity Checkpoint"]],
+      [17,"General Relativity",["Equivalence Principle","Curved Spacetime","Geodesics","Einstein Field Equations","Gravitational Time Dilation","GPS & Relativity","Gravitational Lensing","Black Holes","Event Horizon","Schwarzschild Radius","Gravitational Waves","LIGO Detection","Cosmological Constant","Expanding Universe","GR Checkpoint"]],
+      [18,"Quantum Mechanics",["Wave-Particle Duality","Photon","Photoelectric Effect","de Broglie Wavelength","Uncertainty Principle","Schrödinger Equation","Wavefunction","Probability","Quantum Tunneling","Hydrogen Atom","Quantum Numbers","Spin","Pauli Exclusion","Entanglement","QM Checkpoint"]],
+      [19,"Particle Physics",["Standard Model Overview","Quarks","Leptons","Bosons","Higgs Boson","Strong Force","Weak Force","Antimatter","Particle Accelerators","CERN & LHC","Detectors","Beyond the Standard Model","Dark Matter","Supersymmetry","Particle Physics Checkpoint"]],
+      [20,"Physics Mastery",["Mechanics Final Review","Energy & Momentum Final","Waves & Sound Final","Optics Final","Electromagnetism Final","Thermodynamics Final","Special Relativity Final","General Relativity Final","Quantum Mechanics Final","Particle Physics Final","Problem-Solving Strategies","Famous Experiments","Physics in Modern Life","Physics Olympiad Prep","Physics Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'phy-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('physics');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('physics');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

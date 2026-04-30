@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIATSIS — Indigenous Australian Languages — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+
+    .acknowledgement { max-width: 760px; margin: 24px auto 0; padding: 16px 22px; background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; border-radius: 8px; font-size: 0.92rem; line-height: 1.6; color: var(--color-text-primary, #fff); }
+    .acknowledgement strong { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>AIATSIS — Indigenous Australian Languages</h1>
+    <p>The Australian Institute of Aboriginal and Torres Strait Islander Studies' work on Indigenous languages — the Duolingo-partnership approach to revitalisation. Learn Yolŋu Matha, Pitjantjatjara, Warlpiri, Arrernte, Wiradjuri, Gamilaraay, Noongar, Yawuru, Bundjalung, Kaurna, Torres Strait languages, songlines, kinship systems, and cultural protocols. 25 units, 375 lessons.</p>
+  </header>
+
+  <section class="acknowledgement">
+    <strong>Acknowledgement of Country.</strong> We acknowledge the Traditional Custodians of the lands across Australia and pay our respects to Elders past, present, and emerging. This course is taught with respect for the Aboriginal and Torres Strait Islander peoples whose languages, knowledge, and cultures it presents — following AIATSIS Code of Ethics for Aboriginal and Torres Strait Islander Research.
+  </section>
+
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is AIATSIS?",["Australian Institute of Aboriginal and Torres Strait Islander Studies","Founded 1964 — Canberra","AIATSIS Code of Ethics","AIATSIS Library — World's Largest Indigenous Australian Collection","AIATSIS Map of Indigenous Australia","Languages, Cultures & Knowledge","Native Title Research","Family History — Link-Up Service","Audiovisual Archive","AIATSIS Council & Indigenous Leadership","Annual Summit","Publishing — Aboriginal Studies Press","Why AIATSIS Matters","Becoming an AIATSIS Member","AIATSIS Foundations Checkpoint"]],
+      [2,"Aboriginal & Torres Strait Islander Languages — Overview",["250+ Languages Pre-Colonisation","800+ Dialects","Currently 90 Languages Endangered","13 Languages Spoken by Children","Pama-Nyungan Family — 90% of Continent","Non-Pama-Nyungan Languages — Top End","Aboriginal vs Torres Strait Islander","Language Diversity by Region","Sign Languages — Auslan & Aboriginal Sign","Australian Indigenous Languages Map","UNESCO Endangered Languages","Linguistic Diversity Pre-1788","Major Language Families","Why So Many Languages","Languages Overview Checkpoint"]],
+      [3,"Indigenous Knowledge & Country",["What Is 'Country'?","Country as Living Entity","Connection to Country","Caring for Country","Welcome to Country vs Acknowledgement","Sacred Sites","Songlines (Yiri)","Dreaming (The Dreaming/Tjukurrpa)","Indigenous Astronomy","Bush Foods","Bush Medicine","Fire Stick Farming","Seasonal Calendars","Indigenous Ranger Programs","Country Checkpoint"]],
+      [4,"Songlines & The Dreaming",["What Are Songlines?","Songlines as Navigation","Songlines as Law","Tjukurrpa — The Dreaming","Wandjina Stories","Rainbow Serpent Across Cultures","Seven Sisters Songline","Bunjil — Eaglehawk Creator","Baiame — Sky Father","Eingana — Snake Mother","Baiyalala Stories","Songlines & Music","Songlines & Dance","Songlines & Art","Songlines Checkpoint"]],
+      [5,"Kinship Systems",["What Is Kinship?","Skin Names","Avoidance Relationships","Promised Marriage","Mother-in-Law Languages","Subsections — Eight Skins","Moieties — Two Halves","Totems & Kinship","Kinship & Country","Kinship & Language","Mother's Brother / Father's Sister","Brother-in-Law Avoidance","Kinship Across Languages","Mapping Your Mob","Kinship Checkpoint"]],
+      [6,"Yolŋu Matha — North East Arnhem",["Yolŋu People of Arnhem Land","Yolŋu Matha — 12+ Dialects","Dhuwa & Yirritja Moieties","Gumatj Dialect","Djambarrpuyngu Dialect","Yolŋu Numbers","Yolŋu Greetings","Manikay — Songline Tradition","Bark Painting","Yothu Yindi Band","Yolŋu Sign Language","Yolŋu Astronomy","Galiwin'ku Community","Yolŋu Education","Yolŋu Matha Checkpoint"]],
+      [7,"Pitjantjatjara — Central Australia",["Pitjantjatjara People — APY Lands","Anangu Pitjantjatjara Yankunytjatjara","Uluru-Kata Tjuta","Pitjantjatjara Phonology","Pitjantjatjara Greetings — Palya","Pitjantjatjara Numbers","Body Parts Vocabulary","Family Vocabulary","Bush Foods Vocabulary","Animals — Malu (Kangaroo), Kalaya (Emu)","Pitjantjatjara Stories","Anangu Tour Guides","Tjukurpa Law","Pitjantjatjara Education","Pitjantjatjara Checkpoint"]],
+      [8,"Warlpiri — Central Desert",["Warlpiri People — Tanami Desert","Yuendumu, Lajamanu, Willowra","Warlpiri Phonology","Warlpiri Greetings","Warlpiri Numbers","Warlpiri Sign Language","Warlpiri Stories","Bilingual Education at Yuendumu","Warlpiri Media Centre","Bush Mechanics","Warlukurlangu Artists","Jukurrpa — Warlpiri Dreaming","Warlpiri Kinship","Famous Warlpiri Speakers","Warlpiri Checkpoint"]],
+      [9,"Arrernte — Alice Springs Region",["Arrernte People — Mparntwe","Eastern, Western, Central Arrernte","Mparntwe — Alice Springs","Arrernte Phonology","Arrernte Greetings — Werte","Arrernte Numbers","Apmere — Country","Atyenhe — Family","Arrernte Stories","Caterpillar Dreaming","Yipirinya School","Arrernte Bush Foods","Arrernte Astronomy","Famous Arrernte Speakers","Arrernte Checkpoint"]],
+      [10,"Wiradjuri — Central NSW",["Wiradjuri People — Three Rivers","Yindyamarra — Respect","Wiradjuri Greetings — Yamandhu marang?","Wiradjuri Numbers","Wiradjuri Phonology","Bullai — Strong","Murray, Lachlan, Macquarie Rivers","Wiradjuri Revitalisation","Stan Grant — Wiradjuri Author","Wiradjuri at Charles Sturt University","Wiradjuri Place Names — Wagga Wagga","Wiradjuri Family Terms","Wiradjuri Stories","Wiradjuri in Schools","Wiradjuri Checkpoint"]],
+      [11,"Gamilaraay — Northern NSW",["Gamilaraay People (Kamilaroi)","Gamilaraay Country","Gamilaraay Greetings — Yaama","Gamilaraay Numbers","Gamilaraay Phonology","Gamilaraay Astronomy","Emu in the Sky","Baiame — Gamilaraay Sky Father","Gamilaraay Revitalisation","Gamilaraay at University of Sydney","Gamilaraay Music","Gamilaraay Education","Bundjalung-Gamilaraay Border","Gamilaraay Place Names","Gamilaraay Checkpoint"]],
+      [12,"Noongar — South West WA",["Noongar People — 14 Clans","Noongar Six Seasons","Birak — Hot Dry Season","Bunuru — Second Summer","Djeran — Cooling","Makuru — Rains","Djilba — Wildflower","Kambarang — Birth","Noongar Greetings — Kaya","Noongar Numbers","Noongar Place Names","Boorloo — Perth","Walyalup — Fremantle","Noongar Cultural Centre","Noongar Checkpoint"]],
+      [13,"Yawuru — Broome Region",["Yawuru People — Rubibi","Yawuru Greetings","Yawuru Phonology","Yawuru Three Seasons","Mangala — Wet Season","Marrul — Cool Dry","Wirralburu — Hot Dry","Pearl Industry History","Yawuru Conservation Estate","Liyan — Inner Spirit/Wellbeing","Yawuru Place Names","Mabu Liyan Concept","Yawuru Storytelling","Yawuru Native Title","Yawuru Checkpoint"]],
+      [14,"Bundjalung — Northern NSW & SE QLD",["Bundjalung Nation","Many Bundjalung Dialects","Bundjalung Greetings","Bundjalung Numbers","Tweed, Brunswick, Richmond Rivers","Bundjalung Country","Wollumbin — Mt Warning","Bundjalung Place Names","Lismore Region","Byron Bay — Cavanbah","Bundjalung Stories","Bundjalung Bush Foods","Bundjalung Revival","Bundjalung in Schools","Bundjalung Checkpoint"]],
+      [15,"Kaurna — Adelaide Plains",["Kaurna People — Tarndanya (Adelaide)","Kaurna Greetings — Niina marni","Kaurna Numbers","Kaurna Reawakening Project","Tarntanyangga (Victoria Square)","Karrawirra Pari (Torrens River)","Kaurna Place Names","Kaurna Phonology","Lewis O'Brien — Kaurna Elder","Yaitya Inparrila Pampakanthi (Tarrkarri Centre)","Kaurna in Public Signs","Kaurna Education","Kaurna Cultural Practice","Kaurna Welcome Phrases","Kaurna Checkpoint"]],
+      [16,"Torres Strait Creole — Yumplatok",["Torres Strait Islanders","Yumplatok — Torres Strait Creole","Most-Spoken Indigenous Australian Language","Yumplatok Origin","Yumplatok Phonology","Yumplatok Greetings","Yumplatok Numbers","Yumplatok in Music — Christine Anu","Pacific Pidgin Influence","Yumplatok in Schools","Yumplatok Bible Translation","Outer Islands Yumplatok","Mainland Yumplatok","Yumplatok Pride","Yumplatok Checkpoint"]],
+      [17,"Meriam Mir — Eastern Torres Strait",["Meriam People — Murray Island","Meriam Mir — Papuan Family","Mer (Murray Island)","Eddie Mabo — Land Rights Hero","Mabo Day","Meriam Mir Greetings","Meriam Mir Numbers","Meriam Mir Phonology","Meriam Mir Education","Meriam Calendar","Stars in Meriam — Tagai","Meriam Songs","Meriam Storytelling","Meriam Mir Revitalisation","Meriam Mir Checkpoint"]],
+      [18,"Kala Lagaw Ya — Western Torres Strait",["Kala Lagaw Ya — Australian Family","Kala Lagaw Ya Region","Spoken on Western & Central Islands","Kala Lagaw Ya Greetings","Kala Lagaw Ya Numbers","Phonology","Kala Lagaw Ya Music","Kala Lagaw Ya in Schools","Pearl Industry Vocabulary","Sea Country Vocabulary","Kala Lagaw Ya Stories","Kala Lagaw Ya Calendar","Famous Kala Lagaw Ya Speakers","Kala Lagaw Ya Pride","Kala Lagaw Ya Checkpoint"]],
+      [19,"Place Names & Country Names",["Sydney — Warrane","Melbourne — Naarm","Brisbane — Meanjin","Perth — Boorloo","Adelaide — Tarndanya","Canberra — Ngambri","Darwin — Garramilla","Hobart — Nipaluna","Cairns — Gimuy","Newcastle — Mulubinba","Wollongong — Wollongong (Original)","Geelong — Djilang","Indigenous Place Name Reclaiming","Place Name Maps","Place Names Checkpoint"]],
+      [20,"Language Revitalization Methods",["Master-Apprentice Program","Language Nests (Te Kōhanga Reo Inspired)","Bilingual Schools","Language Apps & Online Courses","Duolingo Partnership Approach","Community Recording Projects","Elder Recordings","Language Camps","Toolkit — Living Languages","Sleeping Languages","Awakening Languages","Language Documentation","Field Linguistics Ethics","Community-Driven Approach","Revitalization Checkpoint"]],
+      [21,"AIATSIS Library & Archives",["AIATSIS Library — Canberra","Browsing the Catalogue","Indigenous Australian Languages Map","Audio-Visual Archive","Mura Catalogue","Photographic Collection","Manuscript Collection","Native Title Research Archive","Family History Records","Link-Up Service","Returning Materials to Communities","Digital Collections","Online Access","Researcher Access","Library Checkpoint"]],
+      [22,"Stolen Generations & Language Loss",["Stolen Generations History","Bringing Them Home Report 1997","Sorry Day — 26 May","National Apology 2008","Language Loss as Cultural Loss","Mission Schools & Language Suppression","Cherbourg Mission","Halls Creek Mission","Recovery & Reclaiming","Healing Through Language","Ronald Wilson Inquiry","Reconciliation Australia","Treaty Discussions","Closing the Gap","Stolen Generations Checkpoint"]],
+      [23,"Cultural Protocols",["Welcome to Country","Acknowledgement of Country","Smoking Ceremonies","Sorry Business","Avoiding Cultural Appropriation","Permission to Use Stories","Permission to Use Words","Cultural Sensitivity in Media","Aboriginal Flag — Harold Thomas","Torres Strait Islander Flag","Aunty / Uncle — Respect Terms","Yarning Circles","Deep Listening (Dadirri)","Indigenous Data Sovereignty","Protocols Checkpoint"]],
+      [24,"Indigenous Astronomy & Storytelling",["Emu in the Sky","Tagai — Torres Strait Constellation","Seven Sisters — Pleiades","Wati Nyiru — The Hunter","Yolŋu Constellations","Aboriginal Eclipse Stories","Comet Stories","Seasonal Star Calendars","Songlines as Sky Maps","Bunya Cycle","Karatgurk — Wurundjeri Sun Sisters","Mortin Stars Knowledge","Indigenous Astronomers","Indigenous Knowledge Keepers","Astronomy Checkpoint"]],
+      [25,"AIATSIS Mastery",["AIATSIS Foundations Final","Languages Overview Final","Songlines & Dreaming Final","Kinship Final","Yolŋu Matha Mastery","Pitjantjatjara Mastery","Warlpiri & Arrernte Mastery","Wiradjuri & Gamilaraay Mastery","Noongar & Yawuru Mastery","Bundjalung & Kaurna Mastery","Torres Strait Languages Mastery","Place Names Mastery","Cultural Protocols Mastery","Revitalisation Final","AIATSIS Mastery!"]],
+      [26,"Tasmanian palawa kani — Reawakening a Sleeping Language",["Original Tasmanian Languages","Truganini & The Last Speakers","Sleeping Language Defined","palawa kani Project — 1990s","Tasmanian Aboriginal Centre","Building a Composite Language","palawa kani Phonology","palawa kani Greetings","palawa kani Numbers","palawa kani Place Names","kunanyi (Mt Wellington)","nipaluna (Hobart)","palawa kani in Schools","Cultural Protocols & Permission","palawa kani Checkpoint"]],
+      [27,"Murrinh-Patha — Wadeye Language Family",["Murrinh-Patha People","Wadeye Community","Murrinh-Patha Phonology","Murrinh-Patha Greetings","Murrinh-Patha Numbers","Polysynthetic Verbs","Classifier Stems","Murrinh-Patha Body Parts","Murrinh-Patha Family Terms","Daly River Region","Murrinh-Patha Stories","Bilingual Education at Wadeye","Murrinh-Patha Sign Language","Famous Murrinh-Patha Speakers","Murrinh-Patha Checkpoint"]],
+      [28,"Anindilyakwa, Tiwi & Top End Languages",["Anindilyakwa — Groote Eylandt","Anindilyakwa Greetings","Anindilyakwa Numbers","Tiwi People — Bathurst & Melville","Tiwi Language","Tiwi Greetings","Tiwi Football Club","Pukumani Ceremony","Burarra Language","Maung Language","Iwaidja Language","Kunbarlang Language","Top End Linguistic Diversity","Cross-Border Connections","Top End Languages Checkpoint"]],
+      [29,"Yindjibarndi, Wajarri & Pilbara Languages",["Yindjibarndi People — Roebourne","Yindjibarndi Phonology","Yindjibarndi Greetings","Yindjibarndi Numbers","Karijini National Park","Wajarri — Murchison Region","Wajarri Greetings","Wajarri Place Names","Adnyamathanha — Flinders Ranges","Yura Ngawarla — Adnyamathanha Language","Bardi Language","Karajarri Language","Nyangumarta Language","Pilbara Stories","Pilbara Languages Checkpoint"]],
+      [30,"Indigenous Bush Foods & Medicine",["Bush Tomato (Akudjura)","Quandong","Wattleseed","Lemon Myrtle","Davidson Plum","Finger Lime","Macadamia","Kakadu Plum — Highest Vitamin C","Witchetty Grub","Bush Honey","Bush Banana","Bush Onion","Eucalyptus Medicine","Tea Tree Oil — Indigenous Origin","Bush Foods & Medicine Checkpoint"]],
+      [31,"Indigenous Art Traditions",["Rock Art — Burrup Peninsula","Rock Art — Murujuga","Rock Art — Kakadu","X-Ray Art","Bark Painting — Arnhem Land","Cross-Hatching (Rarrk)","Dot Painting — Western Desert","Papunya Tula Movement","Albert Namatjira","Emily Kame Kngwarreye","Rover Thomas","Lin Onus","Sally Gabori","Modern Indigenous Art Movement","Indigenous Art Checkpoint"]],
+      [32,"Indigenous Music — Didgeridoo, Clapsticks & Modern",["Yidaki — The Didgeridoo","Circular Breathing","Didgeridoo Traditional Use","Clapsticks (Bilma)","Songmen Tradition","Yothu Yindi — Treaty Song","Christine Anu","Archie Roach — Took the Children Away","Geoffrey Gurrumul Yunupingu","Jessica Mauboy","Baker Boy","Briggs","Electric Fields","A.B. Original","Indigenous Music Checkpoint"]],
+      [33,"Famous Indigenous Australians",["Eddie Koiki Mabo","Cathy Freeman","Vincent Lingiari","David Gulpilil","Adam Goodes","Anthony Mundine","Linda Burney","Patrick Dodson","Mick Dodson","Lowitja O'Donoghue","Tom Calma","Stan Grant","Marcia Langton","Pearl Gibbs","Famous Australians Checkpoint"]],
+      [34,"Reconciliation, Treaty & The Future",["Reconciliation Australia","NAIDOC Week","Uluru Statement from the Heart","Voice to Parliament Referendum","Treaty Movements by State","Closing the Gap Targets","Future of Indigenous Languages","Reconciliation Future Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'aia-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('aiatsis');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('aiatsis');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

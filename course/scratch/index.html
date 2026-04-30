@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scratch — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Scratch</h1>
+    <p>MIT's block-based visual programming language — drag-and-drop coding for games, animations, interactive stories, and art. From your first sprite to building full platformers, music makers, simulations, and AI projects. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Scratch?",["A Block-Based Programming Language","Created at MIT — Mitchel Resnick","Scratch 1.0 to Scratch 3.0 History","Why Visual Coding Helps Beginners","Scratch vs Text Languages","Who Uses Scratch?","Scratch Community Stats — 100M+ Projects","Signing Up at scratch.mit.edu","Scratch Junior for Younger Kids","Privacy & Safety on Scratch","Scratch Offline Editor","Hardware Add-Ons — micro:bit, EV3","Famous Scratch Projects","Setting Goals for This Course","Scratch Intro Checkpoint"]],
+      [2,"The Scratch Editor",["The Stage — Where Sprites Live","The Sprite List","The Block Palette","The Scripts Area","The Costume Editor","The Sound Editor","Block Categories at a Glance","Coordinate System — x and y","The Backpack Tool","Save & Share Buttons","Tutorials Inside Scratch","Full Screen Mode","Project Settings & Notes","Remixing Other Projects","Editor Checkpoint"]],
+      [3,"Motion Blocks",["Move 10 Steps","Turn 15 Degrees","Point in Direction","Point Towards Mouse Pointer","Go to x y","Glide to x y","Change x by","Set x to","If on Edge, Bounce","Rotation Style","Following the Mouse","Drawing with Motion","Patrol Patterns","Random Movement","Motion Checkpoint"]],
+      [4,"Looks Blocks",["Say Hello for 2 Seconds","Think Hmm…","Switch Costume To","Next Costume","Switch Backdrop To","Change Size By","Set Size To","Change Color Effect","Show & Hide","Go to Front Layer","Speech vs Thought Bubbles","Costume Animations — Walk Cycle","Layering Sprites","Pixelate, Mosaic & Whirl","Looks Checkpoint"]],
+      [5,"Sound Blocks",["Play Sound — Pop","Play Sound Until Done","Stop All Sounds","Change Volume","Set Volume","Change Pitch Effect","Recording Your Own Voice","Importing Sounds","Sound Library Tour","Looping Background Music","Triggering Sounds on Events","Sound Effects for Actions","Music Block Extension","DJ Mixer Mini-Project","Sound Checkpoint"]],
+      [6,"Events Blocks",["When Green Flag Clicked","When Sprite Clicked","When Key Pressed","When This Sprite Clicked","When Backdrop Switches To","When Loudness Greater Than","Broadcast Message","Broadcast and Wait","When I Receive","Multiple Hat Blocks","Event-Driven Thinking","Cross-Sprite Communication","Project Startup Routines","Pause & Resume Patterns","Events Checkpoint"]],
+      [7,"Control — Loops & If",["Wait 1 Second","Repeat 10 Times","Forever Loop","If Then","If Then Else","Wait Until","Repeat Until","Stop All / This Script / Other Scripts","Clone Myself","When I Start as a Clone","Delete This Clone","Nested Loops","Nested Ifs","Loop Counters","Control Checkpoint"]],
+      [8,"Sensing Blocks",["Touching Mouse Pointer","Touching Color","Color Touching Color","Distance to Mouse","Ask and Wait — Input","Answer Variable","Key Pressed?","Mouse Down?","Mouse X & Mouse Y","Loudness","Timer","Reset Timer","Current Year/Month/Day","Username Block","Sensing Checkpoint"]],
+      [9,"Operators — Math & Logic",["Plus, Minus, Multiply, Divide","Pick Random","Less Than, Greater Than, Equals","And, Or, Not","Join Two Strings","Letter of String","Length of String","Contains?","Mod (Remainder)","Round","Math Functions — abs sin cos sqrt","Truthy & Falsy in Scratch","Operator Precedence","Building Conditions","Operators Checkpoint"]],
+      [10,"Variables",["What Is a Variable?","Make a Variable — For All Sprites or This Sprite Only","Set Variable To","Change Variable By","Show & Hide Variable","Variable Display Styles","Score Counter Project","High Score Tracking","Lives Counter","Timer Variable","Naming Conventions","Local vs Global Scope","Debugging with Variables","Watcher Display Modes","Variables Checkpoint"]],
+      [11,"Lists (Arrays)",["What Is a List?","Add to List","Delete Item of List","Replace Item of List","Insert Item at Position","Item N of List","Length of List","List Contains?","Iterating with For Loops","To-Do App in Scratch","Inventory Systems","Quiz Question Bank","Saving Lists Across Projects","List Watcher Tricks","Lists Checkpoint"]],
+      [12,"Custom Blocks (Functions)",["Define a Custom Block","Inputs — Number, String, Boolean","Run Without Screen Refresh","Recursion in Scratch","Reusable Animation Functions","Drawing Functions","Refactoring Spaghetti Code","Block Libraries","Returning Values via Variables","Common Function Patterns","Documentation in Block Names","Modular Project Design","Performance Considerations","Sharing Blocks via Backpack","Custom Blocks Checkpoint"]],
+      [13,"Sprites & Costumes",["Choosing a Sprite from Library","Painting Your Own Sprite","Vector vs Bitmap Mode","Importing Images","Costume Center & Pivot Point","Costume Naming","Resizing Sprites","Hitboxes via Costume Padding","Costume Animation Frames","Walking Animation 4-Frame","Talking Animation","Particle Effects with Costumes","Sprite Layers","Cloning Sprites","Sprites Checkpoint"]],
+      [14,"Backdrops & Stage",["Stage vs Sprites","Backdrop Library","Painting a Backdrop","Importing Backgrounds","Switching Backdrops with Events","Parallax Scrolling Effect","Day/Night Cycle","Multiple Scenes","Title Screen Design","Game Over Screen","HUD on the Backdrop","Stage-Only Scripts","Stage Variables","Backdrop Music Triggers","Stage Checkpoint"]],
+      [15,"Sound & Music",["The Music Extension","Play Drum","Play Note for Beats","Set Instrument","Tempo BPM","Sequencing Melodies","Chord Progressions","Drum Loops","Soundboard Project","Synthesizer Project","Recording with the Mic","Trimming Audio","Reversing Sounds","Music Visualizer","Sound & Music Checkpoint"]],
+      [16,"Animation Techniques",["Tweening with Glide","Easing — Linear vs Smooth","Looping Walk Cycles","Idle Animations","Particle Bursts","Screen Shake","Camera Pan & Zoom","Lighting Effects","Shadow & Reflection","Cutscenes","Speech Bubble Pacing","Storyboarding First","Scene Transitions","Stop-Motion Style","Animation Checkpoint"]],
+      [17,"Game Design — Platformers",["Platformer Anatomy","Gravity Variable","Jumping Mechanic","Wall & Floor Collision","Walking & Running","Double Jump","Coyote Time","Coin Collection","Enemy Patrols","Boss Battles","Power-Ups","Level Design Tips","Saving Progress","Polishing the Feel","Platformer Checkpoint"]],
+      [18,"Game Design — Top-Down & Arcade",["Top-Down Movement","Twin-Stick Aiming","Bullet Mechanics","Enemy AI — Chase & Flee","Tile-Based Maps","Pong Clone","Snake Clone","Asteroids Clone","Space Invaders Clone","Tower Defense Basics","Endless Runner","Maze Generator","Pickup & Inventory","Score & Combo Systems","Top-Down Checkpoint"]],
+      [19,"Interactive Stories & Art",["Branching Stories","Choose-Your-Own-Adventure","Dialog Tree System","Animated Greeting Cards","Generative Art Patterns","Mandala Maker","Drawing Apps","Spirograph Project","Fractal Patterns","Music-Reactive Visuals","Photo Filter Effects","Pen Block Deep Dive","Color Theory in Scratch","Story Pacing","Stories & Art Checkpoint"]],
+      [20,"Scratch Mastery",["Editor & Stage Review","Motion, Looks & Sound Review","Events & Control Review","Sensing & Operators Review","Variables & Lists Review","Custom Blocks Review","Sprites & Costumes Review","Backdrops & Music Review","Animation Techniques Review","Platformer Game Review","Top-Down Game Review","Stories & Art Review","Sharing & Remixing on Scratch","Joining the Scratch Community","Scratch Grand Mastery!"]],
+      [21,"Thinking in Code",["Writing Programs","Sequencing Commands","Repeating Patterns","Debugging Programs","Looping with Logic","Nesting Loops","Using If Statements","Using If-Else Statements","Conditioning on History","Using Variables","Looping with Variables","Working with Lists","Navigating a Grid","Boolean Logic & Chaining Conditionals","Building Programs Checkpoint"]],
+      [22,"Scratch Extensions",["What Are Extensions","Pen Extension — Drawing with Sprites","Music Extension — Instruments & Drums","Video Sensing — Camera Input","Text-to-Speech Extension","Translate Extension","Makey Makey Extension","micro:bit Extension","LEGO Robotics Extensions","Google Sheets Extension","Face Sensing Add-Ons","TurboWarp Custom Extensions","Creating Your Own Extension","Extension Best Practices","Extensions Checkpoint"]],
+      [23,"Generative Art in Scratch",["What Is Generative Art","Stamping for Patterns","Pen Draw Loops","Spirals & Fractals","Recursive Trees","Mandalas & Symmetry","Perlin Noise in Scratch","Random Color Palettes","Animated Generative Art","L-Systems — Plants","Mosaics & Tilings","Kaleidoscopes","Particle Systems","Interactive Generative Art","Generative Art Checkpoint"]],
+      [24,"Physics Simulation in Scratch",["Simulating Gravity","Velocity & Acceleration Variables","Bouncing Ball","Projectile Motion","Friction","Collisions — Circle to Circle","Collisions — Box to Box","Pendulum Simulation","Spring-Mass System","Particles with Forces","Orbit Simulation","Cloth Simulation — Simple","Rigid Body Basics","Fluid Effect","Physics Sim Checkpoint"]],
+      [25,"AI & Machine Learning in Scratch",["What Is AI?","Machine Learning for Kids — ML4Kids","Teachable Machine Integration","Training a Text Classifier","Training an Image Classifier","Pose Detection","Scratch + Cognimates","Building a Chatbot in Scratch","Rock Paper Scissors AI","Voice-Controlled Sprite","Image Recognition Game","Bias in AI — Ethical Discussion","Simple Neural Network Project","AI Art Generator — Simple","AI in Scratch Checkpoint"]],
+      [26,"Multiplayer & Cloud Variables",["What Are Cloud Variables","Cloud Variable Limits","Encoding Data as Numbers","Global Leaderboard Project","Shared Counters","Cloud-Based Chat — Simplified","Multiplayer Positions","Turn-Based Multiplayer","Real-Time Multiplayer Challenges","Lag & Latency","Cloud Variable Security","TurboWarp Cloud Servers","Alternative Multiplayer Extensions","Building a Multiplayer Game","Multiplayer Checkpoint"]],
+      [27,"Scratch for Classroom",["Why Teach with Scratch","Scratch in K-5 Curriculum","Middle School Projects","High School Transition to Text Code","Teacher Accounts & Studios","Managing Student Work","Rubrics for Scratch Projects","Debugging as Teaching Tool","Pair Programming in Scratch","Scratch & CS Standards","Scratch & Math Connections","Scratch & Art Connections","Differentiation in Scratch","Assessing Computational Thinking","Classroom Checkpoint"]],
+      [28,"Remixing & Scratch Community Culture",["What Is Remixing","Etiquette of Credit","Building on Remixes","Featured Projects","Scratch Studios","Commenting & Feedback","Scratch Design Studio — Monthly","Scratcher & New Scratcher Status","Scratch Team & Scratch Cat","Scratch Conferences","Scratch Wiki","ScratchEd Meetups","Fan Communities & Forums","Appropriate Sharing","Community Checkpoint"]],
+      [29,"From Scratch to Text-Based Languages",["Why Transition to Text Code","Scratch vs Python — Side by Side","Scratch vs JavaScript","Snap! — Halfway Bridge","Pyret — Step Up","Python print vs Scratch say","Python if/else — Scratch Translation","Python while — Scratch Translation","Python for — Scratch Translation","Lists in Python vs Scratch","Functions in Python vs Custom Blocks","Turtle in Python — Scratch-Like","Web Coding — JS in Browser","Your First Python Project","Transition Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sc-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('scratch');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('scratch');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

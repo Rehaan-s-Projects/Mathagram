@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Block-Based Programming Language — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    .tic-page { padding: 64px 16px 96px; max-width: 1100px; margin: 0 auto; }
+    .tic-header { text-align: center; margin-bottom: 24px; }
+    .tic-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: #8b5cf6; }
+    .tic-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .tic-header p { color: var(--color-text-secondary); max-width: 620px; margin: 4px auto 0; line-height: 1.6; }
+
+    .tic-prompt { background: var(--color-surface, #1a1a1a); color: var(--color-text-primary, #fff); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; border-left: 4px solid #8b5cf6; }
+    .tic-prompt strong { color: #c4b5fd; }
+
+    .tic-board { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    @media (max-width: 880px) { .tic-board { grid-template-columns: 1fr; } }
+
+    .tic-pane { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; }
+    .tic-pane h3 { font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-secondary, #aaa); }
+
+    /* Grid stage */
+    .stage { display: grid; gap: 2px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; aspect-ratio: 1; max-width: 420px; margin: 0 auto; }
+    .cell { background: #2a2a2a; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 24px; position: relative; }
+    .cell.wall { background: #444; }
+    .cell.goal::before { content: '🐟'; font-size: 32px; }
+    .player { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 32px; transition: transform 0.4s cubic-bezier(.5,1.6,.5,1); }
+    .player.facing-up    { transform: rotate(0deg); }
+    .player.facing-right { transform: rotate(90deg); }
+    .player.facing-down  { transform: rotate(180deg); }
+    .player.facing-left  { transform: rotate(270deg); }
+
+    .stage-controls { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+    .btn { padding: 9px 18px; border: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: transform 0.1s, opacity 0.2s; font-family: inherit; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-run { background: #22c55e; color: #fff; }
+    .btn-reset { background: rgba(255,255,255,0.08); color: var(--color-text-primary, #fff); }
+    .btn-clear { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+    /* Block palette + code area */
+    .palette, .code-area { display: flex; flex-direction: column; gap: 8px; min-height: 60px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 2px dashed transparent; }
+    .code-area { min-height: 120px; border-color: rgba(139,92,246,0.25); }
+    .code-area.drag-over { border-color: #8b5cf6; background: rgba(139,92,246,0.08); }
+
+    .block { padding: 10px 14px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; font-size: 0.92rem; font-weight: 600; cursor: grab; user-select: none; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.1s, opacity 0.2s; color: #fff; }
+    .block:active { cursor: grabbing; }
+    .block.dragging { opacity: 0.5; }
+    .block .icon { font-size: 1.1em; }
+    .block.move    { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .block.turn-l  { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .block.turn-r  { background: linear-gradient(135deg, #ec4899, #db2777); }
+    .block.repeat  { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+    .block.executing { outline: 3px solid #fde047; box-shadow: 0 0 12px rgba(253,224,71,0.5); }
+
+    .repeat-block { padding: 0; flex-direction: column; align-items: stretch; gap: 0; }
+    .repeat-header { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+    .repeat-header .count-input { width: 40px; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.3); color: #fff; font-family: inherit; font-weight: 700; text-align: center; font-size: 0.9rem; }
+    .repeat-body { padding: 6px 14px 12px 26px; min-height: 36px; display: flex; flex-direction: column; gap: 6px; border-left: 3px solid rgba(255,255,255,0.3); margin-left: 14px; border-bottom-left-radius: 8px; }
+    .repeat-body.drag-over { background: rgba(255,255,255,0.06); }
+
+    .delete-btn { margin-left: auto; background: rgba(0,0,0,0.3); border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .delete-btn:hover { background: rgba(239,68,68,0.7); }
+
+    .status { text-align: center; padding: 14px; border-radius: 8px; font-weight: 600; margin-top: 14px; min-height: 22px; }
+    .status.win  { background: rgba(34,197,94,0.15); color: #86efac; }
+    .status.fail { background: rgba(239,68,68,0.15); color: #fca5a5; }
+    .status.info { background: rgba(139,92,246,0.1); color: #c4b5fd; }
+
+    .empty-hint { color: var(--color-text-secondary, #888); font-size: 0.85rem; font-style: italic; padding: 10px; text-align: center; pointer-events: none; }
+
+    .footer-nav { text-align: center; margin-top: 32px; }
+    .footer-nav a { color: #8b5cf6; text-decoration: none; font-weight: 600; }
+    .footer-nav a:hover { text-decoration: underline; }
+
+    /* Diego — the teaching character */
+    .diego-row { display: flex; gap: 14px; align-items: flex-start; margin: 0 auto 24px; max-width: 760px; }
+    .diego-avatar { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; background: rgba(139,92,246,0.12); border: 2px solid #8b5cf6; padding: 4px; display: flex; align-items: center; justify-content: center; }
+    .diego-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .diego-avatar .name { position: absolute; transform: translateY(48px); font-size: 0.7rem; font-weight: 700; color: #8b5cf6; }
+    .diego-bubble { background: var(--color-surface, #1a1a1a); border: 1px solid rgba(139,92,246,0.35); border-radius: 14px; border-bottom-left-radius: 4px; padding: 14px 18px; color: var(--color-text-primary, #fff); line-height: 1.55; flex: 1; position: relative; box-shadow: 0 2px 8px rgba(139,92,246,0.12); }
+    .diego-bubble::before { content: ''; position: absolute; left: -10px; top: 18px; width: 0; height: 0; border-style: solid; border-width: 8px 12px 8px 0; border-color: transparent rgba(139,92,246,0.35) transparent transparent; }
+    .diego-bubble strong { color: #c4b5fd; }
+    .diego-bubble.win  { border-color: rgba(34,197,94,0.5); }
+    .diego-bubble.win::before  { border-right-color: rgba(34,197,94,0.5); }
+    .diego-bubble.fail { border-color: rgba(239,68,68,0.5); }
+    .diego-bubble.fail::before { border-right-color: rgba(239,68,68,0.5); }
+    .diego-bubble { animation: diego-pulse 0.4s ease; }
+    @keyframes diego-pulse { from { transform: translateX(-4px); opacity: 0.6; } to { transform: translateX(0); opacity: 1; } }
+
+    .diego-voice-controls { display: flex; gap: 8px; margin-top: 10px; }
+    .diego-voice-btn { background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4); border-radius: 999px; padding: 5px 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .diego-voice-btn:hover { background: rgba(139,92,246,0.28); }
+    .diego-voice-btn.muted { opacity: 0.6; text-decoration: line-through; }
+
+    /* Next Page CTA */
+    .next-cta { display: none; max-width: 760px; margin: 28px auto 0; padding: 22px 24px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.45); border-radius: 14px; text-align: center; animation: next-rise 0.4s ease; }
+    .next-cta.show { display: block; }
+    @keyframes next-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .next-cta p { color: #86efac; margin: 0 0 14px; font-weight: 600; font-size: 1.02rem; }
+    .next-page-btn { display: inline-block; background: #22c55e; color: #042f0f; text-decoration: none; padding: 12px 26px; border-radius: 10px; font-weight: 800; font-size: 1rem; font-family: inherit; transition: transform 0.1s, background 0.15s; border: none; cursor: pointer; }
+    .next-page-btn:hover { background: #16a34a; transform: translateY(-1px); }
+
+    /* Level indicator */
+    .level-bar { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 auto 18px; max-width: 760px; }
+    .level-pill { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-secondary, #aaa); transition: all 0.2s; }
+    .level-pill.active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
+    .level-pill.done { background: rgba(34,197,94,0.18); color: #86efac; border-color: rgba(34,197,94,0.4); }
+    .level-pill.done::after { content: ' ✓'; }
+
+    .next-level-btn { display: inline-block; background: #8b5cf6; color: #fff; text-decoration: none; padding: 12px 26px; border-radius: 10px; font-weight: 800; font-size: 1rem; font-family: inherit; transition: transform 0.1s, background 0.15s; border: none; cursor: pointer; margin-right: 10px; }
+    .next-level-btn:hover { background: #7c3aed; transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="tic-page">
+    <header class="tic-header">
+      <span class="tic-badge">Scratch · Unit 1 · Lesson 1</span>
+      <h1>A Block-Based Programming Language</h1>
+      <p>Code is just a sequence of instructions. Drag the pseudocode blocks below into the code area to send the cat to the fish — then press <strong>Run</strong> to execute your program, just like dragging blocks in Scratch.</p>
+    </header>
+
+    <div id="level-bar" class="level-bar"></div>
+
+    <div class="diego-row">
+      <div class="diego-avatar">
+        <img src="../../assets/characters/diego.svg" alt="Diego the Researcher">
+      </div>
+      <div>
+        <div id="diego-bubble" class="diego-bubble">
+          <strong>Hi, I'm Diego!</strong> I'll be your guide. Block-based coding is just <em>stacking instructions in order</em>. Drag a block from the palette into your program, snap them into a sequence, and press <strong>Run</strong> to watch the cat follow your steps. Help her catch the fish — and once you do, see if you can get there with fewer blocks using <strong>Repeat</strong>.
+        </div>
+        <div class="diego-voice-controls">
+          <button id="diego-play"  class="diego-voice-btn" type="button">🔊 Hear Diego</button>
+          <button id="diego-mute"  class="diego-voice-btn" type="button">🔇 Mute</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tic-prompt">
+      <strong>Challenge:</strong> <span id="challenge-text">Guide the cat (🐱) to the fish (🐟). The cat starts facing up. Use as few blocks as you can.</span>
+    </div>
+
+    <div class="tic-board">
+      <section class="tic-pane">
+        <h3>Stage</h3>
+        <div id="stage" class="stage" style="grid-template-columns: repeat(5, 1fr);"></div>
+        <div class="stage-controls">
+          <button id="run-btn"   class="btn btn-run">▶ Run</button>
+          <button id="reset-btn" class="btn btn-reset">↻ Reset</button>
+          <button id="clear-btn" class="btn btn-clear">🗑 Clear Code</button>
+        </div>
+        <div id="status" class="status info">Drag blocks from the palette into the code area.</div>
+      </section>
+
+      <section class="tic-pane">
+        <h3>Block Palette</h3>
+        <div id="palette" class="palette">
+          <div class="block move"   draggable="true" data-block="move"   ><span class="icon">⬆</span>Move Forward</div>
+          <div class="block turn-l" draggable="true" data-block="turn-l" ><span class="icon">↺</span>Turn Left</div>
+          <div class="block turn-r" draggable="true" data-block="turn-r" ><span class="icon">↻</span>Turn Right</div>
+          <div class="block repeat" draggable="true" data-block="repeat" ><span class="icon">🔁</span>Repeat&nbsp;<input class="count-input" type="number" min="1" max="20" value="3" disabled>&nbsp;Times</div>
+        </div>
+
+        <h3 style="margin-top: 18px;">Your Program</h3>
+        <div id="code-area" class="code-area" data-target="root">
+          <div class="empty-hint">Drag blocks here…</div>
+        </div>
+      </section>
+    </div>
+
+    <section id="next-cta" class="next-cta">
+      <p>🎓 Lesson 1 complete — you wrote your first program.</p>
+      <a id="next-page-btn" class="next-page-btn" href="lesson-2.html">Next Page →</a>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Scratch course</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ---- Puzzle config — 5 progressive levels ----
+    const LEVELS = [
+      {
+        // Level 1 — Intro: simple L-path forced by a wall
+        name: "Level 1 · Your First Program",
+        cols: 5, rows: 5,
+        start: { x: 0, y: 4, dir: 0 },
+        goal:  { x: 4, y: 0 },
+        walls: ['2,3', '2,2', '2,1'],
+        prompt: "Guide the cat (🐱) to the fish (🐟). She starts facing up. Use as few blocks as you can.",
+        diegoIntro: "<strong>Hi, I'm Diego!</strong> I'll be your guide. Block-based coding is just <em>stacking instructions in order</em>. Drag a block from the palette into your program, snap them into a sequence, and press <strong>Run</strong> to watch the cat follow your steps. Help her catch the fish.",
+        diegoWin: "🎉 You wrote your first program! Now let's see if you can use a <strong>Repeat</strong> block to make a shorter version.",
+      },
+      {
+        // Level 2 — Straight line, Repeat showcase
+        name: "Level 2 · Use Repeat",
+        cols: 5, rows: 5,
+        start: { x: 0, y: 4, dir: 1 },     // facing right
+        goal:  { x: 4, y: 4 },
+        walls: [],
+        prompt: "The cat needs to walk forward 4 cells. Try to do it with just <strong>two blocks</strong> using <strong>Repeat 4 Times</strong>.",
+        diegoIntro: "<strong>Diego:</strong> Now the cat is facing right and the fish is straight ahead. You <em>could</em> drop four Move Forward blocks — but watch what happens when you put one Move Forward inside <strong>Repeat 4 Times</strong>. Same result, fewer blocks. That's the whole point of a loop.",
+        diegoWin: "🔁 Beautiful loop! That's how every programmer avoids writing the same line over and over.",
+      },
+      {
+        // Level 3 — Turn + Repeat
+        name: "Level 3 · Turn & Repeat",
+        cols: 5, rows: 5,
+        start: { x: 0, y: 4, dir: 0 },     // facing up
+        goal:  { x: 4, y: 0 },
+        walls: [],
+        prompt: "Now the field is open — go up 4, turn right, go right 4. Mix <strong>Repeat</strong> with <strong>Turn Right</strong> to keep your program tight.",
+        diegoIntro: "<strong>Diego:</strong> Open field this time. The cat starts facing up, the fish is at the top-right corner. Move up 4, turn right, move right 4. Try writing it as: <em>Repeat 4 × Move</em>, <em>Turn Right</em>, <em>Repeat 4 × Move</em>.",
+        diegoWin: "👌 Two repeats around a turn — that's a sequencing pattern you'll use all the time.",
+      },
+      {
+        // Level 4 — Multi-turn maze
+        name: "Level 4 · Multi-Turn Maze",
+        cols: 6, rows: 6,
+        start: { x: 0, y: 5, dir: 0 },     // facing up
+        goal:  { x: 5, y: 5 },
+        walls: ['1,4','2,4','3,4','4,4','3,3','3,2','3,1'],
+        prompt: "The fish is to the right but a wall blocks the easy path. Find a route up, around, and back down — combine moves, turns, and repeats.",
+        diegoIntro: "<strong>Diego:</strong> Trickier maze. Trace the path with your finger first, then translate it to blocks. Hint: the cat needs to go up, then right, then down to reach the fish. Plan the turns carefully.",
+        diegoWin: "🧠 Nicely planned. Reading the path before coding is exactly how engineers approach problems.",
+      },
+      {
+        // Level 5 — Final challenge with a longer path benefiting from nested or back-to-back repeats
+        name: "Level 5 · Final Challenge",
+        cols: 7, rows: 7,
+        start: { x: 0, y: 6, dir: 0 },     // facing up
+        goal:  { x: 6, y: 0 },
+        walls: ['2,5','2,4','2,3','4,3','4,2','4,1','4,0'],
+        prompt: "Bigger grid, more obstacles. Snake through the maze — and try to express your solution with <strong>nested repeats</strong> if you can.",
+        diegoIntro: "<strong>Diego:</strong> Final challenge. Don't be intimidated — break it into segments. For each straight section, ask yourself: how many moves, then which way is the next turn? You can even put a <em>Repeat inside a Repeat</em> if a pattern repeats.",
+        diegoWin: "🏆 You finished all five levels! You've used sequence, turns, and repetition — the three pillars of every program you'll ever write. When you're ready, hit Next Page to continue.",
+      }
+    ];
+
+    const DIRS = [
+      { dx: 0, dy: -1, name: 'up' },
+      { dx: 1, dy:  0, name: 'right' },
+      { dx: 0, dy:  1, name: 'down' },
+      { dx: -1, dy: 0, name: 'left' }
+    ];
+
+    // ---- State ----
+    let levelIdx = 0;
+    let level = LEVELS[levelIdx];
+    let COLS = level.cols, ROWS = level.rows;
+    let WALLS = new Set(level.walls);
+    let player = { ...level.start };
+    let running = false;
+
+    const stage = document.getElementById('stage');
+    const codeArea = document.getElementById('code-area');
+    const status = document.getElementById('status');
+    const runBtn = document.getElementById('run-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const clearBtn = document.getElementById('clear-btn');
+
+    // ---- Stage rendering ----
+    function buildStage() {
+      stage.innerHTML = '';
+      stage.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.dataset.x = x; cell.dataset.y = y;
+          if (WALLS.has(`${x},${y}`)) cell.classList.add('wall');
+          if (x === level.goal.x && y === level.goal.y) cell.classList.add('goal');
+          stage.appendChild(cell);
+        }
+      }
+      placePlayer();
+    }
+
+    // ---- Level loading + indicator ----
+    const levelBar = document.getElementById('level-bar');
+    function renderLevelBar() {
+      levelBar.innerHTML = '';
+      LEVELS.forEach((lv, i) => {
+        const pill = document.createElement('div');
+        pill.className = 'level-pill' + (i === levelIdx ? ' active' : '') + (i < levelIdx ? ' done' : '');
+        pill.textContent = `Lv ${i + 1}`;
+        levelBar.appendChild(pill);
+      });
+    }
+    function loadLevel(idx) {
+      levelIdx = idx;
+      level = LEVELS[idx];
+      COLS = level.cols; ROWS = level.rows;
+      WALLS = new Set(level.walls);
+      player = { ...level.start };
+      running = false;
+      // Clear any code in progress
+      codeArea.querySelectorAll(':scope > .block').forEach(el => el.remove());
+      refreshHints();
+      // Update prompt + Diego
+      document.getElementById('challenge-text').innerHTML = level.prompt;
+      setDiego('', level.diegoIntro);
+      buildStage();
+      renderLevelBar();
+      setStatus('info', `${level.name} — drag blocks into your program.`);
+      // Hide any next CTA
+      nextCta.classList.remove('show');
+      nextShown = false;
+    }
+    function placePlayer() {
+      document.querySelectorAll('.player').forEach(p => p.remove());
+      const cell = stage.children[player.y * COLS + player.x];
+      const sprite = document.createElement('div');
+      sprite.className = `player facing-${DIRS[player.dir].name}`;
+      sprite.textContent = '🐱';
+      cell.appendChild(sprite);
+    }
+
+    // ---- Drag and drop ----
+    let dragged = null; // { type, fromPalette, sourceEl }
+
+    function makeBlockEl(type, count) {
+      const el = document.createElement('div');
+      el.className = 'block ' + type + (type === 'repeat' ? ' repeat-block' : '');
+      el.draggable = true;
+      el.dataset.block = type;
+
+      if (type === 'repeat') {
+        el.innerHTML = `
+          <div class="repeat-header">
+            <span class="icon">🔁</span>Repeat
+            <input class="count-input" type="number" min="1" max="20" value="${count || 3}">
+            Times
+            <button class="delete-btn" title="Remove">×</button>
+          </div>
+          <div class="repeat-body" data-target="repeat-body">
+            <div class="empty-hint">Drop blocks here…</div>
+          </div>`;
+        const body = el.querySelector('.repeat-body');
+        attachDropTarget(body);
+      } else {
+        const labels = {
+          'move':   ['⬆', 'Move Forward'],
+          'turn-l': ['↺', 'Turn Left'],
+          'turn-r': ['↻', 'Turn Right']
+        }[type];
+        el.innerHTML = `<span class="icon">${labels[0]}</span>${labels[1]}<button class="delete-btn" title="Remove">×</button>`;
+      }
+
+      el.addEventListener('dragstart', (e) => {
+        dragged = { type, fromPalette: false, sourceEl: el };
+        el.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', type);
+      });
+      el.addEventListener('dragend', () => {
+        el.classList.remove('dragging');
+        dragged = null;
+      });
+      el.querySelector('.delete-btn').addEventListener('click', () => {
+        el.remove();
+        refreshHints();
+        setStatus('info', 'Drag blocks from the palette into the code area.');
+      });
+      return el;
+    }
+
+    // Palette items: dragging clones a fresh block into a target
+    document.querySelectorAll('#palette .block').forEach(srcEl => {
+      srcEl.addEventListener('dragstart', (e) => {
+        dragged = { type: srcEl.dataset.block, fromPalette: true, sourceEl: srcEl };
+        srcEl.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('text/plain', srcEl.dataset.block);
+      });
+      srcEl.addEventListener('dragend', () => {
+        srcEl.classList.remove('dragging');
+        dragged = null;
+      });
+    });
+
+    function attachDropTarget(target) {
+      target.addEventListener('dragover', (e) => { e.preventDefault(); target.classList.add('drag-over'); });
+      target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
+      target.addEventListener('drop', (e) => {
+        e.preventDefault();
+        target.classList.remove('drag-over');
+        if (!dragged) return;
+        let newEl;
+        if (dragged.fromPalette) {
+          newEl = makeBlockEl(dragged.type);
+        } else {
+          // Move existing element. Avoid dropping a repeat into itself.
+          if (dragged.sourceEl.contains(target)) return;
+          newEl = dragged.sourceEl;
+        }
+        const hint = target.querySelector(':scope > .empty-hint');
+        if (hint) hint.remove();
+        target.appendChild(newEl);
+        refreshHints();
+      });
+    }
+    attachDropTarget(codeArea);
+
+    function refreshHints() {
+      // Re-add empty-hint placeholders to any drop target that lost its blocks.
+      document.querySelectorAll('[data-target]').forEach(t => {
+        const hasChildBlock = t.querySelector(':scope > .block');
+        const hasHint = t.querySelector(':scope > .empty-hint');
+        if (!hasChildBlock && !hasHint) {
+          const hint = document.createElement('div');
+          hint.className = 'empty-hint';
+          hint.textContent = t.dataset.target === 'repeat-body' ? 'Drop blocks here…' : 'Drag blocks here…';
+          t.appendChild(hint);
+        }
+        if (hasChildBlock && hasHint) hasHint.remove();
+      });
+    }
+
+    // ---- Program execution ----
+    function readProgram(target) {
+      const out = [];
+      target.querySelectorAll(':scope > .block').forEach(el => {
+        const type = el.dataset.block;
+        if (type === 'repeat') {
+          const count = Math.max(1, Math.min(20, parseInt(el.querySelector('.count-input').value, 10) || 1));
+          const body = el.querySelector('.repeat-body');
+          out.push({ type, count, body: readProgram(body), el });
+        } else {
+          out.push({ type, el });
+        }
+      });
+      return out;
+    }
+
+    const diegoBubble = document.getElementById('diego-bubble');
+
+    // Diego's voice — Web Speech API, calm researcher tone
+    let voiceMuted = false;
+    let cachedVoice = null;
+    function pickDiegoVoice() {
+      if (cachedVoice) return cachedVoice;
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return null;
+      const en = voices.filter(v => v.lang.startsWith('en'));
+      cachedVoice =
+        en.find(v => /daniel|alex|fred|tom|aaron|arthur|gordon|oliver|rishi/i.test(v.name) && !/female/i.test(v.name)) ||
+        en[0] || voices[0];
+      return cachedVoice;
+    }
+    if ('speechSynthesis' in window) {
+      // Voices load async on some browsers
+      window.speechSynthesis.addEventListener?.('voiceschanged', () => { cachedVoice = null; pickDiegoVoice(); });
+    }
+    function speakAsDiego(text) {
+      if (voiceMuted || !('speechSynthesis' in window) || !text) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const v = pickDiegoVoice();
+      if (v) u.voice = v;
+      u.pitch = 1.0; u.rate = 1.0; u.volume = 0.85;   // matches characters.js Diego settings
+      window.speechSynthesis.speak(u);
+    }
+    function bubbleTextOnly(html) {
+      // Strip HTML tags, collapse whitespace; replace common emoji with words.
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      return (tmp.textContent || tmp.innerText || '').replace(/🎉/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function setDiego(kind, html) {
+      diegoBubble.classList.remove('win', 'fail');
+      if (kind === 'win' || kind === 'fail') diegoBubble.classList.add(kind);
+      // Restart the entry animation
+      diegoBubble.style.animation = 'none';
+      void diegoBubble.offsetWidth;
+      diegoBubble.style.animation = '';
+      diegoBubble.innerHTML = html;
+      speakAsDiego(bubbleTextOnly(html));
+    }
+    function setStatus(kind, msg) {
+      status.className = 'status ' + kind;
+      status.textContent = msg;
+    }
+
+    function step(action) {
+      if (action === 'turn-l') {
+        player.dir = (player.dir + 3) % 4;
+      } else if (action === 'turn-r') {
+        player.dir = (player.dir + 1) % 4;
+      } else if (action === 'move') {
+        const d = DIRS[player.dir];
+        const nx = player.x + d.dx, ny = player.y + d.dy;
+        if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) return { error: 'You walked off the stage.' };
+        if (WALLS.has(`${nx},${ny}`)) return { error: 'Bumped into a wall.' };
+        player.x = nx; player.y = ny;
+      }
+      placePlayer();
+      return {};
+    }
+
+    async function runProgram(blocks) {
+      for (const b of blocks) {
+        if (!running) return { halted: true };
+        b.el.classList.add('executing');
+        await new Promise(r => setTimeout(r, 100));
+        if (b.type === 'repeat') {
+          for (let i = 0; i < b.count; i++) {
+            const r = await runProgram(b.body);
+            if (r.halted || r.error) { b.el.classList.remove('executing'); return r; }
+          }
+        } else {
+          const r = step(b.type);
+          await new Promise(r => setTimeout(r, 350));
+          if (r.error) { b.el.classList.remove('executing'); return r; }
+        }
+        b.el.classList.remove('executing');
+      }
+      return {};
+    }
+
+    runBtn.addEventListener('click', async () => {
+      if (running) return;
+      player = { ...level.start };
+      placePlayer();
+      const program = readProgram(codeArea);
+      if (program.length === 0) { setStatus('info', 'Add some blocks first!'); return; }
+      running = true;
+      runBtn.disabled = true;
+      setStatus('info', 'Running…');
+      const result = await runProgram(program);
+      running = false;
+      runBtn.disabled = false;
+      if (result.error) {
+        setStatus('fail', '❌ ' + result.error + ' Press Reset and try again.');
+        setDiego('fail', "<strong>Diego:</strong> Hmm — " + result.error.toLowerCase().replace(/\.$/, '') + ". Trace through each block in your head before pressing Run. What direction is the cat facing after each turn?");
+      } else if (player.x === level.goal.x && player.y === level.goal.y) {
+        setStatus('win',  '🎉 The cat caught the fish!');
+        const isLast = levelIdx === LEVELS.length - 1;
+        setDiego('win', "<strong>Diego:</strong> " + level.diegoWin);
+        if (isLast) {
+          revealNext();
+        } else {
+          revealNextLevel();
+        }
+      } else {
+        setStatus('fail', "The cat didn't catch the fish — keep trying.");
+        setDiego('fail', "<strong>Diego:</strong> Close, but the cat didn't land on the fish. Look at where she ended up — what extra step would get her there? Adjust your blocks and run again.");
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      running = false;
+      player = { ...level.start };
+      placePlayer();
+      setStatus('info', 'Stage reset. Press Run to try again.');
+      setDiego('', "<strong>Diego:</strong> Stage reset. Take a fresh look at your program — the cat is back at the start, ready when you are.");
+    });
+
+    clearBtn.addEventListener('click', () => {
+      codeArea.querySelectorAll(':scope > .block').forEach(el => el.remove());
+      refreshHints();
+      setStatus('info', 'Code cleared. Drag new blocks to start.');
+      setDiego('', "<strong>Diego:</strong> Cleared! Drag blocks from the palette to start a new program. Remember — order matters.");
+    });
+
+    // Voice control buttons
+    const playBtn = document.getElementById('diego-play');
+    const muteBtn = document.getElementById('diego-mute');
+    playBtn.addEventListener('click', () => {
+      if (voiceMuted) { voiceMuted = false; muteBtn.classList.remove('muted'); muteBtn.textContent = '🔇 Mute'; }
+      speakAsDiego(bubbleTextOnly(diegoBubble.innerHTML));
+    });
+    muteBtn.addEventListener('click', () => {
+      voiceMuted = !voiceMuted;
+      muteBtn.classList.toggle('muted', voiceMuted);
+      muteBtn.textContent = voiceMuted ? '🔈 Unmute' : '🔇 Mute';
+      if (voiceMuted && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+    });
+
+    // ---- Reveal the Next Page CTA on win (final level only) ----
+    const nextCta = document.getElementById('next-cta');
+    let nextShown = false;
+    function revealNext() {
+      if (nextShown) return;
+      nextShown = true;
+      nextCta.innerHTML = `
+        <p>🏆 All 5 levels complete — you finished Lesson 1.</p>
+        <a class="next-page-btn" href="lesson-2.html">Next Page →</a>`;
+      nextCta.classList.add('show');
+      nextCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function revealNextLevel() {
+      if (nextShown) return;
+      nextShown = true;
+      const upcoming = LEVELS[levelIdx + 1];
+      nextCta.innerHTML = `
+        <p>🎉 ${level.name} complete! Up next: <strong>${upcoming.name}</strong>.</p>
+        <button id="advance-level-btn" class="next-level-btn" type="button">Continue to ${upcoming.name.split(' · ')[0]} →</button>
+        <button id="replay-level-btn" class="next-page-btn" style="background:rgba(255,255,255,0.08); color:#fff;" type="button">Replay this level</button>`;
+      nextCta.classList.add('show');
+      nextCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('advance-level-btn').addEventListener('click', () => {
+        loadLevel(levelIdx + 1);
+        document.querySelector('.tic-board').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      document.getElementById('replay-level-btn').addEventListener('click', () => {
+        loadLevel(levelIdx);
+      });
+    }
+
+    // Init
+    renderLevelBar();
+    buildStage();
+  </script>
+</body>
+</html>

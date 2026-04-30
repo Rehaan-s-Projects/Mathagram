@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Backgammon — The Board & Setup</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/characters.css">
+<style>
+body { background:#f8f9fa; }
+.wrap { max-width:760px; margin:70px auto 40px; text-align:center; padding:16px; }
+h1 { font-size:1.5rem; margin-bottom:6px; }
+.sub { color:#555; font-size:0.95rem; margin-bottom:14px; font-weight:500; line-height:1.5; }
+.bar { height:10px; background:#e0e0e0; border-radius:5px; margin-bottom:18px; }
+.fill { height:100%; background:#58cc02; border-radius:5px; transition:width 0.3s; }
+.counter { font-weight:700; margin-bottom:10px; color:#374151; }
+
+.board {
+  display:grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap:0;
+  background:#8b5a2b;
+  border:6px solid #4a2c10;
+  padding:6px;
+  border-radius:6px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+  max-width:720px;
+  margin:0 auto 12px;
+}
+.point {
+  position:relative;
+  height:170px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  cursor:default;
+  user-select:none;
+}
+.point.top { justify-content:flex-start; }
+.point.bottom { justify-content:flex-end; }
+.point .triangle {
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  pointer-events:none;
+}
+.point.top.lighttri .triangle { background:linear-gradient(to bottom, #f5e6c8 0%, #f5e6c8 90%, transparent 100%); clip-path:polygon(0 0, 100% 0, 50% 100%); }
+.point.top.darktri  .triangle { background:linear-gradient(to bottom, #6b3410 0%, #6b3410 90%, transparent 100%); clip-path:polygon(0 0, 100% 0, 50% 100%); }
+.point.bottom.lighttri .triangle { background:linear-gradient(to top, #f5e6c8 0%, #f5e6c8 90%, transparent 100%); clip-path:polygon(50% 0, 0 100%, 100% 100%); }
+.point.bottom.darktri  .triangle { background:linear-gradient(to top, #6b3410 0%, #6b3410 90%, transparent 100%); clip-path:polygon(50% 0, 0 100%, 100% 100%); }
+
+.point .num {
+  position:absolute;
+  font-size:0.65rem;
+  font-weight:800;
+  color:#fff;
+  background:rgba(0,0,0,0.55);
+  padding:1px 5px;
+  border-radius:6px;
+  z-index:3;
+}
+.point.top .num { bottom:-18px; }
+.point.bottom .num { top:-18px; }
+
+.bar-col {
+  background:#4a2c10;
+  border-left:2px solid #2d1606;
+  border-right:2px solid #2d1606;
+}
+
+.checker-stack {
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:4px;
+  margin-bottom:4px;
+}
+.point.bottom .checker-stack { flex-direction:column-reverse; }
+.checker-w, .checker-b {
+  width:34px; height:34px; border-radius:50%;
+  margin:-2px 0;
+}
+.checker-w { background:radial-gradient(circle at 35% 35%,#fff,#cbd5e1); border:2px solid #1f2937; }
+.checker-b { background:radial-gradient(circle at 35% 35%,#374151,#0f172a); border:2px solid #000; }
+
+.target-overlay {
+  position:absolute;
+  top:50%; left:50%;
+  width:38px; height:38px;
+  margin:-19px 0 0 -19px;
+  border-radius:50%;
+  border:4px solid #4caf50;
+  cursor:pointer;
+  z-index:4;
+  animation:pulse 0.8s infinite;
+  background:rgba(76,175,80,0.25);
+}
+.target-overlay:hover { transform:scale(1.15); background:rgba(76,175,80,0.55); }
+@keyframes pulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(76,175,80,0.7); }
+  50% { box-shadow:0 0 0 8px rgba(76,175,80,0); }
+}
+.click-hit {
+  position:absolute; inset:0;
+  cursor:pointer; z-index:1;
+}
+
+.target-label {
+  font-size:0.7rem;
+  font-weight:700;
+  color:#1e3a8a;
+  background:#dbeafe;
+  padding:6px 10px;
+  border-radius:6px;
+  display:inline-block;
+  margin-bottom:8px;
+}
+
+.msg { padding:14px; border-radius:10px; margin:12px 0; font-weight:700; font-size:1rem; }
+.msg-ok { background:#dcfce7; color:#166534; border:2px solid #22c55e; }
+.msg-no { background:#fef2f2; color:#991b1b; border:2px solid #ef4444; }
+.btn { padding:12px 32px; font-size:1.05rem; font-weight:700; background:#58cc02; color:#fff; border:none; border-radius:12px; cursor:pointer; margin-top:10px; box-shadow:0 4px 0 #46a302; text-decoration:none; display:inline-block; }
+.btn:hover { background:#46a302; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+
+<div class="wrap">
+<h1>Backgammon — The Board & Setup</h1>
+<p class="sub">Tap each <span style="color:#4caf50;font-weight:800">GREEN CIRCLE</span> to place the next checker.<br>Top row: points 13–24. Bottom row: points 12–1. 15 white + 15 black = 30 checkers total.</p>
+<div class="bar"><div class="fill" id="bar"></div></div>
+<div class="counter" id="counter">0 / 30 checkers placed</div>
+<div class="target-label" id="next-label">Place a White checker on point 24</div>
+<div id="game"></div>
+<div id="msg"></div>
+</div>
+
+<script>
+if ('caches' in window) { caches.keys().then(function(n){n.forEach(function(k){caches.delete(k)})}); }
+if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}); }
+</script>
+<script type="module">
+import { initNav } from '../../js/nav.js';
+import { initRitaChat } from '../../js/rita-chat.js';
+initNav('../../');
+initRitaChat('../../');
+import { showBuddy, initSideCharacter } from '../../js/characters.js';
+import { calculateGrade, calculateXP, saveLessonResult } from '../../js/progress.js';
+import { onAuthChange } from '../../js/auth.js';
+initSideCharacter('william', '../../');
+
+// Standard backgammon starting position
+// Top row holds points 13-24 (left to right). Bottom row holds points 12-1 (left to right => 12 on far left, 1 on far right).
+// Setup (point: count, color):
+//  24: 2 white
+//  13: 5 black
+//  8:  3 black
+//  6:  5 white
+//  1:  2 black
+//  12: 5 white
+//  17: 3 white
+//  19: 5 black
+const startingPoint = (point, count, color) => {
+  return Array.from({length: count}, () => ({point, color}));
+};
+
+const sequence = [
+  ...startingPoint(24, 2, 'w'),
+  ...startingPoint(13, 5, 'b'),
+  ...startingPoint(8,  3, 'b'),
+  ...startingPoint(6,  5, 'w'),
+  ...startingPoint(1,  2, 'b'),
+  ...startingPoint(12, 5, 'w'),
+  ...startingPoint(17, 3, 'w'),
+  ...startingPoint(19, 5, 'b'),
+];
+const TOTAL = sequence.length; // 30
+
+let placed = {}; // point -> [{color}, ...]
+let mistakes = 0;
+let cur = 0;
+
+function colorName(c){ return c==='w' ? 'White' : 'Black'; }
+
+window.tap = function(point) {
+  const target = sequence[cur];
+  if (point === target.point) {
+    if (!placed[point]) placed[point] = [];
+    placed[point].push({color: target.color});
+    cur++;
+    showBuddy('william','correct');
+    if (cur >= TOTAL) {
+      finish();
+    } else {
+      render();
+    }
+  } else {
+    mistakes++;
+    showBuddy('william','wrong');
+    document.getElementById('msg').innerHTML = '<div class="msg msg-no">✗ Wrong point. Tap point ' + target.point + '.</div>';
+    setTimeout(()=>{ document.getElementById('msg').innerHTML=''; }, 900);
+  }
+};
+
+// Determine the column index (0-12) for a given point number, where col 6 is the bar
+function pointToCol(p) {
+  // Top row: points 13..24 -> cols 0..5 (for 13-18) and 7..12 (for 19-24)
+  // Bottom row: points 12..1 -> cols 0..5 (for 12-7) and 7..12 (for 6-1)
+  if (p >= 13 && p <= 18) return p - 13;        // 13->0, 18->5
+  if (p >= 19 && p <= 24) return (p - 19) + 7;  // 19->7, 24->12
+  if (p >= 7  && p <= 12) return 12 - p;        // 12->0, 7->5
+  if (p >= 1  && p <= 6)  return (6 - p) + 7;   // 6->7, 1->12
+  return -1;
+}
+
+function isTopRow(p) { return p >= 13 && p <= 24; }
+
+function render() {
+  document.getElementById('bar').style.width = (cur/TOTAL*100)+'%';
+  document.getElementById('counter').textContent = cur + ' / ' + TOTAL + ' checkers placed';
+  const target = sequence[cur];
+  document.getElementById('next-label').textContent =
+    'Next: place a ' + colorName(target.color) + ' checker on point ' + target.point;
+
+  // Build 13-cell wide board (top half + bar + bottom half handled via two grids inside one wrap)
+  let h = '<div class="board">';
+  // Top row: 13 cols
+  for (let col = 0; col < 13; col++) {
+    if (col === 6) { h += '<div class="bar-col" style="grid-row:1"></div>'; continue; }
+    const point = (() => {
+      if (col >= 0 && col <= 5) return 13 + col;       // top-left: 13..18
+      if (col >= 7 && col <= 12) return 19 + (col - 7); // top-right: 19..24
+    })();
+    const isLight = ((col + 0) % 2 === 0);
+    const triClass = isLight ? 'lighttri' : 'darktri';
+    const stack = placed[point] || [];
+    const isTarget = (target.point === point);
+
+    let stackHtml = '<div class="checker-stack">';
+    stack.slice(0,7).forEach(p => { stackHtml += '<div class="checker-' + p.color + '"></div>'; });
+    if (stack.length > 7) stackHtml += '<div style="font-size:0.7rem;color:#fff;font-weight:700;background:rgba(0,0,0,0.6);padding:1px 4px;border-radius:3px;">+' + (stack.length - 7) + '</div>';
+    stackHtml += '</div>';
+
+    h += '<div class="point top ' + triClass + '" data-point="' + point + '" style="grid-row:1">';
+    h += '<div class="triangle"></div>';
+    h += stackHtml;
+    h += '<div class="num">' + point + '</div>';
+    if (isTarget) {
+      h += '<div class="target-overlay" onclick="tap(' + point + ')"></div>';
+    } else {
+      h += '<div class="click-hit" onclick="tap(' + point + ')"></div>';
+    }
+    h += '</div>';
+  }
+  // Bottom row: 13 cols
+  for (let col = 0; col < 13; col++) {
+    if (col === 6) { h += '<div class="bar-col" style="grid-row:2"></div>'; continue; }
+    const point = (() => {
+      if (col >= 0 && col <= 5) return 12 - col;          // bottom-left: 12..7
+      if (col >= 7 && col <= 12) return 6 - (col - 7);    // bottom-right: 6..1
+    })();
+    const isLight = ((col + 1) % 2 === 0);
+    const triClass = isLight ? 'lighttri' : 'darktri';
+    const stack = placed[point] || [];
+    const isTarget = (target.point === point);
+
+    let stackHtml = '<div class="checker-stack">';
+    stack.slice(0,7).forEach(p => { stackHtml += '<div class="checker-' + p.color + '"></div>'; });
+    if (stack.length > 7) stackHtml += '<div style="font-size:0.7rem;color:#fff;font-weight:700;background:rgba(0,0,0,0.6);padding:1px 4px;border-radius:3px;">+' + (stack.length - 7) + '</div>';
+    stackHtml += '</div>';
+
+    h += '<div class="point bottom ' + triClass + '" data-point="' + point + '" style="grid-row:2">';
+    h += '<div class="triangle"></div>';
+    h += '<div class="num">' + point + '</div>';
+    h += stackHtml;
+    if (isTarget) {
+      h += '<div class="target-overlay" onclick="tap(' + point + ')"></div>';
+    } else {
+      h += '<div class="click-hit" onclick="tap(' + point + ')"></div>';
+    }
+    h += '</div>';
+  }
+  h += '</div>';
+  document.getElementById('game').innerHTML = h;
+}
+
+function finish() {
+  document.getElementById('bar').style.width = '100%';
+  document.getElementById('counter').textContent = TOTAL + ' / ' + TOTAL + ' checkers placed';
+  document.getElementById('next-label').textContent = 'All 30 checkers placed!';
+  // Re-render without the target ring
+  cur = TOTAL;
+  // Render full board (no target overlay, since cur is past end — but render uses sequence[cur])
+  // To avoid out-of-bounds, render with a safe empty target
+  const target = { point: -1, color: 'w' };
+  // Inline-render without target (duplicating render logic minus target)
+  let h = '<div class="board">';
+  for (let col = 0; col < 13; col++) {
+    if (col === 6) { h += '<div class="bar-col" style="grid-row:1"></div>'; continue; }
+    const point = (col<=5) ? 13+col : 19+(col-7);
+    const stack = placed[point] || [];
+    const triClass = (col%2===0) ? 'lighttri' : 'darktri';
+    let s = '<div class="checker-stack">';
+    stack.slice(0,7).forEach(p => { s += '<div class="checker-' + p.color + '"></div>'; });
+    if (stack.length > 7) s += '<div style="font-size:0.7rem;color:#fff;font-weight:700;background:rgba(0,0,0,0.6);padding:1px 4px;border-radius:3px;">+' + (stack.length - 7) + '</div>';
+    s += '</div>';
+    h += '<div class="point top ' + triClass + '" style="grid-row:1"><div class="triangle"></div>' + s + '<div class="num">' + point + '</div></div>';
+  }
+  for (let col = 0; col < 13; col++) {
+    if (col === 6) { h += '<div class="bar-col" style="grid-row:2"></div>'; continue; }
+    const point = (col<=5) ? 12-col : 6-(col-7);
+    const stack = placed[point] || [];
+    const triClass = ((col+1)%2===0) ? 'lighttri' : 'darktri';
+    let s = '<div class="checker-stack">';
+    stack.slice(0,7).forEach(p => { s += '<div class="checker-' + p.color + '"></div>'; });
+    if (stack.length > 7) s += '<div style="font-size:0.7rem;color:#fff;font-weight:700;background:rgba(0,0,0,0.6);padding:1px 4px;border-radius:3px;">+' + (stack.length - 7) + '</div>';
+    s += '</div>';
+    h += '<div class="point bottom ' + triClass + '" style="grid-row:2"><div class="triangle"></div><div class="num">' + point + '</div>' + s + '</div>';
+  }
+  h += '</div>';
+  document.getElementById('game').innerHTML = h;
+
+  const pct = Math.max(0, 100 - mistakes * 3);
+  const g = calculateGrade(pct);
+  const xp = calculateXP(pct);
+  document.getElementById('msg').innerHTML =
+    '<h2 style="font-size:2.5rem;margin:16px 0">'+g.grade+'</h2>' +
+    '<div style="font-size:2.5rem">'+'⭐'.repeat(g.stars)+'☆'.repeat(3-g.stars)+'</div>' +
+    '<div style="font-size:1.3rem;color:#eab308;font-weight:700;margin:8px 0">+'+xp+' XP</div>' +
+    '<p style="margin:10px 0;color:#888">' + (mistakes===0 ? 'Perfect setup!' : mistakes + ' mistake' + (mistakes===1?'':'s')) + '</p>' +
+    '<a href="index.html" class="btn">Back to Course</a>';
+  showBuddy('william', pct===100 ? 'perfect' : 'correct');
+  onAuthChange(async function(u){ if(u) await saveLessonResult('board-games','setup-backgammon',pct); });
+}
+
+render();
+</script>
+</body>
+</html>

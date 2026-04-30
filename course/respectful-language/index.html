@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Respectful Language — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Respectful Language</h1>
+    <p>Mathagram is a safe place for learning. A course on slurs, hate speech, why words hurt, online respect, and being an ally — taught by Edam. 90 lessons across 6 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What's a Slur?",["What Is a Slur?","Slurs vs Curse Words","Why Slurs Are Different","Power & Language","Reclaimed Words","In-Group vs Out-Group Use","Racial Slurs","Slurs Against Gender","Slurs Against Sexuality","Slurs Against Religion","Slurs Against Disability","Coded Slurs (Dog Whistles)","Slang vs Slur","Recognizing a Slur in the Wild","Slurs Checkpoint"]],
+      [2,"A Brief History of Hate Speech",["Origins of Hate Speech","Slurs in Antiquity","Slurs During Slavery","Slurs During the Holocaust","Slurs in Colonialism","Slurs in Apartheid","Slurs in the Civil Rights Era","Slurs in Modern Movements","Hate Speech Laws Worldwide","First Amendment & Hate Speech","Hate Speech Online","Section 230 (US)","European Hate Speech Laws","Free Speech vs Harm","Hate Speech History Checkpoint"]],
+      [3,"Why Words Hurt",["Words & The Brain","Microaggressions","Stereotype Threat","Cumulative Harm","Trauma & Slurs","Slurs as Threats","Words to Actions Pipeline","Hate Speech & Hate Crimes","Online Harassment Effects","Mental Health Impact","Academic Performance Impact","Bystander Effect","Witnessing vs Doing","Building Empathy","Why Words Hurt Checkpoint"]],
+      [4,"Online Respect",["Digital Citizenship","Online vs Offline Self","Empathy at a Distance","Anonymity & Cruelty","Trolling vs Disagreement","Constructive Criticism","Reporting Hate Online","Block, Mute, Report","Privacy & Safety","Doxxing — Don't","Screenshots & Receipts","Apologizing Online","Owning Your Mistakes","Building a Better Internet","Online Respect Checkpoint"]],
+      [5,"Being an Ally",["What Is Allyship?","Listening First","Amplifying Voices","Calling In vs Calling Out","Not Performing","Long-Term Commitment","Educating Yourself","Allyship Across Race","Allyship Across Identities","Allies vs Saviors","When You Mess Up","Repair & Accountability","Building Coalitions","Ally Toolkit","Ally Checkpoint"]],
+      [6,"Respectful Language Mastery",["Reflecting on Your Words","Daily Self-Check","Practicing Allyship","Talking to Friends & Family","Modeling for Younger Kids","Apologizing Sincerely","Repairing Harm","Educational Resources","Books to Read","Documentaries","Speakers & Activists","Joining Community Groups","Reporting Slurs Effectively","Lifelong Practice","Respectful Language Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'rl-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('respectful-language');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('respectful-language');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

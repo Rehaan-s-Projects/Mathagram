@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlantean — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Atlantean</h1>
+    <p>The mother of all human tongues — Marc Okrand's constructed language for Disney's Atlantis: The Lost Empire. Phonology, the boustrophedon script, vocabulary, grammar, mythology, and full Atlantean fluency. 150 lessons across 10 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Atlantean Foundations",["What Is Atlantean?","Marc Okrand & Atlantean","Disney's Atlantis: The Lost Empire","Concept of a Proto-World Language","Atlantean as Mother Tongue","Indo-European Inspiration","Hebrew & Sumerian Influences","Cultural Setting in the Film","Milo & Kida","Atlantean Today","Atlantean Linguist Communities","Why Learn Atlantean?","Sources & Documentation","Resources","Foundations Checkpoint"]],
+      [2,"The Atlantean Alphabet",["Atlantean Script Overview","Boustrophedon Reading Direction","Letter Shapes — A through L","Letter Shapes — M through Z","Vowel Markers","Consonant Sigils","Numerals","Punctuation","Writing Direction","Hand-Written vs Stylized","Recognizing Letters","Common Confusions","Practicing Strokes","Calligraphy Practice","Alphabet Checkpoint"]],
+      [3,"Phonology & Pronunciation",["Atlantean Sound Inventory","Five Vowels","Long vs Short Vowels","Consonant Clusters","Glottal Stop","Stress Patterns","Intonation","Rhythm of Atlantean","Listening to Kida","Phonetic Notation","IPA for Atlantean","Tongue Twisters","Difficult Sounds","Pronunciation Drills","Phonology Checkpoint"]],
+      [4,"Pronouns & Basic Sentences",["Pronouns — Singular","Pronouns — Plural","Personal vs Possessive","Demonstratives","Subject-Verb-Object","Topic-Comment Order","Equational Sentences","Yes/No Questions","Wh-Questions","Negation","Imperatives","Polite Forms","Pronouncing Pronouns","Sentence Drills","Sentences Checkpoint"]],
+      [5,"Verbs & Tenses",["Verb Roots","Tense Markers","Past Tense","Present Tense","Future Tense","Continuous Aspect","Perfect Aspect","Modal Verbs","Common Verbs","Auxiliary Verbs","Verb Conjugation Tables","Irregular Verbs","Compound Verbs","Verb Practice","Verbs Checkpoint"]],
+      [6,"Nouns, Modifiers & Numbers",["Singular Nouns","Plural Marking","Possession Marking","Adjective Placement","Comparatives","Superlatives","Adverbs of Time","Adverbs of Place","Numbers 1-10","Numbers 11-100","Ordinals","Counting Objects","Time of Day","Calendar Vocabulary","Nouns & Modifiers Checkpoint"]],
+      [7,"Vocabulary by Theme",["People & Family","Body Parts","Animals","Plants","Food","Weather","Geography","Buildings","Tools & Crafts","Emotions & Feelings","Colors","Nature","Sea & Ocean","Sky & Stars","Vocabulary Checkpoint"]],
+      [8,"Atlantean Culture & Mythology",["Atlantean History","Founders of Atlantis","The Heart of Atlantis","Atlantean Crystals","King Kashekim Nedakh","Queen Kida","The Sinking of Atlantis","Survival Underwater","Atlantean Religion","Mythological Creatures","Leviathan","Atlantean Government","Daily Life in Atlantis","Atlantean Art & Music","Culture Checkpoint"]],
+      [9,"Common Phrases & Expressions",["Greetings","Farewells","Thank You / You're Welcome","Apologies","Asking Names","Asking Directions","Ordering Food","Marketplace Phrases","Weather Talk","Family Talk","Romance & Affection","Battle Phrases","Diplomatic Phrases","Idioms","Phrases Checkpoint"]],
+      [10,"Atlantean Mastery",["Reading Atlantean Inscriptions","Translating English to Atlantean","Translating Atlantean to English","Writing Atlantean Sentences","Atlantean Poetry","Atlantean Songs","Atlantean Storytelling","Cosplay & Roleplay","Joining Atlantean Communities","Online Resources","Marc Okrand Interviews","Continued Study","Mawh — A Final Greeting","The Way Forward","Atlantean Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'atl-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('atlantean');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('atlantean');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

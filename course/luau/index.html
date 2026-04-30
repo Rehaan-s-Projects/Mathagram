@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luau (Roblox Coding) — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Luau (Roblox Coding)</h1>
+    <p>Master Luau — Roblox's gradually-typed Lua dialect — and ship real Roblox games. From Roblox Studio basics, variables, tables, and functions to the full object model, RemoteEvents, DataStores, ScreenGui design, TweenService, animations, ModuleScripts, pathfinding, particles, monetization, and publishing. 25 units, 375 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Luau & Roblox Studio?",["Luau — Roblox's Lua Fork","Lua vs Luau Differences","Why Roblox Built Luau","Roblox Platform Overview","Installing Roblox Studio","Roblox Account & Studio Login","Your First Place","Studio Tour — Top-Level","Studio vs Game Client","Saving Locally vs Publishing","Free vs Paid Assets","Studio System Requirements","Roblox Developer Forum","Reading the Luau Style Guide","Luau Foundations Checkpoint"]],
+      [2,"Roblox Studio Tour",["The Explorer Window","The Properties Window","The Toolbox","Output Window — Print Statements","Command Bar","Plugins Tab","Test Tab — Play, Run, Stop","View Tab — Anchor, Resize, Move","Model Tab — Group, Ungroup","Home Tab","Customizing the Layout","Themes — Dark vs Light","Keyboard Shortcuts","Auto-Save & Recovery","Studio Tour Checkpoint"]],
+      [3,"Variables & Data Types",["Declaring Variables — local","Why local Beats Global","number Type","string Type","boolean Type","nil — The Absence Value","Type Coercion in Luau","Luau Type Annotations","Type Checking — strict vs nonstrict","Constants & Conventions","Naming Conventions — camelCase","Comments — -- and --[[ ]]","Multi-Line Strings","Concatenation with .. ","Variables Checkpoint"]],
+      [4,"Operators & Expressions",["Arithmetic Operators + - * /","Modulo % and Floor Division //","Exponent ^","Comparison == ~= < > <= >=","Logical and / or / not","Short-Circuit Evaluation","String Operators","Length Operator #","Operator Precedence","Truthy & Falsy in Luau","Ternary-Like Patterns","Compound Assignment += -=","Bitwise Operators (Luau)","Common Pitfalls","Operators Checkpoint"]],
+      [5,"Strings & String Manipulation",["string Library Tour","string.format() — Like printf","string.sub() — Substrings","string.upper / lower","string.find & string.match","Lua Patterns vs Regex","string.gsub() — Replace","string.split() & table.concat","Escape Sequences","Multi-Line Strings","Unicode in Luau","Performance — Concat vs table.concat","Building a Chat Filter","Player Name Sanitization","Strings Checkpoint"]],
+      [6,"Tables — Lua's Data Structure",["What Is a Table?","Arrays in Luau","Dictionaries in Luau","Mixed Tables","Inserting & Removing — table.insert / remove","Iterating with ipairs","Iterating with pairs","table.sort()","table.concat()","Nested Tables","Cloning Tables — table.clone","Tables as Sets","Tables as Stacks & Queues","Memory & Garbage Collection","Tables Checkpoint"]],
+      [7,"Conditionals",["if / then / end","if / else / end","elseif Chains","Nested Conditionals","Conditional Expressions","Pattern Matching with Conditions","Guard Clauses","Switch-Like Tables","Validating User Input","Common Bugs","Refactoring Long Conditionals","Truthy Checks — if value then","nil Checks","Combining Conditions","Conditionals Checkpoint"]],
+      [8,"Loops",["while Loops","repeat / until Loops","Numeric for Loops","Generic for with ipairs","Generic for with pairs","Breaking Out — break","continue Equivalent","Nested Loops","Infinite Loops & RunService","Loop Performance","Iterating Workspace Children","FindFirstChild Patterns","Coroutines vs Loops","Common Loop Bugs","Loops Checkpoint"]],
+      [9,"Functions",["Defining Functions","Parameters & Arguments","Returning Values","Multiple Return Values","Default Argument Patterns","Varargs ...","Anonymous Functions","First-Class Functions","Closures","Recursion","Tail Calls in Luau","Function Annotations","Higher-Order Functions","function vs : Method Syntax","Functions Checkpoint"]],
+      [10,"Roblox Object Model",["The Game Tree — Hierarchy","DataModel — game","Workspace","Players Service","Lighting Service","ReplicatedStorage","ServerStorage","ServerScriptService","StarterPlayer & StarterGui","StarterPack","Teams Service","SoundService","TweenService","RunService","Object Model Checkpoint"]],
+      [11,"Parts, Properties & Workspace",["Inserting a Part","Part Properties — Position, Size, Color","CFrame vs Vector3","Anchored vs Unanchored","Material Property","Transparency & CanCollide","Welds & WeldConstraints","Models & PrimaryPart","Mesh Parts vs Parts","Union & Negate Operations","Lighting Effects on Parts","Touched Events","Region3 Queries","Raycasting Basics","Parts & Workspace Checkpoint"]],
+      [12,"Events & Signals",["RBXScriptSignal","Connecting with :Connect()","Disconnecting Connections","Once-Only Connections — :Once()","Wait Patterns — :Wait()","ChildAdded & ChildRemoved","DescendantAdded","Touched & TouchEnded","Players.PlayerAdded","Player.CharacterAdded","Heartbeat & Stepped","RenderStepped (Client Only)","Custom BindableEvents","Memory Leaks from Connections","Events Checkpoint"]],
+      [13,"UserInputService & Player Input",["UserInputService Tour","InputBegan & InputEnded","Detecting Keyboard Keys","Detecting Mouse Clicks","Detecting Touch Input","GetMouseLocation","ContextActionService","Mobile Touch Buttons","Gamepad Input","Camera Input — UserInputType","Modifier Keys — Shift, Ctrl","Detecting Typing in Text Boxes","Custom Input Bindings","Input Sinking","Input Checkpoint"]],
+      [14,"Player & Character",["Player Object Properties","UserId vs Name","DisplayName","Player Avatar","Character Model Structure","Spawning the Character","RespawnTime","Player.PlayerGui","Player.Backpack","Leaderstats Folder","Player.Team","CharacterAdded vs CharacterAppearanceLoaded","Player.Chatted","Inferring Local Player","Player & Character Checkpoint"]],
+      [15,"Humanoid & Movement Scripting",["The Humanoid Object","Health & MaxHealth","WalkSpeed & JumpPower","HumanoidRootPart","Humanoid:MoveTo()","Humanoid:LoadAnimation()","Humanoid States","Sit & Jump","Climbing & Swimming","Damage & Healing","HumanoidDescription","Custom Character Models","R6 vs R15 Rigs","Force Fields","Humanoid Checkpoint"]],
+      [16,"RemoteEvents & Client-Server Communication",["Filtering Enabled — Always On","Server vs Client Boundaries","RemoteEvents in ReplicatedStorage","FireServer() vs FireClient()","FireAllClients()","RemoteFunctions — InvokeServer / InvokeClient","Validating Client Data on Server","Anti-Exploit Basics","Sanity Checks","Rate-Limiting Remote Calls","Remote Latency","Bindable vs Remote Events","Replication Best Practices","Common Remote Bugs","Remote Communication Checkpoint"]],
+      [17,"DataStores & Persistence",["DataStoreService Overview","Standard DataStores","Ordered DataStores","SetAsync vs UpdateAsync","GetAsync","Removing Data","DataStore Limits","Throttling — 6 sec Cooldown","Saving on PlayerRemoving","Saving on BindToClose","ProfileService — Community Library","Versioning Saves","Backup Strategies","Cross-Server Data Issues","DataStores Checkpoint"]],
+      [18,"ScreenGui & UI Design",["ScreenGui in StarterGui","Frame, ImageLabel, TextLabel","UDim2 — Position & Size","ZIndex Layering","Anchor Point Explained","UICorner & UIStroke","UIAspectRatioConstraint","UIGridLayout, UIListLayout","ScrollingFrame","TextBox Input","ImageButton & TextButton","UI Theming","Mobile-Friendly Layouts","Localization Service","UI Design Checkpoint"]],
+      [19,"UI Scripting & TweenService",["Connecting Button Events","TweenService — Smooth Animation","TweenInfo — Duration, Style, Direction","Easing Styles — Quad, Sine, Bounce","Tweening Position vs Size","Tweening Color & Transparency","Chaining Tweens","Cancelling Tweens","Spring-Like Animation","UIPageLayout for Carousels","Sliding Menus","Notifications System","Health Bars","Progress Bars","UI Scripting Checkpoint"]],
+      [20,"Animations",["Animation Editor in Studio","Importing FBX & Roblox Avatars","Creating Keyframes","Animation Priorities","Looping Animations","Loading Animations on a Humanoid","AnimationTrack:Play() & :Stop()","Speed Modifiers","Weight Blending","Animation Markers","Animation Events","Replicating Animations to Server","Common Animation Bugs","Buying Animations on Marketplace","Animations Checkpoint"]],
+      [21,"Sound & Music",["SoundService Overview","Inserting a Sound","Sound Properties — Volume, Pitch","2D vs 3D Sounds","Sound:Play() & :Stop()","Looping Music","Sound Groups & Mixing","Sound Effects on Events","Spatialized Sound on Parts","RollOffMode","Sound Library — Roblox Audio","Custom Audio Uploads","Audio Pricing & Privacy","Background Music Patterns","Sound Checkpoint"]],
+      [22,"ModuleScripts & OOP",["What Is a ModuleScript?","require() Mechanics","Caching Behavior","Module Naming Conventions","Returning a Table from a Module","Building Utility Modules","Service Locator Pattern","Singleton Pattern in Luau","Object-Oriented Luau","__index Metatable","Inheritance Patterns","Encapsulation Tips","Module Hot-Reload Tricks","Testing Modules","Modules Checkpoint"]],
+      [23,"Pathfinding & AI",["PathfindingService Overview","Path:ComputeAsync()","Waypoints","Walkable Areas","Climb & Jump Path Costs","Pathfinding Modifiers","NPC Movement Loops","NPC State Machines","Aggro & Detection","NPC Combat Logic","Patrolling Patterns","Performance — Throttling AI","NPC Models & Humanoids","Boss AI Patterns","Pathfinding Checkpoint"]],
+      [24,"Particles & Visual Effects",["ParticleEmitter Basics","Rate, Lifetime, Speed","Color & Transparency Curves","Texture Selection","Beam vs Trail vs Particle","Beams Between Parts","Trail Effects on Movement","ScreenEffects — ColorCorrection","Bloom & DepthOfField","Lighting Effects","Skybox & Atmosphere","Camera Shake","Slow-Mo via Time Scaling","Optimizing FX Performance","FX Checkpoint"]],
+      [25,"Publishing, Monetization & Mastery",["Publishing Your Place","Naming, Description & Icon","Game Pages & Discoverability","Game Passes vs Developer Products","Robux Pricing Strategy","MarketplaceService","PromptPurchase Flow","Premium Payouts","UGC & Avatar Items","Group Games & Revenue Sharing","Analytics — Roblox Devstats","Common Bans & Moderation","Promoting on Social Media","Joining Roblox Studio Community","Luau & Roblox Grand Mastery!"]],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'lu-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('luau');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('luau');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

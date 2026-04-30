@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meteorology & Weather — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Meteorology & Weather</h1>
+    <p>How weather works — atmospheric pressure, humidity, clouds, precipitation, wind, fronts, thunderstorms, tornadoes, hurricanes, hail storms, blizzards, monsoons, forecasting, weather maps, Doppler radar, climate zones, climate change basics, and a complete cloud index (genera, species, varieties, supplementary features). 42 units, 630 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Atmosphere Basics",["Layers of Atmosphere","Troposphere","Stratosphere","Mesosphere","Thermosphere","Exosphere","Composition — Nitrogen 78%","Composition — Oxygen 21%","Trace Gases — Argon, CO2, Water Vapor","Atmospheric Mass","Pressure with Altitude","Temperature Profile","Tropopause","Ozone Layer","Atmosphere Checkpoint"]],
+      [2,"Weather vs Climate",["Definitions","Weather Variables","Climate Variables","Climate Zones","Microclimate","Mesoclimate","Macroclimate","Historical Climate","Paleoclimate","Climate Anomalies","Weather Records","Climate Records","ENSO","NAO","Weather/Climate Checkpoint"]],
+      [3,"Air Pressure",["Atmospheric Pressure Defined","Standard Pressure — 1013 hPa","Barometers","Mercury Barometer","Aneroid Barometer","Pressure & Altitude","Highs & Lows","Pressure Gradient","Coriolis Effect","Geostrophic Wind","Hydrostatic Equilibrium","Surface Pressure Maps","Isobars","Pressure Tendency","Pressure Checkpoint"]],
+      [4,"Temperature",["Temperature Scales — F, C, K","Thermometers","Diurnal Temperature Range","Seasonal Variation","Latitude Effect","Altitude Effect","Land vs Water Heating","Lapse Rate","Inversions","Heat Waves","Cold Snaps","Wind Chill","Heat Index","Apparent Temperature","Temperature Checkpoint"]],
+      [5,"Humidity & Dew Point",["Water Vapor in Air","Absolute Humidity","Relative Humidity","Specific Humidity","Mixing Ratio","Dew Point","Frost Point","Saturation","Condensation","Evaporation","Hygrometers","Sling Psychrometer","Dew Formation","Frost Formation","Humidity Checkpoint"]],
+      [6,"Clouds — 10 Types",["Cirrus","Cirrostratus","Cirrocumulus","Altostratus","Altocumulus","Stratus","Stratocumulus","Nimbostratus","Cumulus","Cumulonimbus","Cloud Heights","Cloud Formation","Lapse Rate & Clouds","Lenticular Clouds","Clouds Checkpoint"]],
+      [7,"Precipitation",["Rain","Drizzle","Snow","Sleet","Freezing Rain","Hail","Graupel","Rime Ice","Precipitation Process — Bergeron","Coalescence Process","Cloud Seeding","Acid Rain","Rain Gauges","Precipitation Records","Precipitation Checkpoint"]],
+      [8,"Wind",["Wind Causes","Pressure Gradient Force","Coriolis Force","Friction","Geostrophic Wind","Gradient Wind","Sea Breezes","Land Breezes","Mountain Breezes","Valley Breezes","Foehn Winds","Chinook","Trade Winds","Westerlies","Wind Checkpoint"]],
+      [9,"Fronts & Air Masses",["Air Masses","Continental Polar","Maritime Polar","Continental Tropical","Maritime Tropical","Cold Front","Warm Front","Stationary Front","Occluded Front","Dry Line","Mid-Latitude Cyclones","Frontal Lifting","Squall Line","Frontogenesis","Fronts Checkpoint"]],
+      [10,"Storms — Thunderstorms",["Thunderstorm Types","Single-Cell","Multi-Cell","Supercell","Squall Line","Mesoscale Convective Systems","Lightning Formation","Cloud-to-Ground Lightning","Cloud-to-Cloud Lightning","Thunder","Hail Formation","Downdrafts","Microbursts","Storm Chasing","Thunderstorm Checkpoint"]],
+      [11,"Tornadoes",["Tornado Definition","Mesocyclone","Wall Cloud","Funnel Cloud","Tornado Formation","EF Scale","Tornado Alley","Outbreaks","Tri-State Tornado 1925","Joplin 2011","Moore 2013","Storm Shelters","Watches vs Warnings","Doppler Radar Detection","Tornadoes Checkpoint"]],
+      [12,"Hurricanes",["Tropical Cyclone Anatomy","Eye","Eyewall","Spiral Bands","Saffir-Simpson Scale","Hurricane Formation","Cape Verde Hurricanes","Storm Surge","Atlantic Basin","Pacific Basin","Indian Ocean Cyclones","Naming Conventions","Famous Hurricanes — Katrina","Hurricane Hunters","Hurricanes Checkpoint"]],
+      [13,"Blizzards & Winter Storms",["Blizzard Definition","Lake-Effect Snow","Nor'easters","Ice Storms","Polar Vortex","Arctic Outbreaks","Avalanches — Weather Trigger","Whiteouts","Chinooks","Famous Blizzards","Wind Chill Dangers","Frostbite","Hypothermia","Snow Day Forecasting","Winter Storms Checkpoint"]],
+      [14,"Monsoons",["What Is a Monsoon?","Indian Monsoon","Southeast Asian Monsoon","African Monsoon","North American Monsoon","South American Monsoon","Monsoon Onset","Monsoon Withdrawal","Monsoon Floods","Monsoon Droughts","ITCZ","Cultural Importance","Agriculture & Monsoons","Climate Change & Monsoons","Monsoons Checkpoint"]],
+      [15,"Forecasting Methods",["Persistence Forecast","Climatology Forecast","Trends Forecast","Numerical Weather Prediction","Computer Models — GFS, ECMWF","Ensemble Forecasting","Statistical Methods","Analog Forecast","Aviation Forecasts","Marine Forecasts","Severe Weather Outlooks","SPC — Storm Prediction Center","Long-Range Forecasting","Forecast Verification","Forecasting Checkpoint"]],
+      [16,"Weather Maps",["Surface Maps","Upper-Air Maps","Station Models","Wind Barbs","Isotherms","Isobars","Isohypses","Isodrosotherms","Frontal Symbols","Pressure Centers","High & Low Notation","Skew-T Diagrams","Hodographs","Reading Synoptic Maps","Weather Maps Checkpoint"]],
+      [17,"Doppler Radar",["Radar Basics","Doppler Effect in Radar","Reflectivity","Velocity Products","Storm Relative Velocity","Hook Echoes","Bow Echoes","Mesocyclone Detection","Tornado Vortex Signature","Dual-Polarization Radar","Phased Array Radar","Coverage Gaps","NEXRAD Network","International Networks","Radar Checkpoint"]],
+      [18,"Climate Zones",["Köppen Classification","Tropical (A)","Dry (B)","Temperate (C)","Continental (D)","Polar (E)","Highland Climates","Tropical Rainforest","Savanna","Hot Desert","Mediterranean","Humid Subtropical","Marine West Coast","Tundra","Climate Zones Checkpoint"]],
+      [19,"Climate Change Basics",["Greenhouse Effect","Greenhouse Gases","CO2 Levels","Methane","Industrial Emissions","Global Temperature Record","Polar Ice Loss","Sea Level Rise","Ocean Acidification","Extreme Weather Events","Paris Agreement","IPCC Reports","Mitigation","Adaptation","Climate Change Checkpoint"]],
+      [20,"Meteorology Mastery",["Atmosphere Final","Pressure & Temperature Final","Humidity & Clouds Final","Precipitation Final","Wind & Fronts Final","Thunderstorms & Tornadoes Final","Hurricanes Final","Winter Storms & Monsoons Final","Forecasting Final","Weather Maps Final","Radar Final","Climate Zones Final","Climate Change Final","Building a Weather Station","Meteorology Grand Mastery!"]],
+      [21,"Hail Storms",["What Is Hail?","Hailstone Anatomy — Layers","Hail Formation in Cumulonimbus","Updraft Strength & Hail Size","Hailstone Size Categories — Pea to Softball","Largest Hailstones on Record — Vivian SD","Hail Damage to Crops","Hail Damage to Vehicles","Hail Damage to Buildings","Hail Alley — Great Plains","Hail Climatology — Where & When","Hail Suppression & Cloud Seeding","Hail Forecasting","Hail Insurance & Economic Cost","Hail Storms Checkpoint"]],
+      [22,"Cloud Index",["WMO Cloud Atlas","The 10 Genera Recap","Species — Form & Internal Structure","Varieties — Arrangement & Transparency","Supplementary Features — Cap, Tail, Funnel","Accessory Clouds — Pileus, Velum, Pannus","Cirrus Uncinus — Hooked","Cirrus Castellanus — Turreted","Altocumulus Lenticularis — UFO Clouds","Cumulonimbus Incus — Anvil","Cumulonimbus Mammatus — Pouch Clouds","Asperitas — Newest Recognized (2017)","Pyrocumulus & Pyrocumulonimbus — Fire Clouds","Nacreous & Noctilucent — Polar Stratospheric & Mesospheric","Cloud Index Checkpoint"]],
+      [23,"Lightning Deep Dive",["Lightning Physics","Charge Separation in Clouds","Stepped Leader","Return Stroke","Cloud-to-Ground","Cloud-to-Cloud","Intracloud","Positive Lightning","Sprites — Red Flashes","Elves & Jets","Ball Lightning","Lightning Mapping Networks","Lightning Strike Survival","Lightning Damage to Trees","Lightning Checkpoint"]],
+      [24,"Atmospheric Optics",["Why the Sky Is Blue","Why Sunsets Are Red","Rainbow Formation","Primary vs Secondary Rainbow","Supernumerary Bows","Halos — 22° & 46°","Sun Dogs","Light Pillars","Circumzenithal Arc","Iridescent Clouds","Crepuscular Rays","Glory","Brocken Spectre","Mirages — Inferior & Superior","Atmospheric Optics Checkpoint"]],
+      [25,"Fog Types",["Radiation Fog","Advection Fog","Upslope Fog","Steam Fog","Frontal Fog","Valley Fog","Sea Fog","Ice Fog","Freezing Fog","San Francisco Karl","Fog Forecasting","Fog Driving Hazards","Visibility Categories","Famous Fog Events","Fog Checkpoint"]],
+      [26,"Frost & Frost Damage",["Frost Formation","Hoarfrost","Window Frost","Frost Flowers","Black Frost","Advection Frost","Radiation Frost","Frost Heave","Crop Frost Damage","Frost Protection — Wind Machines","Sprinklers as Frost Protection","Smudge Pots","Frost-Free Days","Last Spring Frost","Frost Checkpoint"]],
+      [27,"Heat Waves",["Heat Wave Definition","Urban Heat Island","Compound Heat-Humidity","Wet Bulb Globe Temperature","Heat Index Revisited","Heat Dome","Health Impacts","Heat-Related Mortality","2003 European Heat Wave","2021 Pacific Northwest","Cooling Centers","Indoor Cooling Strategies","Heat Adaptation","Climate Change & Heat","Heat Wave Checkpoint"]],
+      [28,"Drought",["Drought Types — Meteorological, Agricultural, Hydrological","Palmer Drought Severity Index","Standardized Precipitation Index","Megadroughts","Dust Bowl 1930s","California Drought","African Sahel Droughts","Australian Millennium Drought","Soil Moisture Monitoring","Drought Effects on Ecosystems","Drought & Wildfires","Water Restrictions","Drought Forecasting","Drought Mitigation","Drought Checkpoint"]],
+      [29,"Air Quality & Pollution",["Particulate Matter — PM2.5, PM10","Smog Types","Photochemical Smog","Acid Rain","Volatile Organic Compounds","Ozone at Surface","Carbon Monoxide","Nitrogen Oxides","Sulfur Dioxide","Air Quality Index (AQI)","Wildfire Smoke","Indoor Air Quality","Saharan Dust Transport","London Smog 1952","Air Quality Checkpoint"]],
+      [30,"Ozone Layer Deep Dive",["Ozone Chemistry","Stratospheric Ozone","Ozone Hole Discovery","CFCs","Montreal Protocol","Ozone Recovery","Polar Stratospheric Clouds","Antarctic Ozone Hole","Arctic Ozone Variability","UV Radiation Levels","UV Index","Skin Cancer & Ozone","Ground-Level Ozone vs Stratospheric","Ozone Future","Ozone Checkpoint"]],
+      [31,"Marine Meteorology",["Sea State Codes","Beaufort Wind Scale","Significant Wave Height","Rogue Waves","Marine Forecasting","Marine Layer","Doldrums","Trade Winds at Sea","Roaring Forties","Furious Fifties","Hurricane at Sea","Tsunami Warnings","Iceberg Forecasts","Coastal Storm Warnings","Marine Met Checkpoint"]],
+      [32,"Aviation Meteorology",["METAR Reports","TAF Forecasts","Pilot Reports","Cloud Ceiling","Visibility","Turbulence — CAT","Wind Shear","Microbursts in Aviation","Icing — Rime, Clear","Volcanic Ash & Aviation","Jet Streams & Routing","Mountain Wave Turbulence","SIGMET","Pre-Flight Briefing","Aviation Met Checkpoint"]],
+      [33,"Microclimates & Urban Heat",["What Is a Microclimate?","Forest Floor Microclimate","Lakeshore Microclimate","Greenhouse Microclimate","Urban Heat Island Causes","City Materials & Heat","Cool Roofs","Green Roofs","Tree Canopy Cooling","Park Cool Islands","Wind Channeling in Cities","Air Pollution Inversions","Mitigation Strategies","Smart City Sensing","Microclimate Checkpoint"]],
+      [34,"Weather Modification",["Cloud Seeding History","Silver Iodide","Hygroscopic Seeding","Glaciogenic Seeding","Chinese Weather Modification","Olympic Weather Modification","Hail Suppression","Fog Dissipation","Hurricane Modification (Failed)","Storm Fury Project","Geoengineering Concepts","Stratospheric Aerosol Injection","Marine Cloud Brightening","Ethical Concerns","Weather Mod Checkpoint"]],
+      [35,"Numerical Weather Prediction Deep Dive",["History of NWP","Bjerknes & Richardson","First Computer Forecast (1950)","Primitive Equations","Grid Spacing","Spectral vs Grid Models","Data Assimilation","4D-Var","Ensemble Prediction","Chaos & Predictability","Lorenz Butterfly","GFS Model","ECMWF","HRRR — Rapid Refresh","NWP Checkpoint"]],
+      [36,"Satellite Meteorology",["GOES Satellites","Polar-Orbiting Satellites","Geostationary Orbits","Visible Imagery","Infrared Imagery","Water Vapor Imagery","RGB Composites","Atmospheric Sounders","Lightning Mapper (GLM)","Hurricane Tracking by Satellite","Volcanic Ash Detection","Ocean Color Sensing","Wind Profilers","Limb Sounders","Satellite Met Checkpoint"]],
+      [37,"Mercury & Venus Weather",["Mercury — No Atmosphere","Mercury Day-Night Extremes","Venus — Carbon Dioxide Atmosphere","Venus — Sulfuric Acid Clouds","Venus — Runaway Greenhouse","Surface Temperature 462°C","Atmospheric Pressure 92 atm","Super-Rotation Wind","Venus Lightning","Polar Vortex on Venus","Venera Probe Findings","Akatsuki Mission","Venus Sky Color","Venus Sunrise/Sunset","Mercury/Venus Checkpoint"]],
+      [38,"Mars Weather",["Thin Atmosphere — 0.6%","CO2-Dominant","Dust Storms — Global","Polar CO2 Caps","Polar Water Caps","Frost on Mars","Martian Snow","Martian Clouds","Yardangs from Wind","Aeolian Erosion","Mars Atmospheric Layers","Olympus Mons Air","Curiosity & Perseverance Weather","MOXIE Oxygen","Mars Checkpoint"]],
+      [39,"Jupiter & Saturn Weather",["Jupiter Atmospheric Bands","Belts vs Zones","Great Red Spot","Oval BA","Jupiter Lightning","Auroras at Jupiter","Saturn Hexagonal Storm","Saturn's Polar Vortex","Saturn Great White Spot","Saturn Lightning","Saturn Auroras","Jupiter & Saturn Wind Speeds","Atmospheric Composition","Cassini & Juno Data","Gas Giant Checkpoint"]],
+      [40,"Outer Solar System — Uranus & Neptune",["Uranus — Tilted on Side","Uranian Seasons","Methane Atmosphere","Uranus Wind Speeds","Dark Spots","Neptune — Most Distant Planet","Neptune Wind Speeds — Fastest","Neptune Great Dark Spot","Scooter — Bright Cloud","Storm Activity","Atmospheric Bands on Neptune","Voyager 2 Findings","Cold Atmospheres","Methane vs Ammonia Clouds","Outer Solar Checkpoint"]],
+      [41,"Titan, Triton & Exotic Worlds",["Titan — Saturn's Moon","Titan Methane Cycle","Liquid Methane Lakes","Methane Rain","Titan Polar Lakes — Kraken Mare","Titan Atmospheric Pressure","Titan Wind","Triton — Neptune's Moon","Triton Geysers","Pluto Atmosphere","Pluto Hazes","Io Volcanic Atmosphere","Europa & Ice Geysers","Sun's Solar Wind & Heliosphere","Exotic Worlds Checkpoint"]],
+      [42,"Exoplanet Weather",["Hot Jupiters","Tidally Locked Worlds","Day-Night Temperature Differences","WASP-12b","HD 189733b — Glass Rain","WASP-76b — Iron Rain","KELT-9b — Hottest Known Planet","Super-Earths","Sub-Neptunes","Atmospheric Spectroscopy","JWST Atmospheres","Habitable Zone Worlds","Exoplanet Cloud Detection","Phase Curves","Exoplanet Weather Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'met-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('meteorology-weather');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('meteorology-weather');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

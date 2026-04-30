@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Na'vi — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Na'vi</h1>
+    <p>The language of the Na'vi from Pandora in James Cameron's Avatar — created by linguist Paul Frommer. Ejectives, agglutinative infixes, octal numbers, tripartite alignment, tsaheylu, and the songs and clans of Pandora. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Introduction to Na'vi",["Who Are the Na'vi?","Paul Frommer — The Creator","Pandora — The Moon of Polyphemus","Na'vi in Avatar 1, 2, 3","Language Construction Goals","Why Learn Na'vi?","Learn Na'vi Community","Resources — LearnNavi.org","Dictionaries — Taronyu","Reverend Kxetse","Omatikaya Clan","Metkayina Clan — Way of Water","Tulkun Song","Learning Approach","Introduction Checkpoint"]],
+      [2,"Pandora & the Na'vi People",["Pandora Moon","Na'vi Biology — 10 Feet Tall","Queue — Neural Braid","Tsaheylu — Bond","Eywa — All-Mother","Home Tree — Kelutral","Direhorse — Pa'li","Banshee — Ikran","Thanator — Palulukan","Glowing Forest","Floating Mountains","Tree of Souls","Clans of Pandora","Na'vi Culture","Pandora Checkpoint"]],
+      [3,"Alphabet & Phonology",["Na'vi Alphabet","Vowels — a, ä, e, i, ì, o, u","Diphthongs — aw, ay, ew, ey","Consonants","Ejectives — px, tx, kx","Pseudo-Vowels — ll, rr","Fricatives — f, s, h","Stops — p, t, k","Nasals — m, n, ng","Glides — w, y","Stress Patterns","Syllable Structure","Tricky Sounds","Pronunciation Drills","Alphabet Checkpoint"]],
+      [4,"Ejectives & Tricky Sounds",["What Are Ejectives?","Px — Ejective P","Tx — Ejective T","Kx — Ejective K","Producing Ejectives","Ng — Initial Position","Rr & Ll — Syllabic Liquids","The Apostrophe — Glottal Stop","Distinction from English","Minimal Pairs","Listening Exercises","Common Mistakes","Speaking Drills","Tongue Twisters","Ejectives Checkpoint"]],
+      [5,"Greetings — Oel ngati kameie",["Kaltxì — Hello","Oel ngati kameie — I See You","Kìyevame — Goodbye","Eywa ngahu — Eywa Be With You","Fpìl oe — I Think","Fmawn lu fyape? — What's New?","Tsun oe pivlltxe — May I Speak?","Srane — Yes","Kehe — No","Ngaru lu fpom srak? — How Are You?","Oeru lu fpom — I'm Well","Introducing Yourself — Fìtxan","Polite Forms","Common Exchanges","Greetings Checkpoint"]],
+      [6,"Nouns & Articles",["Noun Structure","No Definite Article","Plural Formation","Dual — me+","Trial — pxe+","Plural — ay+","Genitive — -yä","Dative — -ru","Topical — -ìri","Common Nouns","Compound Nouns","Nouns Referring to People","Animate vs Inanimate","Noun Practice","Nouns Checkpoint"]],
+      [7,"Pronouns",["Oe — I","Nga — You (singular)","Po — He/She","Ayoe — We (exclusive)","Awnga — We (inclusive)","Ayngal — You (plural)","Fo — They","Tsa- — That","Fì- — This","Honorific — ohe, ngenga","Reflexive Forms","Possessive — oey, ngey","Pronoun Infixes","Pronouns in Action","Pronouns Checkpoint"]],
+      [8,"Verbs — Infixes",["Verb Structure","Infixes — Inside the Verb","First Position Infixes","Second Position Infixes","Third Position Infixes","Tense Infixes","Aspect Infixes","Mood Infixes","Subjunctive — iv","Imperative — iv + Subject","Negative — ke","Combining Infixes","Common Verb Examples","Reading Verb Forms","Verbs Checkpoint"]],
+      [9,"Tense System",["Past — am","Perfective Past — ìm","Present — (no infix)","Immediate Future — ìy","Future — ay","Subjunctive Past — ilv","Subjunctive Future — ìyev","Aspect — Perfective ol","Aspect — Imperfective er","Reflexive — äp","Causative — eyk","Combining Tense & Aspect","Tense Sentence Practice","Translation Drills","Tense Checkpoint"]],
+      [10,"Numbers — Octal Base 8",["Pandora Counts in 8s","Aw — One","Mune — Two","Pxey — Three","Tsìng — Four","Mrr — Five","Pukap — Six","Kinä — Seven","Vol — Eight (ten-like)","Volaw — Nine (8+1)","Volmune — Ten (8+2)","Mevol — Sixteen (2×8)","Zam — Sixty-Four","Decimal Conversion","Numbers Checkpoint"]],
+      [11,"Adjectives",["Adjective Position","A- Prefix","-a Suffix","Attributive Adjectives","Predicate Adjectives","Colors — Ean, Rim, Hì'ang","Size — Apxa, Hì'i","Quality — Sìltsan, Yerik","Comparative — Fìtxan","Superlative — Nì'aw","Describing People","Describing Places","Describing Creatures","Adjective Chains","Adjectives Checkpoint"]],
+      [12,"Tsaheylu & Bonding",["What Is Tsaheylu?","Bonding with Pa'li","Bonding with Ikran","Bonding with Tulkun","Bonding with Tree of Souls","Bonding with Mate","Spiritual Dimension","Queue Structure","Consent in Bonding","Trial of Bonding","Ritual Phrases","Clan Ceremonies","Eywa's Network","Avatar Mind-Bridge","Tsaheylu Checkpoint"]],
+      [13,"Clans & Culture",["Omatikaya — Blue Flute Clan","Metkayina — Reef Clan","Tawkami — Tree of Souls Clan","Kekunan — Air Clan","Ni'awve — Horse Clan","Olangi","Tipani","Anurai","Clan Names","Clan Customs","Olo'eyktan — Clan Leader","Tsahìk — Spiritual Leader","Taronyu — Hunter","Vrrtep — Demon (Human)","Clans Checkpoint"]],
+      [14,"Pandora Biology Vocabulary",["Ikran — Banshee","Toruk — Great Leonopteryx","Pa'li — Direhorse","Palulukan — Thanator","Nantang — Viperwolf","Yerik — Hexapede","Riti — Stingbat","Talioang — Sturmbeast","Angtsìk — Hammerhead Titanothere","Fkio — Tetrapteron","Syaksyuk — Prolemuris","Hellfire Wasp","Utral Aymokriyä — Tree of Voices","Unobtanium — Human Term","Biology Checkpoint"]],
+      [15,"Songs & Chants",["Ayvrrtep Akawng — Enemy Song","Hunt Song","Tsahìk's Chant","Lullaby — 'Ivong Na'rìng","Eywa Song","War Chant","Welcoming Song","Mourning Song","Bonding Song","Wedding Song","Victory Chant","Children's Songs","Nature Songs","Composing Your Own Chant","Songs Checkpoint"]],
+      [16,"Lenition Rules",["What Is Lenition?","Triggering Lenition","Stops → Fricatives","Ejectives → Plain Stops","px → p","tx → t","kx → k","p → f","t → s","k → h","'ts' → 's'","When Not to Lenite","Exception Cases","Practice Drills","Lenition Checkpoint"]],
+      [17,"Tripartite Alignment",["What Is Tripartite?","Intransitive Subject — Neutral","Transitive Agent — Ergative -l","Transitive Patient — Accusative -t","Why Na'vi Uses This","Examples with Real Sentences","Free Word Order","Tracking Who Does What","Dative Indirect Object","Topic Marker -ìri","Alignment Reading Practice","Alignment Writing Practice","Comparison with English","Comparison with Ergative Languages","Alignment Checkpoint"]],
+      [18,"Famous Avatar Quotes",["I See You — Oel ngati kameie","You Are Mother — Nga Sa'nok","We Are One — Tsa'u Ayoeng","Sometimes Your Whole Life Boils Down","Eywa Has Chosen","The Way of Water","Hunter's Respect","Neytiri's Lines","Jake's Coming of Age","Sully Family Lines","Metkayina Greetings","Tsireya's Lines","Return of Na'vi","Movie 2 Phrases","Quotes Checkpoint"]],
+      [19,"Writing Na'vi Sentences",["Simple Sentence Structure","Free Word Order","Using Case Markers Right","Questions — Peheyu?","Negation — Ke","Coordination — Sì","Subordination","Conditional — Txo","Purpose Clauses","Reported Speech","Relative Clauses","Translation — English to Na'vi","Translation — Na'vi to English","Story Composition","Sentences Checkpoint"]],
+      [20,"Na'vi Mastery",["Alphabet & Ejectives Final","Nouns & Cases Final","Verb Infixes Final","Tense & Aspect Final","Octal Numbers Final","Vocabulary Final","Lenition Final","Tripartite Alignment Final","Reading Comprehension","Translation Challenge","Song Recitation","Cultural Competency","Writing a Chant","Oral Fluency","Na'vi Mastery — Eywa Ngahu!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'nv-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('navi');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('navi');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fictional Languages — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+
+    /* Speaker roster — Duolingo-style mascot row */
+    .speakers { max-width: 760px; margin: 24px auto 0; padding: 18px; background: var(--color-surface, #1a1a1a); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; }
+    .speakers h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary, #aaa); margin: 0 0 14px; text-align: center; }
+    .speakers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; }
+    .speaker { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 10px; transition: transform 0.15s, background 0.15s; }
+    .speaker:hover { transform: translateY(-2px); background: rgba(139,92,246,0.08); }
+    .speaker img { width: 48px; height: 48px; border-radius: 50%; background: rgba(139,92,246,0.12); padding: 3px; }
+    .speaker .name { font-size: 0.85rem; font-weight: 700; color: var(--color-text-primary, #fff); }
+    .speaker .lang { font-size: 0.72rem; color: var(--color-text-secondary, #aaa); text-align: center; line-height: 1.3; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Fictional Languages</h1>
+    <p>Learn fictional tongues from books, films, and games — with character speakers in the Duolingo style. Klingon, High Valyrian, Dothraki, Elvish, Na'vi, Huttese, Mando'a, Vulcan, Aurebesh, plus famous conlang inventors and how to build your own. Each unit features a Mathagram speaker — meet the cast below. 25 units, 375 lessons.</p>
+  </header>
+
+  <section class="speakers">
+    <h3>Your Native Speakers</h3>
+    <div class="speakers-grid">
+      <div class="speaker"><img src="../../assets/characters/james.svg" alt="James"><span class="name">James</span><span class="lang">Klingon ·<br>Mando'a</span></div>
+      <div class="speaker"><img src="../../assets/characters/rita.svg" alt="Rita"><span class="name">Rita</span><span class="lang">High Valyrian ·<br>Royal Court Speech</span></div>
+      <div class="speaker"><img src="../../assets/characters/steve.svg" alt="Steve"><span class="name">Steve</span><span class="lang">Dothraki ·<br>Insults &amp; Combat</span></div>
+      <div class="speaker"><img src="../../assets/characters/gosia.svg" alt="Gosia"><span class="name">Gosia</span><span class="lang">Sindarin ·<br>Quenya · Tengwar</span></div>
+      <div class="speaker"><img src="../../assets/characters/diego.svg" alt="Diego"><span class="name">Diego</span><span class="lang">Na'vi · Vulcan ·<br>Conlang Theory</span></div>
+      <div class="speaker"><img src="../../assets/characters/william.svg" alt="William"><span class="name">William</span><span class="lang">Huttese ·<br>Toasts &amp; Drinks</span></div>
+      <div class="speaker"><img src="../../assets/characters/sam.svg" alt="Sam"><span class="name">Sam</span><span class="lang">Aurebesh ·<br>Numbers</span></div>
+      <div class="speaker"><img src="../../assets/characters/edam.svg" alt="Edam"><span class="name">Edam</span><span class="lang">Greetings ·<br>Course Guide</span></div>
+    </div>
+  </section>
+
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Welcome — Edam Introduces Fictional Languages",["What Is a Fictional Language?","Conlang vs Natural Language","Edam's Tour of the Cast","Why Fans Learn Fictional Languages","Fluency Numbers — Klingon vs Esperanto","Fictional Languages on Duolingo","The Tolkien Tradition","Hollywood-Created Languages","Game Conlangs","Anime Fictional Languages","Subcultures Around Conlangs","First Contact Communities","Resources — KLI, Dothraki Wiki","Picking Your First Tongue","Welcome Checkpoint"]],
+      [2,"Klingon — James, Speaker of tlhIngan Hol",["James: nuqneH — Hello!","Marc Okrand & Klingon's Origin","The Klingon Dictionary","tlhIngan Hol — The People's Language","Klingon Phonology — qaghs","Object-Verb-Subject Word Order","Klingon Pronouns","Suffixes — Many Layers","James Pronounces Hard Consonants","Klingon Imperative — Threat Forms","Hegh QaQ — A Good Death","Klingon Insults","Famous Phrases — Today Is a Good Day","KLI — Klingon Language Institute","Klingon Checkpoint with James"]],
+      [3,"High Valyrian — Rita's Regal Tongue",["Rita: Valar Morghulis — All Men Must Die","David J. Peterson Created It","High Valyrian on Duolingo","Valyrian Noun Cases — Four","Lunar, Solar, Terrestrial, Aquatic Genders","Valyrian Verb Conjugation","Rita Recites the Valyrian Greeting","Valar Dohaeris — All Men Must Serve","Dracarys — Dragonfire","Westeros vs Essos Dialects","Astapori Valyrian","Meereenese Valyrian","Targaryen Lineage Phrases","Daenerys's Famous Speeches","High Valyrian Checkpoint with Rita"]],
+      [4,"Dothraki — Steve's Horselord Speech",["Steve: Athchomar Chomakaan — Respect","David J. Peterson Created It","Dothraki Sea Vocabulary","Khal & Khaleesi","Hash yer dothrae chek? — Are You Well?","Dothraki Verb Conjugation","Dothraki Nouns — Animate vs Inanimate","Steve's Coyote-Like Pronunciation","Dothraki Insults — Sleemo Equivalents","Drogo's Famous Vows","Vezh fin saja rhaesheseres — Stallion","Khaleesi Speech — Daenerys","Linked to Dothraki Course","Dothraki & Comanche Inspiration","Dothraki Checkpoint with Steve"]],
+      [5,"Sindarin Elvish — Gosia in the Forest",["Gosia: Mae govannen — Well Met","J.R.R. Tolkien's Sindarin","Welsh-Inspired Phonology","Sindarin Mutation Rules","Lenition","Nasal Mutation","Stop Mutation","Mixed Mutation","Gosia Sings Lúthien's Lay","A Elbereth Gilthoniel","Aragorn's Elessar","Common Sindarin Words","Linked to Elvish Course","Sindarin Cinematic Lines","Sindarin Checkpoint with Gosia"]],
+      [6,"Quenya Elvish — Gosia's High Tongue",["Gosia: Aiya — Hail","Tolkien's Quenya","Finnish Inspiration","Quenya Cases — Ten of Them","Quenya Verb Conjugation","Quenya Pronouns","Galadriel's Lament — Namárië","Gosia Recites Namárië","Eärendil Was a Mariner","High Speech vs Common Tongue","Quenya in Films","Quenya Adjectives","Telerin Sister Tongue","Linked to Elvish Course","Quenya Checkpoint with Gosia"]],
+      [7,"Na'vi — Diego on Pandora",["Diego: Oel ngati kameie — I See You","Paul Frommer Created Na'vi","Pandora & the Omatikaya","Na'vi Phonology — Ejectives","Diego Pronounces px, tx, kx","Tripartite Alignment","Na'vi Verb Infixes","Octal Numbers — Base 8","Tsaheylu — Bonding","Famous Avatar Quotes","Way of Water Phrases","Linked to Na'vi Course","Na'vi Songs & Chants","Lenition Rules","Na'vi Checkpoint with Diego"]],
+      [8,"Huttese — William's Smuggler Tongue",["William: H'chu apenkee — Hello","Ben Burtt Created Huttese","Quechua Inspiration","Huttese Phonology","William Sounds Like a Wise Smuggler","Bargon — Hunt","Boska — Let's Go","Stoopa — Idiot","Wupiupi — Currency","Han Solo & Greedo Cantina","Watto's Phrases","Jabba's Throne Speech","Linked to Huttese Course","Mos Eisley Phrases","Huttese Checkpoint with William"]],
+      [9,"Mando'a — James in Beskar Armor",["James: Su cuy'gar — You're Still Alive","Karen Traviss Wrote Mando'a","Mandalorian Code (Resol'nare)","K'oyacyi — Stay Alive","Mando'a Phonology","Mando'a Cases","Vode An — Brothers All","Cuy'val Dar — Those No Longer Counted","James Recites the Mandalorian Creed","This Is the Way","Bo-Katan Phrases","Boba Fett's Words","Children's Songs — Vode An","Mandalorian Battle Cries","Mando'a Checkpoint with James"]],
+      [10,"Vulcan — Diego, the Logical Speaker",["Diego: Dif-tor heh smusma — Live Long & Prosper","Marc Okrand & Vulcan","James Doohan's Original Vulcan","Spock's Phrases","Logic-Forward Sentence Structure","Vulcan Greeting Hand Sign","Kal-if-fee — Marriage Combat","Diego's Calm Pronunciation","Pon Farr — Mating Cycle","T'Pau & Sarek's Court","Vulcan Salute","Vulcan Numbers","IDIC Symbol","Vulcan Mind-Meld Phrases","Vulcan Checkpoint with Diego"]],
+      [11,"Klingon Script — pIqaD with James",["James: Reading the Walls of Qo'noS","pIqaD — Klingon Script","Letterforms","Punctuation","Direction of Writing","Calligraphy in pIqaD","Inscription on Bat'leths","Movie Title Cards","Star Trek: Discovery Klingon","James Writes Your Name","Reading Klingon News","Klingon Dictionary in Script","Famous pIqaD Inscriptions","Comparing pIqaD to Tengwar","pIqaD Checkpoint with James"]],
+      [12,"Tengwar Script — Gosia's Calligraphy",["Gosia: Writing in Tengwar","Tengwar Modes — Many","Classical Mode","Mode of Beleriand","Mode of English","Tehtar Diacritical Marks","Téma Rows — Tinco, Parma, Calma, Quessë","Writing Your Name","One Ring Inscription","Door of Durin","Famous Tengwar Inscriptions","Tengwar Pen Brushes","Comparison to Cirth","Linked to Elvish Course","Tengwar Checkpoint with Gosia"]],
+      [13,"Aurebesh — Sam, the Galactic Standard Reader",["Sam: Reading Aurebesh","Star Wars Galactic Basic","Aurebesh Letters","Aurebesh Numbers","Sam Reads Cantina Signs","Aurebesh in Movies","Cargo Manifest Reading","Imperial Signage","Resistance Code","High Galactic Alphabet","Comparison to Latin Alphabet","Sam Writes Your Name in Aurebesh","Aurebesh Tattoos","Aurebesh Decoder Apps","Aurebesh Checkpoint with Sam"]],
+      [14,"Fictional Numbers — Sam Counts in Many Tongues",["Sam: Counting in Klingon — wa', cha', wej","Counting in High Valyrian","Counting in Dothraki","Counting in Sindarin","Counting in Quenya","Counting in Na'vi (Octal)","Counting in Huttese","Counting in Mando'a","Counting in Vulcan","Counting in Aurebesh","Hexadecimal in Sci-Fi","Counting Cards Across Tongues","Sam Bargains in Multiple Languages","Sam's Number Songs","Numbers Checkpoint with Sam"]],
+      [15,"Fictional Greetings Comparison — Edam Tours",["Edam: A Greeting Tour","tlhIngan Hol — nuqneH","High Valyrian — Rytsas","Dothraki — M'athchomaroon","Sindarin — Mae govannen","Quenya — Aiya","Na'vi — Kaltxì","Huttese — H'chu apenkee","Mando'a — Su cuy'gar","Vulcan — Dif-tor heh smusma","Edam Compares Tones","Greeting Etiquette","Greeting Customs","Cultural Notes","Greetings Checkpoint with Edam"]],
+      [16,"Fictional Insults & Combat — Steve & James",["Steve: Insults of the Underworld","James: Battle Cries","Klingon Insults — petaQ","Dothraki Curses","Huttese — Sleemo, Stoopa","Mando'a Threats","High Valyrian Curses","Na'vi Battle Phrases","Steve's Trickster Phrases","James's War Roars","Honor Combat Phrases","Duel Etiquette","Bloodriders' Vows","Mandalorian Death Cries","Insults & Combat Checkpoint"]],
+      [17,"Fictional Romantic Phrases — Rita's Love Letters",["Rita: I Love You in Many Tongues","Klingon — qamuSHa'","High Valyrian — Avy jorrāelan","Dothraki — Anha zhilak yera","Sindarin — Gi melin","Quenya — Tye-melinyë","Na'vi — Nga yawne lu oer","Huttese — Romantic Idioms","Vulcan — Pon Farr Vows","Mando'a — Cyar'ika","Rita Reads Love Poetry","Wedding Vows in Each Tongue","Heart Symbols","Endearments — Sweetheart Equivalents","Romance Checkpoint with Rita"]],
+      [18,"Fictional Toasts & Drinks — William",["William: Toasts of the Galaxy","Klingon — Bloodwine Toasts","Dothraki — Mare's Milk Toast","High Valyrian — Toasts at Court","Mando'a — Drink Songs","Huttese — Cantina Orders","Na'vi — Pandora Drinks","Vulcan — Tea Ceremony","Sindarin — Miruvor Toasts","Romulan Ale","Andorian Ale","Spice Brandy","William's Cantina Stories","Festive Greetings","Toasts Checkpoint with William"]],
+      [19,"Fictional Profanity (Tame) — Steve & Sam",["Steve: Tasteful Cursing","Klingon — Petaq, Toh","Dothraki — Hash, Ifak","Huttese — Sleemo, Kung","Mando'a — Shabuir","High Valyrian — Dohaerys","Sci-Fi Bleeped Words","Family-Friendly Versions","Sam Learns the 'Bad' Words","When Not to Curse","Cultural Variation","Sam's Sanitized List","Profanity in Translation","Profanity Etiquette","Profanity Checkpoint with Sam"]],
+      [20,"Fictional Politeness Forms — Gosia's Courtesy",["Gosia: Polite Forms in Each Tongue","Klingon — Honorific Suffixes","High Valyrian — Honorifics","Dothraki — Khaleesi Address","Sindarin — Polite Address","Quenya — Royal Forms","Na'vi — Honorific Suffixes","Huttese — Lord Forms","Mando'a — Alor Forms","Vulcan — Logical Politeness","Gosia's Polite Phrases","Court Etiquette","Greeting Elders","Apologies & Thanks","Politeness Checkpoint with Gosia"]],
+      [21,"Royal & Court Speech — Rita's Throne Phrases",["Rita: Royal Forms in Westeros","High Valyrian Court Speech","Targaryen Royal Phrases","Klingon High Council","Klingon Honor Code","Sindarin Royal Court","Quenya Imperial Speech","Dothraki Khalasar Court","Huttese Cartel Etiquette","Mando'a Mand'alor Address","Throne Room Phrases","Bow & Curtsey Etiquette","Rita's Coronation Speech","Royal Decrees","Royal Speech Checkpoint with Rita"]],
+      [22,"Building Your Own Language — Diego's Workshop",["Diego: How Linguists Build Conlangs","Picking a Phonemic Inventory","Designing Phonotactics","Designing Morphology","Designing Syntax","Lexicon Building","Sound Change Rules","Naturalism vs Stylization","Tools — Vulgar Lang, Lexique Pro","David J. Peterson's Workflow","Diego's Workshop Practice","Naming Your Language","Sample Sentences","Sharing on r/conlangs","Conlang Checkpoint with Diego"]],
+      [23,"Famous Conlang Inventors — Diego's Lecture",["Diego: J.R.R. Tolkien — The Master","Marc Okrand — Klingon, Vulcan, Atlantean","David J. Peterson — Game of Thrones, Defiance","Paul Frommer — Na'vi","Ben Burtt — Sound Designer","Karen Traviss — Mando'a","L.L. Zamenhof — Esperanto","John Quijada — Ithkuil","James Cooke Brown — Loglan/Lojban","Suzette Haden Elgin — Láadan","Sonja Lang — Toki Pona","Ronald Knox — Pakuni","Diego's Lecture Continues","Diego Compares Methods","Inventors Checkpoint with Diego"]],
+      [24,"Speak Without an Accent — Edam Coaches",["Edam: Mimicking Native Speakers","Recording Yourself","Slowing Down","Listening Drills","Edam's Mirror Technique","Klingon Throat Sounds","Dothraki Trills","Na'vi Ejectives","Huttese Cadence","Quenya Vowel Length","Sindarin Mutations","Mando'a Pace","Edam's Daily Practice","Acting in Fictional Languages","Accent Checkpoint with Edam"]],
+      [25,"Fictional Languages Mastery — All Speakers",["All Speakers Greet You","Klingon Mastery Final","High Valyrian Mastery Final","Dothraki Mastery Final","Sindarin Mastery Final","Quenya Mastery Final","Na'vi Mastery Final","Huttese Mastery Final","Mando'a Mastery Final","Vulcan Mastery Final","Pick a Favorite Tongue","Compose a Multilingual Speech","All Speakers Cheer You On","Pick Your Next Course","Fictional Languages Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'fl-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('fictional-languages');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('fictional-languages');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

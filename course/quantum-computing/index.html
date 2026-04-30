@@ -30,7 +30,7 @@
     </div>
   </nav>
   <header class="course-header">
-    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
     <h1>Quantum Computing</h1>
     <p>Master qubits, superposition, entanglement, quantum gates, algorithms, and real quantum hardware. 175 lessons across 14 units.</p>
   </header>
@@ -67,7 +67,7 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'qc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'qc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {

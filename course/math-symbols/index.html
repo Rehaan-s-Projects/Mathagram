@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Symbols — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>Math Symbols</h1>
+    <p>Every symbol you'll ever read in math — sets, logic (negation, quantifiers, implication), calculus, Greek letters, geometry, functions, number theory, linear algebra, topology, group theory, category theory, tensors, complex & functional analysis, measure theory, graph & information theory, complexity, cryptography, Dirac quantum notation, and beyond. 560 lessons across 38 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Number System Symbols",["Natural Numbers ℕ","Integers ℤ","Rational Numbers ℚ","Real Numbers ℝ","Complex Numbers ℂ","Algebraic Numbers 𝔸","Imaginary Unit i","Pi π","Eulers Number e","Golden Ratio φ","Infinity ∞","Negative Numbers (−n)","Absolute Value |x|","Floor & Ceiling ⌊x⌋ ⌈x⌉","Number Symbols Checkpoint"]],
+      [2,"Set Theory Symbols",["Element of ∈","Not Element of ∉","Subset ⊂","Subset or Equal ⊆","Proper Subset ⊊","Superset ⊃","Union ∪","Intersection ∩","Empty Set ∅","Set Difference \\","Symmetric Difference △","Power Set 𝒫(A)","Cardinality |A|","Cartesian Product ×","Set Theory Checkpoint"]],
+      [3,"Logic Symbols",["Negation ¬","Conjunction (AND) ∧","Disjunction (OR) ∨","Exclusive OR ⊕","Implication →","Biconditional ↔","Tautology ⊤","Contradiction ⊥","Therefore ∴","Because ∵","Entailment ⊨","Provability ⊢","NAND ↑","NOR ↓","Logic Symbols Checkpoint"]],
+      [4,"Quantifiers & Predicates",["For All ∀","There Exists ∃","Unique Existence ∃!","Not Exists ∄","Such That : | ;","Defined As :=","Identity ≡","Bound Variables","Free Variables","Predicate P(x)","Closed Formula","Open Formula","Scope of Quantifier","Nested Quantifiers","Quantifiers Checkpoint"]],
+      [5,"Calculus Symbols",["Limit lim","Derivative d/dx","Partial ∂","Integral ∫","Definite Integral ∫ₐᵇ","Double Integral ∬","Triple Integral ∭","Line Integral ∮","Sum ∑","Product ∏","Delta Δ","Nabla ∇","Laplacian Δ","Gradient ∇f","Calculus Symbols Checkpoint"]],
+      [6,"Greek Letters in Math",["Alpha α","Beta β","Gamma γ Γ","Delta δ Δ","Epsilon ε","Zeta ζ","Eta η","Theta θ Θ","Lambda λ Λ","Mu μ","Pi π Π","Sigma σ Σ","Phi φ Φ","Omega ω Ω","Greek Letters Checkpoint"]],
+      [7,"Geometry Symbols",["Angle ∠","Right Angle ⦜","Perpendicular ⊥","Parallel ∥","Triangle △","Square □","Circle ○","Congruent ≅","Similar ∼","Degree °","Radian rad","Arc ⌒","Line Segment AB","Ray AB →","Geometry Symbols Checkpoint"]],
+      [8,"Functions & Mappings",["Function f(x)","Inverse f⁻¹","Composition f∘g","Maps To ↦","Injective ↪","Surjective ↠","Bijective ↔","Domain dom(f)","Range / Image ran(f)","Identity Function id","Constant Function","Piecewise Function","Even & Odd Functions","Periodic Function","Functions Checkpoint"]],
+      [9,"Number Theory Symbols",["Divides |","Does Not Divide ∤","GCD gcd","LCM lcm","Modulo mod","Congruence ≡ (mod n)","Prime p","Coprime ⊥","Floor ⌊x⌋","Ceiling ⌈x⌉","Round [x]","Greatest Integer Function","Fractional Part {x}","Factorial n!","Number Theory Checkpoint"]],
+      [10,"Linear Algebra Symbols",["Vector 𝐯","Matrix 𝐀","Transpose Aᵀ","Inverse A⁻¹","Determinant det A","Trace tr(A)","Dot Product ·","Cross Product ×","Norm ‖v‖","Identity Matrix I","Zero Matrix 0","Rank rank(A)","Eigenvalue λ","Span span","Linear Algebra Checkpoint"]],
+      [11,"Probability & Statistics",["Probability P(A)","Conditional P(A|B)","Independence ⊥⊥","Expected Value E[X]","Variance Var(X) σ²","Standard Deviation σ","Mean μ x̄","Median","Mode","Distribution X∼N(μ,σ²)","Sample Space Ω","Event A","Bayes P(A|B)","Z-Score","Probability Symbols Checkpoint"]],
+      [12,"Combinatorics & Discrete",["Factorial n!","Binomial C(n,k)","Permutation P(n,k)","Multinomial","Stirling Numbers","Catalan Numbers","Pochhammer (n)ₖ","Floor & Ceiling Recap","Big-O O(n)","Big-Omega Ω(n)","Big-Theta Θ(n)","Little-o o(n)","Recurrence Relations","Generating Functions","Combinatorics Checkpoint"]],
+      [13,"Special & Advanced Symbols",["Aleph ℵ₀","Beth ℶ","Tensor ⊗","Direct Sum ⊕","Hadamard Product ⊙","Convolution ∗","Function Composition ∘","Group Operation ⋆","Ring Operations + ·","Quaternions ℍ","Octonions 𝕆","P-adic Numbers ℚₚ","Modular Forms","Hyperreal Numbers","Special Symbols Checkpoint"]],
+      [14,"Comparison & Equivalence Symbols",["Approximately ≈","Approximately Equal ≅","Identical ≡","Not Identical ≢","Proportional ∝","Similar ∼","Equivalence ≃","Defined as ≜","Equal by Definition ≝","Estimates ≈","Asymptotically Equal ≂","Less-Approx ≲","Greater-Approx ≳","Bracketed Equality ⊜","Comparison Symbols Checkpoint"]],
+      [15,"Order & Relation Symbols",["Partial Order ≤","Strict Order <","Total Order","Preorder ≼","Equivalence Relation","Reflexive Relation","Symmetric Relation","Transitive Relation","Antisymmetric Relation","Relation Composition ∘","Relation Inverse R⁻¹","Hasse Diagram","Poset","Lattice ⊓ ⊔","Order Symbols Checkpoint"]],
+      [16,"Operator Notation",["Binary Operator ⋆","Unary Operator","Prefix Notation","Infix Notation","Postfix Notation","Associativity","Commutativity","Distributivity","Identity Element","Inverse Element","Operator Precedence","Lambda λ","Closure","Operator Tables","Operators Checkpoint"]],
+      [17,"Hyperoperations & Big Numbers",["Successor S(n)","Addition","Multiplication","Exponentiation aᵇ","Tetration ⁿa","Pentation","Knuth Up-Arrow ↑","Double Up-Arrow ↑↑","Triple Up-Arrow ↑↑↑","Conway Chained Arrows →","Grahams Number","BEAF","Bowers Notation","Fast-Growing Hierarchy","Hyperoperations Checkpoint"]],
+      [18,"Topology Symbols",["Open Set","Closed Set","Boundary ∂","Interior int(A) A°","Closure cl(A) Ā","Limit Point","Compact","Connected","Continuous f","Homeomorphism ≃","Topological Space (X,τ)","Product Topology","Subspace Topology","Quotient Topology","Topology Checkpoint"]],
+      [19,"Group Theory Symbols",["Group (G,⋆)","Identity e","Inverse a⁻¹","Subgroup ≤","Coset aH","Quotient Group G/N","Order |G|","Order of Element |a|","Cyclic Group ⟨a⟩","Symmetric Group Sₙ","Alternating Group Aₙ","Direct Product G × H","Homomorphism φ","Kernel ker φ","Group Theory Checkpoint"]],
+      [20,"Ring & Field Symbols",["Ring (R,+,·)","Commutative Ring","Integral Domain","Field F","Subring","Ideal I","Prime Ideal","Maximal Ideal","Quotient Ring R/I","Polynomial Ring R[x]","Field Extension F⊆E","Galois Group Gal(E/F)","Characteristic char(R)","Algebraic Closure F̄","Ring & Field Checkpoint"]],
+      [21,"Category Theory Symbols",["Category 𝒞","Object","Morphism →","Composition ∘","Identity Morphism","Functor F","Natural Transformation η","Isomorphism ≅","Initial Object","Terminal Object","Product ×","Coproduct ⊔","Pullback","Pushout","Category Theory Checkpoint"]],
+      [22,"Differential Geometry",["Manifold M","Tangent Space TₚM","Tangent Bundle TM","Cotangent Space","Vector Field","Differential Form","Wedge Product ∧","Exterior Derivative d","Pullback f*","Pushforward f_*","Lie Bracket [X,Y]","Connection ∇","Christoffel Symbols Γ","Curvature R","Diff Geometry Checkpoint"]],
+      [23,"Tensor & Index Notation",["Tensor T","Tensor Rank","Covariant Index","Contravariant Index","Einstein Summation","Kronecker Delta δᵢⱼ","Levi-Civita εᵢⱼₖ","Metric Tensor gᵢⱼ","Raising an Index","Lowering an Index","Tensor Product ⊗","Tensor Contraction","Symmetric Tensor","Antisymmetric Tensor","Tensor Notation Checkpoint"]],
+      [24,"Complex Analysis Symbols",["Complex Number z","Real Part Re(z)","Imaginary Part Im(z)","Modulus |z|","Argument arg(z)","Conjugate z̄","Polar Form re^(iθ)","Holomorphic","Cauchy-Riemann","Residue Res","Contour Integral ∮","Branch Cut","Pole","Riemann Surface","Complex Analysis Checkpoint"]],
+      [25,"Functional Analysis Symbols",["Banach Space","Hilbert Space ℋ","Inner Product ⟨·,·⟩","Norm ‖·‖","Dual Space X*","Bounded Operator","Compact Operator","Spectrum σ(T)","Adjoint T*","Self-Adjoint","Unitary Operator","Orthogonal","Weak Convergence ⇀","Weak Topology","Functional Analysis Checkpoint"]],
+      [26,"Measure Theory Symbols",["σ-Algebra Σ","Measure μ","Lebesgue Measure","Borel Set ℬ","Measurable Function","Almost Everywhere a.e.","Lp Space","Integral ∫ dμ","Radon-Nikodym dν/dμ","Pushforward Measure","Product Measure","Convergence in Measure","Dominated Convergence","Fatous Lemma","Measure Theory Checkpoint"]],
+      [27,"Differential Equations",["ODE","PDE","Order of an ODE","Linear vs Nonlinear","Homogeneous","Inhomogeneous","Boundary Conditions","Initial Conditions","Wronskian W","Phase Plane","Equilibrium Point","Laplacian ∇²","Heat Equation","Wave Equation","DE Notation Checkpoint"]],
+      [28,"Lattices & Order Theory",["Lattice","Join ∨","Meet ∧","Top ⊤","Bottom ⊥","Distributive Lattice","Modular Lattice","Boolean Algebra","Heyting Algebra","Galois Connection","Fixed Point","Knaster-Tarski","Complete Lattice","Filters & Ideals","Lattice Checkpoint"]],
+      [29,"Graph Theory Symbols",["Graph G=(V,E)","Vertex v","Edge e","Degree deg(v)","Adjacency Matrix","Path","Cycle","Tree","Spanning Tree","Connected Component","Bipartite","Planar","Chromatic Number χ","Graph Isomorphism ≅","Graph Theory Checkpoint"]],
+      [30,"Information Theory Symbols",["Entropy H(X)","Joint Entropy H(X,Y)","Conditional Entropy H(X|Y)","Mutual Information I(X;Y)","KL Divergence D(P‖Q)","Cross Entropy","Bit","Nat","Channel Capacity C","Source Coding","Hamming Distance","Error Correcting Code","Compression Ratio","Shannon Limit","Information Theory Checkpoint"]],
+      [31,"Computational Complexity",["P","NP","NP-Complete","NP-Hard","BPP","PSPACE","EXP","co-NP","Polynomial Hierarchy","Reduction ≤_p","Circuit Complexity","Big-O Recap","Big-Omega Recap","Big-Theta Recap","Complexity Checkpoint"]],
+      [32,"Cryptography Notation",["Plaintext P","Ciphertext C","Key K","Encryption E_K(P)","Decryption D_K(C)","Hash H(x)","XOR ⊕","Modular Exponent","Public Key","Private Key","Digital Signature","Nonce","Random Oracle","Birthday Bound","Cryptography Checkpoint"]],
+      [33,"Mathematical Physics Notation",["Position r","Velocity v","Acceleration a","Force F","Mass m","Energy E","Momentum p","Angular Momentum L","Hamiltonian H","Lagrangian L","Action S","del Operator ∇","Laplacian ∇²","DAlembertian ◻","Math Physics Checkpoint"]],
+      [34,"Quantum Notation (Dirac)",["Bra ⟨ψ|","Ket |ψ⟩","Bra-Ket ⟨ψ|φ⟩","Operator Ô","Hermitian Operator","Hilbert Space","Tensor Product ⊗","Eigenstate |n⟩","Pauli Matrices σ","Dirac Delta δ","Commutator [A,B]","Anticommutator {A,B}","Density Matrix ρ","Spin ↑↓","Quantum Notation Checkpoint"]],
+      [35,"Statistical Inference Symbols",["Estimator θ̂","Likelihood L(θ)","Log-Likelihood ℓ(θ)","Prior π(θ)","Posterior π(θ|x)","Confidence Interval","Credible Interval","p-value","Test Statistic","Type I Error α","Type II Error β","Power 1−β","Effect Size","Bayes Factor","Statistical Inference Checkpoint"]],
+      [36,"Notation Conventions Across Fields",["Math vs Physics Notation","Math vs Engineering","Engineering j vs Math i","Bourbaki Convention","ISO 80000-2","Different Pi Variants","i vs ı","exp vs e^","log vs ln","Tabular vs Inline","Display vs Inline Math","One-Char vs Word Operators","Cultural Differences","Software-Friendly Notation","Conventions Checkpoint"]],
+      [37,"Symbol Trivia & Curiosities",["Origin of +/− (Widmann 1489)","Origin of = (Recorde 1557)","Origin of π (Jones 1706)","Why √ Looks Like a Hook","Symbol Trivia Checkpoint"]],
+      [38,"Math Symbols Mastery",["Reading Math Aloud","Writing LaTeX","MathML","Unicode Math Block","Mathematical Typography","Common Notation Mistakes","Symbol vs Notation","International Conventions","Historical Origins","Symbol Reference Sheet","Practice — Identify the Symbol","Practice — Translate to Words","Building a Cheat Sheet","Where to Look Things Up","Math Symbols Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'msym-'+n, title: t, href: '#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('math-symbols');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('math-symbols');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

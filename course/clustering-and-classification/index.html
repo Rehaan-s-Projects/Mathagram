@@ -73,7 +73,8 @@
       [24,'t-SNE Visualization',['t-SNE Intuition','Perplexity Parameter','t-SNE Algorithm Steps','t-SNE vs PCA','t-SNE for Clusters','Interpreting t-SNE Plots','t-SNE Pitfalls','UMAP Introduction','UMAP vs t-SNE','UMAP Parameters','LargeVis','Trimap','Embedding Quality Metrics','Visualization Best Practices','t-SNE Visualization Review']],
       [25,'Model Comparison',['Comparing Classifiers','Statistical Tests for Comparison','McNemar Test','Paired t-Test for Models','Friedman Test','Nemenyi Test','No Free Lunch Theorem','Model Selection Criteria','AIC & BIC','Cross-Validated Comparison','Ensemble vs Single Model','Computational Cost Comparison','Interpretability vs Accuracy','Model Comparison Pipeline','Model Comparison Review']],
       [26,'Real-World ML Projects',['Customer Churn Prediction','Credit Scoring','Disease Diagnosis','Image Segmentation','Document Classification','Product Recommendation','Fraud Detection Pipeline','Customer Segmentation','Predictive Maintenance','Sentiment Analysis Project','Face Clustering','Species Classification','Spam Filter Project','End-to-End ML Pipeline','ML Projects Review']],
-      [27,'Real-World Applications',['Image Classification','Handwriting Recognition','Facial Recognition Basics','Recommendation Systems','Anomaly Detection','Fraud Detection','Medical Diagnosis ML','Natural Language Processing','Topic Modeling','Market Basket Analysis','Ethical AI','Feature Engineering','Model Deployment','Applications Review']]
+      [27,'Real-World Applications',['Image Classification','Handwriting Recognition','Facial Recognition Basics','Recommendation Systems','Anomaly Detection','Fraud Detection','Medical Diagnosis ML','Natural Language Processing','Topic Modeling','Market Basket Analysis','Ethical AI','Feature Engineering','Model Deployment','Applications Review']],
+      [28,"Lesson Quizzes",["Quiz — Introduction to ML","Quiz — K-Nearest Neighbors","Quiz — Decision Trees & Random Forests","Quiz — K-Means Clustering","Quiz — Hierarchical Clustering","Quiz — DBSCAN & Density Clustering","Quiz — Naive Bayes","Quiz — Support Vector Machines","Quiz — Logistic Regression","Quiz — Neural Network Basics","Quiz — Feature Engineering & Selection","Quiz — Cross-Validation & Confusion Matrix","Quiz — Precision, Recall, ROC & AUC","Quiz — PCA & Dimensionality Reduction","Lesson Quizzes Checkpoint"]]
     ];
 
     let n = 0;
@@ -81,7 +82,7 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'cc-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'cc-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
       });
     });
 
