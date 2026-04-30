@@ -523,9 +523,21 @@
     function clearCooldown(email) { try { localStorage.removeItem(cooldownKey(email)); } catch (e) {} }
 
     let cooldownTimer = null;
+    const emailInput = document.getElementById('signin-email');
+    const passwordInput = document.getElementById('signin-password');
+    function setInputsLocked(locked) {
+      emailInput.disabled = locked;
+      passwordInput.disabled = locked;
+      // Visual cue — opacity + not-allowed cursor
+      emailInput.style.opacity = locked ? '0.55' : '';
+      passwordInput.style.opacity = locked ? '0.55' : '';
+      emailInput.style.cursor = locked ? 'not-allowed' : '';
+      passwordInput.style.cursor = locked ? 'not-allowed' : '';
+    }
     function startCooldownDisplay(untilTs) {
       submitBtn.style.display = 'none';
       cooldownBtn.classList.add('show');
+      setInputsLocked(true);
       function tick() {
         const remaining = Math.max(0, untilTs - Date.now());
         cooldownSecsEl.textContent = Math.ceil(remaining / 1000);
@@ -534,6 +546,7 @@
           cooldownTimer = null;
           submitBtn.style.display = '';
           cooldownBtn.classList.remove('show');
+          setInputsLocked(false);
         }
       }
       tick();

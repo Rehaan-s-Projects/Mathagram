@@ -68,70 +68,6 @@
     .filter-btn[data-filter="programming"].active { background: #8b5cf6; border-color: #8b5cf6; }
     .filter-btn[data-filter="others"].active { background: var(--color-others); border-color: var(--color-others); }
 
-    /* Search bar — text search across course title + description */
-    .search-bar {
-      max-width: 560px;
-      margin: 16px auto 0;
-      padding: 0 24px;
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    .search-input {
-      width: 100%;
-      padding: 12px 44px 12px 44px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      border: 2px solid var(--color-border);
-      border-radius: 999px;
-      background: var(--color-white);
-      color: var(--color-text);
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .search-input::placeholder { color: var(--color-text-secondary); }
-    .search-input:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
-    }
-    .search-icon {
-      position: absolute;
-      left: 38px;
-      pointer-events: none;
-      color: var(--color-text-secondary);
-      font-size: 1rem;
-      line-height: 1;
-    }
-    .search-clear {
-      position: absolute;
-      right: 36px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--color-text-secondary);
-      font-size: 1.2rem;
-      padding: 4px 8px;
-      line-height: 1;
-      display: none;
-      font-family: inherit;
-    }
-    .search-clear:hover { color: var(--color-text); }
-    .search-bar.has-text .search-clear { display: block; }
-
-    .no-results {
-      max-width: 560px;
-      margin: 32px auto;
-      padding: 24px;
-      text-align: center;
-      color: var(--color-text-secondary);
-      background: var(--color-white);
-      border: 1px dashed var(--color-border);
-      border-radius: var(--radius-lg);
-      display: none;
-    }
-    .no-results.show { display: block; }
-    .no-results strong { color: var(--color-text); }
-
     /* Alphabet/number filter — case-insensitive; matches first character of the course title */
     .alpha-bar {
       display: flex;
@@ -306,12 +242,6 @@
     <p>Explore our growing library of interactive courses in math, science, data analysis, logic, languages, programming, and more.</p>
   </header>
 
-  <!-- Search Bar -->
-  <div class="search-bar" id="search-bar">
-    <span class="search-icon" aria-hidden="true">🔍</span>
-    <input type="search" class="search-input" id="search-input" placeholder="Search courses by name or topic…" autocomplete="off" aria-label="Search courses">
-    <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" title="Clear">×</button>
-  </div>
 
   <!-- Filter Bar -->
   <div class="filter-bar">
@@ -2287,16 +2217,12 @@
     // Dynamic year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Combined category + alphabet + search filter
+    // Combined category + alphabet (first-letter) filter
     const filterBtns = document.querySelectorAll('.filter-btn');
     const alphaBtns = document.querySelectorAll('.alpha-btn');
     const courseItems = document.querySelectorAll('.course-item');
-    const searchBar = document.getElementById('search-bar');
-    const searchInput = document.getElementById('search-input');
-    const searchClear = document.getElementById('search-clear');
-    const noResults = document.getElementById('no-results');
 
-    // Tag each course item with its first-letter bucket and a lowercased search blob.
+    // Tag each course item with its first-letter bucket once, on load.
     function firstChar(title) {
       let t = (title || '').trim();
       if (/^the\s+/i.test(t)) t = t.replace(/^the\s+/i, '');
@@ -2307,27 +2233,30 @@
     }
     courseItems.forEach(item => {
       const h = item.querySelector('h3');
-      const p = item.querySelector('p');
       item.dataset.alpha = firstChar(h ? h.textContent : '');
-      // Search blob — title + description, lowercased, & decoded
-      const title = (h ? h.textContent : '').toLowerCase();
-      const desc = (p ? p.textContent : '').toLowerCase();
-      item.dataset.searchBlob = (title + ' ' + desc).replace(/\s+/g, ' ');
     });
 
     let activeCategory = 'all';
-    let activeQuery = '';
+    let activeAlpha = 'all';
 
     function applyFilter() {
-      let visibleCount = 0;
       courseItems.forEach(item => {
         const catOk = activeCategory === 'all' || item.dataset.category === activeCategory;
-        const searchOk = activeQuery === '' || item.dataset.searchBlob.includes(activeQuery);
-        const visible = catOk && searchOk;
-        item.classList.toggle('hidden', !visible);
-        if (visible) visibleCount++;
+        const alphaOk = activeAlpha === 'all' || item.dataset.alpha === activeAlpha;
+        item.classList.toggle('hidden', !(catOk && alphaOk));
       });
-      noResults.classList.toggle('show', visibleCount === 0);
+      // Grey-out alpha buttons that have no courses under the current category
+      const visibleAlphas = new Set();
+      courseItems.forEach(item => {
+        if (activeCategory === 'all' || item.dataset.category === activeCategory) {
+          if (item.dataset.alpha) visibleAlphas.add(item.dataset.alpha);
+        }
+      });
+      alphaBtns.forEach(b => {
+        const a = b.dataset.alpha;
+        if (a === 'all') return;
+        b.classList.toggle('disabled', !visibleAlphas.has(a));
+      });
     }
 
     filterBtns.forEach(btn => {
@@ -2339,51 +2268,14 @@
       });
     });
 
-    // Alphabet/number buttons act as a virtual keyboard — clicking A then B then C
-    // appends those letters into the search bar (which then drives the filter).
-    function syncSearchFromInput() {
-      activeQuery = searchInput.value.trim().toLowerCase();
-      searchBar.classList.toggle('has-text', activeQuery !== '');
-      applyFilter();
-    }
     alphaBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        const a = btn.dataset.alpha;
-        if (a === 'all') {
-          // "All" clears the search
-          searchInput.value = '';
-        } else if (a === 'num') {
-          searchInput.value += '0';
-        } else {
-          searchInput.value += a;
-        }
-        searchInput.focus();
-        syncSearchFromInput();
+        if (btn.classList.contains('disabled')) return;
+        alphaBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeAlpha = btn.dataset.alpha;
+        applyFilter();
       });
-    });
-
-    // Search input — debounced live filter
-    let searchDebounce;
-    searchInput.addEventListener('input', () => {
-      clearTimeout(searchDebounce);
-      searchDebounce = setTimeout(syncSearchFromInput, 80);
-    });
-    // Clear button
-    searchClear.addEventListener('click', () => {
-      searchInput.value = '';
-      searchInput.focus();
-      syncSearchFromInput();
-    });
-    // ESC clears the search even when the input doesn't have focus;
-    // "/" anywhere on the page jumps to search (GitHub/YouTube convention).
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && activeQuery !== '') {
-        searchInput.value = '';
-        syncSearchFromInput();
-      } else if (e.key === '/' && document.activeElement !== searchInput) {
-        e.preventDefault();
-        searchInput.focus();
-      }
     });
 
     applyFilter();
