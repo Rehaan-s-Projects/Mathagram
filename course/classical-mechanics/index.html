@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classical Mechanics — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Classical Mechanics</h1>
+    <p>The deep dive on pre-relativistic, pre-quantum mechanics — kinematics, Newton's laws, energy &amp; momentum, rotation, rigid bodies, gravitation &amp; orbits, oscillations, the Lagrangian &amp; Hamiltonian formulations, central forces, non-inertial frames, and continuum &amp; fluid mechanics. 25 units, 375 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Foundations of Classical Mechanics",["What Is Classical Mechanics?","Aristotle to Galileo","Galileo's Inclined Planes","Descartes & Inertia","Newton's Principia","Calculus & Mechanics","Domain of Validity","Determinism","Idealizations & Models","Frames of Reference","Time as a Parameter","Length, Mass, Time","SI Units in Mechanics","Dimensional Analysis","Foundations Checkpoint"]],
+      [2,"Vectors & Coordinates",["Scalars vs Vectors","Vector Addition","Vector Subtraction","Scalar Multiplication","Components & Basis","Cartesian Coordinates","Polar Coordinates","Cylindrical Coordinates","Spherical Coordinates","Dot Product","Cross Product","Triple Products","Position, Displacement, Path","Coordinate Transformations","Vectors Checkpoint"]],
+      [3,"Kinematics in One Dimension",["Position vs Time","Average vs Instantaneous Velocity","Acceleration","Constant Acceleration Equations","Free Fall","Graphs of Motion","Differentiation of Motion","Integration of Motion","Variable Acceleration","Position from a(t)","Initial Conditions","Stopping Distance","Reaction Time","Terminal Velocity Preview","1D Kinematics Checkpoint"]],
+      [4,"Kinematics in Two & Three Dimensions",["Position Vectors","Velocity Vectors","Acceleration Vectors","Projectile Motion Setup","Range Equation","Maximum Height","Trajectory Shape","Air Resistance Effects","Relative Velocity","Galilean Transformation","Circular Motion Kinematics","Centripetal Acceleration","Tangential Acceleration","Non-Uniform Circular Motion","2D/3D Kinematics Checkpoint"]],
+      [5,"Newton's Laws of Motion",["First Law — Inertia","Inertial Frames","Second Law — F=ma","Mass vs Weight","Third Law — Action-Reaction","Pairs vs Net Forces","Free-Body Diagrams","Drawing FBDs","Tension","Normal Force","Spring Force","Compound Bodies","Atwood Machine","Inclined Plane Problems","Newton's Laws Checkpoint"]],
+      [6,"Friction & Contact Forces",["Static vs Kinetic Friction","Coefficients of Friction","Microscopic Origin","Friction on Inclines","Friction in Atwood Setups","Self-Locking Wedges","Belt Friction (Capstan)","Rolling Friction","Air Drag — Linear","Air Drag — Quadratic","Terminal Velocity","Stokes' Law","Reynolds Number Preview","Drag in Sport","Friction Checkpoint"]],
+      [7,"Work, Energy & Power",["Definition of Work","Work by Constant Force","Work by Variable Force","Line Integrals of Work","Kinetic Energy","Work-Energy Theorem","Power","Average vs Instantaneous Power","Efficiency","Conservative Forces","Potential Energy","Gravitational PE Near Earth","Spring PE & Hooke's Law","Mechanical Energy","Work & Energy Checkpoint"]],
+      [8,"Conservation of Energy",["Conservation Statement","Path Independence","Closed-Loop Test","Potential Energy Curves","Stable & Unstable Equilibria","Turning Points","Bound vs Unbound Motion","Energy Diagrams","Non-Conservative Work","Friction & Heat","Energy in Collisions","Pendulum Energy","Roller Coasters","Bungee Cord Problems","Conservation Checkpoint"]],
+      [9,"Momentum & Impulse",["Linear Momentum","Newton's 2nd in Momentum Form","Impulse","Impulse-Momentum Theorem","Conservation of Momentum","Isolated Systems","Elastic Collisions 1D","Inelastic Collisions 1D","Perfectly Inelastic","Coefficient of Restitution","2D Collisions","Ballistic Pendulum","Recoil & Rockets","Variable Mass Systems","Momentum Checkpoint"]],
+      [10,"Center of Mass & Many-Particle Systems",["Center of Mass Definition","Discrete CoM","Continuous CoM","CoM by Symmetry","CoM Motion","External vs Internal Forces","Two-Body Reduction","Reduced Mass","Lab vs CoM Frame","Collisions in CoM Frame","Energy in CoM Frame","Variable Mass — Rocket Equation","Tsiolkovsky Equation","Multi-Stage Rockets","Many-Particle Checkpoint"]],
+      [11,"Rotational Kinematics",["Angular Position","Radians vs Degrees","Angular Velocity","Angular Acceleration","Constant α Equations","Linear-Angular Relations","Tangential vs Centripetal","Rolling Without Slipping","Rolling With Slipping","Angular Vector Form","Right-Hand Rule","Rotation Matrices Preview","Euler Angles Preview","Precession Intuition","Rotational Kinematics Checkpoint"]],
+      [12,"Rotational Dynamics",["Torque","Cross-Product Form of Torque","Moment Arm","Rotational Newton's 2nd","Moment of Inertia","Parallel-Axis Theorem","Perpendicular-Axis Theorem","I for Common Shapes","Rotational Kinetic Energy","Work-Energy in Rotation","Rolling KE","Yo-Yo Problems","Pulleys with Mass","Sliding vs Rolling","Rotational Dynamics Checkpoint"]],
+      [13,"Angular Momentum",["Angular Momentum of Particle","Angular Momentum of Rigid Body","Conservation of L","Spinning Skater","L in Collisions","Torque-Angular-Momentum Theorem","Central Forces & L","L in Orbits","Gyroscope Basics","Gyroscopic Precession","Nutation","Tops & Pendulums","Earth's Precession","Bicycle Stability","Angular Momentum Checkpoint"]],
+      [14,"Rigid Body Dynamics",["Rigid Body Definition","Translation + Rotation","Instantaneous Axis of Rotation","Inertia Tensor","Principal Axes","Diagonalizing the Tensor","Euler's Equations","Free Symmetric Top","Free Asymmetric Top","Tennis Racket Theorem","Stability of Rotation","Chandler Wobble","Spinning Bullets","Rolling Cones","Rigid Body Checkpoint"]],
+      [15,"Statics & Equilibrium",["Conditions for Equilibrium","Net Force = 0","Net Torque = 0","Choosing the Pivot","Beams & Bridges","Ladders Against Walls","Hanging Signs","Trusses","Center of Gravity","Stability of Equilibrium","Tipping Conditions","Levers & Mechanical Advantage","Pulleys & Block-and-Tackle","Statically Indeterminate Systems","Statics Checkpoint"]],
+      [16,"Gravitation",["Newton's Law of Universal Gravitation","Gravitational Field g","Inverse-Square Behavior","Shell Theorem","Inside a Spherical Shell","Inside a Solid Sphere","Gravitational Potential Energy","Gravitational Potential","Escape Velocity","Equipotentials","Cavendish Experiment","Variations in g on Earth","Tidal Forces","Roche Limit","Gravitation Checkpoint"]],
+      [17,"Orbital Mechanics",["Two-Body Problem","Reduced-Mass Trick","Conservation in Orbits","Kepler's First Law","Kepler's Second Law","Kepler's Third Law","Orbital Energy","Vis-Viva Equation","Circular Orbits","Elliptical Orbits","Parabolic & Hyperbolic Orbits","Hohmann Transfer","Gravity Assist","Lagrange Points","Orbital Mechanics Checkpoint"]],
+      [18,"Oscillations & Simple Harmonic Motion",["Restoring Forces","Hooke's Law Revisited","SHM Equation","Sinusoidal Solutions","Amplitude, Phase, Period","Energy in SHM","Pendulum (Small Angle)","Physical Pendulum","Torsional Pendulum","Damped Oscillations","Underdamped, Critical, Overdamped","Driven Oscillations","Resonance","Q-Factor","Oscillations Checkpoint"]],
+      [19,"Coupled Oscillators & Normal Modes",["Two Coupled Springs","Equations of Motion","Normal-Mode Concept","Normal Frequencies","Symmetric & Antisymmetric Modes","Beats from Coupling","N Coupled Oscillators","Continuous Limit","Wave Equation Derivation","Standing Waves on a String","Boundary Conditions","Fourier Decomposition","Modes of a Drumhead","Modes of a Solid","Coupled Oscillators Checkpoint"]],
+      [20,"Lagrangian Mechanics",["Generalized Coordinates","Constraints — Holonomic vs Nonholonomic","Principle of Virtual Work","D'Alembert's Principle","Action Principle","Hamilton's Principle","Euler-Lagrange Equations","Lagrangian L = T − V","Pendulum via Lagrangian","Atwood via Lagrangian","Bead on a Wire","Cyclic Coordinates","Conserved Generalized Momenta","Noether's Theorem","Lagrangian Checkpoint"]],
+      [21,"Hamiltonian Mechanics",["Generalized Momenta","Legendre Transform","Hamiltonian H","Hamilton's Equations","Phase Space","Trajectories in Phase Space","Liouville's Theorem","Poisson Brackets","Canonical Transformations","Generating Functions","Action-Angle Variables","Hamilton-Jacobi Equation","Adiabatic Invariants","Integrable vs Chaotic","Hamiltonian Checkpoint"]],
+      [22,"Central Force Problem",["Reduction to 1D Effective Potential","Effective Potential Curves","Bound vs Unbound","Closed Orbits — Bertrand's Theorem","Inverse-Square Orbits","Orbit Equation","Eccentricity & Conics","Apsides — Perihelion & Aphelion","Precession of Perihelion","Yukawa Potential","Hard Sphere Scattering","Rutherford Scattering","Cross Sections","Impact Parameter","Central Force Checkpoint"]],
+      [23,"Non-Inertial Frames & Fictitious Forces",["Why Non-Inertial Frames?","Linearly Accelerating Frame","Pseudo-Forces","Rotating Frame Setup","Centrifugal Force","Coriolis Force","Euler Force","Foucault Pendulum","Trade Winds & Hurricanes","Effective Gravity on Earth","Bathtub Vortex Myth","Free Fall in Rotating Frame","Lagrangian in Non-Inertial Frame","Inertial vs Gravitational Mass","Non-Inertial Checkpoint"]],
+      [24,"Continuum Mechanics & Fluids",["Continuum Hypothesis","Stress & Strain","Elastic Modulus","Bulk Modulus","Shear Modulus","Hooke's Law for Solids","Pressure in Fluids","Pascal's Principle","Buoyancy & Archimedes","Fluid Statics","Continuity Equation","Bernoulli's Equation","Viscosity","Navier-Stokes Preview","Continuum Checkpoint"]],
+      [25,"Classical Mechanics Mastery",["Kinematics Final Review","Newton's Laws Final Review","Energy & Momentum Final","Rotation & Angular Momentum Final","Rigid Body Final","Gravitation & Orbits Final","Oscillations Final","Lagrangian Final","Hamiltonian Final","Central Force Final","Non-Inertial Frames Final","Problem-Solving Strategies","Famous Problems & Paradoxes","Bridge to Modern Physics","Classical Mechanics Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cm-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('classical-mechanics');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('classical-mechanics');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
