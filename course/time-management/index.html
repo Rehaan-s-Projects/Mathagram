@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Management & Productivity — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Time Management & Productivity</h1>
+    <p>Get more done with less stress — Pomodoro, GTD, time blocking, calendars, task managers (Todoist, Things, OmniFocus), eliminating distractions, deep work, focus apps, weekly reviews, Eisenhower matrix, Kanban, energy management, sleep optimization, and the great productivity systems. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Productivity Foundations",["Why Productivity Matters","Productivity vs Busyness","Output vs Activity","The 80/20 Principle","Parkinson's Law","Work Expansion","Energy Management vs Time Management","Common Productivity Mistakes","The Psychology of Procrastination","Famous Productivity Books","Productivity Mythology","Joining Productivity Communities","Setting Productivity Goals","Maintaining Balance","Foundations Checkpoint"]],
+      [2,"Goal Setting",["SMART Goals","OKRs \u2014 Objectives & Key Results","BHAGs","Quarterly Goals","Annual Goals","3-Year Vision","10-Year Vision","Daily Goals","Weekly Goals","Goal Tracking","Goal Visualization","Vision Boards","Accountability Partners","Goal Reviews","Goal Setting Checkpoint"]],
+      [3,"GTD \u2014 Getting Things Done",["David Allen","Capture Everything","Inbox Processing","2-Minute Rule","Next Action Step","Project vs Task","Contexts","Waiting For List","Someday/Maybe","Reference Files","Weekly Review","Monthly Review","Trigger Lists","GTD Apps \u2014 Things, OmniFocus","GTD Checkpoint"]],
+      [4,"Pomodoro Technique",["Francesco Cirillo","25 Minutes Work + 5 Minutes Break","Long Breaks Every 4 Pomodoros","Pomodoro Tracker Apps","Tomato Timer","Forest App","Be Focused","Marinara Timer","Pomodoro for Studying","Pomodoro for Coding","Pomodoro for Writing","Variations \u2014 50/10","When Pomodoro Doesn't Work","Pomodoro & ADHD","Pomodoro Checkpoint"]],
+      [5,"Time Blocking",["What Is Time Blocking?","Cal Newport's Approach","Calendar as Source of Truth","Theme Days","Maker vs Manager Schedules","Deep Work Blocks","Shallow Work Blocks","Buffer Time","Daily Highlights","Email Time Blocks","Meeting Time Blocks","Color-Coding Calendars","Time Block Templates","Avoiding Block Drift","Time Blocking Checkpoint"]],
+      [6,"Calendar Mastery",["Google Calendar","Apple Calendar","Outlook Calendar","Fantastical","Notion Calendar (formerly Cron)","Reclaim.ai","Sunsama","Cal.com","Calendly","Recurring Events","All-Day Events","Calendar Sharing","Booking Links","Calendar Etiquette","Calendar Mastery Checkpoint"]],
+      [7,"Task Manager Apps",["Todoist","Things 3","OmniFocus","TickTick","Microsoft To Do","Apple Reminders","Notion Tasks","Linear","Asana for Personal","Trello \u2014 Personal Boards","Obsidian Tasks","Logseq","TaskPaper","Plain Text Todo","Task App Checkpoint"]],
+      [8,"Email Management",["Inbox Zero","Touch It Once Rule","Email Filters & Rules","Snoozing Email","Templates & Canned Responses","SaneBox & Spike","Hey Email","Newsletter Subscriptions \u2014 Stoop, Substack","Email at Set Times","Vacation Auto-Replies","Email Etiquette","Subject Line Best Practices","Bcc & Reply-All Rules","Group Emails","Email Mastery Checkpoint"]],
+      [9,"Eisenhower Matrix",["Urgent vs Important","Quadrant 1 \u2014 Urgent & Important","Quadrant 2 \u2014 Important Not Urgent","Quadrant 3 \u2014 Urgent Not Important","Quadrant 4 \u2014 Neither","Doing Q1 First","Investing in Q2","Delegating Q3","Eliminating Q4","Stephen Covey","7 Habits Connection","Apps That Use Matrix","Daily Matrix Habit","Matrix for Email","Eisenhower Matrix Checkpoint"]],
+      [10,"Deep Work",["Cal Newport \u2014 Deep Work","Shallow Work Definition","4-Hour Deep Work Limit","Schedule Deep Work","Eliminate Distractions","Phone in Another Room","Website Blockers \u2014 Cold Turkey, Freedom","Deep Work Caf\u00e9s","Library Deep Work","Pomodoro for Deep Work","Deep Work Journal","Counting Deep Work Hours","Deep Work for Knowledge Workers","Deep Work for Students","Deep Work Checkpoint"]],
+      [11,"Focus Apps & Tools",["Forest \u2014 Plant Trees","Cold Turkey Blocker","Freedom","RescueTime","Toggl Track","Time Tracking Honesty","Browser Extensions \u2014 One Tab","News Feed Eradicator","Newsfeed Eradicator for Twitter","Focus Mode in Apple","Do Not Disturb","iPhone Focus Modes","Mac Focus","Pixel/Android Focus","Focus Apps Checkpoint"]],
+      [12,"Eliminating Distractions",["Phone Distraction Tactics","Notification Audit","Greyscale Phone","Social Media Schedule","Deleting Apps","Browser Lockdown","Office Door Closed","Open Office Strategies","Headphones as Signal","Pomodoro to Reset Focus","Saying No","Meeting Free Days","Focus Hours at Work","Communicating Boundaries","Distractions Checkpoint"]],
+      [13,"Energy Management",["Tony Schwartz","Physical Energy","Emotional Energy","Mental Energy","Spiritual Energy","Ultradian Rhythms","90-Minute Cycles","Energy Audit","Morning Energy Peak","Afternoon Energy Slump","Coffee Strategy","Naps \u2014 20 vs 90 Minute","Exercise & Energy","Sugar Crash Avoidance","Energy Management Checkpoint"]],
+      [14,"Sleep Optimization",["Why Sleep Matters for Productivity","7-9 Hours Recommended","Consistent Sleep Schedule","No Caffeine After 2pm","No Screens Before Bed","Blue Light Glasses","Cool Bedroom Temp \u2014 65\u00b0F","Mattress Selection","Sleep Tracker \u2014 Oura, Whoop, Apple Watch","Sleep Hygiene","Bedtime Routine","Wake-Up Routine","Power Naps","Sleep Apnea & CPAP","Sleep Optimization Checkpoint"]],
+      [15,"Weekly & Daily Reviews",["What Is a Weekly Review?","Friday Afternoon Review","Sunday Planning","Daily Shutdown Routine","Inbox Zero Each Day","Review What Worked","Review What Didn't","Adjust Calendar for Next Week","Project Status Reviews","Goal Progress Check","Habit Review","Mood Review","Win Logs","Lessons Learned","Reviews Checkpoint"]],
+      [16,"Habit Formation",["Atomic Habits \u2014 James Clear","Cue, Craving, Response, Reward","Habit Stacking","2-Minute Rule","Streaks \u2014 Don't Break the Chain","Habit Tracker Apps","HabitBull","Streaks App","Way of Life","Notion Habit Tracker","Bullet Journal Habits","Identity-Based Habits","Keystone Habits","Breaking Bad Habits","Habit Formation Checkpoint"]],
+      [17,"Project Management Personal",["Kanban Boards","Scrum for One","Project Triage","Milestones","Critical Path","Buffer Days","Trello Personal Boards","Notion Projects","GitHub Projects for Personal","Color-Coded Status","Project Templates","Reviews on Projects","When to Quit a Project","Wrap-Up Reports","PM Checkpoint"]],
+      [18,"Saying No & Boundaries",["Why Saying No Is Hard","Saying No Politely","The Power of No","Boundaries at Work","Boundaries in Relationships","Boundaries with Family","Email Auto-Replies","Office Hours","Vacation Boundaries","Slack Status","Out of Office Norms","Difficult Conversations","When to Quit a Job","Burnout Recognition","Boundaries Checkpoint"]],
+      [19,"Famous Productivity Frameworks",["Stephen Covey \u2014 7 Habits","Cal Newport \u2014 Deep Work","David Allen \u2014 GTD","Tim Ferriss \u2014 4-Hour Workweek","James Clear \u2014 Atomic Habits","Greg McKeown \u2014 Essentialism","Jocko Willink \u2014 Discipline Equals Freedom","Naval Ravikant \u2014 Almanack","Charles Duhigg \u2014 Power of Habit","Mihaly Csikszentmihalyi \u2014 Flow","Anders Ericsson \u2014 Deliberate Practice","Daniel Pink \u2014 Drive","Carol Dweck \u2014 Mindset","Angela Duckworth \u2014 Grit","Famous Frameworks Checkpoint"]],
+      [20,"Pomodoro Deep Dive",["Cirillo's Tomato Timer","25/5 Original Recipe","50/10 Variation","90/20 Ultradian","Pomodoro Notation","Pomodoro Apps Compared","Pomodoro for Studying","Pomodoro for Coding","Pomodoro for Writing","When Pomodoro Fails","Adapting Block Length","Tracking Pomos","Pomodoro Team Versions","Resisting Interruptions","Pomodoro Checkpoint"]],
+      [21,"Time Blocking Workshop",["What Is Time Blocking?","Newport's Daily Block","Day Theming","Task Batching","Recurring Blocks","Migrating Blocks","Buffer Time","Theme Days vs Hours","Calendar-First vs List-First","Time Boxing vs Blocking","Visual Calendars","Color-Coding Blocks","Reviewing Yesterday's Blocks","Tools: Sunsama, Notion","Time Blocking Checkpoint"]],
+      [22,"Eisenhower Matrix Mastery",["History of the Matrix","Q1: Urgent + Important","Q2: Important Not Urgent","Q3: Urgent Not Important","Q4: Neither","Living in Q2","Identifying False Urgency","Delegating Q3","Eliminating Q4","Weekly Matrix Review","Digital Eisenhower Apps","Personal Matrix","Eisenhower for Email","Eisenhower for Projects","Eisenhower Checkpoint"]],
+      [23,"Kanban for Personal Use",["Origins of Kanban","Personal Kanban (Benson)","Three Columns: Todo, Doing, Done","WIP Limits","Adding Backlog","Adding Waiting Column","Card Aging","Cumulative Flow","Trello Setup","Notion Kanban","Asana Boards","GitHub Projects","Family Kanban","Kanban for Job Hunt","Kanban Checkpoint"]],
+      [24,"GTD Implementation",["GTD 5 Steps Recap","Capture Everywhere","Inbox Zero (Allen Style)","Clarify the Capture","Two-Minute Rule","Project Definition","Next Action Lists","Contexts (@home, @phone)","Waiting For List","Someday/Maybe","Tickler 43 Folders","Weekly Review Checklist","OmniFocus, Things, Todoist","GTD with Email","GTD Checkpoint"]],
+      [25,"Bullet Journal Method",["Origins (Carroll)","Rapid Logging Notation","Index Page","Future Log","Monthly Log","Daily Log","Migrating Tasks","Collections & Trackers","Threading Pages","BuJo Apps Debate","Minimalist BuJo","Decorative BuJo","BuJo for ADHD","BuJo for Anxiety","Bullet Journal Checkpoint"]],
+      [26,"Deep Work (Newport)",["What Is Deep Work?","Shallow vs Deep","Monastic Philosophy","Bimodal Philosophy","Rhythmic Philosophy","Journalistic Philosophy","Deep Work Hour Quota","Distraction Workbook","Quitting Social Media","Embrace Boredom","Drain the Shallows","Productive Meditation","Memorize a Deck","Becoming Indispensable","Deep Work Checkpoint"]],
+      [27,"Atomic Habits (Clear)",["1% Improvements","Identity-Based Habits","Habit Loop Four Laws","Make It Obvious","Make It Attractive","Make It Easy","Make It Satisfying","Habit Stacking","Two-Minute Rule (Habits)","Implementation Intentions","Habit Tracker Templates","Breaking Bad Habits","Plateau of Latent Potential","Goldilocks Rule","Atomic Habits Checkpoint"]],
+      [28,"The 4-Hour Workweek",["DEAL Framework","Definition (Lifestyle)","Elimination (80/20)","Automation (Outsourcing)","Liberation (Geographic)","Mini-Retirements","Income Autopilot","Muse Concept","Dreamlining","Eliminating Email","Batching Work","Outsourcing Your Life","Critique of Ferriss","Modern Take on 4HWW","4HWW Checkpoint"]],
+      [29,"7 Habits of Highly Effective People",["Stephen Covey Bio","Be Proactive","Begin with the End in Mind","Put First Things First","Think Win-Win","Seek First to Understand","Synergize","Sharpen the Saw","Circle of Influence vs Concern","Personal Mission Statement","Quadrant II Living","Emotional Bank Account","Critique of 7 Habits","7 Habits in Practice","7 Habits Checkpoint"]],
+      [30,"Eat That Frog (Tracy)",["The Frog Metaphor","ABCDE Method","80/20 Rule for Tasks","Single Handling","Slice & Dice Big Tasks","Plan Tomorrow Tonight","21-Day Habit","Apply Pareto","Identify Constraints","Prepare Thoroughly","One Bite at a Time","Be Hungry to Win","Lifelong Learner","Push Yourself","Eat That Frog Checkpoint"]],
+      [31,"Indistractable (Eyal)",["Internal Triggers","External Triggers","Make Time for Traction","Schedule Values","Time-Box Personal Time","Time-Box Family Time","Pacts: Effort, Price, Identity","Hack Back Tech","Cut Bad Meetings","Group Chat Hygiene","Email Pact","Phone Hacking","Workplace Distraction","Children & Distraction","Indistractable Checkpoint"]],
+      [32,"Make Time (Knapp & Zeratsky)",["Highlight Methodology","Laser (Stay Focused)","Energize (Body)","Reflect (Improve)","Identify Daily Highlight","Burner Phone","Distraction-Free iPhone","No Email Til 11am","Read News Weekly","Fake Wins to Avoid","Hourglass for Time","Cave Schedule Sleep","Move Daily","Make Time for Loved Ones","Make Time Checkpoint"]],
+      [33,"The 12-Week Year",["Why 12 Weeks (Moran)","Annualized Thinking","Vision First","12-Week Goals","Tactics & Plans","Weekly Plan","Score Card","Lead vs Lag Indicators","Commitment & Accountability","Accountability Meeting","Greatness Zone","13th Week Off","Push Through Resistance","Pre-Week Reflection","12WY Checkpoint"]],
+      [34,"OKRs for Individuals",["What Are OKRs","Andy Grove History","Google Adoption","Setting Objectives","Key Results 3-5","Aspirational vs Committed","Quarterly OKRs","Personal OKR Examples","OKR Apps & Tools","Weekly OKR Reviews","Scoring 0-1.0","Stretch Goals","Common OKR Mistakes","OKRs vs KPIs","OKRs Checkpoint"]],
+      [35,"Energy Management",["Energy vs Time","Loehr & Schwartz","4 Energy Quadrants","Physical Energy","Emotional Energy","Mental Energy","Spiritual Energy","Ultradian Rhythms","90-Minute Cycles","Strategic Naps","Caffeine Strategy","Recovery Rituals","Energy Audit","Burnout Prevention","Energy Mgmt Checkpoint"]],
+      [36,"Sleep Optimization",["Why We Sleep (Walker)","Sleep Stages Refresher","Circadian Hygiene","Sleep Pressure","8 Hours Myth","Wind-Down Routine","Bedroom Environment","Light Exposure","Caffeine Half-Life","Alcohol & Sleep","Naps Done Right","Jet Lag Strategies","Shift Work Sleep","Trackers (Oura, Whoop)","Sleep Checkpoint"]],
+      [37,"Mindfulness for Productivity",["Mindfulness Defined","Kabat-Zinn MBSR","Box Breathing","5-4-3-2-1 Senses","Mindful Transitions","Single-Tasking","Mindful Email","Mindful Meetings","Headspace & Calm","Insight Timer","Mindful Walking","Mindfulness Backlash","RAIN Technique","Mindful Eating","Mindfulness Checkpoint"]],
+      [38,"Procrastination Science",["What Is Procrastination","Hyperbolic Discounting","Steel's Equation","Tim Pychyl Research","Self-Compassion Helps","Implementation Intentions","Just Get Started","Tomato Trick","Pre-Commitment Devices","StickK & Beeminder","Public Accountability","Anti-Procrastination Apps","Two-Minute Variant","Reward Pairing","Procrastination Checkpoint"]],
+      [39,"Decision Fatigue & Defaults",["Baumeister Research","Ego Depletion Replication","Decision Fatigue Real Life","Reduce Decisions","Steve Jobs Wardrobe","Default Choices","Pre-Decisions","Reduce Choice","Apple Pay & Friction","Choice Architecture (Thaler)","Productivity Nudges","Standardize Lunch","Standardize Workouts","Sleep & Decisions","Decision Fatigue Checkpoint"]],
+      [40,"Flow State",["Csikszentmihalyi","8 Conditions of Flow","Flow Channel","Skill vs Challenge","Triggers of Flow","Steven Kotler Flow Genome","Macro vs Micro Flow","Flow at Work","Flow at Home","Flow Killers","Group Flow","Flow & Sports","Flow & Creativity","Engineering Flow Daily","Flow Checkpoint"]],
+      [41,"Saying No & Boundaries",["Why We Say Yes","The Cost of Yes","Power of No","Essentialism (McKeown)","Energy Boundaries","Time Boundaries","Saying No Politely","24-Hour Rule","Letting People Down","Renegotiating Commitments","Boundary at Work","Boundary at Home","Tech Boundaries","Communicating Limits","Boundaries Checkpoint"]],
+      [42,"Meeting Hygiene",["Why Meetings Suck","Meeting Brief 1-Pager","Meeting-Free Days","Async First Default","30-Minute Default","15-Minute Standups","Walking Meetings","No-Tech Meetings","Two-Pizza Rule","DACI Roles","Action Items Discipline","Meeting Costing","Recap Email Template","Calendar Defenses","Meeting Hygiene Checkpoint"]],
+      [43,"Notification Hygiene",["Notification Audit","iPhone Focus Modes","Android Focus Modes","Slack DND","Email Notifications Off","Mobile-Only Apps","One Inbox to Rule Them","Daily Triage Window","Phone in Other Room","Greyscale Mode","App Limits Screen Time","Sleep Mode Schedules","Notification Bankruptcy","Family Tech Charter","Notification Hygiene Checkpoint"]],
+      [44,"Productivity Capstone",["Putting It All Together","Choosing Your Stack","Building a Personal System","The Weekly Review Ritual","The Quarterly Review Ritual","Annual Review Ritual","Avoiding Productivity Porn","Sustainable Routines","Productivity Capstone Final"]],
+      [45,"Productivity Mastery",["Goal Setting Review","GTD Review","Pomodoro Review","Time Blocking Review","Calendar Review","Task App Review","Email Review","Eisenhower Review","Deep Work Review","Energy & Sleep Review","Reviews Process Review","Habit Review","Project Review","Boundaries Review","Productivity Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'tm-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('time-management');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('time-management');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
