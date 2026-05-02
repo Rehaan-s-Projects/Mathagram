@@ -83,113 +83,113 @@
       {
         q: "Which of these is the best definition of machine learning?",
         opts: [
-          "Hand-coding every rule a computer should follow",
-          "A field where computers learn patterns from data instead of being programmed with explicit rules",
-          "A way to make computers run faster",
-          "A subfield of databases focused on storage"
+          "Edam (The Bear): \"Hand-coding every rule a computer should follow.\"",
+          "Diego (The Researcher): \"A field where computers learn patterns from data instead of being programmed with explicit rules.\"",
+          "James (The Strong Man): \"A way to make computers run faster — crush it!\"",
+          "William (The Old Man): \"A subfield of databases focused on storage.\""
         ],
         correct: 1,
         explain: {
-          ok: "Right. ML is about learning patterns from examples — the rules emerge from the data, instead of being explicitly written by a programmer.",
-          no: "ML is the discipline where models learn from data. Instead of writing if/else rules by hand, you show the model examples and it figures out the pattern."
+          ok: "Right. Diego nails it — ML is about learning patterns from examples. The rules emerge from the data, instead of being explicitly written by a programmer.",
+          no: "Listen to Diego the Researcher: ML is the discipline where models learn from data. Instead of writing if/else rules by hand, you show the model examples and it figures out the pattern."
         }
       },
       {
         q: "In TRADITIONAL programming you write rules; in MACHINE LEARNING you provide:",
         opts: [
-          "A faster CPU",
-          "A different programming language",
-          "Examples (data) and a target — and the model learns the rule",
-          "More memory"
+          "Steve (The Fox): \"A faster CPU — sly move!\"",
+          "Rita (The Cat): \"A different programming language. Purrfect!\"",
+          "Diego (The Researcher): \"Examples (data) and a target — and the model learns the rule.\"",
+          "Sam (The Kid): \"More memory! Woohoo!\""
         ],
         correct: 2,
         explain: {
-          ok: "Exactly. Traditional code: rules + data → answers. ML: data + answers → rules.",
-          no: "The flip is: in traditional programming you give rules and data and get answers; in ML you give data and answers (labels) and the model learns the rules."
+          ok: "Exactly — Diego's right. Traditional code: rules + data → answers. ML: data + answers → rules.",
+          no: "Diego had it: in traditional programming you give rules and data and get answers; in ML you give data and answers (labels) and the model learns the rules."
         }
       },
       {
         q: "Predicting house prices from features like square footage, bedrooms, and location is an example of:",
         opts: [
-          "Classification",
-          "Regression",
-          "Clustering",
-          "Reinforcement learning"
+          "Gosia (The Girl): \"Classification — amazing work!\"",
+          "William (The Old Man): \"Regression, scholar.\"",
+          "James (The Strong Man): \"Clustering!\"",
+          "Steve (The Fox): \"Reinforcement learning — sly move!\""
         ],
         correct: 1,
         explain: {
-          ok: "Yes. Predicting a continuous numeric value — like a price — is regression.",
-          no: "Predicting a continuous number (price, temperature, weight) is regression. Classification predicts a category; clustering finds groups without labels."
+          ok: "Yes — well done, scholar. William's right: predicting a continuous numeric value, like a price, is regression.",
+          no: "William called it: predicting a continuous number (price, temperature, weight) is regression. Classification predicts a category; clustering finds groups without labels."
         }
       },
       {
         q: "Why do we usually split data into a TRAINING set and a TEST set?",
         opts: [
-          "To use less memory",
-          "Training data is for learning; test data measures how well the model handles unseen examples",
-          "Because the algorithm only works on small data",
-          "Test data is just a backup of training data"
+          "Edam (The Bear): \"To use less memory — you got this!\"",
+          "Diego (The Researcher): \"Training data is for learning; test data measures how well the model handles unseen examples.\"",
+          "Rita (The Cat): \"Because the algorithm only works on small data. Purrfect!\"",
+          "Sam (The Kid): \"Test data is just a backup of training data — woohoo!\""
         ],
         correct: 1,
         explain: {
-          ok: "Right. Test data is held out so we can estimate how the model will perform on data it has never seen — that's what 'generalization' means.",
-          no: "The test set is unseen data used to measure generalization. If you only checked accuracy on the training set, you'd just be measuring how well the model memorized."
+          ok: "Right. Diego's the researcher for a reason — test data is held out so we can estimate how the model will perform on data it has never seen. That's what 'generalization' means.",
+          no: "Diego had it: the test set is unseen data used to measure generalization. If you only checked accuracy on the training set, you'd just be measuring how well the model memorized."
         }
       },
       {
         q: "Grouping customers into segments WITHOUT predefined categories — letting the algorithm discover the groups — is:",
         opts: [
-          "Supervised learning",
-          "Unsupervised learning (clustering)",
-          "Linear regression",
-          "Reinforcement learning"
+          "James (The Strong Man): \"Supervised learning — crush it!\"",
+          "Diego (The Researcher): \"Unsupervised learning (clustering).\"",
+          "William (The Old Man): \"Linear regression, scholar.\"",
+          "Steve (The Fox): \"Reinforcement learning — sly move!\""
         ],
         correct: 1,
         explain: {
-          ok: "Correct. Clustering is the textbook unsupervised task — you have no labels, and the algorithm groups similar items together (e.g. K-Means).",
-          no: "When there are no labels and the model finds groups itself, that's unsupervised clustering. Supervised would require predefined categories with labeled examples."
+          ok: "Correct — Diego knows. Clustering is the textbook unsupervised task: you have no labels, and the algorithm groups similar items together (e.g. K-Means).",
+          no: "Diego had it: when there are no labels and the model finds groups itself, that's unsupervised clustering. Supervised would require predefined categories with labeled examples."
         }
       },
       {
         q: "A 'feature' in machine learning is:",
         opts: [
-          "The model's prediction",
-          "An individual input variable — a column in the data",
-          "A type of optimizer",
-          "The loss function"
+          "Sam (The Kid): \"The model's prediction — woohoo!\"",
+          "Diego (The Researcher): \"An individual input variable — a column in the data.\"",
+          "Rita (The Cat): \"A type of optimizer. Purrfect!\"",
+          "Gosia (The Girl): \"The loss function — amazing work!\""
         ],
         correct: 1,
         explain: {
-          ok: "Yes. Features are the inputs the model sees: e.g. for predicting price you might have square footage, bedrooms, and zip code as three features.",
-          no: "Features are the input variables (columns). The model's output is the prediction (or label). Optimizers and loss functions are training mechanics, not features."
+          ok: "Yes. Diego nailed it: features are the inputs the model sees. For predicting price you might have square footage, bedrooms, and zip code as three features.",
+          no: "Listen to Diego: features are the input variables (columns). The model's output is the prediction (or label). Optimizers and loss functions are training mechanics, not features."
         }
       },
       {
         q: "A 'label' (in supervised learning) is:",
         opts: [
-          "Random noise added to the data",
-          "The known correct answer for a training example",
-          "A name for the dataset file",
-          "The number of features"
+          "Steve (The Fox): \"Random noise added to the data — sly move!\"",
+          "William (The Old Man): \"The known correct answer for a training example, scholar.\"",
+          "Edam (The Bear): \"A name for the dataset file — you got this!\"",
+          "James (The Strong Man): \"The number of features — crush it!\""
         ],
         correct: 1,
         explain: {
-          ok: "Right. The label is the ground-truth answer — what the model is trying to predict — and supervised learning needs labeled examples to train.",
-          no: "A label is the known correct answer attached to each training example. Without labels, you can't do supervised learning at all."
+          ok: "Right — well done, scholar. William's correct: the label is the ground-truth answer, what the model is trying to predict. Supervised learning needs labeled examples to train.",
+          no: "William had it: a label is the known correct answer attached to each training example. Without labels, you can't do supervised learning at all."
         }
       },
       {
         q: "A model gets 99% accuracy on training data but only 60% on data it hasn't seen. What's happening?",
         opts: [
-          "The model is perfect — it just needs more compute",
-          "Underfitting — the model is too simple to learn the data",
-          "Overfitting — the model memorized the training set instead of learning the general pattern",
-          "There's a hardware bug"
+          "James (The Strong Man): \"The model is perfect — it just needs more compute. Crush it!\"",
+          "Sam (The Kid): \"Underfitting — the model is too simple to learn the data. Woohoo!\"",
+          "Diego (The Researcher): \"Overfitting — the model memorized the training set instead of learning the general pattern.\"",
+          "Gosia (The Girl): \"There's a hardware bug — amazing work!\""
         ],
         correct: 2,
         explain: {
-          ok: "That's the classic signature of overfitting: great on data it has seen, poor on data it hasn't. The model memorized noise instead of learning the underlying rule.",
-          no: "When training accuracy is high but test accuracy is much lower, the model has overfit — it's memorized the training set instead of learning to generalize."
+          ok: "That's Diego's classic signature of overfitting: great on data it has seen, poor on data it hasn't. The model memorized noise instead of learning the underlying rule.",
+          no: "Diego called it: when training accuracy is high but test accuracy is much lower, the model has overfit — it's memorized the training set instead of learning to generalize."
         }
       }
     ];
