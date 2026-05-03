@@ -214,28 +214,69 @@
 
   <script>
     // Reveal the two translation besties (Lingo & Babel) when the page is
-    // being served through the Google Translate proxy or otherwise rendered
-    // in a non-English locale. Stays hidden on the default English site.
+    // being viewed in a non-English language. Detects: the .translate.goog
+    // proxy, a non-English <html lang>, the Google Translate "googtrans"
+    // cookie set by the in-place widget, and Google's <font> text wrappers
+    // (a last-resort signal that translation has actually run).
     (function () {
       function isTranslated() {
+        // 1. The Google Translate proxy domain
         if (location.hostname.endsWith('.translate.goog')) return true;
-        // Google Translate also rewrites <html lang> on inline-translation pages
+        // 2. <html lang> set to a non-English locale
         const lang = (document.documentElement.lang || '').toLowerCase();
-        return !!lang && !lang.startsWith('en');
+        if (lang && !lang.startsWith('en')) return true;
+        // 3. The googtrans cookie left by the in-place widget — format is
+        //    "/<source>/<target>", e.g. "/en/es" when the user picked Spanish.
+        const m = document.cookie.match(/(?:^|; )googtrans=([^;]+)/);
+        if (m) {
+          const parts = decodeURIComponent(m[1]).split('/').filter(Boolean);
+          if (parts.length >= 2 && parts[1] && parts[1].toLowerCase() !== 'en') return true;
+        }
+        // 4. Google's text-wrapper element exists and translation has run
+        if (document.querySelector('font[style*="vertical-align: inherit"], font[style*="vertical-align:inherit"]')) return true;
+        return false;
       }
+      let revealed = false;
       function reveal() {
-        if (!isTranslated()) return;
-        document.querySelectorAll('.learning-bestie').forEach(el => {
-          el.style.display = '';
-        });
+        if (revealed || !isTranslated()) return;
+        revealed = true;
+        document.querySelectorAll('.learning-bestie').forEach(el => { el.style.display = ''; });
         const sub = document.getElementById('characters-subtitle');
         if (sub) sub.textContent = '10 characters with unique voices guide you through every lesson — including Lingo & Babel, your translation besties!';
       }
-      reveal();
-      // <html lang> may be set after Google Translate's widget injects, so
-      // re-check briefly on observable changes.
-      const obs = new MutationObserver(reveal);
-      obs.observe(document.documentElement, { attributes: true, attributeFilter: ['lang','class'] });
+      function hide() {
+        if (!revealed) return;
+        revealed = false;
+        document.querySelectorAll('.learning-bestie').forEach(el => { el.style.display = 'none'; });
+        const sub = document.getElementById('characters-subtitle');
+        if (sub) sub.textContent = '8 characters with unique voices guide you through every lesson';
+      }
+      function recheck() {
+        if (isTranslated()) reveal();
+        else hide();
+      }
+      recheck();
+      // Watch <html lang>/class changes — some flows update lang lazily.
+      new MutationObserver(recheck).observe(document.documentElement, {
+        attributes: true, attributeFilter: ['lang', 'class']
+      });
+      // Watch the body subtree for the appearance of Google's <font> wrappers
+      // (this catches in-place translation that doesn't touch <html lang>).
+      let bodyObs = null;
+      function startBodyObserver() {
+        if (bodyObs || !document.body) return;
+        bodyObs = new MutationObserver(recheck);
+        bodyObs.observe(document.body, { subtree: true, childList: true });
+      }
+      if (document.body) startBodyObserver();
+      else document.addEventListener('DOMContentLoaded', startBodyObserver);
+      // Re-check after the user picks a language from our own dropdown.
+      // The translation widget settles ~1-2s later; poll briefly to catch it.
+      let polls = 0;
+      const pollId = setInterval(() => {
+        recheck();
+        if (++polls >= 20) clearInterval(pollId); // ~10s of 500ms checks
+      }, 500);
     })();
   </script>
 
