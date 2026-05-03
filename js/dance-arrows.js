@@ -78,6 +78,17 @@
     const maxLesson = parseInt(root.dataset.maxLesson || '2430', 10);
     const lessonTitle = root.dataset.title || 'Dance Arrows Practice';
     const diff = difficultyFor(lessonNum, maxLesson);
+    // data-dirs override (e.g. "LR", "UD", "UDLR") restricts which arrows
+    // appear in this lesson — useful for arrow-family practice lessons.
+    const dirsOverride = (root.dataset.dirs || '').toUpperCase();
+    if (dirsOverride) {
+      const allowed = ['U','D','L','R'].filter(d => dirsOverride.includes(d));
+      if (allowed.length) {
+        diff.dirs = allowed;
+        // Doubles need ≥2 directions to make sense
+        if (allowed.length < 2) diff.doublesProb = 0;
+      }
+    }
     const chart = buildChart(diff, lessonNum);
 
     root.innerHTML = `
