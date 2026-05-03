@@ -158,6 +158,31 @@
         .da-touch button:active { background: rgba(236,72,153,0.35); }
         .da-final { margin-top: 14px; text-align: center; color: #cbd5e1; font-size: 0.92rem; min-height: 1.4em; }
         .da-final.win { color: #fde047; font-size: 1.1rem; font-weight: 800; }
+
+        /* Steve the Fox coach */
+        .da-coach { display: flex; gap: 12px; align-items: flex-end; max-width: 480px;
+          margin: 14px auto 6px; padding: 0 4px; }
+        .da-coach .avatar { flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%;
+          background: #fde68a; border: 3px solid #f97316; overflow: hidden; box-shadow: 0 4px 14px rgba(249,115,22,0.3);
+          transition: transform 0.15s; position: relative; }
+        .da-coach .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .da-coach .avatar.talking { animation: da-bob 0.5s ease-in-out infinite; }
+        @keyframes da-bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-4px) rotate(3deg); } }
+        .da-coach .avatar .name-tag { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+          background: #f97316; color: #fff; font-size: 0.65rem; font-weight: 800;
+          padding: 1px 8px; border-radius: 999px; white-space: nowrap; letter-spacing: 0.04em; }
+        .da-coach .bubble { flex: 1; background: rgba(254,215,170,0.10); border: 1.5px solid rgba(249,115,22,0.45);
+          padding: 10px 14px; border-radius: 14px; border-bottom-left-radius: 4px;
+          color: #fed7aa; font-size: 0.92rem; line-height: 1.4; min-height: 44px;
+          display: flex; align-items: center; position: relative; }
+        .da-coach .bubble::before { content: ''; position: absolute; left: -8px; bottom: 8px;
+          width: 0; height: 0; border-style: solid; border-width: 6px 8px 6px 0;
+          border-color: transparent rgba(249,115,22,0.45) transparent transparent; }
+        .da-coach .mute-toggle { flex: 0 0 auto; background: rgba(249,115,22,0.15);
+          border: 1px solid rgba(249,115,22,0.4); color: #fed7aa; cursor: pointer;
+          padding: 6px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700;
+          align-self: center; font-family: inherit; }
+        .da-coach .mute-toggle:hover { background: rgba(249,115,22,0.25); }
       </style>
 
       <div class="da-header">
@@ -169,6 +194,15 @@
           <span class="da-pill">${diff.bpm} BPM</span>
           <span class="da-pill">${diff.notes} arrows</span>
         </div>
+      </div>
+
+      <div class="da-coach" id="da-coach">
+        <div class="avatar" id="da-coach-avatar" title="Steve the Fox">
+          <img src="../../assets/characters/steve.svg" alt="Steve the Fox">
+          <span class="name-tag">Steve</span>
+        </div>
+        <div class="bubble" id="da-coach-bubble">Sly move time, friend! Hit ▶ when you're ready.</div>
+        <button class="mute-toggle" id="da-mute" title="Toggle Steve's voice">🔊 Steve</button>
       </div>
 
       <div class="da-stage" id="da-stage">
@@ -219,6 +253,72 @@
     const elFinal = root.querySelector('#da-final');
     const btnStart = root.querySelector('#da-start');
     const btnReset = root.querySelector('#da-reset');
+    const elCoachAvatar = root.querySelector('#da-coach-avatar');
+    const elCoachBubble = root.querySelector('#da-coach-bubble');
+    const btnMute = root.querySelector('#da-mute');
+
+    // ── Steve the Fox: voice + bubble ─────────────────────────────
+    const STEVE = {
+      start:   ["Sly move time! Let's dance, friend!", "Foxes love rhythm — let's go!", "Quick paws, quick eyes — start!"],
+      perfect: ["Sly!", "Sharp!", "Right on the beat!", "Foxy!", "Perfect!", "Cleanest of clean!"],
+      good:    ["Nice one!", "Solid!", "Keep going!", "On track!", "That'll do!"],
+      miss:    ["Almost!", "Stay sharp!", "Eyes up!", "Try the next one!", "Foxes don't quit."],
+      combo:   ["Hot streak!", "On fire!", "Sly streak!", "Don't stop now!"],
+      winHi:   ["Sly moves all around! Top fox!", "That was foxy. Top marks!", "Champion of the den!"],
+      winMid:  ["Solid run, friend!", "Good moves — keep practicing!", "Foxes call that a win."],
+      winLow:  ["Practice makes perfect!", "Try once more — you've got this.", "Even foxes stumble. Try again!"],
+    };
+    let muted = false;
+    try { muted = localStorage.getItem('da-steve-muted') === '1'; } catch (e) {}
+    function refreshMuteBtn() { btnMute.textContent = muted ? '🔇 Steve' : '🔊 Steve'; }
+    refreshMuteBtn();
+
+    let pickedVoice = null;
+    function pickFoxyVoice() {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || !voices.length) return null;
+      // Prefer English voices that sound brighter/quirkier (heuristics by name).
+      const pref = ['Daniel','Alex','Fred','Trinoids','Junior','Ralph','Karen','Samantha'];
+      const en = voices.filter(v => /^en/i.test(v.lang));
+      for (const name of pref) { const m = en.find(v => v.name.includes(name)); if (m) return m; }
+      return en[0] || voices[0];
+    }
+    if ('speechSynthesis' in window) {
+      pickedVoice = pickFoxyVoice();
+      window.speechSynthesis.onvoiceschanged = () => { pickedVoice = pickFoxyVoice(); };
+    }
+
+    let bubbleTimer = null;
+    function steveSay(category, opts) {
+      const lines = STEVE[category];
+      if (!lines) return;
+      const text = lines[Math.floor(Math.random() * lines.length)];
+      // Update speech bubble
+      elCoachBubble.textContent = text;
+      elCoachAvatar.classList.add('talking');
+      if (bubbleTimer) clearTimeout(bubbleTimer);
+      bubbleTimer = setTimeout(() => elCoachAvatar.classList.remove('talking'), 900);
+      // Speak it (unless muted or browser lacks support)
+      if (muted || !('speechSynthesis' in window)) return;
+      try {
+        // Cancel any in-flight speech so quick events don't queue a backlog
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        if (pickedVoice) u.voice = pickedVoice;
+        u.pitch = 1.55;            // foxy = bright
+        u.rate  = (opts && opts.rate) || 1.18;
+        u.volume = 0.9;
+        window.speechSynthesis.speak(u);
+      } catch (e) { /* noop */ }
+    }
+    btnMute.addEventListener('click', () => {
+      muted = !muted;
+      try { localStorage.setItem('da-steve-muted', muted ? '1' : '0'); } catch (e) {}
+      refreshMuteBtn();
+      if (muted && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+      elCoachBubble.textContent = muted ? '(Steve is silent — click 🔇 to unmute.)' : "Sly move time! I'm back, friend.";
+    });
 
     const ARROW_GLYPH = { U: '⬆', D: '⬇', L: '⬅', R: '➡' };
     const TRAVEL_MS = TRAVEL_MS_OVERRIDE || 1500; // time an arrow takes to travel from bottom to receptor
@@ -254,6 +354,7 @@
       startedAt = performance.now();
       btnStart.textContent = '⏸ Stop';
       elFinal.textContent = 'Hit the arrows as they cross the glowing zone!';
+      steveSay('start');
       tick();
     }
 
@@ -335,6 +436,17 @@
       // Fade arrow
       s.el.classList.add('fading');
       setTimeout(() => s.el.remove(), 200);
+
+      // Steve's commentary — sparingly, so he doesn't talk over himself.
+      // Always speak misses; randomly speak ~25% of perfects/goods; always
+      // speak combo milestones (8, 16, 24…).
+      if (kind === 'miss') {
+        steveSay('miss', { rate: 1.05 });
+      } else if (combo > 0 && combo % 8 === 0) {
+        steveSay('combo', { rate: 1.25 });
+      } else if (Math.random() < 0.25) {
+        steveSay(kind);
+      }
     }
 
     function pressDir(dir) {
@@ -367,6 +479,8 @@
       elFinal.classList.add('win');
       btnStart.textContent = '▶ Start Practice';
       btnStart.disabled = false;
+      // Steve closes out the run
+      steveSay(pct >= 80 ? 'winHi' : pct >= 50 ? 'winMid' : 'winLow', { rate: 1.0 });
     }
 
     document.addEventListener('keydown', (e) => {
