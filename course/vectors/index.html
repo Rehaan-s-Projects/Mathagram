@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vectors — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>Vectors</h1>
+    <p>The Brilliant-style vectors course — magnitude &amp; direction, components, addition, dot &amp; cross products, projections, lines &amp; planes in 3D, polar/cylindrical/spherical coordinates, linear combinations &amp; span, linear independence, basis &amp; dimension, norms &amp; distance, vector-valued functions, gradient/divergence/curl preview, and applications to physics, computer graphics, and machine learning. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is a Vector?",["Vectors as Arrows","Magnitude & Direction","Scalars vs Vectors","Position vs Displacement","Equal Vectors","Zero Vector","Negative of a Vector","Drawing Vectors","Notation: Bold, Hat, Arrow","Vectors in the Plane","Vectors in 3D Preview","Free vs Bound Vectors","Geometric Intuition","Real-World Vectors","Foundations Checkpoint"]],
+      [2,"Vector Components",["Standard Basis i, j, k","Component Form (x, y)","From Tip-and-Tail to Components","Recovering Magnitude","Recovering Direction (Angle)","Components in 3D (x, y, z)","Position Vectors from Origin","Components from Two Points","Decomposing into Axes","Negative Components","Component Notation Conventions","Column vs Row Vectors","Working in Different Frames","Practice: Find the Components","Components Checkpoint"]],
+      [3,"Vector Addition & Subtraction",["Tip-to-Tail Addition","Parallelogram Law","Adding by Components","Commutativity of Addition","Associativity of Addition","Subtraction as Addition of Negative","Vector from A to B","Resultant of Multiple Vectors","Adding 3 or More Vectors","Geometric vs Algebraic Method","Closed Polygons (Sum = 0)","Force Diagrams (Equilibrium)","Adding in 3D","Practice: Resultant Forces","Addition Checkpoint"]],
+      [4,"Scalar Multiplication & Length",["Scaling a Vector","Stretching & Shrinking","Reversing Direction","Distributive Properties","Length Formula in 2D","Length Formula in 3D","Unit Vectors","Normalizing a Vector","Scalar × Unit Vector","Direction Vectors","Parallel Vectors","Anti-Parallel Vectors","Linear Scaling Examples","Practice: Find the Unit Vector","Scaling Checkpoint"]],
+      [5,"The Dot Product",["Geometric Definition (a·b = |a||b|cos θ)","Algebraic Formula (Components)","Dot Product is a Scalar","Sign of the Dot Product","Perpendicular Vectors (Dot = 0)","Parallel Vectors","Commutativity & Distributivity","Dot Product with Self = |v|²","Cosine of the Angle","Finding the Angle Between","Work in Physics (W = F·d)","Dot Product in 3D","Dot Product as a Test","Practice: Compute Dots","Dot Product Checkpoint"]],
+      [6,"The Cross Product",["Why Cross Product (3D Only)","Right-Hand Rule","Geometric: |a×b| = |a||b|sin θ","Algebraic Formula (Determinant)","Cross Product is a Vector","Anti-Commutativity (a×b = −b×a)","Distributivity","Cross with Self = 0","Parallel Vectors → Zero","Area of Parallelogram","Area of Triangle","Torque in Physics (τ = r×F)","Magnetic Force (F = qv×B)","Triple Products","Cross Product Checkpoint"]],
+      [7,"Projections & Decomposition",["Scalar Projection","Vector Projection Formula","Component Along a Direction","Decomposition into Parallel + Perp","Orthogonal Components","Reflecting a Vector","Distance from Point to Line","Distance from Point to Plane","Closest Point on a Line","Light Reflection (Graphics)","Force Decomposition","Gradient Descent Intuition","Gram-Schmidt Preview","Practice: Project & Decompose","Projection Checkpoint"]],
+      [8,"Vectors in 3D",["From 2D to 3D","x-, y-, z-Axes & Right Hand","Octants in 3D","Distance Between Two Points","Midpoint in 3D","Vectors from Two 3D Points","Length in 3D","Dot Product in 3D","Cross Product in 3D","Visualizing 3D Vectors","Angle Between 3D Vectors","Direction Cosines","Direction Angles","Practice: 3D Geometry","3D Vectors Checkpoint"]],
+      [9,"Lines & Planes in Space",["Vector Equation of a Line","Parametric Equations of a Line","Symmetric Equations","Lines Through Two Points","Direction Vector of a Line","Vector Equation of a Plane","Normal Vector to a Plane","Scalar Equation of a Plane","General Plane: ax+by+cz=d","Intersecting Lines","Skew vs Parallel Lines","Distance Point-to-Plane","Angle Between Two Planes","Line of Intersection of Planes","Lines & Planes Checkpoint"]],
+      [10,"Polar, Cylindrical & Spherical",["Polar Coordinates (r, θ)","Polar to Cartesian","Cartesian to Polar","Vectors in Polar Form","Cylindrical Coordinates (r, θ, z)","Cylindrical to Cartesian","Cartesian to Cylindrical","Spherical Coordinates (ρ, θ, φ)","Spherical to Cartesian","Cartesian to Spherical","Choosing the Right Coordinate System","Vector Fields in Cylindrical","Vector Fields in Spherical","Practice: Convert & Compute","Coordinates Checkpoint"]],
+      [11,"Linear Combinations & Span",["Linear Combinations Defined","Reaching a Vector","Span of One Vector","Span of Two Vectors","Span of Three Vectors","When Span is a Line","When Span is a Plane","When Span is All of R³","Geometric Visualization","Reaching by Mixing","Span as a Subspace","Coefficient Existence & Uniqueness","Span of Standard Basis","Practice: Is It in the Span?","Span Checkpoint"]],
+      [12,"Linear Independence",["Linear Independence Defined","Linear Dependence Defined","Two Vectors: When Dependent?","Three Vectors in R²","Three Vectors in R³","Determinant Test (2×2)","Determinant Test (3×3)","Reduced Row Echelon Test","Geometric Picture","Trivial vs Non-Trivial Solutions","Implications for Span","Independent Doesn't Mean Orthogonal","Maximum Independent Set in Rⁿ","Practice: Independence Checks","Independence Checkpoint"]],
+      [13,"Basis & Dimension",["Basis Defined","Standard Basis","Non-Standard Bases","Coordinates with Respect to a Basis","Change of Basis","Dimension of a Space","Basis Theorems","Bases for Subspaces","Orthonormal Bases","Gram-Schmidt Process","Examples: Bases in R²","Examples: Bases in R³","Bases in Function Spaces (Preview)","Practice: Build a Basis","Basis Checkpoint"]],
+      [14,"Norms, Metrics & Distance",["Euclidean Norm (L²)","Manhattan Norm (L¹)","Chebyshev Norm (L∞)","Lᵖ Norms in General","Norm Properties (Axioms)","Distance from a Norm","Triangle Inequality","Cauchy-Schwarz Inequality","Unit Balls in Different Norms","Inner Products","Inner Product Spaces","Orthogonality from Inner Products","Norms in Machine Learning","Practice: Compute Distances","Norms Checkpoint"]],
+      [15,"Vectors in Physics",["Force Vectors","Velocity Vectors","Acceleration Vectors","Momentum Vectors","Free-Body Diagrams","Equilibrium of Forces","Newton's Second Law (F=ma) Vectors","Work-Energy with Dot Product","Torque with Cross Product","Angular Momentum","Magnetic Force on a Charge","Lorentz Force","Center of Mass as Vector Sum","Rocket Thrust as Vector","Physics Vectors Checkpoint"]],
+      [16,"Vectors in Computer Graphics",["Position, Direction & Up Vectors","2D Transformations as Vectors","Translation, Rotation, Scale","3D Camera Up & Forward","View Frustum & Camera Vectors","Normal Vectors for Lighting","Phong Reflection Model","Cross Product for Surface Normals","Ray-Surface Intersection","Barycentric Coordinates","Quaternions vs Vectors (Preview)","Bones & Skinning Vectors","Game Physics Force Vectors","Vector Math in Shaders","Graphics Vectors Checkpoint"]],
+      [17,"Vectors in Machine Learning",["Feature Vectors","Embeddings as Vectors","Cosine Similarity","Euclidean Distance for kNN","Word2Vec Geometry","Sentence & Image Embeddings","Dot Product in Attention","Vector Norms as Regularization","Gradient Vectors","Gradient Descent Step","Direction of Steepest Ascent","High-Dimensional Vector Spaces","Curse of Dimensionality","Vector Databases (FAISS, Pinecone)","ML Vectors Checkpoint"]],
+      [18,"Vector-Valued Functions",["Vector Functions of t","Tracing a Curve","Position, Velocity, Acceleration","Derivatives Component-Wise","Integrals Component-Wise","Tangent Vector","Unit Tangent T(t)","Arc Length","Reparameterization by Arc Length","Curvature","Principal Normal N","Binormal B & TNB Frame","Helix & Famous Curves","Motion Problems","Vector Functions Checkpoint"]],
+      [19,"Gradient, Divergence & Curl Preview",["Scalar Field vs Vector Field","Visualizing Vector Fields","Gradient ∇f as a Vector","Direction of Steepest Ascent","Level Sets & Gradient","Divergence ∇·F","Sources & Sinks","Curl ∇×F","Rotation in a Field","Conservative Fields","Potential Functions","Line Integrals Preview","Surface Integrals Preview","Tying It All Together","Field Calculus Checkpoint"]],
+      [20,"Vectors Mastery",["Components & Magnitude Review","Addition & Subtraction Review","Dot Product Mastery","Cross Product Mastery","Projections Mastery","Lines & Planes Mastery","Linear Independence Mastery","Basis & Dimension Mastery","Norms & Distance Mastery","Physics Applications Final","Graphics Applications Final","Machine Learning Applications Final","Vector Functions Final","Field Calculus Final","Vectors Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'vec-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('vectors');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('vectors');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
