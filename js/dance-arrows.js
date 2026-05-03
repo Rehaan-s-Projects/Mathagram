@@ -50,6 +50,7 @@
     const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
 
     const beatMs = 60000 / diff.bpm;
+    const holdMs = (diff.holdBeats || 2) * beatMs; // FNF-style half-note default
     const chart = [];
     let lastDir = null;
     for (let i = 0; i < diff.notes; i++) {
@@ -60,11 +61,12 @@
       while (dir === lastDir && diff.dirs.length > 1 && rand() < 0.6);
       lastDir = dir;
 
-      const notes = [dir];
+      const isHold = (diff.holdsProb || 0) > 0 && rand() < diff.holdsProb;
+      const notes = [{ dir, hold: isHold ? holdMs : 0 }];
       if (rand() < diff.doublesProb) {
         // Add a second simultaneous arrow that isn't the same direction
         const others = diff.dirs.filter(d => d !== dir);
-        if (others.length) notes.push(others[Math.floor(rand() * others.length)]);
+        if (others.length) notes.push({ dir: others[Math.floor(rand() * others.length)], hold: 0 });
       }
       chart.push({ t, notes });
     }
@@ -98,6 +100,13 @@
     // to the receptor zone — bigger = more reaction time = "slower" feel.
     const travelOverride = parseInt(root.dataset.travelMs || '0', 10);
     const TRAVEL_MS_OVERRIDE = travelOverride > 0 ? travelOverride : null;
+    // FNF-style sustain notes. data-holds is the proportion (0..1) of arrows
+    // that become hold notes; data-hold-beats is the hold length in beats
+    // (default 2 = half note).
+    const holdsProb = Math.max(0, Math.min(1, parseFloat(root.dataset.holds || '0')));
+    const holdBeats = parseFloat(root.dataset.holdBeats || '2') || 2;
+    diff.holdsProb = holdsProb;
+    diff.holdBeats = holdBeats;
     const chart = buildChart(diff, lessonNum);
 
     root.innerHTML = `
@@ -131,6 +140,14 @@
           font-size: 2rem; line-height: 1; pointer-events: none; transition: opacity 0.15s;
           text-shadow: 0 0 14px rgba(255,255,255,0.35); }
         .da-arrow.fading { opacity: 0; }
+        /* FNF-style sustain tail */
+        .da-tail { position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+          width: 18px; border-radius: 9px;
+          background: linear-gradient(180deg, #fde047 0%, #f97316 60%, #fb7185 100%);
+          box-shadow: 0 0 12px rgba(253,224,71,0.55); z-index: -1; }
+        .da-tail.holding { background: linear-gradient(180deg, #86efac 0%, #22c55e 100%);
+          box-shadow: 0 0 16px rgba(34,197,94,0.6); }
+        .da-tail.broken { opacity: 0.35; background: #6b7280; box-shadow: none; }
         .da-hud { position: absolute; bottom: 8px; left: 8px; right: 8px;
           display: flex; justify-content: space-between; align-items: end; pointer-events: none; }
         .da-hud .item { background: rgba(0,0,0,0.45); padding: 6px 12px; border-radius: 10px;
@@ -345,47 +362,99 @@
       btnStart.textContent = '▶ Start Practice';
     }
 
-    function spawnArrow(dir, hitTime) {
+    function spawnArrow(dir, hitTime, holdMs) {
       const a = document.createElement('div');
       a.className = 'da-arrow';
       a.textContent = ARROW_GLYPH[dir];
       a.style.top = STAGE_HEIGHT + 'px';
+      let tailEl = null;
+      if (holdMs > 0) {
+        tailEl = document.createElement('div');
+        tailEl.className = 'da-tail';
+        const px = (holdMs / TRAVEL_MS) * (STAGE_HEIGHT - RECEPTOR_TOP);
+        tailEl.style.height = Math.max(8, px) + 'px';
+        a.appendChild(tailEl);
+      }
       lanes[dir].appendChild(a);
-      scheduled.push({ el: a, dir, hitTime, hit: false });
+      scheduled.push({
+        el: a, tailEl, dir, hitTime, hit: false,
+        holdMs: holdMs || 0, holding: false, holdResolved: false, holdBroken: false,
+      });
     }
 
     function tick() {
       if (!playing) return;
       const now = performance.now() - startedAt;
 
-      // Spawn arrows TRAVEL_MS before their hitTime
+      // Spawn arrows TRAVEL_MS before their hitTime (account for tails)
       while (chartIdx < chart.length && chart[chartIdx].t <= now + TRAVEL_MS) {
         const beat = chart[chartIdx];
-        beat.notes.forEach(d => spawnArrow(d, chart[chartIdx].t));
+        beat.notes.forEach(note => {
+          // Backwards-compat: notes may be a string or {dir, hold}
+          if (typeof note === 'string') spawnArrow(note, beat.t, 0);
+          else spawnArrow(note.dir, beat.t, note.hold || 0);
+        });
         chartIdx++;
       }
 
-      // Move arrows
-      const ARROW_HEIGHT = 32;
       scheduled.forEach(s => {
-        if (s.hit) return;
-        const remaining = s.hitTime - now; // ms until receptor
-        // Position interpolates from STAGE_HEIGHT (bottom) to RECEPTOR_TOP (target)
-        const progress = 1 - (remaining / TRAVEL_MS);
-        const y = STAGE_HEIGHT - progress * (STAGE_HEIGHT - RECEPTOR_TOP);
-        s.el.style.top = y + 'px';
-        // Auto-miss when arrow passes receptor by >120ms
-        if (remaining < -120) {
-          markResult(s, 'miss', null);
+        // Move every arrow whose head hasn't been hit yet
+        if (!s.hit) {
+          const remaining = s.hitTime - now;
+          const progress = 1 - (remaining / TRAVEL_MS);
+          const y = STAGE_HEIGHT - progress * (STAGE_HEIGHT - RECEPTOR_TOP);
+          s.el.style.top = y + 'px';
+          if (remaining < -120) markResult(s, 'miss', null);
+        } else if (s.holdMs > 0 && !s.holdResolved) {
+          // Head was hit; freeze the head at the receptor and shorten the
+          // tail as the hold timer ticks down. This mimics FNF's
+          // "hold the arrow as the tail eats into the receptor" feel.
+          s.el.style.top = RECEPTOR_TOP + 'px';
+          const elapsed = now - s.hitTime;
+          const remainHold = Math.max(0, s.holdMs - elapsed);
+          if (s.tailEl) {
+            const px = (remainHold / TRAVEL_MS) * (STAGE_HEIGHT - RECEPTOR_TOP);
+            s.tailEl.style.height = Math.max(0, px) + 'px';
+          }
+          // Player must keep the key down. Allow a tiny grace window
+          // (80ms) for re-pressing.
+          if (!s.holdBroken && !keysDown[s.dir]) {
+            // Mark broken if the gap exceeds grace
+            if (now - (s.lastHeldAt || s.hitTime) > 80) {
+              s.holdBroken = true;
+              if (s.tailEl) { s.tailEl.classList.remove('holding'); s.tailEl.classList.add('broken'); }
+            }
+          } else if (keysDown[s.dir]) {
+            s.lastHeldAt = now;
+            if (s.tailEl) s.tailEl.classList.add('holding');
+          }
+          if (remainHold === 0) {
+            s.holdResolved = true;
+            if (!s.holdBroken) {
+              score += 50; // FULL HOLD bonus
+              elScore.textContent = score;
+              showToastLocal('perfect', 'FULL HOLD!');
+              steveSay('combo', { rate: 1.15 });
+            } else {
+              showToastLocal('miss', 'HOLD BROKEN');
+            }
+            // Fade the head + tail out
+            s.el.classList.add('fading');
+            setTimeout(() => s.el.remove(), 220);
+          }
         }
       });
 
       rafHandle = requestAnimationFrame(tick);
 
-      // End condition: all arrows resolved + scheduling done
-      if (chartIdx >= chart.length && scheduled.every(s => s.hit)) {
-        finish();
-      }
+      const allDone = chartIdx >= chart.length && scheduled.every(s => s.hit && (s.holdMs === 0 || s.holdResolved));
+      if (allDone) finish();
+    }
+
+    function showToastLocal(kind, text) {
+      elToast.className = 'da-toast show ' + kind;
+      elToast.textContent = text;
+      setTimeout(() => elToast.classList.remove('show'), 350);
     }
 
     function markResult(s, kind, recDir) {
@@ -413,9 +482,18 @@
       elToast.textContent = kind === 'perfect' ? 'PERFECT' : kind === 'good' ? 'GOOD' : 'MISS';
       setTimeout(() => elToast.classList.remove('show'), 350);
 
-      // Fade arrow
-      s.el.classList.add('fading');
-      setTimeout(() => s.el.remove(), 200);
+      // For sustain notes, the head stays anchored at the receptor until
+      // the hold resolves. Regular notes fade immediately.
+      if (s.holdMs > 0 && kind !== 'miss') {
+        s.holding = true;
+        s.lastHeldAt = performance.now() - startedAt;
+      } else {
+        s.el.classList.add('fading');
+        setTimeout(() => s.el.remove(), 200);
+        // If a held note's HEAD missed, mark the hold as already resolved
+        // so we don't keep tracking it.
+        if (s.holdMs > 0) { s.holdResolved = true; s.holdBroken = true; }
+      }
 
       // Steve's commentary — sparingly, so he doesn't talk over himself.
       // Always speak misses; randomly speak ~25% of perfects/goods; always
@@ -463,14 +541,31 @@
       steveSay(pct >= 80 ? 'winHi' : pct >= 50 ? 'winMid' : 'winLow', { rate: 1.0 });
     }
 
+    // Track which direction keys are currently held so sustain/hold notes
+    // can detect whether the player is keeping the key down through the tail.
+    const keysDown = { U: false, D: false, L: false, R: false };
+
     document.addEventListener('keydown', (e) => {
       const d = KEYMAP[e.code];
       if (!d) return;
       e.preventDefault();
+      if (e.repeat) return; // ignore OS auto-repeat — count the initial press
+      keysDown[d] = true;
       pressDir(d);
     });
+    document.addEventListener('keyup', (e) => {
+      const d = KEYMAP[e.code];
+      if (!d) return;
+      keysDown[d] = false;
+    });
     root.querySelectorAll('.da-touch button').forEach(b => {
-      b.addEventListener('click', () => pressDir(b.dataset.touch));
+      const dir = b.dataset.touch;
+      const press = (ev) => { ev.preventDefault(); keysDown[dir] = true; pressDir(dir); };
+      const release = () => { keysDown[dir] = false; };
+      b.addEventListener('pointerdown', press);
+      b.addEventListener('pointerup', release);
+      b.addEventListener('pointerleave', release);
+      b.addEventListener('pointercancel', release);
     });
     btnStart.addEventListener('click', () => start());
     btnReset.addEventListener('click', reset);
