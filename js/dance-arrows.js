@@ -178,11 +178,6 @@
         .da-coach .bubble::before { content: ''; position: absolute; left: -8px; bottom: 8px;
           width: 0; height: 0; border-style: solid; border-width: 6px 8px 6px 0;
           border-color: transparent rgba(249,115,22,0.45) transparent transparent; }
-        .da-coach .mute-toggle { flex: 0 0 auto; background: rgba(249,115,22,0.15);
-          border: 1px solid rgba(249,115,22,0.4); color: #fed7aa; cursor: pointer;
-          padding: 6px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700;
-          align-self: center; font-family: inherit; }
-        .da-coach .mute-toggle:hover { background: rgba(249,115,22,0.25); }
       </style>
 
       <div class="da-header">
@@ -202,7 +197,6 @@
           <span class="name-tag">Steve</span>
         </div>
         <div class="bubble" id="da-coach-bubble">Sly move time, friend! Hit ▶ when you're ready.</div>
-        <button class="mute-toggle" id="da-mute" title="Toggle Steve's voice">🔊 Steve</button>
       </div>
 
       <div class="da-stage" id="da-stage">
@@ -255,7 +249,6 @@
     const btnReset = root.querySelector('#da-reset');
     const elCoachAvatar = root.querySelector('#da-coach-avatar');
     const elCoachBubble = root.querySelector('#da-coach-bubble');
-    const btnMute = root.querySelector('#da-mute');
 
     // ── Steve the Fox: voice + bubble ─────────────────────────────
     const STEVE = {
@@ -268,11 +261,6 @@
       winMid:  ["Solid run, friend!", "Good moves — keep practicing!", "Foxes call that a win."],
       winLow:  ["Practice makes perfect!", "Try once more — you've got this.", "Even foxes stumble. Try again!"],
     };
-    let muted = false;
-    try { muted = localStorage.getItem('da-steve-muted') === '1'; } catch (e) {}
-    function refreshMuteBtn() { btnMute.textContent = muted ? '🔇 Steve' : '🔊 Steve'; }
-    refreshMuteBtn();
-
     let pickedVoice = null;
     function pickFoxyVoice() {
       if (!('speechSynthesis' in window)) return null;
@@ -299,8 +287,8 @@
       elCoachAvatar.classList.add('talking');
       if (bubbleTimer) clearTimeout(bubbleTimer);
       bubbleTimer = setTimeout(() => elCoachAvatar.classList.remove('talking'), 900);
-      // Speak it (unless muted or browser lacks support)
-      if (muted || !('speechSynthesis' in window)) return;
+      // Speak it (if the browser supports it)
+      if (!('speechSynthesis' in window)) return;
       try {
         // Cancel any in-flight speech so quick events don't queue a backlog
         window.speechSynthesis.cancel();
@@ -312,14 +300,6 @@
         window.speechSynthesis.speak(u);
       } catch (e) { /* noop */ }
     }
-    btnMute.addEventListener('click', () => {
-      muted = !muted;
-      try { localStorage.setItem('da-steve-muted', muted ? '1' : '0'); } catch (e) {}
-      refreshMuteBtn();
-      if (muted && 'speechSynthesis' in window) window.speechSynthesis.cancel();
-      elCoachBubble.textContent = muted ? '(Steve is silent — click 🔇 to unmute.)' : "Sly move time! I'm back, friend.";
-    });
-
     const ARROW_GLYPH = { U: '⬆', D: '⬇', L: '⬅', R: '➡' };
     const TRAVEL_MS = TRAVEL_MS_OVERRIDE || 1500; // time an arrow takes to travel from bottom to receptor
     const RECEPTOR_TOP = 24 + 32; // receptor zone center (top + half height)
