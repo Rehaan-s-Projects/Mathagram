@@ -145,7 +145,7 @@
   <!-- Meet the Characters -->
   <section style="max-width:900px; margin:0 auto; padding:0 24px 64px;">
     <h2 style="text-align:center; font-size:1.8rem; font-weight:800; margin-bottom:8px;">Meet Your Learning Buddies</h2>
-    <p style="text-align:center; color:#64748b; font-size:1rem; margin-bottom:32px;">8 characters with unique voices guide you through every lesson</p>
+    <p id="characters-subtitle" style="text-align:center; color:#64748b; font-size:1rem; margin-bottom:32px;">8 characters with unique voices guide you through every lesson</p>
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px;">
       <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:20px; text-align:center;">
         <img src="assets/characters/edam.svg" alt="Edam" style="width:64px; height:64px; border-radius:50%; margin-bottom:8px;">
@@ -195,8 +195,49 @@
         <p style="font-size:0.75rem; color:#94a3b8;">The Girl</p>
         <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">"Amazing work!"</p>
       </div>
+      <!-- Translation besties — Lingo & Babel — only revealed when the
+           page is being viewed through Google Translate (non-English). -->
+      <div class="learning-bestie" style="display:none; background:linear-gradient(180deg,#ecfdf5 0%,#fff 70%); border:2px solid #fde047; border-radius:16px; padding:20px; text-align:center;">
+        <img src="assets/characters/lingo.svg" alt="Lingo" style="width:64px; height:64px; border-radius:50%; margin-bottom:8px;">
+        <h4 style="font-size:0.95rem; font-weight:700;">Lingo <span style="font-size:0.65rem; color:#f97316; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; margin-left:4px;">★ Translation</span></h4>
+        <p style="font-size:0.75rem; color:#94a3b8;">The Parrot</p>
+        <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">"¡Hola, friend!"</p>
+      </div>
+      <div class="learning-bestie" style="display:none; background:linear-gradient(180deg,#fef3c7 0%,#fff 70%); border:2px solid #fde047; border-radius:16px; padding:20px; text-align:center;">
+        <img src="assets/characters/babel.svg" alt="Babel" style="width:64px; height:64px; border-radius:50%; margin-bottom:8px;">
+        <h4 style="font-size:0.95rem; font-weight:700;">Babel <span style="font-size:0.65rem; color:#f97316; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; margin-left:4px;">★ Translation</span></h4>
+        <p style="font-size:0.75rem; color:#94a3b8;">The Owl</p>
+        <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">"Wisdom in every tongue."</p>
+      </div>
     </div>
   </section>
+
+  <script>
+    // Reveal the two translation besties (Lingo & Babel) when the page is
+    // being served through the Google Translate proxy or otherwise rendered
+    // in a non-English locale. Stays hidden on the default English site.
+    (function () {
+      function isTranslated() {
+        if (location.hostname.endsWith('.translate.goog')) return true;
+        // Google Translate also rewrites <html lang> on inline-translation pages
+        const lang = (document.documentElement.lang || '').toLowerCase();
+        return !!lang && !lang.startsWith('en');
+      }
+      function reveal() {
+        if (!isTranslated()) return;
+        document.querySelectorAll('.learning-bestie').forEach(el => {
+          el.style.display = '';
+        });
+        const sub = document.getElementById('characters-subtitle');
+        if (sub) sub.textContent = '10 characters with unique voices guide you through every lesson — including Lingo & Babel, your translation besties!';
+      }
+      reveal();
+      // <html lang> may be set after Google Translate's widget injects, so
+      // re-check briefly on observable changes.
+      const obs = new MutationObserver(reveal);
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ['lang','class'] });
+    })();
+  </script>
 
   <!-- Subscribe & Ask -->
   <section style="background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);padding:48px 24px;text-align:center;">
