@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dance Arrows — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 18px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+
+    /* ── Playable arrow game ───────────────────────────────────── */
+    .dance-game {
+      max-width: 520px; margin: 0 auto 36px; padding: 18px 18px 22px;
+      background: linear-gradient(180deg, #0f1117 0%, #181b25 100%);
+      border: 1px solid #2a2f3d; border-radius: 16px;
+      color: #e5e7eb; box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+    .dance-game h2 {
+      margin: 0 0 12px; font-size: 1.05rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #fbbf24; text-align: center;
+    }
+    .dance-game .controls {
+      display: flex; gap: 10px; justify-content: center; align-items: center;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .dance-game button, .dance-game select {
+      background: #1f2433; color: #fff; border: 1px solid #374151;
+      padding: 7px 14px; border-radius: 8px; font: 600 0.85rem inherit;
+      cursor: pointer;
+    }
+    .dance-game button.primary { background: #ef4444; border-color: #ef4444; }
+    .dance-game button.primary:hover { background: #dc2626; }
+    .dance-game .hud {
+      display: flex; gap: 18px; justify-content: center; margin-bottom: 10px;
+      font: 700 0.92rem 'SF Mono', Menlo, Consolas, monospace; color: #d1d5db;
+    }
+    .dance-game .hud span b { color: #fbbf24; }
+    .dance-game .arena {
+      position: relative; width: 100%; height: 360px;
+      background: #060709; border-radius: 10px; overflow: hidden;
+      border: 1px solid #1f2433;
+    }
+    .dance-game .lanes {
+      position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    .dance-game .lane { border-right: 1px solid rgba(255,255,255,0.04); position: relative; }
+    .dance-game .lane:last-child { border-right: none; }
+    .dance-game .target {
+      position: absolute; left: 0; right: 0; top: 24px; height: 56px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+      pointer-events: none;
+    }
+    .dance-game .target .slot {
+      display: grid; place-items: center; font-size: 1.8rem; color: rgba(255,255,255,0.18);
+      border: 2px dashed rgba(255,255,255,0.1); border-radius: 10px; margin: 4px;
+    }
+    .dance-game .target .slot.flash { color: #fbbf24; border-color: #fbbf24; }
+    .dance-game .arrow {
+      position: absolute; width: 24%; height: 50px; display: grid; place-items: center;
+      font-size: 2rem; font-weight: 900; will-change: transform;
+      transition: opacity 0.18s ease;
+    }
+    .dance-game .arrow.left  { left: 1%; color: #ef4444; }
+    .dance-game .arrow.down  { left: 26%; color: #3b82f6; }
+    .dance-game .arrow.up    { left: 51%; color: #22c55e; }
+    .dance-game .arrow.right { left: 76%; color: #ec4899; }
+    .dance-game .feedback {
+      position: absolute; left: 0; right: 0; bottom: 12px; text-align: center;
+      font: 800 1.4rem inherit; letter-spacing: 0.1em; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .dance-game .feedback.perfect { color: #22c55e; text-shadow: 0 0 18px rgba(34,197,94,0.6); }
+    .dance-game .feedback.good    { color: #fbbf24; text-shadow: 0 0 14px rgba(251,191,36,0.55); }
+    .dance-game .feedback.miss    { color: #ef4444; text-shadow: 0 0 14px rgba(239,68,68,0.55); }
+    .dance-game .instructions {
+      margin: 12px 0 0; font-size: 0.82rem; color: #9ca3af; text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Dance Arrows</h1>
+    <p>Practice rhythm-arrow games on your computer keyboard — press ← ↓ ↑ → in time with falling arrows. Includes a playable arena (below) plus 657 lessons of structured drills (every BPM tier, FNF week walkthroughs, DDR doubles, jacks, trills, streams, stamina charts, speedrunning).</p>
+  </header>
+
+  <!-- Playable arrow-rhythm game -->
+  <section class="dance-game" id="danceGame" aria-label="Dance Arrows practice game">
+    <h2>🎯 Practice Arena</h2>
+    <div class="controls">
+      <label style="font-size:0.85rem;">Difficulty:
+        <select id="dgDifficulty">
+          <option value="easy">Easy (60 BPM)</option>
+          <option value="normal" selected>Normal (100 BPM)</option>
+          <option value="hard">Hard (150 BPM)</option>
+          <option value="expert">Expert (200 BPM)</option>
+        </select>
+      </label>
+      <button class="primary" id="dgStart">▶ Start</button>
+      <button id="dgStop">■ Stop</button>
+    </div>
+    <div class="hud">
+      <span>Score: <b id="dgScore">0</b></span>
+      <span>Combo: <b id="dgCombo">0</b></span>
+      <span>Accuracy: <b id="dgAccuracy">100%</b></span>
+    </div>
+    <div class="arena" id="dgArena">
+      <div class="lanes"><div class="lane"></div><div class="lane"></div><div class="lane"></div><div class="lane"></div></div>
+      <div class="target" id="dgTarget">
+        <div class="slot" data-lane="left">←</div>
+        <div class="slot" data-lane="down">↓</div>
+        <div class="slot" data-lane="up">↑</div>
+        <div class="slot" data-lane="right">→</div>
+      </div>
+      <div class="feedback" id="dgFeedback"></div>
+    </div>
+    <p class="instructions">Press ← ↓ ↑ → on your keyboard when arrows hit the target zone at the top. PERFECT (within ±20 px), GOOD (±50 px), MISS otherwise.</p>
+  </section>
+
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script>
+    // ── Inline arrow-rhythm game ────────────────────────────────
+    (function () {
+      const arena = document.getElementById('dgArena');
+      const targetEl = document.getElementById('dgTarget');
+      const fb = document.getElementById('dgFeedback');
+      const scoreEl = document.getElementById('dgScore');
+      const comboEl = document.getElementById('dgCombo');
+      const accEl   = document.getElementById('dgAccuracy');
+      const diffSel = document.getElementById('dgDifficulty');
+      const startBtn = document.getElementById('dgStart');
+      const stopBtn  = document.getElementById('dgStop');
+
+      const LANES = ['left','down','up','right'];
+      const SYMBOL = { left: '←', down: '↓', up: '↑', right: '→' };
+      const KEY_LANE = { ArrowLeft: 'left', ArrowDown: 'down', ArrowUp: 'up', ArrowRight: 'right' };
+
+      const SETTINGS = {
+        easy:   { bpm: 60,  speed: 130, density: 0.6 },
+        normal: { bpm: 100, speed: 220, density: 0.8 },
+        hard:   { bpm: 150, speed: 320, density: 1.0 },
+        expert: { bpm: 200, speed: 450, density: 1.0 }
+      };
+
+      let arrows = []; // { lane, el, y, born }
+      let raf = null, spawnTimer = null;
+      let running = false;
+      let score = 0, combo = 0, hits = 0, totalAttempts = 0;
+      let lastFrame = performance.now();
+      let speed = 220; // pixels per second
+
+      const TARGET_Y = 24 + 28; // center of the target row
+
+      function reset() {
+        arrows.forEach(a => a.el.remove());
+        arrows = [];
+        score = 0; combo = 0; hits = 0; totalAttempts = 0;
+        updateHud();
+      }
+
+      function updateHud() {
+        scoreEl.textContent = score;
+        comboEl.textContent = combo;
+        const acc = totalAttempts === 0 ? 100 : Math.round((hits / totalAttempts) * 100);
+        accEl.textContent = acc + '%';
+      }
+
+      function showFeedback(text, cls) {
+        fb.textContent = text;
+        fb.className = 'feedback ' + cls;
+        fb.style.opacity = '1';
+        setTimeout(() => { fb.style.opacity = '0'; }, 380);
+      }
+
+      function spawnArrow() {
+        if (!running) return;
+        const lane = LANES[Math.floor(Math.random() * 4)];
+        const el = document.createElement('div');
+        el.className = 'arrow ' + lane;
+        el.textContent = SYMBOL[lane];
+        const arenaH = arena.clientHeight;
+        el.style.top = (arenaH + 10) + 'px'; // start below the arena
+        arena.appendChild(el);
+        arrows.push({ lane, el, y: arenaH + 10, born: performance.now() });
+      }
+
+      function startSpawning() {
+        const cfg = SETTINGS[diffSel.value];
+        speed = cfg.speed;
+        const interval = (60000 / cfg.bpm) / cfg.density; // ms between spawns
+        spawnTimer = setInterval(spawnArrow, interval);
+      }
+      function stopSpawning() {
+        if (spawnTimer) { clearInterval(spawnTimer); spawnTimer = null; }
+      }
+
+      function tick(now) {
+        const dt = (now - lastFrame) / 1000;
+        lastFrame = now;
+        if (running) {
+          for (let i = arrows.length - 1; i >= 0; i--) {
+            const a = arrows[i];
+            a.y -= speed * dt;
+            a.el.style.top = a.y + 'px';
+            // If it scrolls past the target by more than 60px without being hit → MISS
+            if (a.y < TARGET_Y - 60) {
+              registerMiss();
+              a.el.style.opacity = '0';
+              arrows.splice(i, 1);
+              setTimeout(() => a.el.remove(), 200);
+            }
+          }
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      function registerHit(lane, distance) {
+        totalAttempts++;
+        hits++;
+        let pts, label, cls;
+        if (distance <= 20) { pts = 100; label = 'PERFECT!'; cls = 'perfect'; }
+        else                { pts = 50;  label = 'GOOD';     cls = 'good';    }
+        score += pts;
+        combo++;
+        showFeedback(label, cls);
+        flashSlot(lane);
+        updateHud();
+      }
+      function registerMiss() {
+        totalAttempts++;
+        combo = 0;
+        showFeedback('MISS', 'miss');
+        updateHud();
+      }
+      function flashSlot(lane) {
+        const slot = targetEl.querySelector(`.slot[data-lane="${lane}"]`);
+        if (!slot) return;
+        slot.classList.add('flash');
+        setTimeout(() => slot.classList.remove('flash'), 180);
+      }
+
+      function onKey(e) {
+        if (!running) return;
+        const lane = KEY_LANE[e.key];
+        if (!lane) return;
+        e.preventDefault();
+        // Find the closest unhit arrow in this lane near the target
+        let bestIdx = -1, bestDist = Infinity;
+        for (let i = 0; i < arrows.length; i++) {
+          const a = arrows[i];
+          if (a.lane !== lane) continue;
+          const dist = Math.abs(a.y - TARGET_Y);
+          if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+        }
+        if (bestIdx >= 0 && bestDist <= 50) {
+          const a = arrows[bestIdx];
+          registerHit(lane, bestDist);
+          a.el.style.opacity = '0';
+          arrows.splice(bestIdx, 1);
+          setTimeout(() => a.el.remove(), 200);
+        } else {
+          // Pressed too early or no arrow nearby — counts as a miss attempt
+          totalAttempts++;
+          combo = 0;
+          showFeedback('MISS', 'miss');
+          flashSlot(lane);
+          updateHud();
+        }
+      }
+
+      function start() {
+        if (running) return;
+        reset();
+        running = true;
+        lastFrame = performance.now();
+        startSpawning();
+        if (!raf) raf = requestAnimationFrame(tick);
+      }
+      function stop() {
+        running = false;
+        stopSpawning();
+        // Don't cancel raf — let arrows finish their fade.
+      }
+
+      startBtn.addEventListener('click', start);
+      stopBtn.addEventListener('click', stop);
+      diffSel.addEventListener('change', () => { if (running) { stopSpawning(); startSpawning(); } });
+      window.addEventListener('keydown', onKey, { passive: false });
+    })();
+  </script>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Each entry: string (= 15 lessons) or [name, count] for variable size.
+    const unitTopics = [
+      // — Original 15 (general genre coverage) —
+      "Rhythm Game Fundamentals & Note Charts",
+      "Friday Night Funkin' Vanilla — Week 1 to 7",
+      "FNF Characters & Lore (BF, GF, Pico, Daddy Dearest, Skid & Pump, Senpai, Tankman)",
+      "FNF Mods — Whitty, Tricky, Sonic.exe, Hypno's Lullaby, Mid-Fight Masses",
+      "FNF Modding — Build Your Own (Sprites, Charts, Songs)",
+      "Dance Dance Revolution (DDR) — Konami Classic",
+      "Stepmania & In The Groove",
+      "Pump It Up (5-Panel Korean)",
+      "Beatmania IIDX (7-Key + Turntable)",
+      "osu!mania (Vertical Scrolling)",
+      "Project Diva & Vocaloid Rhythm",
+      "Cytus, Deemo, Lanota & Mobile Rhythm",
+      "Just Dance & Motion-Based Rhythm",
+      "Speedrunning & Competitive Rhythm Gaming",
+      // — 29 new practice-focused units (28 × 15 + 1 × 12 = 432) —
+      "Beginner Drills — 4-Note Patterns",
+      "Beginner — 60 BPM",
+      "Beginner — 80 BPM",
+      "Beginner — 100 BPM",
+      "Intermediate — 120 BPM",
+      "Intermediate — 140 BPM",
+      "Intermediate — Quad Notes (4 Lanes Together)",
+      "Intermediate — Jacks (Same-Lane Repeats)",
+      "Advanced — 160 BPM",
+      "Advanced — 180 BPM",
+      "Advanced — Trill Patterns",
+      "Advanced — Cross-Lane Streams",
+      "Expert — 200 BPM",
+      "Expert — 220 BPM",
+      "Expert — 240 BPM Stamina Charts",
+      "Memorization Drills — Fixed Patterns",
+      "Sight-Reading Charts at Speed",
+      "FNF Week 1 — Daddy Dearest Chart Walkthrough",
+      "FNF Week 2 — Skid & Pump (Spookeez, South, Monster)",
+      "FNF Week 3 — Pico Chart Walkthrough",
+      "FNF Week 4 — Mommy Mearest Chart Walkthrough",
+      "FNF Week 5 — Christmas (Cocoa, Eggnog, Winter Horrorland)",
+      "FNF Week 6 — Senpai (Senpai, Roses, Thorns)",
+      "FNF Week 7 — Tankman (Ugh, Guns, Stress)",
+      "DDR Doubles — 8-Panel Mode",
+      "Pump It Up Lifeline Practice",
+      "Stepmania Custom Charts — Building Your Own",
+      "Speedrun Tips & Score Optimization",
+      ["Practice Routines & Daily Drills", 12],
+      // — Existing capstone moved to the end —
+      "Dance Arrows Mastery"
+    ];
+
+    // Pull existing capstone out and put it last (it was already last).
+    // The variable-size mapper handles strings and [name, count] tuples.
+    const units = unitTopics.map((entry, idx) => {
+      const isTuple = Array.isArray(entry);
+      const name = isTuple ? entry[0] : entry;
+      const count = isTuple ? entry[1] : 15;
+      const lessons = [];
+      for (let j = 1; j <= count - 1; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dance-'+n, title: t, href: 'lesson-'+n+'.html', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('dance-arrows');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('dance-arrows');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
