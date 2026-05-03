@@ -89,6 +89,15 @@
         if (allowed.length < 2) diff.doublesProb = 0;
       }
     }
+    // data-bpm overrides spawn density. data-notes overrides note count.
+    const bpmOverride = parseInt(root.dataset.bpm || '0', 10);
+    if (bpmOverride > 0) diff.bpm = bpmOverride;
+    const notesOverride = parseInt(root.dataset.notes || '0', 10);
+    if (notesOverride > 0) diff.notes = notesOverride;
+    // data-travel-ms overrides how long arrows take to travel from bottom
+    // to the receptor zone — bigger = more reaction time = "slower" feel.
+    const travelOverride = parseInt(root.dataset.travelMs || '0', 10);
+    const TRAVEL_MS_OVERRIDE = travelOverride > 0 ? travelOverride : null;
     const chart = buildChart(diff, lessonNum);
 
     root.innerHTML = `
@@ -212,7 +221,7 @@
     const btnReset = root.querySelector('#da-reset');
 
     const ARROW_GLYPH = { U: '⬆', D: '⬇', L: '⬅', R: '➡' };
-    const TRAVEL_MS = 1500; // time an arrow takes to travel from bottom to receptor
+    const TRAVEL_MS = TRAVEL_MS_OVERRIDE || 1500; // time an arrow takes to travel from bottom to receptor
     const RECEPTOR_TOP = 24 + 32; // receptor zone center (top + half height)
     const STAGE_HEIGHT = 520;
 
