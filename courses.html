@@ -166,6 +166,29 @@
     .course-item[data-category="logic"] .category-badge { background: var(--color-logic); }
     .course-item[data-category="language"] .category-badge { background: var(--color-language); }
 
+    /* "Recommended" highlight for featured courses */
+    .recommended-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      margin-left: 6px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #1a1a1a;
+      background: linear-gradient(90deg, #fde047, #f97316);
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.35);
+      vertical-align: middle;
+    }
+    .course-item.is-recommended {
+      box-shadow: 0 0 0 2px rgba(253,224,71,0.55), 0 8px 24px rgba(249,115,22,0.18);
+      background: linear-gradient(180deg, #fffbeb 0%, #fff 60%);
+    }
+    .course-item.is-recommended:hover {
+      box-shadow: 0 0 0 2px rgba(253,224,71,0.85), 0 12px 28px rgba(249,115,22,0.28);
+    }
+
     .course-item h3 {
       font-size: 1.15rem;
       font-weight: 700;
@@ -2160,9 +2183,9 @@
       <span>93 lessons</span>
       </div>
       </a>
-    <a href="course/spanish-grammar/index.html" class="course-item" data-category="language">
+    <a href="course/spanish-grammar/index.html" class="course-item is-recommended" data-category="language">
       <div class="accent-bar"></div>
-      <span class="category-badge">Language</span>
+      <span class="category-badge">Language</span><span class="recommended-badge">★ Recommended</span>
       <h3>Spanish Grammar & Difficult Words</h3>
       <p>Master Spanish grammar, all verb tenses, subjunctive (with adverbial-clause decision tree), pasiva refleja, perífrasis verbales avanzadas, acentuación (agudas/llanas/esdrújulas, diptongos, hiatos, sinéresis), regional dialects (rioplatense, caribeño, andino, mayense, panameño, costarricense, guineoecuatoriano, filipino chabacano, spanglish), 700+ difficult vocab, idioms, proverbs, DELE C2, AP Spanish, and deep dives into Neruda, Paz, Fuentes, Bolaño, Azuela, Sor Juana, Lorca, Vallejo, Matute, Montero plus Spanish cinema (Almodóvar, Cuarón, del Toro).</p>
       <div class="course-meta">
