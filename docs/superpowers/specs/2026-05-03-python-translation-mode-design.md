@@ -2,42 +2,47 @@
 
 **Date:** 2026-05-03
 **Status:** Approved (pending implementation)
+**Revision:** 2 — pivoted from "add Python alongside Google Translate" to "replace Google Translate entirely with Python."
 
 ## Summary
 
-Add "Python" as a selectable mode in Mathagram's existing translate dropdown. Unlike the 130+ real-language entries (which pipe through Google Translate), Python mode is a client-side text transform that rewrites visible English prose with Python keyword/idiom equivalents (e.g., `function`→`def`, `True/False/None`) and rewrites math notation as Python expressions (e.g., `f(x)=x²`→`def f(x): return x**2`).
+Replace Mathagram's Google-Translate-driven translation system with a single client-side **Python translation mode**. The 130+ real-language entries, the Google Translate Element widget, the `.translate.goog` proxy fallback, the `googtrans` cookie handling, and the post-translation course-grid resort are all removed.
 
-The mode lives in a new "Fun modes" section at the bottom of the dropdown — visually distinct from real languages so users don't expect Google-quality output, and extensible for future modes (Pirate, Yoda, etc.).
+What remains is a "Translate" button that toggles between English (default) and Python — a deterministic text transform that rewrites visible English prose with Python keyword/idiom equivalents (`function`→`def`, `True/False/None`) and rewrites math notation as Python expressions (`f(x)=x²`→`def f(x): return x**2`).
 
 ## Goals
 
-- Add a single "🐍 Python (programmer mode)" entry to the translate dropdown.
-- When activated, transform visible page text using both a prose word-skin and a math-expression rewriter.
-- Persist the choice across pages via `localStorage`.
-- Cleanly toggle off (restore original English) when the user picks any other language or English.
-- Coexist safely with Google Translate: clear `googtrans` cookie before activating; deactivate before letting Google Translate run.
+- Single Python translation mode reachable from the existing Translate button in the nav.
+- Toggle on / off cleanly — original English is restored on deactivate.
+- Persist the choice across pages via `localStorage['mathagram-mode']`.
+- Remove all Google Translate code, language data, proxy logic, and translation-besties reveal logic.
+- Keep the Lingo & Babel mascots in the dropdown header — they remain Mathagram's translation guides, just for a different translation now.
 
 ## Non-goals (YAGNI)
 
-- Other fun modes (Pirate, Yoda) — section is structured to extend, but only Python ships.
+- Other fun modes (Pirate, Yoda) — punt until requested.
 - Server-side rendering or pre-baked Python HTML files.
-- Translating the Lingo & Babel mascot header copy (it's marketing copy, not lesson content).
+- Continuing to support real-language translation of any kind (this is the explicit user-approved regression — see "Acknowledged regression" below).
 - Comprehensive English-to-Python translation of arbitrary prose — the dictionary is curated, not exhaustive.
+
+## Acknowledged regression
+
+This change removes real-language translation for non-English speakers. Recent work in commits `e9d7084` (Reveal Lingo & Babel translation besties on non-English pages) and `338cd15` (Fix translation-besties detection on the in-place translated homepage) is deliberately reverted. Users who relied on Spanish / French / etc. via the dropdown will lose that capability. This was confirmed explicitly during brainstorming.
 
 ## Architecture
 
-A new ES module `js/python-translate.js` holds the transform engine. `js/nav.js` adds a "Fun modes" section to the existing translate dropdown and lazy-imports the engine on first activation. Mode persists in `localStorage['mathagram-mode'] = 'py'`. Original text is preserved in a `WeakMap<TextNode, string>` so deactivation cleanly restores English.
+A new ES module `js/python-translate.js` holds the transform engine. `js/nav.js` is rewritten to (a) delete the Google Translate code paths and (b) replace the language picker with a two-entry mode picker: **English** (off) and **🐍 Python** (on). Mode persists in `localStorage['mathagram-mode']` (`'py'` or unset). Original text is preserved in WeakMaps so deactivation cleanly restores English.
 
 ```
-click 🐍 → clear googtrans cookie → localStorage='py' → dynamic import python-translate.js
-        → activate(): walk DOM, transform text nodes, install MutationObserver
-page load → nav.js init → if localStorage='py', auto-activate
-click any other lang or English → deactivate() restores from WeakMap → existing flow runs
+click 🐍 Python  → localStorage='py' → dynamic import python-translate.js → activate()
+                 → walk DOM, transform text nodes, install MutationObserver
+click English    → deactivate() restores from WeakMaps → clear localStorage
+page load        → nav.js init → if localStorage='py', auto-activate
 ```
 
 ## Components
 
-### `js/python-translate.js`
+### `js/python-translate.js` (NEW)
 
 Exports `{ activate, deactivate, isActive }`.
 
@@ -49,9 +54,7 @@ Exports `{ activate, deactivate, isActive }`.
 - `_active: boolean`
 - `_applying: boolean` — flag to prevent feedback loops while we mutate text.
 
-**`wordMap`** — ordered list of `[RegExp, string]` for prose. ~40 entries. Word-boundary anchored; preserves leading capitalization where it makes sense.
-
-Curated entries (initial set):
+**`wordMap`** — ordered list of `[RegExp, string]` for prose. ~40 entries. Word-boundary anchored.
 
 | English | Python |
 |---|---|
@@ -65,7 +68,7 @@ Curated entries (initial set):
 | `dictionary` / `dictionaries` | `dict` |
 | `set(s)` | `set` |
 | `tuple(s)` | `tuple` |
-| `print` (when imperative) | `print` |
+| `print` (imperative) | `print` |
 | `return` | `return` |
 | `import` / `imports` | `import` |
 | `length of` | `len()` of |
@@ -75,14 +78,12 @@ Curated entries (initial set):
 | `inherit(s) from` | `(parent)` |
 | `iterate over` | `for ... in` |
 
-These are illustrative — the implementer should iterate based on what reads well in actual Mathagram lesson copy.
+Illustrative; implementer iterates based on what reads well in real Mathagram copy.
 
-**`mathMap`** — `[RegExp, string | (match) => string]` for math expressions. Fires only on text fragments matching a "looks like math" guard (contains `=`, `f(x)`, digit-letter juxtaposition, Unicode superscript, or LaTeX delimiters). Conservative — false positives in plain prose are worse than false negatives in math.
-
-Initial rules:
+**`mathMap`** — `[RegExp, string | (match) => string]` for math expressions. Fires only on text fragments matching a "looks like math" guard (contains `=`, `f(x)`, digit-letter juxtaposition, Unicode superscript, or LaTeX delimiters).
 
 - `xⁿ` (Unicode superscripts ²³⁴⁵⁶⁷⁸⁹⁰¹) → `x**n`
-- `(\d+)([a-zA-Z])` → `\1*\2` (implicit multiplication: `2x` → `2*x`)
+- `(\d+)([a-zA-Z])` → `\1*\2` (implicit multiplication)
 - `=` (single equals, not `==` or `!=`) inside math context → `==`
 - `\\sqrt\{(.+?)\}` → `math.sqrt(\1)`
 - `\\frac\{(.+?)\}\{(.+?)\}` → `(\1)/(\2)`
@@ -93,30 +94,52 @@ Initial rules:
 
 - `TreeWalker` over `NodeFilter.SHOW_TEXT` rooted at `root` (defaults to `document.body`).
 - Skip if any ancestor matches: `SCRIPT, STYLE, CODE, PRE, TEXTAREA, INPUT, [contenteditable], [data-no-py]`.
-- For each text node: store original in `_originals` if not already stored; apply `wordMap` then `mathMap`; assign back to `node.textContent`.
-- Also processes `placeholder`, `title`, `aria-label` attributes on elements outside `[data-no-py]`.
+- For each text node: store original in `_originalsText` if not already stored; apply `wordMap` then `mathMap`; assign back to `node.textContent`.
+- Also processes `placeholder`, `title`, `aria-label` attributes on elements outside `[data-no-py]`, backing up to `_originalsAttr`.
 
-**`MutationObserver`** — installed on `document.body` with `{ childList: true, subtree: true, characterData: true }`. Debounced ~50ms via `setTimeout`. On fire: collect newly-added nodes from records, run `walkAndTransform` on each. Guarded by `_applying` flag — set true before our mutations, false after a microtask.
+**`MutationObserver`** — installed on `document.body` with `{ childList: true, subtree: true, characterData: true }`. Debounced ~50ms via `setTimeout`. On fire: collect newly-added nodes, run `walkAndTransform` on each. Guarded by `_applying` flag.
 
 **`activate()`** — idempotent. Sets `_active = true`, walks `document.body`, installs observer.
 
-**`deactivate()`** — disconnects observer, restores all entries in `_originalsText` to their text nodes and `_originalsAttr` to their elements, clears both maps, sets `_active = false`.
+**`deactivate()`** — disconnects observer, restores all entries in `_originalsText` to text nodes and `_originalsAttr` to elements, clears both maps, sets `_active = false`.
 
 **`isActive()`** — returns `_active`.
 
-### `js/nav.js` changes
+### `js/nav.js` — major surgery
 
-- After the existing `languages.forEach(...)` block (around line 233), append a divider element and a "Fun modes" subheader, then a single button entry: `🐍 Python (programmer mode)`. The container element is marked `data-no-py` so the engine doesn't rewrite "Python (programmer mode)" itself.
-- The Python entry's click handler:
-  1. Hide dropdown.
-  2. Clear `googtrans` cookie (same logic as the English-reset branch in `translatePage`).
-  3. Set `localStorage.setItem('mathagram-mode', 'py')`.
-  4. Dynamic `import('./python-translate.js').then(m => m.activate())`.
+**Delete:**
+
+- Lines ~38-43: `.translate.goog` proxy detection block (no longer reachable).
+- Lines ~192-217: the `languages` array (130+ entries).
+- Lines ~262-318: `loadGoogleTranslateElement()` and the goog-te suppress style block.
+- Lines ~320-364: the `translatePage()` function — `.translate.goog` proxy navigation, `googtrans` cookie handling, widget driving, and proxy-fallback `window.open`.
+- Lines ~366-end of resort logic: `scheduleResortAfterTranslation()` and its `_resortObserver` / `_resortTimer` state. (Course tiles ship in English-alphabetical order; with no real translation, no resort is needed.)
+
+**Replace:**
+
+- The dropdown's scrollable language list becomes a two-entry list: **English** (default) and **🐍 Python**. Both entries are buttons; clicking dispatches to `setMode('en')` or `setMode('py')`.
+- The search input is removed (two entries don't need search).
+- The "Search 130+ languages…" placeholder and `.search 130+` UI string are gone.
+- Lingo & Babel mascot header **stays**, with copy adjusted: `"Your translation guides — English or Python!"`. The mascot wrapper element is marked `data-no-py` so its label doesn't get rewritten when Python mode is active.
+
+**Add:**
+
+- `setMode(mode)`:
+  - `'en'`: dynamic-import `python-translate.js` (it's already loaded if Python was active), call `deactivate()`, `localStorage.removeItem('mathagram-mode')`.
+  - `'py'`: `localStorage.setItem('mathagram-mode', 'py')`, dynamic-import `python-translate.js`, call `activate()`.
 - In `initNav()` (top of file), after `DOMContentLoaded`: if `localStorage.getItem('mathagram-mode') === 'py'`, dynamic-import and call `activate()`.
-- In the existing per-language click handler, before calling `translatePage(code)`: if `isActive()` (lazy check), call `deactivate()` and clear `localStorage['mathagram-mode']`. This ensures Python and Google Translate never run simultaneously.
-- Skip `scheduleResortAfterTranslation` for Python mode — alphabetical sort doesn't apply since text is still English-rooted.
 
-### `js/python-translate.test.html`
+### `index.html` — remove translation-besties reveal
+
+**Delete (lines ~197 area and ~215-244):**
+
+- The HTML comment block introducing the "Translation besties" decoration.
+- The script that detects `.translate.goog` (or in-place translation) and reveals Lingo & Babel as "translation besties."
+- The text update at line ~244 that mentions "translation besties." Replace with copy that no longer mentions translation besties — keep general mascot reference if appropriate.
+
+The Lingo & Babel SVG assets in `assets/characters/` stay (still used by the dropdown header).
+
+### `js/python-translate.test.html` (NEW)
 
 Standalone manual-test page. Loads `python-translate.js` as a module, runs ~20 fixture pairs `[inputHTML, expectedText]`, renders pass/fail rows. Covers:
 
@@ -126,60 +149,58 @@ Standalone manual-test page. Loads `python-translate.js` as a module, runs ~20 f
 - Negatives: code in `<code>` blocks unchanged; text in `[data-no-py]` unchanged.
 - Activation/deactivation round-trip restores original.
 
-## Data flow (detail)
+## Data flow
 
-**On user clicking 🐍:**
+**On user clicking 🐍 Python:**
 
-1. `nav.js` click handler runs.
-2. Clears `googtrans` cookie via `document.cookie = 'googtrans=; expires=...; path=/'` (and the domain variant).
-3. Sets `localStorage['mathagram-mode'] = 'py'`.
-4. `await import('./python-translate.js')`.
-5. Calls `module.activate()`.
-6. `activate()` walks `document.body`, transforms text nodes, installs `MutationObserver`.
+1. `nav.js` click handler runs `setMode('py')`.
+2. `localStorage['mathagram-mode'] = 'py'`.
+3. `await import('./python-translate.js')`.
+4. `module.activate()`.
+5. `activate()` walks `document.body`, transforms text nodes, installs `MutationObserver`.
+
+**On user clicking English:**
+
+1. `nav.js` click handler runs `setMode('en')`.
+2. If module loaded, call `deactivate()`.
+3. `localStorage.removeItem('mathagram-mode')`.
 
 **On page load (any page):**
 
-1. `initNav()` runs (existing).
-2. New code: if `localStorage['mathagram-mode'] === 'py'`, after DOM ready, dynamic-import and `activate()`.
-3. `activate()` walks the page; observer catches anything rendered later (learning path, modals, lesson cards).
-
-**On user clicking any real language (or English):**
-
-1. Existing per-language handler runs.
-2. New guard: if Python mode is active, call `deactivate()` and clear `localStorage['mathagram-mode']`.
-3. Existing `translatePage(code)` runs as today.
+1. `initNav()` runs.
+2. If `localStorage['mathagram-mode'] === 'py'`, after `DOMContentLoaded`, dynamic-import and `activate()`.
 
 ## Error handling
 
 - Per-node transform wrapped in `try { ... } catch (e) { console.warn(...) }`. A regex failure on one node never stops the walk.
-- `activate()` is idempotent: calling it while already active is a no-op.
-- `deactivate()` is safe to call when not active.
-- If `document.body` is missing (script loaded before body), `activate()` defers via `requestAnimationFrame`.
-- If the dynamic import fails (offline, network error), the click handler logs a warning and leaves the page unchanged — the user can simply pick a real language instead.
-- If Google Translate is mid-render when the user clicks Python, we wait one animation frame after clearing the cookie before walking, so we don't fight `<font>` insertions.
+- `activate()` is idempotent.
+- `deactivate()` is safe when not active.
+- If `document.body` is missing, `activate()` defers via `requestAnimationFrame`.
+- If the dynamic import fails (offline), the click handler logs a warning and leaves the page in English.
 
 ## Testing
 
-No existing test framework in the repo. Verification has two parts:
+No existing test framework. Verification is two parts:
 
-1. **`js/python-translate.test.html`** — manual fixture-based test page (described above). Opened in a browser; pass/fail visible inline.
-2. **Manual smoke checklist** (run before merge):
-   - Homepage: activate, confirm tile titles transform, courses-grid still renders.
-   - Courses page: activate, confirm course names transform, search box still functional.
-   - Calculus course page: activate, confirm unit/lesson titles transform, learning-path zigzag still draws.
-   - A calculus lesson with math (e.g., lesson with `f(x) = x²`): confirm math transforms; LaTeX-wrapped equations transform inside the delimiters.
-   - Toggle on → off → on: original text restored on each cycle.
-   - Activate Python, then pick Spanish: Python deactivates cleanly, Google Translate takes over.
-   - Reload after activating: page comes up already in Python mode (localStorage persistence).
-   - Lingo & Babel dropdown header text is NOT rewritten (lives under `[data-no-py]`).
+1. **`js/python-translate.test.html`** — fixture-based test page.
+2. **Manual smoke checklist:**
+   - Homepage: activate → tile titles transform; courses-grid still renders; "translation besties" copy is gone.
+   - Courses page: activate → course names transform; English toggle restores cleanly.
+   - A calculus lesson with math: confirm math transforms; LaTeX-wrapped equations transform inside the delimiters.
+   - Toggle on → off → on: original text restored each cycle.
+   - Reload after activating: page comes up already in Python mode.
+   - Lingo & Babel dropdown header text is NOT rewritten (under `[data-no-py]`).
+   - Confirm the `.translate.goog` proxy URL no longer 200s — visiting `mathagram-org.translate.goog/...` should be effectively dead (we don't control Google's proxy, but our own code doesn't generate or follow those URLs anymore).
+   - Network tab on page load: no requests to `translate.google.com`.
+   - `document.cookie` contains no `googtrans` cookie after page load (even if a stale one exists from prior visits — though we don't actively clear stale cookies, which is fine; they're inert without the widget).
 
 ## Edge cases / risks
 
-- **Mutation feedback loop**: `_applying` flag plus the "store original on first transform" check in `_originals` prevents re-transforming our own output.
-- **Google Translate's `<font>` wrappers**: when a real language is active and the user clicks Python, our cookie-clear + frame-wait avoids walking partially-translated DOM. The observer will pick up Google's removal of its wrappers as `characterData` mutations, which we then re-walk cleanly.
-- **Forms inside `[data-no-py]`**: the dropdown's "Search 130+ languages…" placeholder must NOT be rewritten. The dropdown wrapper gets `data-no-py`.
-- **Performance on large pages**: a course page with 800+ lesson titles is the worst case. The initial walk should still complete under ~50ms; if it doesn't, batch via `requestIdleCallback`. Watch during smoke testing.
-- **Course tiles' alphabetical re-sort**: existing `scheduleResortAfterTranslation` only fires on real-language paths. Python mode skips it, which is correct (titles are still English-rooted).
+- **Mutation feedback loop**: `_applying` flag plus the "store original on first transform" check prevents re-transforming our own output.
+- **Forms inside `[data-no-py]`**: the dropdown's mascot header text and any future search/filter inputs need `data-no-py` to avoid being rewritten.
+- **Performance on large pages**: a course page with 800+ lesson titles is the worst case. Initial walk should complete under ~50ms; if not, batch via `requestIdleCallback`. Watch during smoke.
+- **Stale `googtrans` cookies**: users who previously selected a language have a `googtrans` cookie in their browser. With the widget removed, the cookie is inert — no action needed. (Optional cleanup: `setMode('en')` on first load could opportunistically clear it. Cheap insurance; include in the implementation.)
+- **External links into `.translate.goog`**: any inbound link from Google's translate proxy will land on Mathagram with no Python mode active and no real translation. That's the regression. Acceptable per user direction.
 
 ## Files
 
@@ -187,7 +208,8 @@ No existing test framework in the repo. Verification has two parts:
 |---|---|---|
 | `js/python-translate.js` | NEW | ~250 |
 | `js/python-translate.test.html` | NEW | ~80 |
-| `js/nav.js` | MODIFY | +30 |
+| `js/nav.js` | MODIFY (mostly deletion) | -200 / +60 |
+| `index.html` | MODIFY (remove translation-besties block) | -30 |
 
 ## Open questions
 
