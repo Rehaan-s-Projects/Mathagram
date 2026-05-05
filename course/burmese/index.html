@@ -74,14 +74,19 @@
       [24,"Burmese Work & Career",["Job Titles","Office Life","Job Interview","Resume & CV","Salary & Benefits","Meetings","Email at Work","Phone Calls","Presentations","Teamwork","Deadlines & Projects","Promotion","Retirement","Freelancing","Career Checkpoint"]],
       [25,"Burmese Emotions & Feelings",["Happy & Excited","Sad & Disappointed","Angry & Frustrated","Scared & Nervous","Surprised & Shocked","Love & Affection","Jealousy & Envy","Pride & Confidence","Shame & Embarrassment","Boredom & Tiredness","Hope & Optimism","Nostalgia","Describing Moods","Emotional Expression","Emotions Checkpoint"]],
       [26,"Burmese Weather & Climate",["Sunny Days","Rainy Weather","Snow & Winter","Wind & Storms","Fog & Mist","Hot & Humid","Cold & Freezing","Weather Forecast","Seasons Detailed","Natural Disasters","Climate Zones","Weather Idioms","Dressing for Weather","Weather Conversations","Weather Checkpoint"]],
-      [27,"Burmese Idioms & Proverbs",["Common Proverbs","Wisdom Sayings","Animal Idioms","Food Idioms","Weather Idioms","Work Idioms","Family Proverbs","Love Proverbs","Humorous Expressions","Poetic Phrases","Using Idioms in Speech","Regional Expressions","Comparing with English Idioms","Creating Sentences","Idioms Checkpoint"]]
+      [27,"Burmese Idioms & Proverbs",["Common Proverbs","Wisdom Sayings","Animal Idioms","Food Idioms","Weather Idioms","Work Idioms","Family Proverbs","Love Proverbs","Humorous Expressions","Poetic Phrases","Using Idioms in Speech","Regional Expressions","Comparing with English Idioms","Creating Sentences","Idioms Checkpoint"]],
+      [28,"Burmese Pronunciation Drills",["The Three Tones in Detail","Low Tone Practice","Creaky Tone Practice","High Tone Practice","Tone-Pair Minimal Pairs","Aspirated vs Unaspirated Stops","Voiced vs Voiceless Consonants","Nasal Consonants","Glottal Stop (Final ʔ)","Vowel Length","Diphthongs","Consonant Clusters & Medials","Word-Level Stress","Sandhi (Sound Changes)","Pronunciation Checkpoint"]],
+      [29,"Burmese Calligraphy",["Origins of Burmese Script","Tools of Calligraphy","The Round-Letter Aesthetic","Stroke Order Basics","Practicing the Circle Strokes","Letter Spacing","Writing Numerals 0-9","Writing Common Greetings","Writing Names","Palm-Leaf Manuscripts (Parabaik)","Modern Burmese Fonts","Calligraphy Styles","Beautiful Handwriting Tips","Practice: Copy a Quote","Calligraphy Checkpoint"]],
+      [30,"Burmese Dialects",["Standard Burmese (Yangon)","Mandalay Dialect","Rakhine (Arakanese)","Tavoyan (Dawei)","Intha (Inle Lake)","Yaw Dialect","Mergui (Myeik) Dialect","Beik Dialect Notes","Tonal Differences Across Dialects","Vocabulary Differences","Grammatical Differences","When to Use Standard","Mutual Intelligibility","Practice: Identify the Dialect","Dialects Checkpoint"]],
+      [31,"Burmese Daily Routines",["Waking Up Vocabulary","Morning Routine","Breakfast Conversations","Going to Work or School","Commuting in Yangon","Workday Vocabulary","Lunch Break Phrases","Afternoon Routine","Evening Activities","Dinner Conversations","Bedtime Routine","Weekend Routines","Holiday Routines","Practice: My Day in Burmese","Daily Routines Checkpoint"]],
+      [32,"Burmese in Business",["Business Card Vocabulary","Greeting a Client","Job Titles","Business Hours","Banking Basics","Negotiating Prices","Closing a Deal","Contracts & Agreements","Email & Business Letters","Phone Etiquette","Networking Events","Industry Vocabulary","Burmese Economy Overview","Practice: Business Dialogue","Business Checkpoint"]]
     ];
     let n = 0;
     const lessons = [];
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'bu-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'bu-'+n, title: t, href: n >= 400 ? 'lesson-'+n+'.html' : '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {
