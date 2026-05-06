@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>python-translate tests</title>
+  <style>
+    body { font-family: monospace; padding: 16px; }
+    .row { padding: 6px 8px; margin: 2px 0; border-radius: 4px; }
+    .pass { background: #d1fae5; color: #064e3b; }
+    .fail { background: #fee2e2; color: #7f1d1d; }
+    .label { font-weight: 700; }
+    pre { display: inline; margin: 0; }
+  </style>
+</head>
+<body>
+  <h1>python-translate tests</h1>
+  <div id="results"></div>
+
+  <script type="module">
+    import * as PT from './python-translate.js';
+
+    const results = document.getElementById('results');
+    let passed = 0, failed = 0;
+
+    function eq(name, actual, expected) {
+      const ok = actual === expected;
+      const row = document.createElement('div');
+      row.className = 'row ' + (ok ? 'pass' : 'fail');
+      row.innerHTML = `<span class="label">${ok ? 'PASS' : 'FAIL'}</span> ${name} — got: <pre>${escape(String(actual))}</pre>${ok ? '' : ' / want: <pre>' + escape(String(expected)) + '</pre>'}`;
+      results.appendChild(row);
+      ok ? passed++ : failed++;
+    }
+    function escape(s) { return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    // ─── Fixtures ─────────────────────────────────────────────────────
+    eq('word: function → def',
+       PT.applyWordMap('a function returns'),
+       'a def returns');
+
+    // Summary row
+    const summary = document.createElement('div');
+    summary.style.cssText = 'margin-top:16px; padding:10px; font-weight:700; border-top:2px solid #333;';
+    summary.textContent = `${passed} passed, ${failed} failed`;
+    results.appendChild(summary);
+  </script>
+</body>
+</html>
