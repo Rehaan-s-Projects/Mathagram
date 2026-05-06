@@ -36,6 +36,18 @@
     eq('word: function → def',
        PT.applyWordMap('a function returns'),
        'a def returns');
+    eq('word: True/False/None',
+       PT.applyWordMap('It is true and not false, returning nothing.'),
+       'It is True and not False, returning None.');
+    eq('word: list/dict/set/tuple',
+       PT.applyWordMap('use a list, a dictionary, a set, or a tuple'),
+       'use a list, a dict, a set, or a tuple');
+    eq('word: return/print/import',
+       PT.applyWordMap('return the value, print it, then import math'),
+       'return the value, print it, then import math');
+    eq('word: class',
+       PT.applyWordMap('Define a class with two classes inside'),
+       'Define a class with two class inside');
 
     // Summary row
     const summary = document.createElement('div');
