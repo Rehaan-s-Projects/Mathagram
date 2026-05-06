@@ -5,6 +5,7 @@
 
 import { onAuthChange, getUserProfile } from './auth.js';
 import { startAutoUpdate } from './auto-update.js';
+import { initProfanityWarning } from './profanity-warning.js';
 
 function getColorValue(colorName) {
   const colors = {
@@ -32,6 +33,10 @@ export function initNav(basePath = '') {
 
   // Add Google Translate widget
   addTranslateWidget();
+
+  // Soft profanity warning — toast on common cuss words; no strike, no redirect.
+  // Idempotent: safe to call repeatedly across pages.
+  initProfanityWarning();
 
   onAuthChange(async (user) => {
     const navLinks = document.querySelector('.nav-links');
