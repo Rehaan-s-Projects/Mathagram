@@ -127,6 +127,27 @@
       PT._walkAndTransform(host);
       eqText('walker: skips <script>', host, 'x**2 function bar(){}');
     }
+    {
+      const host = makeFixture('<input type="text" placeholder="enter a function">');
+      PT._walkAndTransform(host);
+      eq('attr: placeholder rewritten',
+         host.querySelector('input').getAttribute('placeholder'),
+         'enter a def');
+    }
+    {
+      const host = makeFixture('<button aria-label="return value" title="prints true">x</button>');
+      PT._walkAndTransform(host);
+      const btn = host.querySelector('button');
+      eq('attr: aria-label rewritten', btn.getAttribute('aria-label'), 'return value');
+      eq('attr: title rewritten', btn.getAttribute('title'), 'prints True');
+    }
+    {
+      const host = makeFixture('<div data-no-py><input placeholder="function"></div>');
+      PT._walkAndTransform(host);
+      eq('attr: skips data-no-py',
+         host.querySelector('input').getAttribute('placeholder'),
+         'function');
+    }
 
     // Summary row
     const summary = document.createElement('div');

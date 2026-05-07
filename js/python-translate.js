@@ -89,6 +89,44 @@ const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'CODE', 'PRE', 'TEXTAREA', 'INPUT'
 
 const _originalsText = new WeakMap();
 
+const _originalsAttr = new WeakMap();
+
+const ATTR_NAMES = ['placeholder', 'title', 'aria-label'];
+
+function isInDataNoPy(el) {
+  let p = el;
+  while (p) {
+    if (p.hasAttribute && p.hasAttribute('data-no-py')) return true;
+    p = p.parentElement;
+  }
+  return false;
+}
+
+function walkAttributes(root) {
+  if (!root || root.nodeType !== 1 && !root.querySelectorAll) return;
+  const elements = [];
+  if (root.nodeType === 1 && ATTR_NAMES.some(a => root.hasAttribute(a))) elements.push(root);
+  if (root.querySelectorAll) {
+    elements.push(...root.querySelectorAll(ATTR_NAMES.map(a => `[${a}]`).join(',')));
+  }
+  for (const el of elements) {
+    if (isInDataNoPy(el)) continue;
+    let backup = _originalsAttr.get(el);
+    if (!backup) { backup = new Map(); _originalsAttr.set(el, backup); }
+    for (const attr of ATTR_NAMES) {
+      const cur = el.getAttribute(attr);
+      if (cur == null) continue;
+      if (!backup.has(attr)) backup.set(attr, cur);
+      try {
+        const next = transformText(backup.get(attr));
+        if (cur !== next) el.setAttribute(attr, next);
+      } catch (e) {
+        console.warn('python-translate: attr transform failed', e);
+      }
+    }
+  }
+}
+
 function shouldSkip(node) {
   let el = node.parentElement;
   while (el) {
@@ -122,6 +160,7 @@ function walkAndTransform(root) {
       console.warn('python-translate: text transform failed', e);
     }
   }
+  walkAttributes(start);
 }
 
 // Exposed for tests; not part of the stable API.
