@@ -12,14 +12,13 @@ const wordMap = [
   [/\bnothing\b/gi, 'None'],
   [/\bnull\b/gi, 'None'],
   // Type names
-  [/\bdictionary\b/gi, 'dict'],
-  [/\bdictionaries\b/gi, 'dict'],
+  [/\bdictionar(?:y|ies)\b/gi, 'dict'],
   [/\bfunctions?\b/g, 'def'],
   [/\blists?\b/g, 'list'],
   [/\bsets?\b/g, 'set'],
   [/\btuples?\b/g, 'tuple'],
   [/\bclass(?:es)?\b/g, 'class'],
-  // Statement-y keywords (singular forms only — avoid pluralizing)
+  // Statement-y keywords — collapse simple plurals where the rewrite is the same
   [/\breturn\b/g, 'return'],
   [/\bprint\b/g, 'print'],
   [/\bimports?\b/g, 'import'],
