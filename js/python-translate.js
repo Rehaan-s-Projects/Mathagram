@@ -29,11 +29,9 @@ const wordMap = [
   [/\bsets?\b/g, 'set'],
   [/\btuples?\b/g, 'tuple'],
   [/\bclass(?:es)?\b/g, 'class'],
-  // Statement-y keywords — collapse simple plurals where the rewrite is the same
-  [/\breturn\b/g, 'return'],
-  [/\bprint\b/g, 'print'],
+  // Statement-y keywords — only entries that actually transform.
+  // (return/print/lambda map to themselves in Python, so they're skipped.)
   [/\bimports?\b/g, 'import'],
-  [/\blambda\b/g, 'lambda'],
 ];
 
 export function applyWordMap(text) {

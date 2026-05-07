@@ -147,10 +147,10 @@ function addTranslateWidget() {
   btn.style.cssText = 'background:none; border:none; cursor:pointer; padding:4px 8px; font-size:1.2rem; color:var(--color-text-secondary); transition:color 0.2s; display:flex; align-items:center; gap:4px;';
   btn.innerHTML = '<span style="font-size:1.1rem;">&#127760;</span><span style="font-size:0.75rem; font-weight:600;">Translate</span>';
 
-  // Dropdown — marked data-no-py so its own copy never gets rewritten
+  // Dropdown — data-no-py is set on the wrapper (below) so it covers both
+  // the button's own label and the dropdown's contents.
   const dropdown = document.createElement('div');
   dropdown.id = 'translate-dropdown';
-  dropdown.setAttribute('data-no-py', '');
   dropdown.style.cssText = 'display:none; position:absolute; top:100%; right:0; background:var(--color-white); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); z-index:999; min-width:240px; flex-direction:column;';
 
   // Mascot header — Lingo & Babel, your translation guides.
@@ -189,8 +189,10 @@ function addTranslateWidget() {
   list.appendChild(makeEntry('English', 'en'));
   list.appendChild(makeEntry('🐍 Python', 'py'));
 
-  // Wrapper for positioning
+  // Wrapper for positioning. data-no-py protects the button label AND the
+  // dropdown's contents from the engine's text rewriter.
   const wrapper = document.createElement('div');
+  wrapper.setAttribute('data-no-py', '');
   wrapper.style.cssText = 'position:relative; display:flex; align-items:center;';
   wrapper.appendChild(btn);
   wrapper.appendChild(dropdown);
