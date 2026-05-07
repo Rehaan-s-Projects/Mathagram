@@ -69,6 +69,30 @@
     eq('multiword: inherits from',
        PT.applyWordMap('Cat inherits from Animal'),
        'Cat (parent) Animal');
+    eq('math: Unicode superscript x²',
+       PT.applyMathMap('x² + 1'),
+       'x**2 + 1');
+    eq('math: implicit multiplication 2x',
+       PT.applyMathMap('2x + 3 == 7'),
+       '2*x + 3 == 7');
+    eq('math: f(x) = x²',
+       PT.applyMathMap('f(x) = x²'),
+       'def f(x): return x**2');
+    eq('math: \\sqrt{x}',
+       PT.applyMathMap('\\sqrt{x} + 1 = y'),
+       'math.sqrt(x) + 1 == y');
+    eq('math: \\frac{a}{b}',
+       PT.applyMathMap('\\frac{a}{b} = c'),
+       '(a)/(b) == c');
+    eq('math: LaTeX delimiters strip',
+       PT.applyMathMap('compute \\(x² + 1\\) here'),
+       'compute x**2 + 1 here');
+    eq('math: prose untouched',
+       PT.applyMathMap('this is just plain prose with no math'),
+       'this is just plain prose with no math');
+    eq('math: equals only inside math context',
+       PT.applyMathMap('Tom equals Jerry'),
+       'Tom equals Jerry');
 
     // Summary row
     const summary = document.createElement('div');

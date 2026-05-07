@@ -42,7 +42,47 @@ export function applyWordMap(text) {
   return out;
 }
 
-export function applyMathMap(text) { return text; }
+// ─── Math expression rewrites ────────────────────────────────────────
+const SUPER = { '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ⁿ':'n' };
+
+// True if the string looks like it contains math: an `=` in an equation-like
+// position, an `f(x)`, a digit-letter juxtaposition, a Unicode superscript,
+// or a LaTeX delimiter. Conservative: false positives in prose are worse than
+// false negatives in math.
+function isMathy(text) {
+  return /=|f\(x\)|\d[a-zA-Z]|[⁰¹²³⁴⁵⁶⁷⁸⁹ⁿ]|\\\(|\\\)|\$\$|\\sqrt|\\frac/.test(text);
+}
+
+// Rewrite a math expression. Order matters:
+//   1. \sqrt{} and \frac{} (LaTeX functions) before bare-symbol rewrites
+//   2. f(x) = expr → def f(x): return expr (consumes the `=`)
+//   3. Unicode superscripts → **n
+//   4. digit-letter juxtaposition → digit*letter
+//   5. single `=` → `==`
+function rewriteMath(s) {
+  return s
+    .replace(/\\sqrt\{(.+?)\}/g, 'math.sqrt($1)')
+    .replace(/\\frac\{(.+?)\}\{(.+?)\}/g, '($1)/($2)')
+    .replace(/f\(x\)\s*=\s*(.+?)$/g, 'def f(x): return $1')
+    .replace(/([a-zA-Z\)])([⁰¹²³⁴⁵⁶⁷⁸⁹ⁿ]+)/g, (_, base, exp) => {
+      const digits = [...exp].map(c => SUPER[c] || c).join('');
+      return `${base}**${digits}`;
+    })
+    .replace(/(\d+)([a-zA-Z])/g, '$1*$2')
+    .replace(/(?<![=!<>])=(?!=)/g, '==');
+}
+
+export function applyMathMap(text) {
+  if (!isMathy(text)) return text;
+  // Process LaTeX-delimited segments first, dropping their wrappers.
+  let out = text
+    .replace(/\\\((.+?)\\\)/g, (_, inner) => rewriteMath(inner))
+    .replace(/\$\$(.+?)\$\$/g, (_, inner) => rewriteMath(inner));
+  // Then apply math rewrites to the whole string for unwrapped expressions.
+  // rewriteMath is idempotent for matches it has already processed.
+  out = rewriteMath(out);
+  return out;
+}
 export function activate() {}
 export function deactivate() {}
 export function isActive() { return false; }
