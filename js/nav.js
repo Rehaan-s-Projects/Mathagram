@@ -31,8 +31,17 @@ export function initNav(basePath = '') {
   // Run auto-update + cache-clear on every page
   startAutoUpdate();
 
-  // Add Google Translate widget
+  // Add Translate widget (English / 🐍 Python toggle)
   addTranslateWidget();
+
+  // Restore Python mode across navigations
+  if (typeof localStorage !== 'undefined' && localStorage.getItem('mathagram-mode') === 'py') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', autoActivatePython);
+    } else {
+      autoActivatePython();
+    }
+  }
 
   // Soft profanity warning — toast on common cuss words; no strike, no redirect.
   // Idempotent: safe to call repeatedly across pages.
@@ -126,13 +135,11 @@ function escapeHtml(str) {
 }
 
 function addTranslateWidget() {
-  // Don't add twice
   if (document.getElementById('translate-btn')) return;
-
   const navLinks = document.querySelector('.nav-links');
   if (!navLinks) return;
 
-  // Create translate button
+  // Translate button
   const btn = document.createElement('button');
   btn.id = 'translate-btn';
   btn.title = 'Translate';
@@ -140,33 +147,47 @@ function addTranslateWidget() {
   btn.style.cssText = 'background:none; border:none; cursor:pointer; padding:4px 8px; font-size:1.2rem; color:var(--color-text-secondary); transition:color 0.2s; display:flex; align-items:center; gap:4px;';
   btn.innerHTML = '<span style="font-size:1.1rem;">&#127760;</span><span style="font-size:0.75rem; font-weight:600;">Translate</span>';
 
-  // Create dropdown
+  // Dropdown — marked data-no-py so its own copy never gets rewritten
   const dropdown = document.createElement('div');
   dropdown.id = 'translate-dropdown';
-  dropdown.style.cssText = 'display:none; position:absolute; top:100%; right:0; background:var(--color-white); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:8px 0; z-index:999; min-width:180px; max-height:320px; overflow-y:auto;';
+  dropdown.setAttribute('data-no-py', '');
+  dropdown.style.cssText = 'display:none; position:absolute; top:100%; right:0; background:var(--color-white); border:1px solid var(--color-border); border-radius:var(--radius); box-shadow:var(--shadow-lg); z-index:999; min-width:240px; flex-direction:column;';
 
-  const languages = [
-    ['en','English'],['es','Spanish'],['fr','French'],['de','German'],['it','Italian'],['pt','Portuguese'],
-    ['ru','Russian'],['zh-CN','Chinese (Simplified)'],['zh-TW','Chinese (Traditional)'],['ja','Japanese'],['ko','Korean'],
-    ['ar','Arabic'],['hi','Hindi'],['bn','Bengali'],['ur','Urdu'],['fa','Persian'],
-    ['tr','Turkish'],['vi','Vietnamese'],['th','Thai'],['id','Indonesian'],['ms','Malay'],
-    ['sw','Swahili'],['am','Amharic'],['mn','Mongolian'],['ka','Georgian'],['hy','Armenian'],
-    ['uk','Ukrainian'],['pl','Polish'],['nl','Dutch'],['sv','Swedish'],['no','Norwegian'],
-    ['da','Danish'],['fi','Finnish'],['el','Greek'],['he','Hebrew'],['tl','Filipino']
-  ];
+  // Mascot header — Lingo & Babel, your translation guides.
+  // The lingo/babel SVGs may not exist in the repo yet; onerror hides them
+  // and the gradient + text still convey the brand.
+  const mascotHeader = document.createElement('div');
+  mascotHeader.style.cssText = 'display:flex; align-items:center; gap:10px; padding:12px 14px 10px; background:linear-gradient(135deg,#1FA45C 0%,#FFD93D 50%,#FF6B6B 100%); color:#fff; border-radius:var(--radius) var(--radius) 0 0;';
+  mascotHeader.innerHTML = `
+    <div style="display:flex; gap:-8px;">
+      <img src="/assets/characters/lingo.svg" alt="Lingo the Parrot" width="40" height="40" style="background:#fff; border-radius:50%; padding:2px; box-shadow:0 2px 6px rgba(0,0,0,0.15);" onerror="this.style.display='none'">
+      <img src="/assets/characters/babel.svg" alt="Babel the Owl" width="40" height="40" style="background:#fff; border-radius:50%; padding:2px; box-shadow:0 2px 6px rgba(0,0,0,0.15); margin-left:-10px;" onerror="this.style.display='none'">
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:800; font-size:0.85rem; line-height:1.2;">Lingo &amp; Babel</div>
+      <div style="font-size:0.7rem; opacity:0.95; line-height:1.2;">Your translation guides — English or Python!</div>
+    </div>`;
+  dropdown.appendChild(mascotHeader);
 
-  languages.forEach(([code, name]) => {
+  // Mode list
+  const list = document.createElement('div');
+  list.style.cssText = 'padding:6px 0;';
+  dropdown.appendChild(list);
+
+  function makeEntry(label, mode) {
     const item = document.createElement('button');
-    item.style.cssText = 'display:block; width:100%; text-align:left; padding:8px 16px; border:none; background:none; cursor:pointer; font-size:0.85rem; font-family:inherit; color:var(--color-text); transition:background 0.15s;';
-    item.textContent = name;
+    item.style.cssText = 'display:block; width:100%; text-align:left; padding:10px 16px; border:none; background:none; cursor:pointer; font-size:0.9rem; font-family:inherit; color:var(--color-text); transition:background 0.15s;';
+    item.textContent = label;
     item.addEventListener('mouseenter', () => { item.style.background = 'var(--color-bg)'; });
     item.addEventListener('mouseleave', () => { item.style.background = 'none'; });
     item.addEventListener('click', () => {
-      translatePage(code);
+      setMode(mode);
       dropdown.style.display = 'none';
     });
-    dropdown.appendChild(item);
-  });
+    return item;
+  }
+  list.appendChild(makeEntry('English', 'en'));
+  list.appendChild(makeEntry('🐍 Python', 'py'));
 
   // Wrapper for positioning
   const wrapper = document.createElement('div');
@@ -176,17 +197,36 @@ function addTranslateWidget() {
 
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    const isOpen = dropdown.style.display === 'flex';
+    dropdown.style.display = isOpen ? 'none' : 'flex';
   });
-
   document.addEventListener('click', () => { dropdown.style.display = 'none'; });
 
-  // Insert before the first link in nav
   navLinks.insertBefore(wrapper, navLinks.firstChild);
 }
 
-function translatePage(lang) {
-  // Use Google Translate
-  const url = `https://translate.google.com/translate?sl=en&tl=${lang}&u=${encodeURIComponent(window.location.href)}`;
-  window.open(url, '_blank');
+async function setMode(mode) {
+  if (mode === 'py') {
+    localStorage.setItem('mathagram-mode', 'py');
+    try {
+      const m = await import('./python-translate.js');
+      m.activate();
+    } catch (err) {
+      console.warn('python-translate import failed:', err);
+    }
+  } else {
+    localStorage.removeItem('mathagram-mode');
+    try {
+      const m = await import('./python-translate.js');
+      m.deactivate();
+    } catch (err) {
+      console.warn('python-translate import failed:', err);
+    }
+  }
+}
+
+function autoActivatePython() {
+  import('./python-translate.js').then(m => m.activate()).catch(err => {
+    console.warn('python-translate import failed:', err);
+  });
 }
