@@ -83,6 +83,50 @@ export function applyMathMap(text) {
   out = rewriteMath(out);
   return out;
 }
+
+// ─── DOM walker ──────────────────────────────────────────────────────
+const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'CODE', 'PRE', 'TEXTAREA', 'INPUT']);
+
+const _originalsText = new WeakMap();
+
+function shouldSkip(node) {
+  let el = node.parentElement;
+  while (el) {
+    if (SKIP_TAGS.has(el.tagName)) return true;
+    if (el.isContentEditable) return true;
+    if (el.hasAttribute && el.hasAttribute('data-no-py')) return true;
+    el = el.parentElement;
+  }
+  return false;
+}
+
+function transformText(t) {
+  return applyMathMap(applyWordMap(t));
+}
+
+function walkAndTransform(root) {
+  if (!root) return;
+  const start = root.nodeType === 3 ? root.parentNode : root;
+  if (!start) return;
+  const tw = document.createTreeWalker(start, NodeFilter.SHOW_TEXT, {
+    acceptNode: (n) => shouldSkip(n) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+  });
+  let node;
+  while ((node = tw.nextNode())) {
+    if (!_originalsText.has(node)) _originalsText.set(node, node.textContent);
+    try {
+      const original = _originalsText.get(node);
+      const next = transformText(original);
+      if (node.textContent !== next) node.textContent = next;
+    } catch (e) {
+      console.warn('python-translate: text transform failed', e);
+    }
+  }
+}
+
+// Exposed for tests; not part of the stable API.
+export const _walkAndTransform = walkAndTransform;
+
 export function activate() {}
 export function deactivate() {}
 export function isActive() { return false; }

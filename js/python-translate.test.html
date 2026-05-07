@@ -94,6 +94,40 @@
        PT.applyMathMap('Tom equals Jerry'),
        'Tom equals Jerry');
 
+    // ─── DOM walker fixtures ──────────────────────────────────────────
+    function makeFixture(html) {
+      const host = document.createElement('div');
+      host.style.display = 'none';
+      host.innerHTML = html;
+      document.body.appendChild(host);
+      return host;
+    }
+    function eqText(name, host, expected) {
+      // textContent collapses whitespace from nested elements; compare directly.
+      eq(name, host.textContent.trim().replace(/\s+/g, ' '), expected);
+    }
+
+    {
+      const host = makeFixture('<p>The function returns true.</p>');
+      PT._walkAndTransform(host);
+      eqText('walker: simple paragraph', host, 'The def returns True.');
+    }
+    {
+      const host = makeFixture('<p>Use <code>function</code> in code.</p>');
+      PT._walkAndTransform(host);
+      eqText('walker: skips <code>', host, 'Use function in code.');
+    }
+    {
+      const host = makeFixture('<div data-no-py><p>function</p></div>');
+      PT._walkAndTransform(host);
+      eqText('walker: skips data-no-py subtree', host, 'function');
+    }
+    {
+      const host = makeFixture('<p>x²</p><script>function bar(){}</script>');
+      PT._walkAndTransform(host);
+      eqText('walker: skips <script>', host, 'x**2 function bar(){}');
+    }
+
     // Summary row
     const summary = document.createElement('div');
     summary.style.cssText = 'margin-top:16px; padding:10px; font-weight:700; border-top:2px solid #333;';
