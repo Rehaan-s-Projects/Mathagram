@@ -48,6 +48,27 @@
     eq('word: class',
        PT.applyWordMap('Define a class with two classes inside'),
        'Define a class with two class inside');
+    eq('multiword: for each X in Y',
+       PT.applyWordMap('for each item in items'),
+       'for item in items');
+    eq('multiword: if X then Y',
+       PT.applyWordMap('if x is positive then return x.'),
+       'if x is positive: return x.');
+    eq('multiword: equals / is equal to / not equal',
+       PT.applyWordMap('A equals B; C is equal to D; E is not equal'),
+       'A == B; C == D; E != ');
+    eq('multiword: range from A to B',
+       PT.applyWordMap('iterate range from 0 to 10'),
+       'iterate range(0, 10)');
+    eq('multiword: lambda function',
+       PT.applyWordMap('a lambda function maps x to x+1'),
+       'a lambda maps x to x+1');
+    eq('multiword: length of',
+       PT.applyWordMap('the length of items'),
+       'the len() of items');
+    eq('multiword: inherits from',
+       PT.applyWordMap('Cat inherits from Animal'),
+       'Cat (parent) Animal');
 
     // Summary row
     const summary = document.createElement('div');

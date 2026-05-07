@@ -6,6 +6,17 @@
 // Order matters: longer/multi-word phrases must come before their shorter
 // constituents so we don't half-rewrite them. (Multi-word patterns land in Task 4.)
 const wordMap = [
+  // Multi-word phrases — must run before their shorter constituents
+  [/\bfor each ([a-zA-Z_]\w*) in ([a-zA-Z_]\w*)\b/gi, 'for $1 in $2'],
+  [/\bif (.+?) then (.+)$/gi, 'if $1: $2'],
+  [/\bis equal to\b/gi, '=='],
+  [/\b(?:is )?not equal(\b)?/gi, '!= '],
+  [/\bequals\b/gi, '=='],
+  [/\brange from (-?\d+) to (-?\d+)\b/gi, 'range($1, $2)'],
+  [/\blambda function\b/gi, 'lambda'],
+  [/\blength of\b/gi, 'len() of'],
+  [/\binherits? from\b/gi, '(parent)'],
+  [/\biterate over\b/gi, 'for ... in'],
   // Boolean/None constants — case-sensitive when reasonable
   [/\btrue\b/g, 'True'],
   [/\bfalse\b/g, 'False'],
