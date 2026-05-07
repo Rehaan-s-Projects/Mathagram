@@ -166,6 +166,45 @@ function walkAndTransform(root) {
 // Exposed for tests; not part of the stable API.
 export const _walkAndTransform = walkAndTransform;
 
-export function activate() {}
-export function deactivate() {}
-export function isActive() { return false; }
+// ─── Activation ──────────────────────────────────────────────────────
+let _active = false;
+
+function restoreSubtree(root) {
+  if (!root) return;
+  const start = root.nodeType === 3 ? root.parentNode : root;
+  if (!start) return;
+  // Restore text nodes
+  const tw = document.createTreeWalker(start, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = tw.nextNode())) {
+    const orig = _originalsText.get(n);
+    if (orig != null) { n.textContent = orig; _originalsText.delete(n); }
+  }
+  // Restore attributes
+  const attrEls = start.nodeType === 1 ? [start] : [];
+  if (start.querySelectorAll) attrEls.push(...start.querySelectorAll('*'));
+  for (const el of attrEls) {
+    const backup = _originalsAttr.get(el);
+    if (!backup) continue;
+    for (const [k, v] of backup) el.setAttribute(k, v);
+    _originalsAttr.delete(el);
+  }
+}
+
+export function activate() {
+  if (_active) return;
+  if (!document.body) { requestAnimationFrame(activate); return; }
+  _active = true;
+  walkAndTransform(document.body);
+}
+
+export function deactivate() {
+  if (!_active && !document.body) return;
+  if (document.body) restoreSubtree(document.body);
+  _active = false;
+}
+
+export function isActive() { return _active; }
+
+// Exposed for tests; not part of the stable API.
+export const _restoreSubtree = restoreSubtree;

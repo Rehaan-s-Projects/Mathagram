@@ -148,6 +148,43 @@
          host.querySelector('input').getAttribute('placeholder'),
          'function');
     }
+    {
+      // Build a fixture into a real container so deactivate's full-body walk
+      // still finds the nodes.
+      const host = makeFixture('<p>The function returns true.</p><input placeholder="enter function">');
+      // Activate restricted to host by calling _walkAndTransform; then call
+      // a public restore on the host alone via _restoreSubtree.
+      PT._walkAndTransform(host);
+      eq('round-trip: text transformed',
+         host.querySelector('p').textContent, 'The def returns True.');
+      eq('round-trip: attr transformed',
+         host.querySelector('input').getAttribute('placeholder'), 'enter def');
+      PT._restoreSubtree(host);
+      eq('round-trip: text restored',
+         host.querySelector('p').textContent, 'The function returns true.');
+      eq('round-trip: attr restored',
+         host.querySelector('input').getAttribute('placeholder'), 'enter function');
+    }
+    {
+      // Public activate/deactivate end-to-end against document.body — but
+      // scope reasoning to a marker node we can find before/after.
+      const host = makeFixture('<p id="rt-marker">use a list and a set</p>');
+      PT.activate();
+      eq('activate: isActive() === true', PT.isActive(), true);
+      eq('activate: text transformed',
+         document.getElementById('rt-marker').textContent, 'use a list and a set'); // no change since `list`→`list`, `set`→`set`
+      // Use a phrase that DOES change to verify
+      host.querySelector('#rt-marker').textContent = 'a function returns true';
+      // Force a re-walk by calling _walkAndTransform on host (Mutation observer
+      // is implemented in Task 9; for now use the helper).
+      PT._walkAndTransform(host);
+      eq('activate: re-walk transforms updated text',
+         document.getElementById('rt-marker').textContent, 'a def returns True');
+      PT.deactivate();
+      eq('deactivate: isActive() === false', PT.isActive(), false);
+      eq('deactivate: text restored',
+         document.getElementById('rt-marker').textContent, 'a function returns true');
+    }
 
     // Summary row
     const summary = document.createElement('div');
