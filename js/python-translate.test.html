@@ -32,6 +32,7 @@
     }
     function escape(s) { return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
+    (async () => {
     // ─── Fixtures ─────────────────────────────────────────────────────
     eq('word: function → def',
        PT.applyWordMap('a function returns'),
@@ -186,11 +187,30 @@
          document.getElementById('rt-marker').textContent, 'a function returns true');
     }
 
+    // ─── Observer fixture ─────────────────────────────────────────────
+    await new Promise(async (resolve) => {
+      if (PT.isActive()) PT.deactivate();
+      const host = makeFixture('<div id="mo-host"></div>');
+      PT.activate();
+      const p = document.createElement('p');
+      p.id = 'mo-target';
+      p.textContent = 'a function returns true';
+      host.querySelector('#mo-host').appendChild(p);
+      setTimeout(() => {
+        eq('observer: dynamically added node transformed',
+           document.getElementById('mo-target').textContent,
+           'a def returns True');
+        PT.deactivate();
+        resolve();
+      }, 150);
+    });
+
     // Summary row
     const summary = document.createElement('div');
     summary.style.cssText = 'margin-top:16px; padding:10px; font-weight:700; border-top:2px solid #333;';
     summary.textContent = `${passed} passed, ${failed} failed`;
     results.appendChild(summary);
+    })();
   </script>
 </body>
 </html>

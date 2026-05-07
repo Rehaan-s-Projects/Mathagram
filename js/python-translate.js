@@ -168,6 +168,44 @@ export const _walkAndTransform = walkAndTransform;
 
 // ─── Activation ──────────────────────────────────────────────────────
 let _active = false;
+let _observer = null;
+let _applying = false;
+let _pending = [];
+let _pendingTimer = null;
+
+function installObserver() {
+  if (_observer) return;
+  _observer = new MutationObserver((records) => {
+    if (_applying) return;
+    for (const r of records) {
+      if (r.type === 'characterData') _pending.push(r.target);
+      else for (const n of r.addedNodes) _pending.push(n);
+    }
+    if (_pendingTimer) clearTimeout(_pendingTimer);
+    _pendingTimer = setTimeout(flushPending, 50);
+  });
+  _observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+}
+
+function uninstallObserver() {
+  if (_observer) { _observer.disconnect(); _observer = null; }
+  if (_pendingTimer) { clearTimeout(_pendingTimer); _pendingTimer = null; }
+  _pending = [];
+}
+
+function flushPending() {
+  _pendingTimer = null;
+  const batch = _pending; _pending = [];
+  _applying = true;
+  try {
+    for (const n of batch) {
+      if (!n || !n.isConnected) continue;
+      walkAndTransform(n);
+    }
+  } finally {
+    queueMicrotask(() => { _applying = false; });
+  }
+}
 
 function restoreSubtree(root) {
   if (!root) return;
@@ -195,12 +233,19 @@ export function activate() {
   if (_active) return;
   if (!document.body) { requestAnimationFrame(activate); return; }
   _active = true;
-  walkAndTransform(document.body);
+  _applying = true;
+  try { walkAndTransform(document.body); }
+  finally { queueMicrotask(() => { _applying = false; }); }
+  installObserver();
 }
 
 export function deactivate() {
-  if (!_active && !document.body) return;
-  if (document.body) restoreSubtree(document.body);
+  uninstallObserver();
+  if (document.body) {
+    _applying = true;
+    try { restoreSubtree(document.body); }
+    finally { queueMicrotask(() => { _applying = false; }); }
+  }
   _active = false;
 }
 
