@@ -52,9 +52,10 @@ export function renderPath(container, lessons, completedIds = new Set()) {
       const categoryLabel = categoryLabels[lesson.category] || lesson.category || '';
       const header = document.createElement('div');
       header.className = 'path-unit-header';
+      const unitLabel = lesson.unitLabel || 'Unit';
       header.innerHTML = `
         <span class="path-unit-badge ${lesson.category || ''}">${categoryLabel}</span>
-        <div class="path-unit-name">Unit ${lesson.unit}: ${lesson.unitName || ''}</div>
+        <div class="path-unit-name">${unitLabel} ${lesson.unit}: ${lesson.unitName || ''}</div>
       `;
       container.appendChild(header);
     }
@@ -242,11 +243,11 @@ export async function getCompletedLessons(courseId) {
 
 /**
  * Build a URL for the dedicated listening-practice page for this practice node.
- * Derives the course slug from the current page path (/course/<slug>/...)
+ * Derives the course slug from the current page path (/courses/<slug>/...)
  * and the depth-appropriate path prefix to practice.html.
  */
 function buildPracticeUrl(practiceNode) {
-  const m = window.location.pathname.match(/\/course\/([^/]+)\//);
+  const m = window.location.pathname.match(/\/courses?\/([^/]+)\//);
   const slug = m ? m[1] : '';
   const depth = (window.location.pathname.match(/\//g) || []).length - 1;
   const prefix = depth >= 2 ? '../../' : depth === 1 ? '../' : '';
