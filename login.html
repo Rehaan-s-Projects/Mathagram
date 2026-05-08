@@ -334,8 +334,8 @@
           <button type="button" class="cooldown-btn" id="cooldown-btn" disabled>Locked — try again in <span class="countdown" id="cooldown-secs">30</span>s</button>
           <div class="login-warning" id="login-warning" role="alert">
             <span class="triangle">⚠️</span>
-            <strong>Warning — <span id="warn-count">5</span> failed sign-in attempts.</strong>
-            After 10 fails, you'll need to solve a math problem to continue. Each failed attempt at this stage adds a 30-second lockout.
+            <strong>Warning — <span id="warn-count">5</span> failed sign-in attempts. <span id="warn-remaining">5 attempts</span> left.</strong>
+            After that, you'll need to solve a math problem to continue. Each failed attempt at this stage adds a 30-second lockout.
             <div class="reset-row">
               Forgot your password?
               <button type="button" class="reset-btn" id="reset-pw-btn">Reset it &rarr;</button>
@@ -486,6 +486,7 @@
     const cooldownSecsEl = document.getElementById('cooldown-secs');
     const warningEl = document.getElementById('login-warning');
     const warnCountEl = document.getElementById('warn-count');
+    const warnRemainingEl = document.getElementById('warn-remaining');
     const resetPwBtn = document.getElementById('reset-pw-btn');
     const resetPwStatus = document.getElementById('reset-pw-status');
 
@@ -564,6 +565,8 @@
       }
       if (fails >= WARN_THRESHOLD) {
         warnCountEl.textContent = fails;
+        const remaining = FAIL_THRESHOLD - fails;
+        warnRemainingEl.textContent = remaining + (remaining === 1 ? ' attempt' : ' attempts');
         warningEl.classList.add('show');
         resetResetBtn();
       }
