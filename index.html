@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; connect-src https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.googleapis.com;">
   <title>Mathagram — Learn Math & Science, Your Way</title>
   <link rel="icon" href="assets/lighthouse/logo.svg">
   <link rel="manifest" href="manifest.json">
@@ -12,7 +11,35 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Mathagram">
   <link rel="apple-touch-icon" href="assets/lighthouse/logo.svg">
-  <meta name="description" content="Free interactive learning platform for math, science, languages, and more. 50+ courses with AI voice characters.">
+  <meta name="description" content="Free interactive learning platform for math, science, languages, and more. 300+ courses with AI voice characters.">
+  <link rel="canonical" href="https://mathagram.org/">
+
+  <!-- Open Graph / social share -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mathagram">
+  <meta property="og:url" content="https://mathagram.org/">
+  <meta property="og:title" content="Mathagram — Learn Math, Science &amp; Languages, Free">
+  <meta property="og:description" content="300+ free, interactive courses with AI voice characters. Duolingo-style lessons for math, science, languages, and more.">
+  <meta property="og:image" content="https://mathagram.org/assets/lighthouse/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mathagram — learn math, science and languages free">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mathagram — Learn Math, Science &amp; Languages, Free">
+  <meta name="twitter:description" content="300+ free, interactive courses with AI voice characters. Duolingo-style lessons for math, science, languages, and more.">
+  <meta name="twitter:image" content="https://mathagram.org/assets/lighthouse/og-card.png">
+
+  <!-- Google Analytics 4 — replace G-Z7TFRFQDQJ with your real Measurement ID to start counting -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z7TFRFQDQJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z7TFRFQDQJ');
+  </script>
+
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/lighthouse.css">
   <style>
@@ -46,6 +73,34 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+    /* Floating math-operator emoji row — the four operations + the balance scale */
+    .hero-operators {
+      display: flex; gap: 16px; margin-bottom: 28px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .hero-op {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 60px; height: 60px; border-radius: 50%;
+      font-size: 1.7rem; line-height: 1;
+      background: #fff; border: 2.5px solid var(--color-border, #e2e8f0);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+      animation: opfloat 3.2s ease-in-out infinite;
+      user-select: none;
+    }
+    .hero-op.plus  { border-color: #3b82f6; box-shadow: 0 4px 14px rgba(59,130,246,0.18); }
+    .hero-op.minus { border-color: #ef4444; box-shadow: 0 4px 14px rgba(239,68,68,0.18); }
+    .hero-op.times { border-color: #8b5cf6; box-shadow: 0 4px 14px rgba(139,92,246,0.18); }
+    .hero-op.div   { border-color: #22c55e; box-shadow: 0 4px 14px rgba(34,197,94,0.18); }
+    .hero-op.eq    { border-color: #f59e0b; box-shadow: 0 4px 14px rgba(245,158,11,0.22); }
+    .hero-op:nth-child(1) { animation-delay: 0s; }
+    .hero-op:nth-child(2) { animation-delay: 0.45s; }
+    .hero-op:nth-child(3) { animation-delay: 0.9s; }
+    .hero-op:nth-child(4) { animation-delay: 1.35s; }
+    .hero-op:nth-child(5) { animation-delay: 1.8s; }
+    @keyframes opfloat {
+      0%,100% { transform: translateY(0) rotate(0); }
+      50%     { transform: translateY(-9px) rotate(-3deg); }
+    }
     @media (max-width: 768px) {
       .hero-title {
         font-size: 2.5rem;
@@ -53,6 +108,8 @@
       .hero-subtitle {
         font-size: 1.1rem;
       }
+      .hero-op { width: 48px; height: 48px; font-size: 1.35rem; }
+      .hero-operators { gap: 10px; margin-bottom: 22px; }
     }
   </style>
 </head>
@@ -83,11 +140,18 @@
 
   <!-- Early Prototype Banner -->
   <div style="background:#fef3c7; border-bottom:2px solid #f59e0b; text-align:center; padding:10px 16px; font-size:0.85rem; color:#92400e; font-weight:600;">
-    🚧 Early Prototype v0.1.0 — This is a work in progress. Features may be incomplete or change. <a href="https://linktr.ee/Rehaan_rashid" style="color:#92400e; text-decoration:underline;">Send feedback</a>
+    🚧 Early Prototype v0.1.3 — This is a work in progress. Features may be incomplete or change. <a href="https://linktr.ee/Rehaan_rashid" style="color:#92400e; text-decoration:underline;">Send feedback</a>
   </div>
 
   <!-- Hero -->
   <section class="hero">
+    <div class="hero-operators" aria-hidden="true" title="Add. Subtract. Multiply. Divide. Balance.">
+      <span class="hero-op plus">➕</span>
+      <span class="hero-op minus">➖</span>
+      <span class="hero-op times">✖️</span>
+      <span class="hero-op div">➗</span>
+      <span class="hero-op eq">⚖️</span>
+    </div>
     <h1 class="hero-title">Mathagram</h1>
     <p class="hero-subtitle">Learn math &amp; science, your way</p>
     <p style="max-width:600px; margin:0 auto 32px; color:var(--color-text-secondary); font-size:1.05rem; line-height:1.7; text-align:center;">
@@ -96,6 +160,22 @@
     <div class="hero-actions">
       <a href="login.html" class="btn btn-primary">Get Started — It's Free</a>
       <a href="courses.html" class="btn btn-outline">Browse Courses</a>
+      <button type="button" id="openSuperCalc" class="btn btn-outline" style="gap:8px; align-items:center; display:inline-flex;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="2.5" width="14" height="19" rx="2.5"/>
+          <rect x="7.5" y="5" width="9" height="3.5" rx="0.6" fill="currentColor" stroke="none" opacity="0.85"/>
+          <circle cx="8.5" cy="12" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="12" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="15.5" cy="12" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="8.5" cy="15.4" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="15.4" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="15.5" cy="15.4" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="8.5" cy="18.8" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="18.8" r="0.95" fill="currentColor" stroke="none"/>
+          <circle cx="15.5" cy="18.8" r="0.95" fill="currentColor" stroke="none"/>
+        </svg>
+        Super Calculator
+      </button>
       <button id="installBtn" class="btn btn-outline" style="display:none; gap:8px; align-items:center;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download App
@@ -311,12 +391,26 @@
 
   <!-- About This Website -->
   <section style="max-width:900px;margin:0 auto;padding:48px 24px 64px;">
-    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+    <!-- XP-gated lock — 300 XP (Level 4 — Flare) or unlock code 3132026 -->
+    <div id="about-xp-lock" style="max-width:560px;margin:0 auto 24px;padding:32px 28px;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:16px;text-align:center;box-shadow:0 8px 28px rgba(245,158,11,0.18);">
+      <div style="font-size:2.6rem;line-height:1;margin-bottom:6px;" aria-hidden="true">🔒</div>
+      <h2 style="color:#92400e;font-weight:800;font-size:1.15rem;margin:8px 0 6px;">About Mathagram.org — 300 XP to unlock</h2>
+      <p style="color:#78350f;font-size:.9rem;line-height:1.55;margin:0 0 14px;">Reach <strong>Level 4 (Flare — 300&nbsp;XP)</strong> to read the About card, or enter the unlock code below.</p>
+      <div style="height:10px;background:rgba(120,53,15,0.16);border-radius:999px;overflow:hidden;margin:4px 0 6px;"><div id="about-xp-fill" style="height:100%;background:linear-gradient(90deg,#f59e0b,#fde047);width:0%;transition:width 0.6s ease;"></div></div>
+      <p id="about-xp-meta" style="font-size:.78rem;color:#78350f;font-variant-numeric:tabular-nums;margin-bottom:18px;">Sign in to see your XP progress.</p>
+      <form id="about-unlock-form" autocomplete="off" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px;">
+        <input type="text" id="about-unlock-code" placeholder="Enter unlock code" inputmode="numeric" autocomplete="off" spellcheck="false" style="flex:1;min-width:180px;max-width:260px;padding:10px 14px;border:1.5px solid #f59e0b;border-radius:8px;font-family:inherit;font-size:.95rem;background:#fff;color:#1f2937;outline:none;">
+        <button type="submit" style="padding:10px 20px;border:none;border-radius:8px;background:#f59e0b;color:#fff;font-weight:700;font-family:inherit;cursor:pointer;">Unlock →</button>
+      </form>
+      <p id="about-unlock-feedback" aria-live="polite" style="font-size:.82rem;min-height:1.2em;margin:8px 0 0;font-weight:700;"></p>
+      <p style="font-size:.72rem;color:#78350f;opacity:.75;margin:10px 0 0;">Tip: the code is hidden somewhere on this site.</p>
+    </div>
+    <div id="about-card" style="display:none;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
       <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:16px;text-align:center;">About Mathagram.org</h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
         <div>
           <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;">What is Mathagram?</h3>
-          <p style="font-size:.9rem;color:#64748b;line-height:1.7;">Mathagram is a <strong>100% free</strong> online learning platform built by <strong>Rehaan Rashid</strong>. It offers interactive courses in math, science, programming, languages, and more — with AI-powered quizzes, voice characters, and a Duolingo-style learning path. No ads, no paywalls.</p>
+          <p style="font-size:.9rem;color:#64748b;line-height:1.7;">Mathagram is a <strong>100% free</strong> online learning platform built by <strong>Rehaan Rashid</strong>. Interactive courses in math, science, programming, languages, music, brain puzzles, and more — with AI-powered quizzes, voice characters, and a Duolingo-style learning path. Real interactive practice modes: <strong>piano-staff song-tracks</strong> with scrolling notation, an <strong>8×8 MIDI drum pad</strong>, <strong>Minecraft command-block typing drills</strong>, a kitchen-themed cooking quiz, and CAPTCHA-tribute mini-games. No ads, no paywalls.</p>
         </div>
         <div>
           <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;">Website Details</h3>
@@ -332,10 +426,10 @@
         <div>
           <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;">By the Numbers</h3>
           <ul style="font-size:.88rem;color:#64748b;line-height:2;list-style:none;padding:0;margin:0;">
-            <li><strong>50+</strong> courses available</li>
-            <li><strong>10,000+</strong> lessons</li>
-            <li><strong>28+</strong> languages</li>
-            <li><strong>8</strong> AI voice characters</li>
+            <li><strong>278</strong> courses available</li>
+            <li><strong>130,000+</strong> lessons</li>
+            <li><strong>69</strong> languages</li>
+            <li><strong>10</strong> AI voice characters</li>
             <li><strong>6</strong> exercise types</li>
             <li><strong>100%</strong> free, forever</li>
           </ul>
@@ -343,6 +437,21 @@
       </div>
       <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:center;">
         <p style="font-size:.82rem;color:#94a3b8;">mathagram.org &mdash; Education for everyone, everywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- General Settings (below About Mathagram.org) -->
+  <section id="general-settings" style="max-width:560px;margin:0 auto 64px;padding:0 24px;scroll-margin-top:80px;">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+      <h2 style="font-size:1.15rem;font-weight:800;margin:0 0 4px;">General Settings</h2>
+      <p style="font-size:.82rem;color:#64748b;margin:0 0 18px;">Saved on this device.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;">
+        <div>
+          <div style="font-weight:700;font-size:.95rem;color:#0f172a;">🔊 Click sound</div>
+          <div style="font-size:.78rem;color:#64748b;margin-top:2px;">Soft chime when you press buttons site-wide.</div>
+        </div>
+        <button id="click-sound-toggle-btn" type="button" aria-pressed="true" style="padding:10px 22px;border:none;border-radius:999px;background:#22c55e;color:#fff;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit;min-width:78px;">ON</button>
       </div>
     </div>
   </section>
@@ -362,7 +471,7 @@
         <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
       </div>
       <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
-      <p style="font-size:0.7rem; color:#94a3b8; margin-top:6px;">v0.1.0 — Early Prototype</p>
+      <p style="font-size:0.7rem; color:#94a3b8; margin-top:6px;">v0.1.3 — Early Prototype</p>
     </div>
   </footer>
 
@@ -377,11 +486,102 @@
     initRitaChat('');
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // Hero "Super Calculator" button → opens the same modal as the floating FAB.
+    document.getElementById('openSuperCalc')?.addEventListener('click', () => {
+      document.getElementById('sc-fab')?.click();
+    });
+
+    // ─── General Settings: Click sound toggle ─────────────────────────
+    // Bound to ui-sounds.js's isMuted/setMuted (localStorage key
+    // 'mathagram-ui-sounds-muted'). Single non-duplicated control.
+    import('./js/ui-sounds.js').then(({ isMuted, setMuted, playClick }) => {
+      const btn = document.getElementById('click-sound-toggle-btn');
+      if (!btn) return;
+      const paint = () => {
+        const on = !isMuted();
+        btn.textContent = on ? 'ON' : 'OFF';
+        btn.style.background = on ? '#22c55e' : '#94a3b8';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      };
+      btn.addEventListener('click', () => {
+        const nowMuted = !isMuted();
+        setMuted(nowMuted);
+        paint();
+        if (!nowMuted) playClick(); // audible confirmation when re-enabling
+      });
+      paint();
+    }).catch(() => {});
+
     // Show subscribe form only when logged in
     onAuthChange((user) => {
       document.getElementById('subscribeForm').style.display = user ? 'block' : 'none';
       document.getElementById('subscribeLogin').style.display = user ? 'none' : 'block';
     });
+
+    // ─── 300-XP gate for About Mathagram.org card ─────────────────────────
+    // Unlock conditions (any one):
+    //   1. localStorage flag set on this device (sticky after first unlock)
+    //   2. Logged-in user has ≥ 300 XP on their Firestore profile (Level 4)
+    //   3. Correct unlock code (3132026 — Mathagram's founding date)
+    (function aboutXpGate() {
+      const UNLOCK_KEY = 'mathagram_unlock_about-card';
+      const UNLOCK_CODE = '3132026';
+      const REQUIRED_XP = 300;
+      const lockEl = document.getElementById('about-xp-lock');
+      const cardEl = document.getElementById('about-card');
+      const fillEl = document.getElementById('about-xp-fill');
+      const metaEl = document.getElementById('about-xp-meta');
+      const codeInput = document.getElementById('about-unlock-code');
+      const feedbackEl = document.getElementById('about-unlock-feedback');
+      const form = document.getElementById('about-unlock-form');
+
+      function unlock(reason) {
+        try { localStorage.setItem(UNLOCK_KEY, '1'); } catch (e) {}
+        lockEl.style.display = 'none';
+        cardEl.style.display = 'block';
+        if (reason === 'code') {
+          feedbackEl.textContent = '✓ Unlocked! Welcome in.';
+          feedbackEl.style.color = '#166534';
+        }
+      }
+
+      let alreadyUnlocked = false;
+      try { alreadyUnlocked = localStorage.getItem(UNLOCK_KEY) === '1'; } catch (e) {}
+      if (alreadyUnlocked) { unlock('cached'); return; }
+
+      onAuthChange(async (user) => {
+        if (!user) {
+          metaEl.textContent = 'Sign in to see your XP progress.';
+          fillEl.style.width = '0%';
+          return;
+        }
+        try {
+          const { db } = await import('./js/firebase-config.js');
+          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          const xp = (snap.exists() && (snap.data().xp || 0)) || 0;
+          const pct = Math.min(100, Math.round((xp / REQUIRED_XP) * 100));
+          fillEl.style.width = pct + '%';
+          metaEl.textContent = xp >= REQUIRED_XP
+            ? `${xp} XP — eligible to unlock!`
+            : `${xp} / ${REQUIRED_XP} XP`;
+          if (xp >= REQUIRED_XP) unlock('xp');
+        } catch (e) {
+          metaEl.textContent = 'Could not read XP. Try the unlock code instead.';
+        }
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const code = (codeInput.value || '').trim();
+        if (code === UNLOCK_CODE) {
+          unlock('code');
+        } else {
+          feedbackEl.textContent = '✗ Incorrect code. Try again.';
+          feedbackEl.style.color = '#b91c1c';
+        }
+      });
+    })();
 
     // Register service worker for PWA
     if ('serviceWorker' in navigator) {
