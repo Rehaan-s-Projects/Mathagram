@@ -326,7 +326,7 @@
         <li><span class="rule-icon">&#9878;</span><div><strong>No Cheating</strong> — Do not share answers or quiz solutions. Do not ask others to give you answers. Work through problems yourself — that's how you learn. First offense = warning, second offense = 1-week suspension, third offense = permanent ban.</div></li>
         <li><span class="rule-icon">&#169;</span><div><strong>Copyright Violation — No Copying Posts</strong> — Do not copy, repost, or plagiarize another user's post, question, or content. Every post must be your own original work. <strong>1st violation = 1-week suspension. 2nd violation = permanently banned.</strong> No exceptions.</div></li>
         <li><span class="rule-icon">&#127919;</span><div><strong>Stay On Topic</strong> — Use the correct category for your post. Off-topic posts will be removed.</div></li>
-        <li><span class="rule-icon">&#127891;</span><div><strong>Age Requirement</strong> — You must be a Middle School (11+), High School, or University student. Users under 13 need parental consent.</div></li>
+        <li><span class="rule-icon">&#127891;</span><div><strong>Age Requirement</strong> — Learning Post is for users 13 and older. Younger learners (11+) can still use Mathagram's lessons and courses with parental consent, but cannot post here.</div></li>
         <li><span class="rule-icon">&#128680;</span><div><strong>Report, Don't Retaliate</strong> — If you see something wrong, report it. Do not argue or fight back.</div></li>
         <li><span class="rule-icon">&#9888;</span><div><strong>3-Strike System</strong> — Strike 1 = Warning from Edam the Bear. Strike 2 = 1-week suspension (no access to Mathagram). Strike 3 = Permanent account termination. Severe violations (racial slurs, pornography, threats) skip straight to permanent ban.</div></li>
       </ul>
@@ -477,6 +477,16 @@
     };
 
     let currentUser = null;
+    let isUnder13 = false;
+    function ageFromBirthday(iso) {
+      if (!iso) return null;
+      const [y, m, d] = String(iso).split('-').map(Number);
+      if (!y || !m || !d) return null;
+      const t = new Date();
+      let age = t.getFullYear() - y;
+      if ((t.getMonth() + 1) < m || ((t.getMonth() + 1) === m && t.getDate() < d)) age -= 1;
+      return age;
+    }
     let userProfile = null;
     let allPosts = [];
     let currentFilter = 'all';
@@ -524,6 +534,18 @@
           }
         } catch(e) {}
 
+        // Derive age from the stored birthday (authoritative); refresh the
+        // cached under13 flag if the user has since crossed 13.
+        const _age = userData ? ageFromBirthday(userData.birthday) : null;
+        isUnder13 = (_age !== null && _age < 13);
+        if (userData && userData.birthday && userData.under13 !== isUnder13) {
+          try {
+            const { db } = await import('./js/firebase-config.js');
+            const { doc: _d, updateDoc: _u } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+            await _u(_d(db, 'users', user.uid), { under13: isUnder13 });
+          } catch (e) {}
+        }
+
         // Render profile card
         const color = (userData && userData.color) || (userProfile && userProfile.color) || 'blue';
         const displayName = (userData && userData.displayName) || user.displayName || 'Learner';
@@ -547,6 +569,9 @@
             </div>
           </div>`;
 
+        if (isUnder13) {
+          section.innerHTML = '<div class="new-post-card" style="text-align:center;"><h3>Reading mode</h3><p style="margin:8px 0 0;font-size:0.9rem;color:var(--color-text-secondary);">You can read posts, but you need to be 13 or older to share a post.</p></div>';
+        } else {
         section.innerHTML = `
           <div class="new-post-card">
             <h3>Share with the community</h3>
@@ -612,6 +637,7 @@
         document.getElementById('quizBuilder').style.display = '';
         document.getElementById('postText').placeholder = 'Write your question here...';
         buildQuizChoices(2);
+        }
       } else {
         profileSection.innerHTML = '';
         section.innerHTML = `
@@ -710,6 +736,10 @@
     let lastPostTime = 0;
 
     async function submitPost() {
+      if (isUnder13) {
+        alert('You need to be 13 or older to share a post.');
+        return;
+      }
       const textEl = document.getElementById('postText');
       const btn = document.getElementById('postSubmit');
       if (!textEl || !btn) return;
