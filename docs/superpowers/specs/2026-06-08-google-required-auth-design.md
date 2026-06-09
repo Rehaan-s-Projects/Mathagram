@@ -10,7 +10,7 @@ Make every Mathagram account a **Gmail-backed, Google-linked, age-verified** acc
 
 1. Only `@gmail.com` addresses may sign up.
 2. Every user must link a Google account whose email matches their signup Gmail.
-3. Every user must confirm a date of birth and be **at least 13 years old**.
+3. Every user must confirm a date of birth. **Under-13 users are allowed**, but are restricted to **view-only** on the learning-post area (cannot create posts or, if/when they exist, comments/replies).
 4. The requirement applies to **all users, including those who signed up before this change** — they are forced through a one-time setup the next time they use any gated page.
 5. The profile page gains a Google-only **Switch account** button.
 
@@ -36,8 +36,9 @@ Make every Mathagram account a **Gmail-backed, Google-linked, age-verified** acc
 | How to "link" Google to an email/password account | `linkWithPopup(currentUser, GoogleAuthProvider)` | Keeps the same Firebase UID, preserves XP/profile |
 | Email verification | **None** (no email-link blocking) | The required Google link, with email-match, proves Gmail ownership |
 | Birthday source | User types it on the setup step | Firebase Google sign-in does not return DOB without extra People-API scope most accounts won't grant |
-| Minimum age | **13+**, under-13 blocked inline | Standard education/COPPA threshold; under-13 stays on `link-google.html` with a message, DOB not saved |
-| Too-young / incomplete UX | Inline message on `link-google.html` | No separate blocked page needed |
+| Under-13 handling | **Allowed**, but view-only on learning-post area | Per updated requirement (2026-06-08): under-13 may browse and take lessons; they cannot create posts/comments. Birthday is required and stored for **all** users. |
+| Age derivation | Compute from stored `birthday` at read time; also store an `under13` boolean for rules | Avoids a stale hard-coded age; the boolean lets Firestore rules enforce server-side and is lazily refreshed when a user crosses 13 |
+| Incomplete-setup UX | Inline messages on `link-google.html` | No separate blocked page needed |
 
 ## Components
 
@@ -59,8 +60,8 @@ A standalone page styled like `login.html` (reuse `.auth-card` patterns). It doe
 
 **Birthday section:**
 - A date-of-birth input (`<input type="date">` or three selects; date input is simplest).
-- Compute age from DOB vs. today. If `< 13`: show *"You must be at least 13 to use Mathagram."*, keep them on the page, do **not** save.
-- Only a valid 13+ DOB is accepted.
+- Validate the date is real and not in the future / not absurd (age 0–120). **Any valid age is accepted — under-13 is NOT blocked here.**
+- Compute age from DOB; the page stores `birthday` plus a derived `under13` boolean (see Completion). Under-13 users continue normally; their restriction is enforced on the learning-post area, not here.
 
 **Link Google section:**
 - Button "Link your Google account" → `linkWithPopup(auth.currentUser, new GoogleAuthProvider())`.
@@ -68,8 +69,8 @@ A standalone page styled like `login.html` (reuse `.auth-card` patterns). It doe
 - Known Firebase error to handle: `auth/credential-already-in-use` (that Google account is already attached to a different Mathagram user) → message *"That Google account is already linked to another Mathagram account."*; `auth/provider-already-linked` → treat as success.
 
 **Completion:**
-- The step completes only when the user has **both** a `google.com` provider and a valid 13+ DOB.
-- On completion, write to `users/{uid}`: `birthday` (`"YYYY-MM-DD"`) and `birthdayConfirmedAt` (ISO string), then redirect to `profile.html`.
+- The step completes only when the user has **both** a `google.com` provider and a valid DOB (any age 0–120).
+- On completion, write to `users/{uid}`: `birthday` (`"YYYY-MM-DD"`), `birthdayConfirmedAt` (ISO string), and `under13` (boolean, computed from the DOB), then redirect to `profile.html`.
 - Order is flexible (enter DOB, then link, or vice-versa); the page re-checks both conditions and only redirects when both hold.
 
 ### 3. The gate — `js/auth-gate.js`
@@ -104,19 +105,43 @@ Notes:
   - After a successful switch, redirect to `profile.html` (reload) — an existing account lands on its profile; a brand-new account will be routed by the gate to `link-google.html` for birthday setup.
 - Reuse the same Firestore "create profile if missing" logic already present in the Google sign-in handlers so a newly-chosen account gets a profile doc.
 
+### 5. Under-13 view-only on learning posts — `learning-post.html` + `firestore.rules`
+
+Under-13 users may read the feed but cannot contribute. Contribution today = **creating a post** (the "Teach" form injected into `#newPostSection`, ~lines 550–584; `submitPost()` ~line 712). No comment/reply system currently exists; if one is added later, it must reuse the same `isUnder13` guard. Likes/Focus/Report are **left enabled** (not "posting"; not mentioned in the requirement).
+
+Client behaviour (`learning-post.html` module script — it already fetches `userData` from `users/{uid}` at ~line 522):
+- Compute `isUnder13` from `userData.birthday` (derive age at read time — do not trust a possibly-stale stored flag for the UI).
+- **Lazy flag refresh:** if the computed value differs from `userData.under13`, write the corrected `under13` back to `users/{uid}` (keeps the server-side rule fresh when a user crosses 13).
+- If `isUnder13`: render a view-only notice into `#newPostSection` instead of the post-creation card — e.g. *"You can read posts, but you need to be 13 or older to share a post."* — and do not wire up the post form.
+- **Defense-in-depth:** at the top of `submitPost()`, re-check `isUnder13` and abort with the same message if true (covers any DOM tampering).
+
+Server enforcement (`firestore.rules`, `posts` create rule, currently lines 40–42): add a condition that the author's `users/{uid}.under13` is not true:
+
+```
+allow create: if request.auth != null
+  && request.resource.data.uid == request.auth.uid
+  && request.resource.data.text.size() <= 500
+  && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.under13 != true;
+```
+
+This is the authoritative check (client UI is bypassable). The lazy refresh above ensures a user who turns 13 is no longer blocked by a stale flag.
+
 ## Data model changes
 
 `users/{uid}` gains:
-- `birthday` — `string`, `"YYYY-MM-DD"`. Presence implies the user is 13+ (only stored when valid).
+- `birthday` — `string`, `"YYYY-MM-DD"`. Stored for **all** users (any age).
 - `birthdayConfirmedAt` — `string`, ISO timestamp.
+- `under13` — `boolean`, derived from `birthday`; refreshed lazily on learning-post load. Used by the Firestore `posts` create rule and the learning-post UI.
 
-No Firestore-rules change is strictly required for these fields (owner already writes their own doc), but confirm existing rules allow the owner to update these keys.
+The gate (`auth-gate.js`) checks only **presence** of `birthday` (not age) — under-13 is allowed through the gate. Confirm existing rules allow the owner to write `birthday`, `birthdayConfirmedAt`, and `under13` on their own doc (the existing `users/{userId}` owner-write rule already permits this).
 
 ## Data flow
 
-**New email user:** signup (Gmail enforced) → profile doc created → redirect `link-google.html` → enter DOB (13+) + link Google (email match) → `birthday` saved → `profile.html`. Gate now passes everywhere.
+**New email user:** signup (Gmail enforced) → profile doc created → redirect `link-google.html` → enter any valid DOB + link Google (email match) → `birthday`/`under13` saved → `profile.html`. Gate now passes everywhere.
 
 **New Google user:** "Sign up with Google" (Gmail enforced) → profile doc created, Google already linked → redirect (gate) to `link-google.html` → enter DOB only → saved → `profile.html`.
+
+**Under-13 user:** completes setup normally (allowed) → can browse/lessons → on `learning-post.html` sees a view-only notice instead of the post form; `submitPost` and the Firestore `posts` create rule both block creation.
 
 **Existing user (pre-change):** visits any gated page → gate sees missing `google.com` provider and/or missing `birthday` → redirect `link-google.html` → completes missing requirement(s) → `profile.html`.
 
@@ -134,13 +159,15 @@ No Firestore-rules change is strictly required for these fields (owner already w
 Manual (static site, Firebase live):
 1. Email signup with non-Gmail → rejected.
 2. Email signup with Gmail → lands on `link-google.html`.
-3. Under-13 DOB → blocked inline, not saved.
+3. Under-13 DOB → accepted (not blocked); `under13: true` stored.
 4. Link a *different* Gmail than signup → rejected.
-5. Link the matching Gmail + 13+ DOB → reaches profile; revisiting gated pages no longer redirects.
+5. Link the matching Gmail + valid DOB → reaches profile; revisiting gated pages no longer redirects.
 6. Existing account (no Google / no birthday) → forced through setup once.
 7. "Sign up with Google" non-Gmail → rejected; Gmail → setup asks only for birthday.
 8. Profile "Switch account" → chooser appears; non-Gmail rejected; switching to a new Gmail routes to setup.
 9. No redirect loop on `link-google.html`.
+10. Under-13 user on `learning-post.html` → no post form, view-only notice shown; attempting to post is blocked client-side and by Firestore rules. A 13+ user sees the normal post form.
+11. A user who has since turned 13 → `under13` lazily refreshed to false on learning-post load; post form appears.
 
 ## Out of scope
 

@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Make every Mathagram account Gmail-only, Google-linked, and age-verified (13+), enforced site-wide for all users, plus a Google-only "Switch account" button on the profile.
+**Goal:** Make every Mathagram account Gmail-only and Google-linked with a confirmed birthday, enforced site-wide for all users; restrict under-13 users to view-only on learning posts; and add a Google-only "Switch account" button on the profile.
 
-**Architecture:** Pure static site on Firebase Auth + Firestore. Enforcement happens at one shared chokepoint (`js/auth-gate.js`, included on 1,204 pages). A new `link-google.html` collects the missing requirements (Google link + birthday). `login.html` enforces Gmail-only at signup. `profile.html` gains the switch-account control.
+**Architecture:** Pure static site on Firebase Auth + Firestore. Enforcement happens at one shared chokepoint (`js/auth-gate.js`, included on 1,204 pages). A new `link-google.html` collects the missing requirements (Google link + birthday; under-13 is allowed and recorded). `login.html` enforces Gmail-only at signup. `learning-post.html` plus a hardened `firestore.rules` `posts` rule block under-13 post creation. `profile.html` gains the switch-account control.
 
 **Tech Stack:** Vanilla HTML/ES-module JS, Firebase Auth v10.12.0 (`linkWithPopup`, `signInWithPopup`, `GoogleAuthProvider`), Firestore.
 
@@ -203,8 +203,9 @@ This page mirrors `login.html`'s styling (`css/global.css`, `.auth-card`). It do
     const finishErr  = document.getElementById('finish-error');
 
     let currentUser = null;
-    let dobValid = false;       // 13+ entered this session
+    let dobValid = false;       // a real, sane date was entered this session
     let dobValue = '';          // "YYYY-MM-DD"
+    let dobUnder13 = false;     // derived from dobValue; stored on completion
 
     function showErr(el, msg) { el.textContent = msg; el.classList.add('show'); }
     function clearErr(el) { el.textContent = ''; el.classList.remove('show'); }
@@ -244,14 +245,13 @@ This page mirrors `login.html`'s styling (`css/global.css`, `.auth-card`). It do
       const v = dobInput.value;
       if (!v) { dobValid = false; refreshUI(); return; }
       const age = ageFrom(v);
-      if (age < 13) {
-        dobValid = false; dobValue = '';
-        showErr(dobError, 'You must be at least 13 years old to use Mathagram.');
-      } else if (age > 120) {
-        dobValid = false; dobValue = '';
+      // Under-13 is ALLOWED (it only restricts posting later). Reject only
+      // impossible dates (future / absurd age).
+      if (age < 0 || age > 120) {
+        dobValid = false; dobValue = ''; dobUnder13 = false;
         showErr(dobError, 'Please enter a valid date of birth.');
       } else {
-        dobValid = true; dobValue = v;
+        dobValid = true; dobValue = v; dobUnder13 = age < 13;
       }
       refreshUI();
     });
@@ -297,7 +297,8 @@ This page mirrors `login.html`'s styling (`css/global.css`, `.auth-card`). It do
       try {
         await updateDoc(doc(db, 'users', currentUser.uid), {
           birthday: dobValue,
-          birthdayConfirmedAt: new Date().toISOString()
+          birthdayConfirmedAt: new Date().toISOString(),
+          under13: dobUnder13
         });
         window.location.assign('/profile.html');
       } catch (err) {
@@ -314,7 +315,7 @@ This page mirrors `login.html`'s styling (`css/global.css`, `.auth-card`). It do
       try {
         const snap = await getDoc(doc(db, 'users', user.uid));
         const data = snap.exists() ? snap.data() : null;
-        if (data && data.birthday) { dobValid = true; dobValue = data.birthday; }
+        if (data && data.birthday) { dobValid = true; dobValue = data.birthday; dobUnder13 = ageFrom(data.birthday) < 13; }
         if (data && data.birthday && hasGoogle()) {
           window.location.assign('/profile.html'); return;
         }
@@ -329,7 +330,8 @@ This page mirrors `login.html`'s styling (`css/global.css`, `.auth-card`). It do
 - [ ] **Step 2: Verify (birthday + age)**
 
 Open `http://localhost:8000/link-google.html` while signed in (sign in first via `login.html`). 
-- Enter a DOB under 13 → expected: red "You must be at least 13…", birthday block not marked done, Continue stays disabled.
+- Enter a future date or absurd date → expected: red "Please enter a valid date of birth.", Continue stays disabled.
+- Enter a DOB under 13 (e.g. age 10) → expected: **accepted** (block turns green); `under13` will be saved as true on completion.
 - Enter a DOB of 13+ → expected: birthday block turns green "✓ Birthday confirmed".
 
 - [ ] **Step 3: Verify (link + match)**
@@ -488,19 +490,140 @@ git commit -m "Add Google-only Switch account button to profile"
 
 ---
 
+## Task 5: Under-13 view-only on learning posts (`learning-post.html` + `firestore.rules`)
+
+**Files:**
+- Modify: `learning-post.html` (module script: add `isUnder13` state + age helper; wrap the post-card injection ~lines 550–614; guard `submitPost()` ~line 712)
+- Modify: `firestore.rules` (`posts` create rule, lines 40–42)
+
+Under-13 users may read the feed but cannot create posts. Likes/Focus/Report stay enabled. No comment/reply system exists today; if added later it must reuse `isUnder13`.
+
+- [ ] **Step 1: Add an age helper + module-scope `isUnder13` flag**
+
+In `learning-post.html`, near the existing module-scope declarations (the `let currentUser = null;` line, ~479), add:
+
+```js
+    let isUnder13 = false;
+    function ageFromBirthday(iso) {
+      if (!iso) return null;
+      const [y, m, d] = String(iso).split('-').map(Number);
+      if (!y || !m || !d) return null;
+      const t = new Date();
+      let age = t.getFullYear() - y;
+      if ((t.getMonth() + 1) < m || ((t.getMonth() + 1) === m && t.getDate() < d)) age -= 1;
+      return age;
+    }
+```
+
+- [ ] **Step 2: Compute `isUnder13` (+ lazy-refresh the stored flag) after `userData` is fetched**
+
+In the `onAuthChange(async (user) => { ... })` callback, immediately after the `try { ... } catch(e) {}` block that loads `userData` (the block ending ~line 525, right before `// Render profile card`), insert:
+
+```js
+        // Derive age from the stored birthday (authoritative); refresh the
+        // cached under13 flag if the user has since crossed 13.
+        const _age = userData ? ageFromBirthday(userData.birthday) : null;
+        isUnder13 = (_age !== null && _age < 13);
+        if (userData && userData.birthday && userData.under13 !== isUnder13) {
+          try {
+            const { db } = await import('./js/firebase-config.js');
+            const { doc: _d, updateDoc: _u } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+            await _u(_d(db, 'users', user.uid), { under13: isUnder13 });
+          } catch (e) {}
+        }
+```
+
+- [ ] **Step 3: Show a view-only notice instead of the post form for under-13**
+
+Wrap the existing post-card injection and its wiring in an `if (isUnder13) { … } else { … }`.
+
+Immediately **before** the line `section.innerHTML = \`` that begins the `<div class="new-post-card">` block (~line 550), insert:
+
+```js
+        if (isUnder13) {
+          section.innerHTML = '<div class="new-post-card" style="text-align:center;"><h3>Reading mode</h3><p style="margin:8px 0 0;font-size:0.9rem;color:var(--color-text-secondary);">You can read posts, but you need to be 13 or older to share a post.</p></div>';
+        } else {
+```
+
+Then immediately **after** the line `buildQuizChoices(2);` (~line 614, the last statement before the `} else {` that handles logged-out users), insert the closing brace:
+
+```js
+        }
+```
+
+The result: profile card still renders for everyone; the post form renders only for 13+; `loadPosts();` (~line 623) still runs for everyone.
+
+- [ ] **Step 4: Defense-in-depth guard in `submitPost()`**
+
+At the very top of `async function submitPost() {` (~line 712), before any other logic, insert:
+
+```js
+      if (isUnder13) {
+        alert('You need to be 13 or older to share a post.');
+        return;
+      }
+```
+
+- [ ] **Step 5: Harden the Firestore `posts` create rule**
+
+In `firestore.rules`, replace the `posts` create rule (lines 40–42):
+
+```
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text.size() <= 500;
+```
+
+with:
+
+```
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text.size() <= 500
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.under13 != true;
+```
+
+(Missing `under13` on legacy docs reads as "not true" → allowed, which is correct since the gate forces setup before reaching the feed.)
+
+- [ ] **Step 6: Verify (client)**
+
+Serve locally and open `http://localhost:8000/learning-post.html`:
+- Signed in as an **under-13** account (set `under13: true` / a sub-13 `birthday` on its `users/{uid}` doc) → expected: no post form; "Reading mode" notice; the feed still loads; likes/focus still work.
+- Signed in as a **13+** account → expected: normal post form appears and posting works.
+- Turned-13 case: set `birthday` to exactly 13 years ago but leave `under13: true` → reload → expected: post form appears and the doc's `under13` is refreshed to `false` (check Firebase console).
+
+- [ ] **Step 7: Verify (rules)**
+
+Deploy/emulate rules and attempt a `posts` create as an under-13 user via the console or emulator → expected: permission denied. As a 13+ user → allowed.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add learning-post.html firestore.rules
+git commit -m "Restrict under-13 to view-only on learning posts (client + Firestore rule)"
+```
+
+> **Rules deploy note:** `firestore.rules` changes are not published by a static-site upload — they require `firebase deploy --only firestore:rules` (or pasting in the Firebase console). Flag this to the user; do not assume the Netlify deploy covers it.
+
+---
+
 ## Final verification (end-to-end)
 
-- [ ] New Gmail email signup → setup step → enter 13+ DOB → link matching Gmail → reach profile → revisit a lesson with no redirect.
+- [ ] New Gmail email signup → setup step → enter DOB → link matching Gmail → reach profile → revisit a lesson with no redirect.
 - [ ] New "Sign up with Google" (Gmail) → setup step shows only birthday → complete → profile.
 - [ ] Non-Gmail rejected on both email signup and Google buttons.
-- [ ] Under-13 blocked inline on `link-google.html`.
+- [ ] Under-13 DOB accepted on `link-google.html` (`under13: true` stored); only future/absurd dates rejected.
 - [ ] Existing user with no birthday is forced through setup once.
+- [ ] Under-13 account on `learning-post.html` → "Reading mode" notice, no post form, feed still loads; posting blocked client-side and by Firestore rule. 13+ account posts normally.
+- [ ] User who has turned 13 → `under13` lazily refreshed to false; post form appears.
 - [ ] Switch-account chooser works and respects Gmail-only.
 - [ ] No redirect loop on `link-google.html`.
 
 ## Deploy
 
 This is the consumer site. Deploy via the project's established Netlify direct-upload procedure (per project memory: a git push does **not** publish mathagram.org; a full-clean direct Netlify deploy is required). Deploy only after the user approves the implemented changes.
+
+**Firestore rules deploy separately:** the `firestore.rules` change (Task 5) is **not** covered by the Netlify upload. Publish it with `firebase deploy --only firestore:rules` or by pasting the rules in the Firebase console. Without this, the server-side under-13 post block is not active (the client-side restriction still works).
 
 ## Notes / risks
 
