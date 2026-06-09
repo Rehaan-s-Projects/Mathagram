@@ -575,6 +575,50 @@
     }
 
     // Redirect if not logged in
+    // Full-page block shown when the signed-in account has no linked Google
+    // account. A linked Google account is mandatory; the only ways out are to
+    // link one or to sign out. The page (and site) stays blocked otherwise.
+    function showLinkRequiredBlock() {
+      if (document.getElementById('link-required-overlay')) return;
+      const ov = document.createElement('div');
+      ov.id = 'link-required-overlay';
+      ov.innerHTML = `
+        <style>
+          #link-required-overlay {
+            position: fixed; inset: 0; z-index: 100000;
+            background: var(--color-bg, #f8f9fa);
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+          }
+          #link-required-overlay .lr-card {
+            background: var(--color-white, #fff); border: 1px solid var(--color-border, #e2e8f0);
+            border-radius: 16px; max-width: 440px; width: 100%; padding: 40px 32px; text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+          }
+          #link-required-overlay .lr-icon { font-size: 3rem; margin-bottom: 12px; }
+          #link-required-overlay h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; color: #b45309; }
+          #link-required-overlay p { font-size: 0.95rem; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+          #link-required-overlay .lr-btn {
+            display: block; width: 100%; padding: 12px 24px; margin-top: 10px; font-size: 1rem; font-weight: 700;
+            border-radius: 12px; border: none; cursor: pointer; text-decoration: none; box-sizing: border-box;
+          }
+          #link-required-overlay .lr-primary { background: #00e5c8; color: #fff; }
+          #link-required-overlay .lr-primary:hover { background: #00b89f; }
+          #link-required-overlay .lr-secondary { background: transparent; color: #64748b; border: 2px solid var(--color-border, #e2e8f0); }
+        </style>
+        <div class="lr-card">
+          <div class="lr-icon">&#9888;&#65039;</div>
+          <h2>Link your Google account to continue</h2>
+          <p>For your security, a linked Google account is required to use Mathagram. Link your Google account now, or sign out.</p>
+          <a href="link-google.html" class="lr-btn lr-primary">Link Google account</a>
+          <button type="button" id="lr-signout" class="lr-btn lr-secondary">Sign out</button>
+        </div>`;
+      document.body.appendChild(ov);
+      document.getElementById('lr-signout').addEventListener('click', async () => {
+        try { await logOut(); } catch (_) {}
+        window.location.href = 'login.html';
+      });
+    }
+
     onAuthChange(async (user) => {
       if (!user) {
         window.location.href = 'login.html';
@@ -603,6 +647,14 @@
           window.location.href = 'login.html?suspended=1';
           return;
         }
+      }
+
+      // ─── Linked-account requirement ──────────────────────────────────
+      // Block the profile (and the site) until a Google account is linked.
+      const hasGoogle = (user.providerData || []).some(p => p.providerId === 'google.com');
+      if (!hasGoogle) {
+        showLinkRequiredBlock();
+        return;
       }
 
       const userColor = (profile && profile.color) || 'blue';
