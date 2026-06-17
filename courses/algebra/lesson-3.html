@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3 — Algebra — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style> .lesson-content { max-width: 720px; margin: 0 auto; padding: 56px 24px 12px; } .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0ea5e9; margin-bottom: 8px; } .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; line-height: 1.25; color: #0f172a; } .lesson-content p { font-size: 1.05rem; line-height: 1.7; color: #475569; margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+      <div class="nav-links">
+        <a href="index.html">Algebra</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Lesson 3 — Foundations</div>
+    <h1>Order of Operations</h1>
+    <p>This lesson covers <strong>Order of Operations</strong>. Read through the idea, then mark the lesson complete to continue along the Algebra path.</p>
+  </section>
+<section style="max-width:720px;margin:8px auto 36px;padding:0 24px;text-align:center;">
+    <a href="index.html" id="mgMarkBtn" style="display:inline-block;padding:12px 28px;border-radius:14px;font-family:inherit;font-weight:700;font-size:0.95rem;cursor:pointer;border:none;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;text-decoration:none;box-shadow:0 4px 12px rgba(14,165,233,0.30);">Mark Lesson 3 Complete →</a>
+  </section>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="mgYr"></span> Mathagram.org</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('mgYr').textContent = new Date().getFullYear();
+    document.getElementById('mgMarkBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (auth.currentUser) {
+          await setDoc(
+            doc(db, 'users', auth.currentUser.uid, 'progress', 'algebra'),
+            { 'a-3': { completed: true, at: serverTimestamp() } },
+            { merge: true }
+          );
+        }
+      } catch {}
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

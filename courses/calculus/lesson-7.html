@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Continuity — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .lesson-content .chapter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .lesson-content h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .lesson-content p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+    .lesson-content .math-block {
+      text-align: center;
+      margin: 24px 0;
+      font-size: 1.3rem;
+    }
+    .lesson-content ul {
+      margin: 12px 0 20px 20px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+    .exercise-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .exercise-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .lesson-complete {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 32px auto;
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; font-size: 1rem; font-weight: 700;
+      color: var(--color-xp); background: rgba(234,179,8,0.1);
+      border-radius: var(--radius); margin-bottom: 16px;
+    }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+<link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Teaching Content -->
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Continuity</h1>
+
+    <p>
+      Intuitively, a function is <strong>continuous</strong> if you can draw its graph without lifting your pen. But in calculus we need a precise definition.
+    </p>
+
+    <p>A function \(f\) is <strong>continuous at \(x = a\)</strong> if all three conditions hold:</p>
+    <ul>
+      <li><strong>1.</strong> \(f(a)\) is defined (the point exists).</li>
+      <li><strong>2.</strong> \(\displaystyle\lim_{x \to a} f(x)\) exists (left and right limits agree).</li>
+      <li><strong>3.</strong> \(\displaystyle\lim_{x \to a} f(x) = f(a)\) (the limit equals the function value).</li>
+    </ul>
+
+    <p>If any one of these fails, we have a <strong>discontinuity</strong>. There are three main types:</p>
+    <ul>
+      <li><strong>Removable discontinuity</strong> (hole): The limit exists but \(f(a)\) is either missing or doesn't match. You could "fill in" the hole to fix it.</li>
+      <li><strong>Jump discontinuity</strong>: The left-hand and right-hand limits exist but are different. Think of a step function.</li>
+      <li><strong>Infinite discontinuity</strong>: The function blows up to \(\pm\infty\) near \(x = a\). This creates a vertical asymptote.</li>
+    </ul>
+
+    <p><strong>Example:</strong> Consider \(\displaystyle f(x) = \frac{x^2 - 1}{x - 1}\). At \(x = 1\), the function is undefined (division by zero). But:</p>
+    <div class="math-block">
+      $$\lim_{x \to 1} \frac{x^2 - 1}{x - 1} = \lim_{x \to 1} \frac{(x-1)(x+1)}{x-1} = \lim_{x \to 1} (x+1) = 2$$
+    </div>
+    <p>The limit exists and equals 2, but \(f(1)\) is undefined. This is a <strong>removable discontinuity</strong>.</p>
+
+    <p>
+      <strong>Key fact:</strong> Polynomials, exponentials, sine, and cosine are continuous everywhere. Rational functions are continuous wherever the denominator is nonzero.
+    </p>
+  </section>
+
+  <!-- Exercises -->
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+  </section>
+
+  <div id="completion" style="display:none;"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    // KaTeX auto-render
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+  })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize side character
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'Which of the following is NOT a condition for continuity at \\(x = a\\)?',
+        options: ['\\(f(a)\\) is defined', '\\(\\lim_{x \\to a} f(x)\\) exists', '\\(f\'(a)\\) exists', '\\(\\lim_{x \\to a} f(x) = f(a)\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'true-false',
+        question: 'Every polynomial is continuous on \\((-\\infty, \\infty)\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The function \\(f(x) = \\frac{x^2 - 4}{x - 2}\\) has what type of discontinuity at \\(x = 2\\)?',
+        options: ['Jump', 'Infinite', 'Removable', 'No discontinuity'],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'If \\(\\lim_{x \\to 3^-} f(x) = 5\\) and \\(\\lim_{x \\to 3^+} f(x) = 8\\), the discontinuity at \\(x = 3\\) is called a ___ discontinuity.',
+        answer: 'jump'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which function is continuous everywhere?',
+        options: ['\\(\\frac{1}{x}\\)', '\\(\\tan(x)\\)', '\\(\\sin(x)\\)', '\\(\\ln(x)\\)'],
+        correctIndex: 2
+      },
+      {
+        type: 'matching',
+        question: 'Match each scenario with the type of discontinuity.',
+        pairs: [
+          { left: 'Limit exists but \\(f(a)\\) is undefined', right: 'Removable' },
+          { left: 'Left and right limits differ', right: 'Jump' },
+          { left: 'Function goes to \\(\\pm\\infty\\)', right: 'Infinite' },
+          { left: 'All 3 conditions hold', right: 'Continuous' }
+        ]
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f(a)\\) is defined and \\(\\lim_{x \\to a} f(x)\\) exists, then \\(f\\) must be continuous at \\(x = a\\).',
+        correctAnswer: false
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The function \\(f(x) = \\frac{1}{x - 3}\\) has what type of discontinuity at \\(x = 3\\)?',
+        options: ['Removable', 'Jump', 'Infinite', 'None'],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'To "remove" a removable discontinuity at \\(x = a\\), you redefine \\(f(a)\\) to equal the ___ at that point.',
+        answer: 'limit'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'The greatest integer function \\(f(x) = \\lfloor x \\rfloor\\) has what type of discontinuity at each integer?',
+        options: ['Removable', 'Jump', 'Infinite', 'It is continuous at integers'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f(x) = 2x + 1, then f(4) = ___',
+        answer: '9'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f(x) = x^2 − 3x, then f(5) = ___',
+        answer: '10'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Fill the missing number: if f is continuous at 2 and \\(\\lim_{x\\to 2} f(x) = 7\\), then f(2) = ___',
+        answer: '7'
+      }
+    ];
+
+
+    const mathContainer = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    // Random character for EACH question
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const onAnswer = (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    };
+    const mathResult = await runExerciseSet(mathContainer, exercises, onAnswer);
+    const combinedScore = mathResult.score;
+    const totalXp = (mathResult.xp || 0);
+
+    await showLessonComplete(mathContainer, completionDiv, combinedScore, { xp: totalXp,
+      courseId: 'calculus',
+      lessonId: 'lesson-7',
+      nextHref: 'lesson-8.html',
+      backHref: 'index.html'
+    });
+  import { createCalculator } from "../../js/calculator.js"; createCalculator();
+</script>
+
+</body>
+</html>
