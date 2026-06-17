@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limits by Direct Evaluation — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lang-tabs { max-width: 700px; margin: 0 auto; padding: 16px 24px 0; display: flex; gap: 8px; justify-content: center; }
+    .lang-tab { padding: 6px 16px; border-radius: 999px; border: 1.5px solid var(--color-border); background: transparent; color: var(--color-text-secondary); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.04em; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .lang-tab.active { background: var(--color-primary, #00b89f); color: #fff; border-color: var(--color-primary, #00b89f); }
+    .lang-tab:hover:not(.active) { color: var(--color-text); border-color: var(--color-text-secondary); }
+    .lesson-section[data-lang]:not(.show) { display: none; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+  <link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="lang-tabs" role="tablist" aria-label="Lesson language">
+    <button type="button" class="lang-tab active" data-pick="en" role="tab" aria-selected="true">English</button>
+    <button type="button" class="lang-tab" data-pick="es" role="tab" aria-selected="false">Español</button>
+    <button type="button" class="lang-tab" data-pick="pt" role="tab" aria-selected="false">Português</button>
+  </div>
+
+  <section class="lesson-content lesson-section show" data-lang="en">
+    <div class="chapter-label">Unit 1 &mdash; Limits</div>
+    <h1>Limits by Direct Evaluation</h1>
+
+    <p>A <strong>limit</strong> describes what value a function approaches as its input approaches some number. We write:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = L$$</div>
+    <p>This reads: "the limit of \(f(x)\) as \(x\) approaches \(a\) equals \(L\)."</p>
+
+    <p>The simplest way to find a limit is <strong>direct substitution</strong> — just plug in the value of \(a\). If the function is continuous at \(a\) (no holes, no jumps, no vertical asymptotes), then:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = f(a)$$</div>
+
+    <p><strong>Example 1.</strong> Find \(\lim_{x \to 3}(2x + 1)\).</p>
+    <p>Plug in \(x = 3\): \(2(3) + 1 = 7\). So the limit is \(7\).</p>
+
+    <p><strong>Example 2.</strong> Find \(\lim_{x \to 4} \sqrt{x}\).</p>
+    <p>Plug in: \(\sqrt{4} = 2\). The limit is \(2\).</p>
+
+    <p><strong>Example 3.</strong> Find \(\lim_{x \to 0} \cos x\).</p>
+    <p>Plug in: \(\cos(0) = 1\). The limit is \(1\).</p>
+
+    <p><strong>When does direct substitution work?</strong> It works for polynomials, rational functions (when the denominator isn't zero), trig functions, exponentials, and logarithms — anywhere the function is continuous at the point.</p>
+
+    <p><strong>When does it fail?</strong> When plugging in gives \(\frac{0}{0}\), \(\frac{\infty}{\infty}\), or an undefined expression. In those cases, you need other techniques (factoring, conjugates, L'Hôpital's Rule) which come in later lessons.</p>
+  </section>
+
+  <section class="lesson-content lesson-section" data-lang="es" lang="es">
+    <div class="chapter-label">Unidad 1 &mdash; Límites</div>
+    <h1>Límites por Sustitución Directa</h1>
+
+    <p>Un <strong>límite</strong> describe el valor al que se aproxima una función cuando su entrada se aproxima a cierto número. Escribimos:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = L$$</div>
+    <p>Esto se lee: «el límite de \(f(x)\) cuando \(x\) tiende a \(a\) es igual a \(L\)».</p>
+
+    <p>La forma más sencilla de encontrar un límite es la <strong>sustitución directa</strong>: simplemente sustituye el valor de \(a\). Si la función es continua en \(a\) (sin huecos, sin saltos, sin asíntotas verticales), entonces:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = f(a)$$</div>
+
+    <p><strong>Ejemplo 1.</strong> Calcula \(\lim_{x \to 3}(2x + 1)\).</p>
+    <p>Sustituye \(x = 3\): \(2(3) + 1 = 7\). El límite es \(7\).</p>
+
+    <p><strong>Ejemplo 2.</strong> Calcula \(\lim_{x \to 4} \sqrt{x}\).</p>
+    <p>Sustituye: \(\sqrt{4} = 2\). El límite es \(2\).</p>
+
+    <p><strong>Ejemplo 3.</strong> Calcula \(\lim_{x \to 0} \cos x\).</p>
+    <p>Sustituye: \(\cos(0) = 1\). El límite es \(1\).</p>
+
+    <p><strong>¿Cuándo funciona la sustitución directa?</strong> Funciona para polinomios, funciones racionales (cuando el denominador no es cero), funciones trigonométricas, exponenciales y logaritmos: donde sea que la función sea continua en el punto.</p>
+
+    <p><strong>¿Cuándo falla?</strong> Cuando al sustituir obtienes \(\frac{0}{0}\), \(\frac{\infty}{\infty}\) o una expresión indefinida. En esos casos necesitas otras técnicas (factorización, conjugados, regla de L'Hôpital) que verás en lecciones posteriores.</p>
+  </section>
+
+  <section class="lesson-content lesson-section" data-lang="pt" lang="pt">
+    <div class="chapter-label">Unidade 1 &mdash; Limites</div>
+    <h1>Limites por Substituição Direta</h1>
+
+    <p>Um <strong>limite</strong> descreve o valor ao qual uma função se aproxima quando sua entrada se aproxima de certo número. Escrevemos:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = L$$</div>
+    <p>Lê-se: «o limite de \(f(x)\) quando \(x\) tende a \(a\) é igual a \(L\)».</p>
+
+    <p>A maneira mais simples de calcular um limite é a <strong>substituição direta</strong>: basta substituir o valor de \(a\). Se a função for contínua em \(a\) (sem buracos, saltos ou assíntotas verticais), então:</p>
+    <div class="math-block">$$\lim_{x \to a} f(x) = f(a)$$</div>
+
+    <p><strong>Exemplo 1.</strong> Calcule \(\lim_{x \to 3}(2x + 1)\).</p>
+    <p>Substitua \(x = 3\): \(2(3) + 1 = 7\). O limite é \(7\).</p>
+
+    <p><strong>Exemplo 2.</strong> Calcule \(\lim_{x \to 4} \sqrt{x}\).</p>
+    <p>Substitua: \(\sqrt{4} = 2\). O limite é \(2\).</p>
+
+    <p><strong>Exemplo 3.</strong> Calcule \(\lim_{x \to 0} \cos x\).</p>
+    <p>Substitua: \(\cos(0) = 1\). O limite é \(1\).</p>
+
+    <p><strong>Quando a substituição direta funciona?</strong> Funciona para polinômios, funções racionais (quando o denominador não é zero), funções trigonométricas, exponenciais e logaritmos — sempre que a função for contínua no ponto.</p>
+
+    <p><strong>Quando falha?</strong> Quando ao substituir você obtém \(\frac{0}{0}\), \(\frac{\infty}{\infty}\) ou uma expressão indefinida. Nesses casos, precisa de outras técnicas (fatoração, conjugados, regra de L'Hôpital) que aparecerão nas próximas lições.</p>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+  </section>
+
+  <div id="completion" style="display:none;"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    // Language toggle for the lesson body (English / Español / Português)
+    (function setupLangTabs() {
+      const tabs = document.querySelectorAll('.lang-tab');
+      const sections = document.querySelectorAll('.lesson-section[data-lang]');
+      const initial = (new URLSearchParams(location.search)).get('lang')
+        || (navigator.language || 'en').slice(0, 2).toLowerCase();
+      const allowed = ['en','es','pt'];
+      const pick = allowed.includes(initial) ? initial : 'en';
+      function activate(lang) {
+        tabs.forEach(t => {
+          const on = t.dataset.pick === lang;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        sections.forEach(s => s.classList.toggle('show', s.dataset.lang === lang));
+      }
+      tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.pick)));
+      activate(pick);
+    })();
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'Find \\(\\lim_{x \\to 3}(2x + 1)\\).',
+        options: ['\\(5\\)', '\\(7\\)', '\\(6\\)', '\\(9\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\lim_{x \\to 4} \\sqrt{x} =\\) ___.',
+        answer: '2'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\lim_{x \\to 0} \\cos x =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(-1\\)', 'Undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'If \\(f\\) is continuous at \\(a\\), then \\(\\lim_{x \\to a} f(x) = f(a)\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: '\\(\\lim_{x \\to 2}(x^2 + 3x) =\\) ___.',
+        answer: '10'
+      },
+      {
+        type: 'multiple-choice',
+        question: '\\(\\lim_{x \\to 1} \\frac{x^2 + 1}{x + 1} =\\)',
+        options: ['\\(0\\)', '\\(1\\)', '\\(2\\)', 'Undefined'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Direct substitution fails when plugging in gives:',
+        options: ['A whole number', '\\(\\frac{0}{0}\\)', 'A negative value', 'A fraction'],
+        correctIndex: 1
+      }
+    ];
+
+
+    const mathContainer = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const onAnswer = (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    };
+    const mathResult = await runExerciseSet(mathContainer, exercises, onAnswer);
+    const combinedScore = mathResult.score;
+    const totalXp = (mathResult.xp || 0);
+    await showLessonComplete(mathContainer, completionDiv, combinedScore, { xp: totalXp,
+      courseId: 'calculus', lessonId: 'lesson-1', nextHref: 'index.html', backHref: 'index.html'
+    });
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
+</body>
+</html>

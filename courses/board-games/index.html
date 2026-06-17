@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Games — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Board Games</h1>
+    <p>Master classic and modern board games — Checkers, Backgammon, Go, Mancala, Othello, Shogi, Xiangqi, Scrabble, plus the modern hobby (Catan, Ticket to Ride, Carcassonne, Pandemic, Dominion, 7 Wonders, Wingspan, Terraforming Mars, Scythe, Gloomhaven, Twilight Imperium, Risk, Diplomacy); deckbuilding, worker placement, area control, engine-building, roll-and-write, hidden role, party, trivia, family, wargames, MTG, Bridge, Poker; famous designers (Knizia, Rosenberg, Feld, Vlaada Chvátil), BGG culture, conventions, awards, and tournament play. 799 lessons across 54 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Checkers (Draughts)',['⭐ Capture the Stars — Bronze Challenge','⭐ Capture the Stars — Silver Challenge','⭐ Capture the Stars — Gold Challenge','⭐ Capture the Stars — Diamond Challenge','History of Checkers','The Board & Setup','Basic Moves','Jumping & Capturing','Multiple Jumps','King Me! (Promotion)','Forced Captures Rule','Opening Strategies','Middle Game Tactics','Endgame Techniques','Double Corner Defense','Man Down Strategy','Checkers Puzzles','Checkers Review']],
+      [2,'Backgammon',['History of Backgammon','The Board & Setup','Rolling & Moving','Hitting & Entering','Bearing Off','The Doubling Cube','Opening Moves','Anchoring Strategy','Running Game','Holding Game','Backgame Strategy','Pip Counting','Backgammon Probabilities','Backgammon Review']],
+      [3,'Go (Baduk/Weiqi)',['History of Go','The Board (19x19)','Placing Stones','Liberties','Capturing Stones','Ko Rule','Eyes & Life/Death','Territory Counting','Seki (Mutual Life)','Opening (Fuseki)','Middle Game (Chuban)','Endgame (Yose)','Go Puzzles (Tsumego)','Go Review']],
+      [4,'Mancala',['History of Mancala','Oware Rules','Kalah Rules','Bao Rules','Basic Strategy','Counting Seeds','Capturing Techniques','Opening Moves','Middle Game','Endgame Strategy','African Mancala Variations','Asian Mancala Variations','Mancala Mathematics','Mancala Review']],
+      [5,'Othello (Reversi)',['History of Othello','The Board & Setup','Flipping Discs','Corner Strategy','Edge Play','Mobility','Parity','Stable Discs','X-Squares & C-Squares','Opening Book','Middle Game Strategy','Endgame Counting','Othello Tournaments','Othello Review']],
+      [6,'Shogi (Japanese)',['History of Shogi','The Board (9x9)','Piece Types & Movement','Drops (Unique Rule)','Promotion Rules','King Safety','Opening Strategies','Attacking Formations','Castle Building','Middle Game Tactics','Endgame (Tsume)','Famous Shogi Games','Shogi vs Chess Comparison','Shogi Review']],
+      [7,'Xiangqi (Chinese)',['History of Xiangqi','The Board & River','Piece Types','The General & Advisors','Elephants & Horses','Chariots & Cannons','Soldiers','Opening Principles','Middle Game','Checkmate Patterns','Famous Games','Xiangqi Strategy','Xiangqi Puzzles','Xiangqi Review']],
+      [8,'Connect Four & Dots',['Connect Four Rules','First Move Advantage','Column Control','Threat Building','Double Threats','Odd/Even Strategy','Advanced Patterns','Connect Four Solutions','Dots & Boxes Rules','Chain Strategy','Double-Dealing','Nimstring Theory','Dots Endgame','Connect Four & Dots Review']],
+      [9,'Scrabble & Word Games',['Scrabble Board & Tiles','Tile Values & Distribution','Two-Letter Words','Three-Letter Words','Bingo (7-Letter Words)','Rack Management','Board Control','Triple Word Traps','Q Without U Words','Hook Strategy','Endgame Tile Tracking','Tournament Rules','Boggle & Anagram Games','Word Games Review']],
+      [10,'Strategy Board Games',['Risk — World Domination','Catan — Trading & Building','Carcassonne — Tile Placement','Ticket to Ride — Route Building','Pandemic — Cooperative Play','Azul — Pattern Building','Splendor — Engine Building','7 Wonders — Card Drafting','Codenames — Team Guessing','Terraforming Mars','Wingspan — Engine Building','Puerto Rico','Strategy Games Review']],
+      [11,'Classic & Traditional',['Ludo — Race to Home','Snakes & Ladders — History & Math','Parcheesi','Nine Men Morris','Hnefatafl (Viking Game)','Senet (Ancient Egypt)','Royal Game of Ur','Pachisi (Indian Classic)','Mahjong — Tile Matching','Dominoes — Basics & Strategy','Carrom — Flicking Game','Crokinole','Traditional Games Review']],
+      [12,'Board Game Theory & Mastery',['Game Theory in Board Games','Perfect Information Games','Imperfect Information','Combinatorial Game Theory','Solved vs Unsolved Games','First Player Advantage','Zugzwang & Tempo','Probability in Board Games','Expected Value Decisions','Bluffing & Psychology','Tournament Preparation','Rating Systems (Elo Glicko)','Sportsmanship & Etiquette','Board Games Mastery!']],
+      [13,'Reversi/Othello',['History of Reversi','Board Setup & Rules','Flipping Mechanics','Corner Strategy','Edge Play','Mobility Concept','Parity Strategy','Opening Theory','Midgame Tactics','Endgame Counting','Stable Discs','Wedges & Traps','Tournament Reversi','Computer Othello','Reversi Review']],
+      [14,'Shogi (Japanese Chess)',['History of Shogi','The Board & Pieces','Piece Movement Rules','Drops & Captures','Promotion Rules','Opening Strategies','Castle Building','Attacking Formations','Lance & Knight Tactics','Silver & Gold Generals','Rook & Bishop Strategy','Endgame Techniques','Famous Shogi Games','Online Shogi Resources','Shogi Review']],
+      [15,'Nine Mens Morris',['History & Origins','Board Setup','Placing Phase Rules','Forming Mills','Removing Opponent Pieces','Moving Phase','Flying Phase','Opening Strategy','Blocking Techniques','Double Mill Strategy','Midgame Tactics','Endgame Technique','Solved Game Analysis','Nine Mens Morris Review']],
+      [16,'Dominoes',['History of Dominoes','Basic Block Game','Draw Game Rules','Muggins/All Fives','Chicken Foot','Mexican Train','Scoring & Counting','Strategy Basics','Tile Tracking','Advanced Blocking','Double-Six Set','Double-Nine & Twelve Sets','Dominoes Mathematics','Tournament Rules','Dominoes Review']],
+      [17,'Stratego',['History & Origins','Board Setup & Deployment','Piece Ranks & Values','The Flag & Bombs','Scouts & Miners','Spy & Marshal','Opening Deployment Strategy','Bluffing Tactics','Piece Tracking & Memory','Attack Strategies','Defense Formations','Midgame Adaptation','Endgame Techniques','Online Stratego','Stratego Review']],
+      [18,'Mahjong',['History of Mahjong','Tiles & Suits','The Wall & Deal','Chow Pung & Kong','Winning Hands','Scoring Basics','Riichi Mahjong Rules','Yaku (Winning Conditions)','Dora & Bonus Tiles','Defensive Play','Reading Discards','Efficiency & Tenpai','Hong Kong vs Japanese Rules','Strategy Overview','Mahjong Review']],
+      [19,'Card Games Strategy',['Poker Basics','Texas Holdem','Hand Rankings & Odds','Pot Odds & Probability','Bluffing Strategy','Bridge Introduction','Bridge Bidding','Bridge Play & Defense','Hearts Strategy','Spades Strategy','Rummy & Gin Rummy','Blackjack Basic Strategy','Card Counting Concepts','Game Theory in Cards','Card Games Review']],
+      [20,"Catan & Settlers Family",["Klaus Teuber — Designer","Settlers of Catan (1995)","Resource Management","Trading Mechanics","Robber Mechanic","Longest Road & Largest Army","Catan: Seafarers","Catan: Cities & Knights","Catan: Traders & Barbarians","Catan: Explorers & Pirates","Star Trek Catan","Game of Thrones Catan","Catan World Championship","Catan Strategy","Catan Checkpoint"]],
+      [21,"Ticket to Ride",["Alan R. Moon — Designer","Original Ticket to Ride (2004)","Ticket to Ride Europe","Marklin Edition","Nordic Countries","Asia & Legendary Asia","India","Africa","Pennsylvania","Train Cards & Routes","Destination Tickets","Spiel des Jahres 2004","Strategy — Long Routes vs Short","Blocking Opponents","Ticket to Ride Checkpoint"]],
+      [22,"Carcassonne",["Klaus-Jürgen Wrede","Carcassonne (2000)","Tile-Laying Mechanic","Meeple Placement","Cities, Roads, Cloisters","Farmers Endgame","Inns & Cathedrals","Traders & Builders","Princess & Dragon","River Expansion","Big Box Editions","Carcassonne World Championship","Strategy — Tile Counting","Family Variants","Carcassonne Checkpoint"]],
+      [23,"Pandemic & Cooperative Games",["Matt Leacock — Designer","Pandemic (2008)","Cooperative Mechanics","Roles — Medic, Scientist, Researcher","Forecasting & Planning","Pandemic: On the Brink","Pandemic Legacy: Season 1","Pandemic Legacy: Season 2","Pandemic Iberia","Pandemic Rising Tide","Forbidden Island","Forbidden Desert","Spirit Island","The Crew","Co-op Games Checkpoint"]],
+      [24,"Dominion & Deckbuilding",["Donald X. Vaccarino","Dominion (2008)","Deckbuilding Mechanic","Action, Treasure, Victory Cards","Engine Building","Big Money Strategy","Dominion: Intrigue","Dominion: Seaside","Dominion: Prosperity","Star Realms","Hero Realms","Ascension","Legendary Encounters","Aeon's End","Deckbuilding Checkpoint"]],
+      [25,"7 Wonders",["Antoine Bauza — Designer","7 Wonders (2010)","Card Drafting Mechanic","Three Ages","Civilizations & Wonders","Resource Production","Military Conflicts","Science Sets","7 Wonders Duel","7 Wonders: Cities","7 Wonders: Leaders","7 Wonders: Babel","7 Wonders: Armada","Spiel des Jahres Special Award","7 Wonders Checkpoint"]],
+      [26,"Splendor",["Marc André — Designer","Splendor (2014)","Gem Tokens","Card Engine Building","Nobles","Cities Expansion","Marvel Splendor","Strategy — Bonus vs Prestige","Reservation Mechanic","Tempo & Speed","Splendor Duel","Spiel des Jahres Nominee","Family Game Appeal","Splendor Apps","Splendor Checkpoint"]],
+      [27,"Wingspan",["Elizabeth Hargrave","Wingspan (2019)","Bird Cards (170+)","Engine Building","Habitats — Forest, Grassland, Wetland","Egg-Laying","European Expansion","Oceania Expansion","Asia Expansion","Wingspan: Fit to Be Tied","Stonemaier Games","Spiel des Jahres Kennerspiel 2019","Bird Realism","Wingspan Auto-Bot","Wingspan Checkpoint"]],
+      [28,"Terraforming Mars",["Jacob Fryxelius","Terraforming Mars (2016)","Corporate Era","Project Cards","Standard Projects","Heat, Plants, Steel, Titanium","Oxygen, Temperature, Ocean","Awards & Milestones","Hellas & Elysium","Venus Next","Prelude","Colonies","Turmoil","Solo Mode","Terraforming Mars Checkpoint"]],
+      [29,"Scythe & 1920s+1 Games",["Jamey Stegmaier","Scythe (2016)","Alternate-History Setting","Stonemaier Games","Mech Combat","Workers & Resources","Factions","Scythe: Invaders from Afar","Scythe: The Wind Gambit","Scythe: The Rise of Fenris","Scythe: Modular Board","Scythe Digital","Scythe Strategy","Solo Automa","Scythe Checkpoint"]],
+      [30,"Gloomhaven & Legacy Games",["Isaac Childres","Gloomhaven (2017)","Frosthaven (2022)","Jaws of the Lion","Legacy Game Concept","Risk Legacy","Pandemic Legacy: Season 0","SeaFall","Charterstone","Mechs vs Minions","Star Wars Legion","Tabletop RPG Hybrids","Persistent Worlds","Legacy Game Storage","Legacy Games Checkpoint"]],
+      [31,"Twilight Imperium",["Christian T. Petersen","Twilight Imperium (1997)","TI 4th Edition","Galactic Empire Theme","Strategy Cards","Politics — Speaker, Senate","Ground Combat","Space Combat","Trade & Economy","Race Selection — 17 Races","Prophecy of Kings Expansion","8-Hour Game Sessions","Twilight Imperium Lore","TI Strategy","Twilight Imperium Checkpoint"]],
+      [32,"Risk & Diplomacy",["Albert Lamorisse","Risk (1957)","Risk: Legacy","Risk: Game of Thrones","Risk: Lord of the Rings","Diplomacy (1959)","Allan B. Calhamer","Diplomacy — No Dice","Press & Negotiation","Anschluss & Sealion","Diplomacy in Pop Culture (Kissinger)","Risk Strategy — Continent Bonuses","Risk Strategy — Card Cycling","Online Diplomacy (webDiplomacy)","Risk & Diplomacy Checkpoint"]],
+      [33,"Axis & Allies",["Larry Harris Jr.","Axis & Allies (1981)","WWII Theme","A&A: Europe","A&A: Pacific","A&A: 1942","A&A: 1940 Global","A&A: 1914","A&A: D-Day","A&A: Battle of the Bulge","A&A: Guadalcanal","Naval Combat","Strategic Bombing","Anniversary Edition","Axis & Allies Checkpoint"]],
+      [34,"Worker Placement Games",["Caylus (2005)","Agricola (2007)","Stone Age (2008)","Le Havre","Lords of Waterdeep","Russian Railroads","Viticulture","Tzolk'in","Anachrony","Everdell","Manhattan Project","Trickerion","Cult of the New","Worker Placement Theory","Worker Placement Checkpoint"]],
+      [35,"Area Control Games",["Risk Refresher","El Grande","Twilight Struggle","A Game of Thrones","Cyclades","Kemet","Inis","Blood Rage","Rising Sun","Eclipse","Smallworld","War of the Ring","Star Wars: Rebellion","Area Control Theory","Area Control Checkpoint"]],
+      [36,"Engine-Building Genre",["What Is Engine-Building?","Race for the Galaxy","Innovation","Trajan","Concordia","Roll for the Galaxy","Underwater Cities","Glen More II","Wingspan as Engine","Terraforming Mars as Engine","Splendor as Engine","Combo Pieces","Setup vs Payoff","Tempo Theory","Engine-Building Checkpoint"]],
+      [37,"Roll-and-Write & Write & Roll",["Yahtzee Origin","Qwixx","Welcome To...","Railroad Ink","Dice Forge","Cartographers","Hadrian's Wall","Rolling Realms","On Tour","Three Sisters","Galaxies","Encyclopedia","Roll-and-Write Renaissance","Solo Roll-and-Write","Roll-and-Write Checkpoint"]],
+      [38,"Hidden Role & Social Deduction",["Werewolf / Mafia","One Night Ultimate Werewolf","The Resistance","Avalon","Coup","Secret Hitler","Spyfall","Two Rooms and a Boom","Battlestar Galactica","Shadows over Camelot","Saboteur","Are You the Traitor?","Hidden Role Strategy","Spotting Liars","Hidden Role Checkpoint"]],
+      [39,"Party Games",["Codenames","Codenames Duet","Codenames Pictures","Time's Up!","Wits & Wagers","Telestrations","Just One","Decrypto","The Mind","Pictionary","Apples to Apples","Cards Against Humanity","Family-Friendly Party","Party Game Strategy","Party Games Checkpoint"]],
+      [40,"Trivia Games",["Trivial Pursuit","Wits & Wagers","You Don't Know Jack","Smart Ass","Wikipedia Game","Trivia Crack","Geography Trivia","Sports Trivia","Movie Trivia","Music Trivia","Pub Quiz","Bar Trivia Hosting","Sporcle","Online Trivia Platforms","Trivia Checkpoint"]],
+      [41,"Family Games",["Monopoly","Monopoly Strategy (Yes Really)","Monopoly Variants","The Game of Life","Sorry!","Trouble","Candy Land","Chutes & Ladders","Clue","Battleship","Operation","Guess Who?","Hungry Hungry Hippos","Family Game Night Picks","Family Games Checkpoint"]],
+      [42,"Wargames History",["Kriegsspiel (1812)","Avalon Hill Era","SPI Magazine","Squad Leader","Advanced Squad Leader","Up Front","Twilight Struggle (Cold War)","1960: The Making of the President","Here I Stand","Combat Commander","Conflict of Heroes","COIN Series","Mark Herman Designs","Volko Ruhnke Designs","Wargames Checkpoint"]],
+      [43,"Magic: The Gathering",["Richard Garfield","Magic: The Gathering (1993)","Five Colors","Mana System","Standard Format","Modern Format","Legacy Format","Vintage Format","Commander (EDH)","Pauper","Limited — Draft & Sealed","Pro Tour & Magic Worlds","MTG Arena","MTG Online","MTG Checkpoint"]],
+      [44,"Bridge",["Contract Bridge History","Auction Bridge","Bidding Conventions","Stayman","Blackwood","2/1 Game Force","Standard American","Acol","Bridge Etiquette","Bridge Tournaments — ACBL","Duplicate Bridge","Online Bridge — BBO","Famous Bridge Players","Bridge in Movies","Bridge Checkpoint"]],
+      [45,"Poker Deep",["Poker History","Texas Hold'em Rules","Omaha","Seven-Card Stud","Razz","Hand Rankings","Pot Odds","Implied Odds","Position Play","Bluffing Theory","Tells","WSOP — World Series","WPT — World Poker Tour","Online Poker","Poker Checkpoint"]],
+      [46,"Solitaire & Patience Games",["Klondike","Spider Solitaire","FreeCell","Pyramid","TriPeaks","Yukon","Forty Thieves","Canfield","Card Solitaire Origins","Patience in 19th Century","Microsoft Solitaire","Mobile Solitaire","Solitaire Strategy","Solo Board Games","Solitaire Checkpoint"]],
+      [47,"Famous Designers — Reiner Knizia",["Reiner Knizia Bio","Tigris & Euphrates","Modern Art","Ra","Lost Cities","Keltis","Knizia's Auction Mechanics","Knizia's Tile Laying","Knizia's Card Games","Schotten Totten","Through the Desert","Samurai","Lord of the Rings (Cooperative)","Children's Games","Knizia Checkpoint"]],
+      [48,"Famous Designers — Uwe Rosenberg",["Uwe Rosenberg Bio","Bohnanza","Agricola","Le Havre","Caverna","Patchwork","Cottage Garden","Reykholt","A Feast for Odin","At the Gates of Loyang","Glass Road","Hallertau","Worker Placement Innovations","Tile Laying Innovations","Rosenberg Checkpoint"]],
+      [49,"Famous Designers — Stefan Feld",["Stefan Feld Bio","Trajan","Castles of Burgundy","In the Year of the Dragon","Notre Dame","Bora Bora","The Speicherstadt","Feld City Collection","Feld's Point Salad","Multiple Paths to Victory","Dice Manipulation","AEG Tempest Setting","Feld's Style Critique","Feld Solo","Feld Checkpoint"]],
+      [50,"Famous Designers — Vlaada Chvátil",["Vlaada Chvátil Bio","Codenames","Galaxy Trucker","Through the Ages","Mage Knight","Tash-Kalar","Pictomania","Space Alert","Bunny Bunny Moose Moose","Dungeon Lords","Dungeon Petz","Czech Games Edition","Vlaada Solo","Vlaada Checkpoint","Designers Checkpoint"]],
+      [51,"Board Game Geek (BGG) & Hobby",["Geeklists","BGG Top 100","BGG Hot List","BGG Marketplace","Cardboard Cult","SU&SD","The Dice Tower","Watch It Played","Shut Up & Sit Down","Tom Vasel","Rahdo","Tabletop Simulator","Board Game Arena","BGA Premium","Hobby Community Checkpoint"]],
+      [52,"Board Game Conventions",["Spiel Essen (Germany)","Origins Game Fair","Gen Con","PAX Unplugged","UK Games Expo","Tokyo Game Market","BGG.CON","CMON Expo","Dice Tower Con","Geekway to the West","Convention Etiquette","Hot Releases","Cult of the New","Buying at Cons","Conventions Checkpoint"]],
+      [53,"Famous Awards & Modern Board Game Mastery",["Spiel des Jahres","Kennerspiel des Jahres","Kinderspiel des Jahres","Deutscher Spiele Preis","Origins Award","Charles S. Roberts Award","Mensa Select","Best of Show — Gen Con","Diana Jones Award","International Gamers Awards","Modern Era of Board Games","Top 10 Designer Games","Modern Board Game Mastery","Lifetime of Gaming","Awards & Mastery Checkpoint"]],
+      [54,'Tournament Play & Competition',['Tournament Formats','Swiss System Tournaments','Round Robin','Elimination Brackets','Rated & Ranked Play','Time Controls & Clocks','Recording & Notation','Analyzing Your Games','Learning from Losses','Building Practice Routines','Online Tournament Platforms','Board Game Communities','Competitive Etiquette','Becoming a Competitor','Tournament Review']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'bg-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+      });
+    });
+    // Make first 5 lessons playable
+    for (let i = 0; i < 5 && i < lessons.length; i++) {
+      lessons[i].href = 'lesson-' + (i+1) + '.html';
+    }
+    // Wire the interactive "Board & Setup" lesson per game to its own piece-placing page.
+    // Each game has a different starting position, so each setup lives in its own file.
+    const setupByUnit = {
+      1:  'setup-checkers.html',           // Checkers — "The Board & Setup"
+      2:  'setup-backgammon.html',         // Backgammon — "The Board & Setup"
+      5:  'setup-othello.html',            // Othello — "The Board & Setup"
+      13: 'setup-othello.html',            // Reversi/Othello — "Board Setup & Rules"
+      15: 'setup-nine-mens-morris.html',   // Nine Men's Morris — "Board Setup"
+      17: 'setup-stratego.html'            // Stratego — "Board Setup & Deployment"
+    };
+    lessons.forEach(l => {
+      const isSetup = /Board.*Setup|Setup.*Rules|Setup.*Deployment/.test(l.title);
+      if (isSetup && setupByUnit[l.unit]) {
+        l.href = setupByUnit[l.unit];
+      }
+      // Unit 1 (Checkers) "Basic Moves" → black & red piece-movement quiz.
+      if (l.unit === 1 && l.title === 'Basic Moves') {
+        l.href = 'basic-moves.html';
+      }
+    });
+    // Unit 1 (Checkers) interactive lessons that live in their own lesson-N.html
+    // files. Wired by title (unit-scoped) because the file numbers don't line up
+    // with path positions — and several of these titles recur in other units.
+    const checkersLessonFiles = {
+      'Jumping & Capturing':  'lesson-6.html',
+      'Multiple Jumps':       'lesson-7.html',
+      'King Me! (Promotion)': 'lesson-8.html',
+      'Forced Captures Rule': 'lesson-9.html',
+      'Opening Strategies':   'lesson-10.html',
+      'Middle Game Tactics':  'lesson-11.html',
+      'Endgame Techniques':   'lesson-12.html'
+    };
+    lessons.forEach(l => {
+      if (l.unit === 1 && checkersLessonFiles[l.title]) l.href = checkersLessonFiles[l.title];
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('board-games');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('board-games');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>
