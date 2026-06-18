@@ -3,297 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; connect-src https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://www.googleapis.com;">
   <title>Sign In — Mathagram</title>
   <link rel="icon" href="assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="css/global.css">
   <style>
-    .auth-container {
-      max-width: 480px;
-      margin: 48px auto;
-      padding: 0 24px;
-    }
+    .auth-container { max-width: 480px; margin: 48px auto; padding: 0 24px; }
     .auth-card {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      padding: 40px 32px;
+      background: var(--color-white); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg); padding: 40px 32px;
     }
     .auth-card h1 {
-      text-align: center;
-      font-size: 1.75rem;
-      font-weight: 800;
-      margin-bottom: 24px;
-      color: var(--color-primary-dark);
+      text-align: center; font-size: 1.75rem; font-weight: 800;
+      margin-bottom: 24px; color: var(--color-primary-dark);
     }
     .tab-switcher {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 28px;
-      background: var(--color-bg);
-      border-radius: var(--radius);
-      padding: 4px;
+      display: flex; gap: 8px; margin-bottom: 28px;
+      background: var(--color-bg); border-radius: var(--radius); padding: 4px;
     }
     .tab-btn {
-      flex: 1;
-      padding: 10px 16px;
-      font-family: var(--font-sans);
-      font-size: 0.925rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--color-text-secondary);
+      flex: 1; padding: 10px 16px; font: 600 0.925rem var(--font-sans);
+      border: none; border-radius: 8px; cursor: pointer;
+      background: transparent; color: var(--color-text-secondary);
       transition: background 0.2s, color 0.2s;
     }
-    .tab-btn.active {
-      background: var(--color-white);
-      color: var(--color-text);
-      box-shadow: var(--shadow-sm);
-    }
-    .form-group {
-      margin-bottom: 18px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--color-text);
-    }
+    .tab-btn.active { background: var(--color-white); color: var(--color-text); box-shadow: var(--shadow-sm); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; }
     .form-group input {
-      width: 100%;
-      padding: 10px 14px;
-      font-family: var(--font-sans);
-      font-size: 0.925rem;
-      border: 2px solid var(--color-border);
-      border-radius: var(--radius);
-      background: var(--color-bg);
-      color: var(--color-text);
-      transition: border-color 0.2s;
+      width: 100%; padding: 10px 14px; font: 0.925rem var(--font-sans);
+      border: 2px solid var(--color-border); border-radius: var(--radius);
+      background: var(--color-bg); transition: border-color 0.2s;
+      box-sizing: border-box;
     }
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--color-primary);
-    }
-    .auth-card .btn-primary {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      margin-top: 8px;
-    }
+    .form-group input:focus { outline: none; border-color: var(--color-primary); }
+    .auth-card .btn-primary { width: 100%; padding: 12px; font-size: 1rem; margin-top: 8px; }
+    .auth-card .btn-primary[disabled] { opacity: 0.6; cursor: progress; }
     .error-msg {
-      display: none;
-      color: #ef4444;
-      font-size: 0.85rem;
-      margin-top: 12px;
-      text-align: center;
+      display: none; color: #ef4444; font-size: 0.85rem;
+      margin-top: 12px; text-align: center; line-height: 1.45;
     }
-    .error-msg.show {
-      display: block;
+    .error-msg.show { display: block; }
+    .forgot-row {
+      text-align: center; margin-top: 14px;
+      font-size: 0.88rem; color: var(--color-text-secondary);
     }
-
-    /* Warning banner — appears at 5-9 failed sign-in attempts on the same email */
-    .login-warning {
-      display: none;
-      margin: 14px 0 4px;
-      padding: 12px 14px;
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      color: #78350f;
-      line-height: 1.5;
+    .forgot-row button {
+      background: none; border: none; padding: 0; font: inherit;
+      color: var(--color-primary); font-weight: 700; cursor: pointer;
+      text-decoration: underline; margin-left: 4px;
     }
-    .login-warning.show { display: block; animation: fade-in 0.25s ease; }
-    .login-warning strong { color: #92400e; }
-    .login-warning .triangle { font-size: 1rem; margin-right: 4px; }
-    .login-warning .reset-row {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed rgba(180, 83, 9, 0.4);
-      font-size: 0.82rem;
-      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-    }
-    .login-warning .reset-btn {
-      background: #b45309;
-      color: #fff;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.15s;
-    }
-    .login-warning .reset-btn:hover:not(:disabled) { background: #92400e; }
-    .login-warning .reset-btn:disabled { background: #9ca3af; cursor: not-allowed; opacity: 0.7; }
-    .login-warning .reset-status { font-weight: 700; }
-    .login-warning .reset-status.ok { color: #166534; }
-    .login-warning .reset-status.error { color: #b91c1c; }
-    @keyframes fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Cooldown overlay on the Sign In button — 30s lockout after each failure at 5+ attempts */
-    .cooldown-btn {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      margin-top: 8px;
-      background: #94a3b8;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: not-allowed;
-      display: none;
-      font-family: inherit;
-    }
-    .cooldown-btn.show { display: block; }
-    .cooldown-btn .countdown { font-variant-numeric: tabular-nums; }
-
-    /* Math challenge — appears after 10 failed sign-in attempts on the same email */
-    .math-challenge {
-      display: none;
-      margin: 14px 0 4px;
-      padding: 16px 18px;
-      background: linear-gradient(135deg, #fef3c7, #fde68a);
-      border: 2px solid #f59e0b;
-      border-radius: 12px;
-      text-align: center;
-    }
-    .math-challenge.show { display: block; animation: shake-in 0.4s ease; }
-    @keyframes shake-in {
-      0% { transform: translateX(0); opacity: 0; }
-      30% { transform: translateX(-6px); opacity: 1; }
-      60% { transform: translateX(4px); }
-      100% { transform: translateX(0); }
-    }
-    .math-challenge .lock-row {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      margin-bottom: 8px;
-      color: #92400e;
-      font-weight: 800;
-      font-size: 0.92rem;
-    }
-    .math-challenge .lock-row .icon { font-size: 1.2rem; }
-    .math-challenge .help {
-      font-size: 0.78rem;
-      color: #78350f;
-      margin: 0 0 12px;
-      line-height: 1.5;
-    }
-    .math-challenge .equation {
-      font-family: 'Times New Roman', Georgia, serif;
-      font-style: italic;
-      font-size: 1.4rem;
-      color: #1f2937;
-      margin: 6px 0 14px;
-      letter-spacing: 0.04em;
-    }
-    .math-challenge .equation b { color: #b45309; font-weight: 700; }
-    .math-challenge .answer-row {
-      display: flex; gap: 8px; justify-content: center; align-items: center;
-      flex-wrap: wrap;
-    }
-    .math-challenge input[type="number"] {
-      width: 110px; padding: 10px 12px;
-      border: 2px solid #f59e0b; border-radius: 8px;
-      font-size: 1rem; font-weight: 700; text-align: center;
-      background: #fff; color: #1f2937;
-      outline: none; -moz-appearance: textfield;
-    }
-    .math-challenge input[type="number"]::-webkit-outer-spin-button,
-    .math-challenge input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none; margin: 0;
-    }
-    .math-challenge input[type="number"]:focus { box-shadow: 0 0 0 4px rgba(245,158,11,0.25); }
-    .math-challenge .verify-btn {
-      padding: 10px 20px; border-radius: 8px;
-      background: #f59e0b; color: #1f2937; border: none;
-      font-weight: 800; font-size: 0.92rem; cursor: pointer;
-      font-family: inherit; transition: background 0.15s;
-    }
-    .math-challenge .verify-btn:hover { background: #d97706; }
-    .math-challenge .new-btn {
-      background: transparent; color: #92400e;
-      border: 1px solid #d97706; padding: 8px 12px;
-      border-radius: 8px; font-size: 0.78rem; cursor: pointer;
-      font-family: inherit; font-weight: 600;
-    }
-    .math-challenge .new-btn:hover { background: rgba(245,158,11,0.15); }
-    .math-challenge .feedback {
-      margin-top: 10px;
-      font-size: 0.85rem; font-weight: 700;
-      min-height: 18px;
-    }
-    .math-challenge .feedback.wrong { color: #b91c1c; animation: shake-in 0.3s; }
-    .math-challenge .feedback.right { color: #166534; }
-    .math-challenge.locked .verify-btn,
-    .math-challenge.locked input { opacity: 0.6; pointer-events: none; }
+    .forgot-status { display: block; margin-top: 6px; font-weight: 700; }
     .google-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px;
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      font-weight: 600;
-      border: 2px solid var(--color-border);
-      border-radius: var(--radius);
-      background: var(--color-white);
-      color: var(--color-text);
-      cursor: pointer;
+      width: 100%; padding: 10px 14px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--color-white); color: var(--color-text);
+      border: 2px solid var(--color-border); border-radius: var(--radius);
+      font: 600 0.95rem var(--font-sans); cursor: pointer;
       transition: background 0.2s, border-color 0.2s;
-      margin-bottom: 20px;
     }
-    .google-btn:hover {
-      background: var(--color-bg);
-      border-color: #4285f4;
-    }
-    .google-btn svg {
-      width: 20px;
-      height: 20px;
-    }
+    .google-btn:hover { background: var(--color-bg); border-color: var(--color-primary); }
+    .google-btn svg { width: 18px; height: 18px; flex: 0 0 18px; }
     .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      color: var(--color-text-muted);
-      font-size: 0.82rem;
+      text-align: center; color: var(--color-text-muted);
+      font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; margin: 18px 0;
+      position: relative;
     }
     .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--color-border);
+      content: ''; position: absolute; top: 50%; width: 30%;
+      height: 1px; background: var(--color-border);
     }
-    .color-picker {
-      margin-bottom: 20px;
-    }
-    .color-option.selected {
-      border-color: #1a1a2e !important;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    @media (max-width: 600px) {
-      .auth-card {
-        padding: 28px 20px;
-      }
+    .divider::before { left: 0; }
+    .divider::after  { right: 0; }
+    .color-picker { margin: 18px 0 8px; }
+    .color-option.selected { border-color: #1a1a2e !important; }
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 56px; }
+    .pw-show {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 4px 6px;
+      font-size: 0.78rem; color: var(--color-text-secondary); font-weight: 700;
     }
   </style>
 </head>
 <body>
-
-  <!-- Navigation -->
   <nav class="nav">
     <div class="container">
       <a href="/" class="nav-logo">
@@ -303,575 +98,280 @@
     </div>
   </nav>
 
-  <!-- Auth Form -->
   <div class="auth-container">
     <div class="auth-card">
       <h1>Welcome</h1>
 
-      <!-- Tab Switcher -->
       <div class="tab-switcher">
         <button class="tab-btn active" data-tab="signin">Sign In</button>
         <button class="tab-btn" data-tab="signup">Sign Up</button>
       </div>
 
-      <!-- Sign In Tab -->
+      <!-- ─── SIGN IN ─────────────────────────────────────────────────── -->
       <div id="tab-signin" class="tab-content active">
         <button type="button" class="google-btn" id="google-signin-btn">
           <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Continue with Google
         </button>
         <div class="divider">or sign in with email</div>
-        <form id="signin-form">
+        <form id="signin-form" novalidate>
           <div class="form-group">
             <label for="signin-email">Email</label>
             <input type="email" id="signin-email" required autocomplete="email">
           </div>
           <div class="form-group">
             <label for="signin-password">Password</label>
-            <input type="password" id="signin-password" required autocomplete="current-password">
+            <div class="pw-wrap">
+              <input type="password" id="signin-password" required autocomplete="current-password">
+              <button type="button" id="signin-show" class="pw-show" aria-label="Show password">Show</button>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary" id="signin-submit">Sign In</button>
-          <button type="button" class="cooldown-btn" id="cooldown-btn" disabled>Locked — try again in <span class="countdown" id="cooldown-secs">30</span>s</button>
-          <div class="login-warning" id="login-warning" role="alert">
-            <span class="triangle">⚠️</span>
-            <strong>Warning — <span id="warn-count">5</span> failed sign-in attempts.</strong>
-            After 10 fails, you'll need to solve a math problem to continue. Each failed attempt at this stage adds a 30-second lockout.
-            <div class="reset-row">
-              Forgot your password?
-              <button type="button" class="reset-btn" id="reset-pw-btn">Reset it &rarr;</button>
-              <span class="reset-status" id="reset-pw-status" aria-live="polite"></span>
-            </div>
-          </div>
-          <div class="math-challenge" id="math-challenge" role="region" aria-label="Security check">
-            <div class="lock-row"><span class="icon">🔒</span> <span>Too many failed attempts — solve to continue</span></div>
-            <p class="help">Your email has failed sign-in <strong id="mc-attempts">10</strong> times. Solve the equation below to prove you're human, then try again.</p>
-            <div class="equation" id="mc-equation"></div>
-            <div class="answer-row">
-              <input type="number" id="mc-answer" placeholder="x = ?" autocomplete="off" inputmode="numeric">
-              <button type="button" class="verify-btn" id="mc-verify-btn">Verify</button>
-              <button type="button" class="new-btn" id="mc-new-btn" title="Generate a new equation">↻ New</button>
-            </div>
-            <p class="feedback" id="mc-feedback"></p>
-          </div>
           <p id="signin-error" class="error-msg"></p>
+          <div class="forgot-row">
+            Forgot your password?
+            <button type="button" id="forgot-btn">Reset it &rarr;</button>
+            <span id="forgot-status" class="forgot-status" aria-live="polite"></span>
+          </div>
         </form>
       </div>
 
-      <!-- Sign Up Tab -->
+      <!-- ─── SIGN UP ─────────────────────────────────────────────────── -->
       <div id="tab-signup" class="tab-content">
         <button type="button" class="google-btn" id="google-signup-btn">
           <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Sign up with Google
         </button>
         <div class="divider">or sign up with email</div>
-        <form id="signup-form">
+        <form id="signup-form" novalidate>
           <div class="form-group">
-            <label for="signup-name">Display Name <span id="nameCharCount" style="font-size:0.75rem; font-weight:400; color:var(--color-text-muted);">(3-13 chars)</span></label>
-            <input type="text" id="signup-name" required autocomplete="name" maxlength="13" minlength="3" pattern="[A-Za-z]{3,13}" title="Only characters A-Z and a-z, 3-13 characters">
+            <label for="signup-name">Display Name <span id="nameCharCount" style="font-size:0.75rem;font-weight:400;color:var(--color-text-muted);">(3-13 chars)</span></label>
+            <input type="text" id="signup-name" required autocomplete="name" maxlength="13" minlength="3" pattern="[A-Za-z0-9]{3,13}" title="Letters and digits, 3-13 characters">
           </div>
           <div class="form-group">
             <label for="signup-email">Email</label>
             <input type="email" id="signup-email" required autocomplete="email">
           </div>
           <div class="form-group">
-            <label for="signup-password">Password</label>
+            <label for="signup-password">Password (min 6 chars)</label>
             <input type="password" id="signup-password" required minlength="6" autocomplete="new-password">
           </div>
           <div class="color-picker">
-            <p style="font-weight:600; margin-bottom:12px;">Choose your color</p>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button type="button" class="color-option selected" data-color="blue" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/blue.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
-              <button type="button" class="color-option" data-color="green" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/green.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
-              <button type="button" class="color-option" data-color="orange" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/orange.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
-              <button type="button" class="color-option" data-color="purple" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/purple.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
-              <button type="button" class="color-option" data-color="cyan" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/cyan.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
-              <button type="button" class="color-option" data-color="pink" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/pink.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
-              <button type="button" class="color-option" data-color="gray" style="width:48px; height:48px; border-radius:50%; border:3px solid transparent; cursor:pointer; background:none; padding:0;" onclick="selectColor(this)">
-                <img src="assets/avatars/gray.svg" style="width:48px; height:48px; border-radius:50%;">
-              </button>
+            <p style="font-weight:600;margin-bottom:12px;">Choose your color</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button type="button" class="color-option selected" data-color="blue"   style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/blue.svg"   style="width:48px;height:48px;border-radius:50%;"></button>
+              <button type="button" class="color-option"          data-color="green"  style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/green.svg"  style="width:48px;height:48px;border-radius:50%;"></button>
+              <button type="button" class="color-option"          data-color="orange" style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/orange.svg" style="width:48px;height:48px;border-radius:50%;"></button>
+              <button type="button" class="color-option"          data-color="purple" style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/purple.svg" style="width:48px;height:48px;border-radius:50%;"></button>
+              <button type="button" class="color-option"          data-color="cyan"   style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/cyan.svg"   style="width:48px;height:48px;border-radius:50%;"></button>
+              <button type="button" class="color-option"          data-color="pink"   style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/pink.svg"   style="width:48px;height:48px;border-radius:50%;"></button>
+              <button type="button" class="color-option"          data-color="gray"   style="width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:none;padding:0;"><img src="assets/avatars/gray.svg"   style="width:48px;height:48px;border-radius:50%;"></button>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Create Account</button>
+          <button type="submit" class="btn btn-primary" id="signup-submit">Create Account</button>
           <p id="signup-error" class="error-msg"></p>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!--
+    ─── SIMPLE LOGIN SCRIPT ────────────────────────────────────────────────
+    Bare minimum: import Firebase Auth, listen to the form submit, call
+    signInWithEmailAndPassword, redirect on success, show error on failure.
+    No localStorage gates. No math challenges. No probing. No timeouts.
+    Nothing else gets between you and Firebase.
+  -->
   <script type="module">
     import { initNav } from './js/nav.js';
     initNav('');
-    import { signUp, signIn, signInWithGoogle, resetPassword, onAuthChange } from './js/auth.js';
+    import {
+      signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { auth, db } from './js/firebase-config.js';
 
-    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tab switching
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabBtns.forEach(btn => {
+    // ─── Tab switching ────────────────────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        tabBtns.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
       });
     });
 
-    // Color picker
+    // ─── Color picker (sign-up) ───────────────────────────────────────
     let selectedColor = 'blue';
-    window.selectColor = function(el) {
-      document.querySelectorAll('.color-option').forEach(b => { b.classList.remove('selected'); b.style.borderColor = 'transparent'; });
-      el.classList.add('selected');
-      el.style.borderColor = '#1a1a2e';
-      selectedColor = el.dataset.color;
-    };
-
-    // Google Sign-In
-    document.getElementById('google-signin-btn').addEventListener('click', async () => {
-      try {
-        await signInWithGoogle();
-        window.location.href = 'profile.html';
-      } catch (err) {
-        signinError.textContent = err.message;
-        signinError.classList.add('show');
-      }
-    });
-    document.getElementById('google-signup-btn').addEventListener('click', async () => {
-      try {
-        await signInWithGoogle();
-        window.location.href = 'profile.html';
-      } catch (err) {
-        signupError.textContent = err.message;
-        signupError.classList.add('show');
-      }
+    document.querySelectorAll('.color-option').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.color-option').forEach(x => { x.classList.remove('selected'); x.style.borderColor = 'transparent'; });
+        b.classList.add('selected');
+        b.style.borderColor = '#1a1a2e';
+        selectedColor = b.dataset.color;
+      });
     });
 
-    // Sign In
-    const signinForm = document.getElementById('signin-form');
-    const signinError = document.getElementById('signin-error');
-
-    // ===== Anti-brute-force escalation =====
-    //   1–4 fails:    normal
-    //   5–9 fails:    yellow warning banner + 30-second cooldown after each fail
-    //   10–14 fails:  easy calculus problem (power-rule derivative)
-    //   15+ fails:    difficult AP Statistics problem (z-score / combinations / SE)
-    const WARN_THRESHOLD = 5;
-    const FAIL_THRESHOLD = 10;
-    const STATS_THRESHOLD = 15;
-    const COOLDOWN_MS = 30000;
-    const submitBtn = document.getElementById('signin-submit');
-    const cooldownBtn = document.getElementById('cooldown-btn');
-    const cooldownSecsEl = document.getElementById('cooldown-secs');
-    const warningEl = document.getElementById('login-warning');
-    const warnCountEl = document.getElementById('warn-count');
-    const resetPwBtn = document.getElementById('reset-pw-btn');
-    const resetPwStatus = document.getElementById('reset-pw-status');
-
-    // "Reset password" button inside the warning banner — only meaningful at 5+ fails
-    // since the banner itself only appears at that point. Sends a Firebase password
-    // reset email to whatever address is currently typed in the email field.
-    resetPwBtn.addEventListener('click', async () => {
-      const email = (document.getElementById('signin-email').value || '').trim();
-      resetPwStatus.className = 'reset-status';
-      resetPwStatus.textContent = '';
-      if (!email) {
-        resetPwStatus.className = 'reset-status error';
-        resetPwStatus.textContent = 'Type your email above first.';
-        document.getElementById('signin-email').focus();
-        return;
-      }
-      resetPwBtn.disabled = true;
-      resetPwBtn.textContent = 'Sending…';
-      try {
-        await resetPassword(email);
-        resetPwStatus.className = 'reset-status ok';
-        resetPwStatus.textContent = '✓ Reset link sent to ' + email + '. Check your inbox.';
-        resetPwBtn.textContent = 'Sent ✓';
-      } catch (err) {
-        resetPwStatus.className = 'reset-status error';
-        resetPwStatus.textContent = (err && err.message) ? err.message.replace(/^Firebase: /, '') : 'Could not send reset email.';
-        resetPwBtn.disabled = false;
-        resetPwBtn.textContent = 'Reset it →';
-      }
+    // ─── Show/hide password ───────────────────────────────────────────
+    const pwInput = document.getElementById('signin-password');
+    const pwShow  = document.getElementById('signin-show');
+    pwShow.addEventListener('click', () => {
+      const shown = pwInput.type === 'text';
+      pwInput.type = shown ? 'password' : 'text';
+      pwShow.textContent = shown ? 'Show' : 'Hide';
     });
 
-    function cooldownKey(email) { return 'mathagram_login_cooldown_' + (email || '').trim().toLowerCase(); }
-    function getCooldownUntil(email) { try { return parseInt(localStorage.getItem(cooldownKey(email)) || '0', 10) || 0; } catch (e) { return 0; } }
-    function setCooldownUntil(email, ts) { try { localStorage.setItem(cooldownKey(email), String(ts)); } catch (e) {} }
-    function clearCooldown(email) { try { localStorage.removeItem(cooldownKey(email)); } catch (e) {} }
-
-    let cooldownTimer = null;
-    const emailInput = document.getElementById('signin-email');
-    const passwordInput = document.getElementById('signin-password');
-    function setInputsLocked(locked) {
-      emailInput.disabled = locked;
-      passwordInput.disabled = locked;
-      // Visual cue — opacity + not-allowed cursor
-      emailInput.style.opacity = locked ? '0.55' : '';
-      passwordInput.style.opacity = locked ? '0.55' : '';
-      emailInput.style.cursor = locked ? 'not-allowed' : '';
-      passwordInput.style.cursor = locked ? 'not-allowed' : '';
-    }
-    function startCooldownDisplay(untilTs) {
-      submitBtn.style.display = 'none';
-      cooldownBtn.classList.add('show');
-      setInputsLocked(true);
-      function tick() {
-        const remaining = Math.max(0, untilTs - Date.now());
-        cooldownSecsEl.textContent = Math.ceil(remaining / 1000);
-        if (remaining <= 0) {
-          clearInterval(cooldownTimer);
-          cooldownTimer = null;
-          submitBtn.style.display = '';
-          cooldownBtn.classList.remove('show');
-          setInputsLocked(false);
-        }
-      }
-      tick();
-      if (cooldownTimer) clearInterval(cooldownTimer);
-      cooldownTimer = setInterval(tick, 200);
-    }
-    function applyEscalationFor(email) {
-      const fails = getAttempts(email);
-      const cooldownUntil = getCooldownUntil(email);
-      // Hide everything by default, then re-show whichever stage applies
-      warningEl.classList.remove('show');
-      if (fails >= FAIL_THRESHOLD) {
-        // Math challenge takes over (handled separately below)
-        return;
-      }
-      if (fails >= WARN_THRESHOLD) {
-        warnCountEl.textContent = fails;
-        warningEl.classList.add('show');
-        resetResetBtn();
-      }
-      // Cooldown countdown overrides the submit button until it elapses
-      if (cooldownUntil > Date.now()) {
-        startCooldownDisplay(cooldownUntil);
-      }
-    }
-    // Re-enable the "Reset it →" button so a returning user can resend if needed
-    function resetResetBtn() {
-      resetPwBtn.disabled = false;
-      resetPwBtn.textContent = 'Reset it →';
+    // ─── Friendly error mapper ────────────────────────────────────────
+    function friendly(err) {
+      const c = (err && err.code) ? String(err.code) : '';
+      if (/wrong-password|invalid-credential|invalid-login-credentials|user-not-found/.test(c))
+        return 'Email or password is incorrect. If you signed up with Google, use "Continue with Google" above. Otherwise click "Reset it →" below.';
+      if (/too-many-requests/.test(c))      return 'Too many attempts. Please wait a few minutes, or use "Reset it →".';
+      if (/invalid-email/.test(c))          return 'That email address is not formatted correctly.';
+      if (/user-disabled/.test(c))          return 'This account has been disabled.';
+      if (/email-already-in-use/.test(c))   return 'An account with that email already exists. Sign in instead.';
+      if (/weak-password/.test(c))          return 'Password is too weak — use at least 6 characters.';
+      if (/network-request-failed/.test(c)) return 'Network error. Check your internet connection and try again.';
+      if (/popup-closed-by-user|cancelled-popup-request/.test(c)) return 'Sign-in cancelled. Try again when ready.';
+      return (err && err.message ? err.message.replace(/^Firebase:\s*/,'').replace(/\s*\(auth\/[^)]+\)\.?\s*$/,'').trim() : 'Sign-in failed. Please try again.');
     }
 
-    const challengeBox = document.getElementById('math-challenge');
-    const eqEl = document.getElementById('mc-equation');
-    const answerEl = document.getElementById('mc-answer');
-    const verifyBtn = document.getElementById('mc-verify-btn');
-    const newBtn = document.getElementById('mc-new-btn');
-    const feedbackEl = document.getElementById('mc-feedback');
-    const attemptsEl = document.getElementById('mc-attempts');
-    let challengeAnswer = null;          // current required integer answer
-    let challengePassed = false;          // one-shot — clears after a sign-in attempt
-    function attemptKey(email) { return 'mathagram_login_attempts_' + (email || '').trim().toLowerCase(); }
-    function getAttempts(email) { try { return parseInt(localStorage.getItem(attemptKey(email)) || '0', 10) || 0; } catch (e) { return 0; } }
-    function setAttempts(email, n) { try { localStorage.setItem(attemptKey(email), String(n)); } catch (e) {} }
-    function clearAttempts(email) { try { localStorage.removeItem(attemptKey(email)); } catch (e) {} }
-
-    function randInt(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
-    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-    function factorial(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
-    function ncr(n, k) { return factorial(n) / (factorial(k) * factorial(n - k)); }
-
-    // ----- Tier 2: easy calculus (10–14 fails) -----
-    function makeCalcChallenge() {
-      // Power-rule derivative at a point: f(x) = a·xⁿ → f′(b) = a·n·b^(n-1)
-      const a = randInt(2, 6);
-      const n = randInt(2, 4);
-      const b = randInt(2, 5);
-      challengeAnswer = a * n * Math.pow(b, n - 1);
-      const fxExp = 'x<sup>' + n + '</sup>';
-      eqEl.innerHTML = 'f(x) = <b>' + a + fxExp + '</b> &nbsp;→&nbsp; f′(' + b + ') = ?';
-      lockHelpText('Solve this calculus problem to continue. (Power rule: d/dx[axⁿ] = a·n·xⁿ⁻¹.)');
-    }
-
-    // ----- Tier 3: difficult AP Statistics (15+ fails) -----
-    function makeStatsChallenge() {
-      const kind = pick(['z', 'se', 'ncr', 'variance']);
-      if (kind === 'z') {
-        // z-score: z = (x − μ) / σ — pick params so z is a small positive integer
-        const mu = randInt(40, 80);
-        const sigma = pick([4, 5, 6, 8, 10]);
-        const z = randInt(2, 4);
-        const x = mu + z * sigma;
-        challengeAnswer = z;
-        eqEl.innerHTML = 'A population has μ = <b>' + mu + '</b>, σ = <b>' + sigma + '</b>.<br>What is the <i>z</i>-score for x = <b>' + x + '</b>?';
-      } else if (kind === 'se') {
-        // SE of the mean: σ / √n — pick perfect-square n so result is integer
-        const sqrtN = pick([2, 3, 4, 5]);
-        const n = sqrtN * sqrtN;
-        const result = randInt(2, 7);
-        const sigma = result * sqrtN;
-        challengeAnswer = result;
-        eqEl.innerHTML = 'A sample of size n = <b>' + n + '</b> is drawn from a population with σ = <b>' + sigma + '</b>.<br>What is the standard error of the sample mean (SE = σ/√n)?';
-      } else if (kind === 'ncr') {
-        // Combinations C(n, k)
-        const n = randInt(5, 9);
-        const k = randInt(2, Math.min(4, n - 1));
-        challengeAnswer = ncr(n, k);
-        eqEl.innerHTML = 'How many ways can you choose <b>' + k + '</b> items from <b>' + n + '</b>?<br>(Compute <i>C(' + n + ', ' + k + ')</i>.)';
-      } else {
-        // Population variance of a small dataset (sum of squared deviations / N)
-        const datasets = [
-          { d: [2, 4, 6, 8], mean: 5, ss: 20, n: 4 },     // var = 5
-          { d: [1, 3, 5, 7], mean: 4, ss: 20, n: 4 },     // var = 5
-          { d: [3, 6, 9, 12], mean: 7.5, ss: 45, n: 4 },  // var = 11.25 — skip
-          { d: [10, 20, 30], mean: 20, ss: 200, n: 3 },   // var ≈ 66.67 — skip
-          { d: [4, 8, 12], mean: 8, ss: 32, n: 4 },       // skip
-          { d: [2, 4, 6], mean: 4, ss: 8, n: 4 },         // skip
-        ].filter(s => Number.isInteger(s.ss / s.n));
-        const ds = pick(datasets);
-        challengeAnswer = ds.ss / ds.n;
-        eqEl.innerHTML = 'Find the <b>population variance</b> of {' + ds.d.join(', ') + '}. <br>(σ² = Σ(xᵢ − μ)² / N)';
-      }
-      lockHelpText('Solve this AP Statistics problem to continue.');
-    }
-
-    // ----- Helper: set the lock-row + help text on the challenge box -----
-    function lockHelpText(helpText) {
-      const lockRow = challengeBox.querySelector('.lock-row span:not(.icon)');
-      const helpEl = challengeBox.querySelector('.help');
-      if (lockRow) lockRow.textContent = 'Too many failed attempts — solve to continue';
-      if (helpEl) helpEl.innerHTML = '<strong>' + helpText + '</strong>';
-    }
-
-    // Pick the right tier of challenge based on the failure count for this email
-    function makeChallengeFor(email) {
-      answerEl.value = '';
-      feedbackEl.className = 'feedback';
-      feedbackEl.textContent = '';
-      challengePassed = false;
-      challengeBox.classList.remove('locked');
-      const fails = getAttempts(email);
-      if (fails >= STATS_THRESHOLD) {
-        makeStatsChallenge();
-      } else {
-        makeCalcChallenge();
-      }
-    }
-
-    function showChallengeFor(email) {
-      const fails = getAttempts(email);
-      attemptsEl.textContent = fails;
-      makeChallengeFor(email);
-      challengeBox.classList.add('show');
-      setTimeout(() => answerEl.focus(), 50);
-    }
-    function hideChallenge() {
-      challengeBox.classList.remove('show');
-      challengePassed = false;
-    }
-
-    verifyBtn.addEventListener('click', () => {
-      if (answerEl.value.trim() === '') return;
-      const guess = parseInt(answerEl.value, 10);
-      if (guess === challengeAnswer) {
-        challengePassed = true;
-        feedbackEl.className = 'feedback right';
-        feedbackEl.textContent = '✓ Correct — you may try signing in once.';
-        challengeBox.classList.add('locked');
-      } else {
-        feedbackEl.className = 'feedback wrong';
-        feedbackEl.textContent = '✗ Wrong — generating a new problem…';
-        setTimeout(() => {
-          const email = document.getElementById('signin-email').value;
-          makeChallengeFor(email);
-        }, 800);
-      }
-    });
-    newBtn.addEventListener('click', () => {
-      const email = document.getElementById('signin-email').value;
-      makeChallengeFor(email);
-    });
-    answerEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); verifyBtn.click(); }
-    });
-
+    // ─── SIGN IN — the WHOLE thing ────────────────────────────────────
+    const signinForm   = document.getElementById('signin-form');
+    const signinBtn    = document.getElementById('signin-submit');
+    const signinError  = document.getElementById('signin-error');
     signinForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      signinError.classList.remove('show');
-
-      const email = document.getElementById('signin-email').value;
+      signinError.classList.remove('show'); signinError.textContent = '';
+      const email    = document.getElementById('signin-email').value.trim().toLowerCase();
       const password = document.getElementById('signin-password').value;
-
-      // Gate 1 — 30-second cooldown (active at 5+ fails)
-      const cdUntil = getCooldownUntil(email);
-      if (cdUntil > Date.now()) {
-        startCooldownDisplay(cdUntil);
-        const remaining = Math.ceil((cdUntil - Date.now()) / 1000);
-        signinError.textContent = 'Locked — wait ' + remaining + 's before retrying.';
-        signinError.classList.add('show');
-        return;
+      if (!email || !password) {
+        signinError.textContent = 'Please enter both email and password.';
+        signinError.classList.add('show'); return;
       }
-      // Gate 2 — math challenge (active at 10+ fails)
-      if (getAttempts(email) >= FAIL_THRESHOLD && !challengePassed) {
-        showChallengeFor(email);
-        signinError.textContent = 'Solve the math problem above before trying again.';
-        signinError.classList.add('show');
-        return;
-      }
-
+      signinBtn.disabled = true;
+      const orig = signinBtn.textContent;
+      signinBtn.textContent = 'Signing in…';
       try {
-        await signIn(email, password);
-
-        // Check if account is banned before allowing access
-        const { db } = await import('./js/firebase-config.js');
-        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        const { auth } = await import('./js/firebase-config.js');
-        const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
-
-        if (auth.currentUser) {
-          const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            // Strike 3 — permanent ban
-            if (data.banned) {
-              await signOut(auth);
-              signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Terminated</strong><br>This account has been permanently banned for violating our Community Safety Rules. You cannot sign in.';
-              signinError.classList.add('show');
-              return;
-            }
-            // Strike 2 — suspended
-            if (data.suspended && data.suspendedUntil) {
-              const until = new Date(data.suspendedUntil.seconds ? data.suspendedUntil.seconds * 1000 : data.suspendedUntil);
-              if (until > new Date()) {
-                await signOut(auth);
-                const days = Math.ceil((until - new Date()) / 86400000);
-                signinError.innerHTML = '<img src="assets/characters/edam.svg" style="width:48px;height:48px;border-radius:50%;border:3px solid #ef4444;display:block;margin:0 auto 8px;"><strong style="color:#dc2626;">Account Suspended</strong><br>Your account is suspended for ' + days + ' more day' + (days === 1 ? '' : 's') + ' due to a second violation. You cannot sign in until the suspension ends.';
-                signinError.classList.add('show');
-                return;
-              }
-            }
-          }
-        }
-
-        // Successful sign-in — reset everything for this email
-        clearAttempts(email);
-        clearCooldown(email);
-        warningEl.classList.remove('show');
-        hideChallenge();
-
-        window.location.href = 'profile.html';
+        await signInWithEmailAndPassword(auth, email, password);
+        // Success. Navigate. That's it.
+        window.location.assign('/profile.html');
       } catch (err) {
-        // Failed sign-in — bump counter and apply escalation
-        const fails = getAttempts(email) + 1;
-        setAttempts(email, fails);
-        // Consume the one-shot challenge pass (force a new challenge for the next try)
-        challengePassed = false;
-
-        signinError.textContent = err.message;
+        signinError.textContent = friendly(err);
         signinError.classList.add('show');
-
-        // 5+ fails: show warning banner AND start a 30-second cooldown
-        if (fails >= WARN_THRESHOLD && fails < FAIL_THRESHOLD) {
-          warnCountEl.textContent = fails;
-          warningEl.classList.add('show');
-          resetResetBtn();
-          const until = Date.now() + COOLDOWN_MS;
-          setCooldownUntil(email, until);
-          startCooldownDisplay(until);
-        }
-        // 10+ fails: math challenge takes over (cooldown no longer needed once they're past 10)
-        if (fails >= FAIL_THRESHOLD) {
-          warningEl.classList.remove('show');
-          clearCooldown(email);
-          showChallengeFor(email);
-        }
+        signinBtn.disabled = false;
+        signinBtn.textContent = orig;
       }
     });
 
-    // If the user switches to an email that's already in trouble, apply the
-    // matching escalation state proactively (warning banner, cooldown, or challenge).
-    document.getElementById('signin-email').addEventListener('change', (e) => {
-      const email = e.target.value;
-      if (getAttempts(email) >= FAIL_THRESHOLD) {
-        warningEl.classList.remove('show');
-        showChallengeFor(email);
-      } else {
-        hideChallenge();
-        applyEscalationFor(email);
+    // ─── Google sign-in (one button, one handler) ─────────────────────
+    async function googleAuth() {
+      signinError.classList.remove('show');
+      try {
+        const provider = new GoogleAuthProvider();
+        const { user } = await signInWithPopup(auth, provider);
+        if (!/@gmail\.com$/i.test(user.email || '')) {
+          const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+          await signOut(auth);
+          signinError.textContent = 'Mathagram requires a Gmail address. Please choose a @gmail.com Google account.';
+          signinError.classList.add('show');
+          return;
+        }
+        // Create a Firestore profile if one doesn't exist yet
+        const ref = doc(db, 'users', user.uid);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          await setDoc(ref, {
+            displayName: user.displayName || 'New Learner',
+            email: user.email, color: 'blue', xp: 0, createdAt: serverTimestamp()
+          });
+        }
+        window.location.assign('/profile.html');
+      } catch (err) {
+        signinError.textContent = friendly(err);
+        signinError.classList.add('show');
+      }
+    }
+    document.getElementById('google-signin-btn').addEventListener('click', googleAuth);
+    document.getElementById('google-signup-btn').addEventListener('click', googleAuth);
+
+    // ─── Forgot password ──────────────────────────────────────────────
+    const forgotBtn    = document.getElementById('forgot-btn');
+    const forgotStatus = document.getElementById('forgot-status');
+    forgotBtn.addEventListener('click', async () => {
+      const email = document.getElementById('signin-email').value.trim().toLowerCase();
+      forgotStatus.style.color = ''; forgotStatus.textContent = '';
+      if (!email) {
+        forgotStatus.style.color = '#b91c1c';
+        forgotStatus.textContent = 'Type your email above first.';
+        document.getElementById('signin-email').focus(); return;
+      }
+      const orig = forgotBtn.textContent;
+      forgotBtn.disabled = true; forgotBtn.textContent = 'Sending…';
+      try {
+        await sendPasswordResetEmail(auth, email);
+        forgotStatus.style.color = '#166534';
+        forgotStatus.textContent = '✓ Reset link sent to ' + email + '. Check your inbox.';
+        forgotBtn.textContent = 'Sent ✓';
+      } catch (err) {
+        forgotStatus.style.color = '#b91c1c';
+        forgotStatus.textContent = friendly(err) || 'Could not send reset email.';
+        forgotBtn.disabled = false; forgotBtn.textContent = orig;
       }
     });
 
-    // Sign Up
-    const signupForm = document.getElementById('signup-form');
+    // ─── Sign up ──────────────────────────────────────────────────────
+    const signupForm  = document.getElementById('signup-form');
+    const signupBtn   = document.getElementById('signup-submit');
     const signupError = document.getElementById('signup-error');
-
-    // Name input: A-Z a-z only, max 13 chars, live counter
-    const nameInput = document.getElementById('signup-name');
-    const nameCharCount = document.getElementById('nameCharCount');
+    const nameInput   = document.getElementById('signup-name');
+    const nameChar    = document.getElementById('nameCharCount');
     nameInput.addEventListener('input', () => {
-      nameInput.value = nameInput.value.replace(/[^A-Za-z]/g, '');
-      if (nameInput.value.length > 13) nameInput.value = nameInput.value.slice(0, 13);
+      nameInput.value = nameInput.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 13);
       const len = nameInput.value.length;
-      nameCharCount.textContent = `(${len}/13)`;
-      nameCharCount.style.color = (len >= 3 && len <= 13) ? '#22c55e' : '#ef4444';
+      nameChar.textContent = '(' + len + '/13)';
+      nameChar.style.color = (len >= 3) ? '#22c55e' : '#ef4444';
     });
-
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      signupError.classList.remove('show');
-
-      const name = document.getElementById('signup-name').value.trim();
-      if (!name || name.length < 3 || name.length > 13 || !/^[A-Za-z]{3,13}$/.test(name)) {
-        signupError.textContent = 'Name must be 3-13 characters, only A-Z and a-z.';
-        signupError.classList.add('show');
-        return;
-      }
-      const email = document.getElementById('signup-email').value;
+      signupError.classList.remove('show'); signupError.textContent = '';
+      const name     = nameInput.value.trim();
+      const email    = document.getElementById('signup-email').value.trim().toLowerCase();
       const password = document.getElementById('signup-password').value;
-
-      try {
-        await signUp(email, password, name, selectedColor);
-        window.location.href = 'profile.html';
-      } catch (err) {
-        signupError.textContent = err.message;
-        signupError.classList.add('show');
+      if (!/^[A-Za-z0-9]{3,13}$/.test(name)) {
+        signupError.textContent = 'Name must be 3-13 letters/digits.';
+        signupError.classList.add('show'); return;
       }
-    });
-
-    // Redirect if already logged in (but not if banned)
-    onAuthChange(async (user) => {
-      if (user) {
-        try {
-          const { db } = await import('./js/firebase-config.js');
-          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists() && userDoc.data().banned) {
-            const { auth } = await import('./js/firebase-config.js');
-            const { signOut } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
-            await signOut(auth);
-            return;
-          }
-        } catch(e) {}
-        window.location.href = 'profile.html';
+      if (!/@gmail\.com$/i.test(email)) {
+        signupError.textContent = 'Mathagram requires a Gmail address (@gmail.com). Please sign up with your Gmail.';
+        signupError.classList.add('show'); return;
+      }
+      signupBtn.disabled = true;
+      const orig = signupBtn.textContent;
+      signupBtn.textContent = 'Creating account…';
+      try {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(user, { displayName: name });
+        await setDoc(doc(db, 'users', user.uid), {
+          displayName: name, email, color: selectedColor, xp: 0, createdAt: serverTimestamp()
+        });
+        window.location.assign('/link-google.html');
+      } catch (err) {
+        signupError.textContent = friendly(err);
+        signupError.classList.add('show');
+        signupBtn.disabled = false;
+        signupBtn.textContent = orig;
       }
     });
   </script>
-
 </body>
 </html>

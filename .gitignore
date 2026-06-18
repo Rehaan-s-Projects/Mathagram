@@ -1,3 +1,8 @@
 # Local Netlify folder
 .netlify
 .DS_Store
+__pycache__/
+*.pyc
+
+# Git worktrees (isolated branch workspaces)
+.worktrees/

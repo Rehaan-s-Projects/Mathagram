@@ -393,14 +393,15 @@ async function loadGoogleAccount() {
   try {
     var config = await import('./js/firebase-config.js');
     var user = config.auth.currentUser;
-    if (user && user.email) {
+    // Only an @Mgramschools.net Google account counts as the school link.
+    if (user && user.email && user.email.toLowerCase().endsWith('@mgramschools.net')) {
       el.textContent = user.email;
       // Save link locally
       localStorage.setItem('vs_google_email', user.email);
     } else if (localStorage.getItem('vs_google_email')) {
       el.textContent = localStorage.getItem('vs_google_email');
     } else {
-      el.textContent = 'Not linked — please log in with Google';
+      el.textContent = 'Not linked — please log in with your @Mgramschools.net Google account';
       el.style.color = '#94a3b8';
     }
   } catch(e) {

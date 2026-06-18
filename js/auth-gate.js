@@ -10,6 +10,114 @@
 const script = document.currentScript || document.querySelector('script[src*="auth-gate"]');
 const basePath = script?.getAttribute('data-base') || '';
 
+// ─── Google Translate proxy detection ─────────────────────────────────
+// When users open a page through translate.goog, the browser treats it as
+// a *different origin* than mathagram.org. Firebase Auth, localStorage, and
+// XP can't be read across origins — so the user normally looks logged-out
+// on the translated copy. Workaround: when the user clicks Translate on
+// mathagram.org, nav.js stamps their name/XP/color into the URL hash
+// (#_mga_u=<base64(JSON)>). Here we read it back and display it in the
+// nav so the translated page shows the SAME Mathagram identity.
+if (/\.translate\.goog$/i.test(window.location.hostname)) {
+  // Stamp from the URL hash (preserved across cross-origin redirects).
+  // Also stash in sessionStorage so it survives intra-translate.goog
+  // navigation (e.g., clicking a course tile drops the hash).
+  let userInfo = null;
+  let customToken = null;
+  try {
+    const hash = location.hash || '';
+    const mU = hash.match(/_mga_u=([^&]+)/);
+    const mT = hash.match(/_mga_t=([^&]+)/);
+    if (mU) {
+      userInfo = JSON.parse(decodeURIComponent(escape(atob(mU[1]))));
+      sessionStorage.setItem('mga_translate_user', JSON.stringify(userInfo));
+    } else {
+      const cached = sessionStorage.getItem('mga_translate_user');
+      if (cached) userInfo = JSON.parse(cached);
+    }
+    if (mT) {
+      customToken = decodeURIComponent(mT[1]);
+    }
+    // Tidy the URL — remove the hash so it's not in subsequent links
+    if (mU || mT) {
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    }
+  } catch (e) { userInfo = null; }
+
+  // If we got a Firebase custom token, sign in for real with it. After this
+  // succeeds, the page has the SAME account state on translate.goog as on
+  // mathagram.org — same UID, same Firestore data, same XP, writes work.
+  // (Requires `mathagram-org.translate.goog` to be in Firebase Auth's
+  // authorized-domain list — set in Firebase Console.)
+  if (customToken) {
+    (async () => {
+      try {
+        const { auth } = await import('./firebase-config.js');
+        const { signInWithCustomToken } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        await signInWithCustomToken(auth, customToken);
+        // Mark the session so we know SSO is active (vs. read-only display).
+        try { sessionStorage.setItem('mga_translate_sso', '1'); } catch (e) {}
+      } catch (e) {
+        console.warn('Cross-origin sign-in failed; falling back to read-only display:', e);
+      }
+    })();
+  }
+
+  function applyTranslateUserChrome() {
+    // 1. Replace the "Login" link with the user's name + XP badge
+    const loginLink = document.querySelector('.nav-links a[data-auth="login"]');
+    if (userInfo && loginLink) {
+      const colorMap = { blue:'#3b82f6', green:'#22c55e', orange:'#f97316', purple:'#8b5cf6', cyan:'#06b6d4', pink:'#ec4899', gray:'#94a3b8' };
+      const c = colorMap[userInfo.color] || colorMap.blue;
+      const userBadge = document.createElement('a');
+      userBadge.href = 'https://mathagram.org/profile.html';
+      userBadge.target = '_top';
+      userBadge.rel = 'noopener';
+      userBadge.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;background:rgba(255,255,255,0.95);border:1.5px solid '+c+';border-radius:999px;color:#1f1108;text-decoration:none;font-weight:700;font-size:0.85rem;';
+      userBadge.innerHTML = `
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:${c};color:#fff;font-size:0.78rem;font-weight:800;">${(userInfo.name||'?').slice(0,1).toUpperCase()}</span>
+        <span style="line-height:1.1;">
+          <span style="display:block;">${userInfo.name||'Learner'}</span>
+          <span style="display:block;font-size:0.68rem;color:${c};">⚡ ${(userInfo.xp||0).toLocaleString()} XP</span>
+        </span>
+      `;
+      loginLink.replaceWith(userBadge);
+    }
+    // 2. Banner explaining the situation
+    const banner = document.createElement('div');
+    banner.id = 'translate-account-banner';
+    banner.innerHTML = `
+      <style>
+        #translate-account-banner {
+          position: fixed; bottom: 0; left: 0; right: 0; z-index: 9998;
+          padding: 8px 16px;
+          background: linear-gradient(90deg, #1FA45C, #FFD93D, #FF6B6B);
+          color: #1f1108;
+          font-family: inherit; font-size: 0.82rem; line-height: 1.35;
+          text-align: center; font-weight: 700;
+          box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
+        }
+        #translate-account-banner a { color: #1e3a8a; text-decoration: underline; font-weight: 800; }
+        #translate-account-banner button {
+          background: rgba(0,0,0,0.12); color: #1f1108; border: none;
+          padding: 3px 10px; border-radius: 999px; font-weight: 800;
+          cursor: pointer; font-size: 0.74rem; margin-left: 10px;
+        }
+      </style>
+      <span>${userInfo
+        ? `🌐 Translated view of Mathagram — signed in as <strong>${userInfo.name||'Learner'}</strong>. Progress saving requires the original site: <a href="https://mathagram.org" target="_top" rel="noopener">mathagram.org</a>.`
+        : `🌐 You're viewing the translated version of Mathagram. Your account &amp; XP live on <a href="https://mathagram.org" target="_top" rel="noopener">mathagram.org</a>.`}</span>
+      <button type="button" onclick="document.getElementById('translate-account-banner').remove()">Dismiss</button>
+    `;
+    document.body.appendChild(banner);
+  }
+
+  if (document.body) applyTranslateUserChrome();
+  else document.addEventListener('DOMContentLoaded', applyTranslateUserChrome);
+  // Skip overlay + Firebase init below — no same-origin storage available.
+}
+const ON_TRANSLATE_GOOG = /\.translate\.goog$/i.test(window.location.hostname);
+
 // Create overlay immediately (before page renders)
 const overlay = document.createElement('div');
 overlay.id = 'auth-gate-overlay';
@@ -55,19 +163,23 @@ overlay.innerHTML = `
     <p class="gate-link">or <a href="${basePath}index.html">go back to home</a></p>
   </div>
 `;
-document.body.appendChild(overlay);
+if (!ON_TRANSLATE_GOOG) {
+  document.body.appendChild(overlay);
+}
 
-// Check auth state and ban status
-import('./firebase-config.js').then(({ auth, db }) => {
+// Check auth state and ban status — skip entirely on Google Translate proxy
+// (different origin → no Firebase Auth state available here)
+if (!ON_TRANSLATE_GOOG) import('./firebase-config.js').then(({ auth, db }) => {
   Promise.all([
     import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
     import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
   ]).then(([authMod, fireMod]) => {
     authMod.onAuthStateChanged(auth, async (user) => {
       if (user) {
+        let userDoc = null;
         // Check if user is banned or suspended
         try {
-          const userDoc = await fireMod.getDoc(fireMod.doc(db, 'users', user.uid));
+          userDoc = await fireMod.getDoc(fireMod.doc(db, 'users', user.uid));
           if (userDoc.exists()) {
             const data = userDoc.data();
             const reason = data.banReason || 'Violation of Community Safety Rules';
@@ -93,6 +205,18 @@ import('./firebase-config.js').then(({ auth, db }) => {
             }
           }
         } catch(e) {}
+        // ─── Require linked Google account + confirmed birthday ───────
+        try {
+          const data2 = (userDoc && userDoc.exists()) ? userDoc.data() : null;
+          const hasGoogle = (user.providerData || []).some(p => p.providerId === 'google.com');
+          const hasBirthday = !!(data2 && data2.birthday);
+          if (!hasGoogle || !hasBirthday) {
+            if (!/link-google\.html$/.test(location.pathname)) {
+              window.location.href = basePath + 'link-google.html';
+              return;
+            }
+          }
+        } catch (e) { /* never lock the user out on a gate error */ }
         overlay.classList.add('hidden');
       } else {
         overlay.classList.remove('hidden');

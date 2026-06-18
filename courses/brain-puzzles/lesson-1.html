@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Water Sort — How It Works — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/exercises.css">
+<link rel="stylesheet" href="../../css/characters.css">
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<nav class="nav"><div class="container">
+  <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+  <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+</div></nav>
+
+<div class="container" style="max-width:760px; padding:80px 24px 32px;">
+  <a href="index.html" style="font-size:0.85rem; color:var(--color-text-muted);">&larr; Back to Brain Puzzle Games</a>
+  <h1 style="font-size:2rem; font-weight:800; margin:8px 0 24px;">Water Sort — How It Works</h1>
+
+  <section style="line-height:1.8; font-size:1.05rem;">
+    <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:12px;">The Goal</h2>
+    <p>Water Sort is a stacking puzzle. You start with a row of tubes; each tube holds several <strong>layers</strong> of colored liquid stacked on top of one another. Some tubes are full of mixed colors; one or two start empty. <strong>You win when every tube either is empty or contains only one color.</strong></p>
+
+    <h2 style="font-size:1.3rem; font-weight:700; margin:24px 0 12px;">The One Pour Rule</h2>
+    <p>You can only pour from one tube to another when:</p>
+    <ul style="margin:8px 0 16px 24px;">
+      <li>The destination tube is <strong>empty</strong>, OR</li>
+      <li>The top layer of the destination matches the top layer of the source.</li>
+    </ul>
+    <p>When you pour, every connected layer of the matching color moves at once — not just one unit. So if the source has three reds on top, all three flow into the destination (if there's room).</p>
+
+    <h2 style="font-size:1.3rem; font-weight:700; margin:24px 0 12px;">Core Strategies</h2>
+    <ul style="margin:8px 0 16px 24px;">
+      <li><strong>Free up empty tubes early.</strong> An empty tube is a wildcard — it can accept any color first. Don't waste it on something you can place elsewhere.</li>
+      <li><strong>Consolidate matching tops.</strong> If two tubes both show red on top, pour the smaller stack onto the larger to free up a tube faster.</li>
+      <li><strong>Look ahead.</strong> A pour that solves <em>now</em> can trap a color underneath later. Trace what each color needs before committing.</li>
+      <li><strong>Reset when stuck.</strong> If every tube has mixed colors with no empty space and no matching tops anywhere, the level isn't solvable from this state — restart and try a different opening sequence.</li>
+    </ul>
+
+    <div style="background:var(--color-surface); border-radius:12px; padding:20px; margin:20px 0;">
+      <strong>Key insight:</strong> The hardest moves aren't the obvious matches — they're the moves that <em>create</em> matches you couldn't see yet. Look for the chain, not the single pour.
+    </div>
+  </section>
+
+  <hr style="border:none; border-top:1px solid var(--color-border); margin:40px 0;">
+  <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:16px;">Practice</h2>
+  <div id="exercises"></div>
+  <div id="completion"></div>
+</div>
+
+<footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+<script type="module">
+  import { initNav } from '../../js/nav.js';
+  import { initRitaChat } from '../../js/rita-chat.js'; initNav('../../');
+  initRitaChat('../../');
+  import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+  import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  initSideCharacter(randomCharacterId(), '../../');
+
+  const exercises = [
+    {
+      type: 'multiple-choice',
+      question: 'What is the goal of a Water Sort puzzle?',
+      options: [
+        'Mix all colors evenly across every tube',
+        'Empty every tube',
+        'End with each tube either empty or holding a single color',
+        'Match adjacent tubes to the same color'
+      ],
+      correctIndex: 2
+    },
+    {
+      type: 'multiple-choice',
+      question: 'Which pour is allowed?',
+      options: [
+        'Pouring red onto blue',
+        'Pouring red onto red, or red into an empty tube',
+        'Pouring only from full tubes',
+        'Pouring only one drop at a time'
+      ],
+      correctIndex: 1
+    },
+    {
+      type: 'true-false',
+      question: 'When you pour, the entire matching-color streak on top moves at once — not just one layer.',
+      correctAnswer: true
+    },
+    {
+      type: 'true-false',
+      question: 'An empty tube can accept any color as its first pour.',
+      correctAnswer: true
+    },
+    {
+      type: 'fill-blank',
+      question: 'A stack of colored liquid inside a tube is made of individual ___ stacked on top of each other.',
+      answer: 'layers'
+    },
+    {
+      type: 'multiple-choice',
+      question: 'Two tubes both show red as the top layer. What is usually the best first move?',
+      options: [
+        'Wait — never combine reds',
+        'Pour the smaller red stack onto the larger one to free a tube',
+        'Pour both into a third tube',
+        'Restart the level'
+      ],
+      correctIndex: 1
+    },
+    {
+      type: 'multiple-choice',
+      question: 'You are stuck: every tube is mixed, no tube is empty, and no two tops match. What is the right move?',
+      options: [
+        'Pour any color into any other to break the deadlock',
+        'There is no legal pour — restart the level',
+        'Pour the rightmost tube into the leftmost',
+        'Wait for an undo button'
+      ],
+      correctIndex: 1
+    },
+    {
+      type: 'true-false',
+      question: 'A puzzle counts as solved as soon as every tube either is empty or contains exactly one color.',
+      correctAnswer: true
+    },
+    {
+      type: 'multiple-choice',
+      question: 'Sam asks: which habit will help you the most in harder levels?',
+      options: [
+        'Pour as fast as possible to clear tubes quickly',
+        'Always fill empty tubes first',
+        'Trace where each color needs to end up before committing to a pour',
+        'Never use the empty tube'
+      ],
+      correctIndex: 2
+    }
+  ];
+
+  const container = document.getElementById('exercises');
+  const { score } = await runExerciseSet(container, exercises, (isCorrect) => {
+    showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+  });
+
+  await showLessonComplete(container, document.getElementById('completion'), score, {
+    courseId: 'brain-puzzles',
+    lessonId: 'bp-1',
+    nextHref: 'lesson-2.html',
+    backHref: 'index.html'
+  });
+</script>
+</body>
+</html>
