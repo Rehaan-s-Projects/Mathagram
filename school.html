@@ -846,6 +846,8 @@ if ('speechSynthesis' in window) {
   window.speechSynthesis.addEventListener('voiceschanged', function(){}, {once:true});
 }
 
+var chatSending = false;
+
 // Stream Ms. Gosia's reply from the AI endpoint into the given bubble's text node.
 // Returns the full reply text. Throws on auth/rate/network failure.
 async function streamGosiaReply(history, bubbleTextEl) {
@@ -867,28 +869,30 @@ async function streamGosiaReply(history, bubbleTextEl) {
   var decoder = new TextDecoder();
   var buffer = '';
   var full = '';
+  function handleLine(line) {
+    if (line.indexOf('data:') !== 0) return;
+    var payload = line.slice(5).trim();
+    if (!payload || payload === '[DONE]') return;
+    var evt;
+    try { evt = JSON.parse(payload); } catch (_e) { return; }
+    if (evt.type === 'fallback' && evt.text) {
+      full = evt.text; bubbleTextEl.textContent = full;
+    } else if (evt.type === 'content_block_delta' && evt.delta && evt.delta.type === 'text_delta') {
+      full += evt.delta.text;
+      bubbleTextEl.textContent = full;
+      bubbleTextEl.parentElement.parentElement.scrollTop = 9e9;
+    }
+  }
   while (true) {
     var chunk = await reader.read();
     if (chunk.done) break;
     buffer += decoder.decode(chunk.value, { stream: true });
     var lines = buffer.split('\n');
     buffer = lines.pop();
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i];
-      if (line.indexOf('data:') !== 0) continue;
-      var payload = line.slice(5).trim();
-      if (!payload || payload === '[DONE]') continue;
-      var evt;
-      try { evt = JSON.parse(payload); } catch (_e) { continue; }
-      if (evt.type === 'fallback' && evt.text) {
-        full = evt.text; bubbleTextEl.textContent = full;
-      } else if (evt.type === 'content_block_delta' && evt.delta && evt.delta.type === 'text_delta') {
-        full += evt.delta.text;
-        bubbleTextEl.textContent = full;
-        bubbleTextEl.parentElement.parentElement.scrollTop = 9e9;
-      }
-    }
+    for (var i = 0; i < lines.length; i++) handleLine(lines[i]);
   }
+  buffer += decoder.decode(); // flush any trailing bytes / final unterminated line
+  if (buffer) handleLine(buffer);
   return full;
 }
 
@@ -898,6 +902,8 @@ function sendChat() {
     bi.value = ''; bi.placeholder = 'You have been removed from the classroom.'; bi.disabled = true;
     return;
   }
+  if (chatSending) return; // ignore re-entrant sends while a reply is streaming
+
   var input = document.getElementById('chatInput');
   var msg = input.value.trim();
   if (!msg) return;
@@ -945,18 +951,26 @@ function sendChat() {
   var textEl = row.querySelector('.g-text');
   var typingEl = row.querySelector('.g-typing');
 
+  chatSending = true;
   streamGosiaReply(chatHistory, textEl).then(function(full){
+    chatSending = false;
     if (typingEl) typingEl.remove();
     var clean = (full || '').trim();
     if (clean) {
       chatHistory.push({ role: 'assistant', content: clean });
       gosiaSpeak(clean);
+    } else {
+      // Empty reply (e.g., a safety refusal streams with no text) — drop the
+      // unanswered user turn so history stays valid, and show a gentle line.
+      if (chatHistory.length && chatHistory[chatHistory.length-1].role === 'user') chatHistory.pop();
+      textEl.textContent = "Let's keep our questions about school, okay? Ask me anything you're learning! 💜";
     }
   }).catch(function(err){
+    chatSending = false;
     if (typingEl) typingEl.remove();
     if (chatHistory.length && chatHistory[chatHistory.length-1].role === 'user') chatHistory.pop();
     var line = (err && err.code === 'auth')
-      ? 'Please sign in again to chat with me. 💜'
+      ? 'Please sign in to chat with me. 💜'
       : (err && err.code === 'rate')
       ? 'One question at a time, please! Give me a moment and try again. 💜'
       : "I can't reach the classroom right now — try again in a moment!";

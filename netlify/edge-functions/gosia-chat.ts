@@ -1,12 +1,14 @@
 // Netlify Edge Function — Ms. Gosia AI classroom chat for the Virtual School.
-// Verifies the caller's Firebase ID token, rate-limits per user, then
-// stream-proxies the Anthropic Messages API back to the browser as SSE.
+// Verifies the caller's Firebase ID token (full RS256 signature check),
+// rate-limits per user, then stream-proxies the Anthropic Messages API back
+// to the browser as SSE.
 //
 // REQUIRED Netlify env vars:
 //   ANTHROPIC_API_KEY   — Anthropic API key (server-only; never sent to client)
 //   FIREBASE_PROJECT_ID — e.g. "mathagram-org" (same value mga-token.ts uses)
 
 import type { Context } from "https://edge.netlify.com";
+import { decodeProtectedHeader, importX509, jwtVerify } from "https://esm.sh/jose@5.9.6";
 
 const MODEL = "claude-haiku-4-5";
 const ANTHROPIC_VERSION = "2023-06-01";
@@ -14,6 +16,10 @@ const MAX_TOKENS = 600;
 const RATE_MAX = 20;          // messages per window
 const RATE_WINDOW_MS = 60_000;
 const MAX_INPUT_CHARS = 1500;
+const ISSUER_PREFIX = "https://securetoken.google.com/";
+// Google's public X.509 certs for Firebase Secure Token Service.
+const FIREBASE_CERTS_URL =
+  "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com";
 
 const GOSIA_SYSTEM_PROMPT = `You are Ms. Gosia, a warm, patient, encouraging teacher at Mathagram's Virtual School for kids and teens. You teach across subjects — math, science, English, history, and study skills — in plain, age-appropriate language.
 
@@ -30,27 +36,31 @@ Safety (very important — this is a children's classroom):
 
 Keep replies concise — a few short paragraphs at most.`;
 
-const ISSUER_PREFIX = "https://securetoken.google.com/";
-
-function b64urlDecodeText(s: string): string {
-  const pad = "=".repeat((4 - (s.length % 4)) % 4);
-  const b64 = (s + pad).replace(/-/g, "+").replace(/_/g, "/");
-  const bin = atob(b64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new TextDecoder().decode(bytes);
+// Cache Google's signing certs (~30 min) so we don't refetch per request.
+let _certsCache: { keys: Record<string, string>; at: number } | null = null;
+async function getFirebaseCerts(): Promise<Record<string, string>> {
+  if (_certsCache && Date.now() - _certsCache.at < 30 * 60 * 1000) return _certsCache.keys;
+  const res = await fetch(FIREBASE_CERTS_URL);
+  if (!res.ok) throw new Error("certs fetch failed: " + res.status);
+  const keys = await res.json();
+  _certsCache = { keys, at: Date.now() };
+  return keys;
 }
 
-// Validate issuer/audience/expiry of the Firebase ID token and return its uid (sub).
-// Mirrors mga-token.ts: payload checks are sufficient here — the token was just
-// minted by Firebase for this project, and a forgery would need Google's key.
-function uidFromIdToken(idToken: string, projectId: string): string {
-  const parts = idToken.split(".");
-  if (parts.length !== 3) throw new Error("malformed token");
-  const payload = JSON.parse(b64urlDecodeText(parts[1]));
-  if (payload.aud !== projectId) throw new Error("audience mismatch");
-  if (payload.iss !== ISSUER_PREFIX + projectId) throw new Error("issuer mismatch");
-  if (payload.exp <= Math.floor(Date.now() / 1000)) throw new Error("token expired");
+// Fully verify a Firebase ID token (RS256 signature against Google's public
+// certs, plus issuer/audience/expiry) and return its uid (sub). Throws on any
+// failure — there is NO payload-only fallback, because this is the whole gate.
+async function uidFromIdToken(idToken: string, projectId: string): Promise<string> {
+  const header = decodeProtectedHeader(idToken);
+  if (header.alg !== "RS256" || !header.kid) throw new Error("bad token header");
+  const certs = await getFirebaseCerts();
+  const pem = certs[header.kid];
+  if (!pem) throw new Error("unknown signing key");
+  const key = await importX509(pem, "RS256");
+  const { payload } = await jwtVerify(idToken, key, {
+    issuer: ISSUER_PREFIX + projectId,
+    audience: projectId,
+  });
   if (!payload.sub) throw new Error("no subject");
   return payload.sub as string;
 }
@@ -78,7 +88,7 @@ function sseFallback(text: string): Response {
   const body = `data: ${JSON.stringify({ type: "fallback", text })}\n\n`;
   return new Response(body, {
     status: 200,
-    headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+    headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform" },
   });
 }
 
@@ -112,28 +122,34 @@ export default async (req: Request, _ctx: Context) => {
   }
 
   let uid: string;
-  try { uid = uidFromIdToken(idToken, projectId); }
-  catch (e) {
-    return new Response(JSON.stringify({ error: "unauthorized", message: String(e) }), {
+  try { uid = await uidFromIdToken(idToken, projectId); }
+  catch (_e) {
+    // Generic message to the client; details stay server-side (no forgery oracle).
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
+  // Reject (don't silently truncate) an over-long latest user message.
+  const rawLast = messages[messages.length - 1];
+  if (rawLast && rawLast.role === "user" && typeof rawLast.content === "string"
+      && rawLast.content.length > MAX_INPUT_CHARS) {
+    return sseFallback("That message is a bit long for me! Try asking it in fewer words. 💜");
+  }
+
   // Sanitize history: keep only user/assistant text turns, clamp to last 10,
-  // and ensure it starts on a user turn (Anthropic requires messages[0].role==="user").
+  // then trim non-user turns off BOTH ends so messages[0] and messages[-1] are
+  // "user" (Anthropic requires first=user and a completion needs last=user).
   let clean = messages
     .filter((m: any) => (m?.role === "user" || m?.role === "assistant") && typeof m?.content === "string")
     .map((m: any) => ({ role: m.role, content: String(m.content).slice(0, MAX_INPUT_CHARS) }))
     .slice(-10);
   while (clean.length && clean[0].role !== "user") clean = clean.slice(1);
+  while (clean.length && clean[clean.length - 1].role !== "user") clean = clean.slice(0, -1);
   if (!clean.length) {
     return new Response(JSON.stringify({ error: "empty_history" }), {
       status: 400, headers: { ...cors, "Content-Type": "application/json" },
     });
-  }
-  const last = clean[clean.length - 1];
-  if (last.role === "user" && last.content.length > MAX_INPUT_CHARS) {
-    return sseFallback("That message is a bit long for me! Try asking it in fewer words. 💜");
   }
 
   if (!(await allowRequest(uid))) {
@@ -167,14 +183,15 @@ export default async (req: Request, _ctx: Context) => {
     return sseFallback("I can't reach the classroom right now — try again in a moment!");
   }
 
-  // Pipe the Anthropic SSE straight through to the browser.
+  // Pipe the Anthropic SSE straight through to the browser. (A refusal streams
+  // as a normal 200 with no text deltas; the client treats an empty reply as a
+  // fallback — see streamGosiaReply in school.html.)
   return new Response(upstream.body, {
     status: 200,
     headers: {
       ...cors,
       "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive",
+      "Cache-Control": "no-cache, no-transform",
     },
   });
 };
