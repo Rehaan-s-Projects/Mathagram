@@ -756,99 +756,15 @@ function updateClock() {
 
 function goToClass(course) {
   var chatBox = document.getElementById('chatMessages');
-  var input = document.getElementById('chatInput');
   chatBox.parentElement.parentElement.scrollIntoView({behavior:'smooth'});
-
   var subjectName = course.replace(/-/g,' ').replace(/\b\w/g, function(c){return c.toUpperCase();});
   activeCourse = course;
-  chatQuizStep = 0;
-  chatQuizScore = 0;
-
-  var lesson = chatLessons[course];
-  if (!lesson) {
-    addGosiaChat("Welcome to <strong>" + subjectName + "</strong> class! Ask me anything about the topic and I'll teach you through our chat. Let's learn together! 💜");
-    return;
-  }
-
-  addGosiaChat("📚 Welcome to <strong>" + subjectName + "</strong>! Let me teach you today's lesson right here in our chat.");
-  setTimeout(function(){
-    addGosiaChat(lesson.teach);
-    setTimeout(function(){
-      chatQuizStep = 0;
-      askChatQuiz();
-    }, 2000);
-  }, 1500);
+  chatHistory = [];
+  addGosiaChat("Welcome to <strong>" + subjectName + "</strong> class! Ask me anything about it and we'll learn together. What would you like to start with? 💜");
 }
 
 var activeCourse = null;
-var chatQuizStep = 0;
-var chatQuizScore = 0;
-
-var chatLessons = {
-  'algebra': {
-    teach: "<strong>Solving One-Step Equations</strong><br><br>An equation is like a balance — whatever you do to one side, you must do to the other.<br><br>Example: <strong>x + 5 = 12</strong><br>Subtract 5 from both sides: <strong>x = 7</strong> ✓<br><br>Example: <strong>3x = 15</strong><br>Divide both sides by 3: <strong>x = 5</strong> ✓",
-    quiz: [
-      {q:"Solve: x + 7 = 10. What is x?", a:"3", hint:"Subtract 7 from both sides."},
-      {q:"Solve: 4x = 20. What is x?", a:"5", hint:"Divide both sides by 4."},
-      {q:"Solve: x − 3 = 9. What is x?", a:"12", hint:"Add 3 to both sides."},
-      {q:"True or false: To solve x + 5 = 8, you add 5 to both sides.", a:"false", hint:"You SUBTRACT to undo addition."}
-    ]
-  },
-  'calculus': {
-    teach: "<strong>What Are Integrals?</strong><br><br>An <strong>integral</strong> measures the <em>accumulation</em> of a quantity over an interval. The notation: <strong>∫ f(x) dx</strong><br><br>• The ∫ symbol means \"sum\"<br>• f(x) is the integrand<br>• dx means \"with respect to x\"<br><br><strong>Power Rule:</strong> ∫ x² dx = x³/3 + C",
-    quiz: [
-      {q:"What does the ∫ symbol stand for?", a:"sum", hint:"It comes from the Latin word 'summa'."},
-      {q:"In ∫ f(x) dx, what is f(x) called?", a:"integrand", hint:"The function being integrated."},
-      {q:"Using the power rule: ∫ x² dx = x³/___  + C. Fill in the blank.", a:"3", hint:"Add 1 to the exponent, then divide by the new exponent."},
-      {q:"What does the '+ C' represent?", a:"constant", hint:"The constant of integration."}
-    ]
-  },
-  'trigonometry': {
-    teach: "<strong>Introduction to Trigonometry</strong><br><br>Trigonometry studies relationships between <strong>angles</strong> and <strong>sides</strong> of triangles.<br><br>The three main ratios (SOH-CAH-TOA):<br>• <strong>sin θ = opposite / hypotenuse</strong><br>• <strong>cos θ = adjacent / hypotenuse</strong><br>• <strong>tan θ = opposite / adjacent</strong>",
-    quiz: [
-      {q:"What does SOH stand for?", a:"sin equals opposite over hypotenuse", hint:"Sin = Opposite / Hypotenuse."},
-      {q:"cos θ = adjacent / ___. Fill in the blank.", a:"hypotenuse", hint:"CAH = Cos Adjacent Hypotenuse."},
-      {q:"tan θ = ___ / adjacent. Fill in the blank.", a:"opposite", hint:"TOA = Tan Opposite Adjacent."},
-      {q:"True or false: Trigonometry only works with right triangles.", a:"false", hint:"It extends to all triangles and the unit circle."}
-    ]
-  },
-  'circuits': {
-    teach: "<strong>What Is Electricity?</strong><br><br><strong>Electricity</strong> is the flow of <strong>electric charge</strong> — electrons moving through a wire.<br><br>Three key quantities:<br>• <strong>Current (I)</strong> — rate of charge flow, measured in <strong>Amperes (A)</strong><br>• <strong>Voltage (V)</strong> — the \"push\", measured in <strong>Volts (V)</strong><br>• <strong>Resistance (R)</strong> — opposition to flow, measured in <strong>Ohms (Ω)</strong><br><br>Formula: <strong>I = Q / t</strong>",
-    quiz: [
-      {q:"Current is measured in what unit?", a:"amperes", hint:"Also written as 'A'."},
-      {q:"Voltage is measured in ___.", a:"volts", hint:"Named after Alessandro Volta."},
-      {q:"If 6 coulombs flow past a point in 2 seconds, what is the current in amperes?", a:"3", hint:"I = Q / t = 6 / 2."},
-      {q:"True or false: Copper is a conductor.", a:"true", hint:"Conductors let electrons move freely."}
-    ]
-  },
-  'english-grammar': {
-    teach: "<strong>Parts of a Sentence</strong><br><br>Every sentence needs:<br>• A <strong>subject</strong> — who or what the sentence is about<br>• A <strong>verb</strong> (predicate) — what the subject does<br><br>Example: <strong>The cat (subject) sleeps (verb).</strong><br><br>Modifiers add detail: adjectives describe nouns, adverbs describe verbs.",
-    quiz: [
-      {q:"What are the two essential parts of a sentence?", a:"subject and verb", hint:"Every sentence must have these two."},
-      {q:"In 'The dog runs fast', what is the subject?", a:"dog", hint:"Who or what is doing the action?"},
-      {q:"What part of speech describes a noun?", a:"adjective", hint:"Like 'big', 'red', 'fast'."},
-      {q:"True or false: 'Runs quickly' is a complete sentence.", a:"false", hint:"It's missing a subject."}
-    ]
-  },
-  'world-history': {
-    teach: "<strong>Ancient Civilizations</strong><br><br>The first civilizations arose near <strong>rivers</strong> because water was essential for farming.<br><br>• <strong>Mesopotamia</strong> — between the Tigris and Euphrates (modern Iraq)<br>• <strong>Egypt</strong> — along the Nile River<br>• <strong>Indus Valley</strong> — along the Indus River (modern Pakistan/India)<br>• <strong>China</strong> — along the Yellow River",
-    quiz: [
-      {q:"Why did early civilizations develop near rivers?", a:"water", hint:"Rivers provided water for farming and drinking."},
-      {q:"Mesopotamia was between which two rivers?", a:"tigris and euphrates", hint:"Located in modern-day Iraq."},
-      {q:"Which civilization developed along the Nile River?", a:"egypt", hint:"Famous for pyramids and pharaohs."},
-      {q:"True or false: The Indus Valley civilization was in modern-day China.", a:"false", hint:"It was in modern Pakistan/India."}
-    ]
-  },
-  'psychology': {
-    teach: "<strong>What Is Psychology?</strong><br><br>Psychology is the scientific study of <strong>mind and behavior</strong>.<br><br>Major approaches:<br>• <strong>Behavioral</strong> — focuses on observable actions<br>• <strong>Cognitive</strong> — focuses on thinking and memory<br>• <strong>Biological</strong> — focuses on the brain and nervous system<br>• <strong>Humanistic</strong> — focuses on personal growth",
-    quiz: [
-      {q:"Psychology is the scientific study of ___ and behavior.", a:"mind", hint:"The mental side of things."},
-      {q:"Which approach focuses on observable actions?", a:"behavioral", hint:"Behavior you can see and measure."},
-      {q:"Which approach studies the brain and nervous system?", a:"biological", hint:"Bio = life, relating to the body."},
-      {q:"True or false: Psychology is only about mental illness.", a:"false", hint:"It covers all aspects of mind and behavior."}
-    ]
-  }
-};
+var chatHistory = [];
 
 function addGosiaChat(html) {
   var container = document.getElementById('chatMessages');
@@ -860,21 +776,6 @@ function addGosiaChat(html) {
   container.scrollTop = container.scrollHeight;
   gosiaSpeak(html.replace(/<[^>]*>/g,''));
 }
-
-function askChatQuiz() {
-  var lesson = chatLessons[activeCourse];
-  if (!lesson || chatQuizStep >= lesson.quiz.length) {
-    var pct = lesson ? Math.round(chatQuizScore / lesson.quiz.length * 100) : 0;
-    addGosiaChat("🎉 <strong>Quiz Complete!</strong> You got " + chatQuizScore + "/" + (lesson?lesson.quiz.length:0) + " (" + pct + "%). " + (pct >= 80 ? "Excellent work! ⭐" : pct >= 60 ? "Good effort! Keep practicing! 💪" : "Let's review this material again soon. You'll get it! 📚"));
-    activeCourse = null;
-    return;
-  }
-  var q = lesson.quiz[chatQuizStep];
-  addGosiaChat("📝 <strong>Question " + (chatQuizStep+1) + ":</strong> " + q.q);
-  waitingForQuizAnswer = true;
-}
-
-var waitingForQuizAnswer = false;
 
 // Grade selector
 document.getElementById('gradeSelector').addEventListener('click', function(e) {
@@ -890,18 +791,6 @@ document.getElementById('gradeSelector').addEventListener('click', function(e) {
 });
 
 // Gosia Classroom Chat
-var gosiaResponses = {
-  math: ["Great question! Let me break that down for you. In math, the key is to practice step by step. Which specific problem are you working on?","Math is all about patterns! Try working through it one step at a time. Need me to show you an example?","I love math questions! Remember: read the problem, identify what you know, find what's missing, then solve. What are you stuck on?"],
-  science: ["Science is about observation and asking WHY! What experiment or topic are you studying?","That's a great science question! Let me think... The key concept here is understanding cause and effect. Can you tell me more?","I love science! Remember the scientific method: observe, hypothesize, test, conclude. What part are you on?"],
-  english: ["English is beautiful! Are you working on grammar, vocabulary, or writing? I can help with all three!","Great question! For writing, remember: clear topic sentence, supporting details, and a strong conclusion.","Let me help with that! Reading carefully and noting key words is the first step. What text are you working with?"],
-  history: ["History is like a giant story! Understanding the causes and effects helps everything make sense. What era are you studying?","Interesting question! Let me share some context... History is about connecting events. What period?","I love history! Remember: who, what, when, where, why. Which event are you learning about?"],
-  homework: ["Homework time! I'm here to guide you, not give answers directly. Let's work through it together!","Let's tackle that homework! Show me the problem and I'll help you understand the steps.","I'm proud of you for asking for help! That's what smart students do. What's the assignment?"],
-  help: ["I'm here for you! You can ask me about any subject — math, science, English, history, or study tips.","Need help? Just type your question and I'll do my best to explain it clearly!","Don't worry, no question is too simple! That's what teachers are for. Ask away! 💜"],
-  greeting: ["Hey there! Ready to learn today? What subject should we work on?","Hello! Great to see you in class! What can I help you with?","Hi! Ms. Gosia at your service! What are we studying today? 📚"],
-  motivation: ["You're doing amazing! Keep pushing — every problem you solve makes you smarter!","I believe in you! Even the hardest subjects become easy with practice.","Remember: every expert was once a beginner. You've got this! 💪"],
-  default: ["That's interesting! Tell me more and I'll try to help.","Hmm, let me think about that... Can you give me more details?","Good question! I want to make sure I give you the best answer. What subject is this for?","I'm not sure I understand completely. Can you rephrase that? I want to help!"]
-};
-
 // Content moderation — Gosia watches for inappropriate messages
 var chatWarnings = parseInt(localStorage.getItem('vs_chat_warnings') || '0');
 var chatBanned = localStorage.getItem('vs_chat_banned') === 'true';
@@ -957,43 +846,58 @@ if ('speechSynthesis' in window) {
   window.speechSynthesis.addEventListener('voiceschanged', function(){}, {once:true});
 }
 
-function getGosiaReply(msg) {
-  var m = msg.toLowerCase();
+// Stream Ms. Gosia's reply from the AI endpoint into the given bubble's text node.
+// Returns the full reply text. Throws on auth/rate/network failure.
+async function streamGosiaReply(history, bubbleTextEl) {
+  var config = await import('./js/firebase-config.js');
+  var user = config.auth && config.auth.currentUser;
+  if (!user) { var e = new Error('not_signed_in'); e.code = 'auth'; throw e; }
+  var idToken = await user.getIdToken();
 
-  // CHECK FOR INAPPROPRIATE CONTENT FIRST
-  if (isInappropriate(m)) {
-    chatWarnings++;
-    localStorage.setItem('vs_chat_warnings', chatWarnings);
-    if (chatWarnings >= 3) {
-      chatBanned = true;
-      localStorage.setItem('vs_chat_banned', 'true');
-      return warningMessages[2].msg;
+  var res = await fetch('/api/gosia-chat', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ idToken: idToken, messages: history })
+  });
+  if (res.status === 401) { var a = new Error('unauthorized'); a.code = 'auth'; throw a; }
+  if (res.status === 429) { var r = new Error('rate'); r.code = 'rate'; throw r; }
+  if (!res.ok || !res.body) { throw new Error('net'); }
+
+  var reader = res.body.getReader();
+  var decoder = new TextDecoder();
+  var buffer = '';
+  var full = '';
+  while (true) {
+    var chunk = await reader.read();
+    if (chunk.done) break;
+    buffer += decoder.decode(chunk.value, { stream: true });
+    var lines = buffer.split('\n');
+    buffer = lines.pop();
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      if (line.indexOf('data:') !== 0) continue;
+      var payload = line.slice(5).trim();
+      if (!payload || payload === '[DONE]') continue;
+      var evt;
+      try { evt = JSON.parse(payload); } catch (_e) { continue; }
+      if (evt.type === 'fallback' && evt.text) {
+        full = evt.text; bubbleTextEl.textContent = full;
+      } else if (evt.type === 'content_block_delta' && evt.delta && evt.delta.type === 'text_delta') {
+        full += evt.delta.text;
+        bubbleTextEl.textContent = full;
+        bubbleTextEl.parentElement.parentElement.scrollTop = 9e9;
+      }
     }
-    return warningMessages[Math.min(chatWarnings-1, 1)].msg;
   }
-
-  if (/^(hi|hey|hello|good morning|good afternoon|sup|yo)/.test(m)) return gosiaResponses.greeting[Math.floor(Math.random()*gosiaResponses.greeting.length)];
-  if (/math|algebra|calculus|trig|equation|solve|number|fraction|decimal|percent/.test(m)) return gosiaResponses.math[Math.floor(Math.random()*gosiaResponses.math.length)];
-  if (/science|biology|chemistry|physics|atom|cell|energy|experiment/.test(m)) return gosiaResponses.science[Math.floor(Math.random()*gosiaResponses.science.length)];
-  if (/english|grammar|write|essay|read|vocab|word|spell|sentence/.test(m)) return gosiaResponses.english[Math.floor(Math.random()*gosiaResponses.english.length)];
-  if (/history|war|president|country|ancient|revolution|civil/.test(m)) return gosiaResponses.history[Math.floor(Math.random()*gosiaResponses.history.length)];
-  if (/homework|assignment|due|project|test|exam|quiz/.test(m)) return gosiaResponses.homework[Math.floor(Math.random()*gosiaResponses.homework.length)];
-  if (/help|stuck|confused|don'?t understand|how do/.test(m)) return gosiaResponses.help[Math.floor(Math.random()*gosiaResponses.help.length)];
-  if (/motivat|tired|bored|hard|give up|can'?t/.test(m)) return gosiaResponses.motivation[Math.floor(Math.random()*gosiaResponses.motivation.length)];
-  if (/thank|thanks|thx/.test(m)) return "You're welcome! That's what I'm here for. Keep up the great work! 💜";
-  if (/bye|goodbye|see you|leaving/.test(m)) return "Bye! Great work today. See you next class! 🎒";
-  return gosiaResponses.default[Math.floor(Math.random()*gosiaResponses.default.length)];
+  return full;
 }
 
 function sendChat() {
-  // Check if banned
   if (chatBanned) {
-    document.getElementById('chatInput').value = '';
-    document.getElementById('chatInput').placeholder = 'You have been removed from the classroom.';
-    document.getElementById('chatInput').disabled = true;
+    var bi = document.getElementById('chatInput');
+    bi.value = ''; bi.placeholder = 'You have been removed from the classroom.'; bi.disabled = true;
     return;
   }
-
   var input = document.getElementById('chatInput');
   var msg = input.value.trim();
   if (!msg) return;
@@ -1003,71 +907,61 @@ function sendChat() {
   var studentName = localStorage.getItem('vs_name') || 'You';
   var isBad = isInappropriate(msg.toLowerCase());
 
-  // Student message — censor if inappropriate
   var displayMsg = isBad ? msg.replace(/</g,'&lt;').replace(/\S/g,'*') : msg.replace(/</g,'&lt;');
   container.insertAdjacentHTML('beforeend',
     '<div style="display:flex;gap:8px;align-items:flex-start;justify-content:flex-end;">' +
     '<div style="background:'+(isBad?'#ef4444':'#3b82f6')+';color:#fff;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;line-height:1.5;">' + displayMsg + (isBad?' <span style="font-size:.7rem;opacity:.7;">[censored]</span>':'') + '</div>' +
     '<div style="width:28px;height:28px;border-radius:50%;background:'+(isBad?'#ef4444':'#3b82f6')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0;">' + studentName.charAt(0).toUpperCase() + '</div>' +
-    '</div>'
-  );
+    '</div>');
   container.scrollTop = container.scrollHeight;
 
-  // Gosia typing indicator
-  var typingId = 'typing-' + Date.now();
+  // Inappropriate input -> existing strike system, no API call.
+  if (isBad) {
+    chatWarnings++;
+    localStorage.setItem('vs_chat_warnings', chatWarnings);
+    if (chatWarnings >= 3) {
+      chatBanned = true; localStorage.setItem('vs_chat_banned', 'true');
+      addGosiaChat(warningMessages[2].msg);
+      var bi2 = document.getElementById('chatInput');
+      bi2.disabled = true; bi2.placeholder = 'You have been removed from the classroom.';
+    } else {
+      addGosiaChat(warningMessages[Math.min(chatWarnings-1, 1)].msg);
+    }
+    return;
+  }
+
+  chatHistory.push({ role: 'user', content: msg });
+
+  // Gosia bubble with a typing indicator; filled as tokens stream in.
+  var rowId = 'g-' + Date.now();
   container.insertAdjacentHTML('beforeend',
-    '<div id="' + typingId + '" style="display:flex;gap:8px;align-items:flex-start;">' +
+    '<div id="' + rowId + '" style="display:flex;gap:8px;align-items:flex-start;">' +
     '<img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">' +
-    '<div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;font-size:.85rem;color:#7c3aed;"><span style="animation:dots 1s infinite;">Typing</span><span class="bus-dots"></span></div>' +
-    '</div>'
-  );
+    '<div style="background:#ede9fe;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;line-height:1.5;color:#1f2937;">' +
+    '<span class="g-text"></span><span class="g-typing" style="color:#7c3aed;">…</span>' +
+    '</div></div>');
   container.scrollTop = container.scrollHeight;
+  var row = document.getElementById(rowId);
+  var textEl = row.querySelector('.g-text');
+  var typingEl = row.querySelector('.g-typing');
 
-  // Gosia reply after delay
-  setTimeout(function() {
-    var typing = document.getElementById(typingId);
-    if (typing) typing.remove();
-
-    // Handle quiz answer
-    if (waitingForQuizAnswer && activeCourse && chatLessons[activeCourse]) {
-      var q = chatLessons[activeCourse].quiz[chatQuizStep];
-      var ans = msg.toLowerCase().trim();
-      var correct = ans.indexOf(q.a.toLowerCase()) !== -1;
-      if (correct) {
-        chatQuizScore++;
-        addGosiaChat("✅ <strong>Correct!</strong> Great job! 🌟");
-      } else {
-        addGosiaChat("❌ Not quite. <strong>Hint:</strong> " + q.hint + "<br>The answer was: <strong>" + q.a + "</strong>");
-      }
-      waitingForQuizAnswer = false;
-      chatQuizStep++;
-      setTimeout(function(){ askChatQuiz(); }, 1500);
-      return;
+  streamGosiaReply(chatHistory, textEl).then(function(full){
+    if (typingEl) typingEl.remove();
+    var clean = (full || '').trim();
+    if (clean) {
+      chatHistory.push({ role: 'assistant', content: clean });
+      gosiaSpeak(clean);
     }
-
-    var reply = getGosiaReply(msg);
-    var isWarning = reply.includes('Strike') || reply.includes('REMOVED');
-    var bgColor = isWarning ? (reply.includes('Strike 3') ? '#fef2f2' : '#fef3c7') : '#ede9fe';
-    var borderColor = isWarning ? (reply.includes('Strike 3') ? '#ef4444' : '#f59e0b') : 'transparent';
-    var textColor = isWarning ? (reply.includes('Strike 3') ? '#991b1b' : '#92400e') : '#1e1b4b';
-
-    container.insertAdjacentHTML('beforeend',
-      '<div style="display:flex;gap:8px;align-items:flex-start;">' +
-      '<img src="assets/characters/gosia.svg" alt="" style="width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;">' +
-      '<div style="background:'+bgColor+';border:1px solid '+borderColor+';border-radius:0 12px 12px 12px;padding:10px 14px;max-width:80%;font-size:.85rem;color:'+textColor+';line-height:1.5;">' + reply + '</div>' +
-      '</div>'
-    );
-    container.scrollTop = container.scrollHeight;
-
-    // Gosia speaks her reply aloud
-    gosiaSpeak(reply);
-
-    // If banned, disable input
-    if (chatBanned) {
-      document.getElementById('chatInput').disabled = true;
-      document.getElementById('chatInput').placeholder = 'You have been removed from the classroom.';
-    }
-  }, isBad ? 500 : 1000 + Math.random() * 1500);
+  }).catch(function(err){
+    if (typingEl) typingEl.remove();
+    if (chatHistory.length && chatHistory[chatHistory.length-1].role === 'user') chatHistory.pop();
+    var line = (err && err.code === 'auth')
+      ? 'Please sign in again to chat with me. 💜'
+      : (err && err.code === 'rate')
+      ? 'One question at a time, please! Give me a moment and try again. 💜'
+      : "I can't reach the classroom right now — try again in a moment!";
+    textEl.textContent = line;
+  });
 }
 
 // Email preview on setup
