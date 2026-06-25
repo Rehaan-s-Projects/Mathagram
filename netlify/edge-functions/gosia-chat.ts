@@ -1,17 +1,18 @@
 // Netlify Edge Function — Ms. Gosia AI classroom chat for the Virtual School.
 // Verifies the caller's Firebase ID token (full RS256 signature check),
-// rate-limits per user, then stream-proxies the Anthropic Messages API back
-// to the browser as SSE.
+// rate-limits per user, then stream-proxies an OpenAI-compatible LLM API
+// (PPQ.AI) to the browser, normalizing its SSE into the simple event shape
+// school.html parses.
 //
 // REQUIRED Netlify env vars:
-//   ANTHROPIC_API_KEY   — Anthropic API key (server-only; never sent to client)
+//   PPQ_API_KEY         — PPQ.AI API key (OpenAI-compatible; server-only, never sent to client)
 //   FIREBASE_PROJECT_ID — e.g. "mathagram-org" (same value mga-token.ts uses)
 
 import type { Context } from "https://edge.netlify.com";
 import { decodeProtectedHeader, importX509, jwtVerify } from "https://esm.sh/jose@5.9.6";
 
-const MODEL = "claude-haiku-4-5";
-const ANTHROPIC_VERSION = "2023-06-01";
+const PPQ_URL = "https://api.ppq.ai/chat/completions";
+const MODEL = "claude-haiku-4.5";
 const MAX_TOKENS = 600;
 const RATE_MAX = 20;          // messages per window
 const RATE_WINDOW_MS = 60_000;
@@ -104,7 +105,7 @@ export default async (req: Request, _ctx: Context) => {
   if (req.method !== "POST") return new Response("POST only", { status: 405, headers: cors });
 
   const projectId = Deno.env.get("FIREBASE_PROJECT_ID");
-  const apiKey = Deno.env.get("ANTHROPIC_API_KEY");
+  const apiKey = Deno.env.get("PPQ_API_KEY");
   if (!projectId || !apiKey) {
     return new Response(JSON.stringify({ error: "server_not_configured" }), {
       status: 503, headers: { ...cors, "Content-Type": "application/json" },
@@ -160,19 +161,18 @@ export default async (req: Request, _ctx: Context) => {
 
   let upstream: Response;
   try {
-    upstream = await fetch("https://api.anthropic.com/v1/messages", {
+    upstream = await fetch(PPQ_URL, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": ANTHROPIC_VERSION,
+        "authorization": "Bearer " + apiKey,
       },
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_TOKENS,
         stream: true,
-        system: GOSIA_SYSTEM_PROMPT,
-        messages: clean,
+        // PPQ.AI is OpenAI-compatible: the system prompt is a message, not a top-level field.
+        messages: [{ role: "system", content: GOSIA_SYSTEM_PROMPT }, ...clean],
       }),
     });
   } catch (_e) {
@@ -183,10 +183,38 @@ export default async (req: Request, _ctx: Context) => {
     return sseFallback("I can't reach the classroom right now — try again in a moment!");
   }
 
-  // Pipe the Anthropic SSE straight through to the browser. (A refusal streams
-  // as a normal 200 with no text deltas; the client treats an empty reply as a
-  // fallback — see streamGosiaReply in school.html.)
-  return new Response(upstream.body, {
+  // Normalize the upstream OpenAI-style SSE (choices[].delta.content, plus ":"
+  // keepalive comments and a final [DONE]) into the simple text_delta events
+  // that school.html's streamGosiaReply already understands. Keeps the browser
+  // decoupled from the provider's wire format. An empty/refusal stream yields no
+  // text events, which the client renders as a gentle fallback line.
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let buf = "";
+  const normalize = new TransformStream<Uint8Array, Uint8Array>({
+    transform(chunk, controller) {
+      buf += decoder.decode(chunk, { stream: true });
+      const parts = buf.split("\n");
+      buf = parts.pop() as string;
+      for (const line of parts) {
+        const l = line.trim();
+        if (!l || l.startsWith(":") || !l.startsWith("data:")) continue;
+        const data = l.slice(5).trim();
+        if (data === "[DONE]") continue;
+        try {
+          const obj = JSON.parse(data);
+          const text = obj?.choices?.[0]?.delta?.content;
+          if (text) {
+            controller.enqueue(encoder.encode(
+              `data: ${JSON.stringify({ type: "content_block_delta", delta: { type: "text_delta", text } })}\n\n`,
+            ));
+          }
+        } catch (_e) { /* ignore keepalive / partial line */ }
+      }
+    },
+  });
+
+  return new Response(upstream.body.pipeThrough(normalize), {
     status: 200,
     headers: {
       ...cors,
