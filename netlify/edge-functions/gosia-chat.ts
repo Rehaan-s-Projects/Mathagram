@@ -35,6 +35,10 @@ Safety (very important — this is a children's classroom):
 - If a student brings up anything unsafe, hateful, sexual, violent, or about self-harm, do not engage with the content. Respond briefly and kindly, steer back to learning, and if they seem to be in danger gently suggest talking to a trusted adult.
 - Never produce profanity, slurs, or adult content.
 
+Formatting:
+- Write in plain, conversational text, like you're speaking to the student.
+- Do NOT use Markdown or any special formatting — no #, *, **, backticks, headers, or bullet-point symbols. Just normal sentences.
+
 Keep replies concise — a few short paragraphs at most.`;
 
 // Cache Google's signing certs (~30 min) so we don't refetch per request.
