@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Command Block Practice — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  :root {
+    --stone-1: #5b5b5b;     /* mc stone */
+    --stone-2: #3c3c3c;     /* mc stone dark */
+    --stone-3: #2a2a2a;
+    --cb-orange: #d97706;   /* impulse command block */
+    --cb-orange-light: #fbbf24;
+    --cb-green: #16a34a;    /* repeat */
+    --cb-purple: #7e22ce;   /* chain */
+    --chat-bg: rgba(15, 15, 15, 0.78);
+    --ink: #f4f4f4; --ink-mute: #a3a3a3;
+    --good: #4ade80; --bad: #f87171; --gold: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: #2a2a2a;
+    /* Subtle stone-block texture (CSS-only) */
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.18) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.18) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.18) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.18) 75%),
+      linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+    background-size: 32px 32px, 32px 32px, 100% 100%;
+    background-position: 0 0, 16px 16px, 0 0;
+    color: var(--ink); min-height: 100vh; margin: 0;
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    image-rendering: pixelated;
+  }
+
+  /* Topbar */
+  .topbar { display: flex; gap: 14px; align-items: center; padding: 14px 22px 6px; max-width: 1040px; margin: 0 auto; }
+  .exit {
+    flex: 0 0 auto; width: 38px; height: 38px;
+    border: 2px solid #1a1a1a; background: var(--stone-1); color: var(--ink);
+    font-size: 1.3rem; line-height: 1; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 -3px 0 #1a1a1a, inset 0 3px 0 rgba(255,255,255,0.08);
+    transition: transform 0.06s, box-shadow 0.06s;
+  }
+  .exit:hover { background: #6b6b6b; }
+  .exit:active { transform: translateY(2px); box-shadow: inset 0 -1px 0 #1a1a1a; }
+  .progress-track {
+    flex: 1; display: flex; gap: 6px; align-items: center;
+    background: var(--stone-3); border: 2px solid #1a1a1a;
+    padding: 3px; height: 22px;
+  }
+  .progress-dot {
+    flex: 1; height: 100%;
+    background: #1a1a1a; border: 1px solid #0a0a0a;
+  }
+  .progress-dot.done { background: linear-gradient(180deg, #fde68a, #d97706); border-color: #92400e; }
+  .progress-dot.cur  { background: linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange)); border-color: #92400e; animation: pulse 1.2s ease-in-out infinite; }
+  .progress-dot.miss { background: linear-gradient(180deg, #fda4af, #be123c); border-color: #881337; }
+  @keyframes pulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.4); } }
+
+  .stage { max-width: 1040px; margin: 0 auto; padding: 6px 22px 40px; }
+
+  /* Lesson meta */
+  .meta { margin: 8px 0 14px; }
+  .meta .unit-label {
+    display: inline-block;
+    font-family: 'Press Start 2P', monospace; font-size: 0.62rem;
+    color: var(--cb-orange-light); background: var(--stone-3);
+    padding: 6px 10px; border: 2px solid #1a1a1a;
+    letter-spacing: 0.08em;
+  }
+  .meta h1 {
+    font-family: 'Press Start 2P', monospace; font-size: 1rem;
+    margin: 8px 0 0; color: var(--ink); line-height: 1.5;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  /* Command block prompt card */
+  .cb-prompt {
+    position: relative; margin: 0 0 16px;
+    background: linear-gradient(180deg, var(--cb-orange) 0%, #92400e 100%);
+    border: 4px solid #1a1a1a;
+    padding: 18px 22px 18px 70px;
+    box-shadow: inset 0 -6px 0 rgba(0,0,0,0.25), inset 0 4px 0 rgba(255,255,255,0.12);
+    color: #fff;
+  }
+  .cb-prompt::before {
+    content: ''; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background:
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange));
+    background-size: 12px 12px, 12px 12px, 100% 100%;
+    background-position: 0 0, 6px 6px, 0 0;
+    border: 3px solid #1a1a1a;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.35);
+  }
+  .cb-prompt .lbl {
+    font-family: 'Press Start 2P', monospace; font-size: 0.55rem;
+    color: #fef3c7; letter-spacing: 0.1em; margin-bottom: 6px;
+  }
+  .cb-prompt .txt {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.98rem;
+    font-weight: 700; line-height: 1.45; color: #fff;
+    text-shadow: 1px 1px 0 #1a1a1a;
+  }
+  .cb-prompt .step-count {
+    position: absolute; right: 14px; top: 12px;
+    font-family: 'Press Start 2P', monospace; font-size: 0.5rem;
+    background: rgba(0,0,0,0.4); color: #fef3c7;
+    padding: 4px 8px; border: 1.5px solid #1a1a1a;
+  }
+
+  /* Chat log */
+  .chat {
+    background: var(--chat-bg); border: 2px solid #1a1a1a;
+    padding: 10px 14px; min-height: 220px; max-height: 280px;
+    overflow-y: auto; margin: 0 0 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.86rem;
+    line-height: 1.55; color: var(--ink); scrollbar-color: #5b5b5b #1a1a1a;
+  }
+  .chat::-webkit-scrollbar { width: 8px; }
+  .chat::-webkit-scrollbar-thumb { background: #5b5b5b; }
+  .chat::-webkit-scrollbar-track { background: #1a1a1a; }
+  .chat .line { margin: 2px 0; }
+  .chat .line .tag {
+    display: inline-block; min-width: 60px; color: #a3a3a3;
+    text-shadow: 1px 1px 0 #000;
+  }
+  .chat .line.user .tag { color: #f4f4f4; }
+  .chat .line.user .body { color: #fbbf24; }
+  .chat .line.sys .tag   { color: #60a5fa; }
+  .chat .line.sys .body  { color: #bfdbfe; }
+  .chat .line.good .tag  { color: #4ade80; }
+  .chat .line.good .body { color: #d1fae5; }
+  .chat .line.bad .tag   { color: #f87171; }
+  .chat .line.bad .body  { color: #fecaca; }
+  .chat .line .body { text-shadow: 1px 1px 0 #000; word-break: break-word; }
+
+  /* Command input row */
+  .cmd-row {
+    display: flex; align-items: stretch; gap: 8px; margin-bottom: 12px;
+  }
+  .cmd-input-wrap {
+    flex: 1; position: relative;
+    background: #1a1a1a; border: 2px solid #1a1a1a;
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.45);
+  }
+  .cmd-input-wrap::before {
+    content: '/'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--cb-orange-light); font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem; font-weight: 700; pointer-events: none;
+    text-shadow: 1px 1px 0 #000;
+  }
+  .cmd-input {
+    width: 100%; border: none; outline: none; background: transparent;
+    color: #f4f4f4; padding: 12px 14px 12px 28px;
+    font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 500;
+    caret-color: var(--cb-orange-light);
+  }
+  .cmd-input::placeholder { color: #6b7280; font-style: italic; }
+
+  .btn {
+    font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
+    padding: 0 18px; height: auto; cursor: pointer; border: 2px solid #1a1a1a;
+    background: var(--stone-1); color: var(--ink);
+    box-shadow: inset 0 -4px 0 #1a1a1a, inset 0 3px 0 rgba(255,255,255,0.10);
+    transition: transform 0.06s, box-shadow 0.06s;
+    letter-spacing: 0.08em;
+  }
+  .btn:hover { background: #6b6b6b; }
+  .btn:active { transform: translateY(2px); box-shadow: inset 0 -1px 0 #1a1a1a; }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange));
+    color: #2a1500;
+    box-shadow: inset 0 -4px 0 #92400e, inset 0 3px 0 rgba(255,255,255,0.25);
+  }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:active { box-shadow: inset 0 -1px 0 #92400e; }
+
+  .toolbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 4px 0 0; }
+  .hint {
+    margin-top: 10px; padding: 8px 12px;
+    background: rgba(0,0,0,0.45); border-left: 3px solid var(--cb-orange-light);
+    font-size: 0.84rem; color: #fef3c7; display: none;
+  }
+  .hint.show { display: block; }
+  .hint code { background: rgba(255,255,255,0.06); padding: 1px 5px; color: #fde68a; }
+
+  /* End card */
+  .end-overlay {
+    position: fixed; inset: 0; z-index: 60; display: none;
+    align-items: center; justify-content: center; padding: 24px;
+    background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(2px);
+  }
+  .end-overlay.show { display: flex; }
+  .end-card {
+    background: linear-gradient(180deg, var(--stone-1) 0%, var(--stone-2) 100%);
+    border: 4px solid #1a1a1a; padding: 26px 24px;
+    max-width: 460px; width: 100%; text-align: center;
+    box-shadow: inset 0 -8px 0 rgba(0,0,0,0.3), inset 0 6px 0 rgba(255,255,255,0.06), 0 18px 36px rgba(0,0,0,0.6);
+  }
+  .end-card h2 {
+    font-family: 'Press Start 2P', monospace; font-size: 0.95rem;
+    color: var(--cb-orange-light); margin: 0 0 12px; text-shadow: 2px 2px 0 #000;
+  }
+  .end-card .score {
+    font-family: 'Press Start 2P', monospace; font-size: 1.6rem;
+    color: #fff; margin: 12px 0; text-shadow: 2px 2px 0 #000;
+  }
+  .end-card p { color: var(--ink-mute); margin: 0 0 18px; font-size: 0.9rem; }
+  .end-actions { display: flex; flex-direction: column; gap: 10px; }
+  .end-actions .btn { padding: 12px 18px; width: 100%; text-decoration: none; display: block; line-height: 1; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div class="topbar">
+    <a class="exit" id="exitBtn" href="index.html" title="Back to Command Block" aria-label="Exit lesson">&times;</a>
+    <div class="progress-track" id="progressTrack" aria-label="Lesson progress"></div>
+  </div>
+
+  <div class="stage">
+    <div class="meta">
+      <span class="unit-label" id="unitLabel">Unit 1 · Lesson 1</span>
+      <h1 id="lessonTitle">Loading…</h1>
+    </div>
+
+    <div class="cb-prompt" id="cbPrompt">
+      <div class="step-count" id="stepCount">1 / 5</div>
+      <div class="lbl">▶ COMMAND BLOCK CHALLENGE</div>
+      <div class="txt" id="promptText">&nbsp;</div>
+    </div>
+
+    <div class="chat" id="chatLog"></div>
+
+    <div class="cmd-row">
+      <div class="cmd-input-wrap">
+        <input type="text" id="cmdInput" class="cmd-input" autocomplete="off" autocorrect="off"
+               autocapitalize="off" spellcheck="false" placeholder="type your command and press Enter…">
+      </div>
+      <button type="button" class="btn btn-primary" id="sendBtn">Run ▶</button>
+    </div>
+
+    <div class="toolbar">
+      <button type="button" class="btn" id="hintBtn">Hint</button>
+      <button type="button" class="btn" id="skipBtn">Skip</button>
+      <button type="button" class="btn" id="resetBtn">Reset</button>
+    </div>
+
+    <div class="hint" id="hint"></div>
+  </div>
+
+  <div class="end-overlay" id="endCard">
+    <div class="end-card">
+      <h2 id="endTitle">Quest Complete!</h2>
+      <div class="score" id="endScore">0 / 5</div>
+      <p id="endMsg">Nice typing — XP banked.</p>
+      <div class="end-actions">
+        <a class="btn btn-primary" id="nextLessonLink" href="index.html">Next Lesson ▶</a>
+        <button type="button" class="btn" id="retryBtn">Replay</button>
+        <a class="btn" href="index.html">Back to Course</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+  </script>
+
+  <script type="module">
+    // ─── URL params ─────────────────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+    let unit   = parseInt(params.get('u') || '1', 10);
+    let lesson = parseInt(params.get('l') || '1', 10);
+    if (!unit) unit = 1;
+    if (!lesson) lesson = 1;
+    const LESSONS_PER_UNIT = 15;
+
+    function unitNameFromStorage(u) {
+      try {
+        const raw = localStorage.getItem('cmd-unit-names');
+        if (!raw) return null;
+        const map = JSON.parse(raw);
+        return map[String(u)] || null;
+      } catch { return null; }
+    }
+    function lessonTitleFromStorage(u, l) {
+      try {
+        const raw = localStorage.getItem('cmd-unit-lessons');
+        if (!raw) return null;
+        const map = JSON.parse(raw);
+        const arr = map[String(u)];
+        return Array.isArray(arr) ? arr[l - 1] : null;
+      } catch { return null; }
+    }
+    const unitName = unitNameFromStorage(unit) || `Unit ${unit}`;
+    const lessonTopic = lessonTitleFromStorage(unit, lesson) || `Lesson ${lesson}`;
+
+    document.getElementById('unitLabel').textContent =
+      `UNIT ${unit} · LESSON ${lesson} · ${unitName.toUpperCase()}`;
+    document.getElementById('lessonTitle').textContent = lessonTopic;
+
+    // ─── Topic-keyed practice banks ─────────────────────────────────────
+    // Each unit maps to a topic; pickFive picks 5 deterministic prompts
+    // from the matching topic so a Scoreboards lesson asks about
+    // scoreboards, an /execute lesson asks about /execute, etc.
+    const TOPIC_BANK = {
+      basics: [
+        { prompt: "Give yourself a command block.", pattern: /^\/?give\s+@[sp]\s+(minecraft:)?command_block/i, hint: "/give @s command_block" },
+        { prompt: "Switch yourself to creative mode.", pattern: /^\/?gamemode\s+(creative|c|1)/i, hint: "/gamemode creative" },
+        { prompt: "Place a command block at your feet.", pattern: /^\/?setblock\s+~\s+~\s+~\s+(minecraft:)?command_block/i, hint: "/setblock ~ ~ ~ command_block" },
+        { prompt: "Give yourself a repeating command block.", pattern: /^\/?give\s+@[sp]\s+(minecraft:)?repeating_command_block/i, hint: "/give @s repeating_command_block" },
+        { prompt: "Give yourself a chain command block.", pattern: /^\/?give\s+@[sp]\s+(minecraft:)?chain_command_block/i, hint: "/give @s chain_command_block" },
+        { prompt: "Place glowstone one block above your head.", pattern: /^\/?setblock\s+~\s+~1\s+~\s+(minecraft:)?glowstone/i, hint: "/setblock ~ ~1 ~ glowstone" },
+        { prompt: "Switch the nearest player to spectator.", pattern: /^\/?gamemode\s+(spectator|sp|3)\s+@p/i, hint: "/gamemode spectator @p" },
+        { prompt: "Give yourself a diamond block.", pattern: /^\/?give\s+@[sp]\s+(minecraft:)?diamond_block/i, hint: "/give @s diamond_block" }
+      ],
+      selectors: [
+        { prompt: "Use a selector to give EVERY player a diamond.", pattern: /^\/?give\s+@a\s+(minecraft:)?diamond/i, hint: "/give @a diamond" },
+        { prompt: "Tag yourself with the tag 'admin'.", pattern: /^\/?tag\s+@[sp]\s+add\s+admin/i, hint: "/tag @s add admin" },
+        { prompt: "Teleport the nearest player to 0 100 0.", pattern: /^\/?(tp|teleport)\s+@p\s+0\s+100\s+0/i, hint: "/tp @p 0 100 0" },
+        { prompt: "Kill all zombies (entity type=zombie).", pattern: /^\/?kill\s+@e\[type=(minecraft:)?zombie\]/i, hint: "/kill @e[type=zombie]" },
+        { prompt: "Give a RANDOM player a golden apple.", pattern: /^\/?give\s+@r\s+(minecraft:)?golden_apple/i, hint: "/give @r golden_apple" },
+        { prompt: "Set glowstone 5 blocks above you (relative coords).", pattern: /^\/?setblock\s+~\s+~5\s+~\s+(minecraft:)?glowstone/i, hint: "/setblock ~ ~5 ~ glowstone" },
+        { prompt: "Give every player within 10 blocks a diamond.", pattern: /^\/?give\s+@a\[distance=\.\.10\]\s+(minecraft:)?diamond/i, hint: "/give @a[distance=..10] diamond" },
+        { prompt: "Remove the tag 'admin' from yourself.", pattern: /^\/?tag\s+@[sp]\s+remove\s+admin/i, hint: "/tag @s remove admin" }
+      ],
+      essentials: [
+        { prompt: "Say \"Hello world!\" in chat.", pattern: /^\/?say\s+hello\s+world!?/i, hint: "/say Hello world!" },
+        { prompt: "Teleport to coordinates 0 100 0.", pattern: /^\/?(tp|teleport)\s+(@[saprn]\s+)?0\s+100\s+0/i, hint: "/tp 0 100 0" },
+        { prompt: "Set the block above your head to glowstone.", pattern: /^\/?setblock\s+~\s+~1?\s+~\s+(minecraft:)?glowstone/i, hint: "/setblock ~ ~1 ~ glowstone" },
+        { prompt: "Fill a 3-wide row of dirt above your head.", pattern: /^\/?fill\s+~-1\s+~1\s+~\s+~1\s+~1\s+~\s+(minecraft:)?dirt/i, hint: "/fill ~-1 ~1 ~ ~1 ~1 ~ dirt" },
+        { prompt: "Set the time to day.", pattern: /^\/?time\s+set\s+(day|1000)/i, hint: "/time set day" },
+        { prompt: "Set the weather to clear.", pattern: /^\/?weather\s+clear/i, hint: "/weather clear" },
+        { prompt: "Set difficulty to peaceful.", pattern: /^\/?difficulty\s+(peaceful|0)/i, hint: "/difficulty peaceful" },
+        { prompt: "Give yourself Speed II for 30 seconds.", pattern: /^\/?effect\s+give\s+@[sp]\s+(minecraft:)?speed\s+30\s+1/i, hint: "/effect give @s speed 30 1" },
+        { prompt: "Enchant your held item with Sharpness V.", pattern: /^\/?enchant\s+@[sp]\s+(minecraft:)?sharpness\s+5/i, hint: "/enchant @s sharpness 5" }
+      ],
+      execute: [
+        { prompt: "Execute /say Hi AS every player.", pattern: /^\/?execute\s+as\s+@a\s+(at\s+@[sp]\s+)?run\s+say\s+hi/i, hint: "/execute as @a at @s run say Hi" },
+        { prompt: "Run /say BLOCK only if stone is at ~ ~-1 ~.", pattern: /^\/?execute\s+if\s+block\s+~\s+~-1\s+~\s+(minecraft:)?stone\s+run\s+say\s+block/i, hint: "/execute if block ~ ~-1 ~ stone run say BLOCK" },
+        { prompt: "Teleport every zombie to 0 100 0 (execute at).", pattern: /^\/?execute\s+at\s+@e\[type=(minecraft:)?zombie\]\s+run\s+(tp|teleport)\s+0\s+100\s+0/i, hint: "/execute at @e[type=zombie] run tp 0 100 0" },
+        { prompt: "Run /say HI positioned at 0 100 0.", pattern: /^\/?execute\s+positioned\s+0\s+100\s+0\s+run\s+say\s+hi/i, hint: "/execute positioned 0 100 0 run say HI" },
+        { prompt: "Kill yourself UNLESS you are in creative mode.", pattern: /^\/?execute\s+unless\s+entity\s+@[sp]\[gamemode=creative\]\s+run\s+kill\s+@[sp]/i, hint: "/execute unless entity @s[gamemode=creative] run kill @s" },
+        { prompt: "Summon a pig AT the nearest player.", pattern: /^\/?execute\s+at\s+@p\s+run\s+summon\s+(minecraft:)?pig/i, hint: "/execute at @p run summon pig" },
+        { prompt: "Make every zombie face the nearest player.", pattern: /^\/?execute\s+as\s+@e\[type=(minecraft:)?zombie\]\s+at\s+@[sp]\s+(facing\s+entity\s+@p|run\s+tp\s+@[sp]\s+~\s+~\s+~\s+facing\s+entity\s+@p)/i, hint: "/execute as @e[type=zombie] at @s run tp @s ~ ~ ~ facing entity @p eyes" },
+        { prompt: "Aligned to xyz, summon TNT at ~ ~ ~.", pattern: /^\/?execute\s+aligned\s+xyz\s+run\s+summon\s+(minecraft:)?tnt/i, hint: "/execute aligned xyz run summon tnt" }
+      ],
+      scoreboards: [
+        { prompt: "Create a dummy objective called 'kills'.", pattern: /^\/?scoreboard\s+objectives\s+add\s+kills\s+dummy/i, hint: "/scoreboard objectives add kills dummy" },
+        { prompt: "Set your own 'kills' score to 0.", pattern: /^\/?scoreboard\s+players\s+set\s+@[sp]\s+kills\s+0/i, hint: "/scoreboard players set @s kills 0" },
+        { prompt: "Add 1 to your own 'kills' score.", pattern: /^\/?scoreboard\s+players\s+add\s+@[sp]\s+kills\s+1/i, hint: "/scoreboard players add @s kills 1" },
+        { prompt: "Display 'kills' in the sidebar.", pattern: /^\/?scoreboard\s+objectives\s+setdisplay\s+sidebar\s+kills/i, hint: "/scoreboard objectives setdisplay sidebar kills" },
+        { prompt: "Reset your 'kills' score.", pattern: /^\/?scoreboard\s+players\s+reset\s+@[sp]\s+kills/i, hint: "/scoreboard players reset @s kills" },
+        { prompt: "Add a 'health' criterion objective.", pattern: /^\/?scoreboard\s+objectives\s+add\s+health\s+(minecraft\.custom:|health)/i, hint: "/scoreboard objectives add health health" },
+        { prompt: "Remove the 'kills' objective.", pattern: /^\/?scoreboard\s+objectives\s+remove\s+kills/i, hint: "/scoreboard objectives remove kills" },
+        { prompt: "Subtract 5 from your 'kills' score.", pattern: /^\/?scoreboard\s+players\s+remove\s+@[sp]\s+kills\s+5/i, hint: "/scoreboard players remove @s kills 5" }
+      ],
+      nbt: [
+        { prompt: "Get the nearest player's Health via /data get.", pattern: /^\/?data\s+get\s+entity\s+@p\s+Health/i, hint: "/data get entity @p Health" },
+        { prompt: "Add the tag 'boss' to all zombies.", pattern: /^\/?tag\s+@e\[type=(minecraft:)?zombie\]\s+add\s+boss/i, hint: "/tag @e[type=zombie] add boss" },
+        { prompt: "Remove NoAI from the nearest zombie.", pattern: /^\/?data\s+remove\s+entity\s+@e\[type=(minecraft:)?zombie,?\s*limit=1\]\s+NoAI/i, hint: "/data remove entity @e[type=zombie,limit=1] NoAI" },
+        { prompt: "Set storage 'cmd:data' count to 5.", pattern: /^\/?data\s+modify\s+storage\s+cmd:data\s+count\s+set\s+value\s+5/i, hint: "/data modify storage cmd:data count set value 5" },
+        { prompt: "Remove the tag 'boss' from your nearest target.", pattern: /^\/?tag\s+@p\s+remove\s+boss/i, hint: "/tag @p remove boss" },
+        { prompt: "List all tags on yourself.", pattern: /^\/?tag\s+@[sp]\s+list/i, hint: "/tag @s list" },
+        { prompt: "Get storage 'cmd:data' count.", pattern: /^\/?data\s+get\s+storage\s+cmd:data\s+count/i, hint: "/data get storage cmd:data count" },
+        { prompt: "Append the value 7 to storage 'cmd:data' list.", pattern: /^\/?data\s+modify\s+storage\s+cmd:data\s+list\s+append\s+value\s+7/i, hint: "/data modify storage cmd:data list append value 7" }
+      ],
+      summon: [
+        { prompt: "Summon a cow at your position.", pattern: /^\/?summon\s+(minecraft:)?cow/i, hint: "/summon cow" },
+        { prompt: "Summon a lightning bolt at the nearest player.", pattern: /^\/?execute\s+at\s+@p\s+run\s+summon\s+(minecraft:)?lightning_bolt|^\/?summon\s+(minecraft:)?lightning_bolt/i, hint: "/execute at @p run summon lightning_bolt" },
+        { prompt: "Summon an invisible armor stand here.", pattern: /^\/?summon\s+(minecraft:)?armor_stand\s+(~\s+~\s+~\s+)?\{[^}]*Invisible[^}]*1b/i, hint: "/summon armor_stand ~ ~ ~ {Invisible:1b}" },
+        { prompt: "Summon a primed TNT at the nearest player.", pattern: /^\/?execute\s+at\s+@p\s+run\s+summon\s+(minecraft:)?tnt|^\/?summon\s+(minecraft:)?tnt/i, hint: "/execute at @p run summon tnt" },
+        { prompt: "Spawn fireworks at every player.", pattern: /^\/?execute\s+at\s+@a\s+run\s+summon\s+(minecraft:)?firework_rocket/i, hint: "/execute at @a run summon firework_rocket" },
+        { prompt: "Summon a zombie with custom name 'Boss'.", pattern: /^\/?summon\s+(minecraft:)?zombie\s+(~\s+~\s+~\s+)?\{[^}]*CustomName[^}]*Boss/i, hint: '/summon zombie ~ ~ ~ {CustomName:\'"Boss"\'}' },
+        { prompt: "Summon a falling block at ~ ~1 ~.", pattern: /^\/?summon\s+(minecraft:)?falling_block\s+~\s+~1\s+~/i, hint: "/summon falling_block ~ ~1 ~ {BlockState:{Name:\"minecraft:tnt\"}}" },
+        { prompt: "Summon an item entity (apple) at your feet.", pattern: /^\/?summon\s+(minecraft:)?item\s+(~\s+~\s+~\s+)?\{[^}]*Item[^}]*apple/i, hint: "/summon item ~ ~ ~ {Item:{id:'minecraft:apple',Count:1b}}" }
+      ],
+      tellraw: [
+        { prompt: "Tell EVERYONE \"Welcome!\" in gold via /tellraw.", pattern: /^\/?tellraw\s+@a\s+\{[^}]*["']text["']\s*:\s*["']Welcome!?["'][^}]*["']color["']\s*:\s*["']gold["']/i, hint: '/tellraw @a {"text":"Welcome!","color":"gold"}' },
+        { prompt: "Show the title 'Welcome' to every player.", pattern: /^\/?title\s+@a\s+title\s+\{?[^}]*Welcome/i, hint: '/title @a title {"text":"Welcome"}' },
+        { prompt: "Use /tellraw to display @p's name in red.", pattern: /^\/?tellraw\s+@a\s+\{[^}]*selector[^}]*@p[^}]*red/i, hint: '/tellraw @a {"selector":"@p","color":"red"}' },
+        { prompt: "Make a clickable tellraw saying 'Press me' that runs /say hi.", pattern: /^\/?tellraw\s+@a\s+\{[^}]*clickEvent[^}]*run_command/i, hint: '/tellraw @a {"text":"Press me","clickEvent":{"action":"run_command","value":"/say hi"}}' },
+        { prompt: "Show 'GO!' as a subtitle for the nearest player.", pattern: /^\/?title\s+@p\s+subtitle\s+\{?[^}]*GO/i, hint: '/title @p subtitle {"text":"GO!"}' },
+        { prompt: "Clear all titles for everyone.", pattern: /^\/?title\s+@a\s+clear/i, hint: "/title @a clear" },
+        { prompt: "Make tellraw text BOLD saying 'Hi'.", pattern: /^\/?tellraw\s+@a\s+\{[^}]*bold[^}]*true/i, hint: '/tellraw @a {"text":"Hi","bold":true}' },
+        { prompt: "Show an action bar saying 'OK' to nearest player.", pattern: /^\/?title\s+@p\s+actionbar\s+\{?[^}]*OK/i, hint: '/title @p actionbar {"text":"OK"}' }
+      ],
+      effects_sounds: [
+        { prompt: "Play a Note Block harp sound for everyone.", pattern: /^\/?playsound\s+(minecraft:)?block\.note_block\.harp/i, hint: "/playsound block.note_block.harp master @a" },
+        { prompt: "Stop all sounds for the nearest player.", pattern: /^\/?stopsound\s+@p/i, hint: "/stopsound @p" },
+        { prompt: "Spawn a heart particle at your eyes.", pattern: /^\/?particle\s+(minecraft:)?heart\s+(~\s+~1\.?6?\s+~|@[sp])/i, hint: "/particle heart ~ ~1.6 ~" },
+        { prompt: "Give Resistance V for 10 seconds.", pattern: /^\/?effect\s+give\s+@[sp]\s+(minecraft:)?resistance\s+10\s+4/i, hint: "/effect give @s resistance 10 4" },
+        { prompt: "Add a bossbar called 'boss:king' named 'King'.", pattern: /^\/?bossbar\s+add\s+boss:king\s+(\{?[^}]*King|"?King"?)/i, hint: '/bossbar add boss:king {"text":"King"}' },
+        { prompt: "Make bossbar 'boss:king' visible to everyone.", pattern: /^\/?bossbar\s+set\s+boss:king\s+players\s+@a/i, hint: "/bossbar set boss:king players @a" },
+        { prompt: "Set bossbar 'boss:king' max value to 100.", pattern: /^\/?bossbar\s+set\s+boss:king\s+max\s+100/i, hint: "/bossbar set boss:king max 100" },
+        { prompt: "Spawn 30 happy_villager particles at your feet.", pattern: /^\/?particle\s+(minecraft:)?happy_villager\s+~\s+~\s+~\s+/i, hint: "/particle happy_villager ~ ~ ~ 1 1 1 0 30" }
+      ],
+      datapacks: [
+        { prompt: "Reload all datapacks.", pattern: /^\/?reload/i, hint: "/reload" },
+        { prompt: "Call function 'mypack:main'.", pattern: /^\/?function\s+mypack:main/i, hint: "/function mypack:main" },
+        { prompt: "List installed datapacks.", pattern: /^\/?datapack\s+list/i, hint: "/datapack list" },
+        { prompt: "Enable datapack 'file/mypack'.", pattern: /^\/?datapack\s+enable\s+"?file\/mypack"?/i, hint: '/datapack enable "file/mypack"' },
+        { prompt: "Disable datapack 'file/mypack'.", pattern: /^\/?datapack\s+disable\s+"?file\/mypack"?/i, hint: '/datapack disable "file/mypack"' },
+        { prompt: "Grant the advancement 'mypack:start' to yourself.", pattern: /^\/?advancement\s+grant\s+@[sp]\s+only\s+mypack:start/i, hint: "/advancement grant @s only mypack:start" },
+        { prompt: "Revoke all advancements from yourself.", pattern: /^\/?advancement\s+revoke\s+@[sp]\s+everything/i, hint: "/advancement revoke @s everything" },
+        { prompt: "Give yourself loot from table 'mypack:rare'.", pattern: /^\/?loot\s+give\s+@[sp]\s+loot\s+mypack:rare/i, hint: "/loot give @s loot mypack:rare" }
+      ]
+    };
+
+    // Map each of the 41 units to a topic. Units without a match use the
+    // 'essentials' bank as a safe default.
+    const UNIT_TOPIC = {
+      1:'basics',
+      2:'selectors', 12:'selectors', 35:'selectors',
+      3:'essentials',
+      4:'execute', 14:'execute',
+      5:'scoreboards', 15:'scoreboards',
+      6:'nbt', 16:'nbt', 17:'nbt', 34:'nbt',
+      7:'summon', 18:'summon', 19:'summon', 25:'summon', 38:'summon',
+      8:'tellraw', 22:'tellraw',
+      20:'effects_sounds', 21:'effects_sounds', 23:'effects_sounds',
+      24:'nbt', 27:'nbt', 28:'datapacks', 29:'datapacks', 30:'datapacks', 31:'datapacks',
+      9:'execute', 36:'execute', 37:'execute',
+      10:'datapacks', 33:'datapacks',
+      11:'essentials', 13:'essentials',
+      26:'summon', 39:'summon', 40:'datapacks', 41:'essentials',
+      32:'datapacks'
+    };
+    const topic = UNIT_TOPIC[unit] || 'essentials';
+    const BANK = TOPIC_BANK[topic] || TOPIC_BANK.essentials;
+
+    // Deterministic 5-prompt selection seeded by (unit, lesson) so each
+    // lesson feels fresh but is reload-safe.
+    function pickFive(seed) {
+      const out = [];
+      const used = new Set();
+      let s = seed || 1;
+      while (out.length < 5 && used.size < BANK.length) {
+        s = (s * 9301 + 49297) % 233280;
+        const idx = s % BANK.length;
+        if (!used.has(idx)) { used.add(idx); out.push(BANK[idx]); }
+      }
+      return out;
+    }
+    const PROMPTS = pickFive(unit * 100 + lesson);
+
+    // ─── Build progress track ────────────────────────────────────────────
+    const track = document.getElementById('progressTrack');
+    PROMPTS.forEach(() => {
+      const d = document.createElement('div');
+      d.className = 'progress-dot';
+      track.appendChild(d);
+    });
+
+    // ─── Chat log helpers ────────────────────────────────────────────────
+    const chat = document.getElementById('chatLog');
+    function appendChat(kind, tag, body) {
+      const line = document.createElement('div');
+      line.className = 'line ' + kind;
+      line.innerHTML = `<span class="tag">[${tag}]</span> <span class="body"></span>`;
+      line.querySelector('.body').textContent = body;
+      chat.appendChild(line);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    appendChat('sys', 'system', `Loaded "${lessonTopic}" (${unitName}). 5 challenges queued.`);
+    appendChat('sys', 'system', `Type the requested command and press Enter to execute.`);
+
+    // ─── State ──────────────────────────────────────────────────────────
+    let step = 0, correct = 0, attempts = 0;
+    function renderPrompt() {
+      const cur = PROMPTS[step];
+      if (!cur) { endLesson(); return; }
+      document.getElementById('promptText').textContent = cur.prompt;
+      document.getElementById('stepCount').textContent = (step + 1) + ' / ' + PROMPTS.length;
+      document.getElementById('hint').classList.remove('show');
+      document.getElementById('cmdInput').focus();
+      // progress dots
+      [...track.children].forEach((d, i) => {
+        d.classList.remove('done', 'cur', 'miss');
+        if (i < step) d.classList.add('done');
+        else if (i === step) d.classList.add('cur');
+      });
+    }
+    renderPrompt();
+
+    function submit() {
+      const input = document.getElementById('cmdInput');
+      const raw = input.value.trim();
+      if (!raw) return;
+      attempts++;
+      appendChat('user', 'you', raw.startsWith('/') ? raw : '/' + raw);
+      const cur = PROMPTS[step];
+      if (cur.pattern.test(raw)) {
+        appendChat('good', '✔ ok', 'Command executed successfully.');
+        correct++;
+        track.children[step].classList.remove('cur');
+        track.children[step].classList.add('done');
+        step++;
+        input.value = '';
+        setTimeout(renderPrompt, 250);
+      } else {
+        appendChat('bad', '✘ err', 'That doesn\'t match the challenge. Try again or tap Hint.');
+        input.select();
+      }
+    }
+    document.getElementById('sendBtn').addEventListener('click', submit);
+    document.getElementById('cmdInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); submit(); }
+    });
+    document.getElementById('hintBtn').addEventListener('click', () => {
+      const cur = PROMPTS[step]; if (!cur) return;
+      const hint = document.getElementById('hint');
+      hint.innerHTML = 'Try: <code>' + cur.hint + '</code>';
+      hint.classList.add('show');
+      appendChat('sys', 'hint', cur.hint);
+    });
+    document.getElementById('skipBtn').addEventListener('click', () => {
+      if (!PROMPTS[step]) return;
+      appendChat('bad', 'skip', 'Skipped — counted as a miss.');
+      track.children[step].classList.remove('cur');
+      track.children[step].classList.add('miss');
+      step++;
+      document.getElementById('cmdInput').value = '';
+      setTimeout(renderPrompt, 200);
+    });
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+
+    function resetAll() {
+      step = 0; correct = 0; attempts = 0;
+      chat.innerHTML = '';
+      appendChat('sys', 'system', 'Reset. 5 challenges queued again.');
+      document.getElementById('cmdInput').value = '';
+      document.getElementById('endCard').classList.remove('show');
+      [...track.children].forEach(d => d.className = 'progress-dot');
+      renderPrompt();
+    }
+    document.getElementById('retryBtn').addEventListener('click', resetAll);
+
+    // ─── End of lesson ──────────────────────────────────────────────────
+    function endLesson() {
+      const pct = correct / PROMPTS.length;
+      document.getElementById('endScore').textContent = correct + ' / ' + PROMPTS.length;
+      let msg;
+      if (pct === 1)        msg = 'Flawless run — all commands executed. 💎';
+      else if (pct >= 0.8)  msg = 'Solid work — XP banked.';
+      else if (pct >= 0.4)  msg = 'XP banked. Replay to clear the misses.';
+      else                  msg = 'Reload your datapack and try the lesson again.';
+      document.getElementById('endMsg').textContent = msg;
+      const nextHref = lesson < LESSONS_PER_UNIT
+        ? `command-practice.html?u=${unit}&l=${lesson + 1}`
+        : `command-practice.html?u=${unit + 1}&l=1`;
+      document.getElementById('nextLessonLink').href = nextHref;
+      document.getElementById('endCard').classList.add('show');
+      if (pct >= 0.6) markComplete();
+    }
+
+    // ─── Firestore: mark complete ───────────────────────────────────────
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return; alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } =
+          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        const pos = LESSONS_PER_UNIT * (unit - 1) + lesson;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'command-block'),
+          { ['cmd-' + pos]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+  </script>
+</body>
+</html>

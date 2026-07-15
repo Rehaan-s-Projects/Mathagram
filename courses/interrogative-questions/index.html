@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interrogative Questions — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 660px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Interrogative Questions</h1>
+    <p>❓ <em>Every</em> interrogative word, phrase &amp; form in English — 5 W&rsquo;s, How, yes/no, tag, choice, indirect, polite, negative, rhetorical; advanced relatives <strong>whom · whose · which · that</strong>; archaic <strong>wherein · whereof · whereby · whereupon · whither · whence · wherefore</strong>; compound <strong>what for · what if · what else · which way · how so · how dare · what sort/kind/type/manner</strong>; the <strong>-soever</strong> suffix; cleft Q ("what is it that…?"); free relatives (<strong>whoever · whatever · wherever · whichever · however</strong>); echo Q, declarative Q, mini-Q, multiple-wh Q; the world&rsquo;s question marks (<strong>¿ ; ՞ ؟ ？</strong>); cross-language interrogatives across French, Spanish, German, Italian, Japanese, Mandarin, Arabic, Russian, Hebrew, Korean, Vietnamese, Thai, Turkish, Hindi, Swahili, Welsh, Hawaiian, ASL, Esperanto &amp; Latin; pedagogy (Socratic, Bloom, funnel, probing), hypothetical &amp; counterfactual, and conversational repair (sluicing, "sorry, what?"). 480 lessons across 40 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Question Foundations',['What Is an Interrogative?','Statement vs Question','The ? Mark — When & Why','Rising vs Falling Intonation','Subject vs Object Questions','Question Word Order in English','Auxiliary Verbs in Questions','Inverted vs Non-Inverted','Direct vs Indirect Form','Question Spelling & Punctuation','Common Question Mistakes','Foundations Checkpoint']],
+      [2,'The 5 W\'s',['Who — People as Subject','Who — People as Object','What — Things & Actions','"What kind of…" & "What time…"','When — Time Questions','"When did" vs "When does"','Where — Place Questions','"Where from / to / at"','Why — Reason Questions','"Why not…" Suggestions','Mixed 5W Drill','5 W\'s Checkpoint']],
+      [3,'The H Questions',['How — Manner Questions','"How are you?" Greetings','How Much — Uncountable','How Many — Countable','How Long — Duration','How Often — Frequency','How Old / Tall / Far','How Come (informal)','"How about…" Suggestions','Mixed H Drill','H + 5W Combined','H Questions Checkpoint']],
+      [4,'Yes / No Questions',['Be-Verb Inversion (Is/Are/Was/Were)','Do / Does / Did Auxiliary','Have / Has Got Questions','Modal Inversion (Can/Will/Should)','Present Perfect Yes/No','Past Continuous Yes/No','Future Yes/No','Conditional Yes/No','Short Answers — "Yes, I do."','Short Answers — "No, I don\'t."','Long-Form Replies','Yes/No Checkpoint']],
+      [5,'Tag Questions',['What\'s a Tag Question?','Positive → Negative Tag','Negative → Positive Tag','Modal Tags (will, can, should)','"I\'m…, aren\'t I?"','Imperative Tags ("…, will you?")','"Let\'s…, shall we?"','Rising vs Falling Tag Intonation','Real Question vs Confirmation','"There is/are" Tags','Tags After "Everyone / Nobody"','Tag Questions Checkpoint']],
+      [6,'Choice & Alternative Questions',['"Tea or coffee?" — Or-Questions','Or-Questions vs Yes/No','Three-Item Choices','"Which" + Options','"Would you rather…?"','Polite Choice Phrasing','Restaurant / Shop Scenarios','Travel Booking Choices','"Either … or …"','Choice with Modals','Mixed Choice Drill','Choice Checkpoint']],
+      [7,'Indirect Questions',['What\'s an Indirect Question?','"Could you tell me…?"','"Do you know…?"','"I wonder if…"','Word Order — No Inversion!','Indirect Yes/No with "if / whether"','Indirect Wh-Question Order','Reported-Question Tense Shift','Polite Customer-Service Phrasing','Indirect-Quotation Punctuation','Mixed Indirect Drill','Indirect Q Checkpoint']],
+      [8,'Question Words in Embedded Clauses',['"I don\'t know what you mean."','"Tell me where…"','"I\'m not sure why…"','"It depends on how…"','Whoever / Whatever / Wherever','Free-Relative Clauses','Embedded with Subjunctive','Tense Backshift Rules','Common Embedded Mistakes','Reported-Speech Bridge','Mixed Embedded Drill','Embedded Checkpoint']],
+      [9,'Polite Question Forms',['"May I…?" Permission','"Could I…?" Soft Request','"Would you mind…?"','"Do you mind if I…?"','"Could you possibly…?"','"If it\'s not too much trouble…"','Customer-Service Politeness','Hotel & Travel Politeness','Politeness in Email','Cross-Cultural Politeness','Over-Polite vs Natural','Polite Forms Checkpoint']],
+      [10,'Negative Questions',['"Don\'t you like it?"','"Isn\'t it lovely?"','"Why don\'t you…?"','"Haven\'t you finished?"','"Aren\'t you tired?"','Expressing Surprise','Expressing Confirmation Bias','Negative Yes/No Reply Logic','Rhetorical Negative Q','Negative Q with Modals','"Wouldn\'t you say…?"','Negative Q Checkpoint']],
+      [11,'Rhetorical & Leading Questions',['What\'s a Rhetorical Question?','Persuasive Rhetorical Q','"Who knows?" Expressions','Sarcastic Questions','Loaded Questions (fallacy)','Leading Q in Interviews','Legal Cross-Examination Style','Socratic Method Questions','Rhetorical Q in Speeches','Rhetorical Q in Writing','Detecting Manipulation','Rhetorical Q Checkpoint']],
+      [12,'Cross-Language Interrogatives',['French "Est-ce que…?"','French Inversion (avez-vous?)','Spanish ¿Inverted Punctuation?','Spanish Subject-Drop in Q','Italian Rising Intonation','German V2 Inversion','Japanese か Particle','Mandarin 吗 Particle','Mandarin Wh-Question Position','Arabic Question Particles','Russian Word Order','Cross-Language Checkpoint']],
+      [13,'Whom — The Formal Object Question',['What "Whom" Actually Is','Subject Who vs Object Whom','"Whom did you see?"','"Whom should I ask?"','Preposition + Whom — "To whom"','Preposition + Whom — "With whom"','Preposition + Whom — "By whom / For whom"','Pied-Piping vs Stranding','Whom in Legal & Academic Style','Whom in Journalism Style','When Native Speakers Use "Who" Instead','Whom Checkpoint']],
+      [14,'Whose — The Possessive Question',['"Whose book is this?"','Whose + Singular vs Plural Noun','Whose vs Who\'s — The Apostrophe Trap','Possessive Replies — "It\'s mine."','Whose + Abstract Noun ("Whose idea?")','Whose with Animals & Objects','Whose in Indirect Questions','Whose in Reported Speech','Whose vs Of Which','Whose in Legal Wills & Deeds','Whose in Riddles','Whose Checkpoint']],
+      [15,'Which — Discriminating Questions',['Which vs What — Closed vs Open Set','Which + Singular Count Noun','Which + Plural Count Noun','Which One / Which Ones','"Which of these / those / them"','Which + Superlative ("Which is best?")','Which in Multiple-Choice Format','Which with Prepositions','Which in Indirect Questions','Which in Trivia & Quiz Phrasing','Which in Restaurant Choices','Which Checkpoint']],
+      [16,'That, Which, Who as Relative Pronouns',['Defining vs Non-Defining Clauses','The Comma Rule for Relatives','Restrictive "That" Usage','Non-Restrictive "Which" Usage','"Who" vs "That" for People','"Which" for Things & Animals','"Whose" in Relative Clauses','"Whom" in Relative Clauses','Omitting the Relative Pronoun','Stacked Relative Clauses','Reduced Relative Clauses (-ing / -ed)','Relatives Checkpoint']],
+      [17,'Emphatic & Multi-Word Interrogatives',['"How on earth…?"','"What in the world…?"','"Why ever…?"','"Where the heck…?"','"Who in their right mind…?"','"How come…?" (informal)','"What the…?" Surprise','"Just how…?" Intensifier','"And what about…?"','"So what?" Dismissal','"Now what?" Frustration','Emphatic Q Checkpoint']],
+      [18,'Formal Question Phrases',['"For what purpose…?"','"In what way…?"','"To what extent…?"','"Under what circumstances…?"','"By what means…?"','"Of what kind…?"','"On what grounds…?"','"At what point…?"','"From whom / From what…?"','"In whose name / by whose authority"','Academic-Paper Question Phrasing','Formal Phrasing Checkpoint']],
+      [19,'Reported Speech with Whom / Whose / Which',['"He asked whom I knew."','"She wondered whose it was."','"They asked which one I wanted."','Backshift of Tense in Reported Q','Sequence of Tenses Rules','Reporting Verbs — ask, wonder, inquire','Embedded "if / whether" with Whom','Stripping Quotation Marks','Time-Reference Shifts ("yesterday" → "the day before")','Pronoun Shifts in Reported Q','Punctuation in Reported Q','Reported-Speech Checkpoint']],
+      [20,'Mid-Course Mastery — Core 20',['Mixed Wh-Question Drill','Mixed Yes/No Drill','Formal vs Informal Switching','Spoken vs Written Register','Tag-Question Speed Drill','Whom / Whose / Which Speed Drill','Defining vs Non-Defining Clause Drill','Cross-Language Conversion Drill','Reported-Speech Conversion','Politeness-Ladder Drill','Detecting Loaded / Leading Q','Core-20 Mastery Checkpoint']],
+      [21,'Archaic & Legal Interrogatives',['What "Wh- + Preposition" Compounds Mean','Wherein — "In Which"','Whereof — "Of Which"','Whereby — "By Which / By Means of Which"','Whereupon — "After Which"','Whereat — "At Which"','Wherefrom — "From Which"','Whereto — "To Which"','Wherefore — "For What Reason" (Shakespearean)','Modern Legal Usage in Contracts','Reading 18th-Century English','Archaic Interrogative Checkpoint']],
+      [22,'Whither & Whence — Directional Archaisms',['What "Whither" Means','What "Whence" Means','Whither — "To Where"','Whence — "From Where"','"Whither goest thou?" (KJV)','"Whence came you?" (Literary)','Hither / Thither / Yonder Mates','Modern Equivalents — Where to / Where from','Whence in Logic — "It does not follow whence"','Reading Pre-1900 Literature','"Whither democracy?" Modern Headlines','Directional-Archaism Checkpoint']],
+      [23,'Compound "What" Questions',['"What for?" — Purpose','"What for!" — Punishment Threat','"What if?" — Hypothetical','"What if not?"','"What else?" — Exclusion','"What now?"','"What then?"','"What about you?"','"What of it?"','"What of…?" (Literary)','"What ever?" vs "Whatever"','Compound-What Checkpoint']],
+      [24,'Exclusion Questions — "Who Else?", "Where Else?"',['Who Else? — Person Exclusion','Where Else? — Place Exclusion','When Else? — Time Exclusion','Why Else? — Reason Exclusion','How Else? — Manner Exclusion','What Else?','Which Else?','"No one else" Negative Reply','"Anywhere else" Open Reply','"Anyone else? Speak now."','Else in Indirect Questions','Exclusion-Q Checkpoint']],
+      [25,'Directional Questions — Which Way / What Way',['"Which way?" — Direction','"What way?" — Manner & Direction','"Which side?"','"Which direction?"','"From which direction?"','"Toward which way?"','Navigation Phrasing','"Which floor?"','Compass-Point Q (N/S/E/W)','"Which exit?"','Travel & Map Q','Direction Checkpoint']],
+      [26,'Modal Variants of How',['"How so?" — Asking Why','"How dare you!"','"How could you?"','"How could it be?"','"How would I know?"','"How might one…?"','"How can…?" — Permission','"How can…?" — Disbelief','"How should I…?"','"How shall I…?"','"How may I help?" (formal)','How-Modal Checkpoint']],
+      [27,'What Sort / Kind / Type / Manner of',['"What sort of X?"','"What kind of X?"','"What type of X?"','"What manner of X?" (archaic)','Sort vs Kind vs Type — Register','"What sort of person…?"','"What kind of question…?"','"What type of music…?"','"What manner of beast…?" (literary)','Indirect-Form Variants','Reply Patterns','Sort-Kind-Type Checkpoint']],
+      [28,'The -soever Suffix',['What "-soever" Adds','Whatsoever — "Anything at All"','Whomsoever — Object Form','Whosoever — Subject Form','Wheresoever','Whensoever','Howsoever','Whichsoever','-soever in Legal Documents','-soever in KJV Bible','-soever in Vows & Oaths','-soever Checkpoint']],
+      [29,'Cleft Questions — "What is it that…?"',['What\'s a Cleft Sentence?','"It is X that Y" Structure','"What is it that you want?"','"Who is it that called?"','"Where is it that we go?"','"When was it that…?"','"Why is it that…?"','"How is it that…?"','Cleft vs Plain Q Emphasis','Pseudo-Cleft Form','Inverted Pseudo-Cleft','Cleft-Q Checkpoint']],
+      [30,'Free Relatives — Whoever / Whatever / Wherever',['What Free Relatives Are','Whoever — "Anyone Who"','Whomever — Object Form','Whosever — Possessive','Whatever — "Anything That"','Whichever — Choice','Wherever — "Any Place That"','Whenever — "Any Time That"','However — "In Any Way That"','Free Relative vs Interrogative — Same Word','-ever in Concessive Clauses','Free-Relative Checkpoint']],
+      [31,'Echo Questions — "He said WHAT?"',['What\'s an Echo Question?','Stress + Rising Intonation','Single-Word Echoes ("What?" "Who?")','Echoing Embedded Wh','Echo of Yes/No ("He DID?")','Echo with Disbelief','Echo with Sarcasm','Echo of Multiple Words','Punctuation in Writing (CAPS?)','Echo in Comics & Speech Bubbles','Cross-Language Echo Q','Echo-Q Checkpoint']],
+      [32,'Declarative Questions — Rising Intonation',['What\'s a Declarative Question?','"You\'re coming?" — Statement Order','Rising Intonation Without Inversion','Confirmation vs Genuine Q','Marking Uncertainty','Marking Surprise','Marking Politeness','Customer-Service Scripts','Therapy / Counseling Use','Declarative Q in Court Testimony','Punctuation in Writing','Declarative-Q Checkpoint']],
+      [33,'Mini-Questions & Short Replies',['What Mini-Questions Are','"Are you?" Short Q','"Did he?" Short Q','"Has she?"','"Can they?"','"Was it?"','"Will you?"','Surprise Mini-Q','Skeptical Mini-Q','Polite-Acknowledgment Mini-Q','Mini-Q in British vs American English','Mini-Q Checkpoint']],
+      [34,'Multiple Wh-Questions',['What Multiple Wh-Q Are','"Who said what?"','"Who gave what to whom?"','Word-Order Rules','Distributive Interpretation','Pair-List Interpretation','Single-Answer Interpretation','Embedded Multiple Wh','Cross-Linguistic Multiple Wh','Multiple Wh in Quizzes','Multiple Wh in Game Shows','Multiple-Wh Checkpoint']],
+      [35,'Question Marks Around the World',['The Latin "?"','Spanish ¿ Inverted','Catalan ¿ Optional','Greek ; (Semicolon-Like)','Armenian ՞ (Superscript)','Arabic ؟ (Mirrored)','Hebrew Question Punctuation','Coptic & Old Cyrillic','Chinese ？(Full-Width)','Japanese ？(Optional)','Question-Mark Origins (Medieval)','Punctuation-of-Q Checkpoint']],
+      [36,'Cross-Language Q — Hebrew · Korean · Vietnamese · Thai · Turkish · Hindi',['Hebrew Interrogative ה (he)','Hebrew Question Words (מי, מה, איפה)','Korean ㅂ니까? Polite','Korean -요? Casual','Vietnamese Không Particle','Vietnamese Có…không?','Thai ไหม / หรือ Particles','Thai Question Words','Turkish -mi Suffix','Turkish Question Words','Hindi क्या (kya) Particle','6-Language Checkpoint']],
+      [37,'Cross-Language Q — Swahili · Welsh · Hawaiian · ASL · Esperanto · Latin',['Swahili "Je…?" Sentence-Initial','Swahili Wh-Words (Nani, Nini, Wapi)','Welsh "A…?" Particle','Welsh "Oes…?" for "Is there…?"','Hawaiian Question Patterns','ASL Eyebrow-Up vs Eyebrow-Down','ASL Wh-Sign Position','Esperanto Ĉu — Universal Yes/No','Esperanto Ki- Words','Latin -ne · Num · Nonne','Latin Wh-Words (Quis, Quid, Ubi)','6-Language Checkpoint']],
+      [38,'Pedagogical Question Techniques',['Open vs Closed Questions in Teaching','The Funnel Technique','The Probing Question','The Socratic Method','Bloom\'s Taxonomy in Q-Phrasing','Wait-Time After a Question','Cold-Call vs Hand-Raise','Survey & Likert Q','Behavioral Interview Q','Situational Interview Q','Avoiding Leading Q','Pedagogy-Q Checkpoint']],
+      [39,'Hypothetical & Counterfactual Questions',['"What would you do if…?"','"What if I had…?"','Second-Conditional Q','Third-Conditional Q','Mixed-Conditional Q','"Would you rather…?"','"Would you ever…?"','"Could you ever…?"','"Suppose / Imagine…"','Trolley-Problem-Style Q','Counterfactual History Q','Hypothetical-Q Checkpoint']],
+      [40,'Question Fragments & Conversational Repair',['Sluicing — "He left." / "When?"','Bare Wh — "Who?", "Where?"','"Sorry, what?"','"Pardon?" (formal)','"Come again?"','"Say that again?"','"Beg your pardon?"','Repair After Mishearing','Repair After Misunderstanding','Repair in Phone Calls','Repair in Noisy Environments','All-Interrogatives Final Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'iq-' + n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i === titles.length - 1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('interrogative-questions');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('interrogative-questions');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

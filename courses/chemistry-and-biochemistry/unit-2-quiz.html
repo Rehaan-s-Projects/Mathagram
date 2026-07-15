@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 2 Quiz — Molecular &amp; Ionic Bonding — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-science); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .quiz-meta { display: inline-block; padding: 6px 14px; background: rgba(34,197,94,0.12); color: #16a34a; font-weight: 700; border-radius: 999px; font-size: 0.85rem; margin-top: 8px; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Chemistry and Biochemistry</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 2 &middot; Checkpoint Quiz</div>
+    <h1>Molecular &amp; Ionic Bonding Quiz</h1>
+    <span class="quiz-meta">15 Questions</span>
+    <p style="margin-top:20px;">
+      Test what you've learned about Lewis structures, VSEPR geometry, ionic vs covalent bonding, hybridization, polarity, and intermolecular forces. Pass this quiz to complete Unit 2.
+    </p>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Quiz</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(renderMath, 80);
+      }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'How many valence electrons does a Lewis structure for CO₂ show in total?',
+        options: ['8', '12', '16', '20'],
+        correctIndex: 2
+      },
+      {
+        type: 'multiple-choice',
+        question: 'According to VSEPR theory, what is the molecular geometry of methane (CH₄)?',
+        options: ['Trigonal planar', 'Tetrahedral', 'Bent', 'Trigonal pyramidal'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'Ionic bonds form between atoms with very large differences in electronegativity.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'The molecular geometry of NH₃ is ___ pyramidal.',
+        answer: 'trigonal'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which molecule contains a polar bond but is overall NONPOLAR?',
+        options: ['H₂O', 'NH₃', 'CO₂', 'HF'],
+        correctIndex: 2
+      },
+      {
+        type: 'matching',
+        question: 'Match each hybridization to its electron domain geometry.',
+        pairs: [
+          { left: 'sp', right: 'Linear' },
+          { left: 'sp²', right: 'Trigonal planar' },
+          { left: 'sp³', right: 'Tetrahedral' },
+          { left: 'sp³d²', right: 'Octahedral' }
+        ]
+      },
+      {
+        type: 'multiple-choice',
+        question: 'A double bond consists of:',
+        options: ['Two sigma bonds', 'Two pi bonds', 'One sigma and one pi bond', 'One sigma and two pi bonds'],
+        correctIndex: 2
+      },
+      {
+        type: 'true-false',
+        question: 'Resonance structures differ in the placement of electrons, not atoms.',
+        correctAnswer: true
+      },
+      {
+        type: 'fill-blank',
+        question: 'The bond order of N₂ is ___.',
+        answer: '3'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the formal charge on the central nitrogen in NO₃⁻ (with three N=O resonance structures)?',
+        options: ['-1', '0', '+1', '+2'],
+        correctIndex: 2
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which compound has the LARGEST lattice energy?',
+        options: ['NaCl', 'KBr', 'MgO', 'CsI'],
+        correctIndex: 2
+      },
+      {
+        type: 'ordering',
+        question: 'Order these bonds by INCREASING bond strength.',
+        correctOrder: ['C–C single', 'C=C double', 'C≡C triple'],
+        shuffled: ['C≡C triple', 'C–C single', 'C=C double']
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Metallic bonding is best described as:',
+        options: [
+          'Shared electron pairs between two atoms',
+          'Electrostatic attraction between cations and a sea of delocalized electrons',
+          'Transfer of electrons from metal to nonmetal',
+          'Hydrogen bonding between metal atoms'
+        ],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'SF₆ is an example of an expanded octet (more than 8 valence electrons on the central atom).',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'In molecular orbital theory, the bond order of O₂ is:',
+        options: ['1', '1.5', '2', '3'],
+        correctIndex: 2
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'chemistry-and-biochemistry',
+      lessonId: 'unit-2-quiz',
+      nextHref: 'index.html',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

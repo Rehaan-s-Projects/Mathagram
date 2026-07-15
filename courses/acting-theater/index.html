@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acting & Theater — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Acting & Theater</h1>
+    <p>From audition to opening night — every acting technique deep (Stanislavski, Meisner, Strasberg, Adler, Hagen, Suzuki & Viewpoints, Alexander, Linklater, Fitzmaurice, Knight-Thompson speech), stage combat, movement & dance for actors, audition technique, self-tape, cold reading, improv (long & short form), stand-up, sketch & solo, voiceover, audiobook narration, dialects, mime/mask/Commedia dell'arte, full theater history (Greek/Roman, Medieval, Elizabethan & Shakespeare, Restoration, 19th-c Realists, Brecht, Beckett & Absurdism, Williams/Miller/O'Neill, August Wilson & Black theater), musical theater (Sondheim, Hamilton & modern), theater production crew, Broadway, regional theater, film & TV career, agents, headshots, and the great performers. 53 units, 788 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Acting Foundations",["What Is Acting?","Acting vs Performing","Truth in Imaginary Circumstances","Why People Become Actors","Common Beginner Mistakes","Audition Anxiety","Joining a Theater Company","Famous Actor Quotes","Books to Read \u2014 Stanislavski, Meisner, Adler","Films to Watch","Plays to Read","Watching Live Theater","Watching With an Actor's Eye","Setting Goals","Foundations Checkpoint"]],
+      [2,"Stanislavski Method",["Konstantin Stanislavski","An Actor Prepares","Building a Character","Creating a Role","Magic If","Given Circumstances","Objectives & Super-Objectives","Tactics","Beats & Units","Active Verbs","Sense Memory","Affective Memory","Public Solitude","Through-Line of Action","Stanislavski Checkpoint"]],
+      [3,"Meisner Technique",["Sanford Meisner","Repetition Exercises","Reality of Doing","Living Truthfully Under Imagined Circumstances","Independent Activities","Knock Exercise","Three-Moment Game","Emotional Preparation","Meisner Schools \u2014 Neighborhood Playhouse","Famous Meisner Actors","Meisner Today \u2014 Robert Carnegie","Adapting Meisner for Camera","Meisner & Improv","Meisner & Scene Study","Meisner Checkpoint"]],
+      [4,"Strasberg Method",["Lee Strasberg","Method Acting Origins","Sense Memory Exercises","Emotional Memory","Private Moment","Substitution","Coffee Cup Exercise","Animal Exercises","The Actors Studio \u2014 NYC","Famous Method Actors \u2014 De Niro, Brando, Pacino","Critiques of Method","When to Use Method","Method on Camera","Method on Stage","Strasberg Checkpoint"]],
+      [5,"Adler Technique",["Stella Adler","Imagination as Foundation","Script Analysis","Given Circumstances Deep Dive","Action vs Activity","Adler Studio \u2014 NYC, LA","Adler vs Strasberg","Marlon Brando \u2014 Adler's Most Famous Student","Justifying Behavior","Building from Text","Specificity","Heightened Imagination","Adler & Classical Text","Adler & Modern Plays","Adler Checkpoint"]],
+      [6,"Voice & Speech",["Diaphragmatic Breathing","Resonance for Stage","Articulation Exercises","Linklater Voice Work","Fitzmaurice Voicework","Lessac Voice","Knight-Thompson Speechwork","International Phonetic Alphabet","Standard American Speech","RP \u2014 Received Pronunciation","Dialect Study","Cockney","Southern American","Irish","Voice & Speech Checkpoint"]],
+      [7,"Movement & Body",["Alexander Technique","Feldenkrais Method","Laban Movement","Viewpoints \u2014 Anne Bogart","Suzuki Method","Stage Combat \u2014 SAFD","Period Movement","Mask Work","Clown Work","Mime \u2014 Marcel Marceau","Greek Chorus Movement","Commedia dell'arte","Bartenieff Fundamentals","Movement for Camera","Movement Checkpoint"]],
+      [8,"Scene Study",["Reading the Play First","Character Backstory","Relationship Mapping","Status Plays","Substitution Work","Beat Changes","Discoveries \u2014 Moments","Listening on Stage","Pause vs Filling","Reacting","Working with Scene Partners","Scene Rehearsal Etiquette","Director's Notes","Note-Taking","Scene Study Checkpoint"]],
+      [9,"Monologues",["Choosing a Monologue","Active vs Passive Monologues","Comedic Monologues","Dramatic Monologues","Classical Monologues","Contemporary Monologues","30-Second Cuts","60-Second Cuts","2-Minute Monologues","Memorization Tactics","Acting Beats in Monologues","Audience for the Monologue","Cold Reads","Monologue Books \u2014 Magic, Best Women's Stage Monologues","Monologues Checkpoint"]],
+      [10,"Improv & Comedy",["Yes, And","Status in Improv","Object Work","Long-Form Improv \u2014 Harold","Short-Form \u2014 Whose Line","Second City","UCB","Groundlings","Annoyance Theatre","iO Chicago","Sketch Comedy Writing","Stand-Up vs Sketch","Comedy Timing","Sitcom Acting","Improv Checkpoint"]],
+      [11,"Shakespeare & Classical",["Iambic Pentameter","Verse vs Prose","Heightened Language","Shakespeare's Punctuation","Operative Words","Caesura","End-Stops vs Run-Ons","First Folio Cues","Famous Shakespearean Roles","Globe Theatre Style","RSC Style","Cicely Berry \u2014 Voice for Shakespeare","Chekhov \u2014 Stanislavski's Playwright","Greek Tragedy \u2014 Aeschylus, Sophocles, Euripides","Classical Checkpoint"]],
+      [12,"Modern American Drama",["Eugene O'Neill","Tennessee Williams","Arthur Miller","Edward Albee","Lorraine Hansberry","August Wilson","Tony Kushner","Sam Shepard","David Mamet","Suzan-Lori Parks","Tracy Letts","Annie Baker","Lin-Manuel Miranda","Lynn Nottage","Modern Drama Checkpoint"]],
+      [13,"Musical Theater Acting",["Why Sing? \u2014 Acting Through Song","Acting the Lyric","Subtext in Song","Active Listening Between Numbers","Belting & Acting","Audition Cuts","Book Scenes vs Songs","Sondheim Acting","Hamilton Acting","Wicked Acting","In the Heights","Hadestown","Rent","Musical Theater Audition Reels","Musical Theater Checkpoint"]],
+      [14,"On-Camera Acting",["Differences from Stage","Eye Lines","Hitting Marks","Continuity","Take Different Each Time","Doing Less on Camera","Listening on Camera","Reaction Shots","Coverage","Slates & Self-Tapes","Reading with Reader","Camera-Friendly Wardrobe","Working with Director vs Theater","TV vs Film Pacing","On-Camera Checkpoint"]],
+      [15,"Auditions & Headshots",["What Casting Wants","Headshot Photographers","3/4 Headshots","Wardrobe for Headshots","Resumes \u2014 Stage Format","Resumes \u2014 Film Format","Actors Access","Backstage","Slating","Cold Reads","Self-Tape Setup","Tripod & Lighting","Editing Self-Tapes","Audition Wardrobe","Auditions Checkpoint"]],
+      [16,"Agents & Managers",["Difference Between Agent & Manager","Finding an Agent","Cover Letters","Demo Reels","Booking Rate","Commission \u2014 10%","Coverage Areas","SAG-AFTRA Membership","Equity Membership","Booking Through Agent","Submitting Yourself","Pay-to-Play Pitfalls","Predatory Schools to Avoid","Networking Properly","Agents & Managers Checkpoint"]],
+      [17,"Theatrical Technical Roles",["Stage Manager","Director","Dramaturg","Set Designer","Costume Designer","Lighting Designer","Sound Designer","Choreographer","Music Director","Fight Director","Intimacy Coordinator","Producer","Casting Director","Production Manager","Tech Roles Checkpoint"]],
+      [18,"Live Theater Career",["Regional Theaters","Off-Broadway","Broadway","Touring Productions","Cruise Ship Theater","Theme Park Acting","Renaissance Faire","Murder Mystery Dinners","Improv Companies","Children's Theater","Summer Stock","Equity vs Non-Equity","Living the Theater Life","Sustaining a Career","Theater Career Checkpoint"]],
+      [19,"Film & TV Career",["Background Work \u2014 Extras","Day Player","Co-Star","Recurring","Series Regular","Lead Roles","Independent Film","Studio Film","Streaming Series","Procedural TV","Sitcoms","Reality TV","Voice-Over Work","Animation Voice Acting","Film & TV Career Checkpoint"]],
+      [20,"Stanislavski Method Deep",["Konstantin Stanislavski","Moscow Art Theatre","An Actor Prepares","Building a Character","Creating a Role","Magic If","Given Circumstances","Action & Objective","Super-Objective","Through-Line","Emotional Memory","Sense Memory","Active Analysis","Etudes & Improvisation","Stanislavski Checkpoint"]],
+      [21,"Meisner Technique Deep",["Sanford Meisner","Neighborhood Playhouse","Repetition Exercise","Living Truthfully","Independent Activity","Doorbell Exercise","Knock at the Door","Emotional Preparation","Particular Circumstances","Improvisation in Meisner","Meisner Bill Esper Lineage","Meisner vs Method","Meisner Two-Year Training","Famous Meisner Actors","Meisner Checkpoint"]],
+      [22,"Strasberg Method Acting",["Lee Strasberg","Actors Studio","Sense Memory Drills","Affective Memory","Private Moment Exercise","Animal Exercise","Substitution","Personalization","Method Controversies","Marlon Brando","James Dean","Marilyn Monroe","Al Pacino","Daniel Day-Lewis","Method Checkpoint"]],
+      [23,"Adler & Hagen Techniques",["Stella Adler","Adler Imagination","Script Analysis Adler","Substitution vs Adler","Adler Famous Students","Uta Hagen","Respect for Acting","9 Questions","Object Exercises","Hagen Preparation","Practical Aesthetics","David Mamet","Atlantic Theater","True or False — Mamet","Adler & Hagen Checkpoint"]],
+      [24,"Suzuki & Viewpoints",["Tadashi Suzuki","Suzuki Training","Stomping Exercise","Slow-Tempo Walk","Statues Exercise","Ten Ways of Walking","Anne Bogart","Six Viewpoints","Tempo Duration Spatial Relationship","Architecture & Topography","Kinesthetic Response","Composition Work","SITI Company","Modern Physical Theater","Suzuki & Viewpoints Checkpoint"]],
+      [25,"Alexander & Body Technique",["F.M. Alexander","Use of the Self","Inhibition","Direction","Primary Control","Lying Down (Constructive Rest)","Chair Work","Hands-On Work","Alexander for Performers","Feldenkrais Method","Awareness Through Movement","Functional Integration","Pilates for Actors","Yoga for Actors","Body Technique Checkpoint"]],
+      [26,"Linklater & Fitzmaurice Voice",["Kristin Linklater","Freeing the Natural Voice","Linklater Warm-Up","Spine Stack","Breath Awareness","Touch of Sound","Range Exploration","Catherine Fitzmaurice","Destructuring","Restructuring","Tremor Work","Effortless Power","Voice & Heart Connection","Linklater vs Fitzmaurice","Voice Work Checkpoint"]],
+      [27,"Speech Training (Knight-Thompson, Skinner)",["Knight-Thompson Speechwork","KTS Sound Action","KTS Detail Model","Phil Thompson","Dudley Knight","Edith Skinner","Speak with Distinction","Mid-Atlantic / Stage Standard","Good Speech for Stage","RP — Received Pronunciation","General American","IPA for Actors","Tongue Twisters","Resonance Placement","Speech Training Checkpoint"]],
+      [28,"Stage Combat",["SAFD — Society of American Fight Directors","Unarmed Combat","Slaps & Punches","Hair-Pulling","Falls — Side Back Forward","Knife Combat","Single Sword","Quarterstaff","Rapier & Dagger","Broadsword","Knapping (Sound Effects)","Reaction Choreography","Choreographing a Fight","Fight Captain Role","Stage Combat Checkpoint"]],
+      [29,"Movement & Dance for Actors",["Laban Movement Analysis","Effort Categories — Weight Time Space Flow","Body Weight & Center","Williamson Technique","Lecoq Pedagogy","Neutral Mask","Larval Mask","Tap for Actors","Jazz for Actors","Ballet Basics","Period Movement (Restoration Victorian)","Court Dance","Modern Dance","Choreographed Numbers","Movement & Dance Checkpoint"]],
+      [30,"Audition Technique Deep",["Sides","Cold Reads","Prepared Monologue","Slate","Choosing the Right Material","Contrasting Monologues","Classical vs Contemporary","Audition Outfits","Headshot Use","Resume Format","Special Skills List","Audition Anxiety","Reading the Room","Walking In & Out","Audition Checkpoint"]],
+      [31,"Self-Tape & Modern Casting",["Self-Tape Setup","Lighting for Self-Tape","Audio Quality","Eyeline","Reader Off-Camera","Casting Networks","Actors Access","Backstage","LA Casting","Eco Cast","Frame.io for Submissions","Casting Director Workshops","Recording on iPhone","Editing Software","Self-Tape Checkpoint"]],
+      [32,"Cold Reading",["Cold Read Preparation","Skim Reading","Inferring Character","Quick Choices","Listening Over Reading","Eye Contact with Reader","Off-Book Cold","Stand-and-Deliver vs Sitting","Comedy Cold","Drama Cold","Children's Cold Reading","Singing Cold","Casting-Day Cold","Tag-Style Reads","Cold Reading Checkpoint"]],
+      [33,"Improv — Long & Short Form",["Yes-And","Listen-And-Respond","Tempo Tags","Game of the Scene","Heightening","Two-Person Scenes","Group Scenes","Long Form — The Harold","Armando","Bat","La Ronde","Short Form — Whose Line","Improv Festivals","Improv Teachers — Halpern Close","Improv Checkpoint"]],
+      [34,"Stand-Up Comedy",["Comedy History — Vaudeville","Modern Stand-Up","Joke Structure — Setup & Punchline","Tag Lines","Callbacks","Crowd Work","Stage Time","Open Mics","Set Building","5-Minute Tight Five","Comedy Festivals","Specials & Specials Sites","Famous Stand-Ups","Comedy Writing","Stand-Up Checkpoint"]],
+      [35,"Sketch & Solo Performance",["Saturday Night Live","Key & Peele","Sketch Structure","Premise","Heightening Sketch","UCB Sketch","Solo Performance Tradition","Spalding Gray","Anna Deavere Smith","Eric Bogosian","One-Person Shows","Storytelling Shows — The Moth","Cabaret","Burlesque","Solo Performance Checkpoint"]],
+      [36,"Voiceover & Animation",["Commercial VO","Animation VO","Character Voices","Voice Reels","Booth Setup","Home Recording","Audition Submission","Source-Connect","ipDTL","Famous VO Actors","Animation Studios — Disney Pixar","Anime Dubbing","Video Game VO","ADR & Looping","VO & Animation Checkpoint"]],
+      [37,"Audiobook Narration",["Audiobook Industry","ACX Platform","Audible","Narration Style","Single-Voice Narration","Multi-Voice","Character Voices in Books","Pacing & Pronunciation","Author Intent","Punch & Roll Recording","Booth Acoustics","Editing & Mastering","Royalty Share vs PFH","Famous Narrators","Audiobook Checkpoint"]],
+      [38,"Dialects & Accents Deep",["IPA Foundations","RP English","Cockney","Scottish","Irish","Australian","Southern American","New York","Boston","Russian","French","German","Indian","Caribbean","Dialects Checkpoint"]],
+      [39,"Mime, Mask & Commedia dell'arte",["Marcel Marceau","Étienne Decroux","Corporeal Mime","Wall Box Rope Illusions","Trapped Person","Neutral Mask","Larval Mask","Character Mask","Commedia History","Arlecchino (Harlequin)","Pantalone","Il Capitano","Il Dottore","Innamorati","Mask & Mime Checkpoint"]],
+      [40,"Greek & Roman Drama",["Origins of Theater — Dionysia","Aeschylus","Sophocles","Euripides","Aristophanes","Greek Tragic Structure","Chorus","Skene & Orchestra","Tragic Mask","Comic Mask","Plautus","Terence","Seneca","Roman Theater","Greek & Roman Drama Checkpoint"]],
+      [41,"Medieval Theater",["Liturgical Drama","Mystery Plays","Miracle Plays","Morality Plays","Everyman","York Cycle","Wakefield Cycle","Pageant Wagons","Devil & Vice Characters","Allegorical Characters","Hroswitha — Female Playwright","Italian Religious Drama","Carnival Theater","Folk Plays","Medieval Theater Checkpoint"]],
+      [42,"Elizabethan & Shakespeare",["Shakespeare's London","The Globe Theatre","Burbages","Lord Chamberlain's Men","Boy Players","Iambic Pentameter","Shakespeare Folio","First Folio","Histories","Comedies","Tragedies","Romances","Christopher Marlowe","Ben Jonson","Elizabethan Checkpoint"]],
+      [43,"Restoration Comedy",["Restoration Period","Charles II","Reopening of Theaters","First Actresses","Nell Gwyn","Comedy of Manners","Wycherley — The Country Wife","Congreve — The Way of the World","Aphra Behn","Vanbrugh — The Relapse","Sheridan — The School for Scandal","Goldsmith — She Stoops to Conquer","Witty Dialogue","Stock Characters","Restoration Checkpoint"]],
+      [44,"19th-Century Realists",["Henrik Ibsen","A Dolls House","Hedda Gabler","Ghosts","August Strindberg","Miss Julie","The Father","Anton Chekhov","The Seagull","Three Sisters","Uncle Vanya","The Cherry Orchard","Naturalism","Realism vs Romanticism","Realists Checkpoint"]],
+      [45,"Brecht & Epic Theater",["Bertolt Brecht","Verfremdungseffekt (Alienation)","Epic Theater","Mother Courage","The Threepenny Opera","The Caucasian Chalk Circle","Lehrstücke (Learning Plays)","Marxist Theater","Gestus","Songs in Brecht","Erwin Piscator","Berliner Ensemble","Brechtian Acting","Modern Brechtian Influence","Brecht Checkpoint"]],
+      [46,"Beckett & Absurdism",["Samuel Beckett","Waiting for Godot","Endgame","Krapps Last Tape","Happy Days","Eugène Ionesco","The Bald Soprano","Rhinoceros","Jean Genet","The Maids","Harold Pinter","The Birthday Party","Pinter Pause","Theatre of the Absurd","Absurdism Checkpoint"]],
+      [47,"American Greats — Williams, Miller, O'Neill",["Eugene O'Neill","Long Days Journey Into Night","The Iceman Cometh","Tennessee Williams","A Streetcar Named Desire","The Glass Menagerie","Cat on a Hot Tin Roof","Arthur Miller","Death of a Salesman","The Crucible","All My Sons","Edward Albee","Whos Afraid of Virginia Woolf?","Lorraine Hansberry — A Raisin in the Sun","American Greats Checkpoint"]],
+      [48,"August Wilson & Black Theater",["August Wilson","Pittsburgh Cycle (10 Plays)","Fences","Ma Raineys Black Bottom","The Piano Lesson","Joe Turners Come and Gone","Two Trains Running","Lloyd Richards Collaboration","Lorraine Hansberry","Suzan-Lori Parks","Topdog/Underdog","Branden Jacobs-Jenkins","Tarell Alvin McCraney","Negro Ensemble Company","Black Theater Checkpoint"]],
+      [49,"Musical Theater History",["Operetta Origins","Gilbert & Sullivan","Show Boat (1927)","Oklahoma! (1943)","Rodgers & Hammerstein","West Side Story","My Fair Lady","The Sound of Music","Hair (1968)","A Chorus Line","Cats","Phantom of the Opera","Les Misérables","Andrew Lloyd Webber","Musical Theater Checkpoint"]],
+      [50,"Modern Musicals — Sondheim, Hamilton",["Stephen Sondheim","Sweeney Todd","Sunday in the Park with George","Into the Woods","Company","Lin-Manuel Miranda","Hamilton","In the Heights","Dear Evan Hansen","Hadestown","Six","Spring Awakening","The Book of Mormon","Wicked","Modern Musicals Checkpoint"]],
+      [51,"Theater Production — Crew",["Stage Manager Role","Production Manager","Lighting Designer","Sound Designer","Set Designer","Costume Designer","Props Master","Hair & Makeup","Technical Director","Master Electrician","Booth Operator","Spot Operator","Run Crew","Rigging","Production Checkpoint"]],
+      [52,"Famous Actors & Career Stories",["Laurence Olivier","Marlon Brando","Meryl Streep","Daniel Day-Lewis","Anthony Hopkins","Robert De Niro","Denzel Washington","Famous Actors Checkpoint"]],
+      [53,"Acting Mastery",["Stanislavski Review","Meisner Review","Method Review","Adler Review","Voice & Speech Review","Movement Review","Scene Study Review","Monologues Review","Improv Review","Classical Review","On-Camera Review","Auditions Review","Career Review","Lifelong Acting","Acting Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'at-'+n, title: t, href: 'quiz.html?unit=' + u + '&lesson=' + (i + 1), unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('acting-theater');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('acting-theater');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

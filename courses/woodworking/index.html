@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Woodworking — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Woodworking</h1>
+    <p>From the safety of your shop to dovetailed boxes, hand-cut joinery, and full furniture builds — wood ID across hardwoods/softwoods/engineered, veneer & marquetry, reclaimed wood, drying & movement science, hand-tool sharpening (planes, chisels, saws), workbench building, dust collection, deep mortise & tenon and dovetail joinery, Japanese joinery, timber framing, bandsaw/router/CNC mastery, lathe (bowl, pen, spindle), carving (whittling, spoon, relief, chip), furniture styles (Shaker, Mid-Century, Mission/Craftsman), cabinet & drawer making, chair making (Windsor & Adirondack), wood bending, inlay, pyrography, finishing, and selling. 615 lessons across 41 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Shop Setup & Safety",["Shop Layout","Lighting","Dust Collection","Hearing Protection","Eye Protection","Respirators","Push Sticks","Lockout Tag-Out","Fire Safety","First Aid","Beginner Safety Rules","Sharp vs Dull Blades","Tear-Out Awareness","Workshop Etiquette","Safety Checkpoint"]],
+      [2,"Wood Species & Lumber",["Hardwood vs Softwood","Oak","Maple","Walnut","Cherry","Pine","Mahogany","Plywood","MDF","Particleboard","Reading Lumber Stamps","Grain Direction","Defects to Avoid","Wood Movement","Lumber Checkpoint"]],
+      [3,"Hand Tools",["Hand Plane Anatomy","Smoothing Plane","Block Plane","Jointer Plane","Chisels","Mallets","Hand Saws","Crosscut vs Rip","Japanese Saws","Marking Knife","Squares","Marking Gauge","Sharpening Stones","Tuning a Plane","Hand Tools Checkpoint"]],
+      [4,"Power Tools",["Table Saw","Miter Saw","Band Saw","Jointer","Thickness Planer","Router","Router Tables","Drill Press","Random Orbit Sander","Belt Sander","Track Saw","Lathe Intro","CNC Intro","Cordless Drill","Power Tools Checkpoint"]],
+      [5,"Joinery — Hand-Cut",["Butt Joint","Miter Joint","Lap Joint","Half-Lap","Mortise & Tenon","Through Tenon","Wedged Tenon","Dovetail Through","Dovetail Half-Blind","Box Joints","Sliding Dovetail","Bridle Joint","Dado","Rabbet","Joinery Checkpoint"]],
+      [6,"Joinery — Machine",["Pocket Holes","Biscuits","Dominos","Loose Tenons","Router Mortising","Router Dovetails","Box Joint Jigs","Drawer Lock Bits","Splines","Edge Banding","Plywood Joinery","Knockdown Hardware","Cam Locks","Pocket Hole Jigs","Machine Joinery Checkpoint"]],
+      [7,"Furniture Making",["Cutting Boards","Stools","Side Tables","Dining Tables","Chairs","Bed Frames","Bookcases","Cabinets","Drawers","Shaker Style","Mid-Century Modern","Krenov Style","Japanese Joinery Style","Live Edge","Furniture Checkpoint"]],
+      [8,"Carving & Turning",["Whittling Basics","Relief Carving","Chip Carving","Spoon Carving","Lovespoons","Lathe Setup","Spindle Turning","Bowl Turning","Hollow Forms","Pen Turning","Segmented Bowls","Texturing","Power Carving","Carving Tools","Carving Checkpoint"]],
+      [9,"Finishing",["Sanding Progression","Filling Gaps","Stains","Dyes","Oil Finishes","Wax Finishes","Shellac","Lacquer","Polyurethane","Water-Based vs Oil-Based","Spray Finishing","French Polishing","Distressing","Repairing Finishes","Finishing Checkpoint"]],
+      [10,"Wood ID — Tropical Hardwoods",["Mahogany","Teak","Rosewood","Ebony","Padauk","Purpleheart","Bubinga","Wenge","Cocobolo","Bocote","Iroko","Sapele","Zebrawood","CITES & Sustainability","Tropical Hardwoods Checkpoint"]],
+      [11,"Wood ID — Domestic Hardwoods",["White Oak","Red Oak","Hard Maple","Soft Maple","Black Walnut","Cherry","Hickory","Ash","Birch","Beech","Sycamore","Elm","Poplar","Sassafras","Domestic Hardwoods Checkpoint"]],
+      [12,"Wood ID — Softwoods",["Eastern White Pine","Sugar Pine","Douglas Fir","Western Red Cedar","Eastern Red Cedar","Spruce","Hemlock","Larch","Cypress","Yellow Pine","Redwood","Yew","Juniper","Softwood Workability","Softwoods Checkpoint"]],
+      [13,"Plywood, MDF & Engineered Wood",["Plywood Grades — A through D","Baltic Birch Plywood","Marine Plywood","Hardwood Plywood","MDF","HDF","Particleboard","OSB","Melamine","Edge Banding","Cutting Plywood Cleanly","Avoiding Tear-out","Engineered Wood Pros & Cons","Sustainable Engineered Wood","Engineered Wood Checkpoint"]],
+      [14,"Veneer & Marquetry",["What Is Veneer?","Veneer Types — Sliced, Rotary, Sawn","Book-Matched Veneer","Slip-Matched Veneer","Diamond Match","Veneer Press","Hammer Veneering","Hot Hide Glue","Vacuum Press","Marquetry Basics","Window Method","Double-Bevel Cutting","Sand Shading","Famous Marquetry","Veneer & Marquetry Checkpoint"]],
+      [15,"Reclaimed & Salvaged Wood",["Sources of Reclaimed Wood","Barn Wood","Old Pallets","Demolition Wood","Driftwood","Removing Nails","Metal Detection","Pest Inspection","Borate Treatment","Cleaning Reclaimed Wood","Milling Reclaimed","Stabilizing Punky Wood","Character Marks","Selling Reclaimed Pieces","Reclaimed Wood Checkpoint"]],
+      [16,"Wood Drying, Kilns & Movement Science",["Green vs Dry Wood","Equilibrium Moisture Content","Air Drying","Kiln Drying","Solar Kilns","Vacuum Kilns","Moisture Meters","Pin vs Pinless","Tangential vs Radial Movement","Quartersawn Stability","Flatsawn Movement","Cupping & Bowing","Twist & Crook","Acclimating Wood","Movement Science Checkpoint"]],
+      [17,"Sharpening Plane Irons & Chisels",["Why Sharpening Matters","Bevel Angles — 25° Primary, 30° Secondary","Water Stones","Diamond Stones","Oil Stones","Strops","Honing Guides","Free-Hand Sharpening","Flattening Backs","Camber on Plane Irons","Skew Chisel Sharpening","Touch-Up Honing","Polishing to a Mirror","Sharpness Tests","Sharpening Checkpoint"]],
+      [18,"Saw Sharpening",["Saw Anatomy","Rip vs Crosscut Tooth","Tooth Geometry","Saw Files","Filing Set","Filing Sharp","Joint Filing","Setting the Saw","Hammer Setting","Plier Setting","Japanese Saw Sharpening","Backsaws","Coping Saws","When to Replace","Saw Sharpening Checkpoint"]],
+      [19,"Plane Restoration & Tuning",["Vintage Stanley Planes","Cleaning Rust","Sole Flattening","Frog Tuning","Chipbreaker Fitting","Lever Cap Adjustment","Tote & Knob Replacement","Replacement Irons (Hock, IBC)","Lapping a Cast Iron Sole","Wax & Lubrication","Storage","Restoring No. 4 Smoother","Restoring a Jointer","Lie-Nielsen vs Vintage","Plane Tuning Checkpoint"]],
+      [20,"Workbench Building",["Workbench Styles — Roubo","Workbench Styles — English","Workbench Styles — Japanese Atelier","Workbench Styles — Moravian","Top Material — Maple, Beech","Leg Vise","Tail Vise","Wagon Vise","Holdfasts","Bench Dogs","Planing Stop","Crochet","Tool Tray","Building a 4×8 Roubo","Workbench Checkpoint"]],
+      [21,"Dust Collection Systems",["Why Dust Matters — Health","Cyclone Separators","Bag Filters","HEPA Filters","CFM vs Static Pressure","4-Inch Ducting","6-Inch Ducting","Flexible Hoses","Blast Gates","Magnetic Dust Hoods","Festool & Festool-Compatible","Shop-Vac Setups","Air Cleaners","Respirators","Dust Collection Checkpoint"]],
+      [22,"Mortise & Tenon Deep",["Through Tenon","Stub Tenon","Wedged Tenon","Drawbored Tenon","Pinned Tenon","Mortise & Tenon Proportions","Cutting by Hand — Chop & Pare","Cutting by Hand — Saw & Pare","Router-Cut Mortises","Mortising Machine","Loose Tenon (Domino)","Twin Tenons","Haunched Tenon","Tusk Tenon","M&T Checkpoint"]],
+      [23,"Dovetail Joinery Deep",["Through Dovetails","Half-Blind Dovetails","Full-Blind (Mitered) Dovetails","Sliding Dovetails","Decorative Dovetails","Houndstooth Dovetails","Dovetail Angles — 1:6 to 1:8","Pins-First vs Tails-First","Dovetail Saws","Marking Gauges","Dovetail Markers","Paring to the Line","Cleaning the Baseline","Dovetail Drills","Dovetail Checkpoint"]],
+      [24,"Japanese Joinery",["Sashimono Tradition","Hari-Tsugite (Beam Splice)","Kanawa-Tsugite","Shihou-Kama-Tsugite","Mitsugashira (3-Way)","Yari-Ganna Spear Plane","Japanese Saws — Ryoba & Dozuki","Pull-Stroke Sawing","Japanese Chisels — Oire Nomi","Kakushi Arikake","Building Without Glue","Temple Joinery","Wedge-Locked Joinery","Hidden Pegs","Japanese Joinery Checkpoint"]],
+      [25,"Timber Framing",["Timber Frame History","Bent Construction","Mortise & Tenon (Heavy)","Drawboring","Pegged Joints","Scarf Joints","Hammer Beams","King Posts","Queen Posts","Tie Beams","Foundation Connections","Raising Day","Tools — Slick, Boring Machine","Modern Timber Framing","Timber Framing Checkpoint"]],
+      [26,"Bandsaw Mastery — Boxes & Resawing",["Bandsaw Setup","Tracking the Blade","Tension Adjustment","Guide Bearings","Choosing a Blade","TPI for Curves","TPI for Resawing","Resawing Tall Stock","Resawing Veneer","Bandsaw Boxes","Drawer Pulls","Compound Curves","Stacking Cuts","Bandsaw Safety","Bandsaw Checkpoint"]],
+      [27,"Router Mastery",["Plunge vs Fixed Base","Spiral vs Straight Bits","Router Table Anatomy","Featherboards","Climb Cutting","Pattern Routing","Template-Guided Routing","Edge Profiles — Round, Cove, Ogee","Inlay with a Router","Box Joints with a Jig","Mortising with a Router","Dado & Rabbet Bits","Router Lifts","Variable-Speed Routers","Router Checkpoint"]],
+      [28,"CNC Woodworking",["What Is CNC?","CNC Mill vs Router","Shapeoko & X-Carve","Shaper Origin","CAD Software","CAM Software","V-Carving","3D Carving","Workholding on CNC","Endmills 101","Toolpaths","Speed & Feed","Inlays with CNC","Combining CNC + Hand","CNC Checkpoint"]],
+      [29,"Lathe Mastery — Bowl Turning",["Bowl Lathe Anatomy","Faceplate vs Chuck","Bowl Gouge Anatomy","Bowl Gouge Sharpening","Roughing a Bowl","Hollowing a Bowl","Wall Thickness","Tear-Out Avoidance","Wet vs Dry Turning","Twice-Turned Bowls","Natural-Edge Bowls","Segmented Bowls","Sanding on the Lathe","Finishing on the Lathe","Bowl Turning Checkpoint"]],
+      [30,"Lathe Mastery — Pen & Spindle",["Pen Mandrel Setup","Pen Blanks","Drilling Blanks","Gluing Tubes","Turning a Pen","Pen Finishing — CA Finish","Pen Kits","Spindle Gouge Use","Skew Chisel Mastery","Beads & Coves","Roughing Gouge","Parting Tool","Spindle Steady Rest","Wood Goblets","Pen & Spindle Checkpoint"]],
+      [31,"Carving — Whittling & Spoon",["Whittling Knives","Sharpening Whittling Knives","Basswood for Practice","Reading Grain","Stop Cuts","Push & Pull Cuts","Whittling a Comfort Bird","Whittling Walking Sticks","Spoon Carving Knives","Hook Knives","Crook Knives","Carving a Kuksa","Carving a Sloyd Spoon","Spoon Finishing — Walnut Oil","Whittling & Spoon Checkpoint"]],
+      [32,"Carving — Relief & Chip",["Relief Carving History","Low Relief","High Relief","Relief Carving Tools","V-Tools","U-Gouges","Veining Tools","Backgrounds","Relief Patterns","Chip Carving Knives","Triangular Chip Cuts","Borders & Patterns","Wayne Barton Style","Skandinavian Chip","Relief & Chip Checkpoint"]],
+      [33,"Furniture Styles — Shaker",["Shaker Communities","Simplicity Aesthetic","Tapered Legs","Cherry & Maple Choice","Ladder-Back Chairs","Shaker Tables","Shaker Boxes (Oval)","Bentwood Joinery","Shaker Pegs","Shaker Drawers","Shaker Wall Cabinets","Shaker Color Palette","Shaker Workmanship","Modern Shaker Revival","Shaker Style Checkpoint"]],
+      [34,"Furniture Styles — Mid-Century Modern",["MCM History — 1945-1969","Tapered Legs Splayed","Eames Lounge Chair","George Nelson","Hans Wegner","Wishbone Chair","Walnut MCM","Teak MCM","Compass Legs","Plywood Forms","Eames Plywood Process","Sliding Doors","MCM Cabinets","Modern MCM Revival","MCM Style Checkpoint"]],
+      [35,"Furniture Styles — Mission & Craftsman",["Stickley Brothers","Quartersawn White Oak","Pegged Joinery","Through Tenons","Mission Tables","Morris Chairs","Craftsman Bookcases","Greene & Greene","Pin & Cove Detail","Hammered Hardware","Fumed Oak Finish","Ammonia Fuming","Greene & Greene Cloud Lift","Craftsman Revival","Mission/Craftsman Checkpoint"]],
+      [36,"Cabinet & Drawer Making",["Face Frame vs Frameless","European Hinges","Soft-Close Hinges","Drawer Slides","Undermount Slides","Dovetailed Drawers","Pinned Drawers","Locking Drawer Joints","Drawer Bottoms","Cabinet Backs","Built-In Cabinets","Kitchen Cabinets","Floating Shelves","Inset vs Overlay Doors","Cabinet & Drawer Checkpoint"]],
+      [37,"Chair Making — Windsor & Adirondack",["Windsor Chair Tradition","Steam-Bent Backs","Spindle Turning for Chairs","Sack-Back Windsor","Continuous-Arm Windsor","Comb-Back Windsor","Bow-Back Windsor","Compass Seat Carving","Tavern Stools","Adirondack Chair Plans","Adirondack Materials","Cypress vs Cedar","Outdoor Joinery","Adirondack Variations","Chair Making Checkpoint"]],
+      [38,"Wood Bending — Steam & Lamination",["Steam Box Construction","Steam Generators","Bending Wood Selection","Air-Dried for Steam","Bending Forms","Spring-Back Compensation","Bent Lamination","Glue Choices for Lamination","Vacuum Lamination","Form-Bent Furniture","Hot Pipe Bending","Cold Bending Thin Stock","Compression Strap","Famous Bent-Wood Designs","Wood Bending Checkpoint"]],
+      [39,"Inlay & Marquetry Deep",["Inlay Banding","String Inlay","Mother-of-Pearl Inlay","Brass Inlay","Wood Inlay Using Templates","Engraving Filled with Pigment","Boulle Marquetry","Tunbridge Ware","Parquetry","Geometric Marquetry","Sand-Shaded Marquetry","Modern Marquetry","Inlay Tools — Burns Inlay Tool","Marquetry Knife","Inlay Deep Checkpoint"]],
+      [40,"Pyrography (Wood Burning)",["Pyrography History","Burning Pens","Solid-Tip vs Wire-Nib","Adjustable Temperature","Wood Selection for Burning","Tracing the Design","Stippling","Cross-Hatching","Smooth Shading","Color with Watercolor","Pet Portraits","Landscape Pyrography","Sealing the Burn","Famous Pyrographers","Pyrography Checkpoint"]],
+      [41,"Selling & Mastery",["Pricing Your Work","Photographing Furniture","Etsy & Local Markets","Commission Work","Building a Portfolio","YouTube as a Woodworker","Teaching Classes","Insurance for Shops","Tax Considerations","Sustainable Sourcing","Reclaimed Wood","Heirloom Quality","Master Craftsman Mindset","Lifetime of Skill","Woodworking Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'wood-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('woodworking');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('woodworking');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

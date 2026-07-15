@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>🎲 Dice &amp; Probability</h1>
+    <p>Master the math, history, and applications of dice — from ancient astragali to casino-grade precision. Probability theory (single &amp; multi-dice, expected value, variance, Bayes), distributions (uniform, binomial-via-dice, normal-via-CLT), simulation (Monte Carlo, random walks, Markov chains), board games (Backgammon, Monopoly, Risk, Catan), tabletop RPGs (D&amp;D 5e, Pathfinder, Call of Cthulhu — dice notation, damage rolls, criticals), casino games (Craps, Sic Bo, Liar's Dice, Yahtzee, house edge), cheating detection, non-transitive dice &amp; Penney's game, classic paradoxes (De Méré, birthday), cryptography (Diceware, EFF dice), magic tricks, capstone — design your own dice game. Plus dice in video games (loot tables, RNG), streaming dice culture (Critical Role), polyhedral geometry, combinatorics, statistics history (Pascal/Fermat/Pearson/Fisher), quantum dice &amp; philosophy (Einstein/Bell), and dice across cultures (Africa, Asia, Indigenous Americas). 47 units, 705 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "What Is a Die? — From Astragali to Modern Dice",
+      "Types of Dice — d4, d6, d8, d10, d12, d20, d100",
+      "Single-Die Probability — Fair vs Loaded",
+      "Two-Dice Probability — Sum, Difference, Product",
+      "Multi-Dice Probability — Three Dice & Beyond",
+      "Dice Notation — 2d6+3 and RPG Conventions",
+      "Expected Value of Dice Rolls",
+      "Variance & Standard Deviation",
+      "Probability Distributions — Dice as Discrete RVs",
+      "The Bell Curve from Many Dice — CLT in Action",
+      "Conditional Probability with Dice",
+      "Independence & Joint Probability",
+      "Bayes' Theorem with Dice",
+      "The Law of Large Numbers",
+      "Simulating Dice in Code — Python, JS, R",
+      "Monte Carlo Methods with Dice",
+      "Random Walks with Dice",
+      "Markov Chains with Dice",
+      "Backgammon — Doubling Cube & Pip Counts",
+      "Monopoly — Roll Probabilities & Jail Math",
+      "Risk & Settlers of Catan — Battle Odds",
+      "D&D 5e — Advantage, Disadvantage, Inspiration",
+      "Pathfinder & Call of Cthulhu — Skill Checks",
+      "Critical Hits & Saving Throws",
+      "Damage Dice — Optimization Strategies",
+      "Craps — Pass Line, Don't Pass, Come/Don't Come",
+      "Sic Bo & Hazard — Old & New",
+      "Liar's Dice & Yahtzee — Strategy",
+      "House Edge & Expected Loss",
+      "Loaded & Biased Dice — Cheating Mechanics",
+      "Detecting Cheating — Chi-Square & Statistical Tests",
+      "Penney's Game & Non-Transitive Dice",
+      "Famous Paradoxes — De Méré's Problem",
+      "Birthday Paradox with Dice Rolls",
+      "Dice in Cryptography & True Randomness",
+      "Diceware & EFF Dice — Building Passphrases",
+      "Dice in Education & Math Pedagogy",
+      "Mass Production & Precision — Casino-Grade Dice",
+      "Dice Tricks, Magic & Illusions",
+      "Capstone — Design Your Own Dice Game",
+      "Dice in Video Games — Loot Tables & RNG",
+      "Streaming Dice Culture — Critical Role to DiceCloud",
+      "Polyhedral Geometry — Why Dice Have Those Shapes",
+      "Combinatorics with Dice — Counting Outcomes Systematically",
+      "Statistics History — Pascal, Fermat, Pearson, Fisher",
+      "Quantum Dice & Philosophy — Einstein, Bell, Determinism",
+      "Dice Across Cultures — Africa, Asia, Indigenous Americas"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dice-'+n, title: t, href: '#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('dice');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('dice');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

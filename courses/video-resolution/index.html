@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Resolution — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Video Resolution</h1>
+    <p>Pixels, aspect ratios, SD &#x2192; 8K, frame rates, bitrate &amp; compression, codecs (H.264 / H.265 / AV1), HDR (Dolby Vision / HDR10 / HLG), color depth &amp; spaces (Rec.709 / Rec.2020 / DCI&#x2011;P3), interlaced vs progressive, cinema anamorphic, upscaling &amp; downscaling, and streaming-platform workflows. 225 lessons across 15 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"What Is Video Resolution?",["What Is Video Resolution? — Lesson 1","What Is Video Resolution? — Lesson 2","What Is Video Resolution? — Lesson 3","What Is Video Resolution? — Lesson 4","What Is Video Resolution? — Lesson 5","What Is Video Resolution? — Lesson 6","What Is Video Resolution? — Lesson 7","What Is Video Resolution? — Lesson 8","What Is Video Resolution? — Lesson 9","What Is Video Resolution? — Lesson 10","What Is Video Resolution? — Lesson 11","What Is Video Resolution? — Lesson 12","What Is Video Resolution? — Lesson 13","What Is Video Resolution? — Lesson 14","What Is Video Resolution? Checkpoint"]],
+      [2,"Pixels & Aspect Ratios",["Pixels & Aspect Ratios — Lesson 1","Pixels & Aspect Ratios — Lesson 2","Pixels & Aspect Ratios — Lesson 3","Pixels & Aspect Ratios — Lesson 4","Pixels & Aspect Ratios — Lesson 5","Pixels & Aspect Ratios — Lesson 6","Pixels & Aspect Ratios — Lesson 7","Pixels & Aspect Ratios — Lesson 8","Pixels & Aspect Ratios — Lesson 9","Pixels & Aspect Ratios — Lesson 10","Pixels & Aspect Ratios — Lesson 11","Pixels & Aspect Ratios — Lesson 12","Pixels & Aspect Ratios — Lesson 13","Pixels & Aspect Ratios — Lesson 14","Pixels & Aspect Ratios Checkpoint"]],
+      [3,"Standard Definition (SD)",["Standard Definition (SD) — Lesson 1","Standard Definition (SD) — Lesson 2","Standard Definition (SD) — Lesson 3","Standard Definition (SD) — Lesson 4","Standard Definition (SD) — Lesson 5","Standard Definition (SD) — Lesson 6","Standard Definition (SD) — Lesson 7","Standard Definition (SD) — Lesson 8","Standard Definition (SD) — Lesson 9","Standard Definition (SD) — Lesson 10","Standard Definition (SD) — Lesson 11","Standard Definition (SD) — Lesson 12","Standard Definition (SD) — Lesson 13","Standard Definition (SD) — Lesson 14","Standard Definition (SD) Checkpoint"]],
+      [4,"HD — 720p & 1080p",["HD — 720p & 1080p — Lesson 1","HD — 720p & 1080p — Lesson 2","HD — 720p & 1080p — Lesson 3","HD — 720p & 1080p — Lesson 4","HD — 720p & 1080p — Lesson 5","HD — 720p & 1080p — Lesson 6","HD — 720p & 1080p — Lesson 7","HD — 720p & 1080p — Lesson 8","HD — 720p & 1080p — Lesson 9","HD — 720p & 1080p — Lesson 10","HD — 720p & 1080p — Lesson 11","HD — 720p & 1080p — Lesson 12","HD — 720p & 1080p — Lesson 13","HD — 720p & 1080p — Lesson 14","HD — 720p & 1080p Checkpoint"]],
+      [5,"4K Ultra HD",["4K Ultra HD — Lesson 1","4K Ultra HD — Lesson 2","4K Ultra HD — Lesson 3","4K Ultra HD — Lesson 4","4K Ultra HD — Lesson 5","4K Ultra HD — Lesson 6","4K Ultra HD — Lesson 7","4K Ultra HD — Lesson 8","4K Ultra HD — Lesson 9","4K Ultra HD — Lesson 10","4K Ultra HD — Lesson 11","4K Ultra HD — Lesson 12","4K Ultra HD — Lesson 13","4K Ultra HD — Lesson 14","4K Ultra HD Checkpoint"]],
+      [6,"8K & Beyond",["8K & Beyond — Lesson 1","8K & Beyond — Lesson 2","8K & Beyond — Lesson 3","8K & Beyond — Lesson 4","8K & Beyond — Lesson 5","8K & Beyond — Lesson 6","8K & Beyond — Lesson 7","8K & Beyond — Lesson 8","8K & Beyond — Lesson 9","8K & Beyond — Lesson 10","8K & Beyond — Lesson 11","8K & Beyond — Lesson 12","8K & Beyond — Lesson 13","8K & Beyond — Lesson 14","8K & Beyond Checkpoint"]],
+      [7,"Frame Rates — 24fps to 120fps+",["Frame Rates — 24fps to 120fps+ — Lesson 1","Frame Rates — 24fps to 120fps+ — Lesson 2","Frame Rates — 24fps to 120fps+ — Lesson 3","Frame Rates — 24fps to 120fps+ — Lesson 4","Frame Rates — 24fps to 120fps+ — Lesson 5","Frame Rates — 24fps to 120fps+ — Lesson 6","Frame Rates — 24fps to 120fps+ — Lesson 7","Frame Rates — 24fps to 120fps+ — Lesson 8","Frame Rates — 24fps to 120fps+ — Lesson 9","Frame Rates — 24fps to 120fps+ — Lesson 10","Frame Rates — 24fps to 120fps+ — Lesson 11","Frame Rates — 24fps to 120fps+ — Lesson 12","Frame Rates — 24fps to 120fps+ — Lesson 13","Frame Rates — 24fps to 120fps+ — Lesson 14","Frame Rates — 24fps to 120fps+ Checkpoint"]],
+      [8,"Bitrate & Compression",["Bitrate & Compression — Lesson 1","Bitrate & Compression — Lesson 2","Bitrate & Compression — Lesson 3","Bitrate & Compression — Lesson 4","Bitrate & Compression — Lesson 5","Bitrate & Compression — Lesson 6","Bitrate & Compression — Lesson 7","Bitrate & Compression — Lesson 8","Bitrate & Compression — Lesson 9","Bitrate & Compression — Lesson 10","Bitrate & Compression — Lesson 11","Bitrate & Compression — Lesson 12","Bitrate & Compression — Lesson 13","Bitrate & Compression — Lesson 14","Bitrate & Compression Checkpoint"]],
+      [9,"Video Codecs — H.264 H.265 AV1",["Video Codecs — H.264 H.265 AV1 — Lesson 1","Video Codecs — H.264 H.265 AV1 — Lesson 2","Video Codecs — H.264 H.265 AV1 — Lesson 3","Video Codecs — H.264 H.265 AV1 — Lesson 4","Video Codecs — H.264 H.265 AV1 — Lesson 5","Video Codecs — H.264 H.265 AV1 — Lesson 6","Video Codecs — H.264 H.265 AV1 — Lesson 7","Video Codecs — H.264 H.265 AV1 — Lesson 8","Video Codecs — H.264 H.265 AV1 — Lesson 9","Video Codecs — H.264 H.265 AV1 — Lesson 10","Video Codecs — H.264 H.265 AV1 — Lesson 11","Video Codecs — H.264 H.265 AV1 — Lesson 12","Video Codecs — H.264 H.265 AV1 — Lesson 13","Video Codecs — H.264 H.265 AV1 — Lesson 14","Video Codecs — H.264 H.265 AV1 Checkpoint"]],
+      [10,"HDR — Dolby Vision HDR10 HLG",["HDR — Dolby Vision HDR10 HLG — Lesson 1","HDR — Dolby Vision HDR10 HLG — Lesson 2","HDR — Dolby Vision HDR10 HLG — Lesson 3","HDR — Dolby Vision HDR10 HLG — Lesson 4","HDR — Dolby Vision HDR10 HLG — Lesson 5","HDR — Dolby Vision HDR10 HLG — Lesson 6","HDR — Dolby Vision HDR10 HLG — Lesson 7","HDR — Dolby Vision HDR10 HLG — Lesson 8","HDR — Dolby Vision HDR10 HLG — Lesson 9","HDR — Dolby Vision HDR10 HLG — Lesson 10","HDR — Dolby Vision HDR10 HLG — Lesson 11","HDR — Dolby Vision HDR10 HLG — Lesson 12","HDR — Dolby Vision HDR10 HLG — Lesson 13","HDR — Dolby Vision HDR10 HLG — Lesson 14","HDR — Dolby Vision HDR10 HLG Checkpoint"]],
+      [11,"Color Depth & Color Spaces",["Color Depth & Color Spaces — Lesson 1","Color Depth & Color Spaces — Lesson 2","Color Depth & Color Spaces — Lesson 3","Color Depth & Color Spaces — Lesson 4","Color Depth & Color Spaces — Lesson 5","Color Depth & Color Spaces — Lesson 6","Color Depth & Color Spaces — Lesson 7","Color Depth & Color Spaces — Lesson 8","Color Depth & Color Spaces — Lesson 9","Color Depth & Color Spaces — Lesson 10","Color Depth & Color Spaces — Lesson 11","Color Depth & Color Spaces — Lesson 12","Color Depth & Color Spaces — Lesson 13","Color Depth & Color Spaces — Lesson 14","Color Depth & Color Spaces Checkpoint"]],
+      [12,"Interlaced vs Progressive & Cinema Aspect",["Interlaced vs Progressive & Cinema Aspect — Lesson 1","Interlaced vs Progressive & Cinema Aspect — Lesson 2","Interlaced vs Progressive & Cinema Aspect — Lesson 3","Interlaced vs Progressive & Cinema Aspect — Lesson 4","Interlaced vs Progressive & Cinema Aspect — Lesson 5","Interlaced vs Progressive & Cinema Aspect — Lesson 6","Interlaced vs Progressive & Cinema Aspect — Lesson 7","Interlaced vs Progressive & Cinema Aspect — Lesson 8","Interlaced vs Progressive & Cinema Aspect — Lesson 9","Interlaced vs Progressive & Cinema Aspect — Lesson 10","Interlaced vs Progressive & Cinema Aspect — Lesson 11","Interlaced vs Progressive & Cinema Aspect — Lesson 12","Interlaced vs Progressive & Cinema Aspect — Lesson 13","Interlaced vs Progressive & Cinema Aspect — Lesson 14","Interlaced vs Progressive & Cinema Aspect Checkpoint"]],
+      [13,"Upscaling & Downscaling",["Upscaling & Downscaling — Lesson 1","Upscaling & Downscaling — Lesson 2","Upscaling & Downscaling — Lesson 3","Upscaling & Downscaling — Lesson 4","Upscaling & Downscaling — Lesson 5","Upscaling & Downscaling — Lesson 6","Upscaling & Downscaling — Lesson 7","Upscaling & Downscaling — Lesson 8","Upscaling & Downscaling — Lesson 9","Upscaling & Downscaling — Lesson 10","Upscaling & Downscaling — Lesson 11","Upscaling & Downscaling — Lesson 12","Upscaling & Downscaling — Lesson 13","Upscaling & Downscaling — Lesson 14","Upscaling & Downscaling Checkpoint"]],
+      [14,"Streaming Resolution Workflows",["Streaming Resolution Workflows — Lesson 1","Streaming Resolution Workflows — Lesson 2","Streaming Resolution Workflows — Lesson 3","Streaming Resolution Workflows — Lesson 4","Streaming Resolution Workflows — Lesson 5","Streaming Resolution Workflows — Lesson 6","Streaming Resolution Workflows — Lesson 7","Streaming Resolution Workflows — Lesson 8","Streaming Resolution Workflows — Lesson 9","Streaming Resolution Workflows — Lesson 10","Streaming Resolution Workflows — Lesson 11","Streaming Resolution Workflows — Lesson 12","Streaming Resolution Workflows — Lesson 13","Streaming Resolution Workflows — Lesson 14","Streaming Resolution Workflows Checkpoint"]],
+      [15,"Video Resolution Mastery",["Video Resolution Mastery — Lesson 1","Video Resolution Mastery — Lesson 2","Video Resolution Mastery — Lesson 3","Video Resolution Mastery — Lesson 4","Video Resolution Mastery — Lesson 5","Video Resolution Mastery — Lesson 6","Video Resolution Mastery — Lesson 7","Video Resolution Mastery — Lesson 8","Video Resolution Mastery — Lesson 9","Video Resolution Mastery — Lesson 10","Video Resolution Mastery — Lesson 11","Video Resolution Mastery — Lesson 12","Video Resolution Mastery — Lesson 13","Video Resolution Mastery — Lesson 14","Video Resolution Mastery Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'vidres-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('video-resolution');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('video-resolution');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

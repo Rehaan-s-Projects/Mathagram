@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>What Is a Command Block? — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  :root {
+    --stone-1: #5b5b5b; --stone-2: #3c3c3c; --stone-3: #2a2a2a;
+    --cb-orange: #d97706; --cb-orange-light: #fbbf24;     /* impulse */
+    --cb-purple: #7e22ce; --cb-purple-light: #c084fc;     /* repeat */
+    --cb-green:  #15803d; --cb-green-light:  #4ade80;     /* chain */
+    --ink: #f4f4f4; --ink-mute: #a3a3a3; --good: #4ade80; --bad: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: #2a2a2a;
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.18) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.18) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.18) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.18) 75%),
+      linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+    background-size: 32px 32px, 32px 32px, 100% 100%;
+    background-position: 0 0, 16px 16px, 0 0;
+    color: var(--ink); min-height: 100vh; margin: 0;
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    image-rendering: pixelated;
+  }
+
+  .topbar { display: flex; gap: 14px; align-items: center; padding: 14px 22px 6px; max-width: 1040px; margin: 0 auto; }
+  .exit {
+    flex: 0 0 auto; width: 38px; height: 38px;
+    border: 2px solid #1a1a1a; background: var(--stone-1); color: var(--ink);
+    font-size: 1.3rem; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 -3px 0 #1a1a1a, inset 0 3px 0 rgba(255,255,255,0.08);
+  }
+  .exit:hover { background: #6b6b6b; }
+  .progress-track {
+    flex: 1; display: flex; gap: 6px; background: var(--stone-3);
+    border: 2px solid #1a1a1a; padding: 3px; height: 22px;
+  }
+  .progress-dot { flex: 1; background: #1a1a1a; border: 1px solid #0a0a0a; }
+  .progress-dot.done { background: linear-gradient(180deg, #fde68a, var(--cb-orange)); border-color: #92400e; }
+  .progress-dot.cur  { background: linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange)); border-color: #92400e; animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.4); } }
+
+  .stage { max-width: 1040px; margin: 0 auto; padding: 6px 22px 40px; }
+  .meta { margin: 8px 0 14px; }
+  .meta .unit-label {
+    display: inline-block; font-family: 'Press Start 2P', monospace;
+    font-size: 0.62rem; color: var(--cb-orange-light); background: var(--stone-3);
+    padding: 6px 10px; border: 2px solid #1a1a1a; letter-spacing: 0.08em;
+  }
+  .meta h1 {
+    font-family: 'Press Start 2P', monospace; font-size: 1.15rem;
+    margin: 8px 0 0; color: var(--ink); line-height: 1.5;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  /* Intro card */
+  .intro {
+    background: var(--stone-2); border: 3px solid #1a1a1a;
+    padding: 18px 22px; margin-bottom: 18px;
+    box-shadow: inset 0 -5px 0 rgba(0,0,0,0.3), inset 0 3px 0 rgba(255,255,255,0.06);
+    font-size: 0.96rem; line-height: 1.65;
+  }
+  .intro p { margin: 0 0 8px; }
+  .intro strong { color: var(--cb-orange-light); }
+  .intro code {
+    background: rgba(0,0,0,0.45); padding: 1px 6px;
+    color: #fde68a; border: 1px solid #1a1a1a;
+  }
+
+  /* Three-block row */
+  .blocks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 0 0 18px; }
+  @media (max-width: 640px) { .blocks { grid-template-columns: 1fr; } }
+  .cb-tile {
+    cursor: pointer; user-select: none; padding: 18px 16px 16px;
+    border: 4px solid #1a1a1a; color: #fff;
+    box-shadow: inset 0 -6px 0 rgba(0,0,0,0.3), inset 0 4px 0 rgba(255,255,255,0.12);
+    transition: transform 0.06s, filter 0.1s;
+    position: relative;
+  }
+  .cb-tile:hover { filter: brightness(1.1); }
+  .cb-tile:active, .cb-tile.active { transform: translateY(3px); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.06); }
+  .cb-tile.active { outline: 3px solid #fff; outline-offset: -7px; }
+  .cb-tile.impulse { background: linear-gradient(180deg, var(--cb-orange) 0%, #92400e 100%); }
+  .cb-tile.repeat  { background: linear-gradient(180deg, var(--cb-purple) 0%, #4c1d95 100%); }
+  .cb-tile.chain   { background: linear-gradient(180deg, var(--cb-green) 0%, #14532d 100%); }
+  .cb-tile .glyph {
+    width: 56px; height: 56px; margin: 0 auto 10px;
+    background-size: 14px 14px, 14px 14px, 100% 100%;
+    background-position: 0 0, 7px 7px, 0 0;
+    border: 3px solid #1a1a1a;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.35);
+  }
+  .cb-tile.impulse .glyph {
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange));
+  }
+  .cb-tile.repeat .glyph {
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(180deg, var(--cb-purple-light), var(--cb-purple));
+  }
+  .cb-tile.chain .glyph {
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.25) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.25) 75%),
+      linear-gradient(180deg, var(--cb-green-light), var(--cb-green));
+  }
+  .cb-tile .name {
+    font-family: 'Press Start 2P', monospace; font-size: 0.62rem;
+    letter-spacing: 0.06em; text-align: center;
+    text-shadow: 1px 1px 0 #000; margin-bottom: 6px;
+  }
+  .cb-tile .desc { font-size: 0.78rem; line-height: 1.5; text-align: center; opacity: 0.95; }
+
+  /* Detail panel */
+  .detail {
+    background: rgba(15, 15, 15, 0.78); border: 2px solid #1a1a1a;
+    padding: 14px 18px; margin-bottom: 18px;
+    font-size: 0.9rem; line-height: 1.6; min-height: 80px;
+    color: #fef3c7; display: none;
+  }
+  .detail.show { display: block; }
+  .detail h3 {
+    font-family: 'Press Start 2P', monospace; font-size: 0.62rem;
+    color: var(--cb-orange-light); margin: 0 0 8px; letter-spacing: 0.08em;
+  }
+  .detail code { background: rgba(255,255,255,0.05); padding: 1px 5px; color: #fde68a; }
+
+  /* Examples In Action — sample commands you'd put in a command block */
+  .examples { margin: 0 0 18px; }
+  .examples h3 {
+    font-family: 'Press Start 2P', monospace; font-size: 0.62rem;
+    color: var(--cb-orange-light); margin: 0 0 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .ex-card {
+    display: grid; grid-template-columns: 14px 1fr auto; gap: 14px; align-items: center;
+    background: var(--stone-2); border: 2px solid #1a1a1a;
+    padding: 12px 16px; margin-bottom: 8px; cursor: pointer;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.05);
+    transition: transform 0.06s, filter 0.1s, outline 0.15s;
+  }
+  .ex-card:hover { filter: brightness(1.15); transform: translateX(2px); }
+  .ex-card.copied { outline: 2px solid var(--cb-orange-light); outline-offset: -4px; }
+  .ex-card .marker { align-self: stretch; min-height: 32px; border-right: 2px solid #1a1a1a; }
+  .ex-card.impulse .marker { background: linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange)); }
+  .ex-card.repeat  .marker { background: linear-gradient(180deg, var(--cb-purple-light), var(--cb-purple)); }
+  .ex-card.chain   .marker { background: linear-gradient(180deg, var(--cb-green-light), var(--cb-green)); }
+  .ex-card .body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .ex-card .cmd {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.92rem; font-weight: 700;
+    color: #fde68a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ex-card .cmd::before { content: '/'; color: var(--cb-orange-light); margin-right: 2px; }
+  .ex-card .desc { font-size: 0.78rem; color: var(--ink-mute); line-height: 1.4; }
+  .ex-card .badge {
+    font-family: 'Press Start 2P', monospace; font-size: 0.5rem;
+    padding: 4px 7px; letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .ex-card.impulse .badge { background: var(--cb-orange-light); color: #2a1500; }
+  .ex-card.repeat  .badge { background: var(--cb-purple-light); color: #2c0a47; }
+  .ex-card.chain   .badge { background: var(--cb-green-light); color: #052e15; }
+  .ex-copy-toast {
+    text-align: center; font-size: 0.78rem; color: var(--good);
+    margin-top: -4px; margin-bottom: 14px; min-height: 1.2em;
+    transition: opacity 0.2s; opacity: 0;
+  }
+  .ex-copy-toast.show { opacity: 1; }
+
+  /* Challenge card */
+  .challenge {
+    background: linear-gradient(180deg, var(--cb-orange) 0%, #92400e 100%);
+    border: 4px solid #1a1a1a; padding: 18px 22px;
+    box-shadow: inset 0 -6px 0 rgba(0,0,0,0.25), inset 0 4px 0 rgba(255,255,255,0.12);
+    margin-bottom: 14px;
+  }
+  .challenge .lbl {
+    font-family: 'Press Start 2P', monospace; font-size: 0.55rem;
+    color: #fef3c7; letter-spacing: 0.1em; margin-bottom: 8px;
+  }
+  .challenge .ask { font-size: 0.96rem; font-weight: 700; color: #fff; text-shadow: 1px 1px 0 #000; }
+
+  .cmd-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .cmd-input-wrap {
+    flex: 1; position: relative; background: #1a1a1a; border: 2px solid #1a1a1a;
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.45);
+  }
+  .cmd-input-wrap::before {
+    content: '/'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--cb-orange-light); font-size: 1.1rem; font-weight: 700;
+    pointer-events: none; text-shadow: 1px 1px 0 #000;
+  }
+  .cmd-input {
+    width: 100%; border: none; outline: none; background: transparent; color: #f4f4f4;
+    padding: 12px 14px 12px 28px;
+    font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 500;
+    caret-color: var(--cb-orange-light);
+  }
+  .cmd-input::placeholder { color: #6b7280; font-style: italic; }
+
+  .btn {
+    font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
+    padding: 0 18px; cursor: pointer; border: 2px solid #1a1a1a;
+    background: var(--stone-1); color: var(--ink);
+    box-shadow: inset 0 -4px 0 #1a1a1a, inset 0 3px 0 rgba(255,255,255,0.10);
+    letter-spacing: 0.08em;
+  }
+  .btn:hover { background: #6b6b6b; }
+  .btn:active { box-shadow: inset 0 -1px 0 #1a1a1a; transform: translateY(2px); }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--cb-orange-light), var(--cb-orange));
+    color: #2a1500;
+    box-shadow: inset 0 -4px 0 #92400e, inset 0 3px 0 rgba(255,255,255,0.25);
+  }
+  .btn-primary:hover { filter: brightness(1.06); }
+
+  .feedback {
+    margin: 10px 0 0; padding: 10px 14px; font-size: 0.9rem;
+    border-left: 3px solid var(--cb-orange-light); background: rgba(0,0,0,0.45);
+    display: none; line-height: 1.5;
+  }
+  .feedback.show { display: block; }
+  .feedback.good { border-left-color: var(--good); color: #d1fae5; }
+  .feedback.bad  { border-left-color: var(--bad);  color: #fecaca; }
+  .feedback code { background: rgba(255,255,255,0.06); padding: 1px 5px; color: #fde68a; }
+
+  .end-overlay {
+    position: fixed; inset: 0; z-index: 60; display: none;
+    align-items: center; justify-content: center; padding: 24px;
+    background: rgba(15,15,15,0.7); backdrop-filter: blur(2px);
+  }
+  .end-overlay.show { display: flex; }
+  .end-card {
+    background: linear-gradient(180deg, var(--stone-1) 0%, var(--stone-2) 100%);
+    border: 4px solid #1a1a1a; padding: 26px 24px; max-width: 460px; width: 100%; text-align: center;
+    box-shadow: inset 0 -8px 0 rgba(0,0,0,0.3), inset 0 6px 0 rgba(255,255,255,0.06), 0 18px 36px rgba(0,0,0,0.6);
+  }
+  .end-card h2 {
+    font-family: 'Press Start 2P', monospace; font-size: 0.95rem;
+    color: var(--cb-orange-light); margin: 0 0 12px; text-shadow: 2px 2px 0 #000;
+  }
+  .end-card p { color: var(--ink-mute); margin: 0 0 18px; font-size: 0.9rem; line-height: 1.55; }
+  .end-actions { display: flex; flex-direction: column; gap: 10px; }
+  .end-actions .btn, .end-actions a.btn { padding: 12px 18px; width: 100%; text-decoration: none; line-height: 1; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div class="topbar">
+    <a class="exit" href="index.html" aria-label="Exit lesson">&times;</a>
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-dot cur"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="meta">
+      <span class="unit-label">UNIT 1 · LESSON 1</span>
+      <h1>What Is a Command Block?</h1>
+    </div>
+
+    <section class="intro">
+      <p>A <strong>command block</strong> is a special block in Minecraft that runs a command whenever it gets a redstone signal. You can't craft one — you only get them by typing <code>/give @s command_block</code> in a world with cheats enabled.</p>
+      <p>There are three types, and they all look like a grey block with arrows on top — but the colour of the centre tells you what they do.</p>
+    </section>
+
+    <section class="blocks">
+      <div class="cb-tile impulse" data-type="impulse" tabindex="0">
+        <div class="glyph"></div>
+        <div class="name">IMPULSE</div>
+        <div class="desc">Runs <strong>once</strong> when it gets a signal.</div>
+      </div>
+      <div class="cb-tile repeat" data-type="repeat" tabindex="0">
+        <div class="glyph"></div>
+        <div class="name">REPEAT</div>
+        <div class="desc">Runs <strong>every tick</strong> while powered.<br>(20 times per second!)</div>
+      </div>
+      <div class="cb-tile chain" data-type="chain" tabindex="0">
+        <div class="glyph"></div>
+        <div class="name">CHAIN</div>
+        <div class="desc">Runs <strong>after the previous</strong> block.</div>
+      </div>
+    </section>
+
+    <section class="detail" id="detail">
+      <h3 id="detailTitle">Tap a block above</h3>
+      <p id="detailBody">Click any of the three command blocks to learn what makes it special.</p>
+    </section>
+
+    <section class="examples">
+      <h3>▶ Examples In Action</h3>
+      <div class="ex-card impulse" data-cmd="/give @p diamond_sword">
+        <div class="marker"></div>
+        <div class="body">
+          <div class="cmd">give @p diamond_sword</div>
+          <div class="desc">Hand the nearest player a diamond sword the moment the block is powered.</div>
+        </div>
+        <span class="badge">IMPULSE</span>
+      </div>
+      <div class="ex-card impulse" data-cmd="/tp @s 0 100 0">
+        <div class="marker"></div>
+        <div class="body">
+          <div class="cmd">tp @s 0 100 0</div>
+          <div class="desc">One-shot teleport to coordinates 0, 100, 0 — a classic return-to-spawn button.</div>
+        </div>
+        <span class="badge">IMPULSE</span>
+      </div>
+      <div class="ex-card repeat" data-cmd="/effect give @a speed 1 1">
+        <div class="marker"></div>
+        <div class="body">
+          <div class="cmd">effect give @a speed 1 1</div>
+          <div class="desc">Re-applies a 1-second Speed II to every player every tick — a permanent fast-zone.</div>
+        </div>
+        <span class="badge">REPEAT</span>
+      </div>
+      <div class="ex-card chain" data-cmd="/say Phase 2 begins!">
+        <div class="marker"></div>
+        <div class="body">
+          <div class="cmd">say Phase 2 begins!</div>
+          <div class="desc">Place behind another block — fires only AFTER the previous command succeeds.</div>
+        </div>
+        <span class="badge">CHAIN</span>
+      </div>
+      <div class="ex-card impulse" data-cmd="/setblock ~ ~-1 ~ diamond_block">
+        <div class="marker"></div>
+        <div class="body">
+          <div class="cmd">setblock ~ ~-1 ~ diamond_block</div>
+          <div class="desc">Drops a diamond block right under your feet — handy when you need a safety save.</div>
+        </div>
+        <span class="badge">IMPULSE</span>
+      </div>
+      <div class="ex-copy-toast" id="copyToast">Copied!</div>
+    </section>
+
+    <section class="challenge">
+      <div class="lbl">▶ YOUR FIRST CHALLENGE</div>
+      <div class="ask">Give yourself a command block by typing the right command.</div>
+    </section>
+
+    <div class="cmd-row">
+      <div class="cmd-input-wrap">
+        <input type="text" id="cmdInput" class="cmd-input" autocomplete="off" autocorrect="off"
+               autocapitalize="off" spellcheck="false" placeholder="type /give @s command_block">
+      </div>
+      <button type="button" class="btn btn-primary" id="sendBtn">Run ▶</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="end-overlay" id="endCard">
+    <div class="end-card">
+      <h2 id="endTitle">Lesson 1 cleared!</h2>
+      <p id="endMsg">You now know the three types of command block and how to give yourself one. On to Coordinates &amp; Selectors!</p>
+      <div class="end-actions">
+        <a class="btn btn-primary" id="nextLessonLink" href="command-practice.html?u=1&l=2">Next Lesson ▶</a>
+        <a class="btn" href="index.html">Back to Course</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+  </script>
+
+  <script type="module">
+    // ─── Block-detail panel ─────────────────────────────────────────────
+    const DESCRIPTIONS = {
+      impulse: {
+        title: 'IMPULSE — Runs Once',
+        body: 'The orange one. Press the button or flick the lever and it executes its command exactly once. Default flavour when you first place a command block. Pair with a button for one-shot triggers like <code>/tp @p 0 100 0</code>.'
+      },
+      repeat: {
+        title: 'REPEAT — 20 Times a Second',
+        body: 'The purple one. Set to "Always Active" and it fires its command every single tick (Minecraft runs at 20 ticks/sec). Use it for ticking systems like score timers or per-frame particle effects — but keep the command light, it runs <strong>a lot</strong>.'
+      },
+      chain: {
+        title: 'CHAIN — Runs After the Previous',
+        body: 'The green one. Only fires after the command block behind it (impulse or repeat) succeeds. Stack chain blocks end-to-end to build a sequence of commands in one tick — perfect for multi-step combos with <code>/execute</code>.'
+      }
+    };
+    const detail = document.getElementById('detail');
+    const dTitle = document.getElementById('detailTitle');
+    const dBody  = document.getElementById('detailBody');
+    let opened = 0;
+    document.querySelectorAll('.cb-tile').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.cb-tile').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        const k = t.dataset.type;
+        dTitle.textContent = DESCRIPTIONS[k].title;
+        dBody.innerHTML = DESCRIPTIONS[k].body;
+        detail.classList.add('show');
+        if (!t.dataset.seen) {
+          t.dataset.seen = '1';
+          opened++;
+          if (opened === 3) {
+            document.getElementById('progressTrack').children[1].classList.add('done');
+            document.getElementById('progressTrack').children[2].classList.add('cur');
+          } else if (opened === 1) {
+            document.getElementById('progressTrack').children[0].classList.add('done');
+            document.getElementById('progressTrack').children[1].classList.add('cur');
+          }
+        }
+      });
+    });
+
+    // ─── Examples — click to copy the command ──────────────────────────
+    const toast = document.getElementById('copyToast');
+    document.querySelectorAll('.ex-card').forEach(card => {
+      card.addEventListener('click', async () => {
+        const cmd = card.dataset.cmd;
+        try { await navigator.clipboard.writeText(cmd); } catch {}
+        card.classList.add('copied');
+        toast.textContent = 'Copied  ' + cmd;
+        toast.classList.add('show');
+        setTimeout(() => card.classList.remove('copied'), 700);
+        setTimeout(() => toast.classList.remove('show'), 1400);
+      });
+    });
+
+    // ─── Challenge ──────────────────────────────────────────────────────
+    const fb = document.getElementById('feedback');
+    function submit() {
+      const input = document.getElementById('cmdInput');
+      const raw = input.value.trim();
+      if (!raw) return;
+      // Accept: /give @s command_block, /give @p command_block, etc., with optional minecraft: namespace.
+      const ok = /^\/?give\s+@[sapr]\s+(minecraft:)?command_block(\s|$)/i.test(raw);
+      if (ok) {
+        fb.className = 'feedback good show';
+        fb.innerHTML = '✔ <strong>Command executed.</strong> A command block appears at your feet. You\'re ready for Lesson 2.';
+        document.getElementById('progressTrack').children[2].classList.remove('cur');
+        document.getElementById('progressTrack').children[2].classList.add('done');
+        setTimeout(showEnd, 700);
+      } else {
+        fb.className = 'feedback bad show';
+        fb.innerHTML = '✘ Not quite. Try <code>/give @s command_block</code> — that\'s the syntax: <code>/give &lt;target&gt; &lt;item&gt;</code>.';
+        input.select();
+      }
+    }
+    document.getElementById('sendBtn').addEventListener('click', submit);
+    document.getElementById('cmdInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); submit(); }
+    });
+
+    // ─── End + mark complete ────────────────────────────────────────────
+    function showEnd() {
+      document.getElementById('endCard').classList.add('show');
+      markComplete();
+    }
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return; alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } =
+          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        // Global position: 15 lessons per unit, this is unit 1 lesson 1 → pos 1.
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'command-block'),
+          { 'cmd-1': { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+  </script>
+
+</body>
+</html>

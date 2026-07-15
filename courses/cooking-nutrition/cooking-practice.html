@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Cooking & Nutrition Practice — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/global.css">
+<link rel="stylesheet" href="../../css/exercises.css">
+<style>
+  :root {
+    --cream: #fff8ee; --paper: #fffdf8;
+    --paprika: #d35400; --paprika-d: #a04200;
+    --olive: #6c8e23; --olive-d: #4a6b18;
+    --tomato: #d64545; --tomato-d: #a82323;
+    --butter: #fcd34d;
+    --ink: #2a221a; --ink-soft: #6b5b4a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--cream);
+    background-image:
+      radial-gradient(rgba(211,84,0,0.05) 1.5px, transparent 1.5px),
+      radial-gradient(rgba(108,142,35,0.05) 1.5px, transparent 1.5px);
+    background-size: 28px 28px, 36px 36px;
+    background-position: 0 0, 14px 18px;
+    color: var(--ink); min-height: 100vh; margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  .topbar { display: flex; gap: 14px; align-items: center; padding: 18px 22px 8px; max-width: 720px; margin: 0 auto; }
+  .exit {
+    flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%;
+    border: none; background: var(--paper); color: var(--ink-soft);
+    font-size: 1.3rem; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    transition: background 0.15s;
+  }
+  .exit:hover { background: #fff; color: var(--paprika); }
+  .progress-track {
+    flex: 1; height: 14px; background: rgba(211,84,0,0.12);
+    border-radius: 999px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--butter), var(--paprika));
+    transition: width 0.4s cubic-bezier(.34,1.3,.64,1);
+  }
+  .stage { max-width: 720px; margin: 0 auto; padding: 8px 22px 40px; }
+
+  /* Lesson header — recipe card aesthetic */
+  .card {
+    background: var(--paper);
+    border-radius: 18px; padding: 22px 26px;
+    border: 1.5px solid rgba(211,84,0,0.18);
+    box-shadow: 0 8px 22px rgba(170,90,30,0.10);
+    margin-bottom: 18px;
+  }
+  .card .unit-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    color: var(--paprika); background: rgba(211,84,0,0.10);
+    padding: 4px 10px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .card h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.7rem; font-weight: 700; margin: 10px 0 4px;
+    color: var(--ink);
+  }
+  .card .sub {
+    color: var(--ink-soft); font-size: 0.92rem; line-height: 1.55;
+  }
+  .card .sub strong { color: var(--paprika-d); }
+
+  /* Exercises engine container styling overrides */
+  #exercises { margin-top: 4px; }
+  #completion { margin-top: 16px; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div class="topbar">
+    <a class="exit" href="index.html" aria-label="Exit lesson">&times;</a>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:100%"></div></div>
+  </div>
+
+  <main class="stage">
+    <section class="card">
+      <span class="unit-tag" id="unitTag">Unit 1 · Lesson 1</span>
+      <h1 id="lessonTitle">Loading…</h1>
+      <p class="sub" id="subtitle">&nbsp;</p>
+    </section>
+
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </main>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+  </script>
+
+  <script type="module">
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+
+    // ─── URL params ─────────────────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+    let unit   = parseInt(params.get('u') || '1', 10);
+    let lesson = parseInt(params.get('l') || '1', 10);
+    if (!unit) unit = 1;
+    if (!lesson) lesson = 1;
+    const LESSONS_PER_UNIT = 15;
+
+    function unitNameFromStorage(u) {
+      try {
+        const raw = localStorage.getItem('cook-unit-names');
+        if (!raw) return null;
+        const map = JSON.parse(raw);
+        return map[String(u)] || null;
+      } catch { return null; }
+    }
+    const unitName = unitNameFromStorage(unit) || `Unit ${unit}`;
+    document.getElementById('unitTag').textContent = `Unit ${unit} · Lesson ${lesson}`;
+    document.getElementById('lessonTitle').textContent = unitName;
+    document.getElementById('subtitle').innerHTML =
+      `A <strong>5-question taste test</strong> on the kitchen fundamentals behind this lesson.`;
+
+    // ─── Universal Cooking & Nutrition quiz bank (10 → 5 per lesson) ───
+    // Absurd wrong answers in Duolingo style per house rule.
+    const BANK = [
+      { type: 'multiple-choice',
+        question: 'What does "mise en place" mean?',
+        options: ['Prep all ingredients & tools before you start cooking',
+                  'A loud French chef\'s yelling style',
+                  'A tiny mise the chef whispers to',
+                  'When the dishwasher gives up'],
+        correctIndex: 0 },
+      { type: 'multiple-choice',
+        question: 'Safe internal temperature for cooked chicken (USDA)?',
+        options: ['165°F (74°C)', '8°F (-13°C)', '500°F (260°C)', 'Whatever the cat thinks'],
+        correctIndex: 0 },
+      { type: 'multiple-choice',
+        question: 'What is the Maillard reaction?',
+        options: ['Browning that develops deep, savoury flavour',
+                  'When the mail comes early', 'A type of wedding dance',
+                  'Onion-induced sadness'],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'Extra-virgin olive oil has a HIGH smoke point and is ideal for deep frying.',
+        correctAnswer: false },
+      { type: 'multiple-choice',
+        question: 'How should you hold a chef\'s knife?',
+        options: ['Pinch grip — thumb & forefinger on the blade',
+                  'Like a pen', 'Like a tennis racket', 'With oven mitts on'],
+        correctIndex: 0 },
+      { type: 'fill-blank',
+        question: 'Gluten is the protein network formed when ___ flour mixes with water.',
+        answer: 'wheat' },
+      { type: 'multiple-choice',
+        question: 'Pasta is "al dente" when…',
+        options: ['It still has a slight bite in the centre',
+                  'It dissolves on the spoon', 'It snaps like a pretzel',
+                  'It hums opera back to you'],
+        correctIndex: 0 },
+      { type: 'multiple-choice',
+        question: 'What does "fold in" mean when baking?',
+        options: ['Gently combine without deflating the air',
+                  'Slap the batter for 2 minutes', 'Whisper a recipe to it',
+                  'Origami the eggs'],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'Yeast eats sugars and produces carbon dioxide, which makes bread rise.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'Caramelization of pure sugar typically begins around…',
+        options: ['170°C / 340°F', '20°C / 68°F', '900°C / 1652°F',
+                  'When the sugar feels personally attacked'],
+        correctIndex: 0 }
+    ];
+
+    function pickFive(seed) {
+      const out = []; const used = new Set(); let s = seed || 1;
+      while (out.length < 5) {
+        s = (s * 9301 + 49297) % 233280;
+        const idx = s % BANK.length;
+        if (!used.has(idx)) { used.add(idx); out.push(BANK[idx]); }
+      }
+      return out;
+    }
+    const exercises = pickFive(unit * 100 + lesson);
+    const container = document.getElementById('exercises');
+    const completion = document.getElementById('completion');
+
+    const { score, xp } = await runExerciseSet(container, exercises);
+    const nextHref = lesson < LESSONS_PER_UNIT
+      ? `cooking-practice.html?u=${unit}&l=${lesson + 1}`
+      : `cooking-practice.html?u=${unit + 1}&l=1`;
+    await showLessonComplete(container, completion, score, { xp,
+      courseId: 'cooking-nutrition',
+      lessonId: `cook-${LESSONS_PER_UNIT * (unit - 1) + lesson}`,
+      nextHref, backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

@@ -18,6 +18,36 @@ const FINGERS = {
   RP: { name: 'Right Pinky', color: '#ec4899' }
 };
 
+// Spanish (lang-es) versions for the dynamic strings the JS injects after
+// initial render — Google Translate doesn't pick those up. Names match what
+// Translate produces on the static markup so the UI reads consistently.
+const FINGERS_ES = {
+  LP:     'Meñique izquierdo',
+  LR:     'Anillo izquierdo',
+  LM:     'Centro izquierdo',
+  LI:     'Índice izquierdo',
+  TH:     'Pulgar',
+  'TH-L': 'Pulgar izquierdo',
+  'TH-R': 'Pulgar derecho',
+  RI:     'Índice derecho',
+  RM:     'Centro derecho',
+  RR:     'Anillo derecho',
+  RP:     'Meñique derecho'
+};
+
+function isEs() {
+  return !!(document.body && document.body.classList.contains('lang-es'));
+}
+
+function fingerName(code) {
+  if (isEs()) {
+    const es = FINGERS_ES[code];
+    if (es) return es;
+  }
+  const meta = FINGERS[code];
+  return meta ? meta.name : code;
+}
+
 // Standard touch-typing finger map for QWERTY. Each entry: [primary key,
 // shifted key, finger key]. Spaces use TH.
 const KEY_ROWS = [
@@ -69,7 +99,11 @@ function buildKeyEl(key, shifted, finger) {
   const long = ['Tab','CapsLock','Enter','Shift','Backspace','Space'];
   if (long.includes(key)) el.style.minWidth = key === 'Space' ? '180px' : '40px';
   if (key === 'Space') el.style.minWidth = '320px';
-  el.textContent = (key === 'Space') ? '⎵ Space' : (key.length === 1 ? key.toUpperCase() : key);
+  // On a Spanish (ISO) layout, the right-pinky home-row key is Ñ instead of
+  // semicolon — show that label when the page is in Spanish.
+  let displayKey = key;
+  if (isEs() && key === ';') displayKey = 'Ñ';
+  el.textContent = (key === 'Space') ? '⎵ Space' : (displayKey.length === 1 ? displayKey.toUpperCase() : displayKey);
   return el;
 }
 
@@ -86,7 +120,9 @@ function buildKeyboard() {
 }
 
 // 10-finger introduction strip — visualizes each fingertip and its home-row key.
-const FINGER_INTRO = [
+// `getFingerIntro()` returns the lang-appropriate version: Spanish labels +
+// Ñ instead of ; for the right pinky when body.lang-es is set.
+const FINGER_INTRO_BASE = [
   { code: 'LP',   label: 'Left Pinky',   home: 'A' },
   { code: 'LR',   label: 'Left Ring',    home: 'S' },
   { code: 'LM',   label: 'Left Middle',  home: 'D' },
@@ -98,15 +134,24 @@ const FINGER_INTRO = [
   { code: 'RR',   label: 'Right Ring',   home: 'L' },
   { code: 'RP',   label: 'Right Pinky',  home: ';' }
 ];
+function getFingerIntro() {
+  const es = isEs();
+  return FINGER_INTRO_BASE.map(f => ({
+    ...f,
+    label: es ? (FINGERS_ES[f.code] || f.label) : f.label,
+    home: (es && f.code === 'RP') ? 'Ñ' : f.home
+  }));
+}
 
 function buildFingers() {
   const wrap = document.createElement('div');
+  wrap.className = 'tfg-fingers';
   wrap.style.cssText = `
     display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
     padding: 4px 6px 12px; border-bottom: 1px dashed rgba(255,255,255,0.08);
     margin-bottom: 10px;
   `;
-  FINGER_INTRO.forEach(f => {
+  getFingerIntro().forEach(f => {
     const fingerKey = f.baseFinger || f.code;
     const meta = FINGERS[fingerKey];
     const pad = document.createElement('div');
@@ -249,7 +294,7 @@ function buildWidget() {
       background:#22c55e; box-shadow:0 0 0 0 rgba(34,197,94,0.7);
       animation:tfgPulse 1.6s ease-out infinite;"></span>
     <strong style="font: 700 0.85rem -apple-system, BlinkMacSystemFont, system-ui, sans-serif; letter-spacing: 0.02em;">🎥 AI Camera — Finger Guide</strong>
-    <span id="tfg-message" style="margin-left:6px; font: 600 0.78rem -apple-system, system-ui, sans-serif; color:#9ca3af;">Type any key — I'll show you the correct finger.</span>
+    <span id="tfg-message" style="margin-left:6px; font: 600 0.78rem -apple-system, system-ui, sans-serif; color:#9ca3af;">${isEs() ? "Pulsa cualquier tecla — te mostraré el dedo correcto." : "Type any key — I'll show you the correct finger."}</span>
   `;
   messageEl = title.querySelector('#tfg-message');
 
@@ -329,33 +374,46 @@ function onKey(e) {
   if (key === ' ') key = 'Space';
   const expected = flashKey(key);
   if (!expected) {
-    setMessage(`Key <strong>${key}</strong> isn't on the typing map.`);
+    setMessage(isEs()
+      ? `La tecla <strong>${key}</strong> no está en el mapa de mecanografía.`
+      : `Key <strong>${key}</strong> isn't on the typing map.`);
     return;
   }
 
-  const keyDisplay = key === 'Space' ? '⎵ Space' : (key.length === 1 ? key.toUpperCase() : key);
+  // Display label for the pressed key. On a Spanish layout, ; reads as Ñ.
+  let keyForDisplay = key;
+  if (isEs() && key === ';') keyForDisplay = 'Ñ';
+  const keyDisplay = keyForDisplay === 'Space' ? '⎵ Space' : (keyForDisplay.length === 1 ? keyForDisplay.toUpperCase() : keyForDisplay);
+  const expectedName = fingerName(expected.code);
+  const es = isEs();
 
   // If the real camera is on, compare AI-detected pressing finger vs expected.
   if (cameraEnabled) {
     const actual = detectPressingFinger();
     if (actual) {
       if (actual.fingerCode === expected.code) {
-        setMessage(`✓ <strong style="color:#22c55e;">CORRECT!</strong> Pressed <strong>${keyDisplay}</strong> with your <strong style="color:${expected.color};">${expected.name}</strong>`);
+        setMessage(es
+          ? `✓ <strong style="color:#22c55e;">¡CORRECTO!</strong> Pulsada <strong>${keyDisplay}</strong> con tu <strong style="color:${expected.color};">${expectedName}</strong>`
+          : `✓ <strong style="color:#22c55e;">CORRECT!</strong> Pressed <strong>${keyDisplay}</strong> with your <strong style="color:${expected.color};">${expected.name}</strong>`);
       } else {
-        const actualMeta = FINGERS[actual.fingerCode];
-        showWrongFingerAlert(expected.name, actualMeta?.name || actual.fingerCode);
+        const actualName = fingerName(actual.fingerCode);
+        showWrongFingerAlert(expectedName, actualName);
         // Also flash the actual-finger pad red so the user sees which finger AI thought pressed
         flashFingerPad(actual.fingerCode);
       }
       return;
     }
     // AI couldn't tell with confidence
-    setMessage(`Pressed <strong>${keyDisplay}</strong> — use <strong style="color:${expected.color};">${expected.name}</strong> (AI couldn't tell which finger you used — show hands more clearly)`);
+    setMessage(es
+      ? `Pulsada <strong>${keyDisplay}</strong> — usa <strong style="color:${expected.color};">${expectedName}</strong> (la IA no pudo identificar tu dedo — muestra las manos con más claridad)`
+      : `Pressed <strong>${keyDisplay}</strong> — use <strong style="color:${expected.color};">${expected.name}</strong> (AI couldn't tell which finger you used — show hands more clearly)`);
     return;
   }
 
   // Camera off — keyboard guide only.
-  setMessage(`Pressed <strong style="color:#fff;">${keyDisplay}</strong> — use your <strong style="color:${expected.color};">${expected.name}</strong> finger`);
+  setMessage(es
+    ? `Pulsada <strong style="color:#fff;">${keyDisplay}</strong> — usa tu dedo <strong style="color:${expected.color};">${expectedName}</strong>`
+    : `Pressed <strong style="color:#fff;">${keyDisplay}</strong> — use your <strong style="color:${expected.color};">${expected.name}</strong> finger`);
 }
 
 function shouldActivate() {
@@ -707,6 +765,34 @@ function disableRealCamera(button) {
  * Boot the AI Camera Finger Guide. Idempotent. Only activates on Typing Skills
  * pages so it doesn't crowd the rest of the site.
  */
+// Re-render the parts of the widget whose text depends on body.lang-es.
+// Called when the language class flips (e.g. Google Translate finishes).
+let _lastLangEs = null;
+function refreshLang() {
+  if (!widget) return;
+  const es = isEs();
+  if (es === _lastLangEs) return;
+  _lastLangEs = es;
+  // Replace the finger strip with a fresh build (labels + Ñ for right pinky).
+  const oldStrip = widget.querySelector('.tfg-fingers');
+  if (oldStrip) {
+    const fresh = buildFingers();
+    oldStrip.replaceWith(fresh);
+  }
+  // Re-label the ; key on the on-screen keyboard.
+  const semi = widget.querySelector('.tfg-key[data-key=";"]');
+  if (semi) semi.textContent = es ? 'Ñ' : ';';
+  // Reset the initial hint if no key has been pressed yet.
+  if (messageEl) {
+    const English = "Type any key — I'll show you the correct finger.";
+    const Spanish = "Pulsa cualquier tecla — te mostraré el dedo correcto.";
+    const txt = messageEl.textContent || '';
+    if (txt === English || txt === Spanish) {
+      messageEl.textContent = es ? Spanish : English;
+    }
+  }
+}
+
 export function initTypingFingerGuide() {
   if (window.__tfgInstalled) return;
   if (!shouldActivate()) return;
@@ -716,6 +802,14 @@ export function initTypingFingerGuide() {
     widget = buildWidget();
     document.body.appendChild(widget);
     document.addEventListener('keydown', onKey, true);
+    _lastLangEs = isEs();
+    // Watch for lang-es / lang-pt toggles so the strip + ; → Ñ update without
+    // a page reload after Google Translate finishes.
+    try {
+      new MutationObserver(refreshLang).observe(document.body, {
+        attributes: true, attributeFilter: ['class']
+      });
+    } catch {}
   };
 
   if (document.readyState === 'loading') {

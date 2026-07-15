@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grueling Challenge — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    body { background: #0a0405; }
+    .course-header {
+      padding: 80px 24px 32px; text-align: center;
+      background: radial-gradient(ellipse at top, #2a0608 0%, #0a0405 75%);
+      border-bottom: 1px solid #1f0606;
+    }
+    .course-badge {
+      display: inline-block; padding: 5px 16px; font-size: 0.78rem;
+      font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em;
+      color: #fff; border-radius: 999px; margin-bottom: 14px;
+      background: #b91c1c; border: 2px solid #ef4444;
+      box-shadow: 0 0 22px rgba(239,68,68,0.45);
+    }
+    .course-header h1 {
+      font-size: 3rem; font-weight: 900; letter-spacing: 0.04em;
+      color: #ef4444; margin: 4px 0 12px; line-height: 1.05;
+      text-shadow: 0 0 24px rgba(239,68,68,0.5);
+    }
+    .course-header h1::before { content: "⚠ "; }
+    .course-header h1::after { content: " ⚠"; }
+    .course-header .lead {
+      color: #fca5a5; font-size: 1.05rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin: 0 auto 14px; max-width: 620px;
+    }
+    .course-header p {
+      font-size: 0.96rem; color: #d1d5db; max-width: 620px;
+      margin: 0 auto; line-height: 1.65;
+    }
+    .warn-box {
+      max-width: 620px; margin: 24px auto 0;
+      background: #160505; border: 2px solid #b91c1c;
+      border-radius: 12px; padding: 14px 18px;
+      color: #fecaca; font: 600 0.92rem -apple-system, system-ui, sans-serif;
+      text-align: left;
+    }
+    .warn-box strong { color: #fff; display: block; margin-bottom: 4px; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.82rem; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2.1rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge">⚠ Final Test — Brutal</span>
+    <h1>Grueling Challenge</h1>
+    <p class="lead">The hardest thing on Mathagram. Beat this and you've truly mastered the site.</p>
+    <p>180 brutal questions across 12 cross-subject gauntlets — calculus monsters, abstract algebra, IMO geometry, Putnam problems, NP-hard algorithms, competitive-programming traps, knights-and-knaves logic, dead-language translation, memory marathons, mental-math under fire, ultra-fast typing — finishing with a no-help, no-skip Final Boss synthesis problem that pulls from every Mathagram course.</p>
+    <div class="warn-box">
+      <strong>⚠ Read before starting</strong>
+      This is not a tutorial. Every question assumes you've already mastered the underlying course. Expect to spend hours per challenge. There is no shame in failing — only in giving up. Working extremely hard is the entire point.
+    </div>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "Gauntlet 1 — Mathematical Hell (Putnam-Tier Calculus & Analysis)",
+      "Gauntlet 2 — Algebra Crucible (Abstract Algebra Hellscape)",
+      "Gauntlet 3 — Geometry Nightmare (IMO-Level Synthetic & Olympiad)",
+      "Gauntlet 4 — Number Theory Crucible (Riemann-Adjacent Hardness)",
+      "Gauntlet 5 — Combinatorics Trial (Extremal & Erdős-Style)",
+      "Gauntlet 6 — Programming Gauntlet (Hardest Competitive Programming)",
+      "Gauntlet 7 — Algorithms Crucible (NP-Hard & Approximation)",
+      "Gauntlet 8 — Logic Puzzle Hell (Knights, Knaves & Paradoxes)",
+      "Gauntlet 9 — Linguistic Maze (Dead-Language & Conlang Translation)",
+      "Gauntlet 10 — Memory Marathon (Pi to 1000, Periodic Table, Phone Book)",
+      "Gauntlet 11 — Speed Trial (Mental Math at 60+ wpm Typing)",
+      "Gauntlet 12 — FINAL BOSS — No Help, No Skip, No Mercy"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Question ${j}`);
+      lessons.push(`${name} — FINAL`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'gru-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('grueling-challenge');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('grueling-challenge');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

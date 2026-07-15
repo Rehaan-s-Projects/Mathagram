@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Water Sort — 2 Colors Easy — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+  .lesson-page { max-width: 900px; margin: 0 auto; padding: 56px 16px 80px; }
+  .lesson-header { text-align: center; margin-bottom: 16px; }
+  .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fde68a; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; margin-bottom: 12px; }
+  .lesson-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; color: #fff; }
+  .lesson-header p { font-size: 0.94rem; color: #cbd5e1; max-width: 580px; margin: 0 auto; line-height: 1.5; }
+
+  .puzzle-strip { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 14px 0 10px; }
+  .puzzle-strip .chip {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    color: #cbd5e1; font-weight: 800; font-size: 0.85rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.08s, background 0.15s;
+  }
+  .puzzle-strip .chip:hover { background: rgba(255,255,255,0.12); }
+  .puzzle-strip .chip.active { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b1b; border-color: #f59e0b; transform: scale(1.08); }
+  .puzzle-strip .chip.done { background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; border-color: #22c55e; }
+  .puzzle-strip .chip.done::after { content: '✓'; position: absolute; }
+
+  .hud { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 8px 0 18px; flex-wrap: wrap; }
+  .hud .pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 0.85rem; color: #f1f5f9; }
+  .hud .pill strong { color: #fde68a; }
+  .hud button { padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #f1f5f9; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: inherit; }
+  .hud button:hover { background: rgba(255,255,255,0.12); }
+  .hud button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .stage { background: linear-gradient(180deg, #1e293b, #0f172a); border-radius: 18px; padding: 26px 18px 30px; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 18px 38px rgba(0,0,0,0.30); }
+  .tubes-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .tube {
+    --layers: 4;
+    width: 56px; height: calc(var(--layers) * 36px + 14px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
+    border: 2px solid rgba(255,255,255,0.18); border-top: none;
+    border-radius: 0 0 28px 28px;
+    position: relative;
+    display: flex; flex-direction: column-reverse; overflow: hidden;
+    cursor: pointer; transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .tube::before { content: ''; position: absolute; top: -6px; left: -2px; right: -2px; height: 8px; background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)); border-radius: 4px 4px 0 0; border: 2px solid rgba(255,255,255,0.18); border-bottom: none; }
+  .tube.selected { transform: translateY(-14px); border-color: #fbbf24; box-shadow: 0 0 22px rgba(251,191,36,0.55); }
+  .tube.selected::before { border-color: #fbbf24; }
+  .tube.flash-bad { animation: shake 0.32s; border-color: #ef4444; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .tube.solved { border-color: #22c55e; box-shadow: 0 0 22px rgba(34,197,94,0.45); }
+  .tube.solved::before { border-color: #22c55e; }
+  .layer { height: 36px; width: 100%; }
+
+  .palette { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; font-size: 0.78rem; color: #94a3b8; }
+  .palette .swatch { display: inline-flex; align-items: center; gap: 4px; }
+  .palette .swatch i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; border: 1px solid rgba(255,255,255,0.15); }
+
+  .instructions { background: rgba(251,191,36,0.06); border: 1px dashed rgba(251,191,36,0.30); border-radius: 14px; padding: 12px 18px; margin: 18px 0 14px; font-size: 0.9rem; color: #fde68a; line-height: 1.55; }
+  .instructions strong { color: #fef3c7; }
+
+  .stars { display: inline-flex; gap: 2px; font-size: 1rem; }
+  .stars .star { color: #475569; }
+  .stars .star.lit { color: #fbbf24; }
+
+  .puzzle-complete {
+    max-width: 480px; margin: 18px auto 0; padding: 18px 22px;
+    background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45);
+    border-radius: 14px; text-align: center; display: none;
+  }
+  .puzzle-complete.show { display: block; }
+  .puzzle-complete h3 { color: #86efac; margin: 0 0 6px; font-size: 1.1rem; }
+  .puzzle-complete .next-btn { display: inline-block; margin-top: 8px; padding: 10px 22px; border: none; border-radius: 999px; background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; font-weight: 800; cursor: pointer; font-family: inherit; }
+
+  .win-card {
+    max-width: 540px; margin: 26px auto 0; padding: 24px;
+    background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45);
+    border-radius: 16px; text-align: center; display: none;
+  }
+  .win-card.show { display: block; }
+  .win-card h2 { color: #86efac; margin: 0 0 6px; font-size: 1.4rem; }
+  .win-card p { color: #d1fae5; margin: 0 0 14px; }
+  .win-card .total-stars { font-size: 2rem; margin: 6px 0 10px; }
+  .win-card .btn-next { display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; font-weight: 800; border-radius: 999px; text-decoration: none; font-size: 0.95rem; margin: 0 6px; }
+  .win-card .btn-next.alt { background: rgba(255,255,255,0.08); color: #f1f5f9; }
+
+  .footer-nav { text-align: center; margin-top: 28px; }
+  .footer-nav a { color: #fbbf24; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+  @media (max-width: 540px) {
+    .tube { width: 46px; }
+    .layer { height: 30px; }
+    .tube { height: calc(var(--layers) * 30px + 14px); }
+  }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container">
+    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+  </div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">🧩 Unit 1 · Lesson 2 · 2 Colors — Easy</span>
+      <h1>2 Colors — Easy</h1>
+      <p>Five hand-built 2-color puzzles, getting trickier as you go. Solve each one to earn <strong>up to 3 stars</strong> based on how few moves you used. Clear all 5 to finish the lesson.</p>
+    </header>
+
+    <div class="puzzle-strip" id="puzzle-strip"></div>
+
+    <div class="hud">
+      <span class="pill">Puzzle: <strong id="puzzle-num">1</strong> / 5</span>
+      <span class="pill">Moves: <strong id="moves">0</strong></span>
+      <span class="pill"><span class="stars" id="live-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span></span></span>
+      <button type="button" id="undo-btn" disabled>↶ Undo</button>
+      <button type="button" id="reset-btn">⟲ Reset Puzzle</button>
+    </div>
+
+    <div class="stage">
+      <div class="tubes-row" id="tubes-row"></div>
+      <div class="palette" id="palette"></div>
+    </div>
+
+    <div class="instructions">
+      <strong>Goal:</strong> Make every tube either empty or hold one solid color. <strong>Tap a tube</strong> to pick it up, <strong>tap another</strong> to pour onto an empty tube or onto a matching top color.
+    </div>
+
+    <section class="puzzle-complete" id="puzzle-complete">
+      <h3>✅ Puzzle <span id="pc-num">1</span> solved!</h3>
+      <div class="stars" id="pc-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <div><button type="button" class="next-btn" id="pc-next">Next Puzzle →</button></div>
+    </section>
+
+    <section class="win-card" id="win-card">
+      <h2>🎉 You finished all 5 puzzles!</h2>
+      <div class="total-stars" id="total-stars">★★★★★ ★★★★★ ★★★★★</div>
+      <p>You earned <strong id="final-stars">0</strong> / 15 stars total. Try to come back and beat your record, or move on.</p>
+      <a class="btn-next" href="lesson-3.html">Next Lesson →</a>
+      <a class="btn-next alt" href="index.html">Back to Learning Path</a>
+      <button type="button" class="btn-next alt" id="replay-all">Replay All 5</button>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Brain Puzzle Games</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ─── 2-Colors Water Sort — 5 hand-built puzzles ───────────────────────
+    const COLORS = ['#ef4444','#3b82f6']; // red, blue (just 2 for this lesson)
+    const COLOR_NAMES = ['red','blue'];
+    const TUBE_CAPACITY = 4;
+
+    // Layers ordered BOTTOM → TOP. 0 = red, 1 = blue, [] = empty tube.
+    // optimalMoves is the known shortest solve for that starting layout
+    // (computed by hand; star thresholds derive from it).
+    const PUZZLES = [
+      {
+        // P1 — gentle warm-up: one swap each side, 2 empty tubes.
+        tubes: [ [0,0,1,0], [1,1,0,1], [], [] ],
+        optimal: 3
+      },
+      {
+        // P2 — sandwich: red-blue-blue-red, blue-red-red-blue. 1 empty.
+        tubes: [ [0,1,1,0], [1,0,0,1], [] ],
+        optimal: 5
+      },
+      {
+        // P3 — alternating layers, 1 empty.
+        tubes: [ [0,1,0,1], [1,0,1,0], [] ],
+        optimal: 6
+      },
+      {
+        // P4 — 3 filled tubes, 1 empty. Tougher 2-color juggle.
+        tubes: [ [0,1,1,0], [1,0,1,0], [0,1,0,1], [] ],
+        optimal: 7
+      },
+      {
+        // P5 — final test: messy, 1 empty.
+        tubes: [ [1,0,1,1], [0,1,0,0], [1,0,1,0], [] ],
+        optimal: 8
+      }
+    ];
+
+    let pIdx = 0;                                  // current puzzle index
+    let tubes = [];
+    let selected = null;
+    let moves = 0;
+    let history = [];
+    let isWon = false;
+    const puzzleStars = new Array(PUZZLES.length).fill(0);
+
+    const tubesRow      = document.getElementById('tubes-row');
+    const movesEl       = document.getElementById('moves');
+    const liveStarsEl   = document.getElementById('live-stars');
+    const puzzleNumEl   = document.getElementById('puzzle-num');
+    const undoBtn       = document.getElementById('undo-btn');
+    const resetBtn      = document.getElementById('reset-btn');
+    const palette       = document.getElementById('palette');
+    const strip         = document.getElementById('puzzle-strip');
+    const puzzleComplete= document.getElementById('puzzle-complete');
+    const pcNum         = document.getElementById('pc-num');
+    const pcStars       = document.getElementById('pc-stars');
+    const pcNextBtn     = document.getElementById('pc-next');
+    const winCard       = document.getElementById('win-card');
+    const totalStarsEl  = document.getElementById('total-stars');
+    const finalStarsEl  = document.getElementById('final-stars');
+    const replayAllBtn  = document.getElementById('replay-all');
+
+    // ─── Palette ─────────────────────────────────────────────────────────
+    for (let c = 0; c < COLORS.length; c++) {
+      const span = document.createElement('span');
+      span.className = 'swatch';
+      span.innerHTML = `<i style="background:${COLORS[c]}"></i>${COLOR_NAMES[c]}`;
+      palette.appendChild(span);
+    }
+
+    // ─── Build puzzle strip (chips for each of the 5 puzzles) ────────────
+    function renderStrip() {
+      strip.innerHTML = '';
+      for (let i = 0; i < PUZZLES.length; i++) {
+        const chip = document.createElement('div');
+        chip.className = 'chip' + (i === pIdx ? ' active' : '') + (puzzleStars[i] > 0 ? ' done' : '');
+        chip.textContent = String(i + 1);
+        chip.addEventListener('click', () => loadPuzzle(i));
+        strip.appendChild(chip);
+      }
+    }
+
+    function loadPuzzle(idx) {
+      pIdx = idx;
+      tubes = PUZZLES[idx].tubes.map(t => t.slice());
+      moves = 0;
+      selected = null;
+      history = [];
+      isWon = false;
+      undoBtn.disabled = true;
+      puzzleComplete.classList.remove('show');
+      puzzleNumEl.textContent = idx + 1;
+      movesEl.textContent = 0;
+      updateLiveStars();
+      renderStrip();
+      render();
+    }
+
+    function isTubeSolved(t) {
+      if (t.length === 0) return true;
+      if (t.length !== TUBE_CAPACITY) return false;
+      return t.every(c => c === t[0]);
+    }
+    function checkWin() { return tubes.every(isTubeSolved); }
+    function topColor(t) { return t.length === 0 ? null : t[t.length - 1]; }
+    function topRunLength(t) {
+      if (t.length === 0) return 0;
+      const c = topColor(t);
+      let n = 0;
+      for (let i = t.length - 1; i >= 0; i--) { if (t[i] === c) n++; else break; }
+      return n;
+    }
+    function canPour(src, dst) {
+      if (src === dst) return false;
+      const s = tubes[src], d = tubes[dst];
+      if (s.length === 0) return false;
+      if (d.length >= TUBE_CAPACITY) return false;
+      const sc = topColor(s), dc = topColor(d);
+      if (dc !== null && dc !== sc) return false;
+      return true;
+    }
+    function pour(src, dst) {
+      history.push(tubes.map(t => t.slice()));
+      undoBtn.disabled = false;
+      const s = tubes[src], d = tubes[dst];
+      const color = topColor(s);
+      const run = topRunLength(s);
+      const space = TUBE_CAPACITY - d.length;
+      const move = Math.min(run, space);
+      for (let i = 0; i < move; i++) { s.pop(); d.push(color); }
+      moves++;
+      movesEl.textContent = moves;
+      updateLiveStars();
+      render();
+      if (checkWin()) onPuzzleSolved();
+    }
+
+    // Star formula:
+    //  3 stars: moves ≤ optimal+1
+    //  2 stars: moves ≤ optimal+3
+    //  1 star : any solve
+    function starsFor(m, opt) {
+      if (m <= opt + 1) return 3;
+      if (m <= opt + 3) return 2;
+      return 1;
+    }
+    function renderStars(host, n) {
+      host.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const s = document.createElement('span');
+        s.className = 'star' + (i < n ? ' lit' : '');
+        s.textContent = '★';
+        host.appendChild(s);
+      }
+    }
+    function updateLiveStars() {
+      // While playing, show what they'd get if they finished now
+      // (assuming they solve in 0 more moves — pure projection).
+      const projected = starsFor(moves, PUZZLES[pIdx].optimal);
+      renderStars(liveStarsEl, projected);
+    }
+
+    function onPuzzleSolved() {
+      isWon = true;
+      const stars = starsFor(moves, PUZZLES[pIdx].optimal);
+      // Keep the better of the two if replaying.
+      if (stars > puzzleStars[pIdx]) puzzleStars[pIdx] = stars;
+      pcNum.textContent = pIdx + 1;
+      renderStars(pcStars, stars);
+      const isLast = pIdx === PUZZLES.length - 1;
+      pcNextBtn.textContent = isLast ? 'See Results →' : 'Next Puzzle →';
+      puzzleComplete.classList.add('show');
+      renderStrip();
+      // If every puzzle has at least 1 star, mark the lesson complete.
+      if (puzzleStars.every(x => x > 0)) markLessonComplete();
+    }
+    pcNextBtn.addEventListener('click', () => {
+      puzzleComplete.classList.remove('show');
+      if (pIdx < PUZZLES.length - 1) {
+        loadPuzzle(pIdx + 1);
+      } else {
+        // Show final win card
+        const total = puzzleStars.reduce((a, b) => a + b, 0);
+        totalStarsEl.textContent = puzzleStars.map(s => '★'.repeat(s) + '☆'.repeat(3 - s)).join('  ');
+        finalStarsEl.textContent = total;
+        winCard.classList.add('show');
+      }
+    });
+
+    function onTubeClick(idx) {
+      if (isWon) return;
+      if (selected === null) {
+        if (tubes[idx].length === 0) return;
+        selected = idx;
+        render();
+        return;
+      }
+      if (selected === idx) { selected = null; render(); return; }
+      if (canPour(selected, idx)) {
+        const src = selected;
+        selected = null;
+        pour(src, idx);
+      } else {
+        flashBad(idx);
+      }
+    }
+    function flashBad(idx) {
+      const el = tubesRow.children[idx];
+      if (!el) return;
+      el.classList.add('flash-bad');
+      setTimeout(() => el.classList.remove('flash-bad'), 320);
+    }
+
+    function render() {
+      tubesRow.innerHTML = '';
+      tubes.forEach((t, idx) => {
+        const el = document.createElement('div');
+        el.className = 'tube';
+        el.style.setProperty('--layers', TUBE_CAPACITY);
+        if (selected === idx) el.classList.add('selected');
+        if (isTubeSolved(t)) el.classList.add('solved');
+        el.addEventListener('click', () => onTubeClick(idx));
+        for (let i = 0; i < t.length; i++) {
+          const layer = document.createElement('div');
+          layer.className = 'layer';
+          layer.style.background = COLORS[t[i]];
+          el.appendChild(layer);
+        }
+        tubesRow.appendChild(el);
+      });
+    }
+
+    undoBtn.addEventListener('click', () => {
+      if (history.length === 0) return;
+      tubes = history.pop();
+      selected = null;
+      moves++;
+      movesEl.textContent = moves;
+      undoBtn.disabled = history.length === 0;
+      isWon = false;
+      puzzleComplete.classList.remove('show');
+      updateLiveStars();
+      render();
+    });
+    resetBtn.addEventListener('click', () => loadPuzzle(pIdx));
+    replayAllBtn.addEventListener('click', () => {
+      puzzleStars.fill(0);
+      winCard.classList.remove('show');
+      loadPuzzle(0);
+    });
+
+    // ─── Mark lesson complete on first full clear ─────────────────────────
+    let alreadyMarked = false;
+    async function markLessonComplete() {
+      if (alreadyMarked) return;
+      alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'brain-puzzles'),
+          { 'bp-2': { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    loadPuzzle(0);
+  </script>
+</body>
+</html>

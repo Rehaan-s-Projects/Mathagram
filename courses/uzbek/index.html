@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uzbek — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Uzbek</h1>
+    <p>Learn Uzbek — a Turkic language spoken by 35 million people in Uzbekistan. Silk Road heritage and rich culture. 183 lessons across 12 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Latin & Cyrillic Script',['Uzbek Latin Alphabet (29 Letters)','Vowels (A E I O U O\' )','Consonants & Special Letters','Apostrophe Letters (O\' G\' Sh Ch Ng)','Cyrillic Alphabet Overview','Latin-Cyrillic Conversion','Vowel Harmony Basics','Numbers 1-20','Numbers 20-100','Large Numbers','Days of the Week','Months & Seasons','Writing Practice','Reading Signs & Labels','Script Review']],
+      [2,'Greetings & Basics',['Assalomu Alaykum (Peace Greeting)','Salom (Hello)','Xayr (Goodbye)','Qalaysiz? (How Are You?)','Mening ismim... (My Name Is)','Rahmat (Thank You)','Kechirasiz (Excuse Me)','Ha / Yo\'q (Yes / No)','Qayerdan? (Where From?)','Xush kelibsiz (Welcome)','Hayr (Good Night)','Emergency Phrases','Polite Expressions','Introductions Practice','Greetings Review']],
+      [3,'Grammar Basics',['Nouns & Gender','Plural Formation (-lar -ler)','Definite & Indefinite','Word Order (SOV)','Postpositions (bilan uchun haqida)','Possessive Suffixes','Question Particles (mi)','Question Words (Kim Nima Qayerda Qachon)','Demonstratives (Bu Shu U)','Adjectives & Agreement','Comparatives & Superlatives','Conjunctions (va lekin yoki)','Agglutination Explained','Suffixation Chains','Grammar Basics Review']],
+      [4,'Present Tense',['Verb Roots in Uzbek','Present Continuous (-yap-)','Present Habitual (-a/-y)','Qilmoq (To Do)','Bormoq (To Go)','Kelmoq (To Come)','Yemoq (To Eat)','Ichmoq (To Drink)','Gapirmoq (To Speak)','O\'qimoq (To Read)','Yozmoq (To Write)','Ko\'rmoq (To See)','Bilmoq (To Know)','Negative Present','Present Tense Review']],
+      [5,'Past & Future Tenses',['Simple Past (-di)','Past of Qilmoq','Past of Bormoq','Definite Past','Indefinite Past (-gan)','Past Continuous','Future Tense (-a + di suffix)','Intentional Future (-moqchi)','Time Expressions (Kecha Bugun Ertaga)','Negative Past','Negative Future','Reported Past','Sequencing Events','Conditional Past','Tenses Review']],
+      [6,'Family & People',['Ota (Father)','Ona (Mother)','Aka (Older Brother)','Uka (Younger Brother)','Opa (Older Sister)','Singil (Younger Sister)','Buva (Grandfather)','Buvi (Grandmother)','Amaki (Uncle)','Xola (Aunt)','Turmush O\'rtoq (Spouse)','Farzand (Child)','Describing Appearance','Personality & Character','Family Review']],
+      [7,'Food & Cuisine',['Non (Bread)','Osh / Plov (National Pilaf)','Somsa (Baked Pastry)','Shashlik (Grilled Kebab)','Lag\'mon (Hand-Pulled Noodles)','Manti (Steamed Dumplings)','Mastava (Rice Soup)','Norin (Noodles with Meat)','Choy (Tea Culture)','Fruits of Uzbekistan (Melon Grapes)','Vegetables & Salads','At the Choyxona (Teahouse)','Ordering at a Restaurant','Cooking Vocabulary','Market Etiquette','Food Review']],
+      [8,'Shopping & Numbers',['Currency (So\'m)','Bazaar Culture','Haggling & Bargaining','Clothing Vocabulary','Colors in Uzbek','Sizes & Measurements','Traditional Textiles (Ikat Atlas)','Ceramics & Crafts','Spice Market','Grocery Shopping','Price Comparisons','Modern Shopping','Electronics & Tech','Online Shopping Terms','Shopping Review']],
+      [9,'Travel & Uzbekistan',['Toshkent (Tashkent Capital)','Samarqand (Registan Square)','Buxoro (Bukhara Old City)','Xiva (Khiva Ichan-Kala)','Farg\'ona Valley','Nukus & Savitsky Museum','Shahrisabz (Amir Temur)','Aral Sea Region','Uzbek Railways','At the Airport','Hotel & Accommodation','Directions & Navigation','Public Transport','Emergency Travel Phrases','Silk Road History Sites','Travel Review']],
+      [10,'Culture & Traditions',['Navruz (Spring New Year)','Shashmaqom Music','Uzbek Silk Ikat Weaving','Suzani Embroidery','Amir Temur Legacy','Ulugh Beg & Astronomy','Alisher Navoiy (Literature)','Wedding Traditions (Nikoh)','Beshik To\'y (Cradle Ceremony)','Hospitality & Mehmondo\'stlik','Uzbek Proverbs','Traditional Games','Miniature Painting Art','Modern Uzbekistan','Cultural Etiquette','Culture Review']],
+      [11,'Advanced Grammar',['Six Cases (Nominative Genitive Dative Accusative Locative Ablative)','Complex Suffixation','Relative Clauses (-gan -digan)','Passive Voice','Causative Verbs (-tir-)','Reflexive Verbs','Reported Speech','Conditional Sentences','Subjunctive Mood','Formal vs Informal Register','Written vs Spoken Differences','Dialectal Variations','Error Correction','Academic Uzbek','Advanced Grammar Review']],
+      [12,'Fluency & Mastery',['Conversation Starters','Small Talk & Weather','Expressing Opinions','Agreeing & Disagreeing','Storytelling Traditions','Uzbek News Reading','Uzbek Poetry (She\'r)','Listening Practice 1','Listening Practice 2','Writing Practice (Essay)','Debate & Discussion','Role Play Scenarios','Presentation Skills','Job Interview Practice','Final Uzbek Challenge']]
+    ,
+      [13,"Uzbek at the Market",["Shopping for Food","Clothing Store","Electronics Shop","Bargaining & Prices","Asking for Sizes","Comparing Products","Payment Methods","Returns & Exchanges","Online Shopping Vocabulary","Market Culture","Street Vendors","Gift Shopping","Window Shopping","Shopping Phrases","Market Checkpoint"]],
+      [14,"Uzbek Travel & Tourism",["At the Airport","At the Hotel","Public Transportation","Asking Directions","Booking Reservations","At the Restaurant Abroad","Emergency Phrases","Sightseeing Vocabulary","Taking Photos","Currency Exchange","Customs & Immigration","Travel Insurance","Packing Vocabulary","Travel Blog Writing","Travel Checkpoint"]],
+      [15,"Uzbek Sports & Fitness",["Football & Soccer","Basketball","Swimming","Running & Jogging","Gym Vocabulary","Traditional Sports","Olympic Sports","Team Sports","Individual Sports","Watching Sports","Sports Commentary","Fitness Goals","Exercise Routine","Competition Vocabulary","Sports Checkpoint"]],
+      [16,"Uzbek Technology",["Computer Basics","Smartphone Vocabulary","Internet & Social Media","Email & Messaging","Apps & Software","Video Games","Streaming & Media","Online Safety","Tech Support Phrases","Programming Terms","AI & Robots","Smart Home","Photography","Digital Vocabulary","Technology Checkpoint"]],
+      [17,"Uzbek Nature & Environment",["Trees & Forests","Rivers & Lakes","Mountains & Valleys","Ocean & Beach","Weather Patterns","Animals — Wild","Animals — Domestic","Birds & Insects","Flowers & Plants","Seasons Detailed","Environmental Issues","Recycling & Conservation","Climate Change","Nature Vocabulary","Nature Checkpoint"]],
+      [18,"Uzbek Music & Entertainment",["Musical Instruments","Singing & Songs","Traditional Music","Modern Music","Concerts & Festivals","Movies & Cinema","Television Shows","Theater & Drama","Dancing","Art & Painting","Photography","Entertainment Vocabulary","Reviews & Opinions","Celebrity Culture","Entertainment Checkpoint"]],
+      [19,"Uzbek History & Heritage",["Ancient History","Medieval Period","Colonial Era","Modern History","Independence & Revolution","Famous Leaders","Cultural Heritage","Archaeological Sites","Museums","Historical Events","Wars & Conflicts","Peace & Diplomacy","National Symbols","Heritage Preservation","History Checkpoint"]],
+      [20,"Uzbek Food Deep Dive",["Breakfast Traditions","Lunch Culture","Dinner Customs","Street Food","Desserts & Sweets","Beverages — Hot & Cold","Spices & Herbs","Cooking Methods","Kitchen Utensils","Regional Dishes","Holiday Foods","Food Etiquette","Diet & Nutrition","Recipe Writing","Food Deep Dive Checkpoint"]],
+      [21,"Uzbek Family & Relationships",["Extended Family","Parenting Vocabulary","Children & Babies","Marriage & Wedding","Dating & Romance","Friendship","Neighbors & Community","Elderly Care","Family Traditions","Family Conflicts","Celebrations Together","Family Values","Describing People","Relationship Advice","Family Checkpoint"]],
+      [22,"Uzbek Education & School",["Primary School","Secondary School","University","Teachers & Professors","Exams & Tests","Homework & Assignments","School Supplies","Subjects Deep Dive","Graduation","Libraries","Online Learning","Study Abroad","Scholarships","Student Life","Education Checkpoint"]],
+      [23,"Uzbek Health & Medicine",["Doctor Visit","Hospital Vocabulary","Pharmacy","Mental Health","Dental Care","Eye Care","First Aid","Chronic Illness","Healthy Eating","Exercise & Wellness","Sleep & Rest","Allergies","Medical Tests","Health Insurance","Health Checkpoint"]],
+      [24,"Uzbek Work & Career",["Job Titles","Office Life","Job Interview","Resume & CV","Salary & Benefits","Meetings","Email at Work","Phone Calls","Presentations","Teamwork","Deadlines & Projects","Promotion","Retirement","Freelancing","Career Checkpoint"]],
+      [25,"Uzbek Emotions & Feelings",["Happy & Excited","Sad & Disappointed","Angry & Frustrated","Scared & Nervous","Surprised & Shocked","Love & Affection","Jealousy & Envy","Pride & Confidence","Shame & Embarrassment","Boredom & Tiredness","Hope & Optimism","Nostalgia","Describing Moods","Emotional Expression","Emotions Checkpoint"]],
+      [26,"Uzbek Weather & Climate",["Sunny Days","Rainy Weather","Snow & Winter","Wind & Storms","Fog & Mist","Hot & Humid","Cold & Freezing","Weather Forecast","Seasons Detailed","Natural Disasters","Climate Zones","Weather Idioms","Dressing for Weather","Weather Conversations","Weather Checkpoint"]],
+      [27,"Uzbek Idioms & Proverbs",["Common Proverbs","Wisdom Sayings","Animal Idioms","Food Idioms","Weather Idioms","Work Idioms","Family Proverbs","Love Proverbs","Humorous Expressions","Poetic Phrases","Using Idioms in Speech","Regional Expressions","Comparing with English Idioms","Creating Sentences","Idioms Checkpoint"]],
+      [28,"Uzbek Phonology Deep Dive",["Vowels — 6 Sounds","Vowel Harmony","Consonants Inventory","Soft vs Hard Consonants","Aspirated Consonants","Glottal Stop","Stress Patterns","Syllable Structure","Devoicing of Final Consonants","Loanword Phonology","Russian Influence on Sounds","Persian Influence","Arabic Loanwords","Pronunciation Drills","Phonology Checkpoint"]],
+      [29,"Uzbek Verbs — Aspect & Mood",["Perfect vs Imperfect","Continuous Aspect","Habitual Aspect","Inferential Mood","Conditional Mood","Imperative — Singular","Imperative — Plural & Polite","Optative — Wishes","Necessitative — Must","Possibility — May","Compound Verbs — Auxiliary -mok","Compound Verbs with -bermoq, -ko'ymoq","Phrasal Verbs","Verb Negation","Verbs Aspect Checkpoint"]],
+      [30,"Uzbek Cases — Six Cases",["Nominative — Subject","Genitive — Possession","Dative — Indirect Object","Accusative — Direct Object","Locative — Place","Ablative — From","Case Suffixes","Vowel Harmony in Cases","Case with Pronouns","Case with Possessive Suffixes","Stacking Cases","Cases in Questions","Cases in Negation","Sample Sentences","Cases Checkpoint"]],
+      [31,"Uzbek Word Formation",["Derivational Suffixes","-chi — Profession","-lik — Abstract","-li — Adjective","-siz — Without","-loq — Diminutive","-cha — Smaller","-dosh — Companion","-istan — Country","Compound Nouns","Reduplication","Word Stress in Derivatives","Vowel Harmony in Suffixes","Borrowing Patterns","Word Formation Checkpoint"]],
+      [32,"Uzbek Numbers & Math",["Cardinal 1-10 — Bir, Ikki, Uch","Cardinal 11-20","Tens — O'n, Yigirma, O'ttiz","Hundreds — Yuz","Thousands — Ming","Million — Million","Ordinals — Birinchi, Ikkinchi","Fractions — Yarim, Choragi","Multiplication","Division","Currency — So'm","Bargaining","Counting Objects","Math in Conversation","Numbers Checkpoint"]],
+      [33,"Uzbek Time & Calendar",["Hours & Minutes","Telling Time","Days of the Week — Dushanba, Seshanba","Months — Yanvar, Fevral","Seasons — Yoz, Kuz, Qish, Bahor","Today — Bugun","Yesterday — Kecha","Tomorrow — Ertaga","Past Time Phrases","Future Time Phrases","Holidays — Navruz, Mustaqillik Kuni","Eid Holidays","Calendar Conversion","Age Expressions","Time Checkpoint"]],
+      [34,"Tashkent — The Capital",["Tashkent History","Tashkent Earthquake 1966","Independence Square","Chorsu Bazaar","Tashkent Metro — Soviet Architecture","Hazrati Imam Complex","Tashkent Modern Skyline","Tashkent TV Tower","Tashkent Districts","Public Transport","Tashkent Cuisine","Tashkent Slang","Famous Tashkent People","Tashkent Tourism","Tashkent Checkpoint"]],
+      [35,"Samarkand — The Silk Road Jewel",["Registan Square","Tilla-Kori Madrasa","Sherdor Madrasa","Ulugh Beg Madrasa","Bibi-Khanym Mosque","Shah-i-Zinda Necropolis","Gur-e-Amir — Timur's Tomb","Ulugh Beg Observatory","Afrasiyab Ruins","Samarkand Carpets","Samarkand Bread (Non)","Samarkand Cuisine","UNESCO World Heritage","Samarkand History","Samarkand Checkpoint"]],
+      [36,"Bukhara — The Holy City",["Bukhara History","Lyab-i Hauz","Kalyan Minaret","Po-i-Kalyan Complex","Ark Fortress","Bolo Hauz Mosque","Chor Minor","Bukhara Suzani","Bukhara Markets","Bukhara Carpets","Bukhara Cuisine","Bukhara Jewish Quarter","Famous Bukharians","Bukhara Tourism","Bukhara Checkpoint"]],
+      [37,"Khiva — The Open-Air Museum",["Itchan Kala — Inner Town","Kalta Minor Minaret","Kunya Ark","Tash Khauli Palace","Juma Mosque — 218 Pillars","Pakhlavan Mahmoud Mausoleum","Islam Khoja Minaret","Khiva Khanate History","Khorezm Region","Khiva Suzani","Khiva Crafts","Khiva Cuisine","Khiva Tourism","Modern Khiva","Khiva Checkpoint"]],
+      [38,"Fergana Valley",["Fergana Region","Andijan","Namangan","Kokand","Margilan — Silk Capital","Yodgorlik Silk Factory","Fergana Cuisine","Fergana Bread","Fergana Pottery — Rishtan","Tashkent vs Fergana","Cross-Border Issues","Fergana Cotton","Fergana History","Famous Fergana People","Fergana Checkpoint"]],
+      [39,"Karakalpak Region & Aral Sea",["Karakalpakstan — Autonomous Region","Karakalpak Language","Nukus","Savitsky Museum","Aral Sea Disaster","Aralkum Desert","Muynak — Former Port","Karakalpak Yurts","Karakalpak Music","Karakalpak Embroidery","Sturgeon History","Restoration Efforts","Tourism in Karakalpakstan","Karakalpak People","Karakalpak Checkpoint"]],
+      [40,"Plov & National Cuisine Deep Dive",["Plov — National Dish","Tashkent-Style Plov","Samarkand-Style Plov","Fergana-Style Plov","Wedding Plov","Royal Plov","Plov Ingredients","Cooking Plov in Kazan","Plov Etiquette","Plov History","UNESCO Heritage Status","Plov Festivals","Plov Variations","Vegetarian Plov","Plov Checkpoint"]],
+      [41,"Manti, Lagman, Shashlik",["Manti — Steamed Dumplings","Lagman — Hand-Pulled Noodles","Shashlik — Skewered Meat","Norin — Cold Noodle Salad","Somsa — Baked Pastries","Chuchvara — Small Dumplings","Mastava — Rice Soup","Shurpa — Meat Soup","Naryn","Halim","Dolma","Hanim","Beshbarmak","Cold Appetizers — Salat","Cuisine Checkpoint"]],
+      [42,"Uzbek Tea Culture",["Choyhona — Teahouse","Green Tea — Kok Choy","Black Tea — Qora Choy","Tea Pouring Ritual","Three-Pour Tradition","Tea with Sweets","Tea & Hospitality","Choy with Bread","Tea Etiquette","Famous Choyhonas","Modern Tea Cafes","Tea & Conversation","Tea Health Benefits","Tea Vocabulary","Tea Culture Checkpoint"]],
+      [43,"Uzbek Bread (Non) Tradition",["Non — Sacred Bread","Tandyr Oven","Lochira","Patir","Obi Non","Samarkand Non","Bukhara Non","Tashkent Non","Bread Stamps — Chekich","Bread Etiquette","Sharing Bread — Hospitality","Saving Bread","Bread in Wedding Tradition","Bread Vocabulary","Non Checkpoint"]],
+      [44,"Uzbek Architecture",["Madrasa Architecture","Iwan — Vaulted Hall","Pishtaq — Portal","Tilework Patterns","Majolica Tiles","Muqarnas — Vaulted Ceiling","Caravanserais","Mausoleums","Mosque Layout","Minaret Designs","Wooden Carving — Karshi","Soviet Architecture","Modern Tashkent","Restoration Techniques","Architecture Checkpoint"]],
+      [45,"Uzbek Crafts",["Suzani — Embroidered Textiles","Carpet Weaving","Ceramics — Rishtan","Knife Making — Chust","Wood Carving","Goldwork","Silk Production — Margilan","Ikat Patterns","Engraving","Adras Fabric","Uzbek Doppi (Skullcap)","Embroidery Schools","Crafts Markets","UNESCO Crafts Heritage","Crafts Checkpoint"]],
+      [46,"Uzbek Music",["Doira — Frame Drum","Dutar — Two-String Lute","Tanbur","Rubab","Karnay — Long Trumpet","Surnay","Maqom — Classical Music","Shashmaqom — Six Maqams","Bukharan Maqom","Khorezm Maqom","Modern Uzbek Pop","Yulduz Usmonova","Sevara Nazarkhan","Uzbek Music Festivals","Music Checkpoint"]],
+      [47,"Uzbek Cinema & Modern Culture",["Uzbekfilm Studio","Soviet-Era Films","Independent Era Cinema","Bollywood Influence","Famous Directors","Famous Actors","Uzbek TV","Uzbek YouTube","Uzbek Music Videos","Modern Pop Culture","Uzbek Comedy","Uzbek Theater","Uzbek Fashion","Modern Tashkent Lifestyle","Modern Culture Checkpoint"]],
+      [48,"Uzbek Literature — Alisher Navoi",["Alisher Navoi — National Poet","Khamsa — Five Poems","Layla and Majnun","Farhad and Shirin","Babur — Memoirs (Baburnama)","Hamza Hakimzoda","Cholpon","Abdulla Qodiriy","Modern Uzbek Authors","Uzbek Folk Tales","Bashir Bakir","Erkin Vohidov","Translation of Classics","Uzbek Poetry","Literature Checkpoint"]],
+      [49,"Uzbek Mastery",["Phonology & Cases Final","Verb System Final","Tashkent, Samarkand, Bukhara, Khiva Final","Cuisine & Tea Mastery","Architecture & Crafts Mastery","Music & Literature Final","Uzbek Mastery — Tabriklayman!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'uz-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('uzbek');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('uzbek');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

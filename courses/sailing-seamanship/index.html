@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sailing & Seamanship — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Sailing &amp; Seamanship</h1>
+    <p>Harness the wind — from learning to tack a dinghy on a small lake to crossing oceans. Anatomy of a sailboat, points of sail (close-hauled to running), how a sail actually works, sail trim &amp; telltales, tacking &amp; jibing, rigging, knots (bowline, cleat hitch, figure-8), mooring &amp; anchoring, man-overboard recovery, heavy weather &amp; reefing, storm tactics, navigation (charts, dead reckoning, GPS), tides &amp; currents, marine weather &amp; the Beaufort scale, COLREGS right-of-way rules, lights &amp; shapes, VHF radio &amp; MAYDAY, dinghies (Laser, Optimist), keelboats, multihulls (catamarans &amp; trimarans), cruising &amp; bluewater, maintenance, racing tactics, the America's Cup, the Vendée Globe, famous voyages (Captain Cook, Joshua Slocum, Moitessier), Polynesian voyaging, the Age of Sail, modern yacht design, and life at sea. 45 units, 675 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "What Is Sailing? — Wind, Water & Hulls",
+      "Anatomy of a Sailboat — Hull, Mast, Boom & Keel",
+      "Points of Sail — Close-Hauled to Running",
+      "How a Sail Works — Lift on a Vertical Wing",
+      "Tacking & Jibing",
+      "True Wind & Apparent Wind",
+      "Right of Way — COLREGS Rules",
+      "Sail Trim — Telltales, Twist & Camber",
+      "Sail Types — Mainsail, Jib, Genoa & Spinnaker",
+      "Rigging — Standing & Running",
+      "Essential Knots — Bowline, Cleat Hitch, Figure-8",
+      "Mooring & Docking",
+      "Anchoring & Anchor Types",
+      "Man Overboard Recovery",
+      "Heavy Weather Sailing & Reefing",
+      "Storm Tactics — Heaving-To & Running Off",
+      "Marine Charts & Symbols",
+      "Latitude, Longitude & The Compass",
+      "Dead Reckoning at Sea",
+      "Modern Electronic Navigation — GPS & Chart Plotters",
+      "Tides, Currents & Tidal Streams",
+      "Marine Weather — Forecasts & Synoptic Charts",
+      "The Beaufort Scale",
+      "Lights & Shapes — Day and Night Signals",
+      "Marine Radio — VHF & MAYDAY",
+      "Boat Handling Under Power",
+      "Sailing Dinghies — Optimist, Laser & 420",
+      "Keelboat Sailing",
+      "Multihulls — Catamarans & Trimarans",
+      "Cruising — Coastal Passages",
+      "Bluewater & Ocean Crossings",
+      "Maintenance — Bottom Paint, Rigging & Engine",
+      "Provisioning & Life in the Galley",
+      "Advanced Ropework — Splicing & Whipping",
+      "Racing Tactics, Starts & Mark Roundings",
+      "The America's Cup",
+      "The Vendée Globe & Solo Round-the-World Racing",
+      "Famous Voyages — Captain James Cook",
+      "Famous Voyages — Joshua Slocum & Bernard Moitessier",
+      "Polynesian Voyaging — Wayfinding by Stars & Swells",
+      "The Age of Sail — Tall Ships, Clippers & Privateers",
+      "Modern Yacht Design — Foiling & Hull Forms",
+      "Marine Life & Wildlife at Sea",
+      "Sailing Safety, Liferafts & EPIRBs",
+      "Sailing Mastery — Capstone Voyage"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sail-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('sailing-seamanship');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('sailing-seamanship');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

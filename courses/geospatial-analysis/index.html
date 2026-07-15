@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geospatial Data Analysis — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Geospatial Data Analysis</h1>
+    <p>Maps as data. Latitude / longitude, coordinate reference systems (CRS, EPSG, WGS84, Web Mercator EPSG:3857), projections (Mercator, equal-area, conformal, conic), vector data (points, lines, polygons, GeoJSON, Shapefile, GeoPackage, KML), raster data (GeoTIFF, COG, NetCDF, HDF5), GIS fundamentals (QGIS, ArcGIS), Python ecosystem (Geopandas, Shapely, Fiona, PyProj, Rasterio, Folium, Pydeck, Kepler.gl, Geoplot), R ecosystem (sf, terra, leaflet, tmap), spatial operations (intersects, contains, within, buffer, union, difference), spatial joins, distance &amp; geodesic calculations, geocoding (Nominatim, Mapbox, Google), reverse geocoding, isochrones &amp; routing (OSRM, Valhalla, Mapbox Directions), choropleth maps, dot density maps, heat maps &amp; kernel density (KDE), spatial autocorrelation (Moran's I, Geary's C, Getis-Ord), hot-spot analysis, geographically weighted regression (GWR), spatial clustering (DBSCAN, HDBSCAN, spatial K-means), interpolation (IDW, Kriging), satellite imagery &amp; Earth observation (Sentinel, Landsat, MODIS, Planet), Google Earth Engine, OpenStreetMap data (Overpass API, Osmium), web mapping (Leaflet, Mapbox GL JS, MapLibre, deck.gl), tile servers, vector tiles &amp; MVT, PostGIS in PostgreSQL, BigQuery GIS, Snowflake geospatial, location intelligence (LCA, retail site selection, delivery optimization), and a capstone real-world map project. 30 units, 450 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "Lat / Lon & The Globe",
+      "Coordinate Reference Systems (CRS, EPSG)",
+      "Map Projections — Mercator, Equal-Area, Conic",
+      "Vector Data — Points, Lines & Polygons",
+      "Vector Formats — GeoJSON, Shapefile, GeoPackage",
+      "Raster Data — GeoTIFF, COG, NetCDF",
+      "QGIS Fundamentals",
+      "ArcGIS Pro Overview",
+      "Python — Geopandas & Shapely",
+      "Python — Rasterio for Imagery",
+      "Folium, Pydeck & Kepler.gl",
+      "R — sf, terra & leaflet",
+      "Spatial Operations — Intersect, Within, Buffer",
+      "Spatial Joins",
+      "Distance & Geodesic Math",
+      "Geocoding & Reverse Geocoding",
+      "Isochrones & Routing (OSRM, Valhalla)",
+      "Choropleth Maps",
+      "Heat Maps & Kernel Density",
+      "Spatial Autocorrelation — Moran's I",
+      "Hot-Spot Analysis (Getis-Ord)",
+      "Geographically Weighted Regression",
+      "Spatial Clustering — DBSCAN",
+      "Interpolation — IDW & Kriging",
+      "Satellite Imagery — Sentinel, Landsat",
+      "Google Earth Engine",
+      "OpenStreetMap & Overpass API",
+      "Web Mapping — Leaflet, Mapbox, MapLibre",
+      "PostGIS & BigQuery GIS",
+      "Geospatial Mastery — Capstone Map"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'geo-'+n, title: t, href: '#', unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('geospatial-analysis');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('geospatial-analysis');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

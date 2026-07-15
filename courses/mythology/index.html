@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mythology & Folklore — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Mythology &amp; Folklore</h1>
+    <p>Gods, heroes, monsters, and legends from every corner of the world — Greek (pantheon, Titans, Heracles, Odysseus, Trojan War, Underworld, monsters, tragedy), Roman (household gods, founding myths, Vestal Virgins), Norse (Aesir, Vanir, Ragnarok, Loki, Beowulf), Egyptian (creation, Osiris cycle, Duat, animal gods), Mesopotamian (Sumerian, Babylonian, Akkadian), Hindu (Trinity, Ramayana, Mahabharata, goddesses), Buddhist, Chinese, Japanese, Korean, SE Asian, Aztec, Maya, Inca, African (Yoruba, North African, Sub-Saharan), comparative themes (Hero's Journey, flood myths, creation, tricksters), and modern culture. 816 lessons across 55 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Greek Mythology",["Creation Myth","Titans & Olympians","Zeus","Poseidon","Hades","Athena","Apollo & Artemis","Aphrodite","Hermes","Dionysus","Heracles","Perseus","Theseus","The Trojan War","Greek Mythology Checkpoint"]],
+      [2,"Roman Mythology",["Jupiter & the Pantheon","Mars","Venus & Cupid","Minerva","Neptune","Mercury","Vulcan","Romulus & Remus","Aeneas","Lares & Penates","Vestal Virgins","Roman Heroes","Saturnalia","Roman vs Greek Gods","Roman Mythology Checkpoint"]],
+      [3,"Norse Mythology",["Yggdrasil — The World Tree","Odin","Thor","Loki","Freyja","Tyr","Heimdall","Baldur","The Nine Realms","Ragnarok","Valkyries","Fenrir & Jormungandr","The Eddas","Sagas of Iceland","Norse Mythology Checkpoint"]],
+      [4,"Egyptian Mythology",["Creation at Heliopolis","Ra","Osiris","Isis","Horus","Set","Anubis","Thoth","Bastet","Sekhmet","Ma'at & Balance","The Book of the Dead","Pharaoh as God","Afterlife Journey","Egyptian Mythology Checkpoint"]],
+      [5,"Celtic & Slavic Mythology",["The Tuatha Dé Danann","Cú Chulainn","The Morrigan","Brigid","Cernunnos","King Arthur Legends","Merlin","The Holy Grail","Perun","Veles","Baba Yaga","Leshy & Domovoi","Firebird","Rusalka","Celtic & Slavic Checkpoint"]],
+      [6,"Asian Mythology",["Chinese Creation — Pan Gu","Jade Emperor","Sun Wukong — Monkey King","Chang'e & the Moon","Dragons East","Japanese Kami","Amaterasu","Izanagi & Izanami","Yokai Spirits","Korean Mythology","Indian Vedic Gods","Shiva","Vishnu","Krishna & Mahabharata","Asian Mythology Checkpoint"]],
+      [7,"African Mythology",["Yoruba Orishas","Anansi the Spider","Mami Wata","Egungun Masquerade","Dogon Cosmology","Bantu Creation","Ancestor Veneration","Zulu Legends","Ethiopian Myths","Kemetic Traditions","Trickster Tales","Oral Storytelling","African Diaspora Myths","Modern African Mythology","African Mythology Checkpoint"]],
+      [8,"Native American & Oceanic",["Great Spirit Beliefs","Coyote the Trickster","Raven Legends","Thunderbird","Sedna — Inuit Sea Goddess","Quetzalcoatl","Aztec Gods","Mayan Creation","Inca Viracocha","Polynesian Maui","Hawaiian Pele","Maori Legends","Australian Dreamtime","Rainbow Serpent","Native & Oceanic Checkpoint"]],
+      [9,"Monsters & Creatures",["Dragons","Griffins","Unicorns","Werewolves","Vampires","Phoenixes","Centaurs","Minotaur","Cyclops","Medusa","Kraken","Banshees","Chimera","Basilisk","Monsters Checkpoint"]],
+      [10,"Greek Pantheon — Olympians Deep",["Zeus — King of Olympus","Hera — Queen & Marriage","Poseidon — Sea & Earthquakes","Demeter — Harvest","Athena — Wisdom & War","Apollo — Sun & Music","Artemis — Hunt & Moon","Ares — War","Aphrodite — Love","Hephaestus — Forge","Hermes — Messenger","Dionysus — Wine","Hestia — Hearth","Hades — Underworld","Olympians Checkpoint"]],
+      [11,"Titans & Primordials",["Chaos — The Void","Gaia — Earth","Uranus — Sky","Tartarus","Eros — Primordial","Cronus & Time","Rhea — Mother","Iapetus","Prometheus — Fire-Bringer","Atlas — Sky-Bearer","Hyperion","Themis — Justice","Mnemosyne — Memory","Titanomachy","Titans Checkpoint"]],
+      [12,"Greek Heroes — Heracles & Theseus",["Heracles' Birth","12 Labors Overview","Nemean Lion","Lernaean Hydra","Erymanthian Boar","Stables of Augeas","Stymphalian Birds","Cretan Bull","Mares of Diomedes","Belt of Hippolyta","Cattle of Geryon","Apples of Hesperides","Cerberus Capture","Theseus & Minotaur","Heracles & Theseus Checkpoint"]],
+      [13,"Greek Heroes — Odysseus & Jason",["Odysseus' Cunning","Trojan Horse","Cyclops Polyphemus","Lotus-Eaters","Circe","Sirens","Scylla & Charybdis","Underworld Visit","Penelope's Loom","Return to Ithaca","Jason & Argonauts","Golden Fleece","Medea — Witch","Atalanta — Heroine","Heroes Checkpoint"]],
+      [14,"Trojan War Deep Dive",["Judgment of Paris","Helen of Sparta","Achilles' Heel","Agamemnon — King","Hector — Trojan Prince","Patroclus","Cassandra — Cursed Prophet","Iliad Structure","Aeneas Escape","Wooden Horse","Sack of Troy","Aftermath & Returns","Aeschylus' Trilogy","Modern Adaptations","Trojan War Checkpoint"]],
+      [15,"Greek Underworld & Hades",["Hades — God of Dead","Persephone Abducted","Cerberus — 3-Headed Dog","River Styx","River Lethe","River Acheron","River Phlegethon","River Cocytus","Charon — Ferryman","Tartarus","Asphodel Meadows","Elysium","Isles of the Blessed","Sisyphus & Tantalus","Greek Underworld Checkpoint"]],
+      [16,"Greek Monsters",["Medusa & Gorgons","Hydra — 9 Heads","Chimera","Sphinx — Riddler","Centaurs","Minotaur","Cyclops","Harpies","Sirens","Echidna — Mother of Monsters","Typhon — Greatest Monster","Pegasus — Winged Horse","Scylla","Charybdis","Greek Monsters Checkpoint"]],
+      [17,"Greek Tragedy & Oedipus",["Oedipus Rex","Antigone","Electra","Medea","Bacchae","Aeschylus","Sophocles","Euripides","Catharsis Theory","Hubris in Tragedy","Fate vs Free Will","Chorus Function","Stagecraft & Masks","Aristotle's Poetics","Greek Tragedy Checkpoint"]],
+      [18,"Orpheus & Underworld Myths",["Orpheus & Eurydice","Backwards-Glance Tragedy","Orphic Mysteries","Mythical Musicians","Underworld Descent Theme","Heracles in Underworld","Aeneas in Underworld","Theseus in Underworld","Persephone's Descent","Demeter Mourning","Eleusinian Mysteries","Cult of Dionysus","Bacchic Frenzy","Mystery Religion Influence","Underworld Myths Checkpoint"]],
+      [19,"Persephone, Demeter & Seasons",["Demeter Goddess of Harvest","Persephone Queen of Underworld","Pomegranate Seeds","Six Months Above Six Below","Seasonal Origin Myth","Eleusis & Mysteries","Triptolemus","Ceres in Roman","Hades' Love","Hecate's Role","Mother-Daughter Bond","Demeter's Wandering","Famine & Restoration","Hymns to Demeter","Persephone Checkpoint"]],
+      [20,"Roman Household Gods",["Lares — House Spirits","Penates — Pantry Gods","Genius — Family Spirit","Manes — Ancestral Spirits","Lar Familiaris","Vesta — Hearth Goddess","Janus — Doorway God","Forculus — Door","Cardea — Hinges","Limentinus — Threshold","Picumnus — Manure","Pilumnus — Threshing","Roman Household Shrines","Daily Offerings","Household Gods Checkpoint"]],
+      [21,"Roman Founding Myths",["Aeneas Flees Troy","Aeneid by Virgil","Wandering Mediterranean","Dido of Carthage","Aeneas in Underworld","Latium Arrival","Romulus & Remus","She-Wolf","Founding Rome 753 BC","Sabine Women","Numa — Religious King","Servius Tullius","Tarquin the Proud","Republic Founding","Founding Myths Checkpoint"]],
+      [22,"Vestal Virgins & Roman Religion",["Cult of Vesta","Vestal Virgins Selection","30-Year Service","Sacred Fire","Punishments","Pontifex Maximus","Augurs","Haruspices","Roman Calendar","Festivals — Saturnalia","Lupercalia","Floralia","Carmenta","State Religion","Roman Religion Checkpoint"]],
+      [23,"Norse Aesir Pantheon Deep",["Odin — Allfather","Frigg — Queen of Aesir","Thor — Thunder","Sif — Thor's Wife","Tyr — Justice & War","Heimdall — Watchman","Bragi — Poetry","Idunn — Apples of Youth","Vidar — The Silent","Vali","Hodr","Forseti","Eir — Healer","Saga","Aesir Checkpoint"]],
+      [24,"Vanir & Their Stories",["Vanir vs Aesir War","Njord — Sea","Freyr — Fertility","Freyja — Love & Magic","Skadi — Winter & Hunt","Ullr","Aegir — Sea Giant","Ran — Sea Goddess","Vanaheim","Fertility Magic — Seidr","Freyja's Falcon Cloak","Brisingamen Necklace","Hostage Exchange","Mimir","Vanir Checkpoint"]],
+      [25,"Ragnarok",["Prophecies of Ragnarok","Fimbulvetr — Long Winter","Sun & Moon Devoured","Heimdall's Horn","Surt — Fire Giant","Fenrir Wolf Free","Jormungandr Rises","Loki Free","Naglfar — Nail Ship","Battle of Vigrid","Death of Odin","Death of Thor","Death of Frey","Renewal — Lif & Lifthrasir","Ragnarok Checkpoint"]],
+      [26,"Loki Trickster Tales",["Loki — Trickster of Aesir","Sif's Hair","Cutting of Sif's Hair","Brokk & Eitri Wager","Mjolnir Made","Theft of Idunn","Loki & Sleipnir","Father of Monsters","Fenrir's Binding","Death of Baldur","Loki's Punishment","Loki at Ragnarok","Modern Loki (Marvel)","Loki in Eddas","Loki Checkpoint"]],
+      [27,"Beowulf & Anglo-Saxon Heroes",["Beowulf Poem","Hrothgar's Hall Heorot","Grendel","Grendel's Mother","Dragon Battle","Wiglaf","Anglo-Saxon Hero Code","Kennings","Wyrd — Fate","Hrothgar's Sermon","Burial Mounds","Sutton Hoo","Boast Tradition","Modern Beowulf Translations","Beowulf Checkpoint"]],
+      [28,"Egyptian Creation Myths",["Heliopolitan Creation","Atum & Self-Creation","Ennead","Memphite Creation","Ptah & Word","Hermopolitan Creation","Ogdoad — 8 Primordial","Theban Creation","Amun-Ra","Isis Creation Stories","Cosmic Egg","Lotus Emergence","Solar Boat","Maat — Order","Creation Checkpoint"]],
+      [29,"Osiris-Isis-Horus Cycle",["Osiris — God of Dead","Set's Murder Plot","Set Kills Osiris","Isis Searches","Osiris Reassembled","Conception of Horus","Horus Childhood","Horus vs Set Battle","Eye of Horus","Wadjet","Osirian Mysteries","Pharaoh as Horus","Funerary Rites","Modern Osiris Worship","Osiris-Isis Checkpoint"]],
+      [30,"Egyptian Underworld (Duat)",["Duat — Egyptian Underworld","Hall of Maat","Weighing of the Heart","42 Negative Confessions","Anubis — Embalmer","Ammit — Devourer","Thoth — Scribe","Field of Reeds","12 Hours of Night","Sun's Journey Through Duat","Apep — Serpent Enemy","Pyramid Texts","Coffin Texts","Book of Going Forth by Day","Duat Checkpoint"]],
+      [31,"Egyptian Animal Gods",["Sobek — Crocodile","Bastet — Cat","Sekhmet — Lioness","Hathor — Cow","Anubis — Jackal","Thoth — Ibis & Baboon","Khepri — Scarab","Apis Bull","Khnum — Ram","Heqet — Frog","Nekhbet — Vulture","Wadjet — Cobra","Hapi — Hippo","Sacred Animal Mummies","Animal Gods Checkpoint"]],
+      [32,"Sumerian Mythology",["Anu — Sky","Enlil — Wind","Enki — Water","Ninhursag — Earth Mother","Inanna — Love & War","Dumuzid","Inanna's Descent","Underworld Lords","Sumerian Creation","Eridu","Atrahasis Flood","Ziggurats","Sumerian Hymns","Sacred Marriage","Sumerian Checkpoint"]],
+      [33,"Babylonian — Enuma Elish & Gilgamesh",["Enuma Elish — Creation Epic","Tiamat — Primordial Sea","Marduk — Babylonian Hero","Marduk Defeats Tiamat","Creation from Tiamat's Body","Gilgamesh Epic","Gilgamesh & Enkidu","Cedar Forest","Bull of Heaven","Death of Enkidu","Quest for Immortality","Utnapishtim & Flood","Plant of Youth","Lessons of Gilgamesh","Babylonian Checkpoint"]],
+      [34,"Akkadian & Assyrian Mythology",["Akkadian Empire","Assur — Assyrian God","Ishtar — Akkadian Inanna","Anzu Bird Myth","Erra & Ishum","Assyrian Royal Religion","Sacred Trees","Adapa Myth","Zu — Storm Bird","Etana Myth","Akkadian Spells","Ashurbanipal Library","Mesopotamian Influence","Decline of Tradition","Akkadian Checkpoint"]],
+      [35,"Hindu Trinity — Brahma, Vishnu, Shiva",["Brahma — Creator","Saraswati — Brahma's Consort","Vishnu — Preserver","Lakshmi — Vishnu's Consort","Vishnu's 10 Avatars","Matsya — Fish","Kurma — Tortoise","Varaha — Boar","Narasimha — Man-Lion","Vamana — Dwarf","Parashurama","Rama","Krishna","Buddha (as Avatar)","Trinity Checkpoint"]],
+      [36,"Ramayana",["Valmiki — Author","Rama — Prince of Ayodhya","Sita — Daughter of Earth","Lakshmana — Brother","Hanuman — Monkey God","Bharata — Half-Brother","Exile of Rama","Ravana — 10-Headed Demon","Sita's Abduction","Search for Sita","Bridge to Lanka","Battle of Lanka","Rama's Coronation","Sita's Trial","Ramayana Checkpoint"]],
+      [37,"Mahabharata & Bhagavad Gita",["Mahabharata Epic","Pandavas — 5 Brothers","Yudhishthira","Bhima","Arjuna","Nakula & Sahadeva","Kauravas — 100 Brothers","Duryodhana","Draupadi","Krishna's Role","Bhagavad Gita Setting","Karma Yoga","Bhakti Yoga","Kurukshetra War","Mahabharata Checkpoint"]],
+      [38,"Hindu Goddesses",["Devi — Universal Goddess","Durga — Warrior","Kali — Fierce Mother","Lakshmi — Wealth","Saraswati — Wisdom","Parvati — Mother","Sita","Radha","Ganga","Yamuna","Sapta Matrikas","Navadurga","Tridevi","Tantric Goddesses","Hindu Goddesses Checkpoint"]],
+      [39,"Buddhist Mythology",["Buddha — Siddhartha Gautama","Buddha's Birth","Four Sights","Enlightenment","Mara — Tempter","First Sermon","Dharma Wheel","Bodhisattvas","Avalokiteshvara","Manjushri — Wisdom","Tara — Female Bodhisattva","Maitreya — Future Buddha","Jataka Tales","Pure Lands","Buddhist Checkpoint"]],
+      [40,"Chinese Mythology",["Pangu — Creator","Three Sovereigns","Five Emperors","Yellow Emperor — Huangdi","Yan Emperor","Nuwa — Repaired Sky","Fuxi — Trigrams","Jade Emperor","Sun Wukong — Monkey King","Journey to the West","8 Immortals","Chang'e — Moon Goddess","Hou Yi — Archer","Dragon Kings","Chinese Mythology Checkpoint"]],
+      [41,"Japanese Mythology",["Izanagi & Izanami","Creation of Japan","Amaterasu — Sun Goddess","Susanoo — Storm","Tsukuyomi — Moon","Susanoo Slays Yamata-no-Orochi","Kusanagi Sword","Amaterasu in Cave","Mirror Trick","Yokai Spirits","Tsukumogami","Shinto Kami","Inari — Fox Spirits","Tengu","Japanese Checkpoint"]],
+      [42,"Korean Mythology",["Dangun Founding Myth","Tiger & Bear","Hwanin & Hwanung","Three Sacred Treasures","Sky Gods","Earth Gods","Sea Gods","Mountain Gods","Mountain Spirits — Sansin","Dokkaebi — Goblins","Korean Folktales","Heungbu & Nolbu","Shim Cheong","Korean Shamanism","Korean Mythology Checkpoint"]],
+      [43,"Vietnamese, Thai & SE Asian Myths",["Lac Long Quan & Au Co","100 Eggs Origin","Vietnamese Dragons","Thai Mythology","Phra Aphai Mani","Indra in SE Asia","Khmer Mythology","Apsaras","Naga Serpents","Garuda","Hanuman in SE Asia","Indonesian Mythology","Balinese Hindu Stories","Filipino Mythology","SE Asian Checkpoint"]],
+      [44,"Aztec Mythology",["Quetzalcoatl — Feathered Serpent","Huitzilopochtli — War God","Tlaloc — Rain","Tezcatlipoca — Smoking Mirror","Coatlicue — Mother","Five Suns","Cipactli — Earth Monster","Mictlantecuhtli — Death","Mictecacihuatl","Aztec Calendar","Sacred Days","Eagle & Cactus Founding","Tenochtitlan","Sacrifice Beliefs","Aztec Checkpoint"]],
+      [45,"Maya Mythology",["Popol Vuh","Hunahpu & Xbalanque","Hero Twins","Vucub-Caquix Defeat","Underworld Xibalba","Lords of Xibalba","Itzamna — Creator","Ixchel — Moon","Kukulkan — Feathered Serpent","Maya Calendar","Long Count","Bacabs — World Bearers","Maize God","2012 Apocalypse Myth","Maya Checkpoint"]],
+      [46,"Inca Mythology",["Inti — Sun God","Mama Killa — Moon","Viracocha — Creator","Pachamama — Earth Mother","Manco Capac","Coricancha","Lake Titicaca Origin","Mama Cocha — Sea","Chasca — Venus","Apu Mountain Spirits","Pacha Trinity","Inca Sacrifice","Capac Hucha","Cuzco Sacred Center","Inca Checkpoint"]],
+      [47,"Yoruba Orishas Deep",["Yoruba Religion","Orunmila — Wisdom","Olodumare — Supreme","Ifa Divination","Eshu — Trickster","Shango — Thunder","Oshun — Love & Rivers","Yemoja — Mother of Waters","Ogun — Iron","Obatala — Creator","Oya — Wind","Babalu Aye — Healing","Egungun Ancestors","Diaspora — Santeria & Candomble","Orishas Checkpoint"]],
+      [48,"North African Mythology",["Ancient Libyan Myths","Berber/Amazigh Mythology","Tanit — Carthaginian","Baal Hammon","Hercules-Antaeus","Apuleius' Golden Ass","Coptic Survivals","Saharan Spirits","Punic Religion","Numidian Stories","Tuareg Folklore","Egyptian-Libyan Sync","Saint Augustine's North Africa","Moroccan Folklore","North African Checkpoint"]],
+      [49,"Sub-Saharan Folktales",["Anansi the Spider","Spider Trickster Tradition","Eshu Trickster","Mami Wata","Trickster Tortoise","Hyena Tales","Cheetah & Trickster","Bantu Origin Stories","Dogon Cosmology","Zulu Mythology","Mande Mythology","Bantu Creation","Khoisan Mythology","African Diaspora","Sub-Saharan Checkpoint"]],
+      [50,"Hero's Journey (Joseph Campbell)",["Joseph Campbell — Author","Hero with a Thousand Faces","Monomyth Concept","Departure — Call to Adventure","Refusal","Mentor","Crossing Threshold","Belly of Whale","Tests Allies Enemies","Approach to Inmost Cave","Ordeal","Reward","Road Back","Resurrection","Return with Elixir"]],
+      [51,"Flood Myths Across Cultures",["Mesopotamian Flood (Ziusudra/Atrahasis)","Hebrew Noah","Greek Deucalion","Hindu Manu","Chinese Gun-Yu Flood","Maya 4 Suns Flood","Aztec 5 Suns Flood","Australian Aboriginal Flood","Pacific Islander Floods","Polynesian Floods","African Floods","South American Floods","North American Flood Stories","Geological Flood Theories","Flood Myths Checkpoint"]],
+      [52,"Creation Myths Comparative",["Egyptian Creations","Mesopotamian Creations","Hebrew Genesis","Greek Cosmogony","Norse Cosmogony","Hindu Creations","Chinese Pangu","Japanese Izanagi-Izanami","Maya Popol Vuh","Aztec 5 Suns","African Creations","Polynesian Creations","Aboriginal Dreamtime","Native American Creations","Comparative Creation Checkpoint"]],
+      [53,"Trickster Figures Comparative",["Loki (Norse)","Hermes (Greek)","Coyote (Native American)","Raven (Pacific Northwest)","Anansi (West African)","Eshu (Yoruba)","Sun Wukong (Chinese)","Til Eulenspiegel","Reynard the Fox","Br'er Rabbit","Hare (African)","Maui (Polynesian)","Kitsune (Japanese)","Modern Tricksters","Trickster Checkpoint"]],
+      [54,"Myth in Modern Culture",["Campbell's Hero's Journey","Archetypes","Tolkien's Legendarium","Star Wars Myth Structure","Marvel & Comic Gods","Neil Gaiman's American Gods","Rick Riordan Series","Modern Folk Horror","Urban Legends","Cryptids","Internet Mythology","Myths vs Facts","Preserving Oral Tradition","Studying Mythology","Modern Culture Checkpoint"]],
+      [55,"Mythology Mastery",["Comparative Mythology Synthesis","Reading Primary Sources","Joining Mythology Communities","Modern Adaptations Recap","Continued Study","Mythology Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'myth-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('mythology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('mythology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

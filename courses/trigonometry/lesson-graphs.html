@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read &amp; Listen: Reading Trig Graphs — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    body { background: #f8f9fa; }
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .edam-banner { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 28px 24px; text-align: center; margin-bottom: 24px; position: relative; overflow: hidden; }
+    .edam-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fbbf24; display: block; margin: 0 auto 6px; box-shadow: 0 4px 20px rgba(251,191,36,0.3); animation: edamBounce 2s ease infinite; }
+    @keyframes edamBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .edam-speech { background: rgba(255,255,255,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 14px; padding: 14px 18px; margin-top: 12px; color: #e2e8f0; font-size: 0.9rem; line-height: 1.6; font-style: italic; }
+    .headphones-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; padding: 6px 16px; margin-top: 14px; color: #fbbf24; font-size: 0.8rem; font-weight: 700; }
+    .reading-card { background: #fff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-math, #3b82f6); border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
+    .reading-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; color: var(--color-text); }
+    .reading-card p { font-size: 0.98rem; line-height: 1.7; margin-bottom: 8px; color: var(--color-text); }
+    .graph-svg { display: block; margin: 12px auto; max-width: 100%; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Trigonometry</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 5 &mdash; Read &amp; Listen</div>
+    <h1>Read &amp; Listen: Reading Trig Graphs</h1>
+
+    <div class="edam-banner">
+      <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px;">
+        <div style="text-align:center;">
+          <img src="../../assets/characters/edam.svg" alt="Edam" class="edam-avatar">
+          <div style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:4px;">Edam</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="../../assets/characters/diego.svg" alt="Diego" class="edam-avatar" style="border-color:#3b82f6;box-shadow:0 4px 20px rgba(59,130,246,0.3);animation-delay:0.5s;">
+          <div style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:4px;">Diego</div>
+        </div>
+      </div>
+      <div class="edam-speech">
+        "Read each graph card, then listen to the question. Tell us the amplitude, period, phase shift — and read the picture like you read a sentence!"
+      </div>
+      <div class="headphones-badge"><span>&#127911;</span> Headphones Recommended</div>
+    </div>
+
+    <div class="reading-card">
+      <h3>📊 Read: A Sine Wave</h3>
+      <p>For \(y = A\sin(Bx + C) + D\): \(A\) is the <strong>amplitude</strong> (height from midline), \(\frac{2\pi}{|B|}\) is the <strong>period</strong>, \(-C/B\) is the <strong>phase shift</strong>, and \(D\) is the <strong>vertical shift</strong>.</p>
+      <svg class="graph-svg" viewBox="0 0 360 140" width="360" height="140" aria-hidden="true">
+        <line x1="20" y1="70" x2="340" y2="70" stroke="#94a3b8" stroke-width="1"/>
+        <line x1="20" y1="20" x2="20" y2="120" stroke="#94a3b8" stroke-width="1"/>
+        <path d="M 20 70 Q 60 10, 100 70 T 180 70 T 260 70 T 340 70" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+        <text x="170" y="135" font-size="11" fill="#64748b" text-anchor="middle">y = sin(x)</text>
+      </svg>
+    </div>
+
+    <div class="reading-card">
+      <h3>📊 Read: Cosine vs Sine</h3>
+      <p>Cosine is sine shifted left by \(\pi/2\): \(\cos x = \sin\bigl(x + \tfrac{\pi}{2}\bigr)\). Both have amplitude 1 and period \(2\pi\) — they just <em>start</em> at different heights.</p>
+    </div>
+
+    <div class="reading-card">
+      <h3>📊 Read: Stretching &amp; Squeezing</h3>
+      <p>For \(y = 3\sin(2x)\): the coefficient \(3\) <strong>triples the amplitude</strong>, and the coefficient \(2\) <strong>halves the period</strong> to \(\pi\). The graph oscillates between \(-3\) and \(+3\), completing a full cycle in \(\pi\) units.</p>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
+    <h2><span style="font-size:1.5rem;">&#127911;</span> Read &amp; Listen Quiz</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete, showMistakesReview } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const speakers = ['edam', 'diego'];
+    initSideCharacter('edam', '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'For \\(y = 4\\sin(2x)\\), what is the amplitude?',
+        options: ['2', '4', '\\(\\pi\\)', '\\(2\\pi\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'What is the period of y equals sine of three x?',
+        spokenText: 'What is the period of y equals sine of three x?',
+        options: ['\\(\\pi/3\\)', '\\(2\\pi/3\\)', '\\(\\pi\\)', '\\(2\\pi\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Which transformation describes the graph of \\(y = \\sin(x - \\pi/4)\\)?',
+        options: ['Vertical shift up by \\(\\pi/4\\)', 'Phase shift right by \\(\\pi/4\\)', 'Phase shift left by \\(\\pi/4\\)', 'Reflection over x-axis'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A sine graph oscillates between negative 5 and positive 5. What is the amplitude?',
+        spokenText: 'A sine graph oscillates between negative 5 and positive 5. What is the amplitude?',
+        answerType: 'fill-blank',
+        answer: '5'
+      },
+      {
+        type: 'true-false',
+        question: 'The graph of \\(y = \\cos x\\) is the graph of \\(y = \\sin x\\) shifted left by \\(\\pi/2\\).',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'The midline of a sine graph is y equals 3, and its amplitude is 2. What is the maximum value?',
+        spokenText: 'The midline of a sine graph is y equals 3, and its amplitude is 2. What is the maximum value?',
+        answerType: 'fill-blank',
+        answer: '5'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'What is the period of \\(y = \\tan(x)\\)?',
+        options: ['\\(\\pi/2\\)', '\\(\\pi\\)', '\\(2\\pi\\)', '\\(4\\pi\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'True or false: The graph of cosecant has vertical asymptotes wherever sine equals zero.',
+        spokenText: 'True or false. The graph of cosecant has vertical asymptotes wherever sine equals zero.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'multiple-choice',
+        question: 'A sound wave is modeled by \\(y = 0.6\\sin(880\\pi t)\\). What is its frequency?',
+        options: ['440 Hz', '880 Hz', '220 Hz', '\\(880\\pi\\) Hz'],
+        correctIndex: 0
+      },
+      {
+        type: 'listening',
+        question: 'Looking at a graph: the function reaches a maximum at x equals pi over 2 and a minimum at three pi over 2. Sine or cosine?',
+        spokenText: 'Looking at a graph, the function reaches a maximum at x equals pi over 2, and a minimum at three pi over 2. Is it sine or cosine?',
+        options: ['sine', 'cosine', 'tangent', 'cotangent'],
+        correctIndex: 0
+      },
+      {
+        type: 'listening',
+        question: 'What is the period of y equals cosine of pi x?',
+        spokenText: 'What is the period of y equals cosine of pi x?',
+        options: ['1', '2', '\\(\\pi\\)', '\\(2\\pi\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A sine graph has midline y equals negative 1 and amplitude 4. What is the minimum value?',
+        spokenText: 'A sine graph has midline y equals negative one and amplitude four. What is the minimum value?',
+        answerType: 'fill-blank',
+        answer: '-5'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: the graph of y equals tangent x has vertical asymptotes at every odd multiple of pi over two.',
+        spokenText: 'True or false. The graph of y equals tangent x has vertical asymptotes at every odd multiple of pi over two.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'For y equals 2 cosine of x minus pi, what is the phase shift?',
+        spokenText: 'For y equals two cosine of x minus pi, what is the phase shift?',
+        options: ['\\(\\pi\\) left', '\\(\\pi\\) right', '\\(\\pi/2\\) right', 'no shift'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'In y = A sin(Bx + C) + D, the letter A represents the ___.',
+        answer: 'amplitude'
+      },
+      {
+        type: 'fill-blank',
+        question: 'The period of y = sin(Bx) is 2π over ___.',
+        answer: 'B'
+      },
+      {
+        type: 'fill-blank',
+        question: 'For y = sin(x), the maximum value is ___.',
+        answer: '1'
+      },
+      {
+        type: 'fill-blank',
+        question: 'The graph of y = tan(x) has vertical ___ at every odd multiple of π/2.',
+        answer: 'asymptotes'
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const mistakeIdx = new Set();
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      if (!isCorrect && index >= 0) mistakeIdx.add(index);
+      const who = speakers[index % speakers.length];
+      initSideCharacter(who, '../../');
+      showBuddy(who, isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'trigonometry',
+      lessonId: 'lesson-graphs',
+      nextHref: 'lesson-modeling.html',
+      backHref: 'index.html'
+    });
+    showMistakesReview(container, Array.from(mistakeIdx).map((i) => exercises[i]), { basePath: '../../' });
+  </script>
+</body>
+</html>

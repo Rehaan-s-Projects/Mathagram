@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abacus — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-math)">Math</span>
+    <h1>Abacus</h1>
+    <p>The world's first calculator — bead by bead. History from Mesopotamian dust boards to Roman counters to the Chinese suanpan, Japanese soroban, Russian schoty, and the Cranmer abacus for blind students. Master place value on the rods, complementary number tricks, addition &amp; subtraction by sliding beads, multiplication &amp; division, square &amp; cube roots, anzan (mental abacus / blind calculation) — the technique speed-arithmetic champions use to outpace calculators — plus modern competitions (UCMAS, ALOHA Mind Math), classroom pedagogy, the cognitive-development research, and abacus apps. 35 units, 525 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Duolingo-style learning path — practice first, theory & history later.
+    const unitNames = [
+      "Foundations — Slide the Beads",
+      "Arithmetic Abacus — Reading & Place Value",
+      "Addition Without Carrying — Direct Bead Slides",
+      "The Five Complement — \"Friend Numbers to 5\"",
+      "The Ten Complement — Addition With Carrying",
+      "Subtraction Without Borrowing",
+      "Subtraction With Borrowing — Complement Tricks",
+      "Multiplication on the Soroban — Step by Step",
+      "Long Multiplication — Multi-Digit Practice",
+      "Division on the Soroban",
+      "Long Division Practice",
+      "Square Roots on the Abacus",
+      "Cube Roots on the Abacus",
+      "Decimals & Negative Numbers",
+      "Anzan — Mental Abacus / Visualization",
+      "Building Anzan Speed — Drill Routines",
+      "World-Record Calculators — Yusnier Viera, Naofumi Ogasawara",
+      "UCMAS, ALOHA Mind Math & Brain-Boost Programs",
+      "Classroom Pedagogy — Teaching Kids the Soroban",
+      "Cognitive Research — Working Memory, Math Anxiety",
+      "Abacus vs Calculator — When the Abacus Wins",
+      "Apps & Online Trainers — Soroban Master, Abacus Trainer",
+      "Building Your Own Abacus",
+      "Speed Competitions & Scoring",
+      "A Short History — Mesopotamian Dust Boards to Today",
+      "Roman Hand-Abacus & Counting Boards",
+      "The Chinese Suanpan — 2-up / 5-down Beads",
+      "The Japanese Soroban — 1-up / 4-down Beads",
+      "The Russian Schoty — 10-Bead Rods",
+      "The Cranmer Abacus — For Blind Students",
+      "Anatomy of an Abacus — Frame, Rods, Beads, Beam",
+      "Place Value on the Rods — Ones, Tens, Hundreds",
+      "Setting a Number — Reading Beads at the Beam",
+      "Clearing the Abacus — Reset Position",
+      "Abacus Mastery — Comprehensive Review"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    // Lessons 1-6 are interactive practice pages.
+    // 1 = Slide the Beads (Unit 1)
+    // 2 = Read the Soroban (Unit 2)
+    // 3 = Addition Without Carrying (Unit 12)
+    // 4 = Addition With Carrying (Units 14-15, 5- and 10-complements)
+    // 5 = Subtraction (Units 16-17)
+    // 6 = Multiplication (Unit 18)
+    // Duolingo-style sequential playable lessons — each unit's first lesson
+    // is the interactive practice for that topic.
+    const playable = {
+      1:   'lesson-1.html',  // Unit 1: Foundations — Slide the Beads
+      16:  'lesson-2.html',  // Unit 2: Arithmetic Abacus — Reading & Place Value
+      31:  'lesson-3.html',  // Unit 3: Addition Without Carrying
+      61:  'lesson-4.html',  // Unit 5: Ten Complement (addition with carrying)
+      91:  'lesson-5.html',  // Unit 7: Subtraction With Borrowing
+      106: 'lesson-6.html'   // Unit 8: Multiplication
+    };
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ab-'+n, title: t, href: playable[n] || '#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('abacus');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('abacus');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

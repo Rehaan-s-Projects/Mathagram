@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ojibwe (Anishinaabemowin) — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Ojibwe (Anishinaabemowin)</h1>
+    <p>Speak Anishinaabemowin — the Algonquian language of the Great Lakes and Canadian Subarctic. Sounds, the double-vowel system, animate vs inanimate grammar, family, hunting &amp;amp; seasons, Seven Grandfather Teachings, and storytelling. 325 lessons across 27 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Anishinaabemowin Sounds',['Welcome — Boozhoo','The Name \'Anishinaabemowin\'','Long vs Short Vowels','The 7 Vowel Sounds','Consonants Group 1','Consonants Group 2','The Double-Vowel System (Fiero)','Canadian Syllabics Overview','Stress & Rhythm','Pronunciation Drills','Saying Your Name','Sounds Checkpoint']],
+      [2,'Greetings & Essentials',['Boozhoo — Hello','Aaniin — Hi','Aaniin Ezhi-ayaayan — How Are You?','Miigwech — Thank You','Eya\' & Gaawiin — Yes & No','Introducing Yourself','Asking for Help','Goodbye — Giga-waabamin','Please Speak Slowly','I Don\'t Understand','Apologizing — Bizaan','Greetings Checkpoint']],
+      [3,'Animate & Inanimate',['The Animacy Rule','Animate Nouns — People & Animals','Inanimate Nouns — Most Things','Surprising Animate Nouns','Plural — Animate -wag/-ag','Plural — Inanimate -an','Verbs Agree with Animacy','Demonstratives — wa & i\'iw','Possession — Animate','Possession — Inanimate','Common Mistakes with Animacy','Animacy Checkpoint']],
+      [4,'Numbers & Counting',['Bezhig — One','Niizh — Two','Niswi — Three','Niiwin — Four','Naanan — Five','Numbers 6-10','Numbers 11-20','Tens — 30 40 50','One Hundred — Ningotwaak','Counting People vs Things','Telling Time','Numbers Checkpoint']],
+      [5,'Family & Clans',['My Family — Indinawemaaganag','Mother — Indemaamaa','Father — Indedey','Grandmother — Nookomis','Grandfather — Nimishoomis','Siblings — Older & Younger','Children — Abinoojiiyag','Clan System — Doodemag','Bear Clan, Crane Clan, Fish Clan','Naming Ceremonies','Elders — Gichi-aya\'aag','Family Checkpoint']],
+      [6,'Verbs & Sentences',['Verb Categories — VAI VTI VAI-O VTA','First-Person Marker n-','Second-Person Marker g-','Third-Person — no Prefix','Past Tense — gii-','Future Tense — ga-','Negation with gaawiin','Yes-No Questions','Information Questions','Common Verbs — Be','Common Verbs — Do','Verbs Checkpoint']],
+      [7,'Land, Seasons & Animals',['The Four Seasons','Niibin — Summer','Dagwaagin — Autumn','Biboon — Winter','Ziigwan — Spring','Animals of the Forest','Maang — The Loon','Makwa — The Bear','Migizi — The Eagle','Trees — Mitig','Lakes & Rivers — Zaaga\'igan','Seasons & Animals Checkpoint']],
+      [8,'Food & Daily Life',['Manoomin — Wild Rice','Maple Sugaring — Ziinzibaakwad','Berries — Miinan','Fish — Giigoonh','Eating — Wiisini','Cooking Vocabulary','At the Table','Daily Routine','Clothing','Weather Words','Saying Hello to Food','Daily Life Checkpoint']],
+      [9,'Seven Grandfather Teachings',['The Seven Teachings','Nibwaakaawin — Wisdom','Zaagi\'idiwin — Love','Manaaji\'idiwin — Respect','Aakode\'ewin — Bravery','Gwayakwaadiziwin — Honesty','Dabaadendiziwin — Humility','Debwewin — Truth','Living the Teachings','Teaching with Stories','Connecting to Mino-bimaadiziwin','Teachings Checkpoint']],
+      [10,'Stories & Aadizookaanag',['Aadizookaan vs Dibaajimowin','Nanabozho the Trickster','How Nanabozho Got His Name','The Creation Story','Star Stories','Stories Told in Winter','Storytelling Etiquette','Listening Skills','Tobacco Offerings','Retelling a Short Story','Preserving Oral Tradition','Stories Checkpoint']],
+      [11,'Modern Anishinaabe Life',['The Three Fires Confederacy','Reserves & Reservations','Powwows','Lacrosse — A Gift to the World','Anishinaabe Music','Contemporary Authors','Indigenous Cinema','Language Revitalization Today','Online Anishinaabemowin','Treaty Rights','Anishinaabe Diaspora','Modern Life Checkpoint']],
+      [12,'Anishinaabemowin Mastery',['Vocabulary Review','Pronunciation Final','Animacy Mastery','Verb Forms Review','Conversation — Greetings','Conversation — Family','Conversation — Stories','Reading a Short Text','Writing a Paragraph','Cultural Knowledge Test','Listening Comprehension','Anishinaabemowin Mastery!']],
+      [13,'Hunting & Gathering',['Hunting — Niibinige','Tracking Animals','Bow & Arrow — Mitigwaab','Snowshoes — Aagim','Fishing — Bagida\'wewin','Setting Traps','Gathering Berries — Miinan','Plants for Medicine','Seasonal Movement','Sharing the Hunt','Respect for Animals','Hunting Checkpoint']],
+      [14,'Maple Sugar Time',['Ziinzibaakwadoke — Sugaring','Tapping the Tree','Boiling the Sap','Sugar Bush Camp','Children\'s Roles','Snow Candy','Maple Sugar Cones','Family Stories at Sugar Camp','Sugaring Vocabulary','Modern Maple Operations','Songs of Spring','Maple Sugar Checkpoint']],
+      [15,'Wild Rice Harvest',['Manoomin — Wild Rice','Origin of Manoomin','The Manoomin Migration Story','Rice Camp','Knocking & Poling','Parching the Rice','Dancing on the Rice','Winnowing','Storing Manoomin','Manoomin in Modern Diet','Treaty Rights to Manoomin','Manoomin Checkpoint']],
+      [16,'Powwow Vocabulary',['What Is a Powwow?','Grand Entry','Drum Groups','Singing Styles','Regalia — Traditional','Regalia — Fancy','Jingle Dress','Men\'s Grass Dance','Powwow Etiquette','Honor Songs','Powwow Foods','Powwow Checkpoint']],
+      [17,'The Medicine Wheel',['Four Directions','Yellow — East','Red — South','Black — West','White — North','Four Stages of Life','Four Elements','Medicine Wheel Teachings','Connecting to Self','Connecting to Others','Connecting to Nature','Medicine Wheel Checkpoint']],
+      [18,'Birch Bark — Wiigwaas',['Wiigwaasi-mitig — Birch Tree','Harvesting Bark Respectfully','Wigwam Coverings','Wiigwaasi-jiimaan — Birch Bark Canoe','Birch Bark Baskets','Birch Bark Biting Art','Scrolls — Wiigwaasi-makak','Storing Manoomin in Birch','Modern Birch Bark Crafts','Teachers of Birch Bark','Trade Routes','Birch Bark Checkpoint']],
+      [19,'Lacrosse & Games',['Baaga\'adowewin — Lacrosse','The Creator\'s Game','Healing Through Lacrosse','Stick Making','Traditional vs Modern Rules','Wooden Toys','Children\'s Games','Snowsnake — Goon-onaagan','Hand-Drum Game','Storytelling Games','Modern Sport','Games Checkpoint']],
+      [20,'Treaty Rights & Land',['Treaty 3','Treaty 9','Robinson-Superior Treaty','White Earth Treaty','Land Acknowledgment Vocabulary','Sovereignty','Anishinaabe Nationhood','Reserves vs Reservations','Land Defenders','Walleye Wars','Idle No More','Treaty Rights Checkpoint']],
+      [21,'Anishinaabe Authors & Cinema',['Louise Erdrich','Gerald Vizenor','Basil Johnston','Richard Wagamese','Tomson Highway','Indigenous Cinema','Reservation Dogs','Smoke Signals','Atanarjuat','Anishinaabe Documentaries','Reading in Translation','Authors Checkpoint']],
+      [22,'Spirituality — Manidoo',['Manidoo — Spirit','Gichi-Manidoo — Great Spirit','Tobacco Offerings — Asemaa','Pipe Ceremony','Sweat Lodge — Madoodiswan','Fasting & Vision Quest','Naming Ceremony','Sunrise Ceremony','Midewiwin — Grand Medicine','Drumming Etiquette','Smudging','Spirituality Checkpoint']],
+      [23,'Conversation — Daily Life',['Greetings Recap','At the Store','On the Phone','Asking About Family','Discussing Weather','Saying What You Did','Making Plans','Inviting Someone','Refusing Politely','Small Talk','Closing the Conversation','Daily Conversation Checkpoint']],
+      [24,'Conversation — Travel',['At the Airport','On the Bus','Asking Directions','Hotel Check-In','Ordering at Restaurant','Buying Souvenirs','Emergency Phrases','Getting Lost','Money & Currency','Crossing Borders','Travel Stories','Travel Conversation Checkpoint']],
+      [25,'Reading Practice',['Reading Aloud Tips','Children\'s Picture Book','Short News Article','Short Story Excerpt','Poem','Recipe in Ojibwe','Letter from a Friend','Sign Language Texts','Reading Speed Builders','Looking Up Unknown Words','Reading Aloud Final','Reading Checkpoint']],
+      [26,'Listening Practice',['Slow Speech','Normal Speed','Two-Speaker Dialogue','News Clip','Story by an Elder','Song Lyrics','Following Directions','Filling In Missing Words','Predicting What\'s Next','Listening for Numbers','Listening for Names','Listening Checkpoint']],
+      [27,'Anishinaabemowin Mastery II',['Comprehensive Grammar Review','Verb Conjugation Marathon','Vocabulary Recall','Pronunciation Final 2','Cultural Knowledge II','Storytelling Final','Translating a Paragraph','Composing a Letter','Mock Conversation 1','Mock Conversation 2','Cumulative Review','Anishinaabemowin Mastery II!','Ojibwe Conversation Drill 1']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'oj-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('ojibwe');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('ojibwe');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

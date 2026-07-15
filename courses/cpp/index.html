@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Programming — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>C++ Programming</h1>
+    <p>Master C++ from scratch — pointers, references, RAII, OOP, templates, STL, smart pointers, move semantics, modern C++20/23, and real systems projects. 210 lessons across 14 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why C++','Installing g++ & clang','VS Code & CLion Setup','Hello World','Comments','C++ vs C','Compile, Link, Run','Header vs Source Files','C++ Standards Timeline','g++ Flags','Online Compilers','Project Structure','cout & cerr','Debug Output','Foundations Checkpoint']],
+      [2,'Variables & Types',['Declaring Variables','int short long long long','float double long double','char & wchar_t','bool','auto Keyword','Type Casting','Constants — const & constexpr','Reference Variables','Pointer Variables','size_t Type','Fixed-Width Ints','Type Aliases — using & typedef','Enums & Scoped Enums','Variables Checkpoint']],
+      [3,'Operators',['Arithmetic + - * / %','Increment & Decrement','Comparison ==','Logical && and ||','Bitwise & | ^ ~','Shift << >>','Ternary ?:','Operator Precedence','String Concatenation','Address & Dereference','Compound +=','sizeof Operator','Comma Operator','Operator Overloading Preview','Operators Checkpoint']],
+      [4,'Control Flow',['if Statements','if-else','Nested Conditions','switch Statement','while Loop','do-while Loop','for Loop','Range-Based for','break & continue','goto (and Why Not)','Nested Loops','Infinite Loops','FizzBuzz','Pattern Printing','Control Flow Checkpoint']],
+      [5,'Arrays & C-Strings',['Static Arrays','Array Bounds','Multi-dimensional Arrays','Arrays vs Pointers','C-Strings (char arrays)','cstring Library','strlen & strcpy','strcmp','sprintf','C-String Pitfalls','Comparing Arrays','Pass Arrays to Functions','Array Decay','std::array Preview','Arrays Checkpoint']],
+      [6,'Functions',['What Is a Function?','Defining Functions','Parameters & Arguments','Return Values','void Functions','Function Overloading','Default Parameters','Pass by Value','Pass by Reference','Pass by Pointer','inline Functions','constexpr Functions','Lambda Expressions','Function Pointers','Functions Checkpoint']],
+      [7,'Pointers & References',['Pointer Basics','Address-of &','Dereference *','Null Pointers','nullptr Keyword','Pointer Arithmetic','Pointers to Pointers','Dangling Pointers','References vs Pointers','Const Pointers','void Pointers','Smart Pointer Preview','Common Pointer Bugs','Reading Pointer Declarations','Pointers Checkpoint']],
+      [8,'Dynamic Memory',['Stack vs Heap','new & delete','Allocating Arrays','Memory Leaks','Double-Free Bugs','RAII Idea','Why C++ Has Manual Memory','Aligning Allocations','new(nothrow)','Placement new','Memory Profilers','Valgrind Basics','AddressSanitizer','Avoiding Raw new','Dynamic Memory Checkpoint']],
+      [9,'Object-Oriented C++',['Classes vs Structs','Fields & Methods','Constructors','Destructors','this Pointer','Member Initializer Lists','Copy Constructor','Move Constructor (C++11)','Rule of Three / Five / Zero','Access Modifiers','static Members','friend Functions','Operator Overloading','Object Lifetime','OOP Checkpoint']],
+      [10,'Inheritance & Polymorphism',['Public Inheritance','Protected & Private Inheritance','Multiple Inheritance','virtual Functions','Pure Virtual & Abstract Classes','vtables Explained','Virtual Destructors','override & final','Slicing Problem','dynamic_cast','Diamond Problem','Interfaces in C++','Substitution Principle','Composition vs Inheritance','Inheritance Checkpoint']],
+      [11,'Templates',['Function Templates','Class Templates','Template Specialization','Partial Specialization','Non-Type Template Parameters','Variadic Templates','Template Argument Deduction','constexpr if','SFINAE','Concepts (C++20)','Templates vs Generics','Type Traits','Compile-Time Errors','Header-Only Libraries','Templates Checkpoint']],
+      [12,'STL — Containers',['std::vector','std::array','std::deque','std::list & forward_list','std::map & unordered_map','std::set & unordered_set','std::stack & queue','std::priority_queue','std::string','Iterators','Iterator Categories','Choosing a Container','Big-O of STL Operations','std::span (C++20)','Containers Checkpoint']],
+      [13,'STL — Algorithms',['std::sort','std::find','std::count & count_if','std::for_each','std::transform','std::accumulate','std::copy & move','std::unique','std::reverse','std::lower_bound','Lambdas + Algorithms','Ranges Library (C++20)','Views (C++20)','Algorithm Complexity','Algorithms Checkpoint']],
+      [14,'Smart Pointers & RAII',['Why Smart Pointers?','std::unique_ptr','std::shared_ptr','std::weak_ptr','make_unique & make_shared','Custom Deleters','Pointer Ownership Rules','Avoiding Cycles','RAII Pattern','Resource Wrappers','ScopeGuard Idiom','Exception Safety','Strong vs Basic Guarantee','When to Use Raw Pointers','RAII Checkpoint']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cpp-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('cpp');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('cpp');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

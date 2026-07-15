@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punjabi (ਪੰਜਾਬੀ / پنجابی) — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Punjabi (ਪੰਜਾਬੀ / پنجابی)</h1>
+    <p>Speak Panjabi — the Indo-Aryan language of Punjab in India and Pakistan. Gurmukhi script, Shahmukhi overview, greetings, grammar, numbers, family, food, Sikhism, Bhangra &amp;amp; Bollywood, and the global Punjabi diaspora. 428 lessons across 36 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Gurmukhi Script',['Welcome — Sat Sri Akal','Why Gurmukhi?','The Vowel Carriers ੳ ਅ ੲ','Vowel Signs (Matras)','Consonants Group 1 — ਕ ਖ ਗ ਘ ਙ','Consonants Group 2 — ਚ ਛ ਜ ਝ ਞ','Consonants Group 3 — ਟ ਠ ਡ ਢ ਣ','Consonants Group 4 — ਤ ਥ ਦ ਧ ਨ','Consonants Group 5 — ਪ ਫ ਬ ਭ ਮ','Subscript Letters','Reading Gurmukhi Words','Gurmukhi Checkpoint']],
+      [2,'Shahmukhi & Two Scripts',['What Is Shahmukhi?','Punjabi in Pakistan vs India','Comparing Gurmukhi & Shahmukhi','Shared Spoken Punjabi','Reading Both Scripts','Punjabi in the Diaspora','Punjabi Tone System','Punjabi Sounds Not in English','Three Tones — High, Low, Level','Tone Drill','Common Pronunciation Mistakes','Two Scripts Checkpoint']],
+      [3,'Greetings & Essentials',['Sat Sri Akal — Greeting','As-salām alaykum — Pakistani Punjabi','Tusi kiven ho? — How Are You?','Theek aan — I\'m Well','Shukriya — Thank You','Haan & Nahin — Yes & No','Introducing Yourself','Tuhada naam ki hai? — What\'s Your Name?','Asking for Help','Goodbye — Rab Rakha','Apologies','Greetings Checkpoint']],
+      [4,'Pronouns & To Be',['Main — I','Tu / Tusi — You (informal / formal)','Eh / Oh — He / She','Asin — We','Tusi — You (pl.)','Eh / Oh — They','Verb Honaa — To Be','Verb Hona Ke — Present','Past Tense — Si','Future — Hoonga','Subject Drop','Pronouns Checkpoint']],
+      [5,'Grammar Basics',['Word Order — SOV','Gender — Masculine, Feminine','Adjectives — Position & Agreement','Plural Formation','Postpositions — De Diaan Toon','Possession — Da Di De','Negation — Nahin & Na','Yes-No Questions','Question Words — Ki, Kithon, Kado','Conjunctions','Punjabi vs Hindi/Urdu','Grammar Checkpoint']],
+      [6,'Numbers 1-100',['Ikk — One','Do — Two','Tinn — Three','Char — Four','Panj — Five','6-10','11-20','Tens to 100','Counting Objects','Telling Time','Money — Rupee','Numbers Checkpoint']],
+      [7,'Family',['Parivaar — Family','Maan — Mother','Pita — Father','Veer / Bhraa — Brother','Pehn — Sister','Daada & Daadi — Paternal Grandparents','Naana & Naani — Maternal Grandparents','Children — Bachche','Punjabi Naming Customs','Joint Family Tradition','Marriage Vocabulary','Family Checkpoint']],
+      [8,'Food',['Sarson da Saag & Makki di Roti','Butter Chicken','Tandoori','Chole Bhature','Punjabi Lassi','Pinni','Gulab Jamun','Kheer','Chai','Spices of Punjab','At the Dhaba','Food Checkpoint']],
+      [9,'Punjab & Travel',['Punjab — Land of Five Rivers','Amritsar — Golden Temple','Lahore — Cultural Heart','Chandigarh','Patiala','Sindhi Border','Wagah Border','Public Transport','Asking Directions','Currency — INR & PKR','Diaspora Hubs — Toronto, London','Travel Checkpoint']],
+      [10,'Sikhism',['The 10 Sikh Gurus','Guru Nanak Dev Ji','Guru Granth Sahib Ji','The Five Ks','Khalsa — 1699','Langar — Free Kitchen','Gurdwara Etiquette','Sikh Holidays — Vaisakhi','Sikh Greetings','Sikh Vocabulary','Sikhism Worldwide','Sikhism Checkpoint']],
+      [11,'Bhangra & Bollywood',['Bhangra — Origins','Dhol — The Drum','Famous Bhangra Tracks','Gidha — Women\'s Dance','Punjabi Folk Music','Modern Punjabi Pop — Diljit Dosanjh','AP Dhillon','Sidhu Moose Wala','Punjabi in Bollywood','Common Song Lyrics','Singing Along','Music Checkpoint']],
+      [12,'Punjabi Mastery',['Gurmukhi Final','Pronunciation & Tones','Grammar Review','Conversation — Greetings','Conversation — Family','Conversation — Food','Reading a Punjabi Headline','Writing in Gurmukhi','Listening — Bhangra Lyric','Cultural Knowledge','Idioms & Proverbs','Punjabi Mastery!']],
+      [13,'Lahore — Daily Life',['Lahore Old City','Walled City Streets','Anarkali Bazaar','Mughal Heritage','Lahori Punjabi Dialect','Lahori Food','Shahmukhi Press','Lahore Cricket','Lahore Mosques','Lahore Slang','Wagah Border','Lahore Checkpoint']],
+      [14,'Amritsar — Daily Life',['Amritsar Old City','Hall Bazaar','Heritage Walk','Punjabi Dhabas','Amritsari Kulcha','Wagah Ceremony','Jallianwala Bagh','Amritsar Trains','Amritsar Newspapers','Amritsar Slang','Gurdwara Etiquette','Amritsar Checkpoint']],
+      [15,'UK Diaspora — Southall',['Southall — Little Punjab','Southall Broadway','Gurdwaras in UK','Punjabi Restaurants UK','Bhangra Scene UK','Punjabi-British Identity','British-Punjabi Comedy','Punjabi Schools UK','BBC Asian Network','UK Punjabi Rappers','Punjabi Festivals UK','UK Checkpoint']],
+      [16,'Canada Diaspora — Surrey BC',['Surrey BC Community','Brampton Ontario','Sikh Heritage Canada','Punjabi Truckers','Punjabi-Canadian Politicians','Diaspora Schools Canada','Vaisakhi Parade Vancouver','Punjabi Radio Canada','Punjabi-Canadian Films','Diaspora Mental Health','Punjabi-Canadian Identity','Canada Checkpoint']],
+      [17,'California Diaspora',['Yuba City Festival','Stockton California','Bakersfield Sikhs','Fresno Truckers','Stockton Gurdwara','Punjabi-American Farmers','Punjabi-American Politicians','Punjabi-American Students','Punjabi-American Music','Hate Crime Response','Diaspora Identity','California Checkpoint']],
+      [18,'Sikh Diaspora',['Sikhism Around the World','Largest Diasporas','Sikh Coalition','Khalsa Aid','Sikh Activism','Sikh Identity Today','Gurdwara Architecture','Langar Vocabulary','Five Ks Worldwide','Vaisakhi Worldwide','Sikh-American Civil Rights','Diaspora Checkpoint']],
+      [19,'Partition of Punjab — 1947',['Why Partition?','Mountbatten Plan','Cyril Radcliffe Line','Massacres & Migration','Partition Vocabulary','Saadat Hasan Manto','Partition Museum Amritsar','Family Stories','Survivor Testimonies','Healing & Memory','Reading Partition Stories','Partition Checkpoint']],
+      [20,'Operation Blue Star',['June 1984 Vocabulary','Indira Gandhi Era','Operation Blue Star','Indira Gandhi Assassination','Anti-Sikh Pogroms 1984','Justice Today','Sikh Memorial','Sikh Activism Today','Memorial Vocabulary','Reading Memorial Texts','Reading & Healing','1984 Memory Checkpoint']],
+      [21,'Kabaddi',['Kabaddi — Origins','Punjab Kabaddi','Circle Style','Standard Style','Pro Kabaddi League','Famous Kabaddi Players','Kabaddi Vocabulary','Kabaddi Strategy','Watching Kabaddi','Playing Kabaddi','Kabaddi Idioms','Kabaddi Checkpoint']],
+      [22,'Punjabi Wedding — Anand Karaj',['Anand Karaj — Bliss Ceremony','Roka & Engagement','Mehendi Ceremony','Sangeet — Music Night','Ladies Sangeet','Choora Ceremony','Wedding Day','Doli — Bride\'s Departure','Reception','Wedding Foods','Wedding Songs','Wedding Checkpoint']],
+      [23,'Heer Ranjha',['Heer & Ranjha — The Lovers','Heer\'s Family','Ranjha Becomes a Yogi','Heer\'s Forced Marriage','Kaido — Antagonist','Heer\'s Death','Waris Shah\'s Heer','Famous Couplets','Modern Adaptations','Heer in Music','Heer in Film','Heer Checkpoint']],
+      [24,'Mirza Sahiba',['Mirza & Sahiba — Tragedy','Sahiba\'s Brothers','Mirza\'s Arrows','The Tree of Tragedy','Mirza\'s Death','Sahiba\'s Death','Tellings in Folk Music','Mirza Sahiba Films','Cultural Memory','Punjabi Tragedy Tradition','Comparing to Heer Ranjha','Mirza Sahiba Checkpoint']],
+      [25,'Bulleh Shah',['1680-1757 Kasur','Sufi Mystic','Famous Kafis','Bulla Ki Jaana','Ik Nukte Wich','Bulleh Shah\'s Philosophy','Reading Aloud','Modern Pop Adaptations','Coke Studio Bulleh Shah','Bulleh Shah Quotes','Influence on Today','Bulleh Shah Checkpoint']],
+      [26,'Waris Shah',['1722-1798 Jandiala','Heer Waris Shah','Punjabi Literary Canon','Reading Excerpt','Themes & Motifs','Sufi Influences','Lahori Punjabi','Famous Couplets','Modern Singers Performing Waris','Waris Shah & Partition','Amrita Pritam Tribute','Waris Shah Checkpoint']],
+      [27,'Punjabi Cinema',['Carry On Jatta','Chal Mera Putt','Punjab 1984','Sardaarji','Pollywood Stars','Diljit Dosanjh in Films','Punjabi Music in Films','Punjabi Comedy Films','Modern Pollywood','Streaming Punjabi','Reviewing Films','Cinema Checkpoint']],
+      [28,'Sidhu Moose Wala',['Born 1993','Rise to Fame','Famous Tracks','295','So High','Lyrics Style','Beef & Controversy','Death 2022','Legacy','Memorial & Vocabulary','Punjabi Hip-Hop Influence','Sidhu Checkpoint']],
+      [29,'Punjabi Hip-Hop Globally',['Origins','AP Dhillon','Karan Aujla','Shubh','Imran Khan — Amplifier','Punjabi MC','UK Punjabi Hip-Hop','Canadian Punjabi Hip-Hop','Lyrics Themes','Diaspora Sound','Future of Punjabi Hip-Hop','Hip-Hop Checkpoint']],
+      [30,'Farmer Protests',['2020-2021 Farm Bills','Tikri Border','Singhu Border','Punjabi Farmers\' Demands','Farmer Vocabulary','Songs of Protest','Sidhu Moose Wala\'s Support','Repeal Victory','Farmer Heroes','Reading News','Farming Vocabulary','Farmer Protests Checkpoint']],
+      [31,'Daily Life at Home',['Morning Routine','Breakfast','School Run','Work','Lunch','Afternoon Tea — Chai','Evening Prayer','Dinner','Family Time','Phone Calls','Bed Time','Daily Life Checkpoint']],
+      [32,'Idioms & Proverbs',['Ankhi Vekheya','Common Sayings','Farmer Wisdom','Family Sayings','Punjabi Humor','Animal Idioms','Weather Idioms','Comparing to Hindi','Translating Idioms','Using Idioms','Sufi Inspired Sayings','Idioms Checkpoint']],
+      [33,'Conversation — Family Visit',['Sat Sri Akal','Asking About Family','Sharing Sweets','Tea Time Talk','Eating Together','Reminiscing','Mehman Nawazi — Hospitality','Showing Photos','Saying Goodbye','Polite Refusals','Promises of Return','Family Checkpoint']],
+      [34,'Conversation — Gurdwara',['Removing Shoes','Covering Head','Bowing to Guru Granth Sahib','Donating — Daswandh','Langar Etiquette','Volunteering','Greeting Other Sangat','Asking About Kirtan','Sangat Conversations','Prayers in Punjabi','Saying Goodbye','Gurdwara Checkpoint']],
+      [35,'Reading — Punjabi News',['Reading Gurmukhi Headlines','Politics Section','Sports Section','Bollywood Section','Editorials','Reading Tweets','Comments Sections','Translating News','Summarizing Articles','Discussing News','Pakistani Punjabi News','News Checkpoint']],
+      [36,'Punjabi Mastery II',['Gurmukhi Final 2','Tone Final','Grammar Review 2','Verb Conjugation','Reading a Story','Writing a Letter','Conversation — Wedding','Conversation — Gurdwara']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'pa-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('punjabi');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('punjabi');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

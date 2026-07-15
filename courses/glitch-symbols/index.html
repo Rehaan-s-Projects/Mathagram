@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glitch Symbols — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>G&#x0336;l&#x0337;i&#x0338;t&#x0336;c&#x0337;h&#x0338; Symbols</h1>
+    <p>Learn about Unicode glitch text, zalgo generators, box-drawing characters, cursed symbols, corrupted text, and the weird corners of digital text. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'What Is Glitch Text?',['Introduction to Glitch Text','Why Does Text Look "Corrupted"?','Unicode — The Standard for All Text','Code Points & Characters','UTF-8 Encoding Explained','How Computers Display Text','When Text Goes Wrong','Mojibake — Garbled Encoding','Tofu — Missing Character Boxes □','Replacement Character — �','Copy-Paste Gone Wrong','Text Rendering Engines','Font Fallback Chains','Why Some Text Breaks Websites','Glitch Text Checkpoint']],
+      [2,'Zalgo Text — Combining Marks',['What Is Zalgo Text?','Combining Diacritical Marks — U+0300-U+036F','Marks Above — Accents Tildes Dots','Marks Below — Cedilla Underline','Marks Through — Strikethrough Overlay','Stacking Multiple Marks','How Zalgo Generators Work','T̷̢̛h̶̭̋i̵̺̊s̶̗̊ I̵̱̅s̶̗̊ Ẓ̷̈å̶̡l̵̰̈́g̶͎͛o̸̞͝','Creating Zalgo by Hand','Light Zalgo vs Heavy Zalgo','Zalgo in Chat & Social Media','Zalgo That Breaks Apps','Zalgo in Memes','Building a Zalgo Generator','Zalgo Checkpoint']],
+      [3,'Box-Drawing Characters',['What Are Box-Drawing Characters?','Single Lines — ─ │ ┌ ┐ └ ┘','Double Lines — ═ ║ ╔ ╗ ╚ ╝','T-Junctions — ├ ┤ ┬ ┴','Cross — ┼ ╬','Mixed Single/Double — ╒ ╓ ╘ ╙','Drawing Tables in Text','ASCII Art Boxes','Terminal UI with Box Characters','DOS & BIOS Screens','Box Drawing in Code','Block Elements — ░ ▒ ▓ █','Progress Bars with Block Characters','Retro Computing Aesthetics','Box Drawing Checkpoint']],
+      [4,'Block & Shade Characters',['Full Block — █','Upper Half — ▀','Lower Half — ▄','Left Half — ▌','Right Half — ▐','Light Shade — ░','Medium Shade — ▒','Dark Shade — ▓','Quarter Blocks — ▖ ▗ ▘ ▝','Pixel Art with Blocks','Bar Charts with Blocks','Heat Maps with Shades','Block Art Generators','Braille Patterns as Pixels — ⠁ ⠃ ⠇','Block Characters Checkpoint']],
+      [5,'Mathematical Symbols',['Basic Math — + − × ÷ = ≠','Comparison — < > ≤ ≥ ≈','Set Theory — ∈ ∉ ⊂ ⊃ ∪ ∩','Logic — ∧ ∨ ¬ → ↔ ∀ ∃','Calculus — ∫ ∂ ∇ ∑ ∏','Greek Letters — α β γ δ ε π','Arrows — → ← ↑ ↓ ↔ ⇒','Infinity — ∞','Square Root — √','Empty Set — ∅','Proportional — ∝','Therefore — ∴','Because — ∵','Math in Unicode vs LaTeX','Math Symbols Checkpoint']],
+      [6,'Currency & Commercial Symbols',['Dollar — $','Euro — €','Pound — £','Yen — ¥','Won — ₩','Rupee — ₹','Bitcoin — ₿','Cent — ¢','Copyright — ©','Registered — ®','Trademark — ™','Section — §','Pilcrow — ¶','Degree — °','Currency Checkpoint']],
+      [7,'Arrows & Pointers',['Simple Arrows — → ← ↑ ↓','Diagonal Arrows — ↗ ↘ ↙ ↖','Double Arrows — ⇒ ⇐ ⇑ ⇓ ⇔','Heavy Arrows — ➔ ➜ ➤','Curved Arrows — ↩ ↪ ↻ ↺','Dashed Arrows — ⇢ ⇠','Triangle Arrows — ▶ ◀ ▲ ▼','Arrow Heads — ➢ ➣ ➤','Long Arrows — ⟶ ⟵ ⟷','Harpoon Arrows — ⇀ ↽','Paired Arrows — ⇄ ⇅','Circular Arrows — ↻ ↺ ⟳','Arrow in Box — ⊞ ⊡','Arrow Art & Design','Arrows Checkpoint']],
+      [8,'Emoji Deep Dive',['How Emoji Work — Unicode','Emoji Versions — 1.0 to 15.1','Skin Tone Modifiers — 🏻🏼🏽🏾🏿','ZWJ Sequences — 👨‍👩‍👧‍👦','Flag Emoji — Regional Indicators','Emoji Rendering — Apple vs Google vs Samsung','Missing Emoji — Tofu Boxes','Custom Emoji — Discord Slack','Emoji Accessibility','Emoji Search & Input Methods','Most Used Emoji Worldwide','Emoji Trends by Year','Controversial Emoji — 🔫🍑🍆','Creating Emoji Proposals','Emoji Checkpoint']],
+      [9,'Invisible & Zero-Width Characters',['Zero-Width Space — U+200B','Zero-Width Non-Joiner — U+200C','Zero-Width Joiner — U+200D','Word Joiner — U+2060','Soft Hyphen — U+00AD','Non-Breaking Space — U+00A0','Left-to-Right Mark — U+200E','Right-to-Left Mark — U+200F','Invisible Characters in URLs','Invisible Characters in Passwords','Steganography with Zero-Width','Detecting Hidden Characters','Invisible Trolling Online','Security Risks of Invisible Chars','Invisible Characters Checkpoint']],
+      [10,'Cursed & Weird Unicode',['Upside-Down Text — ʇxǝʇ','Fullwidth Text — Ｔｅｘｔ','Small Caps — Tᴇxᴛ','Circled Letters — Ⓣⓔⓧⓣ','Squared Letters — 🅃🄴🅇🅃','Parenthesized — ⒯⒠⒳⒯','Superscript & Subscript — ᵗᵉˣᵗ ₜₑₓₜ','Strikethrough — T̶e̶x̶t̶','Double Struck — 𝕋𝕖𝕩𝕥','Fraktur — 𝕿𝖊𝖝𝖙','Script — 𝒯𝑒𝓍𝓉','Monospace — 𝚃𝚎𝚡𝚝','Bold & Italic Unicode — 𝐓𝑒𝒙𝒕','Cursed Text Generators','Weird Unicode Checkpoint']],
+      [11,'ASCII Art',['What Is ASCII Art?','Simple Faces — :) :( :D','Animals — ASCII Cat Dog Fish','Text Banners — figlet Style','Box Art — Borders & Frames','Landscape Art — Mountains Trees','Building Art — Houses Castles','Vehicle Art — Cars Boats Planes','Logo Art — Brand Logos in Text','Portrait Art — Faces','Animated ASCII — Frame by Frame','One-Line Art — Kaomoji','Japanese Emoticons — (╯°□°)╯︵ ┻━┻','ASCII Art Tools & Generators','ASCII Art Checkpoint']],
+      [12,'Kaomoji & Japanese Emoticons',['What Is Kaomoji?','Happy — (◕‿◕) (◠‿◠)','Sad — (╥_╥) (T_T)','Angry — (╯°□°)╯︵ ┻━┻','Table Flip & Unflip — ┬─┬ノ( º _ ºノ)','Shrug — ¯\\_(ツ)_/¯','Love — (♥ω♥) (❤ω❤)','Bear — ʕ•ᴥ•ʔ','Cat — (=^・ω・^=)','Music — ♪♫•*¨*•.¸¸♪','Sparkles — ✧・゚: *✧','Lenny Face — ( ͡° ͜ʖ ͡°)','Disapproval — ಠ_ಠ','Building Custom Kaomoji','Kaomoji Checkpoint']],
+      [13,'Braille Patterns as Art',['Braille Unicode Block — U+2800-U+28FF','256 Braille Patterns','Braille as Pixel Grid — 2×4 Dots','Drawing Images with Braille','High-Resolution Text Art','Braille in Terminal Graphics','Braille Progress Bars','Braille Graphs & Charts','Braille QR Codes','Braille Art Generators','Actual Braille Reading (Grade 1)','Actual Braille Reading (Grade 2)','Braille Numbers','Ethics — Art vs Accessibility','Braille Art Checkpoint']],
+      [14,'Text Corruption & Encoding Errors',['What Is Mojibake?','UTF-8 vs Latin-1 Confusion','UTF-8 vs Windows-1252','Double Encoding Problems','Byte Order Mark — BOM','Big Endian vs Little Endian','HTML Entity Errors — &amp;amp;','URL Encoding Gone Wrong — %20','Database Encoding Issues','Email Encoding — MIME','CSV Encoding Problems','JSON Unicode Escapes — \\uXXXX','Fixing Corrupted Text','Preventing Encoding Errors','Text Corruption Checkpoint']],
+      [15,'Unicode Security & Exploits',['Homoglyph Attacks — а vs a','IDN Homograph — Fake URLs','Right-to-Left Override — U+202E','Bidi Override Attacks','Zero-Width in Phishing','Unicode in SQL Injection','Invisible Characters in Code','Confusable Characters Table','Unicode Normalization — NFC NFD','Canonicalization Attacks','Buffer Overflow with Unicode','Emoji in Passwords','Unicode Filtering & Sanitization','Security Best Practices','Security Checkpoint']],
+      [16,'Symbols in Programming',['Operators — == != >= <= && ||','Bitwise — & | ^ ~ << >>','Regex Symbols — . * + ? [ ] { } ^','Shell — | > >> < & ; $','HTML Entities — &lt; &gt; &amp;','CSS Selectors — . # : :: > + ~','JavaScript — => ... ??','Python — ** // @ :=','Ruby — <=> =~ ||=','Haskell — :: -> => >>= <$>','APL — ⍳ ⍴ ⌈ ⌊ ⍋ ⍒','Esoteric Languages — Brainfuck','Code Golf Symbols','Unicode in Variable Names','Programming Symbols Checkpoint']],
+      [17,'Musical & Notation Symbols',['Musical Notes — ♩ ♪ ♫ ♬','Sharp Flat Natural — ♯ ♭ ♮','Clefs — 𝄞 𝄢','Time Signatures','Rest Symbols','Repeat — 𝄆 𝄇','Fermata — 𝄐','Crescendo & Decrescendo','Dynamic Markings — pp p mp mf f ff','Chord Symbols','Tab Notation','Percussion Notation','Music in Unicode','Music Typography','Musical Symbols Checkpoint']],
+      [18,'Ancient & Historical Scripts',['Egyptian Hieroglyphs — 𓀀 𓁐 𓂀','Cuneiform — 𒀀 𒁀 𒂀','Phoenician — 𐤀 𐤁 𐤂','Linear B — 𐀀 𐀁','Gothic — 𐌰 𐌱 𐌲','Runic — ᚠ ᚢ ᚦ ᚨ ᚱ','Ogham — ᚁ ᚂ ᚃ ᚄ','Old Italic — 𐌀 𐌁 𐌂','Coptic — Ⲁ Ⲃ Ⲅ','Glagolitic — Ⰰ Ⰱ Ⰲ','Vai — ꔀ ꔁ','Cherokee — Ꭰ Ꭱ Ꭲ','Tengwar (Tolkien) — Not in Unicode','Klingon — pIqaD (Rejected!)','Ancient Scripts Checkpoint']],
+      [19,'Creating Glitch Art with Text',['Glitch Aesthetic — What Is It?','Vaporwave Text — Full-Width','Zalgo Art — Controlled Chaos','ASCII Glitch Art','Unicode Block Pixel Art','Corrupted Text for Social Media','Glitch Text Generators — How They Work','Building Your Own Generator','CSS Glitch Effects','JavaScript Zalgo Function','Animated Text Glitch — CSS','Glitch Logos','Glitch in Digital Art','Combining Multiple Techniques','Glitch Art Checkpoint']],
+      [20,'Glitch Symbols Mastery',['Unicode Block Overview — All 150,000+ Characters','Most Useful Symbols Collection','Symbol Lookup Tools — Unicode Table','Typing Special Characters — Every OS','Character Map — Windows','Character Viewer — Mac','Compose Key — Linux','Symbol Keyboard Apps — Mobile','Copy-Paste Symbol Sites','HTML Entities Reference','LaTeX Symbol Commands','Emoji vs Symbol — When to Use','Creating a Personal Symbol Sheet','Symbol Trivia Challenge','Glitch Symbols Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'gs-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('glitch-symbols');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('glitch-symbols');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

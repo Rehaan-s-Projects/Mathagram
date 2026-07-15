@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word — run — Typing Skills</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+.wrap { max-width: 720px; margin: 60px auto 40px; padding: 0 18px; text-align: center; }
+.badge { display:inline-block;padding:4px 14px;font-size:.72rem;font-weight:800;color:#fff;background:#8b5cf6;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px; }
+h1 { font-size: 1.7rem; font-weight: 800; margin: 6px 0 6px; }
+.intro { color:#64748b;max-width:520px;margin:6px auto 22px;font-size:.96rem;line-height:1.5; }
+.target { font-family:'SF Mono',Monaco,monospace;font-size:1.6rem;font-weight:700;background:#0f172a;color:#e2e8f0;padding:22px 24px;border-radius:14px;min-height:60px;letter-spacing:.04em;margin:0 auto 14px;text-align:center;line-height:1.55;border:2px solid #1e293b;word-break:break-word; }
+.target .ok { color:#22c55e; }
+.target .cur { background:rgba(253,224,71,0.25); border-radius:4px; padding:0 2px; }
+.target .err { color:#f87171; background:rgba(248,113,113,0.15); border-radius:4px; padding:0 2px; }
+.bar { height:10px;background:#e2e8f0;border-radius:5px;margin:6px auto 12px;max-width:560px;overflow:hidden; }
+.fill { height:100%;background:linear-gradient(90deg,#8b5cf6,#c4b5fd);width:0%;transition:width .25s; }
+.stats { display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:12px; }
+.stat { background:#fff;border:1px solid #e2e8f0;border-radius:999px;padding:6px 14px;font-size:.82rem; }
+.stat b { color:#0f172a; }
+input.ta { display:block;width:100%;max-width:560px;margin:0 auto 10px;box-sizing:border-box;padding:13px 16px;font-family:'SF Mono',monospace;font-size:1.1rem;border:2px solid #e2e8f0;border-radius:10px;outline:none; }
+input.ta:focus { border-color:#8b5cf6; }
+.done { max-width:560px;margin:18px auto 0;padding:18px;border:1px solid #22c55e;background:#dcfce7;border-radius:12px;display:none; }
+.done.show { display:block; }
+.done h2 { color:#15803d;margin:0 0 8px;font-size:1.3rem; }
+.btn { padding:11px 22px;border:none;border-radius:10px;font-weight:800;font-size:.92rem;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block; }
+.btn.primary { background:#8b5cf6;color:#fff;box-shadow:0 4px 0 #6d28d9; }
+.btn.secondary { background:#94a3b8;color:#fff;box-shadow:0 4px 0 #64748b; }
+.nav-row { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<script type="module" src="../../js/lesson-loader.js"></script>
+<script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+<nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Typing Skills</a><a href="../../courses.html">Courses</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+<div class="wrap">
+  <span class="badge">Typing Skills &middot; Unit 2 &middot; Lesson 23</span>
+  <h1>Word — run</h1>
+  <p class="intro">Type the target below exactly. Each correct character turns green. Reach the end to complete the lesson.</p>
+
+  <div class="target" id="target"></div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <div class="stats">
+    <div class="stat">Correct: <b id="ok">0</b></div>
+    <div class="stat">Errors: <b id="err">0</b></div>
+    <div class="stat">Accuracy: <b id="acc">100%</b></div>
+  </div>
+  <input class="ta" id="ta" type="text" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Click here and start typing…">
+
+  <div class="done" id="done">
+    <h2>✓ Lesson Complete!</h2>
+    <p style="margin:0 0 6px;color:#15803d;font-weight:700;">Accuracy: <span id="finalAcc">100%</span> &middot; +15 XP</p>
+    <div class="nav-row">
+      <a class="btn primary" href="lesson-80.html">Next Lesson →</a>
+      <a class="btn secondary" href="index.html">Back to Course</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initNav } from '../../js/nav.js';
+import { onAuthChange } from '../../js/auth.js';
+import { saveLessonResult } from '../../js/progress.js';
+import { showBuddy, initSideCharacter } from '../../js/characters.js';
+initNav('../../');
+initSideCharacter('gosia', '../../');
+
+const TARGET = "run run run";
+const tgtEl = document.getElementById('target');
+const fill  = document.getElementById('fill');
+const okEl  = document.getElementById('ok');
+const errEl = document.getElementById('err');
+const accEl = document.getElementById('acc');
+const ta    = document.getElementById('ta');
+const done  = document.getElementById('done');
+const finalAcc = document.getElementById('finalAcc');
+let okN = 0, errN = 0, finished = false;
+
+function render(typed) {
+  let html = '';
+  for (let i = 0; i < TARGET.length; i++) {
+    const ch = TARGET[i] === ' ' ? ' ' : TARGET[i];
+    if (i < typed.length) {
+      const correct = typed[i] === TARGET[i];
+      html += '<span class="' + (correct ? 'ok' : 'err') + '">' + ch + '</span>';
+    } else if (i === typed.length) {
+      html += '<span class="cur">' + ch + '</span>';
+    } else {
+      html += ch;
+    }
+  }
+  tgtEl.innerHTML = html;
+  const pct = Math.round((Math.min(typed.length, TARGET.length) / TARGET.length) * 100);
+  fill.style.width = pct + '%';
+}
+render('');
+setTimeout(() => ta.focus(), 200);
+
+ta.addEventListener('input', (e) => {
+  if (finished) return;
+  let typed = ta.value;
+  if (typed.length > TARGET.length) { typed = typed.slice(0, TARGET.length); ta.value = typed; }
+  okN = 0; errN = 0;
+  for (let i = 0; i < typed.length; i++) {
+    if (typed[i] === TARGET[i]) okN++; else errN++;
+  }
+  okEl.textContent = okN;
+  errEl.textContent = errN;
+  const total = okN + errN;
+  accEl.textContent = total ? Math.round((okN/total)*100) + '%' : '100%';
+  render(typed);
+  if (typed === TARGET) finish();
+});
+
+function finish() {
+  finished = true;
+  ta.disabled = true;
+  const total = okN + errN;
+  const acc = total ? Math.round((okN/total)*100) : 100;
+  finalAcc.textContent = acc + '%';
+  done.classList.add('show');
+  showBuddy('gosia', acc === 100 ? 'perfect' : 'correct');
+  onAuthChange(async (u) => { if (u) await saveLessonResult('typing-skills', 'typ-79', acc); });
+}
+</script>
+</body>
+</html>

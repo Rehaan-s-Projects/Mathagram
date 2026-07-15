@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rust Programming — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Rust Programming</h1>
+    <p>Learn Rust — ownership, borrowing, lifetimes, traits, enums, error handling, concurrency without data races, async, cargo, and real systems projects. 325 lessons across 22 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Rust','Installing rustup','cargo Quick Start','Hello World','Comments & rustdoc','Rust vs C++ vs Go','Compile & Run','The Rust Playground','Edition System','rustc Basics','VS Code + rust-analyzer','Project Structure','println! Macro','Reading Compiler Errors','Foundations Checkpoint']],
+      [2,'Variables & Types',['let Bindings','Mutability with mut','Integer Types','Floating-Point Types','Booleans','Characters','Tuples','Arrays','Type Inference','Type Annotations','Constants & Statics','Shadowing','Numeric Literals','Integer Overflow Behavior','Variables Checkpoint']],
+      [3,'Operators & Expressions',['Arithmetic Operators','Comparison Operators','Logical Operators','Bitwise Operators','Assignment Operators','Expression-Oriented Language','Blocks as Expressions','if as an Expression','Operator Overloading via Traits','Precedence','Wrapping & Checked Arithmetic','Saturating Arithmetic','Casting with as','Common Pitfalls','Operators Checkpoint']],
+      [4,'Control Flow',['if & else','if let','while Loop','while let','loop & break Values','for Loops & Ranges','Labeled Loops','match Expression','Match Guards','Binding with @','Exhaustiveness','Nested Patterns','FizzBuzz in Rust','Pattern Printing','Control Flow Checkpoint']],
+      [5,'Ownership',['What Is Ownership?','The Stack & Heap','Move Semantics','Copy Types','Clone','Ownership & Functions','Return Values & Ownership','Drop & Destructors','Scope & Lifetime Intuition','Why Ownership Exists','Double-Free Prevention','Use-After-Free Prevention','Ownership Examples','Common Ownership Errors','Ownership Checkpoint']],
+      [6,'Borrowing & References',['References &','Mutable References &mut','The Borrow Checker','One Mutable XOR Many Shared','Dangling Reference Prevention','References in Functions','Slices','String Slices &str','Array Slices','Reborrowing','Non-Lexical Lifetimes','Splitting Borrows','Common Borrow Errors','Fixing Borrow Errors','Borrowing Checkpoint']],
+      [7,'Lifetimes',['Why Lifetimes Exist','Lifetime Annotations','Lifetime Elision Rules','Lifetimes in Functions','Lifetimes in Structs','Multiple Lifetimes','The \'static Lifetime','Lifetime Bounds','Lifetimes & Generics','Lifetimes & Traits','Higher-Ranked Trait Bounds','Reading Lifetime Errors','Practical Lifetime Patterns','When Lifetimes Get Hard','Lifetimes Checkpoint']],
+      [8,'Structs',['Defining Structs','Field Init Shorthand','Struct Update Syntax','Tuple Structs','Unit-Like Structs','Methods with impl','Associated Functions','Multiple impl Blocks','Derive Macros','Debug & Display','Builder Pattern','Nested Structs','Structs with References','Newtype Pattern','Structs Checkpoint']],
+      [9,'Enums & Pattern Matching',['Defining Enums','Enum Variants with Data','Option<T>','Result<T,E>','match on Enums','if let & let else','while let','Enum Methods','Recursive Enums (Box)','C-Like Enums','Enums vs Structs','State Machines with Enums','Exhaustive Matching','Common Enum Patterns','Enums Checkpoint']],
+      [10,'Error Handling',['panic! Macro','Unrecoverable vs Recoverable','Result<T,E> Deep Dive','The ? Operator','unwrap & expect','Propagating Errors','Custom Error Types','Box<dyn Error>','thiserror Crate','anyhow Crate','Error Conversion with From','Option to Result','Error Handling Strategy','Logging Errors','Error Checkpoint']],
+      [11,'Collections',['Vec<T>','Vec Methods','String vs &str','String Methods','HashMap<K,V>','HashMap Entry API','HashSet<T>','BTreeMap & BTreeSet','VecDeque','Iterators over Collections','Collecting into Collections','Capacity & Reallocation','Choosing a Collection','Collection Performance','Collections Checkpoint']],
+      [12,'Iterators & Closures',['What Is an Iterator?','iter, into_iter, iter_mut','map & filter','fold & reduce','collect','enumerate & zip','Lazy Evaluation','Closures — Fn FnMut FnOnce','Capturing the Environment','move Closures','Returning Closures','Iterator Adaptors','Custom Iterators','Iterator Performance','Iterators Checkpoint']],
+      [13,'Traits',['What Are Traits?','Defining Traits','Implementing Traits','Default Methods','Trait Bounds','where Clauses','Generic Functions with Traits','Trait Objects dyn','Static vs Dynamic Dispatch','Associated Types','Operator Overloading','Marker Traits','Supertraits','Blanket Implementations','Traits Checkpoint']],
+      [14,'Generics',['Generic Functions','Generic Structs','Generic Enums','Generic Methods','Multiple Type Parameters','Trait Bounds on Generics','Monomorphization','Const Generics','Generic Lifetime Parameters','Phantom Data','Generic Default Types','Turbofish ::<>','Generic Error Patterns','Zero-Cost Abstractions','Generics Checkpoint']],
+      [15,'Smart Pointers',['Box<T>','Deref & Deref Coercion','Drop Trait','Rc<T> — Reference Counting','RefCell<T> — Interior Mutability','Rc + RefCell Pattern','Reference Cycles & Weak<T>','Cow<T>','Arc<T>','Mutex<T>','When to Use Each','Custom Smart Pointers','Pin & Unpin Intro','Pointer Pitfalls','Smart Pointers Checkpoint']],
+      [16,'Concurrency',['Threads with spawn','join Handles','move Closures in Threads','Channels — mpsc','Sharing State — Arc<Mutex>','RwLock','Atomics','Send & Sync Traits','Data Race Freedom','Scoped Threads','rayon — Data Parallelism','Thread Pools','Deadlock Avoidance','Concurrency Patterns','Concurrency Checkpoint']],
+      [17,'Async Rust',['async & await','Futures','The Executor Model','tokio Runtime','async-std Overview','Spawning Tasks','async Channels','select! Macro','Pinning & Async','Streams','async Traits','Cancellation','Blocking in Async','Async Patterns','Async Checkpoint']],
+      [18,'Modules & Crates',['Module System','mod Keyword','Paths — crate, super, self','pub Visibility','use Declarations','Re-exporting with pub use','Splitting Code into Files','The Crate Root','Library vs Binary Crates','Workspaces','External Crates','Feature Flags','Conditional Compilation cfg','Documentation Modules','Modules Checkpoint']],
+      [19,'Cargo & Tooling',['Cargo.toml','Dependencies & Versions','cargo build & run','cargo test','cargo doc','cargo fmt','cargo clippy','cargo check','Profiles — dev & release','Build Scripts build.rs','Publishing to crates.io','cargo install','Cross-Compilation','CI with GitHub Actions','Cargo Checkpoint']],
+      [20,'Testing',['Unit Tests','#[test] Attribute','assert! Macros','Testing Panics','Integration Tests','Test Organization','Documentation Tests','Test Fixtures','Mocking in Rust','Property Testing — proptest','Benchmarking — criterion','Code Coverage','Fuzzing','TDD in Rust','Testing Checkpoint']],
+      [21,'Unsafe Rust',['What Is Unsafe?','unsafe Blocks','Raw Pointers','Dereferencing Raw Pointers','Calling Unsafe Functions','extern & FFI','Calling C from Rust','Calling Rust from C','Static Mutable Variables','Unsafe Traits','Safe Abstractions over Unsafe','Undefined Behavior','Miri Checker','When to Use Unsafe','Unsafe Checkpoint']],
+      [22,'Macros',['Declarative Macros macro_rules!','Macro Patterns','Repetition in Macros','Hygiene','Common Built-in Macros','Procedural Macros Overview','Derive Macros','Attribute Macros','Function-Like Macros','The syn & quote Crates']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'rs-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('rust');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('rust');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

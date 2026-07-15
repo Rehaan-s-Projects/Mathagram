@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Piano Practice — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    background: #fff; min-height: 100vh; margin: 0;
+    color: #1f2937;
+    font-family: 'Fredoka', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* ── Top bar: pause + progress ───────────────────────────────── */
+  .topbar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 22px 8px; max-width: 1100px; margin: 0 auto;
+  }
+  .pause-btn {
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #9ca3af;
+  }
+  .pause-btn:hover { background: #f3f4f6; color: #6b7280; }
+  .pause-btn svg { width: 26px; height: 26px; }
+  .progress-track {
+    flex: 1; height: 16px; background: #e5e7eb; border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #58cc02, #46a302);
+    border-radius: 999px; transition: width 0.35s ease;
+  }
+
+  /* ── Character combo flag ────────────────────────────────────── */
+  .stage { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+  .combo-row {
+    height: 86px; display: flex; align-items: center;
+    padding-left: 8px; margin: 6px 0 2px;
+  }
+  .combo-flag {
+    display: flex; align-items: center; gap: 14px;
+    opacity: 0; transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .combo-flag.show { opacity: 1; transform: translateX(0); }
+  .combo-avatar {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: #fff; border: 5px solid #58cc02;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0; position: relative; z-index: 2;
+  }
+  .combo-avatar img { width: 60px; height: 60px; object-fit: contain; }
+  .combo-bubble { position: relative; }
+  .combo-bubble::before {
+    content: ''; position: absolute; left: -36px; top: 50%;
+    transform: translateY(-50%);
+    border: 22px solid transparent; border-right-color: #d7f5b1;
+    border-right-width: 30px;
+  }
+  .combo-bubble .praise {
+    font-size: 2rem; font-weight: 900; color: #58cc02; line-height: 1;
+  }
+  .combo-bubble .combo-x {
+    font-size: 1.15rem; font-weight: 800; color: #9ca3af; margin-top: 2px;
+  }
+
+  /* ── Staff ───────────────────────────────────────────────────── */
+  .staff-wrap {
+    overflow-x: auto; padding: 6px 0 18px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .staff-wrap::-webkit-scrollbar { height: 8px; }
+  .staff-wrap::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+  svg.staff { display: block; }
+
+  /* ── Hint + buttons ──────────────────────────────────────────── */
+  .controls {
+    display: flex; gap: 10px; justify-content: center; align-items: center;
+    flex-wrap: wrap; margin: 4px 0 16px;
+  }
+  .btn {
+    padding: 11px 22px; border-radius: 999px; border: 2px solid #e5e7eb;
+    background: #fff; color: #4b5563; font-weight: 800; font-size: 0.9rem;
+    cursor: pointer; font-family: inherit; transition: transform 0.08s, box-shadow 0.15s;
+  }
+  .btn:hover:not(:disabled) { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn.primary {
+    background: #58cc02; border-color: #46a302; color: #fff;
+    box-shadow: 0 4px 0 #46a302;
+  }
+  .btn.primary:active:not(:disabled) { box-shadow: 0 1px 0 #46a302; transform: translateY(3px); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .hint {
+    text-align: center; color: #6b7280; font-size: 0.95rem;
+    line-height: 1.5; margin: 0 auto 12px; max-width: 640px;
+  }
+  .hint strong { color: #1f2937; }
+
+  /* ── Piano keyboard ──────────────────────────────────────────── */
+  .piano-wrap { overflow-x: auto; padding: 8px 0 28px; -webkit-overflow-scrolling: touch; }
+  .piano-wrap::-webkit-scrollbar { height: 8px; }
+  .piano-wrap::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+  .piano {
+    position: relative; height: 230px; margin: 0 auto;
+    display: flex; gap: 0; width: max-content; padding: 0 10px;
+  }
+  .wkey {
+    position: relative; width: 74px; height: 230px; flex: 0 0 auto;
+    background: #fff; border: 2px solid #e5e7eb; border-radius: 0 0 14px 14px;
+    margin-right: -2px; cursor: pointer;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 14px;
+    font-size: 1.15rem; font-weight: 800; color: #cbd5e1;
+    transition: transform 0.05s, background 0.08s;
+  }
+  .wkey:active, .wkey.press { background: #f0fdf4; transform: translateY(2px); }
+  .wkey.target {
+    background: #effdf4; box-shadow: inset 0 0 0 3px #58cc02;
+    color: #46a302;
+  }
+  .wkey.good { background: #d7f5b1 !important; }
+  .wkey.bad  { background: #fee2e2 !important; }
+  .bkey {
+    position: absolute; top: 0; width: 48px; height: 142px;
+    background: #3f4654; border-radius: 0 0 10px 10px;
+    cursor: pointer; z-index: 3;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 12px;
+    font-size: 0.92rem; font-weight: 800; color: #9aa2b1;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.28);
+    transition: transform 0.05s, background 0.08s;
+  }
+  .bkey:active, .bkey.press { background: #2a2f3a; transform: translateY(2px); }
+  .bkey.target {
+    background: #3f4654;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.28), inset 0 0 0 3px #58cc02;
+    color: #fff;
+  }
+  .bkey.good { background: #46a302 !important; color: #fff; }
+  .bkey.bad  { background: #b91c1c !important; color: #fff; }
+
+  /* ── Sparkles ────────────────────────────────────────────────── */
+  .spark {
+    position: fixed; width: 12px; height: 12px; pointer-events: none;
+    z-index: 50; border-radius: 2px;
+    animation: sparkfly 0.6s ease-out forwards;
+  }
+  @keyframes sparkfly {
+    0%   { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.2) rotate(180deg); }
+  }
+
+  /* ── Performance songtrack — 3-2-1-Go countdown ─────────────── */
+  .countdown {
+    position: fixed; inset: 0; z-index: 70;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(2px);
+    pointer-events: none; opacity: 0; transition: opacity 0.12s;
+  }
+  .countdown.show { opacity: 1; }
+  .countdown .num {
+    font-size: 7.5rem; font-weight: 900; color: #58cc02;
+    text-shadow: 0 6px 0 rgba(70,163,2,0.22);
+    animation: countpop 0.78s ease-out;
+  }
+  @keyframes countpop {
+    0%   { transform: scale(0.4); opacity: 0; }
+    18%  { transform: scale(1.18); opacity: 1; }
+    72%  { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+  /* In performance mode, give the playhead a thicker, glowing feel. */
+  body.perf #playhead {
+    stroke-width: 4 !important; stroke: #58cc02 !important;
+    stroke-dasharray: none !important;
+    filter: drop-shadow(0 0 6px rgba(88,204,2,0.55));
+  }
+
+  /* ── End card ────────────────────────────────────────────────── */
+  .end-card {
+    max-width: 460px; margin: 10px auto 0; padding: 30px 26px;
+    background: #fff; border: 2px solid #e5e7eb;
+    border-top: 6px solid #58cc02; border-radius: 20px;
+    text-align: center; display: none;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.10);
+  }
+  .end-card.show { display: block; }
+  .end-card h2 { color: #1f2937; margin: 0 0 4px; font-size: 1.5rem; font-weight: 900; }
+  .end-card .score { font-size: 2.6rem; font-weight: 900; color: #58cc02; margin: 10px 0; }
+  .end-card p { color: #6b7280; margin: 0 0 18px; }
+  .end-card a, .end-card button {
+    display: inline-block; margin: 5px 4px 0; padding: 13px 26px;
+    border-radius: 14px; font-weight: 800; text-decoration: none; font-size: 0.95rem;
+    background: #58cc02; color: #fff; border: none; cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 0 #46a302;
+  }
+  .end-card a.alt, .end-card button.alt {
+    background: #fff; color: #4b5563; border: 2px solid #e5e7eb; box-shadow: none;
+  }
+  .footer-nav { text-align: center; margin: 6px 0 30px; }
+  .footer-nav a { color: #9ca3af; text-decoration: none; font-weight: 700; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div class="topbar">
+    <a class="pause-btn" id="pauseBtn" href="index.html" aria-label="Exit practice">
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg>
+    </a>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="combo-row">
+      <div class="combo-flag" id="comboFlag">
+        <div class="combo-avatar"><img id="comboAvatar" src="../../assets/characters/diego.svg" alt=""></div>
+        <div class="combo-bubble">
+          <div class="praise" id="comboPraise">Great!</div>
+          <div class="combo-x" id="comboX">x0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="staff-wrap" id="staffWrap"></div>
+
+    <p class="hint" id="hint">Tap the glowing key to play each note.</p>
+
+    <div class="controls">
+      <button type="button" class="btn" id="listenBtn">🔊 Play for me</button>
+      <button type="button" class="btn primary" id="startBtn">▶ My Turn</button>
+      <button type="button" class="btn" id="restartBtn">⟲ Restart</button>
+    </div>
+
+    <div class="piano-wrap" id="pianoWrap"><div class="piano" id="piano"></div></div>
+
+    <section class="end-card" id="endCard">
+      <h2 id="endTitle">🎉 Lesson complete!</h2>
+      <div class="score" id="endScore">0 / 0</div>
+      <p id="endMsg">Nice work — you've earned XP for this lesson.</p>
+      <a id="nextLessonLink" href="index.html">Next Lesson →</a>
+      <button class="alt" id="retryBtn">Retry</button>
+      <a class="alt" href="index.html">Back to Path</a>
+    </section>
+
+    <div class="footer-nav"><a href="index.html">← Back to Musical Practice</a></div>
+  </main>
+
+  <div class="countdown" id="countdown"><div class="num">3</div></div>
+
+  <script type="module">
+    import { getMelody, lessonSlice } from './melodies.js';
+
+    // ─── URL params ─────────────────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+    let unit   = parseInt(params.get('u') || '0', 10);
+    let lesson = parseInt(params.get('l') || '0', 10);
+    if (!unit || !lesson) {
+      const m = location.pathname.match(/\/song-(\d+)-(\d+)\/?$/);
+      if (m) { unit = parseInt(m[1], 10); lesson = parseInt(m[2], 10); }
+    }
+    if (!unit)   unit = 2;
+    if (!lesson) lesson = 1;
+    const LESSONS_PER_SONG = 6;
+
+    function unitNameFromStorage(u) {
+      try {
+        const map = JSON.parse(localStorage.getItem('mp-unit-names') || '{}');
+        return map[String(u)] || null;
+      } catch { return null; }
+    }
+    const songName = unitNameFromStorage(unit) || `Song ${unit - 1}`;
+
+    const fullMelody = getMelody(songName);
+    const slice = lessonSlice(fullMelody, lesson);
+    const notes = slice.notes;
+    const mode  = slice.mode;
+    const tempoMs = slice.tempoMs || 600;
+
+    const hint = document.getElementById('hint');
+    if (mode === 'listen') {
+      hint.innerHTML = '<strong>Listen.</strong> The melody plays itself — watch the notes light up.';
+    } else if (lesson === 6) {
+      hint.innerHTML = '<strong>Performance.</strong> The songtrack scrolls — hit each note as the playhead arrives. Miss the window and it auto-fails.';
+    } else {
+      hint.innerHTML = 'Tap the <strong>glowing key</strong> to play each note in order.';
+    }
+
+    // ─── Pitch helpers ──────────────────────────────────────────────────
+    const NOTE_OFFSETS = { C:0,'C#':1,D:2,'D#':3,E:4,F:5,'F#':6,G:7,'G#':8,A:9,'A#':10,B:11 };
+    const LETTER_STEP  = { C:0,D:1,E:2,F:3,G:4,A:5,B:6 };
+    function midi(note) {
+      const m = note.match(/^([A-G]#?)(-?\d+)$/);
+      return (parseInt(m[2],10)+1)*12 + NOTE_OFFSETS[m[1]];
+    }
+    function freqOf(note) { return 440 * Math.pow(2, (midi(note)-69)/12); }
+    // Flat → enharmonic sharp so it maps to a piano key.
+    const FLAT_MAP = { 'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#' };
+    function normPitch(p) {
+      const m = p.match(/^([A-G])(b)?(#)?(\d+)$/);
+      if (!m) return p;
+      if (m[2]) return (FLAT_MAP[m[1]+'b'] || (m[1]+'#')) + m[4];
+      return m[1] + (m[3]||'') + m[4];
+    }
+    // Diatonic absolute step (for staff Y). Flats/sharps share the natural's line.
+    function absStep(p) {
+      const m = p.match(/^([A-G])[b#]?(\d+)$/);
+      return parseInt(m[2],10) * 7 + LETTER_STEP[m[1]];
+    }
+    function accidentalOf(p) {
+      if (/b\d/.test(p)) return '♭';   // flat
+      if (/#\d/.test(p)) return '♯';   // sharp
+      return '';
+    }
+
+    // ─── Build the staff (SVG) ──────────────────────────────────────────
+    const STAFF_CENTER = 110;     // Y of the middle line (B4)
+    const LINE_GAP = 16;          // px between adjacent staff lines
+    const HALF = LINE_GAP / 2;
+    const B4_STEP = 4*7 + 6;      // absolute step of B4
+    const SLOT = 78;              // horizontal px per note
+    const STAFF_X0 = 124;         // x where the first note sits
+    function noteY(p) { return STAFF_CENTER - (absStep(p) - B4_STEP) * HALF; }
+
+    const playNotes = notes.filter(n => !n.rest);
+    const staffW = STAFF_X0 + Math.max(playNotes.length, 4) * SLOT + 60;
+    const staffH = 220;
+    const staffWrap = document.getElementById('staffWrap');
+
+    let svg = `<svg class="staff" width="${staffW}" height="${staffH}" viewBox="0 0 ${staffW} ${staffH}">`;
+    // 5 staff lines
+    for (let i = -2; i <= 2; i++) {
+      const y = STAFF_CENTER + i * LINE_GAP;
+      svg += `<line x1="40" y1="${y}" x2="${staffW-20}" y2="${y}" stroke="#d1d5db" stroke-width="2.5"/>`;
+    }
+    // Treble clef — stroked SVG path (Unicode 𝄞 is unreliable across systems).
+    // Single continuous path: bottom tail → stem up → top hook → outer belly loop → inner spiral.
+    const CLEF_PATH = 'M 42 164 L 42 60 C 42 52 50 46 50 56 C 50 70 38 78 36 92 '
+      + 'C 34 106 22 110 22 124 C 22 138 38 142 48 134 C 56 126 50 116 42 118 '
+      + 'C 34 120 32 130 38 132 C 44 134 46 128 42 126';
+    svg += `<path d="${CLEF_PATH}" fill="none" stroke="#bdc3cd" stroke-width="3.6" `
+         + `stroke-linecap="round" stroke-linejoin="round"/>`
+         + `<circle cx="42" cy="164" r="3.2" fill="#bdc3cd"/>`;
+    // Notes — assign each its X. Rests get a slot too (rendered as a rest glyph).
+    const noteX = [];   // x per index in `notes`
+    let slotI = 0;
+    notes.forEach((n, idx) => {
+      const x = STAFF_X0 + slotI * SLOT;
+      noteX[idx] = x;
+      slotI++;
+      if (n.rest) {
+        // Rest glyph chosen by duration (whole/half/quarter/eighth).
+        const rd = n.d || 1;
+        const restCol = '#cbd5e1';
+        if (rd >= 4) {
+          // Whole rest — small block hanging DOWN from the D5 line
+          const yTop = STAFF_CENTER - LINE_GAP;
+          svg += `<rect x="${x-11}" y="${yTop}" width="22" height="8" fill="${restCol}"/>`;
+        } else if (rd >= 2) {
+          // Half rest — small block sitting ON TOP of the middle (B4) line
+          svg += `<rect x="${x-11}" y="${STAFF_CENTER-8}" width="22" height="8" fill="${restCol}"/>`;
+        } else if (rd < 1) {
+          // Eighth rest — slanted bar with a flag-ball
+          svg += `<g>`
+            + `<line x1="${x-7}" y1="${STAFF_CENTER+16}" x2="${x+7}" y2="${STAFF_CENTER-12}" stroke="${restCol}" stroke-width="3" stroke-linecap="round"/>`
+            + `<circle cx="${x-6}" cy="${STAFF_CENTER-2}" r="4.5" fill="${restCol}"/>`
+            + `</g>`;
+        } else {
+          // Quarter rest — stroked squiggle (Unicode 𝄽 is unreliable across systems)
+          svg += `<path d="M ${x-5} ${STAFF_CENTER-12} `
+               + `C ${x+5} ${STAFF_CENTER-4} ${x+3} ${STAFF_CENTER} ${x-3} ${STAFF_CENTER+8} `
+               + `C ${x+5} ${STAFF_CENTER+4} ${x+8} ${STAFF_CENTER+10} ${x+8} ${STAFF_CENTER+18} `
+               + `C ${x+4} ${STAFF_CENTER+14} ${x-2} ${STAFF_CENTER+18} ${x-5} ${STAFF_CENTER+24}" `
+               + `fill="none" stroke="${restCol}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+        }
+        return;
+      }
+      const y = noteY(n.p);
+      // ledger lines
+      const s = absStep(n.p);
+      if (s <= B4_STEP - 6) { // below E4 area
+        for (let ls = B4_STEP - 6; ls >= s; ls -= 2) {
+          const ly = STAFF_CENTER - (ls - B4_STEP) * HALF;
+          svg += `<line x1="${x-16}" y1="${ly}" x2="${x+16}" y2="${ly}" stroke="#d1d5db" stroke-width="2.5" class="ledger"/>`;
+        }
+      } else if (s >= B4_STEP + 6) { // above F5 area
+        for (let ls = B4_STEP + 6; ls <= s; ls += 2) {
+          const ly = STAFF_CENTER - (ls - B4_STEP) * HALF;
+          svg += `<line x1="${x-16}" y1="${ly}" x2="${x+16}" y2="${ly}" stroke="#d1d5db" stroke-width="2.5" class="ledger"/>`;
+        }
+      }
+      // ── Proper musical-notation glyphs by duration ──
+      // d=0.25 sixteenth, 0.5 eighth, 1 quarter, 2 half, 4 whole
+      // Add 1.5× → dotted (0.75 dotted-8th, 1.5 dotted-q, 3 dotted-h)
+      const d = n.d || 1;
+      const baseBeats = [4, 2, 1, 0.5, 0.25].find(b => Math.abs(d - b) < 0.001 || Math.abs(d - b * 1.5) < 0.001) || 1;
+      const isDotted = Math.abs(d - baseBeats * 1.5) < 0.001;
+      const isWhole = baseBeats === 4;
+      const isHollow = baseBeats >= 2;                  // whole + half → hollow head
+      const hasStem = !isWhole;                         // whole notes have NO stem
+      const flagCount = baseBeats < 1 ? (baseBeats === 0.25 ? 2 : 1) : 0;
+      const stemUp = s < B4_STEP;
+      const stemX = stemUp ? x + 9.5 : x - 9.5;
+      const stemY2 = stemUp ? y - 42 : y + 42;
+      const acc = accidentalOf(n.p);
+      svg += `<g class="note" data-i="${idx}">`;
+      // Stem (omit for whole notes)
+      if (hasStem) {
+        svg += `<line class="stem" x1="${stemX}" y1="${y}" x2="${stemX}" y2="${stemY2}" stroke="#4b5563" stroke-width="3.4"/>`;
+      }
+      // Flag(s) for eighth / sixteenth
+      for (let fi = 0; fi < flagCount; fi++) {
+        const fyBase = stemY2 + (stemUp ? fi * 14 : -fi * 14);
+        const dir = stemUp ? 1 : -1;
+        svg += `<path class="flag" d="M ${stemX} ${fyBase} q 16 ${8*dir} 12 ${30*dir} q 6 ${-16*dir} -12 ${-22*dir} Z" fill="#4b5563"/>`;
+      }
+      // Note head — hollow (whole/half) or filled (quarter/eighth)
+      if (isHollow) {
+        svg += `<ellipse class="head" cx="${x}" cy="${y}" rx="11" ry="8.2" fill="none" stroke="#4b5563" stroke-width="3.4" transform="rotate(-22 ${x} ${y})"/>`;
+      } else {
+        svg += `<ellipse class="head" cx="${x}" cy="${y}" rx="11" ry="8.2" fill="#4b5563" transform="rotate(-22 ${x} ${y})"/>`;
+      }
+      // Augmentation dot (right of the head, on a space)
+      if (isDotted) svg += `<circle class="dot" cx="${x+17}" cy="${y}" r="3.6" fill="#4b5563"/>`;
+      // Accidental glyph (♯/♭)
+      if (acc) svg += `<text class="acc" x="${x-26}" y="${y+7}" font-size="30" fill="#4b5563" font-family="serif">${acc}</text>`;
+      svg += `</g>`;
+    });
+    // playhead
+    svg += `<line id="playhead" x1="0" y1="${STAFF_CENTER-44}" x2="0" y2="${STAFF_CENTER+44}" stroke="#58cc02" stroke-width="3" stroke-linecap="round" opacity="0"/>`;
+    svg += `</svg>`;
+    staffWrap.innerHTML = svg;
+    const svgEl = staffWrap.querySelector('svg');
+    const playhead = svgEl.querySelector('#playhead');
+    const noteGroups = {};
+    svgEl.querySelectorAll('.note').forEach(g => { noteGroups[g.dataset.i] = g; });
+
+    function paintNote(idx, state) {
+      const g = noteGroups[idx];
+      if (!g) return;
+      const colors = { up:'#4b5563', cur:'#7c3aed', done:'#58cc02', miss:'#ef4444' };
+      const c = colors[state] || colors.up;
+      g.querySelectorAll('.head,.stem,.flag,.dot,.acc').forEach(el => {
+        // Hollow heads (whole/half notes) carry their colour on the STROKE,
+        // not the fill. Detect by fill="none" and recolor the stroke.
+        if (el.classList.contains('head') && el.getAttribute('fill') === 'none') {
+          el.setAttribute('stroke', c);
+          return;
+        }
+        if (el.tagName === 'path' || el.tagName === 'ellipse' || el.tagName === 'circle' || el.tagName === 'text') el.setAttribute('fill', c);
+        if (el.tagName === 'line') el.setAttribute('stroke', c);
+      });
+      g.style.transition = 'transform 0.12s ease';
+      g.style.transform = state === 'cur' ? 'translateY(-4px)' : 'none';
+    }
+    function movePlayhead(idx) {
+      if (idx < 0 || idx >= notes.length) { playhead.setAttribute('opacity','0'); return; }
+      playhead.setAttribute('x1', noteX[idx]);
+      playhead.setAttribute('x2', noteX[idx]);
+      playhead.setAttribute('opacity','0.55');
+      const x = noteX[idx];
+      const wrap = staffWrap;
+      if (x < wrap.scrollLeft + 80 || x > wrap.scrollLeft + wrap.clientWidth - 80) {
+        wrap.scrollTo({ left: Math.max(0, x - wrap.clientWidth / 2), behavior: 'smooth' });
+      }
+    }
+
+    // ─── Build the piano ────────────────────────────────────────────────
+    // Range covers the melody, padded to whole octaves, min C4–B5.
+    const playMidis = playNotes.map(n => midi(normPitch(n.p)));
+    let loM = playMidis.length ? Math.min(...playMidis) : 60;
+    let hiM = playMidis.length ? Math.max(...playMidis) : 83;
+    let loOct = Math.min(4, Math.floor((loM - 12) / 12) - 1);
+    let hiOct = Math.max(5, Math.floor((hiM - 12) / 12) - 1);
+    if (loOct < 2) loOct = 2;
+    if (hiOct > 6) hiOct = 6;
+    if (hiOct - loOct < 1) hiOct = loOct + 1;
+
+    const WHITE = ['C','D','E','F','G','A','B'];
+    const whiteNotes = [];
+    for (let o = loOct; o <= hiOct; o++) for (const l of WHITE) whiteNotes.push(l + o);
+    const piano = document.getElementById('piano');
+    const keyEls = {};   // sharp-normalized pitch → element
+    const WKEY_W = 74, WKEY_GAP = -2;
+    whiteNotes.forEach((w, idx) => {
+      const k = document.createElement('div');
+      k.className = 'wkey';
+      k.dataset.note = w;
+      k.textContent = w[0];
+      k.addEventListener('pointerdown', () => onKey(w));
+      piano.appendChild(k);
+      keyEls[w] = k;
+    });
+    // black keys positioned over the white-key boundaries
+    whiteNotes.forEach((w, idx) => {
+      const l = w[0];
+      if (l === 'E' || l === 'B') return;
+      const sharp = l + '#' + w.slice(1);
+      const bk = document.createElement('div');
+      bk.className = 'bkey';
+      bk.dataset.note = sharp;
+      bk.dataset.flat = ({ 'C#':'Db','D#':'Eb','F#':'Gb','G#':'Ab','A#':'Bb' })[l + '#'];
+      bk.style.left = (10 + (idx + 1) * (WKEY_W + WKEY_GAP) - 24) + 'px';
+      bk.addEventListener('pointerdown', () => onKey(sharp));
+      piano.appendChild(bk);
+      keyEls[sharp] = bk;
+    });
+
+    // ─── Web Audio ──────────────────────────────────────────────────────
+    let audioCtx;
+    function ensureCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+    function playTone(pitch, durSec = 0.5) {
+      ensureCtx();
+      const t0 = audioCtx.currentTime;
+      const f = freqOf(normPitch(pitch));
+      const o1 = audioCtx.createOscillator(); o1.type = 'triangle'; o1.frequency.value = f;
+      const o2 = audioCtx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 2;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.3, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + durSec);
+      o1.connect(g); o2.connect(g); g.connect(audioCtx.destination);
+      o1.start(t0); o2.start(t0);
+      o1.stop(t0 + durSec + 0.05); o2.stop(t0 + durSec + 0.05);
+    }
+
+    // ─── State ──────────────────────────────────────────────────────────
+    let step = 0, misses = 0, combo = 0, started = false, listenLock = false;
+    let noteResults = [];
+    const PRAISE = ['Nice!', 'Good!', 'Great!', 'Awesome!', 'Perfect!', 'On fire!'];
+    const comboFlag = document.getElementById('comboFlag');
+    const comboPraise = document.getElementById('comboPraise');
+    const comboX = document.getElementById('comboX');
+
+    // ── Performance mode (lesson 6 songtrack animation) ─────────────────
+    const isPerformance = (lesson === LESSONS_PER_SONG);
+    let perfStart = 0, perfRAF = null;
+    function beatsBefore(i) { let b = 0; for (let k = 0; k < i; k++) b += (notes[k].d || 1); return b; }
+    const TOTAL_BEATS = notes.reduce((s, n) => s + (n.d || 1), 0);
+    if (isPerformance) document.body.classList.add('perf');
+
+    function perfMovePlayhead(E) {
+      if (!notes.length) return;
+      let cum = 0;
+      for (let i = 0; i < notes.length; i++) {
+        const d = (notes[i].d || 1) * tempoMs;
+        if (E < cum + d) {
+          const frac = Math.max(0, (E - cum) / d);
+          const x0 = noteX[i];
+          const x1 = (i < notes.length - 1) ? noteX[i+1] : x0 + SLOT;
+          const x = x0 + (x1 - x0) * frac;
+          playhead.setAttribute('x1', x);
+          playhead.setAttribute('x2', x);
+          playhead.setAttribute('opacity', '0.85');
+          const wrap = staffWrap;
+          if (x < wrap.scrollLeft + 120 || x > wrap.scrollLeft + wrap.clientWidth - 120) {
+            wrap.scrollLeft = Math.max(0, x - wrap.clientWidth / 2);
+          }
+          return;
+        }
+        cum += d;
+      }
+      const lastX = noteX[notes.length - 1] + SLOT;
+      playhead.setAttribute('x1', lastX);
+      playhead.setAttribute('x2', lastX);
+    }
+
+    function perfTick() {
+      const E = performance.now() - perfStart;
+      let changed = false;
+      // Auto-resolve notes whose window has passed
+      while (step < notes.length) {
+        const target = beatsBefore(step) * tempoMs;
+        const d = (notes[step].d || 1) * tempoMs;
+        if (notes[step].rest) {
+          if (E >= target) { noteResults[step] = true; step++; changed = true; continue; }
+          break;
+        }
+        if (E >= target + d * 0.85) {
+          if (noteResults[step] === undefined) {
+            noteResults[step] = false; combo = 0; misses++;
+            showCombo();
+          }
+          step++; changed = true; continue;
+        }
+        break;
+      }
+      if (changed) { setProgress(); updateStaff(); highlightTarget(); }
+      perfMovePlayhead(E);
+      if (E > TOTAL_BEATS * tempoMs + 700) {
+        perfRAF = null;
+        endLesson();
+        return;
+      }
+      perfRAF = requestAnimationFrame(perfTick);
+    }
+
+    async function performanceStart() {
+      if (perfRAF) { cancelAnimationFrame(perfRAF); perfRAF = null; }
+      const overlay = document.getElementById('countdown');
+      for (const num of ['3','2','1','Go!']) {
+        overlay.querySelector('.num').textContent = num;
+        overlay.classList.add('show');
+        // re-trigger the pop animation each tick
+        const n = overlay.querySelector('.num'); n.style.animation = 'none'; void n.offsetWidth; n.style.animation = '';
+        await new Promise(r => setTimeout(r, 720));
+        overlay.classList.remove('show');
+        await new Promise(r => setTimeout(r, 90));
+      }
+      started = true; step = 0; misses = 0; combo = 0; noteResults = [];
+      comboFlag.classList.remove('show');
+      perfStart = performance.now();
+      setProgress(); updateStaff(); highlightTarget();
+      if (noteX.length) staffWrap.scrollLeft = Math.max(0, noteX[0] - 100);
+      perfRAF = requestAnimationFrame(perfTick);
+    }
+
+    function onKeyPerformance(pressed) {
+      ensureCtx();
+      playTone(pressed, 0.45);
+      const el = keyEls[normPitch(pressed)];
+      while (step < notes.length && notes[step].rest) {
+        noteResults[step] = true; step++;
+      }
+      if (step >= notes.length) return;
+      const E = performance.now() - perfStart;
+      const target = beatsBefore(step) * tempoMs;
+      const d = (notes[step].d || 1) * tempoMs;
+      const want = normPitch(notes[step].p);
+      const inWindow = (E >= target - tempoMs * 0.5) && (E <= target + d * 0.85);
+      const ok = inWindow && (normPitch(pressed) === want);
+      noteResults[step] = ok;
+      if (ok) {
+        combo++;
+        if (el) { flashKey(el, 'good'); sparkle(el); }
+      } else {
+        combo = 0; misses++;
+        if (el) flashKey(el, 'bad');
+      }
+      showCombo();
+      step++;
+      setProgress(); updateStaff(); highlightTarget();
+    }
+
+    function setProgress() {
+      const pct = notes.length ? (step / notes.length) * 100 : 0;
+      document.getElementById('progressFill').style.width = pct + '%';
+    }
+    function showCombo() {
+      if (combo >= 2) {
+        const tier = Math.min(PRAISE.length - 1, Math.floor(combo / 4) + 1);
+        comboPraise.textContent = PRAISE[tier];
+        comboX.textContent = 'x' + combo;
+        comboFlag.classList.add('show');
+      } else {
+        comboFlag.classList.remove('show');
+      }
+    }
+    function clearKeyTargets() {
+      Object.values(keyEls).forEach(e => {
+        e.classList.remove('target');
+        if (e.classList.contains('bkey')) e.textContent = '';
+        else e.textContent = e.dataset.note[0];
+      });
+    }
+    function highlightTarget() {
+      clearKeyTargets();
+      if (mode === 'read' || mode === 'listen') return;
+      if (step >= notes.length || notes[step].rest) return;
+      const np = normPitch(notes[step].p);
+      const k = keyEls[np];
+      if (k) {
+        k.classList.add('target');
+        // black key shows its flat name when it's the target (Duolingo style)
+        if (k.classList.contains('bkey')) {
+          const orig = notes[step].p;
+          k.textContent = /b\d/.test(orig) ? orig.replace(/(\d)/,'') : (k.dataset.flat || '');
+        }
+      }
+    }
+    function updateStaff() {
+      notes.forEach((n, i) => {
+        if (n.rest) return;
+        if (i < step) paintNote(i, noteResults[i] === false ? 'miss' : 'done');
+        else if (i === step) paintNote(i, 'cur');
+        else paintNote(i, 'up');
+      });
+      movePlayhead(step < notes.length ? step : -1);
+    }
+
+    function sparkle(el) {
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const colors = ['#58cc02','#fde047','#22d3ee','#fb923c'];
+      for (let i = 0; i < 8; i++) {
+        const s = document.createElement('div');
+        s.className = 'spark';
+        s.style.background = colors[i % colors.length];
+        s.style.left = cx + 'px';
+        s.style.top = cy + 'px';
+        const ang = (i / 8) * Math.PI * 2;
+        const dist = 40 + Math.random() * 40;
+        s.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+        s.style.setProperty('--dy', Math.sin(ang) * dist - 30 + 'px');
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 650);
+      }
+    }
+    function flashKey(el, kind) {
+      el.classList.add(kind === 'good' ? 'good' : kind === 'bad' ? 'bad' : 'press');
+      setTimeout(() => el.classList.remove('good','bad','press'), 230);
+    }
+
+    function onKey(pressed) {
+      if (isPerformance && started) { onKeyPerformance(pressed); return; }
+      ensureCtx();
+      playTone(pressed, 0.45);
+      const el = keyEls[normPitch(pressed)];
+      if (!started || mode === 'listen' || mode === 'read') { if (el) flashKey(el, 'press'); return; }
+      if (step >= notes.length) return;
+      // skip past rests automatically
+      while (step < notes.length && notes[step].rest) { noteResults[step] = true; step++; }
+      if (step >= notes.length) { afterStep(); return; }
+      const want = normPitch(notes[step].p);
+      const ok = (mode === 'rhythm') ? true : (normPitch(pressed) === want);
+      noteResults[step] = ok;
+      if (ok) {
+        combo++;
+        if (el) { flashKey(el, 'good'); sparkle(el); }
+      } else {
+        combo = 0;
+        misses++;
+        if (el) flashKey(el, 'bad');
+      }
+      showCombo();
+      step++;
+      afterStep();
+    }
+    function afterStep() {
+      // auto-advance through trailing rests
+      while (step < notes.length && notes[step].rest) { noteResults[step] = true; step++; }
+      setProgress();
+      updateStaff();
+      highlightTarget();
+      if (step >= notes.length) endLesson();
+    }
+
+    // ─── Listen / auto-play ─────────────────────────────────────────────
+    function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+    async function playMelodyAuto() {
+      if (listenLock) return; listenLock = true;
+      step = 0; noteResults = []; setProgress(); updateStaff(); highlightTarget();
+      for (let i = 0; i < notes.length; i++) {
+        const d = notes[i].d || 1;
+        if (!notes[i].rest) {
+          playTone(normPitch(notes[i].p), Math.max(0.25, d * 0.6));
+          const el = keyEls[normPitch(notes[i].p)];
+          if (el) flashKey(el, 'good');
+        }
+        step = i;
+        updateStaff();
+        await wait(tempoMs * d);
+      }
+      step = 0; updateStaff(); highlightTarget(); setProgress();
+      listenLock = false;
+    }
+
+    // ─── Buttons ────────────────────────────────────────────────────────
+    document.getElementById('listenBtn').addEventListener('click', playMelodyAuto);
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if (mode === 'listen') { playMelodyAuto(); return; }
+      if (isPerformance) { performanceStart(); return; }
+      started = true; step = 0; misses = 0; combo = 0; noteResults = [];
+      comboFlag.classList.remove('show');
+      setProgress(); updateStaff(); highlightTarget();
+    });
+    function resetAll() {
+      if (perfRAF) { cancelAnimationFrame(perfRAF); perfRAF = null; }
+      started = false; step = 0; misses = 0; combo = 0; noteResults = [];
+      comboFlag.classList.remove('show');
+      document.getElementById('endCard').classList.remove('show');
+      setProgress(); updateStaff(); highlightTarget();
+    }
+    document.getElementById('restartBtn').addEventListener('click', resetAll);
+    document.getElementById('retryBtn').addEventListener('click', resetAll);
+
+    // ─── End of lesson ──────────────────────────────────────────────────
+    function endLesson() {
+      const correct = noteResults.filter(x => x === true).length;
+      const total = notes.length;
+      const pct = total ? correct / total : 1;
+      document.getElementById('endScore').textContent = `${correct} / ${total}`;
+      let title, msg;
+      if (pct === 1)        { title = '🌟 Flawless!'; msg = 'Every note in order — recital ready.'; }
+      else if (pct >= 0.75) { title = '🎉 Great run!'; msg = 'Strong performance — XP banked.'; }
+      else if (pct >= 0.5)  { title = '🎵 Nice work!'; msg = 'XP banked. Replay to top your score.'; }
+      else                  { title = 'Keep practicing'; msg = 'Replay the lesson and aim higher.'; }
+      document.getElementById('endTitle').textContent = title;
+      document.getElementById('endMsg').textContent = msg;
+      document.getElementById('endCard').classList.add('show');
+      const nextHref = lesson < LESSONS_PER_SONG ? `song-${unit}-${lesson+1}` : `song-${unit+1}-1`;
+      document.getElementById('nextLessonLink').href = nextHref;
+      if (pct >= 0.5) markComplete();
+    }
+
+    // ─── Firestore: mark complete ───────────────────────────────────────
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return; alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        const pos = LESSONS_PER_SONG * (unit - 1) + lesson;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'musical-practice'),
+          { courseId: 'musical-practice', ['mp-' + pos]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    // ─── Init ───────────────────────────────────────────────────────────
+    setProgress();
+    updateStaff();
+    highlightTarget();
+    // centre the keyboard near the first note
+    if (playNotes.length) {
+      const firstKey = keyEls[normPitch(playNotes[0].p)];
+      if (firstKey) {
+        const pw = document.getElementById('pianoWrap');
+        pw.scrollLeft = Math.max(0, firstKey.offsetLeft - pw.clientWidth / 2 + 40);
+      }
+    }
+    if (mode === 'listen') setTimeout(playMelodyAuto, 600);
+  </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swift &amp; iOS Development — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Swift &amp; iOS Development</h1>
+    <p>Build iPhone apps with Swift — optionals, structs, protocols, SwiftUI, UIKit, networking, Core Data, concurrency, the App Store, and real shippable apps. 189 lessons across 13 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Swift & iOS','Installing Xcode','Swift Playgrounds','Hello World','Comments','Swift vs Objective-C','Compile & Run','The Xcode Interface','Swift Version History','Simulator vs Device','Online Swift Editors','Project Structure','print & Console','Reading Xcode Errors','Foundations Checkpoint']],
+      [2,'Variables & Types',['let vs var','Int & Double','String & Character','Bool','Type Inference','Type Annotations','Type Conversion','Tuples','Type Aliases','Constants','Numeric Literals','String Interpolation','Multi-line Strings','Unicode in Swift','Variables Checkpoint']],
+      [3,'Operators',['Arithmetic Operators','Comparison Operators','Logical Operators','Range Operators','Nil-Coalescing ??','Ternary ?:','Compound Assignment','Operator Precedence','Overflow Operators','Custom Operators','Identity Operators','Bitwise Operators','String Concatenation','Common Pitfalls','Operators Checkpoint']],
+      [4,'Control Flow',['if & else','switch Statement','switch Pattern Matching','while & repeat-while','for-in Loops','Ranges in Loops','break & continue','fallthrough','Labeled Statements','guard Statement','Early Returns','where Clauses','FizzBuzz','Pattern Printing','Control Flow Checkpoint']],
+      [5,'Optionals',['What Are Optionals?','Declaring Optionals','Force Unwrapping','Optional Binding if let','guard let','Nil-Coalescing ??','Optional Chaining','Implicitly Unwrapped Optionals','Multiple Optional Binding','Optional Map & FlatMap','Optionals in Collections','Why Optionals Exist','Common Optional Bugs','Avoiding Force Unwrap','Optionals Checkpoint']],
+      [6,'Functions & Closures',['Defining Functions','Parameters & Arguments','Argument Labels','Return Values','Multiple Returns (Tuples)','Default Parameters','Variadic Parameters','inout Parameters','Function Types','Closures','Trailing Closures','Closure Capture','Escaping Closures','Higher-Order Functions','Functions Checkpoint']],
+      [7,'Collections',['Arrays','Array Methods','Sets','Set Operations','Dictionaries','Dictionary Methods','Iterating Collections','map filter reduce','compactMap & flatMap','sorted & sort','Mutating Collections','Collection Protocols','ArraySlice','Choosing a Collection','Collections Checkpoint']],
+      [8,'Structs & Classes',['Structs','Classes','Value vs Reference Types','Properties','Stored vs Computed Properties','Property Observers','Lazy Properties','Methods','Initializers','Deinitializers','self in Methods','mutating Methods','Static Members','Choosing Struct vs Class','Structs & Classes Checkpoint']],
+      [9,'Protocols',['What Are Protocols?','Defining Protocols','Adopting Protocols','Protocol Properties','Protocol Methods','Protocol Extensions','Default Implementations','Protocol Composition','Protocol Inheritance','Associated Types','Protocol-Oriented Programming','Conditional Conformance','some & any','Common Protocols','Protocols Checkpoint']],
+      [10,'Enums & Pattern Matching',['Defining Enums','Associated Values','Raw Values','Enum Methods','Iterating Enum Cases','Recursive Enums (indirect)','switch on Enums','if case & guard case','Enum Best Practices','Result Type','State Machines','Optionals as Enums','Modeling with Enums','Common Patterns','Enums Checkpoint']],
+      [11,'Error Handling',['Error Protocol','throws & throw','do-catch','try, try?, try!','Propagating Errors','Custom Error Types','defer Statement','Result Type','Rethrowing Functions','Error Conversion','Logging Errors','User-Facing Errors','Best Practices','Debugging Errors','Error Checkpoint']],
+      [12,'Generics',['Generic Functions','Generic Types','Type Constraints','Associated Types Recap','where Clauses','Generic Protocols','Opaque Return Types','Generic Extensions','Conditional Conformance','Type Erasure','Phantom Types','Generic Subscripts','Real-World Generics','When to Use Generics','Generics Checkpoint']],
+      [13,'Memory Management',['ARC — Automatic Reference Counting','Strong References','Retain Cycles','weak References','unowned References','Capture Lists','Closures & Memory','Value Semantics & Memory','Copy-on-Write']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'swift-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('swift-ios');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('swift-ios');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+board-games
+brain-puzzles
+dance-arrows
+typing-skills
+musical-practice
+midi-pad-practice
+talker-machine
+catalan

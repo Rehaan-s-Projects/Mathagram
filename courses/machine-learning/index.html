@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Learning — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Machine Learning</h1>
+    <p>Learn machine learning — data prep, regression, classification, neural networks, deep learning, NLP, model evaluation, deployment, and real ML projects. 925 lessons across 62 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['What Is Machine Learning?','AI vs ML vs Deep Learning','Supervised Learning','Unsupervised Learning','Reinforcement Learning','The ML Workflow','Features & Labels','Training vs Inference','Models & Parameters','Why Now? Data & Compute','ML Use Cases','ML Limitations & Ethics','Tools & Environment Setup','Jupyter Notebooks','Foundations Checkpoint']],
+      [2,'Math for ML',['Why Math Matters','Vectors','Matrices','Matrix Multiplication','Dot Products','Derivatives Refresher','Partial Derivatives','Gradients','The Chain Rule','Probability Basics','Distributions','Expectation & Variance','Bayes\' Theorem','Linear Algebra Intuition','Math Checkpoint']],
+      [3,'Python for ML',['NumPy Arrays','Array Operations','Broadcasting','Pandas Series & DataFrames','Loading Datasets','Indexing & Selection','Matplotlib Plotting','Seaborn Visualization','Vectorized Thinking','Random Seeds & Reproducibility','scikit-learn Overview','The Estimator API','Notebooks vs Scripts','Common Pitfalls','Python for ML Checkpoint']],
+      [4,'Data Collection & Cleaning',['Where Data Comes From','Loading CSV & JSON','Inspecting Data','Missing Values','Imputation Strategies','Outlier Detection','Duplicate Removal','Data Types & Conversion','Inconsistent Categories','Date & Time Handling','Data Leakage Warning','Data Quality Checks','Documenting Data','Cleaning Workflow','Data Cleaning Checkpoint']],
+      [5,'Exploratory Data Analysis',['Why EDA?','Summary Statistics','Histograms & Distributions','Box Plots','Scatter Plots','Correlation','Correlation vs Causation','Categorical Analysis','Pair Plots','Heatmaps','Detecting Skew','Identifying Patterns','Hypothesis Generation','EDA Reporting','EDA Checkpoint']],
+      [6,'Feature Engineering',['What Are Features?','Numeric Scaling','Normalization vs Standardization','Encoding Categorical Variables','One-Hot Encoding','Ordinal Encoding','Binning','Polynomial Features','Interaction Features','Date Features','Text Features Preview','Feature Selection','Dimensionality Reduction Preview','Feature Pipelines','Feature Engineering Checkpoint']],
+      [7,'Linear Regression',['The Regression Problem','The Line of Best Fit','Cost Function — MSE','Gradient Descent','Learning Rate','Multiple Linear Regression','Feature Scaling for Regression','Normal Equation','Polynomial Regression','Assumptions of Linear Regression','Residual Analysis','R-Squared','Interpreting Coefficients','Regression with scikit-learn','Linear Regression Checkpoint']],
+      [8,'Logistic Regression & Classification',['The Classification Problem','Why Not Linear Regression?','The Sigmoid Function','Logistic Regression','Decision Boundaries','Binary Classification','Multiclass — One-vs-Rest','Softmax Regression','Cross-Entropy Loss','Class Probabilities','Threshold Tuning','Interpreting Logistic Models','Classification with scikit-learn','Common Mistakes','Classification Checkpoint']],
+      [9,'Model Evaluation',['Train/Test Split','Why Hold Out Data?','Cross-Validation','K-Fold CV','Accuracy','Precision & Recall','F1 Score','The Confusion Matrix','ROC Curve & AUC','Regression Metrics — MAE RMSE','Baseline Models','Bias-Variance Tradeoff','Overfitting & Underfitting','Choosing a Metric','Evaluation Checkpoint']],
+      [10,'Regularization & Tuning',['Why Regularize?','L1 Regularization (Lasso)','L2 Regularization (Ridge)','Elastic Net','Hyperparameters vs Parameters','Grid Search','Random Search','Bayesian Optimization','Validation Curves','Learning Curves','Early Stopping','Avoiding Data Leakage in Tuning','Nested Cross-Validation','Tuning Workflow','Regularization Checkpoint']],
+      [11,'Decision Trees',['What Is a Decision Tree?','Splitting Criteria','Gini Impurity','Entropy & Information Gain','Building a Tree','Tree Depth & Pruning','Overfitting in Trees','Trees for Regression','Feature Importance','Interpreting Trees','Visualizing Trees','Strengths & Weaknesses','Trees with scikit-learn','Common Pitfalls','Decision Trees Checkpoint']],
+      [12,'Ensemble Methods',['Why Ensembles?','Bagging','Random Forests','Random Forest Tuning','Boosting','AdaBoost','Gradient Boosting','XGBoost','LightGBM','CatBoost','Stacking','Voting Classifiers','Ensemble Trade-offs','Feature Importance in Ensembles','Ensembles Checkpoint']],
+      [13,'Other Classic Models',['K-Nearest Neighbors','Choosing K','Distance Metrics','Naive Bayes','Gaussian Naive Bayes','Support Vector Machines','The Kernel Trick','SVM Hyperparameters','Linear Discriminant Analysis','When to Use Each Model','Model Comparison','No Free Lunch Theorem','Baselines Revisited','Model Selection Strategy','Classic Models Checkpoint']],
+      [14,'Unsupervised Learning',['What Is Unsupervised Learning?','K-Means Clustering','Choosing the Number of Clusters','The Elbow Method','Hierarchical Clustering','DBSCAN','Gaussian Mixture Models','Cluster Evaluation','Principal Component Analysis','t-SNE','UMAP','Anomaly Detection','Association Rules','Use Cases','Unsupervised Checkpoint']],
+      [15,'Neural Networks',['The Biological Inspiration','The Perceptron','Activation Functions','Multi-Layer Networks','Forward Propagation','Loss Functions','Backpropagation','Gradient Descent Variants','Weight Initialization','Learning Rate Schedules','Batch vs Mini-Batch','Epochs & Iterations','Vanishing Gradients','Building a Net from Scratch','Neural Networks Checkpoint']],
+      [16,'Deep Learning Frameworks',['Why Frameworks?','TensorFlow Overview','Keras API','PyTorch Overview','Tensors','Autograd & Computation Graphs','Defining a Model','Training Loops','Optimizers','GPUs & Acceleration','Saving & Loading Models','Debugging Models','TensorBoard','Choosing a Framework','Frameworks Checkpoint']],
+      [17,'Deep Learning Techniques',['Dropout','Batch Normalization','Data Augmentation','Transfer Learning','Fine-Tuning','Regularization in Deep Nets','Hyperparameter Tuning','Learning Rate Finding','Gradient Clipping','Mixed Precision Training','Handling Imbalanced Data','Callbacks','Reproducibility','Debugging Training','DL Techniques Checkpoint']],
+      [18,'Computer Vision',['Images as Data','Convolutional Neural Networks','Convolution & Filters','Pooling Layers','CNN Architectures','Image Classification','Transfer Learning for Vision','Object Detection','Image Segmentation','Data Augmentation for Images','Famous Models — ResNet, VGG','Vision Transformers','Generative Models for Images','Vision Projects','Computer Vision Checkpoint']],
+      [19,'Natural Language Processing',['Text as Data','Tokenization','Bag of Words','TF-IDF','Word Embeddings','Word2Vec & GloVe','Recurrent Neural Networks','LSTMs & GRUs','Sequence Models','Attention Mechanism','Transformers','Pretrained Language Models','Sentiment Analysis','Text Classification','NLP Checkpoint']],
+      [20,'Large Language Models',['What Is an LLM?','The Transformer Architecture','Pretraining & Fine-Tuning','Tokens & Context Windows','Prompting Basics','Few-Shot Learning','Embeddings & Semantic Search','Retrieval-Augmented Generation','Using LLM APIs','Fine-Tuning vs Prompting','Evaluation of LLMs','Hallucinations & Limitations','Cost & Latency','Responsible Use','LLM Checkpoint']],
+      [21,'Recommender & Time Series',['Recommender Systems','Collaborative Filtering','Content-Based Filtering','Matrix Factorization','Cold-Start Problem','Time Series Basics','Trend & Seasonality','Stationarity','ARIMA Models','Forecasting with ML','Lag Features','Evaluating Forecasts','Cross-Validation for Time Series','Use Cases','Recommender & Time Series Checkpoint']],
+      [22,'MLOps & Deployment',['From Notebook to Production','Saving Models — Pickle & ONNX','Building an Inference API','Flask & FastAPI for ML','Containerizing Models','Batch vs Real-Time Inference','Model Monitoring','Data & Concept Drift','Retraining Pipelines','Experiment Tracking — MLflow','Feature Stores','Versioning Models & Data','Scaling Inference','CI/CD for ML','MLOps Checkpoint']],
+      [23,'Responsible AI',['Why Ethics Matter','Bias in Data','Bias in Models','Fairness Metrics','Explainability — SHAP & LIME','Interpretable Models','Privacy & Data Protection','Differential Privacy','Model Cards & Datasheets','Adversarial Attacks','Robustness','Environmental Cost','Regulation & Compliance','Human-in-the-Loop','Responsible AI Checkpoint']],
+      [24,'Practical ML Skills',['Framing a Problem','Defining Success Metrics','Building Baselines','Iterative Improvement','Error Analysis','Working with Imbalanced Data','Working with Limited Data','Reading ML Papers','Reproducing Results','Kaggle Competitions','Collaborating on ML Projects','Communicating Results','Avoiding Common Mistakes','Continuous Learning','Practical Skills Checkpoint']],
+      [25,'Projects & Mastery',['House Price Prediction','Spam Classifier','Customer Churn Prediction','Handwritten Digit Recognition','Image Classifier with CNNs','Movie Recommender','Sentiment Analysis App','Sales Forecasting','Customer Segmentation','Fine-Tune a Language Model','Deploy a Model as an API','End-to-End ML Pipeline','Build a Portfolio','Career Path & Resources','Machine Learning Grand Mastery!']],
+      [26,'Advanced Statistics for ML',['Random Variables','Joint Distributions','Conditional Probability','Maximum Likelihood','Maximum A Posteriori','Bias & Variance Math','Confidence Intervals','Hypothesis Testing','p-Values & Pitfalls','Bootstrap Methods','Resampling','Statistical Power','Multiple Testing','Effect Size','Advanced Stats Checkpoint']],
+      [27,'Optimization for ML',['Convex Optimization','Gradient Descent Variants','Momentum','Nesterov Acceleration','AdaGrad','RMSProp','Adam Optimizer','Learning Rate Schedules','Second-Order Methods','Newton\'s Method','L-BFGS','Constrained Optimization','Lagrange Multipliers','Stochastic Optimization','Optimization Checkpoint']],
+      [28,'Linear Algebra for ML',['Vector Spaces','Eigenvalues & Eigenvectors','Singular Value Decomposition','Matrix Factorization','PCA via SVD','Tensor Operations','Vector & Matrix Norms','Projections','Orthogonality','Positive Definite Matrices','Matrix Calculus','Computational Efficiency','Sparse Matrices','Numerical Stability','Linear Algebra Checkpoint']],
+      [29,'Feature Engineering Deep Dive',['Feature Selection Methods','Filter Methods','Wrapper Methods','Embedded Methods','Mutual Information','Feature Importance','Target Encoding','Frequency Encoding','Feature Crosses','Automated Feature Engineering','Featuretools','High Cardinality','Feature Stores Deep Dive','Leakage Detection','Feature Engineering Checkpoint']],
+      [30,'Advanced Model Evaluation',['Stratified Cross-Validation','Time Series CV','Nested CV Deep Dive','Calibration Curves','Probability Calibration','Brier Score','Cohen\'s Kappa','Matthews Correlation','Lift & Gain Charts','Cost-Sensitive Evaluation','Evaluation Under Drift','Significance of Models','Benchmark Design','Evaluation Pitfalls','Evaluation Checkpoint']],
+      [31,'Ensemble Methods Advanced',['Bagging Theory','Random Forest Internals','Extremely Randomized Trees','Boosting Theory','Gradient Boosting Math','XGBoost Internals','LightGBM Internals','CatBoost Internals','Stacking Deep Dive','Blending','Snapshot Ensembles','Bayesian Model Averaging','Ensemble Diversity','Tuning Ensembles','Ensembles Advanced Checkpoint']],
+      [32,'Deep Learning Foundations',['Universal Approximation Theorem','Backpropagation Math','Computational Graphs','Automatic Differentiation','Activation Functions Deep Dive','Weight Initialization Deep Dive','Loss Landscapes','Vanishing & Exploding Gradients','Normalization Methods','Residual Connections','Regularization Theory','Optimization in Deep Nets','The Generalization Mystery','Double Descent','DL Foundations Checkpoint']],
+      [33,'Convolutional Networks Deep Dive',['Convolution Math','Padding & Stride','Receptive Fields','Pooling Variants','1x1 Convolutions','Dilated Convolutions','Depthwise Separable Convolutions','LeNet to AlexNet','VGG & Inception','ResNet & Skip Connections','EfficientNet','ConvNeXt','CNN Visualization','CNN Design Principles','CNN Deep Dive Checkpoint']],
+      [34,'Recurrent Networks Deep Dive',['Sequence Modeling','Vanilla RNN Math','Backprop Through Time','LSTM Internals','GRU Internals','Bidirectional RNNs','Encoder-Decoder','Sequence-to-Sequence','Attention for RNNs','Teacher Forcing','Gradient Issues in RNNs','RNN Applications','RNN vs Transformer','When to Use RNNs','RNN Deep Dive Checkpoint']],
+      [35,'Transformers Deep Dive',['Self-Attention Math','Multi-Head Attention','Positional Encodings','Encoder Architecture','Decoder Architecture','Layer Normalization','Feed-Forward Blocks','Masking','Attention Variants','Efficient Attention','Long-Context Methods','Vision Transformers Deep Dive','Scaling Laws','Transformer Training','Transformers Checkpoint']],
+      [36,'Generative Models',['Generative vs Discriminative','Autoencoders Deep Dive','Variational Autoencoders','The Reparameterization Trick','GAN Fundamentals','GAN Training Dynamics','Mode Collapse','DCGAN','StyleGAN','Conditional GANs','Normalizing Flows','Energy-Based Models','Evaluating Generative Models','Generative Applications','Generative Checkpoint']],
+      [37,'Diffusion Models',['What Are Diffusion Models','Forward Diffusion Process','The Reverse Process','Denoising Objective','DDPM','DDIM Sampling','Classifier-Free Guidance','Latent Diffusion','Stable Diffusion','Text-to-Image','Image-to-Image','ControlNet','Diffusion for Audio & Video','Sampling Speedups','Diffusion Checkpoint']],
+      [38,'Reinforcement Learning',['The RL Problem','Markov Decision Processes','Rewards & Returns','Value Functions','Policy & Value Iteration','Monte Carlo Methods','Temporal Difference Learning','Q-Learning','SARSA','Exploration vs Exploitation','Epsilon-Greedy & UCB','Function Approximation','RL Environments','RL Applications','RL Checkpoint']],
+      [39,'Deep Reinforcement Learning',['Deep Q-Networks','Experience Replay','Target Networks','Double DQN','Dueling DQN','Policy Gradients','REINFORCE','Actor-Critic','A2C & A3C','PPO','TRPO','DDPG & SAC','Model-Based RL','RLHF Overview','Deep RL Checkpoint']],
+      [40,'Natural Language Processing Advanced',['Subword Tokenization','Byte-Pair Encoding','WordPiece','Contextual Embeddings','ELMo & BERT','Masked Language Modeling','Named Entity Recognition','Question Answering','Text Summarization','Machine Translation','Coreference Resolution','Parsing','Multilingual NLP','NLP Evaluation','NLP Advanced Checkpoint']],
+      [41,'LLM Engineering',['LLM Architectures','Pretraining at Scale','Data Curation','Tokenizer Design','Scaling Laws Deep Dive','Mixture of Experts','Instruction Tuning','RLHF in Depth','DPO & Alignment','Quantized Inference','KV Caching','Speculative Decoding','Context Window Extension','Evaluating LLMs','LLM Engineering Checkpoint']],
+      [42,'Prompt Engineering & RAG',['Prompt Design Principles','Zero & Few-Shot','Chain-of-Thought','Self-Consistency','ReAct Prompting','Structured Output','Function Calling','Embeddings for Retrieval','Vector Databases','Chunking Strategies','Retrieval-Augmented Generation','Reranking','Evaluation of RAG','Hybrid Search','Prompt & RAG Checkpoint']],
+      [43,'AI Agents',['What Is an Agent','Tool Use','Planning & Reasoning','Memory for Agents','Multi-Agent Systems','Agent Frameworks','Reflection & Self-Critique','Code-Writing Agents','Browser Agents','Evaluation of Agents','Guardrails','Cost Control','Agent Failure Modes','Agent Design Patterns','Agents Checkpoint']],
+      [44,'Multimodal Machine Learning',['What Is Multimodal ML','Vision-Language Models','CLIP','Image Captioning','Visual Question Answering','Text-to-Image Recap','Audio-Text Models','Video Understanding','Cross-Modal Retrieval','Fusion Strategies','Cross-Modal Alignment','Multimodal Transformers','Multimodal Datasets','Applications','Multimodal Checkpoint']],
+      [45,'Graph Machine Learning',['Graphs as Data','Node Embeddings','DeepWalk & node2vec','Graph Neural Networks','Message Passing','Graph Convolutional Networks','GraphSAGE','Graph Attention Networks','Link Prediction','Node Classification','Graph Classification','Knowledge Graphs','Scalability of GNNs','GNN Applications','Graph ML Checkpoint']],
+      [46,'Self-Supervised & Transfer Learning',['Why Self-Supervision','Pretext Tasks','Contrastive Learning','SimCLR & MoCo','BYOL','Masked Autoencoders','Transfer Learning Deep Dive','Domain Adaptation','Fine-Tuning Strategies','Feature Extraction','Catastrophic Forgetting','Continual Learning','Foundation Models','Pretraining Trade-offs','Self-Supervised Checkpoint']],
+      [47,'Few-Shot & Meta-Learning',['The Few-Shot Problem','Metric-Based Methods','Prototypical Networks','Matching Networks','Siamese Networks','Optimization-Based Meta-Learning','MAML','Reptile','Memory-Augmented Networks','In-Context Learning','Zero-Shot Learning','Data-Efficient Learning','Benchmarks','Applications','Meta-Learning Checkpoint']],
+      [48,'Bayesian Machine Learning',['Bayesian Inference','Priors & Posteriors','Conjugate Priors','Bayesian Linear Regression','Gaussian Processes','Bayesian Neural Networks','Variational Inference','MCMC Methods','Hamiltonian Monte Carlo','Probabilistic Programming','PyMC & Stan','Uncertainty Quantification','Bayesian Optimization Deep Dive','Applications','Bayesian ML Checkpoint']],
+      [49,'Causal Inference',['Correlation vs Causation','Causal Graphs','Confounding','The Do-Operator','Backdoor Criterion','Instrumental Variables','Propensity Scores','Difference-in-Differences','Randomized Experiments','A/B Testing for Causality','Counterfactuals','Causal Discovery','Causal ML','Applications','Causal Inference Checkpoint']],
+      [50,'Time Series Forecasting',['Time Series Components','Stationarity Deep Dive','ARIMA Deep Dive','SARIMA','Exponential Smoothing','Prophet','Feature-Based Forecasting','Deep Learning for Time Series','DeepAR','Temporal Fusion Transformer','Multivariate Forecasting','Probabilistic Forecasting','Anomaly Detection in Series','Forecast Evaluation','Time Series Checkpoint']],
+      [51,'Recommender Systems Advanced',['Recap of Recommenders','Implicit Feedback','Matrix Factorization Deep Dive','Factorization Machines','Neural Collaborative Filtering','Two-Tower Models','Sequence-Aware Recommenders','Session-Based Recommendation','Bandits for Recommendation','Cold-Start Solutions','Diversity & Serendipity','Offline & Online Evaluation','Scaling Recommenders','Applications','Recommenders Advanced Checkpoint']],
+      [52,'Anomaly & Outlier Detection',['What Is an Anomaly','Statistical Methods','Isolation Forest','One-Class SVM','Local Outlier Factor','Autoencoder-Based Detection','Density-Based Methods','Time Series Anomalies','Streaming Anomaly Detection','Evaluation of Detectors','Imbalanced Anomaly Data','Explainable Anomalies','Real-World Systems','Applications','Anomaly Detection Checkpoint']],
+      [53,'Computer Vision Advanced',['Image Preprocessing Deep Dive','Two-Stage Object Detection','Faster R-CNN','One-Stage Object Detection','YOLO Family','SSD','Semantic Segmentation','U-Net','Instance Segmentation','Mask R-CNN','Panoptic Segmentation','Pose Estimation','Image Generation Recap','3D Vision','CV Advanced Checkpoint']],
+      [54,'Speech & Audio ML',['Audio Representations','Spectrograms','MFCCs','Speech Recognition','CTC Loss','Wav2Vec','Whisper','Text-to-Speech','Tacotron & WaveNet','Speaker Identification','Audio Classification','Music Information Retrieval','Sound Event Detection','Applications','Speech & Audio Checkpoint']],
+      [55,'ML Systems Design',['Designing ML Systems','Requirements Gathering','Data Pipelines Deep Dive','Feature Stores Deep Dive','Training Pipelines','Serving Architectures','Batch vs Online Serving','Latency & Throughput','Caching Predictions','Scaling Training','Distributed Training','Model Registries','System Trade-offs','Case Studies','ML Systems Checkpoint']],
+      [56,'MLOps Advanced',['CI/CD for ML Deep Dive','Infrastructure as Code','Kubernetes for ML','Kubeflow','Model Serving — TorchServe','Model Serving — Triton','Canary Deployments','Shadow Deployments','Monitoring Deep Dive','Drift Detection Deep Dive','Automated Retraining','Data Versioning — DVC','Pipeline Orchestration','Cost Management','MLOps Advanced Checkpoint']],
+      [57,'Distributed & Scalable ML',['Why Distribute','Data Parallelism','Model Parallelism','Pipeline Parallelism','Tensor Parallelism','Parameter Servers','AllReduce','Gradient Accumulation','Mixed Precision Deep Dive','ZeRO & Sharding','Training Large Models','Distributed Frameworks','Cloud GPUs & TPUs','The Cost of Scale','Distributed ML Checkpoint']],
+      [58,'Model Compression & Efficiency',['Why Efficiency Matters','Pruning','Structured Pruning','Quantization Deep Dive','Post-Training Quantization','Quantization-Aware Training','Knowledge Distillation','Low-Rank Factorization','Neural Architecture Search','Efficient Architectures','Edge Deployment','Mobile ML','On-Device Inference','Benchmarking Efficiency','Efficiency Checkpoint']],
+      [59,'Interpretability & Explainability',['Why Interpretability','Intrinsic vs Post-Hoc','Feature Attribution','SHAP Deep Dive','LIME Deep Dive','Integrated Gradients','Saliency Maps','Grad-CAM','Counterfactual Explanations','Concept-Based Explanations','Surrogate Models','Global vs Local','Evaluating Explanations','Stakeholder Communication','Interpretability Checkpoint']],
+      [60,'Robustness & Adversarial ML',['Adversarial Examples','Attack Methods','FGSM & PGD','Black-Box Attacks','Adversarial Training','Defensive Distillation','Certified Robustness','Data Poisoning','Backdoor Attacks','Model Stealing','Membership Inference','Robustness Evaluation','Security of ML Systems','Best Practices','Robustness Checkpoint']],
+      [61,'Privacy-Preserving ML',['Privacy Risks in ML','Differential Privacy Deep Dive','DP-SGD','Federated Learning Deep Dive','Secure Aggregation','Homomorphic Encryption','Secure Multi-Party Computation','Synthetic Data','Anonymization','Privacy Budgets','Regulatory Compliance','Privacy Attacks','Trade-offs','Applications','Privacy ML Checkpoint']],
+      [62,'ML Research & Career',['Reading Research Papers','Reproducing Papers','Running Experiments','Experiment Tracking Deep Dive','Ablation Studies','Writing ML Papers','Open-Source Contribution','Kaggle Mastery','Building a Portfolio','ML Interview Prep']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ml-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('machine-learning');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('machine-learning');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

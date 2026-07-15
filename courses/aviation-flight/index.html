@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation & Flight — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Aviation &amp; Flight</h1>
+    <p>The science of flight — from the Wright Brothers to eVTOLs. The four forces (lift, weight, thrust, drag), airfoils, control surfaces, piston / turboprop / turbofan / jet engines, propellers, the atmosphere &amp; density altitude, aviation weather, METARs &amp; TAFs, the cockpit "six pack", glass avionics, pitot-static, navigation (pilotage, VOR, ILS, GPS), charts &amp; airspace classes, air traffic control, radio phraseology, airports &amp; patterns, takeoff/landing performance, stalls &amp; spins, emergencies, human factors, FAA/ICAO regulations, pilot certificates, IFR, golden-age aviation (Lindbergh, Earhart), WWII, the Jet Age &amp; Concorde, Boeing vs Airbus, famous aircraft (DC-3, 747, SR-71), helicopters, gliders, drones, bush flying, aviation safety &amp; famous accidents, the future (eVTOL, SAF, hypersonic), plus aircraft structures &amp; materials, hydraulic / pneumatic / electrical systems, CRM &amp; aeronautical decision-making, general aviation life, mission aviation (SAR, MedEvac, firefighting, crop dusting), flight simulation, and great aviators — Chuck Yeager, the Tuskegee Airmen, Bessie Coleman, Sully Sullenberger, and more. 53 units, 790 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "The Four Forces — Lift, Weight, Thrust, Drag",
+      "Wings & Airfoils — Bernoulli & Newton",
+      "Drag — Parasite, Induced & Form",
+      "Stability & Control — Roll, Pitch, Yaw",
+      "Control Surfaces — Ailerons, Elevators, Rudder",
+      "Aircraft Anatomy — Fuselage, Empennage, Landing Gear",
+      "Piston Engines & The Otto Cycle",
+      "Turboprop & Turbofan Engines",
+      "Pure Jets & Bypass Ratios",
+      "Propellers — Fixed Pitch & Constant Speed",
+      "The Atmosphere — Layers & Standard Atmosphere",
+      "Density Altitude & Aircraft Performance",
+      "Aviation Weather — Fronts, Clouds & Icing",
+      "Reading METARs & TAFs",
+      "Pre-Flight Inspection & Walkaround",
+      "Cockpit Instruments — The Six Pack",
+      "Glass Cockpits & Modern Avionics",
+      "Pitot-Static System & Pressure Errors",
+      "Magnetic Compass & Compass Errors",
+      "Navigation — Pilotage & Dead Reckoning",
+      "VOR, ILS & GPS",
+      "Aviation Charts — Sectional & Enroute",
+      "Airspace Classes A through G",
+      "Air Traffic Control — Towers, Approach & Center",
+      "Radio Phraseology & The NATO Phonetic Alphabet",
+      "Airports — Runways, Taxiways & Markings",
+      "Pattern Operations & Traffic",
+      "Takeoff & Landing Performance",
+      "Stalls, Spins & Recovery",
+      "Emergency Procedures",
+      "Human Factors & Aeromedical Factors",
+      "Aviation Regulations — FAA & ICAO",
+      "Pilot Certificates — Sport, PPL, Commercial & ATP",
+      "Instrument Flight Rules (IFR)",
+      "Aviation History — The Wright Brothers",
+      "Aviation History — The Golden Age, Lindbergh & Earhart",
+      "Aviation History — WWII & The Jet Age",
+      "Modern Commercial Aviation — Boeing vs Airbus",
+      "Famous Aircraft — DC-3, 747, Concorde & SR-71",
+      "Helicopters & Rotorcraft Operations",
+      "Gliders & Soaring Flight",
+      "Drones & UAVs",
+      "Bush Flying & Backcountry Operations",
+      "Aviation Safety & Famous Accidents",
+      "The Future — eVTOL, SAF & Hypersonic",
+      // ─── 7 new themed units (×15 lessons = 105) + a 10-lesson Express pack
+      //     appended below = exactly 115 new lessons.
+      "Aircraft Structures & Materials",
+      "Hydraulics, Pneumatics & Electrical Systems",
+      "CRM & Aeronautical Decision-Making",
+      "General Aviation Life — Owning & Flying GA",
+      "Famous Aviators — Yeager, Tuskegee Airmen, Bessie Coleman, Sully",
+      "Mission Aviation — SAR, MedEvac, Firefighting, Crop Dusting",
+      "Flight Simulation — MSFS, X-Plane & Pro Sims"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    // 10-lesson "Aviation Express" daily-concepts pack (no checkpoint).
+    units.push([unitNames.length + 1, "Aviation Express — 10 Daily Concepts", [
+      "What lift really is",
+      "Why airliners fly so high",
+      "Why pilots say \"niner\"",
+      "How an ILS works in 60 seconds",
+      "What a hold is, and why",
+      "Why winglets save fuel",
+      "Why props pitch — and how",
+      "Why ATC speaks fast",
+      "Why the autopilot is your friend",
+      "Why a go-around is good airmanship"
+    ]]);
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'av-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('aviation-flight');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('aviation-flight');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

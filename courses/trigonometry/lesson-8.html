@@ -158,7 +158,7 @@
     import { initRitaChat } from '../../js/rita-chat.js';
     initNav('../../');
     initRitaChat('../../');
-    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { runExerciseSet, showLessonComplete, showMistakesReview } from '../../js/exercises.js';
     import { showBuddy, initSideCharacter } from '../../js/characters.js';
 
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -250,13 +250,63 @@
         spokenText: 'Daylight hours through the year can be modeled by a cosine function with what kind of period?',
         options: ['24 hours', '7 days', '30 days', '365 days'],
         correctIndex: 3
+      },
+      {
+        type: 'listening',
+        question: 'A 12 foot ladder leans against a wall at a 75 degree angle. How high does it reach, in feet, rounded to one decimal?',
+        spokenText: 'A twelve foot ladder leans against a wall at a seventy five degree angle. How high does it reach, in feet, rounded to one decimal?',
+        options: ['3.1', '8.5', '11.6', '12.0'],
+        correctIndex: 2
+      },
+      {
+        type: 'listening',
+        question: 'You stand 50 feet from a tree. The angle of elevation to the top is 45 degrees. How tall is the tree, in feet?',
+        spokenText: 'You stand fifty feet from a tree. The angle of elevation to the top is forty five degrees. How tall is the tree, in feet?',
+        answerType: 'fill-blank',
+        answer: '50'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: a Ferris wheel rider’s height over time can be modeled by a cosine function.',
+        spokenText: 'True or false. A Ferris wheel rider’s height over time can be modeled by a cosine function.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'A roof has a pitch of 4 over 12. What is the tangent of the roof angle, as a decimal rounded to two places?',
+        spokenText: 'A roof has a pitch of four over twelve. What is the tangent of the roof angle, as a decimal rounded to two places?',
+        options: ['0.25', '0.33', '0.50', '0.75'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'A 10-foot ladder standing straight up against a wall reaches a height of ___ feet.',
+        answer: '10'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Daylight hours over the year can be modeled with a period of ___ days.',
+        answer: '365'
+      },
+      {
+        type: 'fill-blank',
+        question: 'tangent of 45° equals ___.',
+        answer: '1'
+      },
+      {
+        type: 'fill-blank',
+        question: 'AC household current can be modeled by a ___ wave.',
+        answer: 'sine'
       }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
+    const mistakeIdx = new Set();
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      if (!isCorrect && index >= 0) mistakeIdx.add(index);
       const who = speakers[index % speakers.length];
       initSideCharacter(who, '../../');
       showBuddy(who, isCorrect ? 'correct' : 'wrong');
@@ -268,6 +318,7 @@
       nextHref: 'index.html',
       backHref: 'index.html'
     });
+    showMistakesReview(container, Array.from(mistakeIdx).map((i) => exercises[i]), { basePath: '../../' });
   </script>
 </body>
 </html>

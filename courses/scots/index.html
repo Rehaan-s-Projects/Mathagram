@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scots — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Scots</h1>
+    <p>Lallans — the Lowland Scots language. From everyday "Whit's the craic?" to Burns's poetry. Phonology (rolled r, /ʍ/, vowel system), pronouns (ye/youse), modal verbs, irregular verbs (gae, gaed, gaen), distinctive vocabulary (bairn, dreich, glaikit, blether), regional dialects (Doric, Glaswegian, Borders, Shetland, Orcadian, Ulster Scots), spelling traditions, the Scots Wikipedia debate, Scots in literature (Burns, Stevenson, Lochhead, Welsh), Scots in song &amp; comedy, Scots in education &amp; signage, the Scots Language Centre, official recognition under the European Charter for Regional or Minority Languages, and modern revival efforts. 79 units, 1182 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "Whit's Scots? — A Sister Language o English",
+      "The Scots Alphabet & Sounds",
+      "Greetings & Politeness — Hullo, Cheerio, Aye",
+      "Personal Pronouns — A, ye, youse, thay",
+      "Demonstratives — This, That, Yon",
+      "Definite Article — The Auld Man",
+      "Numbers — Ane, Twa, Three",
+      "Days, Months & Time",
+      "Family — Maw, Paw, Bairn, Granfaither",
+      "Body Parts — Heid, Lugs, Pinkie",
+      "Common Verbs — Tae be, tae hae, tae dae",
+      "Irregular Verbs — Gae / Gaed / Gaen",
+      "Modal Verbs — Cannae, Willnae, Maun",
+      "Negation — Nae, Naw, Dinnae",
+      "Question Words — Whit, Whaur, Whan, Wha",
+      "Plural Forms — Een, Shoon, Childer",
+      "Diminutives — Wee, Laddie, Lassie",
+      "Weather Vocabulary — Dreich, Driech, Smirr",
+      "Food & Drink — Tatties, Neeps, Haggis, Cranachan",
+      "Animals — Coo, Sheep, Hoose-mouse",
+      "House & Home — Hoose, But-and-Ben, Ingle",
+      "Clothing — Breeks, Bunnet, Sark",
+      "Adjectives — Glaikit, Crabbit, Couthy, Bonnie",
+      "Adverbs — Aye, Awa, Yince",
+      "Conjunctions — An, Bit, Forby",
+      "Prepositions — Anent, Ablo, Aboot",
+      "Tenses — Past, Present, Future in Scots",
+      "Reported Speech — She said tae me",
+      "Conditionals — Gin, Suid",
+      "Idioms — Lang may yer lum reek",
+      "Phonology — The /ʍ/ Sound (Whit, Whaur)",
+      "Phonology — The Rolled R",
+      "Phonology — The Aitken Vowel System",
+      "Doric — Aberdeen & North-East Scots",
+      "Glaswegian — Patter & Slang",
+      "Borders Scots & Lallans Heartland",
+      "Shetland & Orcadian — Norn Influences",
+      "Ulster Scots — Northern Ireland",
+      "Robert Burns — Auld Lang Syne, Tam o Shanter",
+      "Modern Scots — Welsh, Lochhead, Kelman, Leonard",
+      "Scots in Music — Folk, Hip-Hop, Punk",
+      "Scots Wikipedia & the 2020 Controversy",
+      "Scots in Schools — The 2020 Census Boost",
+      "Official Status — European Charter Recognition",
+      "Code-Switching — Scots & English",
+      "Spelling Conventions — Hou tae spell Scots",
+      "Translation — Bible & Shakespeare in Scots",
+      "Scots Comedy & TV — Still Game, Limmy",
+      "Building a Scots Practice Habit",
+      "Scots Mastery — Comprehensive Review",
+      "Burns Night & Address to a Haggis",
+      "Whisky Vocabulary — Drams, Distilleries, Maltings",
+      "Tartans, Kilts & Highland Dress",
+      "Ceilidh Vocabulary — Strip the Willow, Dashing White Sergeant",
+      "Fishing & Boating Vocabulary — Cobles, Creels, Yawls",
+      "Farming & Crofting — Stookin, Reapin, Mawin",
+      "Mining & Industrial Scots",
+      "Place Names — Aber-, Glen-, Dun-, Inver-, Strath-",
+      "Folk Songs — Loch Lomond, Wild Mountain Thyme",
+      "Children's Rhymes & Playground Scots",
+      "Highland vs Lowland — Cultural Divide",
+      "Edinburgh Scots — The Capital's Speech",
+      "Glaswegian Patter Deep — Pure Mental, Belter, Boggin",
+      "Aberdeen & Doric — Fit Like? Fa? Far?",
+      "Dundee Scots — Eh's Sayin, Twa Pehs, Eh & Plain",
+      "Shetlandic — Norn Words That Survived",
+      "Orcadian Vocabulary — Knowes, Geos, Skerries",
+      "Borders Scots — Hawick, Selkirk, Galashiels",
+      "Scots Words That Crossed Into English — Galore, Wee, Bonnie, Glen",
+      "Cognates with German, Dutch, Frisian & Norwegian",
+      "Scots vs Scottish Standard English (SSE)",
+      "Lorimer's Scots New Testament",
+      "Sir Walter Scott — Waverley & Heart of Midlothian",
+      "Robert Louis Stevenson — Kidnapped & Catriona",
+      "Lewis Grassic Gibbon — A Scots Quair Trilogy",
+      "Hugh MacDiarmid — A Drunk Man Looks at the Thistle",
+      "Liz Lochhead — Memo for Spring & Mary Queen of Scots",
+      "Irvine Welsh — Trainspotting Vocabulary"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    // Custom 12-lesson "Scots Express" unit (no checkpoint) so the total
+    // added is exactly 432 (28 themed units × 15 + 12 = 432).
+    units.push([unitNames.length + 1, "Scots Express — 12 Daily Phrases", [
+      "Hullo, foo are ye?",
+      "A'm fine, thank ye!",
+      "Whit's yer name?",
+      "Whaur ye fae?",
+      "Hou auld are ye?",
+      "Hou's the weather the day?",
+      "Whaur dae ye stey?",
+      "Foo dae ye spell that?",
+      "Whit time is't?",
+      "Cud A get … please?",
+      "Whaur's the loo?",
+      "Cheerio for nou!"
+    ]]);
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sct-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('scots');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('scots');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

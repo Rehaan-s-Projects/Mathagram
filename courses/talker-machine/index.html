@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talker Machine — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+
+    /* ─── Interactive AAC talking machine ─── */
+    .talker-section { max-width: 720px; margin: 28px auto 8px; padding: 0 16px; text-align: center; }
+    .talker-device {
+      background: linear-gradient(180deg, #1e293b, #0f172a);
+      border: 1px solid rgba(0,0,0,0.18);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 18px 38px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .talker-device::before {
+      content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+      width: 50px; height: 6px; background: rgba(255,255,255,0.10); border-radius: 999px;
+    }
+    .talker-screen {
+      background: #0a0f1d; border: 1px solid #1e293b;
+      border-radius: 12px; padding: 18px 16px;
+      min-height: 92px; text-align: left;
+      font-family: 'SF Mono', 'Courier New', monospace;
+      font-size: 1.2rem; color: #4ade80;
+      box-shadow: inset 0 0 22px rgba(74,222,128,0.18), inset 0 0 2px rgba(74,222,128,0.4);
+      letter-spacing: 0.04em; line-height: 1.45;
+      word-break: break-word;
+      position: relative;
+      margin-top: 8px;
+    }
+    .talker-screen::after {
+      content: ''; position: absolute; inset: 0; border-radius: 12px;
+      background: linear-gradient(180deg, rgba(74,222,128,0.04), transparent);
+      pointer-events: none;
+    }
+    .talker-screen.placeholder { color: #475569; font-style: italic; }
+    .talker-screen .caret { display: inline-block; width: 8px; background: #4ade80; margin-left: 2px; animation: blink 1s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .talker-controls { display: flex; gap: 8px; margin: 12px 0 8px; flex-wrap: wrap; justify-content: center; }
+    .talker-btn {
+      flex: 1; min-width: 90px; padding: 12px 14px;
+      border: none; border-radius: 10px; cursor: pointer; font-weight: 800;
+      font-size: 0.95rem; font-family: inherit; transition: transform 0.08s, background 0.15s;
+    }
+    .talker-btn.speak { background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; box-shadow: 0 6px 14px rgba(34,197,94,0.30); }
+    .talker-btn.speak:hover { transform: translateY(-1px); }
+    .talker-btn.clear { background: #334155; color: #f1f5f9; }
+    .talker-btn.back  { background: #475569; color: #f1f5f9; }
+    .talker-btn:active { transform: translateY(1px); }
+    .talker-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .talker-tabs { display: flex; gap: 4px; margin: 10px 0 8px; flex-wrap: wrap; }
+    .talker-tab {
+      padding: 5px 11px; font-size: 0.74rem; font-weight: 700;
+      background: rgba(255,255,255,0.06); color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.10); border-radius: 999px;
+      cursor: pointer;
+    }
+    .talker-tab.active { background: #f59e0b; color: #1e1b1b; border-color: #f59e0b; }
+
+    .word-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 6px; margin: 4px 0 6px;
+    }
+    .word-btn {
+      padding: 12px 8px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05); color: #f1f5f9;
+      border-radius: 10px; cursor: pointer; font-weight: 700;
+      font-size: 0.92rem; font-family: inherit;
+      transition: transform 0.06s, background 0.1s;
+    }
+    .word-btn:hover { background: rgba(255,255,255,0.10); }
+    .word-btn:active { transform: scale(0.95); background: #f59e0b; color: #1e1b1b; }
+    .word-btn.cat-pronoun { border-left: 3px solid #60a5fa; }
+    .word-btn.cat-verb    { border-left: 3px solid #f97316; }
+    .word-btn.cat-social  { border-left: 3px solid #22c55e; }
+    .word-btn.cat-feeling { border-left: 3px solid #ec4899; }
+    .word-btn.cat-question{ border-left: 3px solid #a78bfa; }
+    .word-btn.cat-noun    { border-left: 3px solid #fbbf24; }
+
+    .talker-typing { display: flex; gap: 6px; margin: 10px 0 4px; }
+    .talker-typing input {
+      flex: 1; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.06);
+      color: #f1f5f9; font-family: inherit; font-size: 0.95rem;
+    }
+    .talker-typing input::placeholder { color: #64748b; }
+    .talker-typing input:focus { outline: none; border-color: #f59e0b; }
+    .talker-typing button {
+      padding: 10px 16px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, #f59e0b, #d97706); color: #1e1b1b;
+      font-weight: 800; cursor: pointer;
+    }
+
+    .voice-row { display: flex; gap: 8px; margin: 8px 0 0; align-items: center; font-size: 0.78rem; color: #94a3b8; }
+    .voice-row label { font-weight: 700; }
+    .voice-row select {
+      flex: 1; padding: 6px 8px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); color: #f1f5f9;
+      border: 1px solid rgba(255,255,255,0.10); font-family: inherit; font-size: 0.85rem;
+    }
+    .voice-row select:focus { outline: none; border-color: #f59e0b; }
+
+    .talker-hint { font-size: 0.82rem; color: var(--color-text-muted, #94a3b8); margin-top: 10px; }
+    .talker-hint strong { color: var(--color-text-secondary, #cbd5e1); }
+    @media (max-width: 540px) {
+      .talker-screen { font-size: 1.02rem; min-height: 72px; padding: 14px 12px; }
+      .word-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+      .word-btn { padding: 10px 6px; font-size: 0.84rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Talker Machine</h1>
+    <p>Augmentative and Alternative Communication (AAC) from letter boards to Stephen Hawking&rsquo;s DECtalk to modern eye-tracking SGDs &mdash; symbol systems (PCS, Bliss, SymbolStix), picture boards, speech-generating devices, switch &amp; eye-gaze access, Proloquo2Go / TouchChat / LAMP, core vs fringe vocabulary, aided language stimulation, TTS voices, and AAC for autism, ALS, cerebral palsy &amp; stroke. 225 lessons across 15 units.</p>
+  </header>
+
+  <section class="talker-section" aria-label="Interactive AAC talking machine">
+    <div class="talker-device" role="application" aria-label="Speech-generating device demo">
+      <div class="talker-screen placeholder" id="talker-screen">Tap a word below, or type a sentence, then press <strong>Speak</strong>.<span class="caret">&nbsp;</span></div>
+      <div class="talker-controls">
+        <button type="button" class="talker-btn speak" id="talker-speak">🔊 Speak</button>
+        <button type="button" class="talker-btn back" id="talker-back" title="Delete last word">⌫</button>
+        <button type="button" class="talker-btn clear" id="talker-clear">Clear</button>
+      </div>
+      <div class="talker-tabs" role="tablist">
+        <button type="button" class="talker-tab active" data-cat="core">Core Words</button>
+        <button type="button" class="talker-tab" data-cat="feelings">Feelings</button>
+        <button type="button" class="talker-tab" data-cat="needs">Needs</button>
+        <button type="button" class="talker-tab" data-cat="questions">Questions</button>
+        <button type="button" class="talker-tab" data-cat="phrases">Phrases</button>
+      </div>
+      <div class="word-grid" id="talker-grid"></div>
+      <div class="talker-typing">
+        <input type="text" id="talker-type" placeholder="Or type any text…" autocomplete="off">
+        <button type="button" id="talker-add-text">Add</button>
+      </div>
+      <div class="voice-row">
+        <label for="talker-voice">Voice</label>
+        <select id="talker-voice"><option value="">Default</option></select>
+        <label for="talker-rate" style="margin-left:8px;">Speed</label>
+        <input type="range" id="talker-rate" min="0.5" max="1.6" step="0.05" value="1" style="flex:0 0 90px;">
+      </div>
+    </div>
+    <p class="talker-hint">A working <strong>speech-generating device</strong> — the same kind of digital "talker" used by people with ALS, cerebral palsy, autism, or after a stroke. Build a sentence with the buttons (color-coded by Fitzgerald Key: <span style="color:#60a5fa">pronouns</span> · <span style="color:#f97316">verbs</span> · <span style="color:#fbbf24">nouns</span> · <span style="color:#22c55e">social</span> · <span style="color:#ec4899">feelings</span> · <span style="color:#a78bfa">questions</span>), pick a voice, and tap Speak.</p>
+  </section>
+
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Each unit gets 15 short, distinct, Duolingo-style lesson titles
+    // (14 teaching lessons + 1 Checkpoint). No more repetitive
+    // "Unit Name — Lesson N" — every lesson now tells you what you'll learn.
+    const units = [
+      [1, "What Is a Talker Machine?", [
+        "What is AAC?",
+        "Aided vs Unaided",
+        "Low-tech to High-tech",
+        "Who uses AAC?",
+        "Speech vs Language",
+        "Communication intent",
+        "Why \"Augmentative\"?",
+        "Why \"Alternative\"?",
+        "Famous AAC users",
+        "Daily life with AAC",
+        "Try a digital talker",
+        "The Fitzgerald Key",
+        "Core vs Fringe (intro)",
+        "AAC and identity",
+        "Unit 1 Checkpoint"
+      ]],
+      [2, "History — Letter Boards to Hawking's DECtalk", [
+        "Early letter boards",
+        "The 1960s pioneers",
+        "Birth of the SGD",
+        "DEC and DECtalk (1984)",
+        "\"Perfect Paul\"",
+        "Hawking's tracheotomy",
+        "The cheek-muscle switch",
+        "Intel's ACAT software",
+        "Tobii Dynavox era",
+        "The iPad revolution",
+        "Modern app explosion",
+        "Eye-gaze breakthroughs",
+        "Voice banking begins",
+        "AAC today",
+        "Unit 2 Checkpoint"
+      ]],
+      [3, "Types of AAC — Low-Tech to High-Tech", [
+        "Low-tech defined",
+        "Letter boards",
+        "Picture binders",
+        "PODD books",
+        "Mid-tech intro",
+        "BIGmack & GoTalk",
+        "High-tech intro",
+        "SGD basics",
+        "Dedicated vs tablet",
+        "iOS & iPadOS apps",
+        "Android AAC",
+        "Eye-gaze devices",
+        "Switch-accessed AAC",
+        "Choosing the right type",
+        "Unit 3 Checkpoint"
+      ]],
+      [4, "Symbol Systems — PCS, Bliss, SymbolStix", [
+        "What is a symbol system?",
+        "PCS by Mayer-Johnson",
+        "Charles Bliss & Bliss",
+        "SymbolStix style",
+        "Widgit Symbols",
+        "ARASAAC (open, free)",
+        "Photos vs symbols",
+        "Iconicity & abstraction",
+        "Color-coded grids",
+        "Categorization",
+        "Multi-symbol messages",
+        "Personal symbols",
+        "Cross-system literacy",
+        "Picking a symbol set",
+        "Unit 4 Checkpoint"
+      ]],
+      [5, "Picture Boards & Communication Books", [
+        "Picture board basics",
+        "PODD organization",
+        "Topic pages",
+        "People page",
+        "Feelings page",
+        "Quick-chat strips",
+        "E-Tran (eye-gaze frame)",
+        "Partner-assisted scanning",
+        "Direct selection",
+        "Indirect selection",
+        "Designing for an individual",
+        "Lamination & durability",
+        "Carrying it everywhere",
+        "Pairing with high-tech",
+        "Unit 5 Checkpoint"
+      ]],
+      [6, "Speech-Generating Devices (SGDs)", [
+        "What is an SGD?",
+        "Dedicated vs consumer",
+        "Dynamic display",
+        "Static display",
+        "Tobii Dynavox I-13",
+        "Accent 1400 & 1000",
+        "Saltillo NovaChat",
+        "Smartbox Grid Pad",
+        "Eye-gaze SGDs",
+        "Switch-scan SGDs",
+        "Durability & cases",
+        "Battery life",
+        "Mounting & positioning",
+        "Programming an SGD",
+        "Unit 6 Checkpoint"
+      ]],
+      [7, "Eye-Tracking & Switch Access", [
+        "Cameras & infrared",
+        "Calibrating eye gaze",
+        "Dwell selection",
+        "Blink selection",
+        "Tobii eye-trackers",
+        "EyeTech & Irisbond",
+        "Big single switches",
+        "Sip-and-puff switches",
+        "Cheek-muscle switches",
+        "Head-tracking",
+        "Linear scanning",
+        "Row-column scanning",
+        "Step scanning",
+        "Reducing fatigue",
+        "Unit 7 Checkpoint"
+      ]],
+      [8, "Modern AAC Apps (Proloquo2Go, TouchChat, LAMP)", [
+        "AssistiveWare apps",
+        "Proloquo2Go",
+        "Proloquo (the next-gen)",
+        "Saltillo TouchChat",
+        "WordPower vocabularies",
+        "MultiChat 15",
+        "LAMP Words for Life",
+        "CoughDrop",
+        "Avaz AAC",
+        "Speak for Yourself",
+        "Niki Talk",
+        "TippyTalk",
+        "Choosing an app",
+        "Trialing & funding",
+        "Unit 8 Checkpoint"
+      ]],
+      [9, "Vocabulary — Core vs Fringe", [
+        "What is core?",
+        "What is fringe?",
+        "The 80/20 rule",
+        "Top-20 core words",
+        "Pronouns are core",
+        "Verbs are core",
+        "Adverbs & adjectives",
+        "Fringe by topic",
+        "Personal fringe",
+        "Cultural fringe",
+        "Balancing the board",
+        "Predictable layouts",
+        "Motor planning & core",
+        "Expanding vocab over time",
+        "Unit 9 Checkpoint"
+      ]],
+      [10, "Modeling AAC — Aided Language Stimulation", [
+        "What is modeling?",
+        "Why model?",
+        "Aided language stimulation",
+        "Model + speak",
+        "Modeling in routines",
+        "Modeling in play",
+        "Wait time",
+        "Pause & expect",
+        "Communication temptations",
+        "Gentle sabotage",
+        "Modeling with peers",
+        "Modeling with siblings",
+        "Recasting vs correcting",
+        "Tracking modeling",
+        "Unit 10 Checkpoint"
+      ]],
+      [11, "Voices & Text-to-Speech Engines", [
+        "Formant synthesis",
+        "Concatenative TTS",
+        "Neural TTS (WaveNet)",
+        "Apple system voices",
+        "Acapela voices",
+        "Cereproc voices",
+        "Amazon Ivona / Polly",
+        "Microsoft voices",
+        "Eloquence & DECtalk",
+        "Picking a voice",
+        "Voice banking intro",
+        "Message banking",
+        "Apple's Personal Voice",
+        "Voice and identity",
+        "Unit 11 Checkpoint"
+      ]],
+      [12, "AAC for Autism", [
+        "Speech vs communication",
+        "Minimally verbal autism",
+        "PECS basics",
+        "Motor planning & LAMP",
+        "Stim & echolalia",
+        "Gestalt language",
+        "Modeling for autism",
+        "Choice-making",
+        "Behavior is communication",
+        "Reducing prompt dependence",
+        "Trauma-informed AAC",
+        "Neurodiversity & AAC",
+        "AAC at school",
+        "Adolescent & adult AAC",
+        "Unit 12 Checkpoint"
+      ]],
+      [13, "AAC for ALS, Cerebral Palsy & Stroke", [
+        "ALS progression",
+        "Voice banking for ALS",
+        "Eye-gaze for late ALS",
+        "Cerebral palsy basics",
+        "Motor speech disorders",
+        "Switch access for CP",
+        "Stroke & aphasia",
+        "Broca's vs Wernicke's",
+        "AAC after stroke",
+        "TBI and AAC",
+        "Locked-in syndrome",
+        "Pediatric vs adult AAC",
+        "Care team coordination",
+        "Long-term planning",
+        "Unit 13 Checkpoint"
+      ]],
+      [14, "Funding, Insurance & Schools", [
+        "SGD as medical equipment",
+        "Medicare coverage",
+        "Medicaid coverage",
+        "Private insurance",
+        "Veterans Affairs",
+        "IEPs & IDEA",
+        "Section 504 plans",
+        "School-purchased AAC",
+        "Trial-period rules",
+        "Charity & nonprofit funding",
+        "Voc rehab funding",
+        "Documentation & evals",
+        "Appeals process",
+        "International funding",
+        "Unit 14 Checkpoint"
+      ]],
+      [15, "Talker Machine Mastery", [
+        "Review — what AAC is",
+        "Review — history",
+        "Review — types",
+        "Review — symbol systems",
+        "Review — boards & books",
+        "Review — SGDs",
+        "Review — access methods",
+        "Review — modern apps",
+        "Review — core vs fringe",
+        "Review — modeling",
+        "Review — voices",
+        "Review — populations",
+        "Review — funding",
+        "Putting it all together",
+        "Final Mastery Checkpoint"
+      ]]
+    ];
+    let n = 0;
+    const lessons = [];
+    // Interactive lesson pages by global position:
+    //   • Lesson 1 (Unit 1, Lesson 1) is the full guided "What Is a Talker
+    //     Machine?" practice with a working mini digital talker.
+    //   • Every other lesson links to quiz.html?unit=U&lesson=L — a unit-aware
+    //     multiple-choice quiz driven by the shared quizzes.js question bank.
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        const lessonPos = i + 1;
+        let href;
+        if (n === 1) href = 'lesson-1.html';
+        else href = `quiz.html?unit=${u}&lesson=${lessonPos}`;
+        lessons.push({ id: 'talker-'+n, title: t, href, unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('talker-machine');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('talker-machine');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+
+  <script>
+    // ─── Interactive AAC "Talker" widget ──────────────────────────────────
+    // Builds a sentence from category buttons + free-typed text and reads it
+    // via the browser's SpeechSynthesis API. Mirrors the layout of a real
+    // Speech-Generating Device (Proloquo2Go / TouchChat style).
+    (function () {
+      // Word categories. `cat` controls the colored left border (Fitzgerald Key).
+      const CATEGORIES = {
+        core: [
+          { w: 'I',       cat: 'pronoun' },
+          { w: 'you',     cat: 'pronoun' },
+          { w: 'we',      cat: 'pronoun' },
+          { w: 'they',    cat: 'pronoun' },
+          { w: 'it',      cat: 'pronoun' },
+          { w: 'want',    cat: 'verb' },
+          { w: 'need',    cat: 'verb' },
+          { w: 'like',    cat: 'verb' },
+          { w: 'have',    cat: 'verb' },
+          { w: 'go',      cat: 'verb' },
+          { w: 'see',     cat: 'verb' },
+          { w: 'do',      cat: 'verb' },
+          { w: 'play',    cat: 'verb' },
+          { w: 'eat',     cat: 'verb' },
+          { w: 'drink',   cat: 'verb' },
+          { w: 'help',    cat: 'verb' },
+          { w: 'more',    cat: 'noun' },
+          { w: 'this',    cat: 'noun' },
+          { w: 'that',    cat: 'noun' },
+          { w: 'something', cat: 'noun' },
+          { w: 'yes',     cat: 'social' },
+          { w: 'no',      cat: 'social' },
+          { w: 'please',  cat: 'social' },
+          { w: 'thank you', cat: 'social' }
+        ],
+        feelings: [
+          { w: 'happy',  cat: 'feeling' },
+          { w: 'sad',    cat: 'feeling' },
+          { w: 'tired',  cat: 'feeling' },
+          { w: 'angry',  cat: 'feeling' },
+          { w: 'scared', cat: 'feeling' },
+          { w: 'excited',cat: 'feeling' },
+          { w: 'bored',  cat: 'feeling' },
+          { w: 'sick',   cat: 'feeling' },
+          { w: 'in pain',cat: 'feeling' },
+          { w: 'okay',   cat: 'feeling' },
+          { w: 'great',  cat: 'feeling' },
+          { w: 'love',   cat: 'feeling' },
+          { w: 'miss',   cat: 'feeling' },
+          { w: 'proud',  cat: 'feeling' }
+        ],
+        needs: [
+          { w: 'water',     cat: 'noun' },
+          { w: 'food',      cat: 'noun' },
+          { w: 'bathroom',  cat: 'noun' },
+          { w: 'medicine',  cat: 'noun' },
+          { w: 'phone',     cat: 'noun' },
+          { w: 'help',      cat: 'verb' },
+          { w: 'rest',      cat: 'verb' },
+          { w: 'doctor',    cat: 'noun' },
+          { w: 'family',    cat: 'noun' },
+          { w: 'home',      cat: 'noun' },
+          { w: 'stop',      cat: 'verb' },
+          { w: 'wait',      cat: 'verb' }
+        ],
+        questions: [
+          { w: 'what?',    cat: 'question' },
+          { w: 'who?',     cat: 'question' },
+          { w: 'where?',   cat: 'question' },
+          { w: 'when?',    cat: 'question' },
+          { w: 'why?',     cat: 'question' },
+          { w: 'how?',     cat: 'question' },
+          { w: 'how much?',cat: 'question' },
+          { w: 'how many?',cat: 'question' },
+          { w: 'is it?',   cat: 'question' },
+          { w: 'are you?', cat: 'question' },
+          { w: 'do you?',  cat: 'question' },
+          { w: 'can you?', cat: 'question' }
+        ],
+        phrases: [
+          { w: 'Hello, my name is...',  cat: 'social' },
+          { w: 'Nice to meet you.',     cat: 'social' },
+          { w: 'How are you today?',    cat: 'social' },
+          { w: 'Thank you so much.',    cat: 'social' },
+          { w: 'I love you.',           cat: 'feeling' },
+          { w: 'I need help, please.',  cat: 'social' },
+          { w: 'Could you slow down?',  cat: 'social' },
+          { w: 'I would like some water.', cat: 'social' },
+          { w: 'Please call my family.',   cat: 'social' },
+          { w: "I'm fine, thanks.",        cat: 'social' },
+          { w: 'I don\'t understand.',     cat: 'social' },
+          { w: 'Goodbye!',                  cat: 'social' }
+        ]
+      };
+
+      const screenEl  = document.getElementById('talker-screen');
+      const speakBtn  = document.getElementById('talker-speak');
+      const backBtn   = document.getElementById('talker-back');
+      const clearBtn  = document.getElementById('talker-clear');
+      const gridEl    = document.getElementById('talker-grid');
+      const tabs      = document.querySelectorAll('.talker-tab');
+      const typeInput = document.getElementById('talker-type');
+      const addTextBtn= document.getElementById('talker-add-text');
+      const voiceSel  = document.getElementById('talker-voice');
+      const rateSel   = document.getElementById('talker-rate');
+      if (!screenEl) return;
+
+      const sentenceTokens = [];
+
+      function renderScreen() {
+        if (sentenceTokens.length === 0) {
+          screenEl.classList.add('placeholder');
+          screenEl.innerHTML = 'Tap a word below, or type a sentence, then press <strong>Speak</strong>.<span class="caret">&nbsp;</span>';
+        } else {
+          screenEl.classList.remove('placeholder');
+          screenEl.innerHTML = sentenceTokens.join(' ') + '<span class="caret">&nbsp;</span>';
+        }
+      }
+      function addToken(t) { sentenceTokens.push(t); renderScreen(); }
+
+      function renderGrid(cat) {
+        const words = CATEGORIES[cat] || [];
+        gridEl.innerHTML = '';
+        for (const item of words) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'word-btn cat-' + item.cat;
+          b.textContent = item.w;
+          b.addEventListener('click', () => addToken(item.w));
+          gridEl.appendChild(b);
+        }
+      }
+      renderGrid('core');
+      tabs.forEach(t => t.addEventListener('click', () => {
+        tabs.forEach(x => x.classList.toggle('active', x === t));
+        renderGrid(t.dataset.cat);
+      }));
+
+      backBtn.addEventListener('click', () => { sentenceTokens.pop(); renderScreen(); });
+      clearBtn.addEventListener('click', () => { sentenceTokens.length = 0; renderScreen(); });
+      addTextBtn.addEventListener('click', () => {
+        const t = typeInput.value.trim();
+        if (t) { addToken(t); typeInput.value = ''; }
+      });
+      typeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); addTextBtn.click(); }
+      });
+
+      // ─── Speech synthesis ───────────────────────────────────────────────
+      const synth = window.speechSynthesis;
+      function populateVoices() {
+        if (!synth) return;
+        const voices = synth.getVoices();
+        // Keep only English-locale voices first, others after.
+        const en = voices.filter(v => /^en/i.test(v.lang));
+        const rest = voices.filter(v => !/^en/i.test(v.lang));
+        const all = en.concat(rest);
+        const cur = voiceSel.value;
+        voiceSel.innerHTML = '<option value="">Default voice</option>' +
+          all.map(v => `<option value="${v.name}">${v.name} — ${v.lang}</option>`).join('');
+        if (cur) voiceSel.value = cur;
+      }
+      if (synth) {
+        populateVoices();
+        if (typeof synth.onvoiceschanged !== 'undefined') synth.onvoiceschanged = populateVoices;
+      } else {
+        speakBtn.disabled = true;
+        speakBtn.textContent = '🔇 No TTS in this browser';
+      }
+
+      speakBtn.addEventListener('click', () => {
+        if (!synth || sentenceTokens.length === 0) return;
+        const text = sentenceTokens.join(' ').replace(/\s+([.,?!])/g, '$1');
+        synth.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        const chosen = voiceSel.value;
+        if (chosen) {
+          const v = synth.getVoices().find(x => x.name === chosen);
+          if (v) u.voice = v;
+        }
+        u.rate = parseFloat(rateSel.value) || 1;
+        synth.speak(u);
+      });
+    })();
+  </script>
+</body>
+</html>

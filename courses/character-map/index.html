@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Map — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Character Map</h1>
+    <p>Every character a keyboard can produce — ASCII &amp; Unicode foundations, Latin diacritics, Cyrillic, Greek, IPA, math &amp; currency symbols, punctuation, arrows, CJK ideographs, Hangul, Arabic, Hebrew, Devanagari, emoji, combining marks, ligatures, old scripts (runes, hieroglyphs), Braille, Morse, NATO phonetic alphabet, mojibake &amp; encoding fixes, Vietnamese tonal marks, Polish/Czech/Hungarian/Turkish letters, Esperanto hat letters, Romanization systems &amp; Pinyin tones, Roman numerals, fractions, letterlike math symbols, card &amp; chess suits, music notation, zodiac &amp; planetary symbols, dingbats &amp; Wingdings, whitespace &amp; zero-width characters, emoji modifiers &amp; flags, Unicode normalization, homoglyph spoofing, Punycode, HTML entities, kaomoji, ASCII art, Thai/Lao/Khmer/Burmese/Tibetan/Mongolian, all South &amp; other Indic scripts, African scripts (Ge'ez, Tifinagh, Adlam, N'Ko), Indigenous syllabics, Coptic/Gothic/Glagolitic, CJK traditional vs simplified, Hangul Jamo, furigana &amp; vertical writing, ANSI terminal escapes, regex character classes — and how to type them all (Alt codes, AltGr, Compose key, IMEs, layouts). 1140 lessons across 76 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "ASCII & Plain Text",
+      "Unicode Basics — Code Points, UTF-8 / 16 / 32",
+      "Latin Diacritics — À É Ñ Ü Ô",
+      "Western European Letters — Ç ß Ø Æ Œ",
+      "Cyrillic Alphabet — А Б В Г Д",
+      "Greek Alphabet — Α Β Γ Δ Ε",
+      "IPA — International Phonetic Alphabet",
+      "Mathematical Symbols — ∑ ∫ ∂ √ ∞ ≠ ≤",
+      "Currency Symbols — € £ ¥ ₹ ₽ ₿",
+      "Punctuation — Em Dash, En Dash, Ellipsis, Smart Quotes",
+      "Arrows & Pointers — ← → ↔ ⇒ ⇔",
+      "Box Drawing & Geometric Shapes — ▲ ● ■ ░",
+      "Chinese Hanzi — 你 好 中 国",
+      "Japanese — Hiragana, Katakana & Kanji",
+      "Korean Hangul — ㄱ ㄴ ㄷ ㅏ ㅓ",
+      "Arabic Script — ا ب ت ث ج",
+      "Hebrew Script — א ב ג ד ה",
+      "Devanagari & Indic Scripts — अ आ इ ई उ",
+      "Emoji & Pictographs — 😀 🎉 🌍 ❤️",
+      "Typing Special Characters — Alt Codes, AltGr, Compose Key, IME",
+      "Keyboard Layouts — QWERTY, AZERTY, Dvorak, Colemak",
+      "Combining Characters & Diacritic Stacking",
+      "Right-to-Left Text & the Bidi Algorithm",
+      "Ligatures — fi, fl, æ, œ, ﷲ",
+      "Old Scripts — Runes, Hieroglyphs, Cuneiform, Linear B",
+      "Braille — Six-Dot Tactile Alphabet",
+      "Morse Code — Dots, Dashes & SOS",
+      "Phonetic Alphabets — NATO Alpha-Bravo-Charlie",
+      "Mojibake & Encoding Errors — Why Text Goes Garbled",
+      "Vietnamese Diacritics — Quốc Ngữ Tonal Marks",
+      "Polish, Czech & Slovak — Ą Ć Č Ď Ł Ś Ż",
+      "Hungarian Special Letters — Ő Ű É Á Í Ó Ú",
+      "Turkish — Dotted İ vs Dotless ı, Ş, Ğ, Ç, Ü, Ö",
+      "Esperanto Hat Letters — Ĉ Ĝ Ĥ Ĵ Ŝ Ŭ",
+      "Welsh, Irish & Scottish Gaelic Letters — Ŵ Ŷ Á Í Ḃ",
+      "Faroese & Icelandic — Þ Ð Æ Ý",
+      "Romanization Systems — Pinyin, Hepburn, ISO 9, Wade-Giles",
+      "Pinyin Tone Marks — ā á ǎ à",
+      "Roman Numerals — I V X L C D M",
+      "Number Systems Across Scripts — Arabic, Devanagari, CJK, Tamil",
+      "Fractions & Vulgar Fractions — ½ ⅓ ¼ ⅛",
+      "Superscripts & Subscripts — H₂O, x²",
+      "Letterlike Symbols — ℵ ℝ ℂ ℕ ℚ ℤ",
+      "Card Suits — ♠ ♥ ♦ ♣",
+      "Chess Symbols — ♔ ♕ ♖ ♗ ♘ ♙",
+      "Music Notation — ♩ ♪ ♫ 𝄞 𝄢",
+      "Astrology & Planetary Symbols — ☉ ☿ ♀ ♁ ♂ ♃",
+      "Zodiac Signs — ♈ ♉ ♊ ♋ ♌ ♍",
+      "Trademark & Legal Symbols — ® © ™ ℠",
+      "Dingbats — ✓ ✗ ✪ ❄ ★",
+      "Wingdings & Webdings — Decorative Symbol Fonts",
+      "Whitespace Characters — NBSP, EM, EN, Hair, Thin",
+      "Zero-Width Characters — ZWJ, ZWNJ, ZWSP, BOM",
+      "Variation Selectors & Emoji Style — FE0F vs FE0E",
+      "Skin-Tone Modifiers & ZWJ Emoji Sequences — 👨‍👩‍👧",
+      "Flags — Regional Indicator Symbols 🇺🇸 🇯🇵 🇧🇷",
+      "Unicode Normalization — NFC, NFD, NFKC, NFKD",
+      "Homoglyphs & Spoofing — IDN Homograph Attacks",
+      "Punycode & Internationalized Domain Names",
+      "HTML Entities — &amp; &nbsp; &copy; &mdash;",
+      "Emoticons & Kaomoji — :) Western vs (^_^) Eastern",
+      "ASCII Art & Text Drawings",
+      "Thai Script — ก ข ค ง",
+      "Lao, Khmer & Burmese Scripts — ກ ក က",
+      "Tibetan & Mongolian Vertical Scripts",
+      "South Indian Scripts — Tamil, Telugu, Kannada, Malayalam",
+      "Other Indic — Bengali, Gurmukhi, Gujarati, Odia, Sinhala",
+      "African Scripts — Ge'ez, Tifinagh, Adlam, N'Ko, Vai",
+      "Indigenous Scripts — Cherokee, Inuktitut Syllabics, Cree",
+      "Coptic, Gothic & Glagolitic — Ⲁ 𐌰 Ⰰ",
+      "CJK Variations — Traditional vs Simplified Chinese",
+      "Korean Jamo & Hangul Composition — ㄱ + ㅏ → 가",
+      "Furigana, Ruby Text & Vertical Writing — 漢字",
+      "ANSI Escape Codes & Terminal Drawing",
+      "Regex Character Classes — \\w \\d \\s \\p{L}",
+      "Character Map Mastery"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'cm-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('character-map');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('character-map');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Information Theory — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 720px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+    <h1>Information Theory</h1>
+    <p>The mathematics of communication — Shannon's 1948 foundation through modern capacity-approaching codes. Bits, surprise &amp; self-information, entropy and its joint, conditional, cross &amp; relative (KL) flavors, mutual information, source coding (Huffman, arithmetic, Lempel-Ziv, DEFLATE, BWT, Brotli, Zstandard), lossy &amp; perceptual coding (JPEG, MP3, AAC, Opus, H.264, AV1), Kolmogorov complexity, noisy channels &amp; the Shannon-Hartley capacity theorem, error detection (parity, checksums, CRC) &amp; correction (Hamming, Reed-Solomon, BCH, Golay, convolutional + Viterbi, turbo, LDPC, polar), rate-distortion theory, quantum information (qubits, no-cloning, Holevo bound), and real-world applications from Voyager to 5G to deep learning's cross-entropy loss. 30 units · 450 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"History & Shannon's 1948 Paper",["Pre-1948 — Nyquist (1924) & Hartley (1928)","Claude Shannon — A Mathematical Theory of Communication","Bell Labs in the 1940s","The Shannon–Weaver Communication Model","Norbert Wiener & Cybernetics","Alan Turing's Wartime Information Work","Kolmogorov's Independent Foundations","The Birth of the \"Bit\" — John Tukey (1946)","Pre-Shannon Telegraphy & Morse","Information Theory Meets Statistics","The Shannon Limit — A New Constant of Nature","Impact on Communications Engineering","Information Theory in Cryptography (Shannon 1949)","Information Theory in the 21st Century","History & Shannon Checkpoint"]],
+      [2,"What Is Information?",["Information vs Data vs Knowledge","The Surprise Definition — Less Likely = More Info","Information Has No Meaning (Mathematically)","Why \"Bits\" — The Yes/No Choice","Information & Probability — The Link","Communication = Reducing Uncertainty","Source, Channel, Receiver Model","Noise & The Information Channel","Signal vs Message vs Information","Discrete vs Continuous Information","Memoryless vs With-Memory Sources","Stationary & Ergodic Sources","Information Sources in Real Life","Quantifying Surprise — Toward log₂","What Is Information Checkpoint"]],
+      [3,"Probability for Information Theory",["Random Variables — Discrete & Continuous","Probability Distributions (PMF & PDF)","Expectation E[X] & Variance","Joint Distributions p(x,y)","Marginal Distributions","Conditional Probability p(y|x)","Bayes' Theorem","Independence vs Conditional Independence","The Law of Large Numbers","The Central Limit Theorem","Bernoulli & Binomial Distributions","Poisson & Geometric Distributions","The Gaussian (Normal) Distribution","Entropy of Common Distributions","Probability Foundations Checkpoint"]],
+      [4,"Bits & Binary Foundations",["The Bit — 0 or 1","Base-2 Counting","Powers of 2 — 1024, 65536, …","Binary Addition & Subtraction","Two's Complement (Negative Numbers)","Hexadecimal as Compressed Binary","Nibbles, Bytes & Words","ASCII (7-bit) Encoding","Unicode & UTF-8","Bitwise Operators — AND, OR, XOR, NOT","Bit-Shifts & Masks","Bit-Packing & Bitmaps","Binary File Formats","Why Binary in Hardware","Bits & Binary Checkpoint"]],
+      [5,"Self-Information & Surprise",["Defining I(x) = −log₂ p(x)","Why Logarithm? Additivity of Surprise","Bits, Nats (log e), Dits (log 10)","Information of a Certain Event = 0","Information of an Impossible Event = ∞","Independent Events Add Their Information","Worked Example — Coin Flips","Worked Example — Dice Rolls","Worked Example — English Letters","Pointwise Mutual Information","Self-Information in Linguistics","Self-Information in Compression","Self-Information & Word Embeddings","Code Length ≈ Self-Information","Self-Information Checkpoint"]],
+      [6,"Entropy H(X)",["Defining H(X) = −Σ p(x) log p(x)","Entropy as Expected Surprise","The Binary Entropy Function H₂(p)","Maximum Entropy — Uniform Distribution","Minimum Entropy — Deterministic Distribution","Worked Example — Fair vs Biased Coins","Worked Example — Dice & Decks","Entropy of English Text (~1 bit/character)","Entropy Is Always Non-Negative","Entropy ≤ log |X|","Concavity of Entropy","Rényi Entropy & Tsallis Entropy","Differential Entropy (Continuous Variables)","Entropy in Statistical Mechanics (Boltzmann)","Entropy Checkpoint"]],
+      [7,"Joint, Conditional & Cross Entropy",["Joint Entropy H(X,Y)","Conditional Entropy H(Y|X)","Chain Rule — H(X,Y) = H(X) + H(Y|X)","Cross Entropy H(p,q)","Cross Entropy as a Loss Function","Cross Entropy in Machine Learning","Conditional Entropy ≥ 0","H(X,Y) ≥ max(H(X), H(Y))","Conditioning Reduces Entropy","Markov Chains & Conditional Entropy","Entropy Rate H(𝒳) for Sources","Entropy of Stationary Sources","Computing Entropy from Samples","Estimation Bias in Empirical Entropy","Joint & Conditional Entropy Checkpoint"]],
+      [8,"Mutual Information & KL Divergence",["Mutual Information I(X;Y)","I(X;Y) = H(X) + H(Y) − H(X,Y)","I(X;Y) = H(X) − H(X|Y)","Non-Negativity of Mutual Information","Symmetry — I(X;Y) = I(Y;X)","The Data Processing Inequality","Kullback–Leibler Divergence","KL Is Not Symmetric","KL ≥ 0 (Gibbs' Inequality)","Jensen–Shannon Divergence","Total Variation Distance","Mutual Information in Feature Selection","Information Bottleneck in Neural Nets","Variational Bounds on MI","Mutual Information Checkpoint"]],
+      [9,"Source Coding Basics",["Alphabets & Symbols","Codes & Codewords","Fixed-Length vs Variable-Length Codes","Uniquely Decodable Codes","Prefix (Instantaneous) Codes","The Code Tree","Kraft's Inequality","McMillan's Inequality","Average Codeword Length","Code Efficiency & Redundancy","Decoding a Prefix Code","Block Codes vs Symbol-by-Symbol","Non-Singular Codes","Code Construction Strategies","Source Coding Basics Checkpoint"]],
+      [10,"Source Coding Theorem",["Shannon's First (Source Coding) Theorem","L_avg ≥ H(X) — The Lower Bound","Achievability of H(X)","The Asymptotic Equipartition Property","Typical Sets","Counting Typical Sequences","Compression Limit & Block Length","Per-Symbol vs Per-Block Encoding","Universal Source Coding","Empirical Compression vs the Bound","English Text — Theoretical Minimum","Compression of Music & Images","Existence of Universal Compressors","Source Coding in Practice","Source Coding Theorem Checkpoint"]],
+      [11,"Huffman Coding",["The Greedy Construction Algorithm","The Huffman Tree","Step-by-Step Example","Why Huffman Is Optimal (Among Prefix Codes)","Bound — H ≤ L_avg < H + 1","Huffman vs Fixed-Length","Extended Huffman (Block Symbols)","Adaptive Huffman Coding","Huffman in JPEG","Huffman in DEFLATE / gzip","Huffman Decoding (Lookup Tables)","Canonical Huffman Codes","Length-Limited Huffman","When Huffman Falls Short","Huffman Coding Checkpoint"]],
+      [12,"Arithmetic Coding",["The Idea — A Code Per Message, Not Per Symbol","Encoding as a Number in [0, 1)","Interval Subdivision","Worked Example — Encoding a Sequence","Decoding by Successive Refinement","Finite-Precision Arithmetic Coding","Range Coding (Integer Version)","Adaptive Arithmetic Coding","Arithmetic vs Huffman — When to Use","Patent History (1979–2003)","Arithmetic Coding in JBIG / JBIG2","CABAC in H.264 / HEVC","PPM — Prediction + Arithmetic","Asymmetric Numeral Systems (ANS)","Arithmetic Coding Checkpoint"]],
+      [13,"Lempel-Ziv Family",["Dictionary-Based Compression — The Idea","LZ77 — Sliding Window","LZ77 — Length–Distance Pairs","LZ78 — Explicit Dictionary","LZW — Lempel-Ziv-Welch","The LZW Decoder Trick","Asymptotic Optimality of LZ","GIF & PNG — LZW vs DEFLATE","Unix compress & LZW Patent History","Sliding-Window Size Trade-offs","LZSS — Stored vs Referenced Flag","LZ4 — Speed Over Ratio","LZMA — Higher Ratio","Snappy & LZO — Fast Variants","Lempel-Ziv Checkpoint"]],
+      [14,"DEFLATE & Modern Compression",["DEFLATE = LZ77 + Huffman","The gzip File Format","zlib & PNG IDAT","The ZIP File Format","The Burrows–Wheeler Transform (BWT)","BWT + MTF + Huffman = bzip2","The 7z Format & LZMA2","Brotli (Google, 2013)","Zstandard (Facebook, 2015)","LZ4 in Production (Linux, Hadoop)","Dictionary Compression — Shared Dicts","Streaming vs Block Compression","Benchmarks — Speed vs Ratio","Choosing a Modern Codec","Modern Compression Checkpoint"]],
+      [15,"Lossy Compression Foundations",["Lossy vs Lossless — When to Choose","The Rate–Distortion Trade-off","Distortion Measures — MSE, PSNR, SSIM","Perceptual Distortion Models","Quantization — The Lossy Step","Scalar Quantization","Vector Quantization","Transform Coding — The Big Idea","The Discrete Cosine Transform (DCT)","The Karhunen–Loève Transform (KLT)","Wavelet Transforms","Predictive Coding (DPCM)","Subband Coding","Perceptual Coding Pipelines","Lossy Foundations Checkpoint"]],
+      [16,"JPEG & Image Compression",["The JPEG Pipeline","Color Space — YCbCr","Chroma Subsampling (4:2:0)","8×8 Block DCT","Quantization Tables","Zig-Zag Scan Order","Run-Length Encoding of Zeros","Huffman Coding the DCT Coefficients","Progressive JPEG","JPEG 2000 & Wavelets","WebP (Google)","AVIF & HEIF","PNG vs JPEG vs WebP — Choosing","Image Compression Artifacts","Image Compression Checkpoint"]],
+      [17,"MP3 & Audio Compression",["Audio Sampling & Quantization","PCM & ADPCM","Psychoacoustic Masking","Critical Bands of Hearing","MDCT — Modified Discrete Cosine Transform","The MP3 Pipeline","MP3 Bitrate Modes (CBR, VBR, ABR)","AAC — Advanced Audio Coding","Ogg Vorbis","Opus — Modern Successor","FLAC — Lossless Audio","ALAC — Apple Lossless","Audio Codec Quality Comparisons","Streaming Audio Considerations","Audio Compression Checkpoint"]],
+      [18,"Video Compression",["Video as a Time-Series of Frames","Intra-Frame vs Inter-Frame Coding","Motion Estimation (Block Matching)","Motion Compensation","I, P, B Frames","Group of Pictures (GOP) Structure","MPEG-1 & MPEG-2","H.264 / MPEG-4 AVC","H.265 / HEVC","AV1 (AOMedia)","VP9 (Google)","Rate Control","Adaptive Bitrate Streaming (HLS, DASH)","Subjective Quality Metrics","Video Compression Checkpoint"]],
+      [19,"Kolmogorov Complexity",["Algorithmic Information Theory","K(x) — Length of the Shortest Program","Invariance — K Is Language-Independent (Asymptotically)","K Is Uncomputable","K and Entropy — Asymptotic Equivalence","Solomonoff's Universal Prior","Minimum Description Length (MDL)","Bayesian Model Selection via MDL","Chaitin's Constant Ω","Randomness as Incompressibility","K-Complexity in Bioinformatics","K-Complexity in Plagiarism Detection","Normalized Compression Distance","Algorithmic Probability","Kolmogorov Complexity Checkpoint"]],
+      [20,"Channels & Channel Models",["The Information Channel","Discrete Memoryless Channels (DMC)","The Binary Symmetric Channel (BSC)","The Binary Erasure Channel (BEC)","The Z-Channel","Channels with Memory","Fading Channels","The Additive White Gaussian Noise (AWGN) Channel","Continuous-Input Channels","Bandwidth-Limited Channels","Broadcast & Multiple-Access Channels","Channel Models in Wireless","Channel Models in Storage Media","Signal-to-Noise Ratio (SNR)","Channel Models Checkpoint"]],
+      [21,"Channel Capacity",["Channel Capacity — Definition","C = max I(X;Y) Over Input Distributions","Capacity of the BSC","Capacity of the BEC","Capacity of the Z-Channel","The Shannon–Hartley Theorem","C = B log₂(1 + SNR)","Bandwidth vs Power Trade-off","AWGN Capacity Bounds","Capacity of MIMO Channels","The Capacity Region (Multi-User)","Cutoff Rate vs Capacity","Practical Codes vs Capacity","Computing Capacity Numerically","Channel Capacity Checkpoint"]],
+      [22,"Shannon's Noisy-Channel Theorem",["The Achievability Statement","The Converse Statement","The Random Coding Argument","Jointly Typical Sequences","Probability of Error → 0","Block Length & Reliability Trade-off","Error Exponents","The Strong Converse","Source–Channel Separation","Joint Source–Channel Coding","Engineering Implications","Reaching Capacity in Practice (Turbo, LDPC)","Significance of the Theorem","Limits Beyond Shannon","Noisy-Channel Theorem Checkpoint"]],
+      [23,"Error Detection",["The Need for Error Detection","Single-Bit Parity","Even vs Odd Parity","Two-Dimensional Parity","Checksums — Sum of Bytes","The Internet (Fletcher) Checksum","Adler-32","Cyclic Redundancy Check (CRC) Basics","CRC Polynomial Arithmetic","Common CRC Polynomials (CRC-32, CRC-CCITT)","CRC Implementation (Shift Registers)","CRC in Ethernet, ZIP, PNG","Cryptographic Hashes for Integrity","False-Positive Rates of Each Method","Error Detection Checkpoint"]],
+      [24,"Hamming Codes",["Richard Hamming — Bell Labs 1947","The Hamming Distance","Minimum Distance & Correction Capability","Single-Error-Correcting Codes","The (7,4) Hamming Code","Parity-Check Bit Positions","Encoding (7,4) by Hand","Decoding via Syndrome","Extended Hamming (8,4) — Detect Double Errors","The Hamming (Sphere-Packing) Bound","Perfect Codes","Generalized (2ᵐ−1, 2ᵐ−1−m) Hamming Codes","Hamming Codes in ECC RAM","SECDED Codes","Hamming Codes Checkpoint"]],
+      [25,"Block Codes & Linear Codes",["The Block Code Framework","(n, k, d) Notation","Linear Codes — Definition","The Generator Matrix G","The Parity-Check Matrix H","Systematic vs Non-Systematic Encoders","Syndrome Decoding","Minimum Distance from H","The Singleton Bound","Maximum Distance Separable (MDS) Codes","Dual Codes","Hadamard Codes","Reed–Muller Codes","Golay Codes (Used by Voyager)","Linear Codes Checkpoint"]],
+      [26,"Reed–Solomon & BCH Codes",["Finite Field Arithmetic — GF(2ᵐ)","Polynomial Representation","Reed–Solomon Code Definition","Reed–Solomon Encoding","The Berlekamp–Massey Algorithm","Forney's Algorithm","Erasure Decoding","BCH Codes — The Generalization","Reed–Solomon in CDs & DVDs","Reed–Solomon in QR Codes","Reed–Solomon in Satellite (Voyager, Hubble)","Reed–Solomon in DVB-T / Digital TV","Cross-Interleaved Reed–Solomon (CIRC)","Practical Implementations","Reed–Solomon Checkpoint"]],
+      [27,"Convolutional Codes & Viterbi",["Convolutional Encoders","Constraint Length & Code Rate","Generator Polynomials","The State Diagram","The Trellis Diagram","The Viterbi Algorithm","Soft-Decision Viterbi Decoding","Path Memory & Truncation","Free Distance of a Convolutional Code","Tail-Biting Codes","Convolutional Codes in Modems","Concatenated Codes (Outer RS + Inner Conv)","Voyager's Deep-Space Code","Decoding Complexity","Convolutional Codes Checkpoint"]],
+      [28,"Modern Capacity-Approaching Codes",["The Capacity Gap in the 1990s","Turbo Codes — Berrou, Glavieux, Thitimajshima (1993)","Iterative (Soft-Output) Decoding","Interleavers in Turbo Codes","LDPC Codes — Gallager 1962, Rediscovered","The Tanner Graph","Belief Propagation Decoding","LDPC in DVB-S2 & 5G","Polar Codes — Arıkan 2008","Channel Polarization","Successive Cancellation Decoding","Polar Codes in 5G NR","Fountain Codes (LT, Raptor)","Spatially Coupled LDPC","Modern Codes Checkpoint"]],
+      [29,"Rate–Distortion & Quantum Info",["The Rate–Distortion Function R(D)","R(D) for the Gaussian Source","R(D) for the Binary Source","Source–Channel Separation Revisited","Lossy Compression Bounds","The Information Bottleneck","Quantum Bits (Qubits)","The No-Cloning Theorem","Von Neumann Entropy S(ρ)","Quantum Mutual Information","The Holevo Bound","Quantum Channels","Quantum Error Correction","Quantum Capacity","Rate–Distortion & Quantum Checkpoint"]],
+      [30,"Applications & Mastery",["Modems — V.34 and Beyond","Wi-Fi 6 & 5G Coding","Hard-Drive ECC","SSD Error Correction (LDPC)","JPEG & MP3 Revisited","Voyager's Reed–Solomon + Viterbi Path","DNA as a Coded Message","Information Theory in Biology","Cross-Entropy Loss in Deep Learning","Mutual Information in Neuroscience","Information Theory in Finance","The Future — Post-Shannon Coding","Open Problems in Information Theory","A Bibliography of Classics","Information Theory Grand Mastery!"]]
+    ];
+
+    // Page 1 of Unit 1 already has a hand-written interactive lesson; all
+    // other lessons fall back to the generic catalog placeholder ('#') until
+    // they're built out individually.
+    const playable = { 1: 'lesson-1.html' };
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({
+          id: 'it-' + n,
+          title: t,
+          href: playable[n] || '#',
+          unit: u,
+          unitName: name,
+          category: 'logic',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('information-theory');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('information-theory');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

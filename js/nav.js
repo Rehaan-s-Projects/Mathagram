@@ -16,7 +16,7 @@ import { initUiSounds } from './ui-sounds.js';
 // site. Guard: skip if a gtag tag is already on the page (the homepage
 // embeds it inline in <head>) so we never double-count.
 (function loadGA() {
-  const GA_ID = 'G-Z7TFRFQDQJ';
+  const GA_ID = 'G-1JKG4MN6XX';
   if (document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
   const s = document.createElement('script');
   s.async = true;
@@ -550,15 +550,29 @@ function translatePage(lang) {
   }
 
   // In-place translation: load the widget once, then trigger the language change.
+  // NOTE: use the two-argument .then(onFulfilled, onRejected) form — NOT
+  // .then(...).catch(...). A chained .catch() also swallows exceptions thrown
+  // *inside* the success callback, which fired the proxy fallback below AFTER
+  // the page had already visibly translated in place — so the user saw it
+  // translate, then reload onto translate.goog and translate a second time.
+  // With the two-arg form the fallback fires ONLY when the widget fails to load.
   loadGoogleTranslateElement().then((sel) => {
-    sel.value = lang;
-    sel.dispatchEvent(new Event('change'));
-    scheduleResortAfterTranslation(lang);
-  }).catch(async (err) => {
-    // Fallback: navigate the SAME tab to the .translate.goog proxy.
+    try {
+      sel.value = lang;
+      sel.dispatchEvent(new Event('change'));
+      scheduleResortAfterTranslation(lang);
+    } catch (e) {
+      // Translation already applied; a post-translate hiccup must not trigger
+      // a navigation/re-translate. Log and stay put.
+      console.warn('Post-translate step failed (page already translated):', e);
+    }
+  }, async (err) => {
+    // Fallback: navigate the SAME tab to the .translate.goog proxy. Reached
+    // ONLY when loadGoogleTranslateElement() itself rejects (widget script
+    // blocked or timed out) — never after an in-place translation succeeded.
     // Using window.open() here would be popup-blocked — we're outside the
     // synchronous user-gesture from the language click by the time this
-    // .catch() fires, so browsers refuse to open a new tab.
+    // handler fires, so browsers refuse to open a new tab.
     console.warn('In-place translate unavailable, navigating to proxy:', err);
     const host = location.hostname;
     if (host === 'localhost' || /^\d+(\.\d+){3}$/.test(host) || !host.includes('.')) {

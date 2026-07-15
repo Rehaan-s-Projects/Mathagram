@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albanian (Shqip) — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Albanian (Shqip)</h1>
+    <p>Speak Shqip — the Albanian language, an Indo-European isolate spoken in Albania, Kosovo, North Macedonia, Montenegro and a global diaspora. The 36-letter alphabet, definite-suffix grammar, numbers, family, cuisine, Skanderbeg &amp;amp; history, and modern Tirana. 510 lessons across 43 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Albanian Alphabet',['The 36-Letter Alphabet','Vowels A E Ë I O U Y','The Schwa — Ë','Digraphs DH GJ LL NJ Q RR SH TH XH ZH','Soft Q vs Hard K','Stress Patterns','Reading Albanian Words','Common Pronunciation Mistakes','Writing by Hand','Typing on Albanian Keyboard','Pronunciation Drills','Alphabet Checkpoint']],
+      [2,'Greetings',['Përshëndetje — Hello','Mirëdita — Good Day','Mirëmëngjes — Good Morning','Mirëmbrëma — Good Evening','Si jeni? — How Are You?','Mirë jam — I\'m Well','Faleminderit — Thank You','Po & Jo — Yes & No','Mirupafshim — Goodbye','Më falni — Excuse Me','Introducing Yourself','Greetings Checkpoint']],
+      [3,'Nouns & Definite Suffixes',['Gender — Masculine, Feminine','Indefinite — A Cup, A Book','Definite Suffix Masc — -i / -u','Definite Suffix Fem — -a / -ja','Plural — Masc','Plural — Fem','Cases Overview','Nominative & Accusative','Dative & Genitive','Ablative','Demonstratives — Ky, Kjo','Nouns Checkpoint']],
+      [4,'Pronouns & Verb \'To Be\'',['Unë — I','Ti — You','Ai / Ajo — He / She','Ne — We','Ju — You (pl. / polite)','Ata / Ato — They','The Verb Jam — To Be','The Verb Kam — To Have','Subject Drop','Negation — Nuk','Questions','Pronouns Checkpoint']],
+      [5,'Numbers 1-100',['Një — One','Dy — Two','Tre / Tri — Three','Katër — Four','Pesë — Five','6-10','Eleven — Njëmbëdhjetë','12-20','Tens — 30 40 50','100 — Njëqind','Counting Objects','Numbers Checkpoint']],
+      [6,'Verb System',['Present — Three Conjugations','The Verb Shkoj — To Go','The Verb Vij — To Come','The Verb Bëj — To Do','Past Simple — Imperfect','Past Definite — Aorist','Future — Do Të + Subjunctive','Subjunctive — Të','Conditional Mood','Imperative — Commands','Reflexive Verbs','Verbs Checkpoint']],
+      [7,'Family & People',['Familje — Family','Nëna — Mother','Babai — Father','Vëllai — Brother','Motra — Sister','Gjyshi & Gjyshja — Grandparents','Children — Fëmijë','Albanian Names','Naming Day — Emër','Tradition of Besa','Albanian Hospitality','Family Checkpoint']],
+      [8,'Food & Cuisine',['Byrek','Tavë Kosi','Fërgesë','Qofte','Pilaf','Baklava','Tarator','Rakija','Albanian Coffee — Kafe','Bread — Bukë','Markets — Pazar','Food Checkpoint']],
+      [9,'Tirana, Kosovo & Travel',['Tirana — Capital','Skanderbeg Square','Berat — City of Windows','Gjirokastër','Albanian Riviera','Kosovo — Prishtina','Shkodër','North Macedonia — Tetovo','Currency — Lek','Asking Directions','Public Transport','Travel Checkpoint']],
+      [10,'History & Heroes',['Illyrian Origins','Roman Albania','Byzantine Era','Skanderbeg — National Hero','Ottoman Period','Albanian Renaissance — Rilindja','Independence — 1912','Albania in WWII','Communist Era — Hoxha','Fall of Communism','Modern Albania & EU Path','History Checkpoint']],
+      [11,'Culture & Music',['Iso-polyphony — UNESCO Heritage','Folk Music — Saze','Modern Music — Dua Lipa, Rita Ora','Albanian Eagle','Albanian Literature — Kadare','Cinema','Albanian Dance — Valle','Albanian Carpets','Traditional Dress — Xhubleta','Holidays — Independence Day','Family Celebrations','Culture Checkpoint']],
+      [12,'Albanian Mastery',['Alphabet & Pronunciation Final','Grammar Review','Verb Conjugation Drill','Conversation — Greetings','Conversation — Food','Conversation — Travel','Reading a Tirana Headline','Writing a Letter','Listening — Folk Song','Cultural Knowledge','Idioms Review','Albanian Mastery!']],
+      [13,'Kosovo — Prishtina',['Prishtina Capital','Kosovo Independence — 2008','Kosovo Albanian Dialect','Newborn Monument','Bill Clinton Boulevard','Bear Sanctuary','Mitrovica & The Bridge','Pristina Cafés','Kosovo Music','Kosovo Cuisine','KFOR & UN','Kosovo Checkpoint']],
+      [14,'North Macedonia — Tetovo',['Tetovo Albanian Community','Painted Mosque','Skopje Albanians','University of Tetovo','Pajak Pasha','Macedonian Albanian Politics','Cuisine Crossover','Music Crossover','Dialect Differences','Local Heroes','Education Issues','Macedonia Checkpoint']],
+      [15,'Arbëresh — Italy',['Italian-Albanian Community','Calabria Villages','Sicily Albanians','Old Tosk Dialect','Catholic & Byzantine','Skanderbeg Legacy','Arbëresh Festivals','Arbëresh Cooking','San Demetrio Corone','Arbëresh Music','Identity Today','Arbëresh Checkpoint']],
+      [16,'Arvanitika — Greece',['Arvanites Community','Attica Region','Old Tosk Variant','Religion — Orthodox','Greek Revolution Role','Arvanitika Vocabulary','Greek-Albanian Crossover','Festivals','Folk Songs','Modern Status','Mutual Intelligibility','Arvanitika Checkpoint']],
+      [17,'Switzerland Diaspora',['Zurich Albanian Community','Albanian Pop Stars Born in Switzerland','Granit Xhaka','Diaspora Schools','Bakeries in Switzerland','Soccer Stars','Cuisine in Switzerland','Albanian-Swiss Identity','Albanian Press','Festivals','Returning Home','Switzerland Checkpoint']],
+      [18,'Germany Diaspora',['Munich Community','Stuttgart Community','Berlin Albanians','Albanian Restaurants','Football Stars','Education','Schools & Mosques','Wuppertal Community','Pop Music','Diaspora Newspapers','Family Stories','Germany Checkpoint']],
+      [19,'New York Diaspora',['Bronx Albanian Community','Belmont Italian-Albanian','Yonkers','Albanian-American Pizza','Albanian-American Politicians','Bronx Cafés','Charity Organizations','Mother Teresa Plaque','Identity Today','Soccer Tournaments','Festivals NYC','NYC Checkpoint']],
+      [20,'Mother Teresa',['Born in Skopje 1910','Anjezë Gonxhe Bojaxhiu','Calling to Calcutta','Missionaries of Charity','Nobel Peace 1979','Saint Teresa','Albanian Identity','Mother Teresa Airport','Mother Teresa Memorial','Quotes in Albanian','Influence Today','Mother Teresa Checkpoint']],
+      [21,'Ismail Kadare',['Born 1936 Gjirokastër','The General of the Dead Army','Broken April','The Palace of Dreams','Booker International 2005','Communist Era Writing','Exile in France','Themes — Power & Memory','Kadare\'s Albanian Style','Reading Excerpt','Kadare in Translation','Kadare Checkpoint']],
+      [22,'Albanian Cinema',['Communist-Era Films','Lala dhe Yzberishti','Tomka and His Friends','Modern Cinema — Eshte','Albanian Documentary','Kosovo Cinema','Albanian Animation','International Festivals','Famous Directors','Albanian Actors','Streaming Albanian','Cinema Checkpoint']],
+      [23,'Dua Lipa & Rita Ora',['Dua Lipa — Born London 1995','Kosovo Heritage','One Kiss Lyrics','Dua Lipa in Albanian','Rita Ora — Born Prishtina','Kosovo Honor','Dua\'s Sunny Hill Festival','Rita\'s How to Be Lonely','Their Albanian Pride','Diaspora Pride','Albanian Lyrics','Pop Stars Checkpoint']],
+      [24,'Albanian Wedding',['Krushqi — Engagement','Përgatitja — Preparation','Henna Night','Bride\'s Procession','Groom\'s Procession','Wedding Songs','Albanian Dances','Wedding Food','Wedding Money — Pare','Honeymoon — Hënëmjaltë','Photo Traditions','Wedding Checkpoint']],
+      [25,'Besa — Code of Honor',['Besa Defined','Promise Kept','Albanian Code — Kanun','Kanun of Lekë Dukagjini','Besa During WWII — Saving Jews','Yad Vashem Recognition','Modern Besa','Hospitality Codes','Honor in Conflicts','Saying Besa','Besa Stories','Besa Checkpoint']],
+      [26,'Northern Albania — Highlands',['Theth Village','Valbona Valley','Komani Lake Ferry','Accursed Mountains','Northern Cuisine','Kulla — Stone Houses','Hiking Vocabulary','Mountain Festivals','Highland Music','Traditional Dress','Highland Folklore','Highlands Checkpoint']],
+      [27,'Southern Albania — Riviera',['Sarandë Coast','Ksamil Islands','Butrint Archaeology','Himara','Albanian Riviera Drive','Beach Vocabulary','Greek-Albanian Cuisine','Olives & Olive Oil','Seafood','Coastal Festivals','Holiday Conversation','Riviera Checkpoint']],
+      [28,'Modern Politics',['Sali Berisha','Edi Rama','SP & PD Parties','Parliament Vocabulary','Election Words','Tirana Mayor','Politics Slang','Albanian Diplomacy','Media Outlets','Online Activism','Civic Vocabulary','Politics Checkpoint']],
+      [29,'EU Accession',['EU Candidate Status','Acquis Vocabulary','Negotiations','Western Balkans Summit','Free Movement Aspirations','Schengen','Investment Words','Diaspora Voting','Pro-EU Vocabulary','Anti-EU Vocabulary','Reading EU News','EU Checkpoint']],
+      [30,'Hoxha Era & Bunkers',['Enver Hoxha — 1945-1985','Communist Albania','Bunkerization — 700k Bunkers','Sigurimi — Secret Police','Religion Banned 1967','Reopening 1990','Pyramid of Tirana','Bunk\'Art Museum','Albania After Hoxha','Memory & Trauma','Communist Vocabulary','Hoxha Checkpoint']],
+      [31,'Folk Tales — Gjizar',['The Boy Gjizar','Tales of Mountain Spirits','Zana — Mountain Fairy','Ora — Guardian Spirit','Kuçedra — Dragon','Folk Tale Structures','Telling a Folk Tale','Reading Folk Tales','Folk Tale Vocabulary','Comparing Balkan Tales','Tales for Children','Folk Tales Checkpoint']],
+      [32,'Burrnesha — Sworn Virgins',['Who Are Burrnesha?','Kanun Origin','Reasons for the Vow','Daily Life','Last Burrnesha','Photographer Jill Peters','Documentaries','Cultural Significance','Modern Albania','Gender Vocabulary','Cultural Sensitivity','Burrnesha Checkpoint']],
+      [33,'Iso-Polyphony — UNESCO',['UNESCO Heritage 2005','Tosk Polyphony','Lab Polyphony','Drone Singers','Lead & Counter','Lyrics in Albanian','Wedding Polyphony','Funeral Polyphony','Famous Groups','Listening Practice','Singing Along','Polyphony Checkpoint']],
+      [34,'Filigree & Crafts',['Filigree — Silver Lace','Shkodër Filigree','Wood Carving','Carpet Weaving','Traditional Embroidery','Copper Work','Pottery','Iconography','Crafts Cooperatives','Craft Markets','Buying Crafts','Crafts Checkpoint']],
+      [35,'Albanian Math Heritage',['Pjetër Bogdani','Albanian Renaissance Math','Sami Frashëri','Modern Albanian Math','Math in Albanian Schools','Math Olympiads','Statistics','Counting Big Numbers','Geometry Vocab','Algebra Vocab','Math Talk','Math Heritage Checkpoint']],
+      [36,'Slang Today',['Tirana Slang','Kosovo Slang','Texting Slang','Online Slang','Generation Z','Youth Music Slang','TikTok Albanian','Gender Slang','Football Slang','Family Slang','Slang vs Formal','Slang Checkpoint']],
+      [37,'Idioms & Proverbs',['Goca & Gocë','Mali me Mal','Hahaha Idioms','Animal Idioms','Food Idioms','Weather Idioms','Family Proverbs','Wisdom Sayings','Comparing to English','Using Idioms','Creating Idioms','Idioms Checkpoint']],
+      [38,'Conversation — Pazar',['Approaching a Stall','Asking Prices','Bargaining','Albanian Numbers in Use','Fresh Produce','Cheese & Yogurt','Buying Bread','Counting Change','Common Vendor Phrases','Saying Thanks','Comparing Prices','Pazar Checkpoint']],
+      [39,'Conversation — Directions',['Where Is...?','Right & Left','Straight Ahead','Crossroads','Block Number','Asking a Stranger','Reading Maps','Public Transit','Taxi Calls','Getting Lost','Saying Goodbye','Directions Checkpoint']],
+      [40,'Conversation — Restaurant',['Reserving a Table','Hello & Greetings','Menu Vocabulary','Ordering Drinks','Ordering Mains','Asking About Ingredients','Wine & Raki','Bill — Llogari','Tips Culture','Compliments','Goodbyes','Restaurant Checkpoint']],
+      [41,'Reading — Tirana News',['Reading Headlines','Politics Sections','Sports Sections','Culture Sections','Editorials','Reading Comments','Reading Tweets','Fact-Checking','Translating News','Summarizing News','Discussing News','News Checkpoint']],
+      [42,'Albanian Mastery II',['Vocabulary Final','Grammar Final','Verb Final','Reading Comprehension','Writing Final','Listening — Folk Song','Conversation — Family','Conversation — Travel','Cultural Knowledge Final','Idioms Final','Pronunciation Final','Albanian Mastery II!']],
+      [43,'Practice Lab — Albanian Conversation',['Albanian Conversation Drill 1','Albanian Conversation Drill 2','Albanian Conversation Drill 3','Albanian Conversation Drill 4','Albanian Conversation Speaking Practice','Albanian Conversation Listening Practice']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sq-'+n, title: t, href: 'quiz.html?unit=' + u + '&lesson=' + (i + 1), unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('albanian');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('albanian');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

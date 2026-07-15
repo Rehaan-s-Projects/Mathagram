@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Search — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    .course-header p a { color: var(--color-primary); }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Word Search</h1>
+    <p>🔎 Master word search puzzles from 10-word beginner grids up to 100-word marathons (the famous <a href="https://crayonsandcravings.com/100-word-word-search/" target="_blank" rel="noopener">Crayons &amp; Cravings 100-word tier</a>) — letter-scan techniques, diagonal &amp; backwards directions, hidden-message extraction, and tournament speed solving. 144 lessons across 12 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Word Search Foundations',['What Is a Word Search?','How a Word Search Grid Works','Horizontal, Vertical, Diagonal Words','Forward vs Backward Words','Reading the Word List','Crossing Off Strategy','Letter Scanning Method','Pattern Recognition for Letters','Marking Tools — Pen, Highlighter, Digital','Online vs Printable Word Searches','Timing Yourself','Foundations Checkpoint']],
+      [2,'10-Word Beginner Searches',['Animals (10 words)','Colors (10 words)','Foods (10 words)','Family (10 words)','Numbers Spelled Out','Days of the Week','Months of the Year','Body Parts','Weather Words','School Subjects','Sports (10 words)','10-Word Checkpoint']],
+      [3,'20-Word Searches',['Fruits & Vegetables','Wild Animals','Birds','Sea Creatures','Cooking Verbs','Famous Cities','Countries — Europe','Countries — Asia','Tools','Furniture','Holidays','20-Word Checkpoint']],
+      [4,'30-Word Searches',['Solar System','Periodic Table Elements','Famous Painters','Composers','Musical Instruments','Body Systems','Geography Features','Insects','Trees','Flowers','Geometry Terms','30-Word Checkpoint']],
+      [5,'50-Word Searches',['US States','World Capitals','Famous Authors','Famous Scientists','Common Verbs','Common Adjectives','Olympic Sports','Inventions','Famous Films','Tech Companies','Programming Languages','50-Word Checkpoint']],
+      [6,'75-Word Searches',['Animals From A to Z','Foods Around the World','Famous Books','Music Genres','Tools & Hardware','Garden Plants','Job Titles','Historical Events','Mythological Creatures','Famous Bridges','Famous Mountains','75-Word Checkpoint']],
+      [7,'100-Word Marathons',['100 Animal Names','100 Foods','100 Countries','100 Cities','100 Verbs','100 Adjectives','100 Scientists','100 Authors','100 Athletes','100 Songs','100 Random Words — The Hardest','100-Word Checkpoint']],
+      [8,'Themed Word Searches',['Christmas Theme','Halloween Theme','Thanksgiving Theme','Valentine\'s Day Theme','St. Patrick\'s Day','Easter Theme','Birthday Theme','Wedding Theme','Summer Vacation','Back to School','New Year\'s','Theme Checkpoint']],
+      [9,'Tricky Word Directions',['Diagonal Up-Right Words','Diagonal Up-Left Words','Diagonal Down-Right','Diagonal Down-Left','Backwards Horizontal','Backwards Vertical','Mixed-Direction Puzzles','Wrap-Around (Cylindrical) Searches','Hexagonal Word Searches','Circular Word Searches','All-Diagonal-Only Grids','Tricky Direction Checkpoint']],
+      [10,'Speed Word Search',['Beginner Speed — 10 Words in 2 Min','Intermediate Speed — 25 in 5','Advanced Speed — 50 in 10','Expert Speed — 100 in 20','Letter-Scan Speed Technique','Word-Length Filter Method','First-Letter Indexing','Common Letter Pairings','Tournament Format','Practice Drills','Mental Stamina','Speed Checkpoint']],
+      [11,'Hidden-Message Word Searches',['What\'s a Hidden-Message Search?','Reading the Leftover Letters','Common Hidden-Quote Themes','The Crayons & Cravings 100-Word Search','Find-the-Phrase Method','Decoding Famous Quotes','Bible-Verse Hidden Messages','Poems Hidden in the Grid','Christmas-Carol Lyrics','Movie-Quote Hidden Messages','Custom Hidden-Message Tools','Hidden-Message Checkpoint']],
+      [12,'Word Search Mastery',['All-Difficulties Speed Run','Custom Word Search Creation','Word Search Generators','Themed Word Search Design','Hard-Grid Tricks','Backwards-Diagonal Drill','Hidden-Message Solve','100-Word Marathon','Group Word Search Race','Word Search Tournaments','Famous Word Search Books','Word Search Mastery!']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ws-' + n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i === titles.length - 1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('word-search');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('word-search');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

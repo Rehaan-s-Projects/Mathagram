@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Theory — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-logic)">Logic</span>
+    <h1>Decision Theory</h1>
+    <p>Rational choice, expected utility, risk, Bayesian reasoning, behavioral economics, and multi-criteria decisions. Plus cognitive biases deep dive, intertemporal choice, crisis &amp; emergency decisions, negotiation, public policy, medicine, law, military strategy, finance, sports, the Bayesian brain &amp; neuroeconomics, the history of decision theory (Bernoulli → Kahneman), cross-cultural &amp; evolutionary decision making, and hands-on workshops. 30 units, 450 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations of Decision',['What Is Decision Theory?','Descriptive vs Normative vs Prescriptive','Decisions Under Certainty','Decisions Under Risk','Decisions Under Uncertainty','Outcomes & Consequences','Actions & Alternatives','States of the World','Payoff Matrices','Decision Trees','Dominance','Admissibility','Rational Choice','Bounded Rationality','Foundations Checkpoint']],
+      [2,'Expected Value',['What Is Expected Value?','Calculating EV','EV for Simple Gambles','EV for Complex Gambles','EV in Business','EV in Gambling','EV in Insurance','Fair Games','Risk-Neutral Agents','Limitations of EV','St. Petersburg Paradox','Infinite EV Problems','EV vs Other Criteria','Practice: EV Calculations','EV Checkpoint']],
+      [3,'Utility Theory',['What Is Utility?','Ordinal vs Cardinal Utility','Preferences & Axioms','Completeness','Transitivity','Independence','Continuity','Von Neumann-Morgenstern Theorem','Expected Utility Theory','Utility Functions','Risk Aversion','Risk Seeking','Risk Neutrality','Measuring Utility','Utility Checkpoint']],
+      [4,'Risk & Uncertainty',['Risk vs Uncertainty (Knight)','Probability Assessment','Subjective Probability','Maximin','Maximax','Minimax Regret','Hurwicz Criterion','Laplace Criterion','Sensitivity Analysis','Robust Decisions','Ambiguity Aversion','Ellsberg Paradox','Model Uncertainty','Practice: Criteria Comparison','Risk Checkpoint']],
+      [5,'Bayesian Decision Theory',['Bayes\' Theorem Review','Prior Probabilities','Likelihood','Posterior Probabilities','Bayesian Updating','Value of Information','Perfect Information','Imperfect Information','Sequential Decisions','Decision Trees with Bayes','Medical Diagnosis Example','Legal Reasoning Example','Scientific Inference','Practice: Bayesian Decisions','Bayesian Checkpoint']],
+      [6,'Behavioral Decision Theory',['Heuristics & Biases','Prospect Theory','Loss Aversion','Reference Dependence','Framing Effects','Anchoring','Availability Heuristic','Representativeness','Overconfidence','Status Quo Bias','Endowment Effect','Sunk Cost Fallacy','Mental Accounting','Nudge Theory','Behavioral Checkpoint']],
+      [7,'Multi-Criteria Decisions',['What Are MCDM?','Weighted Sum Model','AHP — Analytic Hierarchy Process','ELECTRE','TOPSIS','Pareto Optimality','Trade-Offs','Lexicographic Ordering','Value Functions','Swing Weights','Sensitivity Analysis','Group MCDM','Consensus Methods','Practice: MCDM','Multi-Criteria Checkpoint']],
+      [8,'Game Theory Connections',['Strategic Decisions','Nash Equilibrium Recap','Mixed Strategies','Sequential Games','Bargaining','Mechanism Design','Auction Theory','Voting Theory','Social Choice','Arrow\'s Theorem','Gibbard-Satterthwaite','Fair Division','Matching Markets','Practice','Game Theory Checkpoint']],
+      [9,'Decision Analysis Tools',['Influence Diagrams','Sensitivity Charts','Tornado Diagrams','Monte Carlo Simulation','Scenario Planning','Real Options','Portfolio Theory','Value at Risk','Break-Even Analysis','Cost-Benefit Analysis','ROI Calculations','Decision Software','Spreadsheet Modeling','Practice: Tools','Tools Checkpoint']],
+      [10,'Ethics & Decision Making',['Consequentialism & Decisions','Deontological Constraints','Rights & Decisions','Fairness Criteria','Distributive Justice','Rawls\' Veil of Ignorance','Utilitarian Calculation','Trolley Problem Revisited','Moral Uncertainty','Ethical AI Decisions','Medical Ethics & Triage','Environmental Decisions','Intergenerational Justice','Practice: Ethical Cases','Ethics Checkpoint']],
+      [11,'Decisions Under Deep Uncertainty',['What Is Deep Uncertainty?','Scenario Discovery','Robust Decision Making','Adaptive Strategies','Info-Gap Theory','Precautionary Principle','Black Swans','Fat Tails','Resilience Thinking','Climate Change Decisions','Pandemic Planning','Technology Assessment','Long-Term Planning','Practice','Deep Uncertainty Checkpoint']],
+      [12,'Group & Organizational Decisions',['Individual vs Group','Groupthink','Delphi Method','Nominal Group Technique','Brainstorming Rules','Devils Advocate','Red Teaming','Structured Analytic Techniques','Organizational Decision Processes','Garbage Can Model','Incrementalism','Satisficing','Bureaucratic Models','Practice','Group Checkpoint']],
+      [13,'AI & Algorithmic Decisions',['Automated Decision Making','Recommendation Systems','Credit Scoring','Hiring Algorithms','Predictive Policing','Algorithmic Bias','Fairness in ML','Explainability','Human-in-the-Loop','Decision Support Systems','Expert Systems','Reinforcement Learning & Decisions','AI Safety','Alignment Problem','AI Checkpoint']],
+      [14,'Personal Decision Making',['Career Decisions','Financial Decisions','Health Decisions','Relationship Decisions','Education Choices','Where to Live','Major Purchases','Time Allocation','Information Overload','Decision Fatigue','Regret Minimization','Pre-Mortem Analysis','Personal Decision Framework','Journaling Decisions','Personal Checkpoint']],
+      [15,'Mastery',['Theory Review','Tools Review','Practice Problems','Case Studies','Decision Portfolio','Research Frontiers','Books & Resources','Self-Assessment','Teaching Decision Theory','Consulting Applications','Policy Applications','Personal Application','Final Case Study','Reflection','Decision Theory Mastery!']],
+      [16,'Cognitive Biases Deep Dive',['Confirmation Bias in Decisions','Hindsight Bias — "I Knew It All Along"','Hot-Hand Fallacy','Gambler\'s Fallacy','Survivorship Bias','Base-Rate Neglect','Conjunction Fallacy — The Linda Problem','Planning Fallacy','Optimism Bias','Pessimism Bias','Self-Serving Attribution Bias','IKEA Effect & Effort Justification','Dunning-Kruger Effect','Debiasing Techniques','Cognitive Biases Checkpoint']],
+      [17,'Time & Intertemporal Choice',['Discounted Utility Model','Exponential vs Hyperbolic Discounting','Present Bias','Self-Control Problems','Commitment Devices','Temporal Construal Theory','Prospective Memory','Procrastination as Decision Problem','Long-Term Saving Decisions','Retirement Planning','Health Behavior Over Time','Climate Change & Future Generations','Discounting in Public Policy','Practice: Time-Inconsistent Choices','Intertemporal Checkpoint']],
+      [18,'Decisions in Crisis & Emergencies',['Time-Pressured Decision Making','Recognition-Primed Decisions (Klein)','OODA Loop — Observe, Orient, Decide, Act','Cynefin Framework','Crisis Communication','Triage Decisions','First-Responder Heuristics','Captain\'s Decisions Under Fire','Mass Evacuation Choices','Pandemic Response Decisions','Cyberattack Response','Hostage Negotiation','Surgical Emergency Decisions','Practice: Crisis Scenarios','Crisis Checkpoint']],
+      [19,'Negotiation as Decision Making',['Distributive Negotiation','Integrative Negotiation','BATNA — Best Alternative to Negotiated Agreement','ZOPA — Zone of Possible Agreement','Anchoring in Negotiation','Splitting the Difference','Multi-Issue Trading','Cultural Differences in Negotiation','Negotiation Frames','Coalition Formation','Threat Strategies','Gradual Concessions','Salary Negotiation','Negotiation Practice','Negotiation Checkpoint']],
+      [20,'Decisions in Public Policy',['Regulatory Impact Analysis','Cost-Benefit Analysis in Policy','Cost-Effectiveness Analysis','Value of a Statistical Life','Discount Rates in Policy','Health Policy Decisions','Education Policy','Environmental Policy','Infrastructure Investment','Tax Policy Decisions','Defense Spending','Welfare & Social Programs','Pandemic Policy','Practice: Policy Tradeoffs','Public Policy Checkpoint']],
+      [21,'Decisions in Medicine',['Evidence-Based Medicine','Shared Decision Making','Informed Consent','Diagnostic Decision Making','Treatment Selection Decisions','End-of-Life Decisions','Triage & Allocation','Vaccination Decisions','Pharmaceutical Approval (FDA)','Personalized Medicine','Decision Aids for Patients','Telemedicine Decisions','Medical Errors as Decision Failures','Practice: Medical Cases','Medical Decisions Checkpoint']],
+      [22,'Decisions in Law',['Jury Decision Making','Evidence Weighing','Reasonable Doubt','Eyewitness Testimony Evaluation','Sentencing Decisions','Plea Bargaining','Bail & Detention Decisions','Judicial Discretion','Probation & Parole','Cross-Examination Strategy','Legal Heuristics & Biases','AI in Legal Decisions','Mock Trial Decisions','Practice: Legal Cases','Legal Checkpoint']],
+      [23,'Military Decision Making',['Boyd\'s OODA Loop Revisited','Mission Command Doctrine','Wargaming','Course of Action Analysis','Strategic Intelligence Assessment','Risk in Combat Decisions','Mission Planning','Casualty Trade-offs','Nuclear Deterrence Decisions','Counterinsurgency Decisions','Cyber Warfare Decisions','Special Operations Planning','Joint Force Decisions','Practice: Strategic Wargame','Military Checkpoint']],
+      [24,'Decisions in Finance',['Portfolio Theory Decisions','Asset Allocation','Risk Tolerance Assessment','Investment Selection','Buy vs Rent Decisions','Credit Decisions','Debt Repayment Strategies','Retirement Planning Revisited','Tax-Optimization Decisions','Insurance Purchase Decisions','Behavioral Finance Biases','Algorithmic Trading Decisions','Robo-Advisors','Practice: Financial Cases','Finance Checkpoint']],
+      [25,'Decisions in Sports',['Coaching Strategy Decisions','Sports Analytics — Moneyball','In-Game Tactical Decisions','Player Selection (Draft, Trade)','Salary Cap Optimization','Fourth-Down Decisions (NFL)','Pitching Changes (MLB)','Substitution Decisions','Risk in Extreme Sports','Gambling on Sports','Player Health Decisions','Olympic Selection','Sports Officiating Decisions','Practice: Game Theory in Sports','Sports Checkpoint']],
+      [26,'Predictive Processing & The Bayesian Brain',['Predictive Processing Theory','Free-Energy Principle','Active Inference','Bayesian Brain Hypothesis','Top-Down vs Bottom-Up Processing','Surprise Minimization','Optical Illusions as Decisions','Mental Models','Neural Correlates of Choice','Reinforcement Learning in the Brain','Decision Neuroscience','Neuroeconomics','Brain Damage & Decision Impairment','Practice: Predictive Decisions','Bayesian Brain Checkpoint']],
+      [27,'History of Decision Theory',['Daniel Bernoulli — St. Petersburg Problem','Pierre-Simon Laplace','Frank Ramsey — Subjective Probability','John von Neumann & Oskar Morgenstern','Leonard Savage — Foundations of Statistics','Herbert Simon — Bounded Rationality','Maurice Allais — The Allais Paradox','Daniel Ellsberg — Ambiguity','Daniel Kahneman & Amos Tversky','Richard Thaler — Nudge & Behavioral Econ','Gerd Gigerenzer — Fast & Frugal Heuristics','Cass Sunstein — Choice Architecture','Robert Aumann — Game Theory','Modern Decision Theorists','History Checkpoint']],
+      [28,'Cross-Cultural Decision Making',['East vs West Decision Styles','Holistic vs Analytic Thinking','Cultural Risk Preferences','Individualism vs Collectivism','Power Distance & Decision Authority','Long-Term vs Short-Term Orientation','Uncertainty Avoidance','Hofstede\'s Dimensions','Trompenaars\' Framework','Negotiation Across Cultures','Cross-Cultural Marketing Decisions','Global Team Decisions','International Business Decisions','Practice: Cultural Case Studies','Cultural Checkpoint']],
+      [29,'Animal & Evolutionary Decision Making',['Evolutionary Roots of Choice','Risk-Sensitive Foraging','Bee Decisions — Quorum Sensing','Bird Migration Decisions','Wolf Pack Decisions','Chimpanzee Decision Making','Honeybee Waggle Dance & Voting','Predator-Prey Decisions','Mate Selection Decisions','Cooperation vs Defection (Hamilton)','Sex Ratios as Decisions','Decision-Making Neurons','Ant Colony Optimization','Practice: Evolution of Decisions','Evolutionary Checkpoint']],
+      [30,'Decision Theory Workshops',['Workshop: Career Pivot','Workshop: Major Purchase Decision','Workshop: Hiring Decision','Workshop: Investment Allocation','Workshop: Medical Treatment Choice','Workshop: Climate Policy','Workshop: Product Launch','Workshop: Personal Relationship','Workshop: Education Path','Workshop: Crisis Response','Workshop: Ethical Dilemma','Workshop: AI Deployment','Workshop: Negotiation Practice','Workshop: Decision Portfolio Review','Workshops Mastery Checkpoint']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dec-'+n, title: t, href: 'quiz.html?unit=' + u + '&lesson=' + (i + 1), unit: u, unitName: name, category: 'logic', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('decision-theory');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('decision-theory');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

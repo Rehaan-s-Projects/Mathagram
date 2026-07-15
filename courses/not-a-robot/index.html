@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I Am Not a Robot — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    .course-header p a { color: var(--color-primary); }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>I Am Not a Robot</h1>
+    <p>🤖 Forty-five escalating CAPTCHA-style challenges, from "check the box" to the gloriously absurd — a tribute to <a href="https://neal.fun/not-a-robot/" target="_blank" rel="noopener">neal.fun/not-a-robot</a>'s 45 levels. Prove your humanity, one impossible test at a time. 45 lessons across 9 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Levels 1–5 · Classic CAPTCHAs',[
+        'Level 1 — Check the Box',
+        'Level 2 — Identify the Cat',
+        'Level 3 — Read the Wavy Text',
+        'Level 4 — Select All Traffic Lights',
+        'Level 5 — Pick the Real Cookie'
+      ]],
+      [2,'Levels 6–10 · Image Puzzles',[
+        'Level 6 — Count the Ducks',
+        'Level 7 — Spot the Difference',
+        'Level 8 — Find the Hidden Animal',
+        'Level 9 — Reassemble the Sandwich',
+        'Level 10 — Match the Emojis'
+      ]],
+      [3,'Levels 11–15 · Audio & Word',[
+        'Level 11 — Transcribe the Voicemail',
+        'Level 12 — Type the Slurred Sentence',
+        'Level 13 — Identify the Bird Call',
+        'Level 14 — Repeat the Tongue Twister',
+        'Level 15 — Decode the Pig Latin'
+      ]],
+      [4,'Levels 16–20 · Math',[
+        'Level 16 — What is 7 + 12?',
+        'Level 17 — Prime or Composite?',
+        'Level 18 — Solve for X',
+        'Level 19 — Predict the Next Number',
+        'Level 20 — Add Without a Calculator'
+      ]],
+      [5,'Levels 21–25 · Emotional Intelligence',[
+        'Level 21 — Crying or Laughing?',
+        'Level 22 — Pick the Sarcastic Reply',
+        'Level 23 — Rate This Painting',
+        'Level 24 — Confess Your Worst Fear',
+        'Level 25 — Hug the Cat on Screen'
+      ]],
+      [6,'Levels 26–30 · Absurd Visuals',[
+        'Level 26 — How Many Holes in This Shirt?',
+        'Level 27 — Eat the Banana on Screen',
+        'Level 28 — Pick the Right Sandwich',
+        'Level 29 — Spin the Pinwheel by Blowing',
+        'Level 30 — Trace the Pretzel'
+      ]],
+      [7,'Levels 31–35 · Memory & Pattern',[
+        'Level 31 — Remember This Sequence',
+        'Level 32 — Find Your Own Face in the Crowd',
+        'Level 33 — The Pattern That Repeats',
+        'Level 34 — Beat the Mini Snake Game',
+        'Level 35 — Solve the Tiny Maze'
+      ]],
+      [8,'Levels 36–40 · Cultural & Existential',[
+        'Level 36 — Sing a Lullaby Out Loud',
+        'Level 37 — Apologize to the Server',
+        'Level 38 — Define "Love"',
+        'Level 39 — Pick the Sunset That Moved You',
+        'Level 40 — Cry on Command'
+      ]],
+      [9,'Levels 41–45 · Final Boss',[
+        'Level 41 — Outsmart Another AI',
+        'Level 42 — Sudoku in 10 Seconds',
+        'Level 43 — The Mirror Test',
+        'Level 44 — Beat the CAPTCHA at Itself',
+        'Level 45 — The Final Bot Test'
+      ]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'nar-' + n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i === titles.length - 1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('not-a-robot');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('not-a-robot');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

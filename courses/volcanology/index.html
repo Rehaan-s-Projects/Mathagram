@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volcanology — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Volcanology</h1>
+    <p>Hotspots, subduction zones, lava types, eruption styles, monitoring with seismographs and gas, and famous eruptions through history. 7 units, 39 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Plate Tectonics",["Hotspots (Hawaii)","Subduction (Ring of Fire)","Rift Zones (Iceland)","Continental Volcanism","Tectonics Checkpoint"]],
+      [2,"Magma & Lava",["Basaltic","Andesitic","Rhyolitic","Viscosity & Silica","Lava Tubes","Magma Checkpoint"]],
+      [3,"Eruption Styles",["Hawaiian","Strombolian","Vulcanian","Plinian","Phreatomagmatic","Styles Checkpoint"]],
+      [4,"Volcano Types",["Shield","Stratovolcano","Cinder Cone","Caldera","Supervolcano","Types Checkpoint"]],
+      [5,"Monitoring",["Seismographs","GPS Deformation","Gas Sensors (SO₂, CO₂)","Thermal Cameras","Monitoring Checkpoint"]],
+      [6,"Historic Eruptions",["Vesuvius 79 CE","Krakatoa 1883","Mt. Pelée 1902","Mt. St. Helens 1980","Mt. Pinatubo 1991","Historic Checkpoint"]],
+      [7,"Hazards & Mitigation",["Pyroclastic Flows","Lahars","Volcanic Ash","Evacuation Plans","Hazards Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'volcanology-'+n, title: t, href: '#', unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('volcanology');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('volcanology');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* Mathagram — Soroban / Abacus widget styles
+   Shared across all Abacus lesson pages. */
+
+body.abacus-lesson { background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%); min-height: 100vh; color: #1f1108; }
+.lesson-page { max-width: 880px; margin: 0 auto; padding: 56px 16px 80px; }
+.lesson-header { text-align: center; margin-bottom: 24px; }
+.lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #92400e; background: rgba(146,64,14,0.1); border: 1px solid rgba(146,64,14,0.3); border-radius: 999px; margin-bottom: 12px; }
+.lesson-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 6px; color: #422006; }
+.lesson-header p { font-size: 1.02rem; color: #78350f; max-width: 620px; margin: 0 auto; line-height: 1.55; }
+
+/* Soroban frame */
+.soroban {
+  max-width: 720px; margin: 28px auto 16px;
+  background: linear-gradient(180deg, #92400e, #6b3410);
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 14px 32px rgba(120,53,15,0.4);
+  position: relative;
+}
+.soroban-inner {
+  background: #fef3c7;
+  border-radius: 8px;
+  padding: 14px 8px;
+  position: relative;
+}
+.rods { display: flex; gap: 14px; justify-content: center; padding: 8px 4px; }
+.rod {
+  flex: 0 0 auto;
+  width: 50px;
+  display: flex; flex-direction: column; align-items: center;
+  position: relative;
+}
+.rod-stem {
+  position: absolute; left: 50%; top: 4px; bottom: 4px;
+  width: 2px; background: #78350f; transform: translateX(-50%);
+  z-index: 0;
+}
+.heaven, .earth { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+.heaven { height: 64px; justify-content: flex-start; }
+.earth  { height: 192px; justify-content: flex-end; }
+.bar {
+  height: 8px;
+  background: linear-gradient(90deg, #422006, #92400e, #422006);
+  margin: 4px -8px;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.bead {
+  width: 44px; height: 28px;
+  background: radial-gradient(ellipse at 30% 30%, #fde68a, #d97706 65%, #78350f);
+  border: 2px solid #422006;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+.bead:hover { transform: scale(1.06); box-shadow: 0 4px 8px rgba(0,0,0,0.35); }
+.heaven .bead { transform: translateY(0); }
+.heaven .bead.active { transform: translateY(28px); }
+.heaven .bead.active:hover { transform: translateY(28px) scale(1.06); }
+.earth .bead + .bead { margin-top: 2px; }
+.rod-label { font-size: 0.68rem; font-weight: 800; color: #78350f; margin-top: 10px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+.read-out {
+  max-width: 320px; margin: 8px auto 22px;
+  padding: 14px 18px;
+  background: #fff;
+  border: 2px solid #78350f;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(120,53,15,0.18);
+}
+.read-out .label { font-size: 0.7rem; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 0.1em; }
+.read-out .value { font-family: 'SF Mono', Monaco, monospace; font-size: 2.4rem; font-weight: 800; color: #422006; line-height: 1.1; }
+
+.controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0 24px; }
+.abc-btn {
+  padding: 10px 22px; border-radius: 999px;
+  font-weight: 800; font-size: 0.95rem; cursor: pointer; border: none;
+  font-family: inherit; transition: transform 0.1s, box-shadow 0.15s;
+}
+.abc-btn:hover { transform: translateY(-2px); }
+.abc-btn.primary { background: linear-gradient(135deg, #d97706, #92400e); color: #fff; box-shadow: 0 6px 18px rgba(146,64,14,0.4); }
+.abc-btn.secondary { background: #fff; color: #92400e; border: 2px solid #d97706; }
+
+.challenge {
+  max-width: 540px; margin: 24px auto;
+  background: #fff;
+  border: 2px solid #d97706;
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 6px 20px rgba(146,64,14,0.18);
+}
+.challenge h2 { font-size: 1.15rem; font-weight: 800; color: #422006; margin: 0 0 6px; }
+.challenge p  { font-size: 0.92rem; color: #78350f; margin: 0 0 12px; }
+.challenge .target { font-family: 'SF Mono', Monaco, monospace; font-size: 1.9rem; font-weight: 800; color: #b45309; text-align: center; margin: 8px 0 12px; }
+.challenge .feedback { min-height: 1.4em; font-weight: 700; text-align: center; font-size: 0.95rem; margin-top: 10px; }
+.challenge .feedback.right { color: #166534; }
+.challenge .feedback.wrong { color: #b91c1c; }
+
+.challenge .answer-input {
+  width: 100%; padding: 10px 14px; font-size: 1.2rem; font-family: 'SF Mono', Monaco, monospace;
+  border: 2px solid #d97706; border-radius: 8px; text-align: center; font-weight: 700; color: #422006;
+  background: #fef3c7; outline: none; box-sizing: border-box;
+}
+.challenge .answer-input:focus { box-shadow: 0 0 0 4px rgba(217,119,6,0.25); }
+
+.progress-row { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 6px 0 12px; flex-wrap: wrap; }
+.progress-row .stat { font-size: 0.82rem; color: #78350f; font-weight: 700; }
+.progress-row .stat.score { color: #166534; }
+
+.footer-nav { text-align: center; margin-top: 28px; }
+.footer-nav a { color: #92400e; text-decoration: none; font-weight: 700; }
+
+@media (max-width: 540px) {
+  .rods { gap: 8px; }
+  .rod { width: 40px; }
+  .bead { width: 36px; height: 22px; }
+  .heaven .bead.active { transform: translateY(22px); }
+  .lesson-header h1 { font-size: 1.6rem; }
+}

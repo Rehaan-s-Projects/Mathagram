@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patanjali's Yoga Sutras — Yoga & Stretching</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 720px; margin: 0 auto; padding: 48px 24px 16px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 14px; }
+
+    /* AI Camera yoga widget */
+    .yoga-camera { max-width: 720px; margin: 12px auto 32px; padding: 0 24px; }
+    .yoga-camera .card {
+      background: linear-gradient(135deg, #c026d3 0%, #4c1d95 100%);
+      border-radius: 22px; padding: 24px;
+      color: #fff; box-shadow: 0 18px 40px rgba(192,38,211,0.25);
+    }
+    .yoga-camera h2 { font-size: 1.4rem; font-weight: 800; margin: 0 0 4px; color: #fff; }
+    .yoga-camera .lede { color: #f5d0fe; font-size: 0.92rem; line-height: 1.55; margin-bottom: 16px; }
+    .yoga-camera .pose-row {
+      display: flex; gap: 18px; align-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px; padding: 14px 16px; margin-bottom: 16px;
+    }
+    .yoga-camera .pose-illus {
+      width: 78px; height: 78px; flex-shrink: 0; border-radius: 50%;
+      background: linear-gradient(135deg, #f0abfc, #c026d3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.6rem;
+      box-shadow: 0 6px 16px rgba(240,171,252,0.35);
+    }
+    .yoga-camera .pose-info h3 { font-size: 1.1rem; font-weight: 800; margin: 0 0 4px; color: #fff; }
+    .yoga-camera .pose-info p { font-size: 0.85rem; color: #fae8ff; margin: 0; line-height: 1.5; }
+    .yoga-camera .cam-stage {
+      position: relative; aspect-ratio: 4 / 3;
+      background: #2e1065; border: 2px dashed rgba(255,255,255,0.22);
+      border-radius: 16px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .yoga-camera .cam-stage.scanning { border-style: solid; border-color: #f0abfc; box-shadow: 0 0 0 4px rgba(240,171,252,0.18); }
+    .yoga-camera .cam-stage video { width: 100%; height: 100%; object-fit: cover; display: none; transform: scaleX(-1); }
+    .yoga-camera .cam-stage video.on { display: block; }
+    .yoga-camera .cam-placeholder { text-align: center; color: #e9d5ff; padding: 18px; }
+    .yoga-camera .cam-placeholder .emoji { font-size: 3.2rem; display: block; margin-bottom: 6px; }
+    .yoga-camera .cam-placeholder.hide { display: none; }
+
+    .ai-overlay { position: absolute; inset: 0; pointer-events: none; display: none; z-index: 2; }
+    .ai-overlay.on { display: block; }
+    .ai-dot {
+      position: absolute; width: 14px; height: 14px;
+      border-radius: 50%; background: #f0abfc;
+      box-shadow: 0 0 14px rgba(240,171,252,0.9);
+      animation: dotPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes dotPulse { 0%,100% { transform: scale(1); opacity: 0.95; } 50% { transform: scale(1.6); opacity: 0.55; } }
+    .ai-line { position: absolute; height: 3px; background: rgba(240,171,252,0.6); border-radius: 2px; transform-origin: left center; pointer-events: none; }
+    .ai-status {
+      position: absolute; left: 12px; top: 12px;
+      font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #fff; background: rgba(192,38,211,0.85);
+      padding: 4px 10px; border-radius: 999px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+    .ai-timer {
+      position: absolute; right: 14px; bottom: 14px;
+      font-family: 'SF Mono', monospace; font-weight: 800; font-size: 1.4rem;
+      color: #fff; background: rgba(46,16,101,0.7);
+      padding: 6px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+      min-width: 64px; text-align: center;
+    }
+
+    .yoga-camera .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .yoga-camera .btn {
+      padding: 11px 22px; border-radius: 12px; border: none;
+      background: rgba(255,255,255,0.10); color: #fff;
+      font-weight: 800; font-size: 0.9rem; cursor: pointer;
+      transition: background 0.15s, transform 0.05s;
+      font-family: inherit;
+    }
+    .yoga-camera .btn:hover:not(:disabled) { background: rgba(255,255,255,0.18); }
+    .yoga-camera .btn:active:not(:disabled) { transform: translateY(1px); }
+    .yoga-camera .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .yoga-camera .btn.primary {
+      background: linear-gradient(135deg, #f0abfc, #c026d3);
+      color: #2e1065; box-shadow: 0 4px 12px rgba(240,171,252,0.35);
+    }
+    .yoga-camera .btn.primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+    .yoga-camera .feedback {
+      margin-top: 14px; padding: 14px 18px;
+      background: rgba(240,171,252,0.12); border-left: 4px solid #f0abfc;
+      border-radius: 10px; font-size: 0.95rem; color: #fdf4ff;
+      display: none;
+    }
+    .yoga-camera .feedback.show { display: block; }
+    .yoga-camera .feedback.great { background: rgba(34,197,94,0.15); border-left-color: #22c55e; }
+    .yoga-camera .feedback strong { color: #fff; }
+
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+
+    .gosia-coach { max-width: 720px; margin: 18px auto 4px; padding: 0 24px; }
+    .gosia-coach .row {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-left: 5px solid #ec4899;
+      border-radius: 14px; padding: 14px 18px;
+    }
+    .gosia-coach .avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(236,72,153,0.10); border: 3px solid #ec4899;
+      padding: 3px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gosia-coach .avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .gosia-coach .info { flex: 1; }
+    .gosia-coach .who { font-size: 0.78rem; font-weight: 800; color: #db2777; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+    .gosia-coach .line { font-size: 0.95rem; color: var(--color-text); line-height: 1.4; }
+    .gosia-coach .voice-btn {
+      flex-shrink: 0;
+      background: #ec4899; color: #fff;
+      border: none; border-radius: 12px;
+      padding: 12px 18px; font-weight: 800; font-size: 0.92rem;
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s, transform 0.08s;
+    }
+    .gosia-coach .voice-btn:hover { background: #db2777; }
+    .gosia-coach .voice-btn:active { transform: translateY(1px); }
+    .gosia-coach .voice-btn.speaking { background: #ef4444; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Yoga &amp; Stretching</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Yoga Foundations &amp; History</div>
+    <h1>Patanjali's Yoga Sutras</h1>
+    <p>Around <strong>400 CE</strong>, the sage <strong>Patanjali</strong> compiled <strong>196 short aphorisms</strong> &mdash; the <em>Yoga Sutras</em> &mdash; into four books (Padas). They became the defining text of <strong>classical yoga</strong>, codifying meditation, ethics, and the path to liberation.</p>
+    <p>The very second sutra defines yoga itself: <strong>"Yogas citta vrtti nirodhah"</strong> &mdash; <em>"Yoga is the stilling of the fluctuations of the mind."</em> To realize that stillness, Patanjali lays out the <strong>Eight Limbs</strong> (Ashtanga), with <em>asana</em> (steady seat) and <em>dhyana</em> (meditation) at the heart.</p>
+    <p>Today's pose is <strong>Padmasana</strong> (puhd-MAH-suh-nuh), the <strong>Lotus Pose</strong> &mdash; the classical meditation seat in which Patanjali himself is traditionally depicted. We'll modify it gently &mdash; Half Lotus is fine for beginners.</p>
+  </section>
+
+  <section class="gosia-coach" aria-label="Gosia voice coach">
+    <div class="row">
+      <div class="avatar"><img src="../../assets/characters/gosia.svg" alt="Gosia"></div>
+      <div class="info">
+        <div class="who">Gosia &middot; Your Yoga Coach</div>
+        <div class="line">Tap to hear me walk you through the classical meditation seat.</div>
+      </div>
+      <button type="button" class="voice-btn" id="gosia-voice-btn">🔊 Hear Gosia</button>
+    </div>
+  </section>
+
+  <section class="yoga-camera" aria-label="AI Camera yoga exercise">
+    <div class="card">
+      <h2>🪷 AI Camera Exercise</h2>
+      <p class="lede">Find a seat. Tap <strong>Open Camera</strong>, then <strong>Start Pose</strong>. The AI will watch your <strong>Padmasana (Lotus / Half Lotus Pose)</strong> for 30 seconds.</p>
+
+      <div class="pose-row">
+        <div class="pose-illus">🪷</div>
+        <div class="pose-info">
+          <h3>Padmasana &mdash; Lotus Pose</h3>
+          <p>Cross your legs &middot; rest one (or both) feet on opposite thighs &middot; spine tall &middot; hands in jnana mudra on knees &middot; slow nostril breath.</p>
+        </div>
+      </div>
+
+      <div class="cam-stage" id="camStage">
+        <div class="cam-placeholder" id="camPlaceholder">
+          <span class="emoji">📷</span>
+          Camera off &mdash; tap <em>Open Camera</em> to begin.
+        </div>
+        <video id="camVideo" autoplay playsinline muted></video>
+        <div class="ai-overlay" id="aiOverlay" aria-hidden="true">
+          <div class="ai-status" id="aiStatus">AI &middot; Tracking…</div>
+          <div class="ai-timer" id="aiTimer" style="display:none;">0:30</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="btn" id="btn-open-cam">📷 Open Camera</button>
+        <button type="button" class="btn primary" id="btn-start-pose" disabled>▶ Start 30-second Pose</button>
+        <button type="button" class="btn" id="btn-close-cam" disabled>Close Camera</button>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Quick Check-in</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../'); initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { speak, speakAsync, showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter('gosia', '../../');
+
+    const GOSIA_SCRIPT = [
+      "Welcome to lesson three. I'm Gosia.",
+      "Today we step into Patanjali's classical yoga — the path of stilling the mind.",
+      "Our pose is Padmasana, the Lotus.",
+      "Cross your legs and, if you can, place one foot on the opposite thigh. Half Lotus is perfectly fine.",
+      "Lengthen your spine, soften your shoulders, and rest your hands on your knees.",
+      "When you're ready, open the camera. Let's sit for thirty seconds, breathing slow through the nose."
+    ];
+    const gosiaBtn = document.getElementById('gosia-voice-btn');
+    let gosiaSpeaking = false;
+    gosiaBtn.addEventListener('click', async () => {
+      if (gosiaSpeaking) {
+        window.speechSynthesis.cancel();
+        gosiaSpeaking = false;
+        gosiaBtn.classList.remove('speaking');
+        gosiaBtn.textContent = '🔊 Hear Gosia';
+        return;
+      }
+      gosiaSpeaking = true;
+      gosiaBtn.classList.add('speaking');
+      gosiaBtn.textContent = '⏹ Stop';
+      try {
+        for (const line of GOSIA_SCRIPT) {
+          if (!gosiaSpeaking) break;
+          await speakAsync(line, 'gosia');
+        }
+      } catch {}
+      gosiaSpeaking = false;
+      gosiaBtn.classList.remove('speaking');
+      gosiaBtn.textContent = '🔊 Hear Gosia';
+    });
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    const camVideo    = document.getElementById('camVideo');
+    const camStage    = document.getElementById('camStage');
+    const camPlace    = document.getElementById('camPlaceholder');
+    const aiOverlay   = document.getElementById('aiOverlay');
+    const aiTimer     = document.getElementById('aiTimer');
+    const aiStatus    = document.getElementById('aiStatus');
+    const btnOpen     = document.getElementById('btn-open-cam');
+    const btnStart    = document.getElementById('btn-start-pose');
+    const btnClose    = document.getElementById('btn-close-cam');
+    const feedback    = document.getElementById('feedback');
+    let camStream = null, poseTimerId = null, poseSecondsLeft = 0;
+
+    btnOpen.addEventListener('click', async () => {
+      feedback.classList.remove('show');
+      try {
+        camStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: 640, height: 480 }, audio: false
+        });
+        camVideo.srcObject = camStream;
+        camVideo.classList.add('on');
+        camPlace.classList.add('hide');
+        btnOpen.disabled = true;
+        btnStart.disabled = false;
+        btnClose.disabled = false;
+        spawnAiDots();
+        aiOverlay.classList.add('on');
+        aiStatus.textContent = 'AI · Ready';
+      } catch (err) {
+        feedback.classList.add('show');
+        feedback.classList.remove('great');
+        feedback.innerHTML = '<strong>Camera unavailable.</strong> Allow camera permission in your browser settings, or skip this exercise and continue to the check-in below.';
+      }
+    });
+
+    btnStart.addEventListener('click', () => {
+      if (!camStream) return;
+      poseSecondsLeft = 30;
+      camStage.classList.add('scanning');
+      aiStatus.textContent = 'AI · Tracking Pose…';
+      aiTimer.style.display = 'block';
+      aiTimer.textContent = formatTime(poseSecondsLeft);
+      btnStart.disabled = true;
+      feedback.classList.remove('show');
+      speak("Settle into your Lotus. Crown of the head lifts, jaw stays soft.", 'gosia');
+      poseTimerId = setInterval(() => {
+        poseSecondsLeft--;
+        aiTimer.textContent = formatTime(Math.max(0, poseSecondsLeft));
+        if (poseSecondsLeft === 20) {
+          aiStatus.textContent = 'AI · Steady seat!';
+          speak("Beautiful. Notice the breath — that is your anchor for stillness.", 'gosia');
+        }
+        if (poseSecondsLeft === 10) {
+          aiStatus.textContent = 'AI · Quiet mind…';
+          speak("Ten seconds. Let the mind settle, like silt falling in still water.", 'gosia');
+        }
+        if (poseSecondsLeft === 3) {
+          speak("Three… two… one.", 'gosia');
+        }
+        if (poseSecondsLeft <= 0) {
+          clearInterval(poseTimerId);
+          poseTimerId = null;
+          aiStatus.textContent = 'AI · Pose complete ✓';
+          camStage.classList.remove('scanning');
+          aiTimer.style.display = 'none';
+          feedback.classList.add('show', 'great');
+          feedback.innerHTML = '<strong>🎉 Padmasana held for 30 seconds!</strong> That is the asana Patanjali calls "sthira sukham" — steady and easeful. +15 XP.';
+          showBuddy('gosia', 'perfect');
+          btnStart.disabled = false;
+        }
+      }, 1000);
+    });
+
+    btnClose.addEventListener('click', closeCamera);
+    function closeCamera() {
+      if (poseTimerId) { clearInterval(poseTimerId); poseTimerId = null; }
+      if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+      camVideo.classList.remove('on');
+      camVideo.srcObject = null;
+      camPlace.classList.remove('hide');
+      aiOverlay.classList.remove('on');
+      camStage.classList.remove('scanning');
+      aiTimer.style.display = 'none';
+      btnOpen.disabled = false;
+      btnStart.disabled = true;
+      btnClose.disabled = true;
+    }
+    window.addEventListener('beforeunload', closeCamera);
+    function formatTime(s) { const m = Math.floor(s/60), r = s%60; return m + ':' + String(r).padStart(2,'0'); }
+
+    function spawnAiDots() {
+      aiOverlay.querySelectorAll('.ai-dot, .ai-line').forEach(e => e.remove());
+      // Lotus silhouette — seated, feet drawn up on thighs
+      const dots = [
+        { x: 50, y: 14 },   // head — 0
+        { x: 50, y: 28 },   // neck — 1
+        { x: 36, y: 32 },   // L shoulder — 2
+        { x: 64, y: 32 },   // R shoulder — 3
+        { x: 30, y: 50 },   // L elbow — 4
+        { x: 70, y: 50 },   // R elbow — 5
+        { x: 38, y: 66 },   // L hand mudra — 6
+        { x: 62, y: 66 },   // R hand mudra — 7
+        { x: 50, y: 56 },   // core — 8
+        { x: 42, y: 72 },   // L hip — 9
+        { x: 58, y: 72 },   // R hip — 10
+        { x: 58, y: 80 },   // L foot on R thigh — 11
+        { x: 42, y: 80 }    // R foot on L thigh — 12
+      ];
+      dots.forEach((d, i) => {
+        const el = document.createElement('div');
+        el.className = 'ai-dot';
+        el.style.left = `calc(${d.x}% - 7px)`;
+        el.style.top  = `calc(${d.y}% - 7px)`;
+        el.style.animationDelay = (i * 0.08) + 's';
+        aiOverlay.appendChild(el);
+      });
+      const lines = [[0,1],[1,2],[1,3],[2,4],[3,5],[4,6],[5,7],[1,8],[8,9],[8,10],[9,11],[10,12],[11,12]];
+      lines.forEach(([a,b]) => {
+        const A = dots[a], B = dots[b];
+        const dx = (B.x - A.x), dy = (B.y - A.y);
+        const len = Math.hypot(dx, dy);
+        const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        const line = document.createElement('div');
+        line.className = 'ai-line';
+        line.style.left = A.x + '%';
+        line.style.top  = A.y + '%';
+        line.style.width = len + '%';
+        line.style.transform = `rotate(${ang}deg)`;
+        aiOverlay.appendChild(line);
+      });
+    }
+
+    const exercises = [
+      { type: 'multiple-choice', question: 'Who compiled the Yoga Sutras?',
+        options: ['Patanjali', 'Plato', 'Confucius', 'Marco Polo'], correctIndex: 0 },
+      { type: 'multiple-choice', question: 'How many sutras are in the Yoga Sutras?',
+        options: ['196', '2', '47', '10,000'], correctIndex: 0 },
+      { type: 'true-false', question: 'The Yoga Sutras define yoga as "the stilling of the fluctuations of the mind."', correctAnswer: true },
+      { type: 'multiple-choice', question: 'The Eight Limbs of yoga in the Sutras are called:',
+        options: ['Ashtanga', 'Mahabharata', 'Saraswati', 'Tabula Rasa'], correctIndex: 0 },
+      { type: 'multiple-choice', question: 'Padmasana means:',
+        options: ['Lotus Pose', 'Mountain Pose', 'Cobra Pose', 'Eagle Pose'], correctIndex: 0 },
+      { type: 'true-false', question: 'Half Lotus is a fine modification when full Lotus is too intense for the knees.', correctAnswer: true }
+    ];
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['gosia','diego','rita','sam','william'];
+    let buddyTick = 0;
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const i = index >= 0 ? index : (buddyTick++);
+      const c = chars[i % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, {
+      xp,
+      courseId: 'yoga-stretching',
+      lessonId: 'lesson-3',
+      nextHref: 'index.html',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

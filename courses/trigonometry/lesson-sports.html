@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read &amp; Listen: Trig in Sports — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    body { background: #f8f9fa; }
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .edam-banner { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 28px 24px; text-align: center; margin-bottom: 24px; position: relative; overflow: hidden; }
+    .edam-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fbbf24; display: block; margin: 0 auto 6px; box-shadow: 0 4px 20px rgba(251,191,36,0.3); animation: edamBounce 2s ease infinite; }
+    @keyframes edamBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .edam-speech { background: rgba(255,255,255,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 14px; padding: 14px 18px; margin-top: 12px; color: #e2e8f0; font-size: 0.9rem; line-height: 1.6; font-style: italic; }
+    .headphones-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; padding: 6px 16px; margin-top: 14px; color: #fbbf24; font-size: 0.8rem; font-weight: 700; }
+    .reading-card { background: #fff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-math, #3b82f6); border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
+    .reading-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; color: var(--color-text); }
+    .reading-card p { font-size: 0.98rem; line-height: 1.7; margin-bottom: 8px; color: var(--color-text); }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Trigonometry</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 23 &mdash; Read &amp; Listen</div>
+    <h1>Trig in Sports: Projectiles, Angles &amp; Arcs</h1>
+
+    <div class="edam-banner">
+      <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px;">
+        <div style="text-align:center;">
+          <img src="../../assets/characters/edam.svg" alt="Edam" class="edam-avatar">
+          <div style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:4px;">Edam</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="../../assets/characters/diego.svg" alt="Diego" class="edam-avatar" style="border-color:#3b82f6;box-shadow:0 4px 20px rgba(59,130,246,0.3);animation-delay:0.5s;">
+          <div style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:4px;">Diego</div>
+        </div>
+      </div>
+      <div class="edam-speech">
+        "Headphones on! Read the sports scenarios first, then we'll <strong>read the questions out loud</strong>. Mix of read &amp; listen — just like your favorite language app!"
+      </div>
+      <div class="headphones-badge"><span>&#127911;</span> Headphones Recommended</div>
+    </div>
+
+    <div class="reading-card">
+      <h3>📘 Read: Basketball Arc</h3>
+      <p>A basketball player shoots from a distance of 5 m. The ball leaves their hands at an angle of 50° above horizontal with speed \(v_0 = 8\,\text{m/s}\). Using projectile motion, the horizontal range is \(R = \frac{v_0^2 \sin(2\theta)}{g}\). Plug in \(\theta = 50°\) and \(g = 9.8\,\text{m/s}^2\) to model where the ball lands.</p>
+    </div>
+
+    <div class="reading-card">
+      <h3>📘 Read: Soccer Free Kick</h3>
+      <p>A soccer ball is kicked at 22 m/s at 32° above the ground. The maximum height reached is \(H = \frac{v_0^2 \sin^2\theta}{2g}\). Players curve the ball using rotational angles — the wall they're aiming over is 2.4 m tall.</p>
+    </div>
+
+    <div class="reading-card">
+      <h3>📘 Read: Skateboard Ramp</h3>
+      <p>A skater takes a quarter-pipe with a 45° lip. The horizontal speed and vertical speed at takeoff are equal because \(\sin 45° = \cos 45°\). This makes 45° the launch angle for <em>maximum range</em> on flat ground.</p>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
+    <h2><span style="font-size:1.5rem;">&#127911;</span> Read &amp; Listen Quiz</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete, showMistakesReview } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const speakers = ['edam', 'diego'];
+    initSideCharacter('edam', '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'A basketball is shot at 50°. Which formula gives the horizontal range R on flat ground?',
+        options: ['\\(R = v_0\\sin\\theta\\)', '\\(R = \\frac{v_0^2\\sin(2\\theta)}{g}\\)', '\\(R = \\frac{v_0\\cos\\theta}{g}\\)', '\\(R = v_0^2\\tan\\theta\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A soccer ball is kicked at 22 meters per second at 32 degrees. What is the maximum height? Use g equals 9.8.',
+        spokenText: 'A soccer ball is kicked at 22 meters per second at 32 degrees above the ground. What is the maximum height? Use g equals 9 point 8.',
+        options: ['About 6.9 m', 'About 14.0 m', 'About 22.0 m', 'About 1.8 m'],
+        correctIndex: 0
+      },
+      {
+        type: 'multiple-choice',
+        question: 'On flat ground, what launch angle gives the MAXIMUM range for a projectile (no air resistance)?',
+        options: ['30°', '45°', '60°', '90°'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A baseball is hit at 40 m/s at 30°. Approximately what is the horizontal range?',
+        spokenText: 'A baseball is hit at 40 meters per second at an angle of 30 degrees. Approximately what is the horizontal range, ignoring air resistance?',
+        options: ['About 71 m', 'About 141 m', 'About 282 m', 'About 35 m'],
+        correctIndex: 1
+      },
+      {
+        type: 'true-false',
+        question: 'Two angles that add to 90° (like 30° and 60°) produce the same range on flat ground.',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'A golfer drives a ball 250 yards at an angle of 12 degrees. True or false: the maximum height is greater than the horizontal range.',
+        spokenText: 'A golfer drives a ball 250 yards at a launch angle of 12 degrees. True or false: the maximum height is greater than the horizontal range.',
+        answerType: 'true-false',
+        correctAnswer: false
+      },
+      {
+        type: 'fill-blank',
+        question: 'A skateboard quarter-pipe has a 45° lip. \\(\\sin 45°\\) equals \\(\\cos 45°\\), so horizontal and vertical speeds at takeoff are ___.',
+        answer: 'equal'
+      },
+      {
+        type: 'listening',
+        question: 'A ski jumper takes off horizontally and lands 60 m down a 35-degree slope. What trig function relates the slope’s vertical drop to its horizontal distance?',
+        spokenText: 'A ski jumper takes off horizontally and lands 60 meters down a 35 degree slope. What trig function relates the slope vertical drop to its horizontal distance?',
+        options: ['sine', 'cosine', 'tangent', 'cosecant'],
+        correctIndex: 2
+      },
+      {
+        type: 'multiple-choice',
+        question: 'A volleyball player jumps and spikes the ball downward at 25° below horizontal at 18 m/s. What is the vertical velocity component?',
+        options: ['\\(18\\cos 25°\\) m/s upward', '\\(18\\sin 25°\\) m/s downward', '\\(18\\tan 25°\\) m/s downward', '\\(18\\) m/s downward'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A cyclist banks 18 degrees on a curved track. What does cosine of 18 degrees represent in this problem?',
+        spokenText: 'A cyclist banks 18 degrees on a curved track. What does cosine of 18 degrees represent in this problem?',
+        options: [
+          'The vertical component of the normal force',
+          'The horizontal component of the normal force',
+          'The tangent of the bank angle',
+          'The track\'s radius'
+        ],
+        correctIndex: 0
+      },
+      {
+        type: 'listening',
+        question: 'A volleyball is served at 40 degrees with speed 20 meters per second. What is the horizontal velocity component, in meters per second, rounded to one decimal?',
+        spokenText: 'A volleyball is served at forty degrees with speed twenty meters per second. What is the horizontal velocity component, in meters per second, rounded to one decimal?',
+        options: ['12.9', '15.3', '17.4', '20.0'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'True or false: above 45 degrees, a basketball shot at a steeper angle reaches a higher maximum height but travels less horizontal distance, with equal speed.',
+        spokenText: 'True or false. Above forty five degrees, a basketball shot at a steeper angle reaches a higher maximum height but travels less horizontal distance, holding initial speed constant.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'A ski slope drops 50 meters over 100 meters of horizontal run. What is the slope angle in degrees, rounded to the nearest whole degree?',
+        spokenText: 'A ski slope drops fifty meters over one hundred meters of horizontal run. What is the slope angle in degrees, rounded to the nearest whole degree?',
+        answerType: 'fill-blank',
+        answer: '27'
+      },
+      {
+        type: 'listening',
+        question: 'A golfer drives a ball at 50 meters per second at 20 degrees. What is the vertical velocity component, in meters per second, rounded to one decimal?',
+        spokenText: 'A golfer drives a ball at fifty meters per second at twenty degrees. What is the vertical velocity component, in meters per second, rounded to one decimal?',
+        options: ['12.5', '17.1', '25.0', '47.0'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'On flat ground (no air resistance), maximum range happens at a launch angle of ___ degrees.',
+        answer: '45'
+      },
+      {
+        type: 'fill-blank',
+        question: 'The projectile range formula is R = v₀² × sin(2θ) divided by ___.',
+        answer: 'g'
+      },
+      {
+        type: 'fill-blank',
+        question: 'When horizontal and vertical launch speeds are equal, the launch angle must be ___ degrees.',
+        answer: '45'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Two complementary launch angles (e.g. 30° and 60°) produce ___ horizontal range on flat ground.',
+        answer: 'equal'
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const mistakeIdx = new Set();
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      if (!isCorrect && index >= 0) mistakeIdx.add(index);
+      const who = speakers[index % speakers.length];
+      initSideCharacter(who, '../../');
+      showBuddy(who, isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'trigonometry',
+      lessonId: 'lesson-sports',
+      nextHref: 'lesson-graphs.html',
+      backHref: 'index.html'
+    });
+    showMistakesReview(container, Array.from(mistakeIdx).map((i) => exercises[i]), { basePath: '../../' });
+  </script>
+</body>
+</html>

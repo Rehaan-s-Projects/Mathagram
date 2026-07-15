@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wolof — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Wolof</h1>
+    <p>The lingua franca of Senegal, the Gambia &amp; Mauritania — spoken by 12+ million. Phonology (prenasalized stops, geminates, ATR vowel harmony), Latin &amp; Wolofal (Arabic-script) writing systems, all eight noun classes (b-, j-, k-, w-, m-, l-, s-, g-), aspect &amp; focus markers (na, dafa, moom), pronouns (man, yaw, moom, ñun), verb morphology, time &amp; numbers (fukk = 10, téeméer = 100), greetings (Nanga def? Mangi fi rekk!), Dakar Wolof vs rural varieties, Mouride &amp; Tijaniyya Sufi traditions, Youssou N'Dour &amp; mbalax music, thiéboudienne &amp; yassa cuisine, the laamb wrestling tradition, diaspora communities (Paris, NYC, Italy), Wolof literature (Cheikh Anta Diop, Mariama Bâ in French; modern Wolof writers), and using Wolof in everyday Senegalese life. 71 units, 1065 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "What Is Wolof? — A Niger-Congo Language",
+      "Where Wolof Is Spoken — Senegal, Gambia, Mauritania",
+      "The Wolof Alphabet (Latin) & Sounds",
+      "Wolofal — Arabic-Script Wolof",
+      "Vowels & ATR Harmony",
+      "Consonants — Prenasalized Stops (mb, nd, ŋg)",
+      "Geminate (Long) Consonants",
+      "Tone & Stress in Wolof",
+      "Greetings — Nanga def? Mangi fi rekk",
+      "Polite Forms — Salaamaalekum, Jërëjëf",
+      "Personal Pronouns — Man, Yaw, Moom, Ñun, Yéen, Ñoom",
+      "Numbers — Benn, Ñaar, Ñett, Ñeent",
+      "Numbers Beyond 10 — Fukk, Téeméer, Junni",
+      "Days of the Week — Altine, Talaata...",
+      "Months & Time",
+      "Family Vocabulary — Baay, Yaay, Doom, Mag",
+      "Body Parts — Bopp, Loxo, Tànk",
+      "Food & Drink — Ceeb, Yapp, Mburu, Ataaya",
+      "Thiéboudienne — Senegal's National Dish",
+      "Yassa, Mafé & Other Classics",
+      "Animals — Xar, Saafara, Jaan",
+      "Common Verbs — Dem, Ñów, Lekk, Naan",
+      "Aspect Markers — Na, Naa, Nañu",
+      "Focus Markers — Dafa, Moom, Laa",
+      "Verb Negation — Du, Tax",
+      "Question Words — Fan, Kan, Lan, Naka",
+      "Yes/No Questions",
+      "Noun Class System — The 8 Classes",
+      "Class B — People & Default",
+      "Class J — Things & Abstract",
+      "Class K — Smaller / Diminutive",
+      "Class W — Liquids & Mass Nouns",
+      "Class M, L, S, G — The Rest",
+      "Definite & Indefinite Articles",
+      "Adjectives & Stative Verbs",
+      "Possessives — Suma, Sa, Si",
+      "Demonstratives — Bi, Bii, Ba",
+      "Prepositions & Locatives",
+      "Past, Present & Future",
+      "Imperatives & Commands",
+      "Conditionals — Su, Bu",
+      "Comparisons — More, Less, Most",
+      "Common Idioms & Proverbs",
+      "Code-Switching — Wolof, French, Pulaar",
+      "Dakar Wolof — Urban Slang",
+      "Rural Wolof — Saloum, Cayor, Jolof",
+      "Sufi Vocabulary — Mouride, Tijaniyya, Baay Faal",
+      "Cheikh Amadou Bamba & Touba",
+      "Music — Youssou N'Dour, Baaba Maal & Mbalax",
+      "Sabar Drumming Vocabulary",
+      "Laamb — Senegalese Wrestling Terms",
+      "Names & Naming Customs (Ngente)",
+      "Money — CFA Franc, Markets, Bargaining",
+      "Transport — Car Rapide, Sept-Place, Pirogue",
+      "Religion — Islam in Senegalese Daily Life",
+      "Festivals — Tabaski, Korité, Magal",
+      "Wolof Folktales — Leuk the Hare",
+      "Modern Wolof Media — TV, Radio, Hip-Hop",
+      "Dakar Hip-Hop — Daara J Family, Keyti",
+      "Wolof on Social Media & WhatsApp",
+      "Texting Conventions & Abbreviations",
+      "Travel — Asking Directions in Dakar",
+      "Saint-Louis & the Colonial Past",
+      "Casamance & Diola Influences",
+      "Diaspora — Paris, NYC, Brescia",
+      "Wolof Literature — Boubacar Boris Diop",
+      "Translating Between Wolof, French & English",
+      "Common Mistakes by English Speakers",
+      "Tips for Sounding Natural",
+      "Building a Daily Wolof Practice Habit",
+      "Wolof Mastery — Comprehensive Review"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'wo-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('wolof');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('wolof');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

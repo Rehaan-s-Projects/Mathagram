@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Parrot: Lingo — multilingual translator mascot -->
+  <!-- Tail feathers (layered colors) -->
+  <path d="M70 78 Q88 82 92 70 Q88 76 78 74" fill="#FFD93D"/>
+  <path d="M72 80 Q90 86 94 76 Q92 84 80 80" fill="#FF6B6B"/>
+  <path d="M74 84 Q92 92 96 82 Q94 90 82 88" fill="#4ECDC4"/>
+  <!-- Wing (tropical layered colors) -->
+  <path d="M30 50 Q22 58 26 70 Q40 72 46 60 Z" fill="#1FA45C"/>
+  <path d="M32 54 Q28 62 32 70 Q42 70 44 62 Z" fill="#FFD93D"/>
+  <path d="M34 58 Q32 64 36 68 Q42 68 42 64 Z" fill="#FF6B6B"/>
+  <!-- Body -->
+  <ellipse cx="50" cy="60" rx="22" ry="22" fill="#1FA45C"/>
+  <!-- Belly -->
+  <ellipse cx="50" cy="64" rx="14" ry="14" fill="#FFD93D"/>
+  <!-- Head -->
+  <circle cx="50" cy="36" r="20" fill="#1FA45C"/>
+  <!-- Cheek patches -->
+  <circle cx="40" cy="40" r="4" fill="#FFB0C8"/>
+  <circle cx="60" cy="40" r="4" fill="#FFB0C8"/>
+  <!-- Eyes -->
+  <circle cx="44" cy="32" r="4.5" fill="#fff"/>
+  <circle cx="56" cy="32" r="4.5" fill="#fff"/>
+  <circle cx="44" cy="32" r="2.5" fill="#1a1a2e"/>
+  <circle cx="56" cy="32" r="2.5" fill="#1a1a2e"/>
+  <circle cx="45" cy="31" r="0.9" fill="#fff"/>
+  <circle cx="57" cy="31" r="0.9" fill="#fff"/>
+  <!-- Beak (curved hook) -->
+  <path d="M44 42 Q50 52 56 42 Q54 48 50 50 Q46 48 44 42 Z" fill="#FF8C42"/>
+  <path d="M48 48 Q50 54 52 48" fill="#E5731F"/>
+  <!-- Speech tag with translation icon -->
+  <rect x="14" y="14" width="22" height="14" rx="3" fill="#fff" stroke="#1a1a2e" stroke-width="1.2"/>
+  <text x="25" y="24.5" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#1a1a2e">A→文</text>
+  <path d="M30 27 L26 32 L34 32 Z" fill="#fff" stroke="#1a1a2e" stroke-width="1.2"/>
+</svg>

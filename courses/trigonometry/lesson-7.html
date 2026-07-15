@@ -158,7 +158,7 @@
     import { initRitaChat } from '../../js/rita-chat.js';
     initNav('../../');
     initRitaChat('../../');
-    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { runExerciseSet, showLessonComplete, showMistakesReview } from '../../js/exercises.js';
     import { showBuddy, initSideCharacter } from '../../js/characters.js';
 
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -250,13 +250,63 @@
         spokenText: 'A skier travels five hundred meters along a slope inclined at twenty degrees. What is the vertical drop, rounded to the nearest meter?',
         options: ['100', '171', '250', '470'],
         correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A football is kicked at 30 degrees with initial speed 25 meters per second. What is the vertical velocity component, in meters per second?',
+        spokenText: 'A football is kicked at thirty degrees with initial speed twenty five meters per second. What is the vertical velocity component, in meters per second?',
+        answerType: 'fill-blank',
+        answer: '12.5'
+      },
+      {
+        type: 'listening',
+        question: 'True or false: a 30 degree launch and a 60 degree launch produce the same range, at equal speed, on flat ground.',
+        spokenText: 'True or false. A thirty degree launch and a sixty degree launch produce the same range, at equal speed, on flat ground.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'What is the cosine of 30 degrees?',
+        spokenText: 'What is the cosine of thirty degrees?',
+        options: ['\\(1/2\\)', '\\(\\sqrt{2}/2\\)', '\\(\\sqrt{3}/2\\)', '1'],
+        correctIndex: 2
+      },
+      {
+        type: 'listening',
+        question: 'A baseball outfielder is 50 meters east and 50 meters north of home plate. What angle, in degrees, from due east is the throw?',
+        spokenText: 'A baseball outfielder is fifty meters east and fifty meters north of home plate. What angle, in degrees, from due east is the throw?',
+        options: ['30', '45', '60', '90'],
+        correctIndex: 1
+      },
+      {
+        type: 'fill-blank',
+        question: 'On flat ground (no air resistance), the launch angle for maximum range is ___ degrees.',
+        answer: '45'
+      },
+      {
+        type: 'fill-blank',
+        question: 'The horizontal velocity component of a projectile launched at angle θ is v₀ × cos(___).',
+        answer: 'θ'
+      },
+      {
+        type: 'fill-blank',
+        question: 'In a 3-4-5 right triangle, the hypotenuse is ___.',
+        answer: '5'
+      },
+      {
+        type: 'fill-blank',
+        question: 'sin(30°) = 1 over ___.',
+        answer: '2'
       }
     ];
 
     const container = document.getElementById('exercises');
     const completionDiv = document.getElementById('completion');
 
+    const mistakeIdx = new Set();
     const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      if (!isCorrect && index >= 0) mistakeIdx.add(index);
       const who = speakers[index % speakers.length];
       initSideCharacter(who, '../../');
       showBuddy(who, isCorrect ? 'correct' : 'wrong');
@@ -268,6 +318,7 @@
       nextHref: 'index.html',
       backHref: 'index.html'
     });
+    showMistakesReview(container, Array.from(mistakeIdx).map((i) => exercises[i]), { basePath: '../../' });
   </script>
 </body>
 </html>

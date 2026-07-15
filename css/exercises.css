@@ -212,6 +212,27 @@
   cursor: default;
 }
 
+/* "Open this lesson" affordance on options/prompts that map to a real page. */
+.mc-option-link {
+  margin-left: 8px;
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-primary);
+  cursor: pointer;
+  opacity: 0.75;
+  pointer-events: auto;
+}
+.mc-option-link:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+.lesson-q-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .mc-option.correct {
   background: var(--color-science-bg);
   border-color: var(--color-science);

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dog Training — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Dog Training</h1>
+    <p>Train any dog at any age — puppy basics, house training, leash walking, sit/stay/come, recall, socialization, behavior modification, separation anxiety, aggression, clicker training, positive reinforcement, breed-specific tips, agility, service dog work, and famous trainers. 20 units, 300 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Dog Training Foundations",["Why Train Your Dog","Dog Body Language","Tail Position Meanings","Ear Position Meanings","Stress Signals","Dog Vision & Hearing","Dog Sense of Smell","Calming Signals","Operant Conditioning","Positive Reinforcement","Classical Conditioning","Common Training Mistakes","Famous Trainers \u2014 Cesar, Zak George, Victoria","Books to Read \u2014 Patricia McConnell","Foundations Checkpoint"]],
+      [2,"Choosing a Dog",["Breeds for Activity Level","Breeds for Apartments","Hypoallergenic Breeds","Mixed Breeds","Adopting from Shelter","Rescue Organizations","Choosing a Reputable Breeder","Avoiding Puppy Mills","Avoiding Backyard Breeders","Bringing Home Day 1","Initial Vet Visit","Microchipping","Dog Insurance","Pet Sitter & Boarding Plan","Choosing a Dog Checkpoint"]],
+      [3,"Puppy Foundations",["Puppy Critical Socialization Window \u2014 3-12 Weeks","Bite Inhibition","Crate Training Setup","Crate Size","Sleeping Through the Night","Feeding Schedule","First Vet Visit","Vaccinations Schedule","Spay/Neuter Decisions","Microchipping","Heartworm Prevention","Flea & Tick Prevention","Puppy Class Enrollment","Bonding Time","Puppy Checkpoint"]],
+      [4,"House Training",["Crate as Den Concept","Bell Training","Schedule \u2014 Eat, Drink, Pee, Poop","Outside on Leash First","Reward Immediately Outside","Cleaning Accidents \u2014 Enzyme Cleaner","No Punishment for Accidents","Older Dog House Training","Apartment Potty Pads","Potty Training Setbacks","Marking Territory","Submissive Urination","Excitement Urination","Senior Dog Incontinence","House Training Checkpoint"]],
+      [5,"Basic Commands",["Sit","Down","Stay","Come (Recall)","Heel","Off","Drop It","Leave It","Wait","Watch Me / Look","Place / Mat","Touch (Targeting)","Spin","Shake","Basic Commands Checkpoint"]],
+      [6,"Recall \u2014 The Most Important Command",["Why Recall Saves Lives","Building Recall Foundation","Long Line Training","Recall Games \u2014 Run Away","Recall Around Distractions","Whistle Recall","Emergency Recall","Hide & Seek for Recall","Recall in Open Areas","Recall Off Leash \u2014 When Ready","Common Recall Mistakes","Calling Once, Then Going to Get","Never Punish on Recall","Reward Variability","Recall Checkpoint"]],
+      [7,"Leash Walking",["Choosing a Leash","Choosing a Collar \u2014 Flat, Martingale","Front-Clip Harness","Back-Clip Harness","No-Pull Harnesses","Why Dogs Pull","Stop & Wait Method","Direction Change Method","Loose Leash Walking","Heel Position","Reactive Dogs on Leash","Crossing Streets Safely","Walking Multiple Dogs","Off-Leash Hiking Areas","Leash Walking Checkpoint"]],
+      [8,"Socialization",["Socialization vs Exposure","Critical Period 3-12 Weeks","Continuing Socialization for Life","Meeting Other Dogs","Meeting Children","Meeting Strangers","Sound Desensitization \u2014 Vacuum, Fireworks","Surface Variety \u2014 Grass, Concrete, Stairs","Car Rides","Dog Parks \u2014 Pros & Cons","Doggy Daycare","Puppy Playdates","Calm Greetings","Socialization Failure Recovery","Socialization Checkpoint"]],
+      [9,"Clicker Training",["Charging the Clicker","Mark & Reward","Capturing Behavior","Shaping Behavior","Free Shaping vs Lured","Fading the Lure","Adding the Cue","Adding Distractions \u2014 3Ds","Variable Reinforcement Schedules","Karen Pryor \u2014 Don't Shoot the Dog","Marker Words \u2014 Yes!","Clicker for Tricks","Clicker for Sport","Multiple Dogs Clicker","Clicker Training Checkpoint"]],
+      [10,"Behavior Modification",["Why Bad Behavior Happens","Counter-Conditioning","Desensitization","Threshold Distance","Look at That (LAT) Game","Engage-Disengage Game","Treat Magnets","Place Command for Behavior","Management vs Training","Boredom-Caused Behavior","Resolving Stealing","Resolving Counter-Surfing","Resolving Trash Raiding","Resolving Furniture Surfing","Behavior Mod Checkpoint"]],
+      [11,"Separation Anxiety",["Recognizing Separation Anxiety","Mild vs Severe SA","Causes of SA","Pre-Departure Cues","Counter-Conditioning Departure","Extending Alone Time Gradually","Crate vs Free Roam During Alone Time","Calming Aids \u2014 DAP Diffuser","Music for Dogs","Treat-Dispensing Toys","Dog Walker Mid-Day","Doggy Daycare","Veterinary Behaviorist Consult","Medications \u2014 Fluoxetine, Trazodone","Separation Anxiety Checkpoint"]],
+      [12,"Aggression",["Types of Aggression","Fear-Based Aggression","Resource Guarding","Leash Reactivity","Same-Household Dog Aggression","Stranger-Directed Aggression","Bite Levels \u2014 Ian Dunbar Scale","Muzzle Training Positively","Muzzle Selection \u2014 Basket","Working with a Behaviorist","BAT 2.0","CAT Procedure","LAT Game","When Rehoming Is Right","Aggression Checkpoint"]],
+      [13,"Fear & Anxiety",["Fear of Thunderstorms","Thundershirt","Fireworks Phobia","Fear of Strangers","Fear of Other Dogs","Fear of Specific Objects","Generalized Anxiety","Veterinary Anxiety","Calming Caps","Calming Treats \u2014 L-Theanine","Pheromones \u2014 DAP","Music & White Noise","TTouch","Working with Vet on Meds","Fear & Anxiety Checkpoint"]],
+      [14,"Tricks & Enrichment",["Sit Pretty","Roll Over","High Five","Wave","Spin","Bow","Play Dead","Speak / Quiet","Find It (Nose Work)","Hide & Seek","Puzzle Toys","Snuffle Mats","Frozen Kong","Lick Mats","Tricks Checkpoint"]],
+      [15,"Dog Sports",["Agility","Flyball","Disc Dog (Frisbee)","Dock Diving","Lure Coursing","Earthdog","Herding Trials","Tracking","Nose Work","Rally Obedience","Competition Obedience","Schutzhund / IPO","Treibball","Canicross","Dog Sports Checkpoint"]],
+      [16,"Service & Therapy Dogs",["Service Dogs Defined \u2014 ADA","Therapy Dogs","Emotional Support Animals","Public Access Rights","Service Dog Tasks \u2014 Mobility, Diabetic Alert, Seizure","Psychiatric Service Dogs","Owner-Trained vs Program-Trained","Service Dog Organizations \u2014 CCI, Guide Dogs","Therapy Dog Programs \u2014 TDI, Pet Partners","Hospital & Library Visits","Crisis Response Dogs","Search & Rescue Dogs","Cadaver Dogs","Detection Dogs","Service & Therapy Checkpoint"]],
+      [17,"Senior Dog Care",["Recognizing Aging","Joint Care \u2014 Glucosamine","Cognitive Decline","Hearing Loss Adjustments","Vision Loss Adjustments","Mobility Aids","Senior Diet","Reduced Exercise Tolerance","Comfortable Bedding","Stairs & Ramps","Quality of Life Assessment","When to Say Goodbye","In-Home Euthanasia","Pet Loss Grief","Senior Dog Checkpoint"]],
+      [18,"Health & Veterinary",["Annual Vet Checkups","Dental Care \u2014 Brushing","Dental Cleanings","Anal Glands","Common Skin Conditions","Allergies \u2014 Food vs Environmental","Hot Spots","Ear Infections","Urinary Infections","Common Cancers","Vaccination Schedule","Heartworm Treatment","Tick-Borne Diseases","Pet Insurance","Health Checkpoint"]],
+      [19,"Famous Dog Trainers",["Cesar Millan","Zak George","Victoria Stilwell","Ian Dunbar","Patricia McConnell","Karen Pryor","Sue Ailsby","Susan Garrett","Kathy Sdao","Jean Donaldson","Kikopup (Emily Larlham)","Dr. Sophia Yin","Dr. Marc Bekoff","Brandon McMillan","Famous Trainers Checkpoint"]],
+      [20,"Dog Training Mastery",["Foundations Review","Puppy Review","House Training Review","Basic Commands Review","Recall Review","Leash Walking Review","Socialization Review","Clicker Training Review","Behavior Mod Review","Anxiety & Aggression Review","Tricks Review","Sports Review","Senior Care Review","Health Review","Dog Training Grand Mastery!"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'dt-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('dog-training');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('dog-training');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

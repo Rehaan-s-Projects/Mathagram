@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twi (Akan) — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Twi (Akan)</h1>
+    <p>Speak Akan Twi — Ghana&#x27;s most widely spoken language. Tones, greetings, grammar, numbers, the Ashanti kingdom, Adinkra symbols, Highlife &amp; Hiplife, and Anansi proverbs. 144 lessons across 12 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Twi Sounds & Tones',['Welcome — Akwaaba','About Akan and Twi','The 22 Letters','Vowels & Vowel Harmony','Nasal Vowels','High vs Low Tones','Tone Changes Meaning','Consonants & Clusters','Twi Stress Patterns','Reading Twi Aloud','Common Pronunciation Mistakes','Sounds & Tones Checkpoint']],
+      [2,'Greetings',['Maakye — Good Morning','Maaha — Good Afternoon','Maadwo — Good Evening','Ɛte sɛn? — How Are You?','Bɔkɔɔ — I\'m Fine','Yɛda wo ase — Thank You','Aane & Daabi — Yes & No','Introducing Yourself','Where Are You From?','Phone Greetings','Sɛ wo da yiye — Sleep Well','Greetings Checkpoint']],
+      [3,'Pronouns & To Be',['Me — I','Wo — You (sing.)','Ɔno — He / She','Yɛn — We','Mo — You (pl.)','Wɔn — They','The Verb \'Wɔ\' — To Have','The Verb \'Yɛ\' — To Be','Subject Pronoun Drills','Negation — m-, n-','Asking Questions','Pronouns Checkpoint']],
+      [4,'Numbers 1-100',['Baako — One','Mmienu — Two','Mmiɛnsa — Three','Anan — Four','Enum — Five','6 through 10','11 through 20','Tens to 100','Counting Objects','Telling Age','Money — Cedi & Pesewa','Numbers Checkpoint']],
+      [5,'Family & Names',['Abusua — Family','Maame — Mother','Papa — Father','Onua — Sibling','Nana — Elder','Mma & Mmarima — Children','Akan Day-Names — Boys','Akan Day-Names — Girls','Naming Ceremonies','Clans of the Ashanti','Talking About Relatives','Family Checkpoint']],
+      [6,'Food & The Market',['Fufu','Banku','Jollof Rice','Kelewele — Spicy Plantain','Waakye','Palm Soup — Abɛ nkwan','Drinks — Sobolo & Nkate','At the Market — Asasi','Bargaining','Eating Etiquette','Cooking Vocabulary','Food Checkpoint']],
+      [7,'Greater Accra & Travel',['Accra — The Capital','Kumasi — Ashanti Capital','Cape Coast — The Castles','Volta Lake','Trotro — Shared Vans','Asking Directions','At the Hotel','At the Airport','Currency & Cedi','Asking About Prices','Sightseeing','Travel Checkpoint']],
+      [8,'Ashanti Kingdom & History',['Origins of the Akan','Osei Tutu I','The Golden Stool','Asantehene','Kente Cloth','Asante Wars','Yaa Asantewaa','Independence — Kwame Nkrumah','Modern Ghana','Pan-Africanism','Akan in the Diaspora','History Checkpoint']],
+      [9,'Adinkra Symbols',['What Are Adinkra Symbols?','Gye Nyame — Supremacy of God','Sankofa — Return & Get It','Nyame Dua — Tree of God','Adinkrahene — Greatness','Nea Onnim — Knowledge','Funtunfunefu — Democracy','Akoma — Patience','Aban — Strength','Symbols on Cloth','Symbols on Buildings','Adinkra Checkpoint']],
+      [10,'Music & Dance',['Highlife — The Classics','Hiplife — Modern Fusion','Azonto','Kpanlogo','Talking Drum','Atumpan Drum','Famous Artists — Sarkodie','Famous Artists — Daddy Lumba','Music Vocabulary','Dancing at Festivals','Lyrics in Twi','Music Checkpoint']],
+      [11,'Proverbs & Storytelling',['Anansi the Spider','Tales of Anansesem','Common Twi Proverbs','Wisdom of Elders','Riddles — Aborɔbɛ','Drum Language','Sayings About Patience','Sayings About Wealth','Sayings About Family','Using Proverbs in Speech','Retelling an Anansi Story','Proverbs Checkpoint']],
+      [12,'Twi Mastery',['Vocabulary Review','Tone Mastery','Verb Drills','Conversation — Greetings','Conversation — Market','Conversation — Family','Reading a Twi News Headline','Writing a Twi Paragraph','Listening — Highlife Lyric','Cultural Knowledge','Pronunciation Final','Twi Mastery!']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'tw-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('twi');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('twi');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

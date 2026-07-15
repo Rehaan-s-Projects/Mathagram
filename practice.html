@@ -160,10 +160,40 @@
     const afterLesson = parseInt(params.get('after') || '0', 10); // global real-lesson count before this practice node
     const SESSION_SIZE = 6;
 
-    // Random companion — Edam or Diego
-    const companions = ['edam', 'diego'];
+    // Map language-course slugs to BCP-47 language codes so we can pick a
+    // matching system voice for the Web Speech API and the localized
+    // character messages defined in characters.js.
+    const COURSE_LANG = {
+      catalan:'ca', spanish:'es', italian:'it', french:'fr', german:'de',
+      portuguese:'pt', dutch:'nl', frisian:'fy', polish:'pl', romanian:'ro',
+      turkish:'tr', russian:'ru', japanese:'ja', korean:'ko', mandarin:'zh',
+      arabic:'ar', hebrew:'he', persian:'fa', hindi:'hi', urdu:'ur',
+      bengali:'bn', vietnamese:'vi', thai:'th', indonesian:'id', filipino:'tl',
+      swedish:'sv', norwegian:'no', finnish:'fi', danish:'da', greek:'el',
+      czech:'cs', hungarian:'hu', bulgarian:'bg', ukrainian:'uk', tamil:'ta',
+      azerbaijani:'az', armenian:'hy', amharic:'am'
+    };
+    const courseLang = COURSE_LANG[courseSlug] || 'en';
+    const isLanguageCourse = courseLang !== 'en';
+
+    // For language courses, pick from the "translation-bestie" pool so the
+    // character feels like a Duolingo Stories narrator (Lily-style). Lingo &
+    // Babel are explicitly the translation guides. For everything else fall
+    // back to the original Edam/Diego pair.
+    const companions = isLanguageCourse
+      ? ['lingo', 'babel', 'gosia', 'rita']
+      : ['edam', 'diego'];
     const companionId = companions[Math.floor(Math.random() * companions.length)];
     const companion = CHARACTERS[companionId];
+
+    // Pick the character's localized message block for this course's lang.
+    function localizedMsgs(c) {
+      if (courseLang === 'ca' && c.messagesCa) return c.messagesCa;
+      if (courseLang === 'es' && c.messagesEs) return c.messagesEs;
+      if (courseLang === 'pt' && c.messagesPt) return c.messagesPt;
+      return c.messages;
+    }
+    const companionMsgs = localizedMsgs(companion);
 
     const avatarEl = document.getElementById('character-avatar');
     const bubbleEl = document.getElementById('speech-bubble');
@@ -171,7 +201,7 @@
     const textEl = document.getElementById('speaker-text');
 
     avatarEl.innerHTML = `<img src="assets/characters/${companion.file}" alt="${companion.name}">`;
-    document.getElementById('back-link').href = courseSlug ? `course/${courseSlug}/index.html` : 'courses.html';
+    document.getElementById('back-link').href = courseSlug ? `courses/${courseSlug}/index.html` : 'courses.html';
 
     function showBubble(kind, text) {
       bubbleEl.classList.remove('correct', 'wrong');
@@ -184,6 +214,19 @@
     }
 
     // --- Speech ---
+    // Picks a voice in this course's language so Catalan lesson titles
+    // sound Catalan (and Spanish ones sound Spanish, etc.) instead of being
+    // mispronounced by an English voice. Falls back through close cousins —
+    // Catalan → Spanish, Frisian → Dutch → German — then English.
+    function pickVoiceFor(lang) {
+      const voices = window.speechSynthesis.getVoices();
+      const tryLang = (l) => voices.find(v => v.lang.toLowerCase().startsWith(l));
+      let v = tryLang(lang);
+      if (!v && lang === 'ca') v = tryLang('es');
+      if (!v && lang === 'fy') v = tryLang('nl') || tryLang('de');
+      if (!v) v = tryLang('en') || voices[0];
+      return v || null;
+    }
     function speak(text, onStart, onEnd) {
       if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
       window.speechSynthesis.cancel();
@@ -191,26 +234,114 @@
       if (!clean) { if (onEnd) onEnd(); return; }
       const u = new SpeechSynthesisUtterance(clean);
       u.rate = 0.85; u.pitch = 1.0; u.volume = 1.0;
-      const voices = window.speechSynthesis.getVoices();
-      const pref = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'))
-        || voices.find(v => v.lang.startsWith('en'))
-        || voices[0];
-      if (pref) u.voice = pref;
+      const pref = pickVoiceFor(courseLang);
+      if (pref) { u.voice = pref; u.lang = pref.lang; }
       if (onStart) u.onstart = onStart;
       if (onEnd) { u.onend = onEnd; u.onerror = onEnd; }
       window.speechSynthesis.speak(u);
+    }
+    // Speech in the COMPANION'S voice — used for greetings and feedback
+    // bubbles. For Catalan we want the character themselves to speak Catalan
+    // (the user explicitly wanted "the character speaking to this person").
+    function speakCompanion(text) {
+      if (!('speechSynthesis' in window) || !text) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 0.95; u.pitch = 1.0; u.volume = 1.0;
+      const pref = pickVoiceFor(courseLang);
+      if (pref) { u.voice = pref; u.lang = pref.lang; }
+      window.speechSynthesis.speak(u);
+    }
+
+    // --- Target-language phrase banks ─────────────────────────────────
+    // For language courses, the lesson TITLES (e.g. "Apostrophe &
+    // Contractions") are English and shouldn't be read aloud with the
+    // target-language voice. Instead, when a phrase bank exists for the
+    // (course, unit) we sample from there so the user hears actual Catalan
+    // (or Spanish, etc.) — the whole point of listening practice.
+    const LANG_PHRASES = {
+      catalan: {
+        1: [
+          // Greetings & pleasantries
+          'Hola, bon dia!', 'Bona tarda.', 'Bona nit.', 'Com estàs?', 'Molt bé, gràcies.',
+          // Self-introduction
+          'Em dic Maria.', 'Soc de Barcelona.', 'Visc a València.', 'Parlo català.',
+          // Numbers 1–20
+          'Un, dos, tres.', 'Quatre i cinc.', 'Sis, set, vuit, nou, deu.',
+          'Onze peres dolces.', 'Catorze llibres oberts.', 'Vint estudiants nous.',
+          // Numbers 21–100
+          'Vint-i-un dies.', 'Trenta minuts.', 'Cinquanta euros.', 'Cent persones.',
+          // Days of the week
+          'Dilluns al matí.', 'Dimecres a la tarda.', 'Divendres a la nit.', 'Diumenge a casa.',
+          // Months and seasons
+          'Al mes de gener.', 'A la primavera.', 'A l\'estiu fa calor.', 'A la tardor plou.',
+          // Colors
+          'La casa és vermella.', 'El cel és blau.', 'El llibre és verd.', 'El sol és groc.',
+          // Time (Catalan-specific quarters)
+          'Un quart de cinc.', 'Dos quarts de tres.', 'Tres quarts de deu.',
+          // Pronunciation gems
+          'L\'amic d\'en Pau.', 'La pluja al maig.', 'Cel·la oberta.', 'Vint anys junts.'
+        ]
+      }
+    };
+    function getLanguagePhrases(slug, unit) {
+      const byCourse = LANG_PHRASES[slug];
+      if (!byCourse) return null;
+      return byCourse[unit] || null;
+    }
+
+    // --- CSP-safe parser for the compact `units` array literal ---
+    // The site's CSP has no 'unsafe-eval', so `new Function(...)` is blocked in
+    // the browser. This recursive-descent parser reads the same literal without
+    // eval: nested arrays, numbers, single/double-quoted strings with escapes,
+    // // and /* */ comments, plus trailing commas and sparse holes.
+    function parseUnitsLiteral(src) {
+      let i = 0; const n = src.length;
+      function ws() { for (;;) { const c = src[i];
+        if (c === ' ' || c === '\t' || c === '\n' || c === '\r') { i++; continue; }
+        if (c === '/' && src[i + 1] === '/') { i += 2; while (i < n && src[i] !== '\n') i++; continue; }
+        if (c === '/' && src[i + 1] === '*') { i += 2; while (i < n && !(src[i] === '*' && src[i + 1] === '/')) i++; i += 2; continue; }
+        break; } }
+      function val() { ws(); const c = src[i];
+        if (c === '[') return arr();
+        if (c === "'" || c === '"') return str();
+        return num(); }
+      function arr() { i++; const a = [];
+        for (;;) { ws();
+          if (src[i] === ',') { a.push(undefined); i++; continue; } // sparse hole
+          if (src[i] === ']') { i++; break; }                       // end / trailing comma
+          a.push(val()); ws();
+          if (src[i] === ',') { i++; continue; }
+          if (src[i] === ']') { i++; break; }
+          throw new Error('array sep @' + i); }
+        return a; }
+      function str() { const q = src[i]; i++; let s = '';
+        while (i < n) { const c = src[i];
+          if (c === '\\') { const x = src[i + 1];
+            if (x === 'u') { s += String.fromCharCode(parseInt(src.substr(i + 2, 4), 16)); i += 6; continue; }
+            s += x === q ? q : x === '\\' ? '\\' : x === 'n' ? '\n' : x === 't' ? '\t'
+               : x === 'r' ? '\r' : x === 'b' ? '\b' : x === 'f' ? '\f' : x;
+            i += 2; continue; }
+          if (c === q) { i++; return s; }
+          s += c; i++; }
+        throw new Error('unterminated string'); }
+      function num() { let s = '';
+        while (i < n && /[0-9.\-+eE]/.test(src[i])) { s += src[i]; i++; }
+        if (s === '') throw new Error('bad number @' + i);
+        return Number(s); }
+      ws(); return val();
     }
 
     // --- Data ---
     async function loadCourseUnits() {
       if (!courseSlug) return [];
       try {
-        const res = await fetch(`course/${courseSlug}/index.html`, { cache: 'no-store' });
+        const res = await fetch(`courses/${courseSlug}/index.html`, { cache: 'no-store' });
         if (!res.ok) return [];
         const html = await res.text();
         const m = html.match(/const units = (\[[\s\S]*?\]);/);
         if (!m) return [];
-        try { return (new Function('return ' + m[1]))(); } catch (e) { return []; }
+        try { return parseUnitsLiteral(m[1]); } catch (e) { return []; }
       } catch (e) { return []; }
     }
 
@@ -333,12 +464,13 @@
     }
 
     function showDone(correct, total, nextLesson) {
-      const msg = correct === total ? companion.messages.perfect : companion.messages.correct;
+      const msg = correct === total ? companionMsgs.perfect : companionMsgs.correct;
       showBubble(correct === total ? 'correct' : null, msg);
+      if (isLanguageCourse) speakCompanion(msg);
       const root = document.getElementById('exercise-root');
       const nextBtn = nextLesson
-        ? `<a class="btn" href="course/${courseSlug}/index.html">Next Lesson → ${nextLesson.title}</a>`
-        : `<a class="btn" href="course/${courseSlug}/index.html">You're at the end — Back to Course</a>`;
+        ? `<a class="btn" href="courses/${courseSlug}/index.html">Next Lesson → ${nextLesson.title}</a>`
+        : `<a class="btn" href="courses/${courseSlug}/index.html">You're at the end — Back to Course</a>`;
       root.innerHTML = `
         <div class="practice-done">
           <h2>Session Complete!</h2>
@@ -346,7 +478,7 @@
           ${nextBtn}
           <div style="margin-top:14px;">
             <a class="btn secondary" href="practice.html?course=${courseSlug}&unit=${unitNum}&after=${afterLesson}">Practice Again</a>
-            <a class="btn secondary" href="course/${courseSlug}/index.html">Back to Course</a>
+            <a class="btn secondary" href="courses/${courseSlug}/index.html">Back to Course</a>
           </div>
         </div>
       `;
@@ -374,28 +506,62 @@
 
       document.getElementById('practice-subtitle').textContent = `Unit ${focusUnit[0]}: ${focusUnit[1]}`;
 
-      // Build SESSION_SIZE distinct phrases
+      // Build SESSION_SIZE distinct phrases. For language courses with a
+      // target-language phrase bank for this unit, prefer those — playing
+      // English lesson titles in a Catalan voice is nonsense audio.
+      const langPhrases = getLanguagePhrases(courseSlug, focusUnit[0]);
       const phrases = [];
-      const pool = [...focusTitles];
-      while (phrases.length < SESSION_SIZE && pool.length) {
-        const idx = Math.floor(Math.random() * pool.length);
-        const candidate = pool.splice(idx, 1)[0];
-        if (tokenize(candidate).length >= 2) phrases.push(candidate);
-      }
-      // Top up from other units if needed
-      if (phrases.length < SESSION_SIZE) {
-        const others = allTitles.filter(t => !phrases.includes(t) && tokenize(t).length >= 2);
-        while (phrases.length < SESSION_SIZE && others.length) {
-          phrases.push(others.splice(Math.floor(Math.random() * others.length), 1)[0]);
+      if (langPhrases && langPhrases.length) {
+        const pool = [...langPhrases];
+        while (phrases.length < SESSION_SIZE && pool.length) {
+          const idx = Math.floor(Math.random() * pool.length);
+          phrases.push(pool.splice(idx, 1)[0]);
+        }
+      } else {
+        const pool = [...focusTitles];
+        while (phrases.length < SESSION_SIZE && pool.length) {
+          const idx = Math.floor(Math.random() * pool.length);
+          const candidate = pool.splice(idx, 1)[0];
+          if (tokenize(candidate).length >= 2) phrases.push(candidate);
+        }
+        // Top up from other units if needed
+        if (phrases.length < SESSION_SIZE) {
+          const others = allTitles.filter(t => !phrases.includes(t) && tokenize(t).length >= 2);
+          while (phrases.length < SESSION_SIZE && others.length) {
+            phrases.push(others.splice(Math.floor(Math.random() * others.length), 1)[0]);
+          }
         }
       }
+      // Build a distractor pool from the SAME phrase bank (or fall back to
+      // titles) so word tiles look natural for the target language.
+      const phraseTokenPool = (langPhrases && langPhrases.length)
+        ? Array.from(new Set(langPhrases.flatMap(tokenize).filter(w => w.length >= 2)))
+        : null;
+      const localDistractorWords = phraseTokenPool || distractorWords;
       const total = phrases.length;
       updateProgress(0, total);
 
-      const greeting = companionId === 'edam'
-        ? `Hi! I'm Edam. Let's practice what you can hear in Unit ${focusUnit[0]}.`
-        : `Diego here. ${total} audio phrases — tap the words you hear, in order.`;
+      // Localized greeting from the companion. For language courses the
+      // character literally says "Hola, sóc Lingo" in Catalan, "Hola, soy
+      // Lingo" in Spanish, etc., AND speaks it out loud in the target
+      // language so the learner hears native pronunciation right away.
+      const GREETINGS = {
+        ca: `Hola! Sóc ${companion.name}. Escolta i toca les paraules que sentis, en ordre.`,
+        es: `¡Hola! Soy ${companion.name}. Escucha y toca las palabras que oigas, en orden.`,
+        pt: `Olá! Eu sou ${companion.name}. Ouça e toque nas palavras que ouvir, na ordem.`,
+        fr: `Salut ! Je suis ${companion.name}. Écoute et touche les mots que tu entends, dans l'ordre.`,
+        it: `Ciao! Sono ${companion.name}. Ascolta e tocca le parole che senti, in ordine.`,
+        de: `Hallo! Ich bin ${companion.name}. Höre zu und tippe die Wörter, die du hörst, der Reihe nach.`,
+        fy: `Hoi! Ik bin ${companion.name}. Lústerje en tik op de wurden dy't do hearst, op folchoarder.`,
+        en: companionId === 'edam'
+          ? `Hi! I'm Edam. Let's practice what you can hear in Unit ${focusUnit[0]}.`
+          : `${companion.name} here. ${total} audio phrases — tap the words you hear, in order.`
+      };
+      const greeting = GREETINGS[courseLang] || GREETINGS.en;
       showBubble(null, greeting);
+      // Have the character actually SAY the greeting out loud — this is the
+      // "Lily speaking" feel: hear the narrator in the target language.
+      if (isLanguageCourse) speakCompanion(greeting);
 
       let idx = 0;
       let correctCount = 0;
@@ -406,16 +572,26 @@
           showDone(correctCount, total, nextLesson);
           return;
         }
-        showBubble(null, `${companion.name}: Tap the speaker, then tap the words you hear — in order.`);
+        const PROMPT = {
+          ca: `${companion.name}: Toca l'altaveu, després toca les paraules en ordre.`,
+          es: `${companion.name}: Toca el altavoz y luego toca las palabras en orden.`,
+          pt: `${companion.name}: Toque no alto-falante e depois nas palavras na ordem.`,
+          en: `${companion.name}: Tap the speaker, then tap the words you hear — in order.`
+        };
+        showBubble(null, PROMPT[courseLang] || PROMPT.en);
         renderTapWhatYouHear({
           phrase: phrases[idx],
-          distractorWords,
+          distractorWords: localDistractorWords,
         }, (isCorrect) => {
           if (isCorrect) {
             correctCount++;
-            showBubble('correct', companion.messages.correct);
+            showBubble('correct', companionMsgs.correct);
+            if (isLanguageCourse) speakCompanion(companionMsgs.correct);
           } else {
-            showBubble('wrong', `${companion.messages.wrong} It was: "${phrases[idx]}".`);
+            const WAS = { ca: 'Era:', es: 'Era:', pt: 'Era:', fr: 'C\'était :', it: 'Era:', de: 'Es war:', en: 'It was:' };
+            const wasIt = WAS[courseLang] || WAS.en;
+            showBubble('wrong', `${companionMsgs.wrong} ${wasIt} "${phrases[idx]}".`);
+            if (isLanguageCourse) speakCompanion(companionMsgs.wrong);
           }
           idx++;
           updateProgress(idx, total);

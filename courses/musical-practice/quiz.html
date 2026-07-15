@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Musical Practice Quiz — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+  .quiz-page { max-width: 720px; margin: 0 auto; padding: 56px 16px 80px; }
+  .quiz-head { text-align: center; margin-bottom: 18px; }
+  .quiz-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fde68a; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; margin-bottom: 12px; }
+  .quiz-head h1 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .quiz-head p { font-size: 0.95rem; color: #cbd5e1; }
+
+  .progress { display: flex; gap: 6px; justify-content: center; margin: 18px 0 22px; }
+  .progress .dot { width: 32px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
+  .progress .dot.active { background: linear-gradient(90deg, #fbbf24, #f59e0b); border-color: #f59e0b; }
+  .progress .dot.done   { background: linear-gradient(90deg, #22c55e, #15803d); border-color: #22c55e; }
+  .progress .dot.miss   { background: linear-gradient(90deg, #ef4444, #b91c1c); border-color: #ef4444; }
+
+  .qcard { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; padding: 24px; box-shadow: 0 18px 38px rgba(0,0,0,0.30); }
+  .qcard .qtext { font-size: 1.1rem; font-weight: 700; line-height: 1.5; margin-bottom: 18px; color: #f8fafc; }
+
+  .answers { display: grid; gap: 12px; }
+  .answer {
+    text-align: left; padding: 14px 18px; border-radius: 14px;
+    background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.10);
+    color: #f1f5f9; font-weight: 600; font-size: 0.96rem; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    font-family: inherit;
+  }
+  .answer:hover:not(:disabled) { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.20); }
+  .answer:active:not(:disabled) { transform: scale(0.98); }
+  .answer.correct { background: rgba(34,197,94,0.18); border-color: #22c55e; color: #d1fae5; }
+  .answer.wrong   { background: rgba(239,68,68,0.18); border-color: #ef4444; color: #fecaca; }
+  .answer:disabled { cursor: default; }
+
+  .feedback { margin-top: 14px; padding: 12px 16px; border-radius: 12px; font-size: 0.92rem; display: none; }
+  .feedback.good { display: block; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35); color: #86efac; }
+  .feedback.bad  { display: block; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.35); color: #fca5a5; }
+
+  .actions { display: flex; gap: 12px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+  .btn { padding: 12px 22px; border-radius: 999px; border: none; font-weight: 800; font-size: 0.95rem; cursor: pointer; text-decoration: none; display: inline-block; font-family: inherit; }
+  .btn.primary { background: linear-gradient(135deg,#22c55e,#15803d); color: #fff; }
+  .btn.alt { background: rgba(255,255,255,0.08); color: #f1f5f9; }
+
+  .end-card { text-align: center; padding: 26px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.35); border-radius: 18px; }
+  .end-card h2 { color: #86efac; font-size: 1.4rem; margin-bottom: 6px; }
+  .end-card p { color: #d1fae5; margin-bottom: 14px; }
+  .end-card .score { font-size: 2.2rem; font-weight: 900; margin: 8px 0; }
+
+  .footer-nav { text-align: center; margin-top: 28px; }
+  .footer-nav a { color: #fbbf24; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container">
+    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+  </div></nav>
+
+  <main class="quiz-page">
+    <header class="quiz-head">
+      <span class="quiz-badge" id="badge">🎵 Musical Practice</span>
+      <h1 id="title">Loading…</h1>
+      <p id="subtitle">&nbsp;</p>
+    </header>
+
+    <div class="progress" id="progress"></div>
+
+    <section class="qcard" id="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions" id="actions" style="display:none;">
+        <button type="button" class="btn primary" id="nextBtn">Next →</button>
+      </div>
+    </section>
+
+    <section class="end-card" id="endCard" style="display:none;">
+      <h2 id="endTitle">🎉 Lesson complete!</h2>
+      <div class="score" id="endScore">4 / 4</div>
+      <p id="endMsg">Great work — you've earned XP for this lesson.</p>
+      <div class="actions">
+        <a class="btn primary" id="nextLessonLink" href="index.html">Next Lesson →</a>
+        <a class="btn alt" href="index.html">Back to Learning Path</a>
+        <button type="button" class="btn alt" id="retryBtn">Retry</button>
+      </div>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Musical Practice</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script type="module">
+    import { BASICS, SONG } from './quizzes.js';
+
+    // ─── Resolve unit + lesson from the URL ─────────────────────────────
+    const params = new URLSearchParams(location.search);
+    const unit   = parseInt(params.get('u') || params.get('unit') || '0', 10);
+    const lesson = parseInt(params.get('l') || params.get('lesson') || '0', 10);
+
+    // The song-unit number maps to a global lesson position so we can
+    // compute the unit's name. Rather than duplicate the full songs[] array
+    // here, we ship a compact `SONG_NAMES` mapping at the bottom of this
+    // file (built once from the same source as index.html).
+    //
+    // Implementation note: we don't actually need the full names map to
+    // render the quiz — we only need the title for the badge / heading.
+    // We can fetch index.html and extract it, but that's heavy. Instead,
+    // we encode the mapping as a small static JSON object generated below.
+
+    // For unit 1 (Basics), each lesson position uses BASICS[lesson].
+    // For unit >= 2 (a song), each lesson position uses SONG[lesson](songName).
+
+    // We look up the song name from the unit-name map stored in localStorage
+    // (populated by index.html when the page is visited). If that's empty,
+    // fall back to a generic label.
+    function unitNameFromStorage(u) {
+      try {
+        const raw = localStorage.getItem('mp-unit-names');
+        if (!raw) return null;
+        const map = JSON.parse(raw);
+        return map[String(u)] || null;
+      } catch { return null; }
+    }
+
+    let questions = [];
+    let unitName = '';
+    let lessonName = '';
+
+    if (unit === 1) {
+      const bank = BASICS[lesson];
+      if (!bank) showError('Unknown Basics lesson: ' + lesson);
+      else {
+        questions = bank;
+        unitName = 'Basics Piano';
+        lessonName = ['', 'Meet the Piano', 'Find Middle C', 'White Keys', 'Black Keys',
+                      'Octaves', 'Right Hand Fingers', 'Left Hand Fingers', 'Posture',
+                      'Dynamics', 'Staccato vs Legato', 'Intervals', 'C Major Position',
+                      'Treble Clef', 'Bass Clef', 'Basics Piano Checkpoint'][lesson] || `Lesson ${lesson}`;
+      }
+    } else if (unit >= 2) {
+      const fn = SONG[lesson];
+      if (!fn) showError('Unknown song lesson: ' + lesson);
+      else {
+        const songLabels = ['', 'Listen', 'Play First Note', 'First Two Notes',
+                            'Read Phrase 1', 'Play Phrase 1', 'Rhythm', 'Read Phrase 2',
+                            'Play Phrase 2', 'Combine 1 & 2', 'Final Phrase', 'Slow Tempo',
+                            'Speed Up', 'Two Hands', 'Full Run', 'Checkpoint'];
+        const storedName = unitNameFromStorage(unit) || `Song ${unit - 1}`;
+        unitName = storedName;
+        lessonName = songLabels[lesson] || `Lesson ${lesson}`;
+        questions = fn(storedName);
+      }
+    } else {
+      showError('Quiz needs ?u=<unit>&l=<lesson> in the URL.');
+    }
+
+    document.getElementById('title').textContent = lessonName;
+    document.getElementById('subtitle').textContent = unitName;
+    document.getElementById('badge').textContent =
+      '🎵 ' + (unit === 1 ? 'Unit 1 · Basics' : `Song ${unit - 1}`) + ' · Lesson ' + lesson;
+
+    // ─── Quiz state ─────────────────────────────────────────────────────
+    let i = 0;
+    let correctCount = 0;
+    let shuffled = [];
+
+    function shuffleAnswers(arr) {
+      // First entry of each `a:` array is the correct answer. Shuffle and
+      // track the new correct index so we can flag it on click.
+      const correct = arr[0];
+      const a = arr.slice();
+      for (let j = a.length - 1; j > 0; j--) {
+        const k = Math.floor(Math.random() * (j + 1));
+        [a[j], a[k]] = [a[k], a[j]];
+      }
+      return { answers: a, correctIdx: a.indexOf(correct) };
+    }
+
+    function renderProgress() {
+      const host = document.getElementById('progress');
+      host.innerHTML = '';
+      for (let j = 0; j < questions.length; j++) {
+        const d = document.createElement('div');
+        d.className = 'dot' +
+          (j < i ? (shuffled[j] && shuffled[j].got ? ' done' : ' miss') : '') +
+          (j === i ? ' active' : '');
+        host.appendChild(d);
+      }
+    }
+
+    function renderQuestion() {
+      if (i >= questions.length) return showEnd();
+      const Q = questions[i];
+      shuffled[i] = shuffled[i] || shuffleAnswers(Q.a);
+      const { answers, correctIdx } = shuffled[i];
+
+      document.getElementById('qtext').textContent = Q.q;
+      const aHost = document.getElementById('answers');
+      aHost.innerHTML = '';
+      answers.forEach((text, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'answer';
+        btn.textContent = text;
+        btn.addEventListener('click', () => onAnswer(idx, correctIdx));
+        aHost.appendChild(btn);
+      });
+      document.getElementById('feedback').className = 'feedback';
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('actions').style.display = 'none';
+      renderProgress();
+    }
+
+    function onAnswer(chosen, correctIdx) {
+      const buttons = document.querySelectorAll('.answer');
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === correctIdx) b.classList.add('correct');
+        else if (idx === chosen) b.classList.add('wrong');
+      });
+      const ok = chosen === correctIdx;
+      shuffled[i].got = ok;
+      if (ok) correctCount++;
+      const fb = document.getElementById('feedback');
+      fb.className = 'feedback ' + (ok ? 'good' : 'bad');
+      fb.textContent = ok ? '✅ Nice — correct!' : '❌ Not quite — see the green answer above.';
+      document.getElementById('actions').style.display = 'flex';
+      document.getElementById('nextBtn').textContent =
+        (i === questions.length - 1) ? 'See Results →' : 'Next →';
+      renderProgress();
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      i++;
+      if (i >= questions.length) showEnd();
+      else renderQuestion();
+    });
+
+    function showEnd() {
+      document.getElementById('qcard').style.display = 'none';
+      document.getElementById('progress').style.display = 'none';
+      const end = document.getElementById('endCard');
+      end.style.display = 'block';
+      document.getElementById('endScore').textContent = correctCount + ' / ' + questions.length;
+      const pct = correctCount / questions.length;
+      let msg;
+      if (pct === 1)       msg = 'Perfect run! XP banked. 🎉';
+      else if (pct >= 0.75) msg = 'Great job — XP banked.';
+      else if (pct >= 0.5)  msg = 'Solid effort — XP banked. Replay to top your score.';
+      else                  msg = 'Worth another try — replay the lesson and aim higher.';
+      document.getElementById('endMsg').textContent = msg;
+
+      // Wire the "Next Lesson →" button to the next position in the course.
+      // Within a unit (1..15) we just bump l. At lesson 15 we move to the next unit.
+      const nextHref = (() => {
+        if (lesson < 15) return `quiz.html?u=${unit}&l=${lesson + 1}`;
+        // End of a unit — move to next unit, lesson 1.
+        return `quiz.html?u=${unit + 1}&l=1`;
+      })();
+      document.getElementById('nextLessonLink').href = nextHref;
+
+      // Mark this lesson complete in Firestore on any pass (>= 50%).
+      if (pct >= 0.5) markComplete();
+    }
+
+    document.getElementById('retryBtn').addEventListener('click', () => {
+      i = 0;
+      correctCount = 0;
+      shuffled = [];
+      document.getElementById('endCard').style.display = 'none';
+      document.getElementById('qcard').style.display = '';
+      document.getElementById('progress').style.display = '';
+      renderQuestion();
+    });
+
+    function showError(msg) {
+      document.getElementById('title').textContent = 'Quiz unavailable';
+      document.getElementById('subtitle').textContent = msg;
+      document.getElementById('qcard').style.display = 'none';
+      document.getElementById('progress').style.display = 'none';
+    }
+
+    // ─── Firestore: mark complete ───────────────────────────────────────
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return;
+      alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        // Global lesson position so it lines up with the learning path's `mp-N` IDs.
+        // The path numbers lessons sequentially across all units: Basics 1..15,
+        // then song1 1..15, then song2 1..15, etc. So position = 15*(unit-1)+lesson.
+        const pos = 15 * (unit - 1) + lesson;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'musical-practice'),
+          { ['mp-' + pos]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    if (questions.length) renderQuestion();
+  </script>
+</body>
+</html>
