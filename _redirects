@@ -16,6 +16,25 @@
 /courses/chess-mastery/*  /courses.html  301!
 /course/chess-mastery/*   /courses.html  301!
 
+# Sign Language courses (ASL/BSL/JSL/KSL) removed 2026-07-15 — bounce old links to
+# the catalog rather than letting the generic /course/* rule land them on a 404.
+/courses/asl/*  /courses.html  301!
+/courses/asl    /courses.html  301!
+/course/asl/*   /courses.html  301!
+/course/asl     /courses.html  301!
+/courses/bsl/*  /courses.html  301!
+/courses/bsl    /courses.html  301!
+/course/bsl/*   /courses.html  301!
+/course/bsl     /courses.html  301!
+/courses/jsl/*  /courses.html  301!
+/courses/jsl    /courses.html  301!
+/course/jsl/*   /courses.html  301!
+/course/jsl     /courses.html  301!
+/courses/ksl/*  /courses.html  301!
+/courses/ksl    /courses.html  301!
+/course/ksl/*   /courses.html  301!
+/course/ksl     /courses.html  301!
+
 # Duplicate "Critical Thinking" (7-unit version) removed 2026-05-12 — its
 # topics are fully covered by the comprehensive "Critical Thinking & Problem-Solving".
 /courses/critical-thinking/*  /courses/critical-thinking-problem-solving/index.html  301!
