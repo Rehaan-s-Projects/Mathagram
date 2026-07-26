@@ -98,8 +98,17 @@ destination URL is the growth lever, not one image per course.
 3. `v3-hook.svg` — question hook ("Still confused by integrals?") over the course title
 
 **Rendering:** `scripts/pinterest/gen-pins.mjs` substitutes course data into each template and
-rasterizes via headless Chrome (the same path that produced `assets/lighthouse/og-card.png` from
-`og-card.svg`). Output: `assets/pins/<slug>-v1.png`, `-v2.png`, `-v3.png`.
+rasterizes with **`rsvg-convert`** (v2.61.3, at `/opt/homebrew/bin/rsvg-convert`) — the same tool
+that produced `assets/lighthouse/og-card.png` from `og-card.svg`. Output:
+`assets/pins/<slug>-v1.png`, `-v2.png`, `-v3.png`.
+
+Two consequences of rsvg-convert that the templates must respect:
+
+- **No web fonts.** Templates declare explicit `font-family` values available locally; text is
+  not styled via external CSS.
+- **No `<foreignObject>` text wrapping.** SVG `<text>` does not wrap, so the generator computes
+  line breaks itself and emits one `<tspan>` per line, with an approximate character-width
+  budget per template and a font-size step-down for long course titles.
 
 **Course selection:** the top 40 by total lesson count. Course data comes from the existing
 `extractMeta(slug)` in `scripts/quiz-buildout/extract-units.mjs`, which already parses the inline
