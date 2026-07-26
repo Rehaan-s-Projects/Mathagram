@@ -706,16 +706,22 @@ Article Rich Pins and search engines get real titles and summaries."
 
 Pinterest verifies the root domain only, so this goes on the homepage and nowhere else.
 
-- [ ] **Step 1: Add the tag with a self-documenting placeholder**
+- [ ] **Step 1: Add the real verification tag**
+
+The user supplied their live code on 2026-07-26. It is **not** a placeholder — use this exact
+value. (Pinterest calls this screen "Link to Pinterest → Websites → Claim", not "Claimed
+accounts".)
 
 Insert immediately after `<link rel="canonical" href="https://mathagram.org/">` in `index.html`:
 
 ```html
-  <!-- Pinterest domain claim. Replace the content value with the code from
-       Pinterest → Settings → Claimed accounts → Claim website → meta tag.
-       Pinterest analytics and Rich Pins stay inactive until this is real. -->
-  <meta name="p:domain_verify" content="PINTEREST_VERIFICATION_CODE_GOES_HERE">
+  <!-- Pinterest domain claim (Settings → Link to Pinterest → Websites → Claim).
+       Pinterest fetches this homepage to verify; it must be deployed before
+       clicking Verify on Pinterest's side. -->
+  <meta name="p:domain_verify" content="95b7afa457ded04fa7214c5fdb22e95c">
 ```
+
+Match the surrounding style: no self-closing slash, two-space indent.
 
 - [ ] **Step 2: Verify it is present and unique**
 
@@ -736,7 +742,9 @@ git commit -m "Add Pinterest domain-verify meta tag placeholder to homepage"
 
 - [ ] **Step 4: Flag the manual step**
 
-Report to the user: the placeholder must be replaced with their real Pinterest code and deployed before Pinterest analytics or Rich Pins activate. This blocks nothing else in the plan.
+Report to the user that the tag is in place and the homepage must be **deployed** before they
+click Verify on Pinterest. The user performs the deploy (see Task 15 Step 5 for the mandatory
+5-path clean); the implementer must not run `netlify deploy`.
 
 ---
 
