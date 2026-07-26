@@ -442,15 +442,16 @@ export function escapeAttr(s) {
 export function buildMetaBlock(course) {
   const title = escapeAttr(`${course.title} — Mathagram`);
   const desc = escapeAttr(course.description);
+  const url = escapeAttr(course.url);
   const lines = [
     META_START,
     `  <meta name="description" content="${desc}">`,
-    `  <link rel="canonical" href="${course.url}">`,
+    `  <link rel="canonical" href="${url}">`,
     `  <meta property="og:type" content="article">`,
     `  <meta property="og:site_name" content="Mathagram">`,
     `  <meta property="og:title" content="${title}">`,
     `  <meta property="og:description" content="${desc}">`,
-    `  <meta property="og:url" content="${course.url}">`,
+    `  <meta property="og:url" content="${url}">`,
     `  <meta property="og:image" content="${OG_IMAGE}">`,
     `  <meta property="og:image:width" content="1200">`,
     `  <meta property="og:image:height" content="630">`,
@@ -470,10 +471,12 @@ export function buildMetaBlock(course) {
 
 export function buildPinElement(course, pinPath) {
   const desc = escapeAttr(`${course.title} — free interactive lessons on Mathagram`);
+  const src = escapeAttr(pinPath);
+  const media = escapeAttr(`${SITE}${pinPath}`);
   return [
     PIN_START,
-    `  <img src="${pinPath}" alt="" width="1000" height="1500" style="display:none"`,
-    `       data-pin-media="${SITE}${pinPath}" data-pin-description="${desc}">`,
+    `  <img src="${src}" alt="" width="1000" height="1500" style="display:none"`,
+    `       data-pin-media="${media}" data-pin-description="${desc}">`,
     PIN_END,
   ].join('\n');
 }
@@ -2165,10 +2168,12 @@ export function buildPinElement(course, pinPath) {
     imageUrl: `${SITE}${pinPath}`,
     description: pinDesc,
   }));
+  const src = escapeAttr(pinPath);
+  const media = escapeAttr(`${SITE}${pinPath}`);
   return [
     PIN_START,
-    `  <img src="${pinPath}" alt="" width="1000" height="1500" style="display:none"`,
-    `       data-pin-media="${SITE}${pinPath}" data-pin-description="${desc}">`,
+    `  <img src="${src}" alt="" width="1000" height="1500" style="display:none"`,
+    `       data-pin-media="${media}" data-pin-description="${desc}">`,
     `  <p class="pin-save-wrap">`,
     `    <a class="pin-save" href="${saveUrl}" target="_blank" rel="noopener"`,
     `       data-pin-do="none">Save to Pinterest</a>`,
