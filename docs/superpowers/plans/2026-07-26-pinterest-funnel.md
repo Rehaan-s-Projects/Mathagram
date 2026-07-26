@@ -2059,6 +2059,182 @@ Tell the user, explicitly, what is still outstanding:
 
 ---
 
+### Task 16: "Save to Pinterest" button
+
+**Depends on:** Task 2 (`buildPinElement`) and Task 11 (body injection). Run after both.
+
+**Files:**
+- Modify: `scripts/pinterest/lib/meta-block.mjs`
+- Modify: `tests/pinterest/meta-block.test.mjs`
+- Modify: `css/global.css` (append)
+- Re-run: `scripts/pinterest/add-course-meta.mjs --pins` (updates the 40 pinned course pages)
+
+**Why this exists:** with ads off the table, organic reach depends on visitors pinning pages
+themselves. A save button turns every reader into a distributor.
+
+**Interfaces:**
+- Produces: `buildPinSaveUrl({ pageUrl, imageUrl, description }): string`
+- Changes: `buildPinElement(course, pinPath)` now emits a visible `<a>` save button in
+  addition to the hidden `data-pin-media` image
+
+**No third-party JavaScript and no CSP change.** Pinterest's official `pinit.js` widget is
+deliberately *not* used — it would need a new `script-src` entry, load third-party JS, and set
+cookies on every course page. Instead the Pinterest pin-create URL is built at **build time**
+in Node and injected as a plain anchor. Zero runtime JS, zero CSP impact, works with JS
+disabled.
+
+The save link carries `utm_content=save` so GA4 distinguishes visitor-initiated saves from
+the pins you publish yourself.
+
+- [ ] **Step 1: Write the failing test**
+
+Append to `tests/pinterest/meta-block.test.mjs`:
+
+```javascript
+test('buildPinSaveUrl targets Pinterest pin-create with encoded params', () => {
+  const url = buildPinSaveUrl({
+    pageUrl: 'https://mathagram.org/courses/algebra/',
+    imageUrl: 'https://mathagram.org/assets/pins/algebra-v1.png',
+    description: 'Algebra & "Friends" — free lessons',
+  });
+  assert.ok(url.startsWith('https://www.pinterest.com/pin/create/button/?'));
+  assert.ok(url.includes('url=https%3A%2F%2Fmathagram.org%2Fcourses%2Falgebra%2F'));
+  assert.ok(url.includes('media=https%3A%2F%2Fmathagram.org%2Fassets%2Fpins%2Falgebra-v1.png'));
+  assert.ok(url.includes('description=Algebra%20%26%20%22Friends%22'));
+  assert.ok(!url.includes(' '), 'no raw spaces may survive encoding');
+});
+
+test('buildPinSaveUrl tags the destination so saves are attributable', () => {
+  const url = buildPinSaveUrl({
+    pageUrl: 'https://mathagram.org/courses/algebra/',
+    imageUrl: 'https://mathagram.org/assets/pins/algebra-v1.png',
+    description: 'x',
+  });
+  assert.ok(url.includes('utm_source%3Dpinterest'));
+  assert.ok(url.includes('utm_content%3Dsave'));
+});
+
+test('buildPinElement emits a visible save anchor alongside the hidden image', () => {
+  const b = buildPinElement(COURSE, '/assets/pins/algebra-v1.png');
+  assert.ok(b.includes('class="pin-save"'));
+  assert.ok(b.includes('href="https://www.pinterest.com/pin/create/button/?'));
+  assert.ok(b.includes('rel="noopener"'));
+  assert.ok(b.includes('target="_blank"'));
+  assert.ok(b.includes('Save to Pinterest'));
+  // the hidden media image must still be present
+  assert.ok(b.includes('data-pin-media='));
+  assert.ok(b.includes('style="display:none"'));
+});
+```
+
+Add `buildPinSaveUrl` to the existing import list at the top of the test file.
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `cd /Users/dakotabrown/rehan-calculus-local && node --test tests/pinterest/meta-block.test.mjs`
+Expected: FAIL — `buildPinSaveUrl is not a function`
+
+- [ ] **Step 3: Implement**
+
+Add to `scripts/pinterest/lib/meta-block.mjs`:
+
+```javascript
+export function buildPinSaveUrl({ pageUrl, imageUrl, description }) {
+  const dest = new URL(pageUrl);
+  dest.searchParams.set('utm_source', 'pinterest');
+  dest.searchParams.set('utm_medium', 'social');
+  dest.searchParams.set('utm_content', 'save');
+  const q = new URLSearchParams({
+    url: dest.toString(),
+    media: imageUrl,
+    description,
+  });
+  // URLSearchParams encodes spaces as '+'; Pinterest handles %20 more reliably.
+  return `https://www.pinterest.com/pin/create/button/?${q.toString().replace(/\+/g, '%20')}`;
+}
+```
+
+Then extend `buildPinElement` to append the anchor before `PIN_END`:
+
+```javascript
+export function buildPinElement(course, pinPath) {
+  const pinDesc = `${course.title} — free interactive lessons on Mathagram`;
+  const desc = escapeAttr(pinDesc);
+  const saveUrl = escapeAttr(buildPinSaveUrl({
+    pageUrl: course.url,
+    imageUrl: `${SITE}${pinPath}`,
+    description: pinDesc,
+  }));
+  return [
+    PIN_START,
+    `  <img src="${pinPath}" alt="" width="1000" height="1500" style="display:none"`,
+    `       data-pin-media="${SITE}${pinPath}" data-pin-description="${desc}">`,
+    `  <p class="pin-save-wrap">`,
+    `    <a class="pin-save" href="${saveUrl}" target="_blank" rel="noopener"`,
+    `       data-pin-do="none">Save to Pinterest</a>`,
+    `  </p>`,
+    PIN_END,
+  ].join('\n');
+}
+```
+
+`data-pin-do="none"` stops Pinterest's browser extension from decorating the anchor as a
+nested pin widget.
+
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `cd /Users/dakotabrown/rehan-calculus-local && node --test tests/pinterest/meta-block.test.mjs`
+Expected: PASS — all meta-block tests including the 3 new ones
+
+- [ ] **Step 5: Append the styles**
+
+Append to `css/global.css`:
+
+```css
+/* ---- Save to Pinterest ---- */
+.pin-save-wrap { text-align: center; margin: 0 0 32px; }
+.pin-save {
+  display: inline-block; padding: 9px 18px; font-size: 0.85rem; font-weight: 700;
+  color: #fff; background: #e60023; border-radius: 999px; text-decoration: none;
+}
+.pin-save:hover, .pin-save:focus-visible { background: #ad081b; }
+```
+
+- [ ] **Step 6: Re-run the injector and confirm idempotency**
+
+```bash
+cd /Users/dakotabrown/rehan-calculus-local
+node scripts/pinterest/add-course-meta.mjs --pins
+SLUG=$(node scripts/pinterest/top-courses.mjs 1)
+sed -n '/pin:media:start/,/pin:media:end/p' "courses/$SLUG/index.html"
+node scripts/pinterest/add-course-meta.mjs --pins
+git status --short courses/ | wc -l
+```
+Expected: the first run reports `changed=40`; the printed block shows both the hidden image and
+the save anchor; the second run reports `changed=0` and adds no further modifications.
+
+- [ ] **Step 7: Verify in a browser**
+
+Serve locally and open a pinned course page. Confirm the red "Save to Pinterest" button renders,
+and that clicking it opens Pinterest's pin-create dialog **pre-filled with the vertical
+1000×1500 image** (not the landscape og-card). Confirm the Network tab shows **no request to any
+Pinterest domain before the click**.
+
+- [ ] **Step 8: Commit**
+
+```bash
+cd /Users/dakotabrown/rehan-calculus-local
+node --test tests/ tests/pinterest/
+git add scripts/pinterest/lib/meta-block.mjs tests/pinterest/meta-block.test.mjs css/global.css courses/
+git commit -m "Add Save to Pinterest button to pinned course pages
+
+Build-time pin-create URL injected as a plain anchor — no pinit.js, no
+third-party JS, no CSP change. Tagged utm_content=save so visitor saves
+are distinguishable from published pins."
+```
+
+---
+
 ## Self-Review
 
 **Spec coverage:** §1 domain claim → Task 5. §2 Rich Pin metadata → Tasks 1–4. §3 pin images → Tasks 9–11. §4 embeds → Tasks 6–8. §5 email capture → Tasks 12–13. §6 measurement → Tasks 8, 13, 15. Privacy policy → Task 14. Deploy → Task 15. No spec section is unimplemented.
