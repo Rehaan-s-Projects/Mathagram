@@ -62,3 +62,15 @@ test('buildPinElement emits a hidden img with absolute pin media', () => {
   assert.ok(b.includes('style="display:none"'));
   assert.ok(b.includes('data-pin-description="Algebra &amp; &quot;Friends&quot;'));
 });
+
+test('buildMetaBlock escapes the course url into attributes', () => {
+  const b = buildMetaBlock({ ...COURSE, url: 'https://mathagram.org/c/a"b&c/' });
+  assert.ok(b.includes('href="https://mathagram.org/c/a&quot;b&amp;c/"'));
+  assert.ok(!b.includes('a"b&c'), 'raw quote/ampersand must not survive');
+});
+
+test('buildPinElement escapes the pin path into attributes', () => {
+  const b = buildPinElement(COURSE, '/assets/pins/a"b&c-v1.png');
+  assert.ok(b.includes('src="/assets/pins/a&quot;b&amp;c-v1.png"'));
+  assert.ok(!b.includes('a"b&c-v1.png'), 'raw quote/ampersand must not survive');
+});
