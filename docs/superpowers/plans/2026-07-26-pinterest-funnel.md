@@ -23,7 +23,8 @@ Every task's requirements implicitly include this section.
 - **GA4 measurement ID is `G-1JKG4MN6XX`.** The old `G-Z7TFRFQDQJ` property is dead and inaccessible.
 - **Email copy addresses parents, teachers, and learners 13+.** This matches `privacy.html` §10, which already requires parental consent for ages 11–12 and restricts Learning Post to 13+. Never place the subscribe form inside a kid-facing lesson flow.
 - **Injected HTML blocks are delimited and idempotent.** Re-running any injection script must produce an empty `git diff`.
-- **Deploying is a 5-path clean + absolute `--dir`.** See Task 15. `git push` does not publish mathagram.org.
+- **Deploying is a 5-path clean + absolute `--dir`.** See Task 15. `git push` does not publish mathagram.org. **The user performs the Netlify deploy, not the implementer.** The Firestore rules deploy (Task 12) is controller-authorized.
+- **`scripts/quiz-buildout/extract-units.mjs` is off-limits.** It is shared with the ongoing quiz-buildout campaign. It cannot parse 61 of 341 courses' unit arrays; this plan works around that with nullable counts (Task 1) rather than editing it.
 
 ## File Structure
 
@@ -75,10 +76,23 @@ Every task's requirements implicitly include this section.
 - Consumes: `extractMeta(slug)` from `scripts/quiz-buildout/extract-units.mjs`
 - Produces:
   - `listCourseSlugs(): string[]` — sorted slugs under `courses/` that contain `index.html`
-  - `getCourseData(slug): CourseData` where `CourseData = { slug, title, description, category, totalLessons, unitCount, url }`
+  - `getCourseData(slug): CourseData` where
+    `CourseData = { slug, title, description, category, totalLessons: number|null, unitCount: number|null, url }`
+  - `extractTitle(html): string`
   - `extractDescription(html): string`
   - `extractCategory(html): string`
   - `truncate(s, max = 160): string`
+
+**Counts are nullable by design.** `extract-units.mjs` cannot parse the unit array of 61 of
+the 341 courses — three separate boundary bugs (an apostrophe inside a single-quoted title; an
+end-marker that overshoots into code referencing `lessons`; an end-marker landing inside a
+`.map()` callback). That parser is shared with the quiz-buildout campaign, so this plan does
+**not** modify it.
+
+Instead `getCourseData()` degrades: `title`, `description`, and `category` come from plain
+regex on the HTML and always work, while `totalLessons` and `unitCount` are `null` when the
+unit array cannot be parsed. Metadata (Tasks 2–4, all 341 courses) needs no counts. Only the
+pin ranking and the v2/v3 templates (Tasks 10–11) do, and they filter nulls out.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -87,7 +101,7 @@ Every task's requirements implicitly include this section.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  extractDescription, extractCategory, truncate,
+  extractTitle, extractDescription, extractCategory, truncate,
   listCourseSlugs, getCourseData,
 } from '../../scripts/pinterest/lib/course-data.mjs';
 
@@ -98,6 +112,11 @@ const SAMPLE = `<!DOCTYPE html><html><head><title>x</title></head><body>
     <p>The ultimate algebra course &amp; more. 1312 lessons across 60 units.</p>
   </header>
 </body></html>`;
+
+test('extractTitle pulls the h1 and decodes entities', () => {
+  assert.equal(extractTitle(SAMPLE), 'Algebra');
+  assert.equal(extractTitle('<h1>Cantor&#39;s Set &amp; Co</h1>'), "Cantor's Set & Co");
+});
 
 test('extractDescription pulls the course-header paragraph and decodes entities', () => {
   assert.equal(
@@ -145,6 +164,25 @@ test('getCourseData reads a real course end to end', () => {
   assert.ok(c.description.length > 20);
   assert.ok(c.description.length <= 160);
 });
+
+test('getCourseData still yields metadata when the unit array cannot be parsed', () => {
+  // set-theory is one of the 61 courses extract-units.mjs cannot parse.
+  const c = getCourseData('set-theory');
+  assert.ok(c.title.length > 0, 'title must survive an unparseable unit array');
+  assert.ok(c.description.length > 0, 'description must survive');
+  assert.equal(c.url, 'https://mathagram.org/courses/set-theory/');
+  assert.equal(c.totalLessons, null);
+  assert.equal(c.unitCount, null);
+});
+
+test('every course in the catalog yields a title and description', () => {
+  const missing = [];
+  for (const slug of listCourseSlugs()) {
+    const c = getCourseData(slug);
+    if (!c.title || !c.description) missing.push(slug);
+  }
+  assert.deepEqual(missing, [], `courses missing title/description: ${missing.join(', ')}`);
+});
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -179,6 +217,12 @@ function stripTags(s) {
   return String(s).replace(/<[^>]+>/g, '');
 }
 
+export function extractTitle(html) {
+  const m = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
+  if (!m) return '';
+  return decodeEntities(stripTags(m[1])).replace(/\s+/g, ' ').trim();
+}
+
 export function extractDescription(html) {
   const m = html.match(/<header class="course-header">[\s\S]*?<p>([\s\S]*?)<\/p>/);
   if (!m) return '';
@@ -209,14 +253,28 @@ export function listCourseSlugs() {
 
 export function getCourseData(slug) {
   const html = readFileSync(`${COURSES_DIR}/${slug}/index.html`, 'utf8');
-  const meta = extractMeta(slug);
+
+  // Lesson counts are a bonus, not a requirement. extract-units.mjs cannot parse
+  // 61 of the 341 courses' unit arrays, and metadata does not need counts — so a
+  // parse failure degrades to nulls rather than throwing. Do not "fix" this by
+  // editing extract-units.mjs: it is shared with the quiz-buildout tooling.
+  let totalLessons = null;
+  let unitCount = null;
+  try {
+    const meta = extractMeta(slug);
+    totalLessons = meta.lessonsPerUnit.reduce((a, b) => a + b, 0);
+    unitCount = meta.unitNames.length;
+  } catch {
+    // counts stay null
+  }
+
   return {
     slug,
-    title: meta.courseName,
+    title: extractTitle(html),
     description: truncate(extractDescription(html), 160),
     category: extractCategory(html),
-    totalLessons: meta.lessonsPerUnit.reduce((a, b) => a + b, 0),
-    unitCount: meta.unitNames.length,
+    totalLessons,
+    unitCount,
     url: `${SITE}/courses/${slug}/`,
   };
 }
@@ -227,23 +285,33 @@ export function getCourseData(slug) {
 Run: `cd /Users/dakotabrown/rehan-calculus-local && node --test tests/pinterest/course-data.test.mjs`
 Expected: PASS — 7 tests
 
-- [ ] **Step 5: Confirm the extractor survives the whole catalog**
+- [ ] **Step 5: Confirm the whole catalog yields metadata**
 
-Some courses may use an unexpected unit format. Find out now, not during the 341-file write.
+`getCourseData()` must never throw, and every course must produce a title and description.
+Counts are allowed to be null for the 61 known-unparseable courses.
 
 Run:
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local && node -e "
 import('./scripts/pinterest/lib/course-data.mjs').then(m => {
-  const bad = [];
+  const threw = [], noMeta = [], noCounts = [];
   for (const s of m.listCourseSlugs()) {
-    try { m.getCourseData(s); } catch (e) { bad.push(s + ': ' + e.message); }
+    try {
+      const c = m.getCourseData(s);
+      if (!c.title || !c.description) noMeta.push(s);
+      if (c.totalLessons === null) noCounts.push(s);
+    } catch (e) { threw.push(s + ': ' + e.message); }
   }
-  console.log('failed:', bad.length);
-  bad.slice(0, 20).forEach(b => console.log('  ' + b));
+  console.log('threw:', threw.length, '| missing title/desc:', noMeta.length, '| null counts:', noCounts.length);
+  threw.slice(0, 10).forEach(b => console.log('  THREW ' + b));
+  noMeta.slice(0, 10).forEach(b => console.log('  NOMETA ' + b));
 });"
 ```
-Expected: `failed: 0`. If any fail, record the slugs — Task 4 must skip them explicitly rather than crash, and the count must be reported to the user.
+Expected: `threw: 0 | missing title/desc: 0 | null counts: 61`.
+
+`threw` or `missing title/desc` above zero is a real failure — report it and stop. A `null
+counts` figure near 61 is expected and correct; report the exact number but do not treat it as
+a failure and do not modify `extract-units.mjs`.
 
 - [ ] **Step 6: Commit**
 
@@ -1208,10 +1276,11 @@ Templates use `{{TOKEN}}` placeholders. `{{TITLE_TSPANS}}` is replaced with gene
 import { listCourseSlugs, getCourseData } from './lib/course-data.mjs';
 
 const n = Number(process.argv[2] || 40);
-const rows = [];
-for (const slug of listCourseSlugs()) {
-  try { rows.push(getCourseData(slug)); } catch { /* skip unparseable courses */ }
-}
+// Courses whose unit array could not be parsed have null counts and cannot be
+// ranked — the v2/v3 templates print a lesson count, so they are not pinnable.
+const rows = listCourseSlugs()
+  .map(getCourseData)
+  .filter((c) => c.totalLessons !== null);
 rows.sort((a, b) => b.totalLessons - a.totalLessons);
 for (const c of rows.slice(0, n)) console.log(c.slug);
 ```
@@ -1277,12 +1346,14 @@ function render(course, tpl) {
 
 mkdirSync(OUT_DIR, { recursive: true });
 
-const rows = [];
-for (const slug of listCourseSlugs()) {
-  try { rows.push(getCourseData(slug)); } catch { /* skip unparseable */ }
-}
+// Null counts mean the unit array could not be parsed; the v2/v3 templates print a
+// lesson count, so those courses are excluded from pin generation.
+const rows = listCourseSlugs()
+  .map(getCourseData)
+  .filter((c) => c.totalLessons !== null);
 rows.sort((a, b) => b.totalLessons - a.totalLessons);
 const selected = rows.slice(0, limit);
+console.log(`ranking ${rows.length} courses with known lesson counts; taking top ${limit}`);
 
 let made = 0;
 for (const course of selected) {
