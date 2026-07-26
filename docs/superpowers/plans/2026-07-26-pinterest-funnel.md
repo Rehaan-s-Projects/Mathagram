@@ -548,6 +548,35 @@ test('preserves content outside the block', () => {
 test('throws when the anchor is absent', () => {
   assert.throws(() => injectBlock('<html></html>', BLOCK, OPTS), /anchor/i);
 });
+
+test('refuses an ambiguous anchor rather than corrupting the file', () => {
+  // A literal </head> inside a script would otherwise receive the block.
+  const html = '<head><script>const t = "</head>";</script>\n</head>';
+  assert.throws(() => injectBlock(html, BLOCK, OPTS), /more than once/i);
+});
+
+test('refuses a dangling start delimiter left by an interrupted write', () => {
+  const html = '<head>\n<!--s-->\n  <meta name="x" content="OLD">\n</head>';
+  assert.throws(() => injectBlock(html, BLOCK, OPTS), /no matching/i);
+});
+
+test('is idempotent when a head block and a body block coexist', () => {
+  // This is the real state of a course page after both Task 4 and Task 11 run.
+  const HEAD_OPTS = { start: '<!--ms-->', end: '<!--me-->', before: '</head>' };
+  const BODY_OPTS = { start: '<!--ps-->', end: '<!--pe-->', before: '</body>' };
+  const HEAD_BLOCK = '<!--ms-->\n  <meta name="a" content="1">\n<!--me-->';
+  const BODY_BLOCK = '<!--ps-->\n  <img src="/p.png">\n<!--pe-->';
+  const doc = '<html><head><title>t</title>\n</head><body><p>hi</p>\n</body></html>';
+
+  const once = injectBlock(injectBlock(doc, HEAD_BLOCK, HEAD_OPTS), BODY_BLOCK, BODY_OPTS);
+  const twice = injectBlock(injectBlock(once, HEAD_BLOCK, HEAD_OPTS), BODY_BLOCK, BODY_OPTS);
+
+  assert.equal(once, twice, 'second pass over both blocks must be a no-op');
+  assert.equal(once.split('<!--ms-->').length - 1, 1, 'exactly one head block');
+  assert.equal(once.split('<!--ps-->').length - 1, 1, 'exactly one body block');
+  assert.ok(once.indexOf('<!--ms-->') < once.indexOf('</head>'), 'head block in head');
+  assert.ok(once.indexOf('<!--ps-->') > once.indexOf('</head>'), 'body block after head');
+});
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -560,14 +589,31 @@ Expected: FAIL — module not found
 ```javascript
 // scripts/pinterest/lib/inject.mjs
 // Idempotent delimited-block injection into an HTML string.
+//
+// This function rewrites 341 committed files, so every ambiguous input fails
+// loudly rather than guessing. A wrong guess here corrupts the whole catalog
+// and the corruption gets committed before anyone notices.
 export function injectBlock(html, block, { start, end, before }) {
   const s = html.indexOf(start);
   const e = html.indexOf(end, s === -1 ? 0 : s);
   if (s !== -1 && e !== -1 && e > s) {
     return html.slice(0, s) + block + html.slice(e + end.length);
   }
+  // A start delimiter with no matching end means a previous write was
+  // interrupted. Inserting now would leave an orphaned delimiter plus a second
+  // block, so refuse.
+  if (s !== -1 && e === -1) {
+    throw new Error(`injectBlock: found ${start} with no matching ${end}`);
+  }
   const at = html.indexOf(before);
   if (at === -1) throw new Error(`injectBlock: anchor ${before} not found`);
+  // indexOf takes the FIRST match. If the anchor string also appears earlier —
+  // e.g. a literal "</body>" inside a script template literal on a
+  // web-development course page — injecting there would mangle the script.
+  // Refuse rather than corrupt.
+  if (html.indexOf(before, at + before.length) !== -1) {
+    throw new Error(`injectBlock: anchor ${before} appears more than once`);
+  }
   return html.slice(0, at) + block + '\n' + html.slice(at);
 }
 ```
