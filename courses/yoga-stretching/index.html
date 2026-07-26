@@ -94,7 +94,7 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'yoga-'+n, title: t, href: playable[n] || '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'yoga-'+n, title: t, href: playable[n] || ('quiz.html?unit='+u+'&lesson='+(i+1)), unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
       });
     });
     async function loadPath() {

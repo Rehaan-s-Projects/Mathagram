@@ -2,8 +2,6 @@ animals
 aviation-flight
 character-map
 chemistry-and-biochemistry
-cosplay-craft
-cpp
 cryptography-logic
 dashboards
 data-ethics

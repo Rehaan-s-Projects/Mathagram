@@ -51,6 +51,8 @@ coffee-tea
 composting
 computer-science
 conflict-resolution
+cosplay-craft
+cpp
 creative-writing
 critical-thinking-problem-solving
 cryptocurrency
@@ -60,3 +62,4 @@ data-wrangling
 decision-theory
 musical-practice
 talker-machine
+yoga-stretching

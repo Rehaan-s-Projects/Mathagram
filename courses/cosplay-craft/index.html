@@ -42,7 +42,7 @@
     units.forEach(([u, name, titles]) => {
       titles.forEach((t, i) => {
         n++;
-        lessons.push({ id: 'cosplay-'+n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
+        lessons.push({ id: 'cosplay-'+n, title: t, href: 'quiz.html?unit='+u+'&lesson='+(i+1), unit: u, unitName: name, category: 'others', checkpoint: i===titles.length-1 });
     if (lessons[0]) lessons[0].href = 'lesson-1.html';
       });
     });
