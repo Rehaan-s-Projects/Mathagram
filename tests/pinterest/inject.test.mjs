@@ -37,3 +37,58 @@ test('preserves content outside the block', () => {
 test('throws when the anchor is absent', () => {
   assert.throws(() => injectBlock('<html></html>', BLOCK, OPTS), /anchor/i);
 });
+
+test('throws when a start delimiter has no matching end', () => {
+  const dangling = '<head><!--s--><meta>text</head>';
+  assert.throws(
+    () => injectBlock(dangling, BLOCK, OPTS),
+    /found.*with no matching/i
+  );
+});
+
+test('throws when the anchor appears more than once', () => {
+  // Scenario: script tag contains literal HTML with </head> inside it
+  const ambiguous = '<head><script>const html = `<head>x</head>`;</script></head>';
+  assert.throws(
+    () => injectBlock(ambiguous, BLOCK, OPTS),
+    /appears more than once/i
+  );
+});
+
+test('is idempotent with both meta and pin blocks', () => {
+  // Simulate the state after Task 4 (meta block in head) and Task 11 (pin block in body)
+  const metaOpts = { start: '<!--m:start-->', end: '<!--m:end-->', before: '</head>' };
+  const pinOpts = { start: '<!--p:start-->', end: '<!--p:end-->', before: '</body>' };
+  const metaBlock = '<!--m:start-->\n  <meta>\n<!--m:end-->';
+  const pinBlock = '<!--p:start-->\n  <img>\n<!--p:end-->';
+
+  const html = '<html><head></head><body></body></html>';
+
+  // Inject both blocks
+  const with_meta = injectBlock(html, metaBlock, metaOpts);
+  const with_both = injectBlock(with_meta, pinBlock, pinOpts);
+
+  // Re-inject both blocks — should be idempotent
+  const again_meta = injectBlock(with_both, metaBlock, metaOpts);
+  const again_both = injectBlock(again_meta, pinBlock, pinOpts);
+
+  assert.equal(with_both, again_both);
+});
+
+test('preserves exactly one of each block with two-block coexistence', () => {
+  // Verify the state after injecting both meta and pin blocks
+  const metaOpts = { start: '<!--m:start-->', end: '<!--m:end-->', before: '</head>' };
+  const pinOpts = { start: '<!--p:start-->', end: '<!--p:end-->', before: '</body>' };
+  const metaBlock = '<!--m:start-->\n  <meta>\n<!--m:end-->';
+  const pinBlock = '<!--p:start-->\n  <img>\n<!--p:end-->';
+
+  const html = '<html><head></head><body></body></html>';
+  const with_meta = injectBlock(html, metaBlock, metaOpts);
+  const with_both = injectBlock(with_meta, pinBlock, pinOpts);
+
+  // Verify exactly one of each delimiter pair exists
+  assert.equal(with_both.split('<!--m:start-->').length - 1, 1);
+  assert.equal(with_both.split('<!--m:end-->').length - 1, 1);
+  assert.equal(with_both.split('<!--p:start-->').length - 1, 1);
+  assert.equal(with_both.split('<!--p:end-->').length - 1, 1);
+});
