@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 6 · The 1⁄N Rule — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THE BIG IDEA',
+        title: 'One rule for every fair die',
+        html: '<p>Imagine a random experiment with <span class="le-term">N</span> possible outcomes, and suppose every one of them is just as likely as every other. Then each single outcome has probability <strong>1⁄N</strong>.</p><p>Roll a fair six-sided die: there are 6 faces, so landing on any particular face &mdash; say a <strong>4</strong> &mdash; has probability <strong>1⁄6</strong>. That is the whole idea, and we call it the <span class="le-term">1⁄N rule</span>.</p>',
+        visual: 'die:4'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE FINE PRINT',
+        title: 'Why "equally likely" matters',
+        html: '<p>The 1⁄N rule only works when the outcomes are <span class="le-term">equally likely</span> &mdash; no face is favored over another. A fair die is perfectly balanced, so all 6 faces share the probability evenly.</p><p>Now picture a <span class="le-term">loaded die</span> secretly weighted to land on 6 more often. Its faces are <em>not</em> equally likely, so you can no longer say each is 1⁄6. "Equally likely" is the assumption that makes the rule valid.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'SEE IT HAPPEN',
+        title: 'Roll and watch the tallies',
+        html: '<p>Tap the die a bunch of times. Because the faces are equally likely, over many rolls each number shows up roughly <strong>1⁄6</strong> of the time &mdash; the tallies drift toward being even.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'COUNTING FAVORABLES',
+        title: 'From one outcome to an event',
+        html: '<p>Most questions ask about an <span class="le-term">event</span> &mdash; a group of outcomes we care about. If <strong>k</strong> of the N equally likely outcomes make the event happen, then its probability is <strong>k⁄N</strong>.</p><p>Example: on a d6, "rolling an even number" means the outcomes {2, 4, 6}. That is <strong>k = 3</strong> favorable outcomes out of <strong>N = 6</strong>, so the probability is 3⁄6 = <strong>1⁄2</strong>.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'question',
+        eyebrow: 'YOUR TURN',
+        title: 'What is P(rolling a number ≤ 2) on a fair d6?',
+        html: '<p>Count the favorable outcomes first, then divide by 6.</p>',
+        options: ['1⁄6', '2⁄6 = 1⁄3', '1⁄2', '2⁄3'],
+        answer: 1,
+        explain: '<p>The outcomes with value &le; 2 are {1, 2}, so <strong>k = 2</strong> out of <strong>N = 6</strong>. That gives 2⁄6, which simplifies to <strong>1⁄3</strong>.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'YOUR TURN',
+        title: 'What is P(rolling greater than 4) on a fair d6?',
+        html: '<p>"Greater than 4" does not include 4 itself.</p>',
+        options: ['1⁄6', '2⁄6 = 1⁄3', '3⁄6 = 1⁄2', '4⁄6 = 2⁄3'],
+        answer: 1,
+        explain: '<p>Numbers greater than 4 are {5, 6} &mdash; note that 4 is <em>not</em> included. So <strong>k = 2</strong> out of <strong>N = 6</strong>, giving 2⁄6 = <strong>1⁄3</strong>.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The 1⁄N rule, locked in',
+        html: '<p>When a random experiment has <strong>N equally likely outcomes</strong>, each single outcome has probability <strong>1⁄N</strong>, and an event built from <strong>k</strong> of those outcomes has probability <strong>k⁄N</strong>.</p><p>This one idea powers every fair die: a d6 gives 1⁄6 per face, a d20 gives <strong>1⁄20</strong> per face, and so on. Just remember the catch &mdash; the outcomes must be <span class="le-term">equally likely</span>, or the rule breaks down.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-6', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

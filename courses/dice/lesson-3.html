@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3 · Fair vs. Loaded — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'FAIRNESS',
+        title: 'What makes a die honest?',
+        html: '<p>Grab an ordinary six&ndash;sided die. When you roll it, none of the numbers gets to cheat: a <strong>1</strong> is just as likely to land face&ndash;up as a <strong>6</strong>. We call a die like this <span class="le-term">fair</span> &mdash; it plays no favorites.</p><p>That one word carries a lot of meaning. Let\'s unpack it.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'EQUALLY LIKELY',
+        title: 'Every face gets the same chance',
+        html: '<p>A d6 has six faces. On a fair die each one has an <em>equal</em> shot, so the probability of any single face is <strong>1&frasl;6</strong> &mdash; about <strong>16.7%</strong>.</p><p>When every outcome is equally likely, we say the die is <span class="le-term">uniform</span>. No face is heavier, stickier, or luckier than another.</p>',
+        visual: 'die:3'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Roll a bunch and watch the tallies',
+        html: '<p>Tap the die many times &mdash; go for 20 or 30 rolls. Watch the tally for each face.</p><p>You won\'t get a perfectly even split, but the more you roll, the more the six counts start to look <em>roughly balanced</em>. That evening&ndash;out is the fingerprint of a fair die.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE CHEATER',
+        title: 'What a loaded die does',
+        html: '<p>A <span class="le-term">loaded</span> die (also called <span class="le-term">weighted</span> or <span class="le-term">biased</span>) is secretly rigged &mdash; maybe a hidden weight tucked behind the 1 makes the <strong>6</strong> land up far too often.</p><p>Here\'s the sneaky part: from a <em>single</em> roll you can\'t tell. But over <strong>many</strong> rolls the tallies drift away from the even 1&ndash;in&ndash;6 spread and pile up on the favored face. (More rolls, clearer truth &mdash; that\'s a hint of the <em>Law of Large Numbers</em> coming later.)</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'SPOT THE CHEAT',
+        title: 'Which tally suggests a LOADED die?',
+        html: '<p>Each player rolled their die <strong>60</strong> times. Which set of results looks rigged?</p>',
+        options: [
+          '11, 9, 10, 12, 8, 10',
+          '9, 11, 10, 10, 12, 8',
+          '3, 4, 2, 5, 41, 5',
+          '10, 10, 10, 10, 10, 10'
+        ],
+        answer: 2,
+        explain: '<p>A fair die over 60 rolls should give each face roughly 10 counts, with small wobble &mdash; exactly what the first, second, and (suspiciously perfect) fourth sets show. But <strong>3, 4, 2, 5, 41, 5</strong> is wildly lopsided: the <strong>6</strong> came up 41 times! That drift away from an even spread is the tell&ndash;tale sign of a <span class="le-term">loaded</span> die.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'THE NUMBER',
+        title: 'On a FAIR d6, what is P(rolling a 4)?',
+        options: [
+          '1&frasl;6',
+          '1&frasl;4',
+          '4&frasl;6',
+          '1&frasl;2'
+        ],
+        answer: 0,
+        explain: '<p>A fair die is <span class="le-term">uniform</span>: all six faces are equally likely, so each single face &mdash; including the 4 &mdash; has probability <strong>1&frasl;6</strong> &asymp; 16.7%. The face number doesn\'t change the odds; there\'s just one 4 among six equally likely outcomes.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Fair, uniform, and honestly random',
+        html: '<p>A <span class="le-term">fair</span> die is <span class="le-term">uniform</span>: every face is equally likely, so P(any one face) = <strong>1&frasl;6</strong>. A <span class="le-term">loaded</span> (biased/weighted) die secretly favors some faces.</p><p>You can\'t catch a cheat from one roll &mdash; but over <em>many</em> rolls, a fair die\'s tallies even out while a loaded die\'s drift lopsided. Next up, we\'ll turn that intuition into real counting.</p>',
+        visual: 'die:6'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-3', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

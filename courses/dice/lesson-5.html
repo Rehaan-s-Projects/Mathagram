@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5 · Fraction, Decimal &amp; Percent — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THREE WAYS, ONE CHANCE',
+        title: 'The same chance, three costumes',
+        html: '<p>Rolling a <strong>1</strong> on a fair die is <em>one</em> possibility out of six. We call that a probability of <span class="le-term">1&#8260;6</span>.</p><p>But math has three ways to say the exact same thing: as a <span class="le-term">fraction</span> (1&#8260;6), as a <span class="le-term">decimal</span> (&asymp; 0.167), or as a <span class="le-term">percent</span> (&asymp; 16.7%). Different costumes &ndash; same chance underneath.</p>',
+        visual: 'die:1'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'FRACTION &rarr; DECIMAL',
+        title: 'Divide to get the decimal',
+        html: '<p>To turn a fraction into a decimal, just <strong>divide the top by the bottom</strong>.</p><p>For 1&#8260;6, compute 1 &divide; 6 = 0.1666&hellip;, which we round to <strong>0.167</strong>. The fraction bar literally means &ldquo;divide.&rdquo;</p>',
+        visual: 'die:1'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'DECIMAL &rarr; PERCENT',
+        title: 'Multiply by 100 for percent',
+        html: '<p>&ldquo;Percent&rdquo; means <em>per hundred</em>, so to get a percent you <strong>multiply the decimal by 100</strong> and add a % sign.</p><p>0.167 &times; 100 = <strong>16.7%</strong>. Putting it all together: 1&#8260;6 &asymp; 0.167 &asymp; <span class="le-term">16.7%</span>.</p>',
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE 0-TO-1 SCALE',
+        title: 'Every probability lives between 0 and 1',
+        html: '<p>No probability can be smaller than <strong>0</strong> or larger than <strong>1</strong>.</p><p>A probability of <span class="le-term">0</span> (that is 0%) means <em>impossible</em> &ndash; it can never happen. A probability of <span class="le-term">1</span> (that is 100%) means <em>certain</em> &ndash; it always happens. Every real chance, like &frac12; or 1&#8260;6, sits somewhere in between.</p>',
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'SEE IT HAPPEN',
+        title: 'Roll and watch the fraction grow',
+        html: '<p>Tap the die a bunch of times. Each roll is one outcome out of six. Notice how &ldquo;rolls of a 1 out of total rolls&rdquo; is itself a fraction you could turn into a decimal or a percent!</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CONVERT IT',
+        title: 'A fair die lands on an even number 3&#8260;6 of the time. What is that as a percent?',
+        html: '<p>Hint: simplify or divide first, then multiply by 100.</p>',
+        options: ['16.7%', '30%', '50%', '60%'],
+        answer: 2,
+        explain: '<p>3&#8260;6 simplifies to &frac12;. Dividing, 1 &divide; 2 = 0.5, and 0.5 &times; 100 = <strong>50%</strong>. Half the faces (2, 4, 6) are even, so a 50% chance makes perfect sense.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'SPOT THE IMPOSTOR',
+        title: 'Which of these could NOT be a probability?',
+        html: '<p>Remember the golden rule of the 0-to-1 scale.</p>',
+        options: ['0.5', '1&#8260;6', '75%', '1.4'],
+        answer: 3,
+        explain: '<p>0.5, 1&#8260;6, and 75% all fall between 0 and 1 (75% = 0.75), so they are fine. But <strong>1.4</strong> equals 140%, which is <em>more than certain</em> &ndash; impossible! Every valid probability must stay between 0 and 1.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'One chance, spoken three ways',
+        html: '<p>You learned that a single probability can wear three costumes: <span class="le-term">fraction</span>, <span class="le-term">decimal</span>, and <span class="le-term">percent</span>.</p><p>Convert <strong>fraction &rarr; decimal</strong> by dividing top by bottom, and <strong>decimal &rarr; percent</strong> by multiplying by 100. And never forget: every probability lives on the <strong>0-to-1</strong> scale &ndash; 0% is impossible, 100% is certain, and everything real sits in between.</p>',
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-5', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

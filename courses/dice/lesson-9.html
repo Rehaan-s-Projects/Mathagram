@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 9 · Anatomy of a Die — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE DIE',
+        title: 'Pips and faces',
+        html: '<p>A standard die is a cube with six flat faces. Instead of printing numerals, most dice show little dots called <span class="le-term">pips</span>. Count the pips and you read the value &mdash; this face shows two.</p><p>Six faces, values <strong>1</strong> through <strong>6</strong>, one number per side. Simple as it looks, the arrangement of those pips is anything but random.</p>',
+        visual: 'die:2'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE RULE OF 7',
+        title: 'Opposite faces sum to 7',
+        html: '<p>Pick up any standard Western die and check the pairs of faces that sit directly across from each other. You will always find <strong>1 &amp; 6</strong>, <strong>2 &amp; 5</strong>, and <strong>3 &amp; 4</strong>.</p><p>Every one of those pairs adds up to <strong>7</strong>. This is the <span class="le-term">rule of 7</span>: the number hidden on the bottom is always 7 &minus; the number showing on top.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WHY IT MUST BE FAIR',
+        title: 'Balance and symmetry',
+        html: '<p>A die is <span class="le-term">fair</span> only when every face is equally likely to land up. That comes from the cube&rsquo;s <span class="le-term">symmetry</span> &mdash; and from careful weight balance.</p><p>Here&rsquo;s the catch: drilling pips removes material, so a naive die is slightly lighter on the 6-face than the 1-face. Quality dice fix this by filling the drilled pips with paint of <em>equal density</em>, keeping the center of mass dead center.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'FEEL THE FAIRNESS',
+        title: 'Roll it yourself',
+        html: '<p>Tap the die a bunch of times and watch the tally. No single face should dominate &mdash; that even spread <em>is</em> fairness in action. The more you roll, the closer each face creeps toward one-sixth of the total.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'PRECISION DICE',
+        title: 'Casino dice are ruthless',
+        html: '<p>Casino dice push fairness to an extreme. Their pips are drilled and then backfilled flush with paint of the <strong>same density</strong> as the body, so no face is heavier. The edges are cut <strong>razor-sharp</strong> (not rounded) so the die tumbles unpredictably, and the plastic is <strong>transparent</strong> so inspectors can spot hidden weights inside.</p><p>Fun detail: the pips can spiral <span class="le-term">right-handed</span> or <span class="le-term">left-handed</span> &mdash; reading 1&ndash;2&ndash;3 around a corner clockwise versus counter-clockwise. Both are fair; it&rsquo;s just a manufacturing choice.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'What shows on the face opposite the 2?',
+        html: '<p>Use the rule of 7.</p>',
+        options: ['3', '4', '5', '6'],
+        answer: 2,
+        explain: '<p>Opposite faces sum to 7, so the face across from a <strong>2</strong> must show 7 &minus; 2 &equals; <strong>5</strong>. The classic pairs are 1&amp;6, 2&amp;5, and 3&amp;4.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'What actually makes a die fair?',
+        options: [
+          'The pips are painted bright white so they are easy to read',
+          'Its symmetry and even weight balance, so every face is equally likely',
+          'The number 7 is printed secretly inside the cube',
+          'It is rolled on a soft surface instead of a hard one'
+        ],
+        answer: 1,
+        explain: '<p>Fairness lives in the <span class="le-term">physics of the cube</span>: a symmetric shape with its mass balanced dead-center gives every face an equal one-in-six chance. Bright paint and soft tables are nice, but they don&rsquo;t change the odds &mdash; and there is certainly no secret 7 inside!</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'You know your die inside and out',
+        html: '<p>You&rsquo;ve dissected the humble d6. The dots are <span class="le-term">pips</span>, and opposite faces obey the <span class="le-term">rule of 7</span> (1&amp;6, 2&amp;5, 3&amp;4).</p><p>What makes it <span class="le-term">fair</span> is <strong>symmetry &plus; balanced weight</strong> &mdash; the reason casino dice fill their pips flush and cut sharp, transparent edges. Every face, equally likely. That fairness is the foundation for all the probability still to come.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-9', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 14 · The Law of Large Numbers — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'A FEW ROLLS',
+        title: 'Small samples are lumpy',
+        html: '<p>Roll a fair die just a handful of times and the results almost never look "fair." You might get three 5s and no 2s at all. That is not a broken die &ndash; it is just <span class="le-term">randomness</span> being noisy.</p><p>With only a few rolls, streaks and gaps are completely normal. The pattern only shows up when you zoom way out.</p>',
+        visual: 'die:5'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE BIG IDEA',
+        title: 'The Law of Large Numbers',
+        html: '<p>The <span class="le-term">Law of Large Numbers</span> says this: as you repeat a random experiment more and more times, the <strong>observed average</strong> and the <strong>observed frequencies</strong> get closer and closer to the theoretical values.</p><p>For a fair d6, each face has a true chance of <strong>1&frasl;6</strong> &asymp; 16.7%, and the true long-run average roll is <strong>3.5</strong>. A few rolls wander far from these numbers; thousands of rolls settle right onto them.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Roll a bunch and watch the tally',
+        html: '<p>Tap the die a dozen or so times and watch the tallies. Notice how <em>uneven</em> they stay &ndash; one face races ahead, another lags behind. That is expected!</p><p>To see each face approach its fair 1&frasl;6 share, you would need not dozens but <strong>thousands</strong> of rolls. The Law of Large Numbers is a promise about the long run, not the next few taps.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'NO MEMORY',
+        title: 'The gambler&rsquo;s fallacy',
+        html: '<p>Suppose you just rolled five 6s in a row. It feels like a non-six is "due." It is not. A die has <span class="le-term">no memory</span> &ndash; it does not know what it rolled before.</p><p>Believing the past changes the next roll is the <span class="le-term">gambler&rsquo;s fallacy</span>. The averages even out not because the die corrects itself, but because a few weird rolls get <em>diluted</em> by an ocean of ordinary ones.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'After 10,000 rolls, the average is closest to?',
+        html: '<p>You roll a fair six-sided die 10,000 times and average all the results.</p>',
+        options: ['1.0', '3.5', '6.0', '7.0'],
+        answer: 1,
+        explain: '<p><strong>3.5.</strong> Over a huge number of rolls the observed average settles onto the theoretical expected value, (1+2+3+4+5+6)&frasl;6 = 3.5. And 7.0 is not even possible &ndash; the biggest single roll is 6!</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'Five 6s in a row &ndash; what&rsquo;s the chance the next roll is a 6?',
+        options: ['Much less than 1&frasl;6, a six is not due', 'Exactly 0, you cannot roll six 6s', 'Still 1&frasl;6, the die has no memory', 'Much more than 1&frasl;6, sixes are hot'],
+        answer: 2,
+        explain: '<p><strong>Still 1&frasl;6.</strong> Each roll is independent &ndash; the die has no memory of the streak. Past results never make any face more or less "due." That mistaken feeling is the gambler&rsquo;s fallacy.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Averages settle, dice don&rsquo;t remember',
+        html: '<p>The <span class="le-term">Law of Large Numbers</span>: more repetitions pull the observed average and frequencies toward their true values. For a d6, faces approach a 1&frasl;6 share and the mean approaches <strong>3.5</strong>.</p><p>Small samples are lumpy and streaky &ndash; that is fine. And because a die has <span class="le-term">no memory</span>, no outcome is ever "due." The long run smooths things out by <em>dilution</em>, not by correction.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-14', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

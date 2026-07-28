@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12 · The Sum of 2d6 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'TWO DICE',
+        title: 'Roll two dice at once',
+        html: '<p>So far we’ve rolled a single die. Now grab a <strong>second</strong> one. To keep our thinking clear, imagine one die is red and the other is blue — they’re <span class="le-term">distinguishable</span>, so a red&nbsp;2 with a blue&nbsp;5 is a different result from a red&nbsp;5 with a blue&nbsp;2.</p><p>Each die still lands on a number from 1 to 6, completely independently of the other.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'COUNTING',
+        title: '36 equally likely outcomes',
+        html: '<p>The red die has 6 possible faces. For <em>each</em> of those, the blue die also has 6 faces. That gives us</p><p><strong>6 &times; 6 = 36</strong> equally likely <span class="le-term">ordered outcomes</span>, from (1,&nbsp;1) all the way to (6,&nbsp;6).</p><p>Every single one of these 36 pairs is just as likely as any other — each has probability 1⁄36.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Feel one die in action',
+        html: '<p>Tap to roll a die a few times. Picture a second die rolling right alongside it — together they land on one of the <strong>36</strong> possible pairs each time. In the next steps we’ll look at what happens when we <em>add</em> the two faces together.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE SUM',
+        title: 'Sums run from 2 to 12 — but not evenly',
+        html: '<p>Usually we don’t care about the individual dice, only their <span class="le-term">sum</span>. The smallest sum is 1&nbsp;+&nbsp;1&nbsp;=&nbsp;<strong>2</strong>, and the largest is 6&nbsp;+&nbsp;6&nbsp;=&nbsp;<strong>12</strong>.</p><p>Here’s the surprise: those sums are <em>not</em> equally likely. A sum of 2 can happen only one way, but a sum in the middle can happen many ways. Let’s count.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'COUNT THE WAYS',
+        title: 'Seven is the crowd favorite',
+        html: '<p>How many of the 36 pairs add up to <strong>7</strong>? Six of them: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1. That’s <strong>6⁄36 = 1⁄6</strong>.</p><p>Compare that to the extremes: a sum of <strong>2</strong> needs 1+1 (just one way), and a sum of <strong>12</strong> needs 6+6 (just one way). Each of those is only <strong>1⁄36</strong> — six times rarer than a 7.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE SHAPE',
+        title: 'A tent peaking at 7',
+        html: '<p>If you plot how many ways make each sum, you get a <span class="le-term">triangular</span> “tent”: 1 way for 2, then 2, 3, 4, 5, up to <strong>6 ways for 7</strong>, then back down 5, 4, 3, 2, 1 for 12.</p><p>The peak sits squarely on 7. That’s exactly why 7 is the star number in games like <em>craps</em> and why moving around a <em>Monopoly</em> board tends to cluster near seven-step jumps.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'Which sum is MOST likely with 2d6?',
+        options: ['2', '6', '7', '12'],
+        answer: 2,
+        explain: '<p><strong>7</strong> is the most likely sum. It can be made six different ways (1+6, 2+5, 3+4, 4+3, 5+2, 6+1), more than any other total. A sum of 2 or 12 can each happen only one way, and 6 can be made five ways — close, but still short of seven’s six.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'What is P(sum = 7) with 2d6?',
+        html: '<p>Remember there are 36 equally likely ordered outcomes in total.</p>',
+        options: ['1⁄36', '6⁄36 = 1⁄6', '1⁄12', '7⁄36'],
+        answer: 1,
+        explain: '<p>Six of the 36 outcomes give a sum of 7, so the probability is <strong>6⁄36</strong>, which simplifies to <strong>1⁄6</strong>. The answer 1⁄36 would be the chance of a single specific pair (or of rolling a 2 or a 12), not of the six-way total of 7.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'What you learned',
+        html: '<p>Two distinguishable dice produce <strong>6 &times; 6 = 36</strong> equally likely ordered outcomes. Their sums range from <strong>2 to 12</strong>, but they are <em>not</em> equally likely.</p><p>Counting the ways to make each sum gives a <span class="le-term">triangular</span> distribution that peaks at <strong>7</strong> (6⁄36 = 1⁄6), while 2 and 12 are the rarest at 1⁄36 each. That single fact — seven rules — quietly drives the odds in countless dice games.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-12', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

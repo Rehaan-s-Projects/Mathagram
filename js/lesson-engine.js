@@ -131,8 +131,10 @@ export function renderLesson(root, steps, opts) {
   }
 
   function header(step) {
-    return `${step.eyebrow ? `<p class="le-eyebrow">${esc(step.eyebrow)}</p>` : ''}
-            ${step.title ? `<h1 class="le-title">${esc(step.title)}</h1>` : ''}`;
+    // title/eyebrow are trusted authored content and may contain HTML entities
+    // (e.g. &divide;, fraction slashes) — render as HTML, like `options`/`html`.
+    return `${step.eyebrow ? `<p class="le-eyebrow">${step.eyebrow}</p>` : ''}
+            ${step.title ? `<h1 class="le-title">${step.title}</h1>` : ''}`;
   }
 
   /* ---- render one step --------------------------------------------------- */

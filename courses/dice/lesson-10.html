@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 10 · How Loaded Dice Cheat — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'FAIR PLAY',
+        title: 'What an honest die does',
+        html: '<p>A trustworthy six-sided die is perfectly balanced: every face is equally likely, so each one shows up about <strong>1 time in 6</strong>. That evenness is the whole point of a fair game.</p><p>A cheater&rsquo;s goal is to quietly break that balance. In this lesson we&rsquo;ll see the tricks &mdash; and, more importantly, how they get <span class="le-term">caught</span>.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE TRICK',
+        title: 'Loading: a hidden weight',
+        html: '<p><span class="le-term">Loading</span> means hiding extra weight inside the die, close to one face. When you toss it, gravity pulls the heavy side <em>down</em> &mdash; which means the <strong>opposite</strong> face tends to end up on top.</p><p>So a weight tucked behind the &ldquo;1&rdquo; makes the die land showing &ldquo;6&rdquo; more often than it should. Remember: on a standard die, opposite faces always add to <strong>7</strong>.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE TRICK',
+        title: 'Shaving and shaping',
+        html: '<p>Not every rigged die hides a weight. In <span class="le-term">shaving</span>, a cheater sands one or two faces so they&rsquo;re slightly larger, flatter, or less square than the rest.</p><p>A die is more likely to come to rest on a <strong>bigger, flatter</strong> face, so the trimmed sides come up more often. The change can be a fraction of a millimeter &mdash; too small to see, but not too small to <em>measure</em>.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'DETECTION',
+        title: 'The salt-water float test',
+        html: '<p>Here&rsquo;s a classic check. Dissolve enough salt in a glass of water and a plastic die will float. Spin it gently and watch.</p><p>A fair die tumbles and stops in <strong>random</strong> orientations. A <span class="le-term">loaded</span> die keeps rotating so its heavy side sinks and its favorite face floats <em>up</em> &mdash; the same face, over and over. That stubborn preference is a red flag.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'DETECTION',
+        title: 'The most reliable test: many rolls',
+        html: '<p>Floats and calipers can catch obvious fakes, but a <em>subtle</em> bias needs numbers. Roll the die a lot &mdash; hundreds of times &mdash; and keep a <span class="le-term">tally</span> of each face.</p><p>A fair die&rsquo;s tallies drift toward an even 1-in-6 spread. A loaded die piles up on its favorite face. Comparing your counts to that fair spread is the heart of a <span class="le-term">statistical test</span> (you&rsquo;ll meet the chi-square test soon).</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'Which face shows most often?',
+        html: '<p>A cheater hides a weight right behind the <strong>&ldquo;1&rdquo;</strong> face. When the die is tossed, which number will it most often land showing on top?</p>',
+        options: ['1', '2', '6', 'It stays perfectly even'],
+        answer: 2,
+        explain: '<p>The heavy &ldquo;1&rdquo; side sinks to the bottom, so its opposite face lands on top. On a standard die opposite faces add to 7, so 7 &minus; 1 = <strong>6</strong>. The loaded die favors the <strong>6</strong>.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'How do you reliably catch it?',
+        html: '<p>You suspect a die is <em>subtly</em> loaded &mdash; the bias is small. What&rsquo;s the most dependable way to prove it?</p>',
+        options: [
+          'Roll it many times and compare the tally to the fair 1-in-6 spread',
+          'Roll it once and see if you get a 6',
+          'Judge by how shiny and new the die looks',
+          'Ask the die’s owner if it is fair'
+        ],
+        answer: 0,
+        explain: '<p>A single roll tells you nothing &mdash; even a fair die shows a 6 sometimes. A subtle bias only reveals itself in the <strong>long run</strong>: roll many times, tally the faces, and compare to the even 1-in-6 spread a fair die should give. That statistical comparison is the gold standard.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Cheaters lose to the long run',
+        html: '<p>Rigged dice cheat by breaking balance: <span class="le-term">loading</span> hides a weight (heavy side down, opposite face up), while <span class="le-term">shaving</span> reshapes faces so flatter sides land more often.</p><p>Detection climbs from quick to rigorous: the <strong>salt-water float</strong> exposes a stubborn favorite face, calipers reveal shaved edges, and &mdash; most reliably &mdash; <strong>many rolls compared to the fair 1-in-6 spread</strong> catch even a tiny bias. Fairness always shows up in the numbers.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-10', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

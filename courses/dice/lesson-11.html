@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 11 · Reading Dice Notation — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'WHY NOTATION',
+        title: 'A recipe for a roll',
+        html: '<p>Games and role-playing games need a compact way to say <em>exactly which dice to roll</em>. Instead of writing a sentence, they use <span class="le-term">dice notation</span> &mdash; a short code that packs the whole roll into a few characters.</p><p>The die below is a single six-sided die. In notation, we&rsquo;d write that as <strong>1d6</strong>. Let&rsquo;s learn how to read it.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE FORMULA',
+        title: 'Decoding AdX&plus;B',
+        html: '<p>Every roll follows the pattern <strong>AdX&plus;B</strong>, read piece by piece:</p><p><strong>A</strong> &mdash; <em>how many</em> dice you roll.<br><strong>d</strong> &mdash; just stands for &ldquo;dice.&rdquo;<br><strong>X</strong> &mdash; how many <em>sides</em> each die has.<br><strong>&plus;B</strong> &mdash; a fixed <span class="le-term">modifier</span> added to the total (optional).</p><p>So <strong>1d6</strong> means one die with six sides, and no modifier.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WORKED EXAMPLE',
+        title: 'Reading 2d6&plus;3',
+        html: '<p>Take <strong>2d6&plus;3</strong>. It says: roll <strong>2</strong> dice, each with <strong>6</strong> sides, sum them, then add <strong>3</strong>.</p><p>The smallest sum from two d6 is 1&plus;1 &equals; 2, so the minimum result is 2&plus;3 &equals; <strong>5</strong>. The largest sum is 6&plus;6 &equals; 12, so the maximum is 12&plus;3 &equals; <strong>15</strong>. Every outcome lands somewhere from 5 to 15.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d6',
+        html: '<p>Tap the die to roll one <strong>d6</strong> and watch the tally build. Imagine tapping twice and adding your two results &mdash; that&rsquo;s the sum part of <strong>2d6</strong>, before any modifier.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'What does 3d8 mean?',
+        html: '<p>Use the AdX&plus;B pattern to decode it.</p>',
+        options: [
+          'Roll three eight-sided dice and add the results together',
+          'Roll one die and multiply the result by eight',
+          'Roll eight three-sided dice and add them',
+          'Roll three dice and subtract 8 from the total'
+        ],
+        answer: 0,
+        explain: '<p>In <strong>3d8</strong>, the <strong>3</strong> is how many dice and the <strong>8</strong> is the number of sides &mdash; so you roll three eight-sided dice and sum them. There&rsquo;s no modifier, so nothing is added or subtracted.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'MORE SHAPES',
+        title: 'Beyond the humble d6',
+        html: '<p>The <strong>X</strong> can be any die shape. <strong>1d20</strong> is a single twenty-sided die &mdash; the star of many RPGs &mdash; ranging from 1 to 20. <strong>3d4</strong> means three four-sided dice, giving a total from 3 (all ones) up to 12 (all fours).</p><p>Same recipe, different dice.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'The maximum result of 2d6&plus;3 is?',
+        html: '<p>Push both dice to their highest face, then apply the modifier.</p>',
+        options: ['11', '12', '15', '18'],
+        answer: 2,
+        explain: '<p>The biggest each d6 can show is 6, so two of them give 6&plus;6 &equals; 12. Adding the &plus;3 modifier: 12&plus;3 &equals; <strong>15</strong>. (12 forgets the modifier; 18 wrongly adds 3 to each die.)</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'You can read dice notation',
+        html: '<p><span class="le-term">Dice notation</span> is a compact recipe: <strong>AdX&plus;B</strong> means roll <strong>A</strong> dice of <strong>X</strong> sides, sum them, then add the modifier <strong>B</strong>.</p><p>So <strong>1d6</strong> is one six-sided die, <strong>2d6</strong> is two summed, and <strong>2d6&plus;3</strong> ranges from a minimum of 5 to a maximum of 15. Whenever you see a code like <strong>3d8</strong> or <strong>1d20</strong>, you now know exactly which dice to grab.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-11', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

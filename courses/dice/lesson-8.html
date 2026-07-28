@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 8 · Odds vs. Probability — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'QUICK RECAP',
+        title: 'Probability, one more time',
+        html: '<p>You already know how to find a <span class="le-term">probability</span>: count the favorable outcomes and divide by the <em>total</em> number of outcomes.</p><p>Roll a die and hope for a 6. There is <strong>1</strong> favorable face out of <strong>6</strong> faces, so the probability is 1&#8260;6.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A DIFFERENT LENS',
+        title: 'Meet the odds',
+        html: '<p>Gamblers and sports fans love to talk about <span class="le-term">odds</span>. Odds are related to probability, but they are <strong>not</strong> the same thing.</p><p>Instead of comparing favorable to <em>total</em>, odds compare favorable to <em>unfavorable</em>. Same die, different way of slicing it up. This face is a 5 &ndash; if you wanted a 5, it is your one lucky outcome against the rest.</p>',
+        visual: 'die:5'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'ODDS IN FAVOR',
+        title: 'Favorable : unfavorable',
+        html: '<p><span class="le-term">Odds in favor</span> = favorable : unfavorable, written with a colon.</p><p>Rolling a 6 on a d6: there is <strong>1</strong> way to succeed and <strong>5</strong> ways to fail, so the odds in favor are <strong>1:5</strong>. Compare that to the probability of 1&#8260;6 &ndash; same situation, different numbers, because odds never count the favorable outcome in the second part.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE CONVERSION',
+        title: 'Turning odds into probability',
+        html: '<p>Given odds in favor of <strong>a:b</strong>, the total number of outcomes is simply a + b. So:</p><p>probability = a &#8260; (a + b)</p><p>Check it: odds of 1:5 become 1 &#8260; (1 + 5) = 1&#8260;6. That matches our die exactly. It works in reverse too &ndash; a probability of a&#8260;(a+b) unfolds into odds a:b.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Roll and feel the ratio',
+        html: '<p>Tap to roll a few times. Watch how <em>rarely</em> any single number shows up &ndash; roughly one time in six. That lonely 1-against-5 feeling is exactly what the odds 1:5 describe.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'What are the odds in favor of rolling a 6?',
+        html: '<p>One favorable face, and the rest are unfavorable. Remember: odds compare favorable to <em>unfavorable</em>.</p>',
+        options: ['1:5', '1:6', '6:1', '5:1'],
+        answer: 0,
+        explain: '<p>Correct is <strong>1:5</strong>. There is 1 way to roll a 6 and 5 ways to miss, so favorable : unfavorable = 1:5. (1:6 is the trap &ndash; that would count the 6 twice. And 1&#8260;6 is the <em>probability</em>, not the odds.)</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CONVERT IT',
+        title: 'Odds in favor are 1:3. The probability is?',
+        html: '<p>Use probability = a &#8260; (a + b).</p>',
+        options: ['1&#8260;3', '1&#8260;4', '3&#8260;4', '1&#8260;2'],
+        answer: 1,
+        explain: '<p>Correct is <strong>1&#8260;4</strong>. With odds 1:3, the total is 1 + 3 = 4, so the probability is 1 &#8260; 4. The tempting 1&#8260;3 comes from confusing odds with probability &ndash; the whole point of this lesson!</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Two views of the same chance',
+        html: '<p><span class="le-term">Probability</span> = favorable &divide; total. <span class="le-term">Odds in favor</span> = favorable : unfavorable.</p><p>Convert with odds a:b &#8596; probability a &#8260; (a + b). So rolling a 6 is probability 1&#8260;6 and odds 1:5 &ndash; both true, just phrased differently.</p><p>Next time someone says "the odds are 1 in 6," you will know they probably mean the <em>probability</em>. Now you can speak both languages.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-8', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

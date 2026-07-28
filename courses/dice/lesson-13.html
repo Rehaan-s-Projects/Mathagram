@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 13 · Expected Value — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THE BIG IDEA',
+        title: 'What does "expected value" mean?',
+        html: '<p>Roll a die once and you get 1, 2, 3, 4, 5, or 6 &ndash; there is no way to know which. But if you roll it <em>hundreds</em> of times and average all the results, that average settles toward a single, predictable number.</p><p>That long&ndash;run average is called the <span class="le-term">expected value</span>. It is what you would <em>expect</em> a typical roll to be worth if you kept rolling forever.</p>',
+        visual: 'die:3'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE RECIPE',
+        title: 'Multiply, then add it all up',
+        html: '<p>To find the expected value, take each possible outcome, multiply it by its probability, and add up every piece.</p><p>On a fair d6 each face has probability 1⁄6, so:</p><p><strong>(1 &plus; 2 &plus; 3 &plus; 4 &plus; 5 &plus; 6) &divide; 6 = 21 &divide; 6 = 3.5</strong></p><p>The <span class="le-term">expected value</span> of one fair die roll is exactly <strong>3.5</strong>.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'SEE IT HAPPEN',
+        title: 'Roll a bunch and watch the average',
+        html: '<p>Tap the die again and again. Any single roll lands on a whole number, but keep going and the <em>running average</em> of all your rolls will drift toward 3.5. The more rolls, the closer it hugs that value.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A COMMON SURPRISE',
+        title: 'You can never actually roll a 3.5',
+        html: '<p>Here is the twist: <strong>3.5 is not a face on the die</strong>. You will never roll it in a single throw.</p><p>Expected value is not a prediction of one roll &ndash; it is the <em>balance point</em> that the average of many rolls settles toward. Think of it as the center of the six numbers, sitting neatly between 3 and 4.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'HANDY SHORTCUT',
+        title: 'The (N &plus; 1) &divide; 2 trick',
+        html: '<p>For <em>any</em> fair die with <span class="le-term">N</span> equally likely faces numbered 1 to N, you do not need to add everything up. Just use:</p><p><strong>EV = (N &plus; 1) &divide; 2</strong></p><p>A d6 gives (6 &plus; 1) &divide; 2 = <strong>3.5</strong>. A d4 gives (4 &plus; 1) &divide; 2 = 2.5, and a d20 gives (20 &plus; 1) &divide; 2 = 10.5. Quick and reliable.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'YOUR TURN',
+        title: 'What is the expected value of one fair six&ndash;sided die?',
+        options: ['3', '3.5', '4', '6'],
+        answer: 1,
+        explain: '<p>Correct is <strong>3.5</strong>. Add the faces &ndash; (1 &plus; 2 &plus; 3 &plus; 4 &plus; 5 &plus; 6) = 21 &ndash; then divide by 6 to get 21 &divide; 6 = 3.5. Or use the shortcut: (6 &plus; 1) &divide; 2 = 3.5. It is not a face you can roll, but it is the long&ndash;run average.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'ONE MORE',
+        title: 'What is the expected value of one fair four&ndash;sided die (d4)?',
+        html: '<p>A d4 has faces 1, 2, 3, and 4, each equally likely.</p>',
+        options: ['2', '2.5', '3', '4'],
+        answer: 1,
+        explain: '<p>Correct is <strong>2.5</strong>. Add the faces (1 &plus; 2 &plus; 3 &plus; 4) = 10 and divide by 4 to get 2.5. The shortcut agrees: (4 &plus; 1) &divide; 2 = 2.5. Just like the d6, the expected value lands between two real faces.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The average roll, captured in one number',
+        html: '<p>The <span class="le-term">expected value</span> is the long&ndash;run average: multiply each outcome by its probability and add them up.</p><p>For a fair d6 that is <strong>3.5</strong> &ndash; a balance point you can never actually roll, but that the average of many rolls settles toward. And for any fair dN, the shortcut <strong>(N &plus; 1) &divide; 2</strong> gets you there instantly.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-13', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

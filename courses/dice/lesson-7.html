@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7 · Complementary Events — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THE BIG IDEA',
+        title: 'Every event has an opposite',
+        html: '<p>Roll a die and ask: "Will I get a 6?" There are really only two outcomes to that question &ndash; <strong>yes</strong> or <strong>no</strong>.</p><p>The event "<em>not</em> a 6" is called the <span class="le-term">complement</span> of the event "a 6." An event and its complement together cover <strong>every</strong> possibility, with no overlap.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE FORMULA',
+        title: 'P(not A) = 1 − P(A)',
+        html: '<p>Because an event and its complement cover everything, their probabilities must add up to <strong>1</strong> (a certainty).</p><p>So if you know one, you know the other: <strong>P(not A) = 1 &minus; P(A)</strong>.</p><p>Rolling a 6 has probability 1⁄6, so <span class="le-term">not</span> rolling a 6 has probability 1 &minus; 1⁄6 = <strong>5⁄6</strong>. That matches your gut &ndash; five of the six faces aren&rsquo;t a 6!</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'SEE IT HAPPEN',
+        title: 'Roll and watch the "not a 6" faces pile up',
+        html: '<p>Tap to roll a few times. Notice how often you land on something <em>other</em> than a 6. Over many rolls, about <strong>5 out of every 6</strong> results should be "not a 6."</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE SHORTCUT',
+        title: '"At least one" loves the complement',
+        html: '<p>Suppose you roll a die <strong>twice</strong> and want the chance of getting <strong>at least one 6</strong>. Counting all the winning cases is fiddly.</p><p>The opposite is much simpler: "at least one 6" fails only when you roll <strong>no 6 at all</strong>. So flip it around:</p><p><strong>P(at least one 6) = 1 &minus; P(no 6 on either roll)</strong> = 1 &minus; (5⁄6 &times; 5⁄6) = 1 &minus; 25⁄36 = <strong>11⁄36</strong>.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'YOUR TURN',
+        title: 'What is P(NOT rolling a 4) on one die?',
+        html: '<p>Use the complement rule.</p>',
+        options: ['1⁄6', '4⁄6', '5⁄6', '1'],
+        answer: 2,
+        explain: '<p>Rolling a 4 has probability 1⁄6, so NOT rolling a 4 is 1 &minus; 1⁄6 = <strong>5⁄6</strong>. Five of the six faces &ndash; 1, 2, 3, 5, 6 &ndash; count as "not a 4."</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'YOUR TURN',
+        title: 'Easiest way to find P(at least one 6 in several rolls)?',
+        html: '<p>Which strategy saves you the most work?</p>',
+        options: [
+          'Add up 1⁄6 for each roll',
+          'Take 1 minus the probability of no 6s',
+          'Multiply 1⁄6 by the number of rolls',
+          'It cannot be calculated'
+        ],
+        answer: 1,
+        explain: '<p>"At least one" is the complement of "none." Computing <strong>1 &minus; P(no 6s)</strong> is far easier than tracking every winning combination. Adding or multiplying 1⁄6 double-counts overlapping cases and can even exceed 1, so those are wrong.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The complement is your shortcut',
+        html: '<p>The <span class="le-term">complement</span> of event A is "A does <strong>not</strong> happen," and <strong>P(not A) = 1 &minus; P(A)</strong>.</p><p>When a problem says "<strong>at least one</strong>," reach for the complement: find P(none) and subtract from 1. That turned a messy two-roll count into a tidy 1 &minus; (5⁄6 &times; 5⁄6) = <strong>11⁄36</strong>.</p><p>Whenever counting the winners feels hard, try counting the losers instead!</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-7', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

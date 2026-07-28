@@ -93,9 +93,31 @@
         lessons.push({ id: 'dice-'+n, title: t, href: '#', unit: u, unitName: name, category: 'math', checkpoint: i===titles.length-1 });
       });
     });
-    // Wire the built lessons (Brilliant-style, js/lesson-engine.js).
-    if (lessons[0]) lessons[0].href = 'lesson-1.html';
-    if (lessons[1]) lessons[1].href = 'lesson-2.html';
+    // ── Unit 1 "Foundations": 15 built Brilliant-style lessons (js/lesson-engine.js).
+    // Give the first-unit nodes real titles + wire them to their lesson pages.
+    const unit1Titles = [
+      'What Is a Die? — From Astragali to Modern Dice',
+      'Meet the Dice Family — d4 to d100',
+      'Fair vs. Loaded — What Makes a Die Honest',
+      'Sample Spaces — Listing Every Outcome',
+      'Probability as a Fraction, Decimal and Percent',
+      'Equally Likely Outcomes — The 1⁄N Rule',
+      'Complementary Events — "Not" and "At Least One"',
+      'Odds vs. Probability',
+      'Anatomy of a Die — Pips, Balance and the Rule of 7',
+      'How Loaded Dice Cheat — Weighting and Shaving',
+      'Reading Dice Notation — 1d6 and 2d6+3',
+      'Rolling Two Dice — The Sum of 2d6',
+      'Expected Value — The Average Roll',
+      'The Law of Large Numbers — Why Averages Settle',
+      'Unit 1 Checkpoint — Foundations Review'
+    ];
+    unit1Titles.forEach((t, k) => {
+      if (!lessons[k]) return;
+      lessons[k].title = t;
+      lessons[k].href = 'lesson-' + (k + 1) + '.html';
+      lessons[k].unitName = 'Foundations of Dice & Probability';
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = await getCompletedLessons('dice');
