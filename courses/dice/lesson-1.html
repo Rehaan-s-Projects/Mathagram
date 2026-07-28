@@ -3,54 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson 1 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <title>Lesson 1 · What Is a Die? — 🎲 Dice &amp; Probability — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
-  <style> .lesson-content { max-width: 720px; margin: 0 auto; padding: 56px 24px 12px; } .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0ea5e9; margin-bottom: 8px; } .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; line-height: 1.25; color: #0f172a; } .lesson-content p { font-size: 1.05rem; line-height: 1.7; color: #475569; margin-bottom: 14px; }
-  </style>
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
 </head>
-<body>
+<body class="le-body">
+  <!-- Required auth gate (google-required-auth). -->
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
-  <nav class="nav">
-    <div class="container">
-      <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
-      <div class="nav-links">
-        <a href="index.html">🎲 Dice &amp; Probability</a>
-        <a href="../../learning-post.html">Posts</a>
-        <a href="../../login.html" data-auth="login">Login</a>
-      </div>
-    </div>
-  </nav>
 
-  <section class="lesson-content">
-    <div class="chapter-label">Lesson 1 — What Is a Die? — From Astragali to Modern Dice</div>
-    <h1>What Is a Die? — From Astragali to Modern Dice</h1>
-    <p>Welcome to <strong>🎲 Dice &amp; Probability</strong> on Mathagram. This is your starting lesson — read the welcome then mark the lesson complete to unlock the rest of the path.</p>
-  </section>
-<section style="max-width:720px;margin:8px auto 36px;padding:0 24px;text-align:center;">
-    <a href="index.html" id="mgMarkBtn" style="display:inline-block;padding:12px 28px;border-radius:14px;font-family:inherit;font-weight:700;font-size:0.95rem;cursor:pointer;border:none;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;text-decoration:none;box-shadow:0 4px 12px rgba(14,165,233,0.30);">Mark Lesson 1 Complete →</a>
-  </section>
-
-  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="mgYr"></span> Mathagram.org</p></div></footer>
+  <div id="lesson"></div>
 
   <script type="module">
-    import { initNav } from '../../js/nav.js';
-    initNav('../../');
-    document.getElementById('mgYr').textContent = new Date().getFullYear();
-    document.getElementById('mgMarkBtn').addEventListener('click', async (e) => {
-      e.preventDefault();
-      try {
-        const { auth, db } = await import('../../js/firebase-config.js');
-        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        if (auth.currentUser) {
-          await setDoc(
-            doc(db, 'users', auth.currentUser.uid, 'progress', 'dice'),
-            { 'dice-1': { completed: true, at: serverTimestamp() } },
-            { merge: true }
-          );
-        }
-      } catch {}
-      window.location.href = 'index.html';
+    import '../../js/nav.js';                       // side-effect: GA4 analytics
+    import { renderLesson } from '../../js/lesson-engine.js';
+
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Chapter 1 · Meet the die',
+        title: 'What is a die?',
+        html: `<p>A <strong>die</strong> (plural: <em>dice</em>) is a small cube with a
+               number marked on each of its six faces. Those little dots are called
+               <span class="le-term">pips</span>, and they run from <strong>1 to 6</strong>.</p>
+               <p>Roll it, and one face lands up — seemingly at random. That simple act is the
+               doorway into all of <strong>probability</strong>.</p>`,
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A little history',
+        title: 'From astragali to modern dice',
+        html: `<p>Long before plastic, people rolled <span class="le-term">astragali</span> —
+               the ankle knucklebones of sheep and goats. They tumbled to rest on one of four
+               uneven sides, and ancient Egyptians, Greeks, and Romans used them for games and
+               fortune-telling.</p>
+               <p>Over centuries they were carved into fair, symmetric cubes. Today,
+               <strong>casino-grade</strong> dice are machined so precisely that no face is
+               favored — accurate to within a few thousandths of an inch.</p>`
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'Try it',
+        title: 'Give it a roll',
+        html: `<p>Tap the die a few times and watch the tally build. Notice something:
+               there's no way to know the next result before it lands — yet over
+               <em>many</em> rolls, a pattern quietly appears.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Fairness',
+        title: 'Every face is equally likely',
+        html: `<p>On a <em>fair</em> die, no face is favored over another. There are
+               <strong>6 possible outcomes</strong>, and each is <strong>equally likely</strong>.</p>
+               <p>That's the key idea behind probability: when outcomes are equally likely,
+               the chance of any one of them is simply
+               <strong>1 &divide; (number of outcomes)</strong>.</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'What is the probability of rolling a 4?',
+        options: ['1⁄4', '1⁄6', '4⁄6', '1 (it always happens)'],
+        answer: 1,
+        explain: `There are 6 equally likely faces and exactly <strong>one</strong> of them is a 4,
+                  so the probability is <strong>1⁄6 ≈ 16.7%</strong>. Every single face shares that
+                  same 1-in-6 chance.`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A hidden rule',
+        title: 'Opposite faces sum to 7',
+        html: `<p>Pick up any standard Western die and look at the pairs of opposite faces:
+               <strong>1 &amp; 6</strong>, <strong>2 &amp; 5</strong>, <strong>3 &amp; 4</strong>.</p>
+               <p>Every pair adds up to the same number. This isn't a coincidence — it's a
+               manufacturing standard that keeps the die balanced.</p>`,
+        visual: 'die:3'
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'Opposite faces of a standard die always add up to…',
+        options: ['6', '7', '8', '12'],
+        answer: 1,
+        explain: `1+6, 2+5, and 3+4 all equal <strong>7</strong> — the standardized rule
+                  for Western dice, which also helps keep the cube balanced.`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Recap',
+        title: "You've got the basics",
+        html: `<p>In one lesson you learned that a die:</p>
+               <p>• has <strong>6 equally likely faces</strong> numbered with pips 1–6,<br>
+               • traces back to ancient <span class="le-term">astragali</span>,<br>
+               • gives each face a <strong>1⁄6</strong> chance on a fair roll,<br>
+               • and always has <strong>opposite faces summing to 7</strong>.</p>
+               <p>Next up: the whole family of dice — d4, d8, d20 and beyond.</p>`
+      }
+    ];
+
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice',
+      lessonId: 'dice-1',
+      backHref: 'index.html',
     });
   </script>
 </body>
