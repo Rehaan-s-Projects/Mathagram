@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Internship</h1>
+    <p>Land your dream internship and crush it — resumes, cover letters, interviews, networking, workplace skills, negotiation, AI tools, and more. 750 lessons across 50 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Finding Opportunities', ['What Is an Internship?','Types of Internships','Paid vs Unpaid Internships','When to Start Looking','Where to Find Internships','Using Job Boards Effectively','Company Career Pages','LinkedIn for Internship Search','Reaching Out to Startups','Cold Emailing Employers','Working with Career Centers','Internship Fairs & Events','Evaluating Opportunities','Setting Your Goals','Finding Opportunities Review']],
+      [2, 'Resume Building', ['Why Resumes Matter','Resume Formats & Layouts','Contact Information Section','Writing a Strong Summary','Education Section Best Practices','Listing Relevant Coursework','Describing Work Experience','Using Action Verbs','Quantifying Achievements','Skills Section Strategies','Including Projects & Activities','Tailoring Your Resume','Common Resume Mistakes','ATS-Friendly Formatting','Resume Building Review']],
+      [3, 'Cover Letters & Applications', ['Purpose of a Cover Letter','Cover Letter Structure','Opening Paragraph Hooks','Highlighting Your Fit','Connecting Skills to the Role','Closing with a Call to Action','Customizing Each Letter','Online Application Forms','Following Directions Carefully','Portfolios & Work Samples','References & Recommendations','Asking for a Reference','Application Tracking','Following Up on Applications','Cover Letters & Applications Review']],
+      [4, 'Networking & Personal Brand', ['Why Networking Matters','Building a LinkedIn Profile','LinkedIn Headline & Summary','Connecting with Professionals','Informational Interviews','How to Request an Informational Interview','Elevator Pitch Basics','Crafting Your Story','Networking at Events','Online Networking Etiquette','Building a Personal Website','Social Media Presence','Joining Professional Groups','Maintaining Your Network','Networking & Personal Brand Review']],
+      [5, 'Interview Preparation', ['Types of Interviews','Researching the Company','Common Interview Questions','Behavioral Interview Questions','The STAR Method','Practicing STAR Responses','Technical Interview Basics','Case Interview Introduction','Phone & Video Interview Tips','What to Wear','Body Language & Confidence','Asking Great Questions','Handling Tough Questions','Mock Interview Practice','Interview Preparation Review']],
+      [6, 'Workplace Skills', ['Professional Email Etiquette','Slack & Team Communication','Meeting Etiquette','Time Management at Work','Prioritizing Tasks','Taking Initiative','Asking for Help','Receiving Feedback Gracefully','Giving Constructive Feedback','Working in Teams','Remote Work Best Practices','Office Culture & Norms','Confidentiality & Professionalism','Managing Stress at Work','Workplace Skills Review']],
+      [7, 'On the Job', ['Your First Day','Setting Expectations with Your Manager','Learning the Tools & Systems','Taking Notes & Documenting','Building Relationships with Colleagues','Finding a Mentor','Weekly Check-Ins','Tracking Your Accomplishments','Going Above & Beyond','Presenting Your Work','Handling Mistakes','Adapting to Feedback','Mid-Internship Self-Assessment','Asking for More Responsibility','On the Job Review']],
+      [8, 'Wrapping Up & Next Steps', ['Reflecting on Your Experience','Updating Your Resume','Requesting a Letter of Recommendation','Asking About Full-Time Opportunities','Exit Interviews','Staying in Touch with Your Team','Writing Thank-You Notes','Sharing What You Learned','Building on New Skills','Leveraging Your Internship for Future Roles','Applying to Your Next Internship','Transitioning to Full-Time Work','Creating a Career Plan','Long-Term Professional Development','Wrapping Up & Next Steps Review']],
+      [9, 'Industry-Specific Internships', ['Tech Industry Internships','Finance & Banking Internships','Healthcare Internships','Marketing & Advertising','Media & Journalism','Engineering Internships','Legal Internships','Education Internships','Architecture & Design','Agriculture & Environment','Nonprofit Internships','Government Internships','Entertainment & Sports','Consulting Internships','Industry-Specific Review']],
+      [10, 'Remote Internship Skills', ['Remote Work Culture','Setting Up Your Home Office','Virtual Communication Tools','Video Call Best Practices','Async Communication','Managing Your Schedule Remotely','Staying Visible & Engaged','Remote Team Building','Time Zone Management','Documenting Work Remotely','Virtual Networking','Overcoming Isolation','Remote Productivity Tips','Remote Onboarding Strategies','Remote Internship Review']],
+      [11, 'International Internships', ['Why Go International?','Finding Opportunities Abroad','Visa & Work Permit Basics','Cultural Adaptation','Language Considerations','Cost of Living Abroad','Housing & Logistics','Health Insurance Abroad','Safety & Emergency Planning','Cross-Cultural Communication','International Networking','Building a Global Resume','Reentry & Reverse Culture Shock','Travel Insurance & Health Coverage','International Review']],
+      [12, 'Legal & Ethical Considerations', ['Employment Law Basics','Intern Rights & Protections','Fair Labor Standards','Unpaid Internship Legality','Non-Disclosure Agreements','Non-Compete Clauses','Intellectual Property Rights','Workplace Harassment Awareness','Reporting Misconduct','Whistleblower Protections','Ethical Workplace Behavior','Conflicts of Interest','Discrimination & Equity','Data Privacy & GDPR Basics','Legal & Ethical Review']],
+      [13, 'Portfolio Building', ['Why Build a Portfolio?','Choosing What to Include','Writing Case Studies','Documenting Projects','Before & After Showcases','Quantifying Your Impact','Photography & Visual Evidence','Building a Personal Website','GitHub & Code Portfolios','Design Portfolios','Writing Portfolios','Video Portfolios','Keeping It Updated','Portfolio for Non-Tech Roles','Portfolio Review']],
+      [14, 'Entrepreneurial Internships', ['Startup Culture Overview','Working at a Startup','Wearing Many Hats','Startup vs Corporate Culture','Equity & Stock Options Basics','Learning from Founders','Rapid Skill Development','Building Products from Scratch','Handling Ambiguity','Startup Failure & Resilience','Intrapreneurship','Starting Your Own Thing','Startup Ecosystem','Pitch Deck Fundamentals','Entrepreneurial Review']],
+      [15, 'STEM Internship Prep', ['Research Internships','Lab Safety & Protocols','Scientific Writing','Data Analysis Skills','Programming for Internships','Statistical Tools','Presentation of Research','Working with Advisors','REU Programs','Conference Presentations','Publishing as an Intern','Patent & IP in STEM','Graduate School Pathways','Citing Sources & Avoiding Plagiarism','STEM Internship Review']],
+      [16, 'Leadership Development', ['What Is Leadership?','Leadership Styles','Leading Without Authority','Communication for Leaders','Delegation Skills','Conflict Resolution','Decision Making Under Pressure','Mentoring Others','Building Team Trust','Emotional Intelligence','Giving Effective Presentations','Running Meetings','Leading Projects','Leading Across Cultures','Leadership Review']],
+      [17, 'Career Transition', ['From Intern to Employee','Salary Negotiation Basics','Benefits & Compensation','First 90 Days Strategy','Building Professional Reputation','Finding Mentors Long-Term','Continuous Learning','Industry Certifications','Professional Associations','Personal Branding','Career Pivoting','Work-Life Balance','Long-Term Career Vision','Negotiating Remote/Hybrid Terms','Career Transition Review']],
+      [18, 'Remote Internship Skills', ['Remote Work Mindset','Setting Up a Productive Home Office','Virtual Communication Mastery','Slack & Teams Power User Tips','Video Call Presence & Confidence','Asynchronous Work Best Practices','Time Management Without Supervision','Staying Visible to Your Manager','Building Relationships Remotely','Virtual Coffee Chats','Documenting Your Work Daily','Remote Collaboration Tools','Overcoming Loneliness & Isolation','Thriving in a Distributed Team','Remote Internship Skills Review']],
+      [19, 'Startup vs Corporate Internships', ['Startup Culture Explained','Corporate Culture Explained','Pace & Structure Differences','Learning Opportunities Compared','Mentorship in Startups vs Corporates','Compensation & Perks','Career Growth Paths','Risk & Stability','Innovation & Bureaucracy','Networking Differences','Resume Impact','Choosing What Fits You','Hybrid & Mid-Size Companies','Making the Most of Either','Startup vs Corporate Review']],
+      [20, 'Technical Interview Prep', ['What Is a Technical Interview?','Data Structures Overview','Algorithms You Should Know','Big O Notation Basics','Arrays & Strings Problems','Linked Lists & Trees','Sorting & Searching','Dynamic Programming Intro','System Design Basics','Whiteboard Coding Tips','Online Coding Assessments','Take-Home Projects','Behavioral Questions in Tech','Mock Interview Strategies','Technical Interview Prep Review']],
+      [21, 'Building a Portfolio', ['Why Every Intern Needs a Portfolio','Choosing Your Best Work','Writing Project Descriptions','Before & After Case Studies','Quantifying Your Contributions','Screenshots & Visual Documentation','Building a Portfolio Website','GitHub Profile Optimization','Writing a Technical Blog','Creating Video Demos','Design Portfolio Best Practices','Writing Portfolio Tips','Keeping It Updated & Relevant','Sharing Your Portfolio Effectively','Building a Portfolio Review']],
+      [22, 'Networking Strategies', ['Why Networking Is Essential','Building Your Network Early','LinkedIn Advanced Strategies','Informational Interview Mastery','Networking at Conferences','Alumni Network Leverage','Industry Meetups & Events','Online Communities & Forums','The Art of the Follow-Up','Building Genuine Relationships','Networking for Introverts','Creating a Networking Plan','Giving Before You Ask','Maintaining Long-Term Connections','Networking Strategies Review']],
+      [23, 'Turning Internship into Full-Time', ['Signaling Your Interest Early','Exceeding Expectations','Building Internal Advocates','Understanding the Conversion Process','Timing Your Conversations','Negotiating a Full-Time Offer','What If There\'s No Open Role?','Staying Connected After Internship','Leveraging Return Offers','Evaluating the Full-Time Opportunity','Competing Offers Strategy','The Transition from Intern to Employee','First 90 Days as Full-Time','Long-Term Career Planning','Internship to Full-Time Review']],
+      [24, 'Internship Abroad', ['Why Intern Abroad?','Finding International Opportunities','Visa & Work Authorization','Cultural Adaptation Strategies','Language Barriers & Solutions','Cost Planning & Budgeting','Housing & Logistics Abroad','Health & Safety Abroad','Cross-Cultural Communication','Working in Different Time Zones','Building a Global Network','Adding International Experience to Resume','Reverse Culture Shock','Making the Most of the Experience','Internship Abroad Review']],
+      [25, 'Entrepreneurship as Alternative', ['Why Consider Entrepreneurship?','Identifying Problems to Solve','Validating Your Idea','Lean Startup Methodology','Building a Minimum Viable Product','Finding Co-Founders','Bootstrapping vs Fundraising','Pitching Your Idea','Incubators & Accelerators','Freelancing as a Start','Side Projects & Side Hustles','Learning from Failed Ventures','Entrepreneurial Mindset','When to Take the Leap','Entrepreneurship Review']],
+      [26, 'Resume Engineering — Advanced', ['Beyond One-Pagers — When Two Is OK','Industry-Specific Resume Sections','Hybrid Resume Formats','Showcasing Side Projects','Including Hackathons & Competitions','Volunteer Work That Counts','Translating Class Projects to Industry Lingo','Resume for Career Changers','Resume for Gap Years','International Resume Conventions (CV vs Résumé)','Using AI to Improve Your Resume','Resume Review Communities','A/B Testing Your Resume','Resume Red Flags to Avoid','Resume Engineering Mastery']],
+      [27, 'LinkedIn Mastery', ['LinkedIn Algorithm Basics','Profile Photo Best Practices','Background Banner Strategy','Writing a Memorable Headline','Crafting the "About" Section','Featured Section — Pinning Your Best Work','Skill Endorsements & How to Earn Them','Strategic Connection Building','Posting for Visibility','LinkedIn Articles vs Posts','Commenting Strategy','Sending Cold InMail','LinkedIn Premium — Worth It?','Recommendations — Asking & Writing','LinkedIn Mastery Checkpoint']],
+      [28, 'Cover Letter Mastery', ['When Cover Letters Still Matter','The Anatomy of a Great Cover Letter','Hook Sentences That Get Read','Showing You Researched the Company','Mirroring the Job Description','Telling a Story in 250 Words','Cover Letters for Cold Outreach','Cover Letters for Referrals','AI-Assisted Cover Letter Writing','Cover Letter Templates — Pros & Cons','Tailoring at Scale','Avoiding Cliches','The Closing Paragraph & CTA','Editing & Proofreading Tips','Cover Letter Mastery Checkpoint']],
+      [29, 'Salary & Negotiation Deep-Dive', ['Why Negotiation Matters at Internships','Researching Salary Ranges','Glassdoor, Levels.fyi & PayScale','Stipend vs Hourly vs Salary','Knowing Your BATNA','The First Offer Conversation','Asking for More — Scripts That Work','Negotiating Beyond Salary','Sign-On Bonuses & Relocation','Stock Options at Startups (Basics)','When to Walk Away','Negotiating as an International Intern','Negotiating a Return Offer','Practicing the Negotiation Conversation','Salary & Negotiation Mastery']],
+      [30, 'Tech Stack for Tech Interns', ['Git & GitHub Basics','Pull Requests & Code Reviews','Reading Existing Codebases','Bug Reports & Issue Tracking','Local Dev Environments','Testing Your Code','Continuous Integration Basics','APIs & REST Fundamentals','Databases for Beginners','Reading Logs & Debugging','Command Line Survival','Docker for Interns (Intro)','Cloud Basics — AWS, GCP & Azure','Asking Good Technical Questions','Tech Stack Checkpoint']],
+      [31, 'Office Tools — Notion, Jira & Slack', ['Slack Etiquette & Channel Hygiene','Slack Threading Best Practices','Slack Saved Items & Reminders','Notion for Personal Notes','Notion Databases Basics','Linking Notes Across Notion','Jira — Reading Tickets','Jira — Writing Tickets','Linear Workflows','Asana for Task Management','Confluence Wiki Navigation','Loom for Async Updates','Zoom Pro Tips','Calendar Etiquette','Office Tools Mastery']],
+      [32, 'Spreadsheet Skills for Interns', ['Why Spreadsheets Still Rule','Cell References — Absolute vs Relative','VLOOKUP & XLOOKUP','INDEX/MATCH Power Move','SUMIFS & COUNTIFS','Pivot Tables From Scratch','Charts That Actually Communicate','Conditional Formatting','Data Validation','Cleaning Messy Data','Filtering & Sorting Like a Pro','Shortcuts That Save Hours','Google Sheets vs Excel','Sharing & Permissions Etiquette','Spreadsheet Mastery']],
+      [33, 'Presentation Skills & Public Speaking', ['Knowing Your Audience','The 3-Sentence Pitch','Slide Design Fundamentals','One Idea Per Slide','Storytelling for Presentations','Practicing Without Sounding Robotic','Managing Nerves on Stage','Voice, Pace & Pauses','Eye Contact — In Person & On Camera','Handling Q&A Confidently','Demoing Live — What Could Go Wrong','Visualizing Data in Slides','Reading the Room','Asking for Feedback After Speaking','Presentation Mastery']],
+      [34, 'Email & Professional Writing', ['Subject Lines That Get Opened','The 3-Sentence Email Rule','CC vs BCC vs Reply-All','Tone — Friendly Without Being Casual','Asking for Things Clearly','Following Up Without Being Annoying','Writing for Skim-Readers','Status Updates Done Right','Memo & Doc Writing','Slack vs Email — When to Use Which','International Email Etiquette','Out-of-Office & Vacation Messages','Email Templates Library','Writing Under Pressure','Professional Writing Checkpoint']],
+      [35, 'Project Management Basics', ['What Is a PM, Anyway?','Project Lifecycle Stages','Defining Scope','Building a Timeline','Estimating Time & Effort','Identifying Dependencies','Risk Identification','Status Reporting','Running a Kickoff Meeting','Sprint Planning Basics','Retros & Postmortems','Stakeholder Communication','Saying "No" Diplomatically','Tools — Gantt, Kanban, Roadmaps','PM Basics Checkpoint']],
+      [36, 'Agile, Scrum & Daily Standups', ['What Is Agile?','Agile vs Waterfall','The Scrum Framework','Roles — PO, SM, Engineer','The Standup Meeting','Writing Standup Updates','Sprint Reviews & Demos','Backlog Grooming','Story Points & Estimation','Kanban as an Alternative','The 2-Pizza Team Rule','When Agile Goes Wrong','Scaling Agile — SAFe, Spotify Model','Adopting Agile in Your Team','Agile & Scrum Checkpoint']],
+      [37, 'Cross-Functional Collaboration', ['Who\'s Who at the Company','Working with Engineers','Working with Designers','Working with PMs','Working with Marketing','Working with Sales','Working with Customer Success','Working with Legal','Working with HR','Working with Finance','Translating Between Teams','Resolving Cross-Team Conflict','Building Cross-Functional Trust','Documenting for Multiple Audiences','Cross-Functional Mastery']],
+      [38, 'Reading Workplace Politics', ['Politics Isn\'t Always Bad','Identifying Power Players','Understanding the Org Chart','Informal vs Formal Authority','Sensing Tension Early','Staying Neutral in Conflicts','Choosing Allies Carefully','Building Internal Reputation','Avoiding Gossip','When to Speak Up vs Stay Quiet','Reading the Room in Meetings','Email & Slack Body-Language','Navigating Reorganizations','Surviving Layoff Seasons','Workplace Politics Checkpoint']],
+      [39, 'Managing Up — Manager Management', ['What "Managing Up" Means','Understanding Your Manager\'s Goals','Knowing Their Communication Style','Setting 1:1 Agendas','Being a Low-Maintenance Report','Bringing Solutions, Not Just Problems','Asking for Clarity','Giving Your Manager Feedback','Handling a Disengaged Manager','Handling a Micromanager','Handling a Conflict-Averse Manager','Building Trust in 90 Days','Asking for Growth Opportunities','Asking for Promotion or Conversion','Managing Up Mastery']],
+      [40, 'Imposter Syndrome & Mental Health', ['What Is Imposter Syndrome?','Recognizing Your Triggers','Talking About It With Peers','The "Spotlight Effect" Myth','Keeping a Brag Document','Reframing Negative Self-Talk','Therapy & Employee Assistance Programs','Mental Health Days','Anxiety in High-Stakes Meetings','Coping With Public Mistakes','Sleep & Performance','Movement & Energy','Boundaries Around Work Hours','Building a Support Circle','Mental Health Checkpoint']],
+      [41, 'Burnout Prevention & Recovery', ['Signs of Burnout','The Burnout Cycle','Workload vs Capacity','Recovery Sprints','Saying No Strategically','Disconnecting on Weekends','Vacation — Take It','Hobbies That Recharge','Exercise as Medicine','Nutrition & Energy','Asking for Reduced Scope','Talking to Your Manager About Overload','When to Quit vs Push Through','Returning to Work After Burnout','Burnout Recovery Mastery']],
+      [42, 'Diversity, Equity & Inclusion at Work', ['Why DEI Matters','Common DEI Terms Explained','Unconscious Bias 101','Microaggressions — Recognizing & Responding','Being a Better Ally','ERGs (Employee Resource Groups)','Inclusive Language','Accessible Meetings & Docs','Pronouns & Identity at Work','Cultural Holidays & Calendars','Inclusive Hiring Practices','Equity vs Equality','Anti-Racism at Work','Speaking Up Safely','DEI Checkpoint']],
+      [43, 'Coffee Chats & Internal Networking', ['Why Coffee Chats Matter','Who to Invite & Why','Crafting the Invite Message','The 25-Minute Format','Great Questions to Ask','Following Up Afterward','Building a Coffee Chat Tracker','Coffee Chats Across Departments','Coffee Chats With Executives','Virtual Coffee Chats','Re-Inviting Old Connections','Coffee Chat Mistakes to Avoid','Turning Chats Into Mentorship','Coffee Chat Goals Per Week','Coffee Chat Mastery']],
+      [44, 'Personal Finance During Internship', ['Building a Budget on a Stipend','Tracking Spending Apps','Emergency Fund Basics','Banking Fundamentals','Credit Cards 101','Building Credit Responsibly','Student Loans — Knowing Your Plan','Filing Your First Taxes','Roth IRA on Internship Income','401(k) — If You Get One','Insurance Basics for Interns','Saving for Grad School','Saving for Relocation','Investing 101 for Interns','Personal Finance Checkpoint']],
+      [45, 'AI & Automation Skills for Interns', ['Using ChatGPT & Claude Effectively','AI for Drafting Emails','AI for Research & Summaries','AI Coding Assistants — Cursor, Copilot','Prompt Engineering Basics','When NOT to Use AI at Work','Confidentiality & AI Tools','Building Tiny Automations','Workflow Automation with Zapier','AI-Powered Note-Taking','AI for Meeting Summaries','Fact-Checking AI Outputs','Citing AI-Assisted Work','Future-Proofing Your Skills','AI Skills Checkpoint']],
+      [46, 'Cybersecurity Basics for Interns', ['Why Cybersecurity Matters at Work','Strong Passwords & Password Managers','Two-Factor Authentication','Phishing — Spotting It','USB & Device Hygiene','Public Wi-Fi Risks','Confidential Data Handling','Reporting Security Incidents','Encrypted Messaging at Work','Screen Locking — Always','Social Engineering Awareness','Open-Source Risks','Compliance & Audits Overview','Onboarding Security Trainings','Cybersecurity Checkpoint']],
+      [47, 'Data Literacy for Interns', ['Reading a Chart Critically','Common Chart Types Explained','Mean, Median, Mode','Correlation vs Causation','Percentages & Rates','Sample Sizes Matter','Misleading Visualizations','Working with Dashboards','Asking the Right Data Question','Sourcing Reliable Data','Privacy in Data Work','Building Your First Dashboard','Translating Numbers to Stories','Common Data Mistakes','Data Literacy Checkpoint']],
+      [48, 'Building Your Reputation', ['What People Mean by "Reputation"','The 80/20 of Visible Work','Showing Up Consistently','Going First in Meetings','The Power of Reliable Follow-Through','Becoming a "Go-To" for Something','Volunteering for Unsexy Work','Public Wins vs Quiet Wins','Sharing Credit Generously','Avoiding Office Gossip','Owning Mistakes Quickly','Building Your Internal Brand','External Reputation — Blogs, Talks','Auditing Your Reputation Yearly','Reputation Checkpoint']],
+      [49, 'Conferences, Workshops & Continued Learning', ['Why Conferences Matter Early','Choosing Which Conferences to Attend','Getting Your Company to Pay','Conference Networking','Working a Booth or Table','Speaking at a Conference','Workshop vs Conference vs Meetup','Online Conferences — Worth It?','Building a Year-Round Learning Plan','Free Resources to Keep Learning','Certifications — Which Pay Off','Reading Industry Newsletters','Joining Professional Associations','Continuing Education Budgets','Continued Learning Checkpoint']],
+      [50, 'Internship Mastery — Capstone', ['Reviewing Your Journey','Documenting Everything You Built','Final Self-Evaluation','Asking for Final Feedback','Your Return-Offer Conversation','Negotiating Your Next Role','The Goodbye Email That Lands Right','Staying in Touch — Year One','Building Your Long-Term Career Story','From Intern to Junior Hire','From Intern to Founder','Lifelong Learning Mindset','Paying It Forward — Mentoring Next Year\'s Interns','The Best Career Advice','Internship Mastery — Final Capstone']]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'intern-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('internship');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('internship');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

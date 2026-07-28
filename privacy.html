@@ -54,31 +54,64 @@
   <!-- Content -->
   <div class="legal-container">
     <h1>Privacy Policy</h1>
-    <p class="legal-updated">Last updated: <span id="year-updated"></span></p>
+    <p class="legal-updated">Last updated: <span id="last-updated">June 17, 2026</span></p>
 
     <h2>1. Information We Collect</h2>
-    <p>When you create an account, we collect your email address and display name. As you use Mathagram, we collect usage data including lessons completed, quiz scores, XP earned, and progress through courses.</p>
+    <p><strong>Account data.</strong> When you create an account we collect your email address and display name (3&ndash;13 letters, A&ndash;Z only). If you sign up with Google, we receive your Google account email address and verified-email status. <strong>For standard Mathagram accounts</strong> we do not receive your contacts, calendar, Drive files, or photos. <em>(The Mathagram School version links a Google account and, with your consent, accesses additional Google services &mdash; see <strong>Mathagram School data</strong> below.)</em></p>
+    <p><strong>Learning data.</strong> As you use Mathagram, we collect usage data including lessons completed, quiz scores, XP earned, current streak, language preference, side-character preference, and progress through each course. This data is associated with your account so we can sync progress across devices.</p>
+    <p><strong>Learning Post content.</strong> Posts, comments, and uploaded study-material images on Learning Post are stored with your display name and timestamp. Strike-system violations are also recorded.</p>
+    <p><strong>Mathagram School data.</strong> The Mathagram School version (an opt-in virtual-school experience) requires you to link a Google account to your assigned Mathagram School email. We use this link for (a) <em>sign-in &amp; identity</em> &mdash; your Google email address and verified-email status, to authenticate you and provide single sign-on to school features; and (b) <em>Google Classroom &amp; Google Drive integration</em> &mdash; only with the permissions you explicitly authorize when linking, to sync your classes, rosters, and assignments from Google Classroom and to read and store school coursework in Google Drive. We request only the Google permission scopes needed for these features and use this data solely to provide school services &mdash; never for advertising, profiling, or sale. You can revoke this access at any time at <a href="https://myaccount.google.com/permissions" style="color: var(--color-primary-dark); text-decoration: underline;" target="_blank" rel="noopener">myaccount.google.com/permissions</a> or by unlinking inside Mathagram School; revoking it disables the related school features.</p>
+    <p><strong>What we do <em>not</em> collect.</strong> We do not collect your real name, home address, phone number, school, or payment information. Mathagram is 100% free and does not process payments. We do not record microphone audio, take screenshots of your device, or use webcam access. Voice narration is generated entirely on your device by your browser&rsquo;s built-in speech synthesis.</p>
 
     <h2>2. How We Use Your Information</h2>
-    <p>We use the information we collect to provide and maintain the Mathagram service, track your learning progress across courses and lessons, personalize your experience with characters and levels, and improve our educational content based on aggregate usage patterns.</p>
+    <p>We use the information we collect to provide and maintain the Mathagram service, authenticate your account, sync your learning progress across devices and courses, personalize your experience (character avatar, XP level, streak, leaderboard ranking), moderate Learning Post for safety, and improve our educational content based on aggregate (de-identified) usage patterns. We do <strong>not</strong> use your data to train AI models, sell to data brokers, or run behavioral advertising.</p>
 
-    <h2>3. Third-Party Services</h2>
-    <p>Mathagram uses Firebase Authentication and Cloud Firestore, both provided by Google, to manage user accounts and store data. Your information is processed in accordance with <a href="https://policies.google.com/privacy" style="color: var(--color-primary-dark); text-decoration: underline;">Google's Privacy Policy</a>. We do not sell or share your personal information with any other third parties.</p>
+    <h2>3. AI-Powered Features</h2>
+    <p>Mathagram uses AI to generate quiz questions, adapt difficulty, and assist with Learning Post moderation. AI inference happens server-side using providers such as Anthropic and/or OpenAI under their respective enterprise privacy terms. We send the minimum data needed (e.g., the topic of a quiz, the text of a post being moderated) and do <em>not</em> send your email address, password, full account history, or other identifying information to AI providers.</p>
 
-    <h2>4. Data Security</h2>
-    <p>We take data security seriously. All connections to Mathagram are encrypted via HTTPS. User data is protected by Firebase security rules that restrict access to authorized users only. Passwords are never stored in plaintext; authentication is handled entirely by Firebase Authentication.</p>
+    <h2>4. Voice &amp; Speech</h2>
+    <p>Character narration (Story Mode, Listening Practice, Reading Practice, Buddy reactions) uses your browser&rsquo;s native <strong>Web Speech API (SpeechSynthesis)</strong>. Speech is generated locally by your operating system &amp; browser — Mathagram does not transmit the dialogue text or any audio to any third-party voice service, and no audio is stored on our servers. If your browser doesn&rsquo;t support speech synthesis, voice features will silently fall back to text-only.</p>
 
-    <h2>5. Data Retention</h2>
-    <p>Your data is retained for as long as your account is active. If you wish to delete your account and all associated data, please contact us via email and we will process your request within 30 days.</p>
+    <h2>5. Third-Party Services</h2>
+    <p>Mathagram uses a small, deliberate set of third-party services:</p>
+    <p><strong>Firebase Authentication &amp; Cloud Firestore</strong> (Google) — manages account login and stores learning progress &amp; Learning Post content. Processed under <a href="https://policies.google.com/privacy" style="color: var(--color-primary-dark); text-decoration: underline;">Google&rsquo;s Privacy Policy</a>.</p>
+    <p><strong>Google Classroom &amp; Google Drive</strong> (Mathagram School only) — when you link a Google account in the Mathagram School version and grant permission, we access Google Classroom (classes, rosters, assignments) and Google Drive (school coursework you choose to store or share) to provide school features. Processed under <a href="https://policies.google.com/privacy" style="color: var(--color-primary-dark); text-decoration: underline;">Google&rsquo;s Privacy Policy</a>. Not used for standard Mathagram accounts.</p>
+    <p><strong>Netlify</strong> — hosts the static site (HTML/CSS/JS). Netlify may collect basic request logs (IP address, user-agent, requested URL) for security and CDN performance.</p>
+    <p><strong>Google Translate proxy (translate.goog)</strong> — used optionally when a user views Mathagram in a non-English language. Page text is sent to Google for translation under <a href="https://policies.google.com/privacy" style="color: var(--color-primary-dark); text-decoration: underline;">Google&rsquo;s Privacy Policy</a>. This is only invoked if you select a translated view.</p>
+    <p><strong>KaTeX CDN</strong> (jsDelivr) — serves math rendering library. No personal data sent.</p>
+    <p><strong>Anthropic / OpenAI</strong> — server-side AI inference for quiz generation and moderation. We send only the minimum content needed; see Section 3.</p>
+    <p>We do <strong>not</strong> use Google Analytics, Meta Pixel, TikTok Pixel, Hotjar, Mixpanel, Segment, or any behavioral-advertising trackers. We do <strong>not</strong> sell or rent your personal information to anyone.</p>
 
-    <h2>6. Children's Privacy</h2>
-    <p>Mathagram is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us so we can take appropriate action.</p>
+    <h2>6. Data Security</h2>
+    <p>All connections to Mathagram are encrypted via HTTPS. User data is protected by Firebase security rules that restrict access to the account owner only. Passwords are never stored in plaintext; authentication is handled entirely by Firebase Authentication using industry-standard hashing.</p>
 
-    <h2>7. Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date. We encourage you to review this policy periodically to stay informed about how we protect your information.</p>
+    <h2>7. Data Retention</h2>
+    <p>Your data is retained for as long as your account is active. If you wish to delete your account and all associated data (progress, XP, streaks, Learning Post posts, strike history), please contact us using the Contact section below and we will process your request within 30 days. After deletion, data cannot be recovered.</p>
 
-    <h2>8. Contact</h2>
-    <p>If you have questions about this Privacy Policy or wish to request data deletion, please contact Rehaan Rashid at <a href="https://linktr.ee/Rehaan_rashid" style="color: var(--color-primary-dark); text-decoration: underline;">linktr.ee/Rehaan_rashid</a>.</p>
+    <h2>8. Your Rights (GDPR &amp; CCPA)</h2>
+    <p>Depending on where you live, you may have the right to:</p>
+    <p><strong>a) Access</strong> — request a copy of the personal data we hold about you.</p>
+    <p><strong>b) Correction</strong> — ask us to fix inaccurate or incomplete data.</p>
+    <p><strong>c) Deletion</strong> — request erasure of your account and all associated data.</p>
+    <p><strong>d) Portability</strong> — receive your data in a machine-readable format (JSON export).</p>
+    <p><strong>e) Object / Restrict</strong> — object to certain processing of your data.</p>
+    <p><strong>f) Withdraw consent</strong> — withdraw any consent you previously gave.</p>
+    <p>To exercise any of these rights, contact us using the Contact section below. We will respond within 30 days. California residents have additional rights under the CCPA, including the right to know what categories of personal information we collect and the right to opt out of any sale (we do not sell personal information).</p>
+
+    <h2>9. International Data Transfers</h2>
+    <p>Mathagram is built and operated from the United States. Firebase services may store and process your data in Google data centers in multiple regions. If you access Mathagram from outside the U.S., your information may be transferred to, stored, and processed in the U.S. By using Mathagram, you consent to this transfer.</p>
+
+    <h2>10. Children&rsquo;s Privacy</h2>
+    <p>Mathagram is designed for learners in Middle School (ages 11+), High School, and University. You must be at least 11 years old to create an account. Users between the ages of 11 and 12 must have verifiable parental or guardian consent to create an account and use Mathagram's lessons and courses; however, Learning Post (our community feed) is restricted to users 13 and older and is not available to them. We do not knowingly collect personal information from children under 11. If you believe a child under 11 has provided us with personal information, please contact us using the Contact section below and we will delete that data promptly.</p>
+
+    <h2>11. Cookies &amp; Local Storage</h2>
+    <p>Mathagram uses browser localStorage and sessionStorage to remember your login session, theme preference, language preference, character preference, and current strike count. We do not use third-party advertising cookies. Firebase Authentication sets first-party cookies to maintain your login session.</p>
+
+    <h2>12. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Material changes will be posted on this page with an updated &ldquo;Last updated&rdquo; date at the top, and we will make a reasonable effort to notify active users. We encourage you to review this policy periodically.</p>
+
+    <h2>13. Contact</h2>
+    <p>For questions about this Privacy Policy, to request data access, correction, deletion, or to exercise any GDPR/CCPA right, contact Rehaan Rashid at <a href="https://linktr.ee/Rehaan_rashid" style="color: var(--color-primary-dark); text-decoration: underline;">linktr.ee/Rehaan_rashid</a>.</p>
   </div>
 
   <!-- Footer -->
@@ -98,9 +131,7 @@
     initNav('');
   </script>
   <script>
-    const yr = new Date().getFullYear();
-    document.getElementById('year').textContent = yr;
-    document.getElementById('year-updated').textContent = yr;
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
 </body>

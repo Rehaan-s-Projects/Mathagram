@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read &amp; Listen: Trig Modeling — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    body { background: #f8f9fa; }
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .edam-banner { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 28px 24px; text-align: center; margin-bottom: 24px; position: relative; overflow: hidden; }
+    .edam-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fbbf24; display: block; margin: 0 auto 6px; box-shadow: 0 4px 20px rgba(251,191,36,0.3); animation: edamBounce 2s ease infinite; }
+    @keyframes edamBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .edam-speech { background: rgba(255,255,255,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 14px; padding: 14px 18px; margin-top: 12px; color: #e2e8f0; font-size: 0.9rem; line-height: 1.6; font-style: italic; }
+    .headphones-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; padding: 6px 16px; margin-top: 14px; color: #fbbf24; font-size: 0.8rem; font-weight: 700; }
+    .reading-card { background: #fff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-math, #3b82f6); border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
+    .reading-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; color: var(--color-text); }
+    .reading-card p { font-size: 0.98rem; line-height: 1.7; margin-bottom: 8px; color: var(--color-text); }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Trigonometry</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 19 &mdash; Read &amp; Listen</div>
+    <h1>Trig Modeling: Ferris Wheels, Tides &amp; Sound</h1>
+
+    <div class="edam-banner">
+      <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px;">
+        <div style="text-align:center;">
+          <img src="../../assets/characters/edam.svg" alt="Edam" class="edam-avatar">
+          <div style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:4px;">Edam</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="../../assets/characters/diego.svg" alt="Diego" class="edam-avatar" style="border-color:#3b82f6;box-shadow:0 4px 20px rgba(59,130,246,0.3);animation-delay:0.5s;">
+          <div style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:4px;">Diego</div>
+        </div>
+      </div>
+      <div class="edam-speech">
+        "Real-world trig! Read the model, then listen to Edam &amp; Diego ask questions. We'll model the world with sine and cosine."
+      </div>
+      <div class="headphones-badge"><span>&#127911;</span> Headphones Recommended</div>
+    </div>
+
+    <div class="reading-card">
+      <h3>🎡 Read: Ferris Wheel</h3>
+      <p>A Ferris wheel has radius 20 m, center 22 m above the ground, and one full rotation takes 60 seconds. The rider's height is \(h(t) = 22 - 20\cos\!\left(\tfrac{2\pi}{60}\,t\right)\). At \(t = 0\), the rider is at the bottom (\(h = 2\) m).</p>
+    </div>
+
+    <div class="reading-card">
+      <h3>🌊 Read: Tides</h3>
+      <p>High tide is 6 m, low tide is 1 m, and the period is roughly 12 hours. Tide height: \(H(t) = 3.5 + 2.5\sin\!\left(\tfrac{\pi}{6}\,t\right)\). Midline 3.5 m, amplitude 2.5 m.</p>
+    </div>
+
+    <div class="reading-card">
+      <h3>🎵 Read: Sound &amp; Music</h3>
+      <p>Middle A on a piano is \(440\,\text{Hz}\). Its sound pressure can be modeled \(p(t) = A\sin(2\pi \cdot 440\, t)\). Doubling the frequency to \(880\,\text{Hz}\) gives the A one octave up.</p>
+    </div>
+
+    <div class="reading-card">
+      <h3>☀️ Read: Daylight Hours</h3>
+      <p>In Boston, daylight ranges from about 9 hours (December) to 15 hours (June). A model: \(D(t) = 12 + 3\sin\!\left(\tfrac{2\pi}{365}(t-80)\right)\), where \(t\) is the day of year.</p>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <hr style="border:none; border-top:1px solid var(--color-border); margin:0 0 40px;">
+    <h2><span style="font-size:1.5rem;">&#127911;</span> Read &amp; Listen Quiz</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org &mdash; All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete, showMistakesReview } from '../../js/exercises.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const speakers = ['edam', 'diego'];
+    initSideCharacter('diego', '../../');
+
+    const exercises = [
+      {
+        type: 'multiple-choice',
+        question: 'A Ferris wheel of radius 20 m has center 22 m up. At the bottom, what is the rider\'s height?',
+        options: ['0 m', '2 m', '20 m', '42 m'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A Ferris wheel takes 60 seconds per revolution. What is its angular speed in radians per second?',
+        spokenText: 'A Ferris wheel takes 60 seconds per revolution. What is its angular speed in radians per second?',
+        options: ['\\(\\pi/30\\)', '\\(\\pi/60\\)', '\\(2\\pi/60\\)', '\\(\\pi\\)'],
+        correctIndex: 0
+      },
+      {
+        type: 'fill-blank',
+        question: 'Tide model \\(H(t) = 3.5 + 2.5\\sin(\\pi t/6)\\). The midline is ___ meters.',
+        answer: '3.5'
+      },
+      {
+        type: 'listening',
+        question: 'A tide cycles between 1 meter at low tide and 6 meters at high tide. What is the amplitude in meters?',
+        spokenText: 'A tide cycles between 1 meter at low tide and 6 meters at high tide. What is the amplitude in meters?',
+        answerType: 'fill-blank',
+        answer: '2.5'
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Middle A is 440 Hz. Modeled as \\(p(t) = A\\sin(2\\pi f t)\\), what is the period?',
+        options: ['1/220 s', '1/440 s', '1/880 s', '440 s'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A sound wave is modeled as 0.5 sine of 2 pi times 440 t. What is the frequency in hertz?',
+        spokenText: 'A sound wave is modeled as 0 point 5 times sine of 2 pi times 440 t. What is the frequency in hertz?',
+        answerType: 'fill-blank',
+        answer: '440'
+      },
+      {
+        type: 'true-false',
+        question: 'In a daylight model \\(D(t) = 12 + 3\\sin(2\\pi(t-80)/365)\\), the maximum daylight is 15 hours.',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'The temperature in a city is modeled as 70 plus 20 sine of pi over 6 t, with t in months. What is the lowest temperature?',
+        spokenText: 'The temperature in a city is modeled as 70 plus 20 sine of pi over 6 times t, with t in months. What is the lowest temperature in degrees?',
+        options: ['50°', '70°', '90°', '20°'],
+        correctIndex: 0
+      },
+      {
+        type: 'multiple-choice',
+        question: 'Population cycle of a predator is modeled \\(P(t) = 500 + 200\\cos(\\pi t/3)\\). What is the period in years?',
+        options: ['3', '6', '\\(2\\pi\\)', '\\(\\pi/3\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'A pendulum is modeled as theta of t equals 0.2 cosine of 4 t. True or false: the period of swing is pi over 2 seconds.',
+        spokenText: 'A pendulum is modeled as theta of t equals 0 point 2 times cosine of 4 t. True or false: the period of swing is pi over 2 seconds.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'A Ferris wheel makes one full revolution every 80 seconds. What is its frequency, in revolutions per second, as a fraction?',
+        spokenText: 'A Ferris wheel makes one full revolution every eighty seconds. What is its frequency, in revolutions per second, as a fraction?',
+        answerType: 'fill-blank',
+        answer: '1/80'
+      },
+      {
+        type: 'listening',
+        question: 'A tide model has period 12 hours. What is the angular frequency, in radians per hour?',
+        spokenText: 'A tide model has period twelve hours. What is the angular frequency, in radians per hour?',
+        options: ['\\(\\pi/12\\)', '\\(\\pi/6\\)', '\\(2\\pi\\)', '\\(\\pi\\)'],
+        correctIndex: 1
+      },
+      {
+        type: 'listening',
+        question: 'True or false: a function modeling daylight hours over a year has a period of 365 days.',
+        spokenText: 'True or false. A function modeling daylight hours over a year has a period of three hundred sixty five days.',
+        answerType: 'true-false',
+        correctAnswer: true
+      },
+      {
+        type: 'listening',
+        question: 'Temperature over a day is modeled as 60 plus 10 sine of pi over 12 t. What is the highest temperature?',
+        spokenText: 'Temperature over a day is modeled as sixty plus ten sine of pi over twelve t, where t is in hours. What is the highest temperature in degrees?',
+        options: ['50°', '60°', '70°', '80°'],
+        correctIndex: 2
+      },
+      {
+        type: 'fill-blank',
+        question: 'A Ferris wheel with radius 20 m and center 22 m high reaches a maximum height of ___ m.',
+        answer: '42'
+      },
+      {
+        type: 'fill-blank',
+        question: 'If a tide cycle has period 12 hours, the angular frequency is π over ___.',
+        answer: '6'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Middle A on a piano vibrates at ___ hertz.',
+        answer: '440'
+      },
+      {
+        type: 'fill-blank',
+        question: 'Daylight hours throughout a year are modeled with a period of ___ days.',
+        answer: '365'
+      }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+
+    const mistakeIdx = new Set();
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      if (!isCorrect && index >= 0) mistakeIdx.add(index);
+      const who = speakers[index % speakers.length];
+      initSideCharacter(who, '../../');
+      showBuddy(who, isCorrect ? 'correct' : 'wrong');
+    });
+
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'trigonometry',
+      lessonId: 'lesson-modeling',
+      nextHref: 'index.html',
+      backHref: 'index.html'
+    });
+    showMistakesReview(container, Array.from(mistakeIdx).map((i) => exercises[i]), { basePath: '../../' });
+  </script>
+</body>
+</html>

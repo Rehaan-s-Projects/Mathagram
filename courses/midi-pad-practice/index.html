@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIDI Pad Practice — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+
+    /* Interactive 8×8 MIDI pad widget — 64 pads. Bottom 4 rows are the drum
+       kit (keyboard-mappable); top 4 rows are pitched synth pads (mouse only). */
+    .pad-section { max-width: 760px; margin: 28px auto 8px; padding: 0 16px; text-align: center; }
+    .pad-now-playing {
+      display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: #5b21b6;
+      background: #ede9fe; border-radius: 999px; margin-bottom: 12px; min-width: 130px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .pad-now-playing.playing { background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; }
+    .pad-grid {
+      display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+      background: linear-gradient(180deg, #1f2937, #111827);
+      border-radius: 18px; padding: 12px;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+    }
+    .pad {
+      aspect-ratio: 1; border-radius: 8px; cursor: pointer;
+      background: linear-gradient(180deg, #4b5563, #374151);
+      border: 1px solid rgba(0,0,0,0.4);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.08), 0 3px 5px rgba(0,0,0,0.3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1px; user-select: none;
+      transition: transform 0.05s ease, background 0.08s ease, box-shadow 0.08s ease;
+    }
+    .pad .pad-num { font-family: 'SF Mono', monospace; font-size: 0.48rem; font-weight: 700; color: #9ca3af; }
+    .pad .pad-name { font-size: 0.58rem; font-weight: 800; color: #e5e7eb; text-align: center; line-height: 1.05; padding: 0 2px; }
+    .pad .pad-key { font-family: 'SF Mono', monospace; font-size: 0.46rem; color: #6b7280; }
+    /* Pitched synth pads — softer slate so the kit reads as distinct */
+    .pad.synth { background: linear-gradient(180deg, #475569, #334155); }
+    .pad.synth .pad-name { color: #99f6e4; }
+    .pad:active, .pad.lit {
+      background: linear-gradient(180deg, #a78bfa, #7c3aed);
+      transform: translateY(2px) scale(0.97);
+      box-shadow: 0 0 18px rgba(124,58,237,0.55);
+    }
+    .pad:active .pad-name, .pad.lit .pad-name,
+    .pad:active .pad-num, .pad.lit .pad-num,
+    .pad:active .pad-key, .pad.lit .pad-key { color: #fff; }
+    .pad-hint { font-size: 0.82rem; color: var(--color-text-muted, #94a3b8); margin-top: 12px; }
+    .pad-hint kbd { display: inline-block; padding: 2px 6px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 0.78rem; color: #475569; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-music)">Music</span>
+    <h1>MIDI Pad Practice</h1>
+    <p>🥁 Learn beat-making and finger drumming on a MIDI pad — the Duolingo way. Start with <strong>Unit 1: Pad Basics</strong> (the 8×8 grid, velocity, the drum-kit sounds), then build real grooves one genre at a time: hip-hop, boom bap, trap, lo-fi, house, techno, drum &amp; bass, dubstep, afrobeats, amapiano, reggaeton, funk, jazz swing and more — finishing with classic breakbeats like the Amen Break. Each unit is 6 short lessons. 40 units · 240 lessons.</p>
+  </header>
+
+  <section class="pad-section" aria-label="Interactive MIDI drum pad">
+    <div class="pad-now-playing" id="pad-now-playing">🥁 Tap any pad</div>
+    <div class="pad-grid" id="pad-grid"></div>
+    <p class="pad-hint">A <strong>64-pad MIDI drum pad</strong> (8×8 grid) — tap or click any pad to hear it. The bottom 4 rows are the drum kit and map to your keyboard: <kbd>Z</kbd>–<kbd>,</kbd>, <kbd>A</kbd>–<kbd>K</kbd>, <kbd>Q</kbd>–<kbd>I</kbd>, <kbd>1</kbd>–<kbd>8</kbd>. The top 4 rows are pitched synth pads (mouse / touch only).</p>
+  </section>
+
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Unit 1: Pad Basics — true beginner unit. 6 lessons (Duolingo style).
+    const PAD_BASICS = [
+      "Meet the Pads",
+      "The 8×8 Grid",
+      "Velocity — Soft & Hard",
+      "The Drum-Kit Sounds",
+      "Your First Tap Pattern",
+      "Pad Basics Checkpoint"
+    ];
+    // Every other unit uses the same 6-lesson Duolingo-Music-style template.
+    const LESSON_TEMPLATE = [
+      "Listen",
+      "The Pattern",
+      "Tap Along",
+      "Build the Loop",
+      "Full Groove",
+      "Performance"
+    ];
+    // Units 2–40 — foundational skills, then genres, then classic breaks.
+    const unitNames = [
+      "Counting in 4/4",
+      "The Kick Drum",
+      "The Snare Backbeat",
+      "Closed Hi-Hats",
+      "Open Hi-Hats",
+      "Your First Full Beat",
+      "Syncopation & Groove",
+      "Drum Fills & Rolls",
+      "Velocity & Dynamics",
+      "Finger Drumming Technique",
+      "Quantize & Swing",
+      "Layering & Texture",
+      "Hip-Hop Beats",
+      "Boom Bap",
+      "Trap Beats",
+      "Lo-Fi Hip-Hop",
+      "Drill Beats",
+      "House Music",
+      "Deep House",
+      "Techno",
+      "Drum & Bass",
+      "Jungle & Breakbeat",
+      "Dubstep",
+      "UK Garage",
+      "Afrobeats",
+      "Amapiano",
+      "Reggaeton",
+      "Dancehall",
+      "Funk Grooves",
+      "Soul & Motown",
+      "Disco",
+      "Rock Beats",
+      "Pop Beats",
+      "Latin Percussion",
+      "Samba & Bossa Nova",
+      "Jazz Swing & Brushes",
+      "The Amen Break",
+      "Famous Drum Breaks",
+      "Beat-Making Mastery"
+    ];
+
+    const units = [
+      [1, "Pad Basics", PAD_BASICS.slice()],
+      ...unitNames.map((name, idx) => [idx + 2, name, LESSON_TEMPLATE.slice()])
+    ];
+
+    // Cache the unit-name map so pad-practice.html can show the right title.
+    const unitNameMap = {};
+    units.forEach(([u, name]) => { unitNameMap[u] = name; });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+    try { localStorage.setItem('mpp-unit-names', JSON.stringify(unitNameMap)); } catch {}
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        const lessonInUnit = i + 1;
+        lessons.push({
+          id: 'mpp-' + n,
+          title: t,
+          href: `pad-practice.html?u=${u}&l=${lessonInUnit}`,
+          unit: u,
+          unitName: name,
+          unitLabel: u === 1 ? 'Unit' : 'Beat',
+          category: 'music',
+          checkpoint: i === titles.length - 1,
+          skipSkillNodes: true
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('midi-pad-practice');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('midi-pad-practice');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+
+  <script>
+    // ─── Interactive 64-pad MIDI drum pad — 8×8 (Web Audio synthesised) ──
+    (function () {
+      const grid = document.getElementById('pad-grid');
+      const nowPlaying = document.getElementById('pad-now-playing');
+      if (!grid) return;
+
+      // Visual layout — top row first. Pad #1 (Kick) sits bottom-left, MPC-style.
+      // Rows 1–4 (top half)  = pitched synth pads, white-key notes C3..C7
+      // Rows 5–8 (bottom)    = drum kit (cymbals · toms · alt kit · main kit)
+      const LAYOUT = [
+        [{n:57,s:'synth',name:'C6',pitch:'C6'},{n:58,s:'synth',name:'D6',pitch:'D6'},{n:59,s:'synth',name:'E6',pitch:'E6'},{n:60,s:'synth',name:'F6',pitch:'F6'},
+         {n:61,s:'synth',name:'G6',pitch:'G6'},{n:62,s:'synth',name:'A6',pitch:'A6'},{n:63,s:'synth',name:'B6',pitch:'B6'},{n:64,s:'synth',name:'C7',pitch:'C7'}],
+        [{n:49,s:'synth',name:'C5',pitch:'C5'},{n:50,s:'synth',name:'D5',pitch:'D5'},{n:51,s:'synth',name:'E5',pitch:'E5'},{n:52,s:'synth',name:'F5',pitch:'F5'},
+         {n:53,s:'synth',name:'G5',pitch:'G5'},{n:54,s:'synth',name:'A5',pitch:'A5'},{n:55,s:'synth',name:'B5',pitch:'B5'},{n:56,s:'synth',name:'C6',pitch:'C6'}],
+        [{n:41,s:'synth',name:'C4',pitch:'C4'},{n:42,s:'synth',name:'D4',pitch:'D4'},{n:43,s:'synth',name:'E4',pitch:'E4'},{n:44,s:'synth',name:'F4',pitch:'F4'},
+         {n:45,s:'synth',name:'G4',pitch:'G4'},{n:46,s:'synth',name:'A4',pitch:'A4'},{n:47,s:'synth',name:'B4',pitch:'B4'},{n:48,s:'synth',name:'C5',pitch:'C5'}],
+        [{n:33,s:'synth',name:'C3',pitch:'C3'},{n:34,s:'synth',name:'D3',pitch:'D3'},{n:35,s:'synth',name:'E3',pitch:'E3'},{n:36,s:'synth',name:'F3',pitch:'F3'},
+         {n:37,s:'synth',name:'G3',pitch:'G3'},{n:38,s:'synth',name:'A3',pitch:'A3'},{n:39,s:'synth',name:'B3',pitch:'B3'},{n:40,s:'synth',name:'C4',pitch:'C4'}],
+        [{n:25,s:'crash',name:'Crash',k:'1'},{n:26,s:'ride',name:'Ride',k:'2'},{n:27,s:'crash',name:'Splash',k:'3'},{n:28,s:'crash',name:'China',k:'4'},
+         {n:29,s:'cowbell',name:'Cowbell',k:'5'},{n:30,s:'rim',name:'Block',k:'6'},{n:31,s:'shaker',name:'Shaker',k:'7'},{n:32,s:'shaker',name:'Tamb',k:'8'}],
+        [{n:17,s:'hitom',name:'Hi Tom',k:'Q'},{n:18,s:'midtom',name:'Mid Tom',k:'W'},{n:19,s:'lowtom',name:'Low Tom',k:'E'},{n:20,s:'lowtom',name:'Floor',k:'R'},
+         {n:21,s:'midtom',name:'Conga Hi',k:'T'},{n:22,s:'lowtom',name:'Conga Lo',k:'Y'},{n:23,s:'hitom',name:'Bongo Hi',k:'U'},{n:24,s:'midtom',name:'Bongo Lo',k:'I'}],
+        [{n:9,s:'kick',name:'Kick Sub',k:'A'},{n:10,s:'snare',name:'Snare 2',k:'S'},{n:11,s:'closedhat',name:'CH 2',k:'D'},{n:12,s:'openhat',name:'OH 2',k:'F'},
+         {n:13,s:'clap',name:'Clap 2',k:'G'},{n:14,s:'rim',name:'Rim 2',k:'H'},{n:15,s:'perc',name:'Perc 2',k:'J'},{n:16,s:'crash',name:'Crash 2',k:'K'}],
+        [{n:1,s:'kick',name:'Kick',k:'Z'},{n:2,s:'snare',name:'Snare',k:'X'},{n:3,s:'closedhat',name:'CH',k:'C'},{n:4,s:'openhat',name:'OH',k:'V'},
+         {n:5,s:'clap',name:'Clap',k:'B'},{n:6,s:'rim',name:'Rim',k:'N'},{n:7,s:'perc',name:'Perc',k:'M'},{n:8,s:'crash',name:'Crash',k:','}]
+      ];
+
+      const padByKey = {};
+      LAYOUT.forEach(row => row.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'pad' + (p.s === 'synth' ? ' synth' : '');
+        el.dataset.sound = p.s;
+        if (p.pitch) el.dataset.pitch = p.pitch;
+        el.innerHTML = `<span class="pad-num">${p.n}</span><span class="pad-name">${p.name}</span><span class="pad-key">${p.k || ''}</span>`;
+        el.addEventListener('mousedown', () => hit(p.s, p.name, el, p.pitch));
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); hit(p.s, p.name, el, p.pitch); }, { passive: false });
+        grid.appendChild(el);
+        if (p.k) padByKey[p.k.toLowerCase()] = { s: p.s, name: p.name, el, pitch: p.pitch };
+      }));
+
+      let ctx = null, noiseBuf = null;
+      function audio() {
+        if (!ctx) {
+          ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const len = ctx.sampleRate * 1.5;
+          noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+          const d = noiseBuf.getChannelData(0);
+          for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+        return ctx;
+      }
+      function noise(t, dur, hp, lp, peak) {
+        const src = ctx.createBufferSource();
+        src.buffer = noiseBuf;
+        let node = src;
+        if (hp) { const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp; node.connect(f); node = f; }
+        if (lp) { const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = lp; node.connect(f); node = f; }
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(peak, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        node.connect(g).connect(ctx.destination);
+        src.start(t); src.stop(t + dur + 0.02);
+      }
+      function tone(t, dur, f0, f1, type, peak) {
+        const osc = ctx.createOscillator();
+        osc.type = type || 'sine';
+        osc.frequency.setValueAtTime(f0, t);
+        if (f1 != null) osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(peak, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.connect(g).connect(ctx.destination);
+        osc.start(t); osc.stop(t + dur + 0.02);
+      }
+      const NOTE_OFFSETS = { C:0,'C#':1,D:2,'D#':3,E:4,F:5,'F#':6,G:7,'G#':8,A:9,'A#':10,B:11 };
+      function freqOf(note) {
+        const m = String(note || 'A4').match(/^([A-G]#?)(-?\d+)$/);
+        if (!m) return 440;
+        const midi = (parseInt(m[2],10)+1)*12 + NOTE_OFFSETS[m[1]];
+        return 440 * Math.pow(2, (midi - 69) / 12);
+      }
+      const SOUNDS = {
+        kick:      (t) => { tone(t, 0.42, 150, 48, 'sine', 0.9); noise(t, 0.03, 1200, null, 0.25); },
+        snare:     (t) => { tone(t, 0.18, 190, 120, 'triangle', 0.4); noise(t, 0.2, 1400, 7000, 0.55); },
+        clap:      (t) => { [0, 0.012, 0.024, 0.05].forEach(d => noise(t + d, 0.13, 1100, 6500, 0.4)); },
+        closedhat: (t) => noise(t, 0.045, 8000, null, 0.42),
+        openhat:   (t) => noise(t, 0.34, 7500, null, 0.34),
+        lowtom:    (t) => tone(t, 0.32, 150, 75, 'sine', 0.7),
+        midtom:    (t) => tone(t, 0.30, 220, 110, 'sine', 0.7),
+        hitom:     (t) => tone(t, 0.26, 320, 160, 'sine', 0.7),
+        rim:       (t) => { tone(t, 0.04, 1700, null, 'square', 0.4); noise(t, 0.04, 2500, null, 0.3); },
+        cowbell:   (t) => { tone(t, 0.28, 540, null, 'square', 0.3); tone(t, 0.28, 800, null, 'square', 0.22); },
+        crash:     (t) => noise(t, 1.2, 5000, null, 0.3),
+        ride:      (t) => noise(t, 0.55, 8500, null, 0.22),
+        shaker:    (t) => noise(t, 0.09, 9000, null, 0.3),
+        perc:      (t) => { tone(t, 0.16, 600, 300, 'triangle', 0.4); noise(t, 0.08, 3000, null, 0.2); },
+        synth:     (t, pitch) => {
+          const f = freqOf(pitch);
+          tone(t, 0.7, f, f, 'triangle', 0.32);
+          tone(t, 0.7, f * 2, f * 2, 'sine', 0.12);
+        }
+      };
+
+      function hit(sound, name, el, pitch) {
+        const c = audio();
+        const fn = SOUNDS[sound] || SOUNDS.perc;
+        if (sound === 'synth') fn(c.currentTime, pitch); else fn(c.currentTime);
+        if (el) { el.classList.add('lit'); setTimeout(() => el.classList.remove('lit'), 110); }
+        if (nowPlaying) {
+          nowPlaying.textContent = '🥁 ' + name;
+          nowPlaying.classList.add('playing');
+          clearTimeout(nowPlaying._t);
+          nowPlaying._t = setTimeout(() => {
+            nowPlaying.classList.remove('playing');
+            nowPlaying.textContent = '🥁 Tap any pad';
+          }, 900);
+        }
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+        const p = padByKey[e.key.toLowerCase()];
+        if (p) { hit(p.s, p.name, p.el, p.pitch); e.preventDefault(); }
+      });
+    })();
+  </script>
+</body>
+</html>

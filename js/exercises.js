@@ -4,6 +4,7 @@
  */
 
 import { sanitizeHTML, sanitizeAnswer } from "./sanitize.js";
+import { speakAsync } from "./characters.js";
 
 /**
  * Show Brilliant-style lesson completion screen.
@@ -94,6 +95,83 @@ export async function showLessonComplete(exerciseContainer, completionDiv, score
           ${nextHref ? `<a href="${sanitizeHTML(nextHref)}" class="btn btn-primary">Next Lesson</a>` : ''}
         </div>
       </div>`;
+  }
+}
+
+/**
+ * Show a "Past Mistakes" review card after a lesson finishes.
+ * Renders below the completion screen. Each missed exercise pairs a
+ * sad character (red border, ✖) showing the question with a happy
+ * character (green border, ✔) showing the correct answer.
+ *
+ * @param {HTMLElement} exerciseContainer - the exercises div (its parent receives the review)
+ * @param {object[]}    missedExercises   - exercise objects the user missed on first attempt
+ * @param {object}      [options]
+ * @param {string}      [options.basePath] - relative path to root (default '../../')
+ */
+export function showMistakesReview(exerciseContainer, missedExercises, options = {}) {
+  if (!missedExercises || missedExercises.length === 0) return;
+  const basePath = options.basePath || '../../';
+
+  const wrongChars = ['diego', 'steve', 'james', 'william'];
+  const rightChars = ['edam', 'rita', 'sam', 'gosia'];
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  const review = el('div', 'mistakes-review');
+  review.style.cssText = 'max-width:700px;margin:32px auto 0;padding:24px;background:#fff;border:1px solid var(--color-border);border-radius:16px;box-shadow:var(--shadow-md);';
+
+  let html = '<h3 style="font-size:1.2rem;font-weight:800;margin-bottom:8px;text-align:center;">' +
+             '<span style="font-size:1.4rem;">📝</span> Past Mistakes Review</h3>' +
+             '<p style="font-size:0.85rem;color:var(--color-text-secondary);text-align:center;margin-bottom:20px;">' +
+             'Characters Right ✔ and Wrong ✖ — review what you missed.</p>';
+
+  missedExercises.forEach((ex) => {
+    const correct = deriveCorrectAnswer(ex);
+    const question = ex.question || ex.spokenText || 'Question';
+    const wrongChar = pick(wrongChars);
+    const rightChar = pick(rightChars);
+    html +=
+      '<div class="mistake-card" style="border:1px solid var(--color-border);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#f8f9fa;">' +
+        '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">' +
+          '<img src="' + basePath + 'assets/characters/' + wrongChar + '.svg" alt="" style="width:44px;height:44px;border-radius:50%;border:3px solid #ef4444;background:#fff;flex-shrink:0;" />' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-size:0.72rem;font-weight:700;color:#ef4444;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">✖ Wrong</div>' +
+            '<div style="font-size:0.95rem;color:var(--color-text);line-height:1.5;">' + sanitizeHTML(question) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;align-items:flex-start;gap:12px;">' +
+          '<img src="' + basePath + 'assets/characters/' + rightChar + '.svg" alt="" style="width:44px;height:44px;border-radius:50%;border:3px solid #22c55e;background:#fff;flex-shrink:0;" />' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-size:0.72rem;font-weight:700;color:#22c55e;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">✔ Right</div>' +
+            '<div style="font-size:0.95rem;color:var(--color-text);line-height:1.5;font-weight:700;">' + sanitizeHTML(correct) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  });
+
+  review.innerHTML = html;
+  const parent = exerciseContainer.parentNode;
+  if (parent) parent.appendChild(review);
+  renderMath(review);
+}
+
+function deriveCorrectAnswer(ex) {
+  switch (ex.type) {
+    case 'multiple-choice':
+      return (ex.options && ex.options[ex.correctIndex]) || '';
+    case 'fill-blank':
+      return ex.answer || '';
+    case 'true-false':
+      return ex.correctAnswer ? 'True' : 'False';
+    case 'matching':
+      if (!ex.pairs) return '';
+      return ex.pairs.map((p) => p.left + ' → ' + p.right).join('; ');
+    case 'listening':
+      if (ex.answerType === 'fill-blank') return ex.answer || '';
+      if (ex.answerType === 'true-false') return ex.correctAnswer ? 'True' : 'False';
+      return (ex.options && ex.options[ex.correctIndex]) || '';
+    default:
+      return '';
   }
 }
 
@@ -197,6 +275,19 @@ function renderMultipleChoice(container, exercise, onAnswer) {
   exercise.options.forEach((option, i) => {
     const btn = elHtml("button", "mc-option", sanitizeHTML(option));
     btn.type = "button";
+    // Opt-in: if this option is a lesson with a real page, add a "↗" opener.
+    // It opens the lesson in a new tab without selecting the answer.
+    const lessonHref = exercise.optionLinks && exercise.optionLinks[i];
+    if (lessonHref) {
+      const link = el("span", "mc-option-link", "↗");
+      link.setAttribute("role", "link");
+      link.title = "Open this lesson";
+      link.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.open(lessonHref, "_blank", "noopener");
+      });
+      btn.appendChild(link);
+    }
     btn.addEventListener("click", () => {
       // Disable all buttons
       grid.querySelectorAll(".mc-option").forEach((b) => {
@@ -476,6 +567,26 @@ function renderListening(container, exercise, onAnswer) {
       .trim();
     if (!clean) return;
 
+    volBtn.classList.add('active');
+    volBtn.querySelector('.volume-icon').innerHTML = '&#128266;';
+    hint.textContent = 'Speaking...';
+
+    const done = () => {
+      volBtn.classList.remove('active');
+      volBtn.querySelector('.volume-icon').innerHTML = '&#128264;';
+      hint.textContent = 'Tap speaker to hear again';
+    };
+
+    // When the lesson assigns a Mathagram character to this exercise
+    // (e.g. exercise.character = 'edam'), read the question aloud in that
+    // character's voice via the shared character-voice engine. This is what
+    // makes "Edam & Diego read each question" actually use their voices.
+    if (exercise.character) {
+      speakAsync(clean, exercise.character).then(done);
+      return;
+    }
+
+    // Neutral fallback: listening exercises with no assigned character.
     const utterance = new SpeechSynthesisUtterance(clean);
     utterance.pitch = 1.0;
     utterance.rate = 0.85;
@@ -489,15 +600,7 @@ function renderListening(container, exercise, onAnswer) {
       if (pref) utterance.voice = pref;
     }
 
-    volBtn.classList.add('active');
-    volBtn.querySelector('.volume-icon').innerHTML = '&#128266;';
-    hint.textContent = 'Speaking...';
-
-    utterance.onend = () => {
-      volBtn.classList.remove('active');
-      volBtn.querySelector('.volume-icon').innerHTML = '&#128264;';
-      hint.textContent = 'Tap speaker to hear again';
-    };
+    utterance.onend = done;
     utterance.onerror = (e) => {
       volBtn.classList.remove('active');
       volBtn.querySelector('.volume-icon').innerHTML = '&#128264;';
@@ -570,7 +673,9 @@ export function renderExercise(container, exercise, onAnswer) {
   // For listening exercises, hide the question text — student must listen
   if (exercise.type !== 'listening') {
     const question = el("div", "exercise-question");
-    question.innerHTML = sanitizeHTML(exercise.question);
+    // questionHTML is an opt-in, trusted-HTML prompt (e.g. reading.html builds
+    // it with escaped text + a safe lesson <a>). Falls back to escaped text.
+    question.innerHTML = exercise.questionHTML || sanitizeHTML(exercise.question);
     container.appendChild(question);
     // Normal lessons: no auto-speech (only listening exercises speak)
   }

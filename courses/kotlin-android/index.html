@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kotlin &amp; Android Development — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Kotlin &amp; Android Development</h1>
+    <p>Build Android apps with Kotlin — null safety, coroutines, Jetpack Compose, the Android SDK, Room, networking, architecture, Play Store release, and real apps. 429 lessons across 29 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Kotlin & Android','Installing Android Studio','Kotlin Playground','Hello World','Comments & KDoc','Kotlin vs Java','Compile & Run','Android Studio Tour','Kotlin Version History','Emulator vs Device','Online Kotlin Editors','Project Structure','println & Logcat','Reading Build Errors','Foundations Checkpoint']],
+      [2,'Variables & Types',['val vs var','Int Long Short Byte','Double & Float','Char & String','Boolean','Type Inference','Explicit Types','Type Conversion','Nullable Types','Constants — const val','Numeric Literals','String Templates','Multi-line Strings','Unsigned Types','Variables Checkpoint']],
+      [3,'Operators',['Arithmetic Operators','Comparison Operators','Logical Operators','Range Operators ..','Elvis Operator ?:','Safe Call ?.','Not-Null Assertion !!','Operator Overloading','Bitwise Functions','Equality — == vs ===','in Operator','Operator Precedence','Increment & Decrement','Common Pitfalls','Operators Checkpoint']],
+      [4,'Control Flow',['if as Expression','when Expression','when with Conditions','while & do-while','for Loops & Ranges','break & continue','Labeled Loops','Loop with Index','Smart Casts','Exhaustive when','guard-style Early Return','Nested Conditions','FizzBuzz','Pattern Printing','Control Flow Checkpoint']],
+      [5,'Null Safety',['The Billion-Dollar Mistake','Nullable vs Non-Null Types','Safe Calls ?.','Elvis Operator ?:','Not-Null Assertion !!','let with Null','Safe Casts as?','Platform Types','lateinit','Late Init Checks','Nullability & Collections','Why Null Safety Matters','Common Null Bugs','Avoiding !!','Null Safety Checkpoint']],
+      [6,'Functions',['Defining Functions','Parameters & Arguments','Default Arguments','Named Arguments','Return Values','Single-Expression Functions','Unit Return Type','Vararg Parameters','Local Functions','Extension Functions','Infix Functions','Higher-Order Functions','Lambda Expressions','Inline Functions','Functions Checkpoint']],
+      [7,'Collections',['Lists — List & MutableList','Sets','Maps','Creating Collections','Accessing Elements','map filter reduce','forEach & onEach','groupBy & associate','sortedBy','flatMap','Sequences — Lazy Collections','Immutable vs Mutable','Collection Operations','Choosing a Collection','Collections Checkpoint']],
+      [8,'Classes & Objects',['Defining Classes','Constructors — Primary & Secondary','init Blocks','Properties','Custom Getters & Setters','Backing Fields','Methods','Visibility Modifiers','Nested & Inner Classes','Data Classes','Object Declarations (Singletons)','Companion Objects','Object Expressions','Enum Classes','Classes Checkpoint']],
+      [9,'Inheritance & Interfaces',['open Classes','Overriding Methods','Overriding Properties','super Calls','Abstract Classes','Interfaces','Default Interface Methods','Multiple Interfaces','sealed Classes','sealed Interfaces','Delegation by','Property Delegation','Polymorphism','Composition vs Inheritance','Inheritance Checkpoint']],
+      [10,'Generics',['Generic Functions','Generic Classes','Type Constraints','in & out Variance','Star Projections','Reified Type Parameters','Generic Extensions','Type Erasure','where Clauses','Generic Interfaces','Covariance & Contravariance','Bounded Generics','Real-World Generics','When to Use Generics','Generics Checkpoint']],
+      [11,'Functional Kotlin',['Lambdas Deep Dive','Function Types','it — Implicit Parameter','Closures','Scope Functions — let','run','with','apply','also','Higher-Order Patterns','Function References ::','Currying & Partial Application','Immutability','Functional Pipelines','Functional Kotlin Checkpoint']],
+      [12,'Coroutines',['What Are Coroutines?','suspend Functions','launch & async','CoroutineScope','Dispatchers','withContext','Jobs & Cancellation','Structured Concurrency','Exception Handling','Flow — Cold Streams','StateFlow & SharedFlow','Coroutines on Android','Testing Coroutines','Common Pitfalls','Coroutines Checkpoint']],
+      [13,'Error Handling',['Exceptions in Kotlin','try-catch-finally','try as Expression','throw Expression','Custom Exceptions','Checked Exceptions (None!)','Result Type','runCatching','Nullability vs Exceptions','require & check','Error Propagation','Logging Errors','User-Facing Errors','Best Practices','Error Checkpoint']],
+      [14,'Android Fundamentals',['What Is Android?','Activities','Activity Lifecycle','Intents','Explicit vs Implicit Intents','Fragments','The Manifest','Resources & res Folder','Gradle for Android','Permissions','Context','Logcat & Debugging','Build Variants','App Components Overview','Android Fundamentals Checkpoint']],
+      [15,'Jetpack Compose Basics',['What Is Compose?','Composable Functions','Text & Image','Modifiers','Column Row Box','Buttons & Click Handlers','State — remember & mutableStateOf','State Hoisting','LazyColumn','Navigation Compose','Scaffold & TopAppBar','Theming with Material 3','Preview Annotations','Recomposition','Compose Basics Checkpoint']],
+      [16,'Compose UI & State',['State Management Patterns','ViewModel + Compose','collectAsState','derivedStateOf','LaunchedEffect','rememberCoroutineScope','Side Effects','Custom Layouts','Constraint Layout in Compose','Animations','Gestures','Lists & Grids','Accessibility','Compose Performance','Compose State Checkpoint']],
+      [17,'Views & XML (Legacy)',['XML Layouts','ViewGroups','ConstraintLayout','RecyclerView','Adapters & ViewHolders','View Binding','Data Binding','Custom Views','Menus & ActionBar','Dialogs','Compose & View Interop','Migrating Views to Compose','When to Use Views','Styles & Themes','Views Checkpoint']],
+      [18,'Networking',['HTTP on Android','Retrofit Setup','Defining API Interfaces','GET & POST Requests','JSON with Moshi/Gson','Coroutines + Retrofit','OkHttp Interceptors','Error Handling','Image Loading — Coil','Caching Responses','Authentication Headers','Pagination','Mocking the Network','Connectivity Checks','Networking Checkpoint']],
+      [19,'Local Persistence',['SharedPreferences','DataStore','Files & Internal Storage','Room — Overview','Entities','DAOs','Room Queries','Room + Coroutines & Flow','Database Migrations','Relations in Room','TypeConverters','Caching Strategy','SQLite Direct','Choosing Persistence','Persistence Checkpoint']],
+      [20,'App Architecture',['MVVM on Android','ViewModel Lifecycle','Repository Pattern','Use Cases','Dependency Injection — Hilt','Hilt Modules & Scopes','Single-Activity Architecture','Navigation Component','State Holders','Unidirectional Data Flow','Clean Architecture Layers','Modularization','Testing Architecture','Architecture Trade-offs','Architecture Checkpoint']],
+      [21,'Jetpack Libraries',['Lifecycle-Aware Components','LiveData','WorkManager','Paging 3','CameraX','DataStore Recap','Navigation Recap','Startup Library','Splash Screen API','Permissions API','Biometric Library','Preferences','Benchmark Library','Compose Libraries','Jetpack Checkpoint']],
+      [22,'Testing',['Unit Tests with JUnit','Assertions','Mocking — MockK','Testing ViewModels','Testing Coroutines & Flow','Instrumented Tests','Espresso UI Tests','Compose UI Testing','Test Doubles','Test Coverage','TDD on Android','CI for Android','Screenshot Testing','Flaky Tests','Testing Checkpoint']],
+      [23,'Device & Platform Features',['Notifications','Notification Channels','Background Work','Foreground Services','Location & Maps','Sensors','Camera & Media','Bluetooth Basics','Deep Links','App Widgets','App Shortcuts','Sharing Content','Material You & Dynamic Color','Permissions Best Practices','Device Features Checkpoint']],
+      [24,'Shipping to Google Play',['Google Play Console','App Signing','Build Types & Flavors','Generating an AAB','Versioning','Store Listing & Assets','Internal & Closed Testing','Staged Rollouts','Play Policies','ProGuard & R8 Shrinking','Crash Reporting','ANR Debugging','Play App Updates','Post-Launch Analytics','Shipping Checkpoint']],
+      [25,'Projects & Mastery',['To-Do App (Compose)','Weather App','Notes App with Room','News Reader','Expense Tracker','Chat UI','Photo Gallery','Step Counter','Pomodoro Timer','Movie Browser','Quiz Game','Habit Tracker','Publishing Your First App','Career Path & Resources','Android Grand Mastery!']],
+      [26,'Kotlin Multiplatform',['Why Multiplatform','KMP Project Setup','Shared Modules','expect & actual','Common Code','Platform-Specific Code','Sharing Business Logic','iOS Interop','JS Target','Native Target','Dependency Management','Testing Shared Code','Compose Multiplatform','KMP Trade-offs','Multiplatform Checkpoint']],
+      [27,'Advanced Coroutines',['Coroutine Internals','Continuations','Dispatcher Internals','Custom Scopes','Flow Operators Deep Dive','StateFlow Patterns','SharedFlow Patterns','channelFlow','Cold vs Hot Streams','Backpressure','Coroutine Testing Advanced','Structured Concurrency Deep','Exception Propagation','Coroutine Performance','Coroutines Advanced Checkpoint']],
+      [28,'Jetpack Compose Advanced',['Compose Internals','Recomposition Scopes','Stability & Skipping','Custom Layouts Deep','SubcomposeLayout','Canvas Drawing','Custom Animations','Gesture Detectors','Navigation Advanced','Compose for Wear OS','Compose Performance','Compose Testing Deep','Theming Systems','Accessibility Deep','Compose Advanced Checkpoint']],
+      [29,'Server-Side Kotlin',['Why Kotlin on the Server','Ktor Basics','Routing','Ktor Plugins','Serialization','Database Access with Exposed','Authentication','REST APIs in Ktor','WebSockets']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'kt-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('kotlin-android');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('kotlin-android');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

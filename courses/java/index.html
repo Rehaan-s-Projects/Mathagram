@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Programming — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Java Programming</h1>
+    <p>Learn Java end-to-end — JVM basics, OOP, collections, generics, streams, lambdas, concurrency, JDBC, Spring Boot, testing, and real projects. 321 lessons across 22 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Java','Installing the JDK','IntelliJ vs Eclipse','Hello World','Comments & Javadoc','Java vs C++ vs C#','Compile & Run','Bytecode & .class Files','Java Version History','javac & java CLI','Online Java Compilers','Project Structure','System.out & Errors','Reading Stack Traces','Foundations Checkpoint']],
+      [2,'Variables & Types',['Declaring Variables','int short long byte','float vs double','char & String','boolean','Naming Rules','final Constants','Type Casting','Wrapper Classes','Autoboxing','var Keyword (Java 10+)','Scope Rules','String Pool','BigInteger & BigDecimal','Variables Checkpoint']],
+      [3,'Operators',['Arithmetic + - * / %','Increment & Decrement','Comparison ==','Logical && and ||','Bitwise & | ^','Shift Operators','Ternary ?:','Operator Precedence','String Concatenation','instanceof','Compound +=','Math.pow & Math.sqrt','Math.random','Integer Overflow','Operators Checkpoint']],
+      [4,'Control Flow',['if Statements','if-else if-else','Nested Conditions','switch Statement','Switch Expressions (Java 14+)','while Loop','do-while Loop','for Loop','Enhanced for-each','break & continue','Labeled break','Nested Loops','Infinite Loops','FizzBuzz','Control Flow Checkpoint']],
+      [5,'Arrays',['Declaring Arrays','Array Initialization','length Property','Index & Loop','Multi-dimensional Arrays','Array of Strings','Arrays.toString','Arrays.sort','Arrays.fill','Arrays.copyOf','Comparing Arrays','Pass by Reference','Common Array Errors','Variable-Length Arrays','Arrays Checkpoint']],
+      [6,'Methods',['What Is a Method?','Defining Methods','Parameters & Arguments','Return Values','void Methods','Method Overloading','Method Signatures','main() Method','Recursion','Varargs ...','Passing Arrays','Visibility Modifiers','static Methods','Helper Methods','Methods Checkpoint']],
+      [7,'Classes & Objects',['Classes vs Objects','Fields & Methods','Constructors','this Keyword','Default Constructor','Multiple Constructors','Getters & Setters','Encapsulation','Access Modifiers','static vs Instance','toString Method','equals & hashCode','Real-World Object Modeling','Immutable Classes','Classes Checkpoint']],
+      [8,'Inheritance',['extends Keyword','super Keyword','Method Overriding','@Override Annotation','final Classes','abstract Classes','abstract Methods','Object Class','Casting Objects','Polymorphism','Multi-level Inheritance','Composition vs Inheritance','Liskov Substitution','Design Considerations','Inheritance Checkpoint']],
+      [9,'Interfaces & Abstraction',['interface Keyword','implements Keyword','Default Methods (Java 8+)','Static Methods in Interfaces','Functional Interfaces','Multiple Interfaces','Marker Interfaces','Comparable Interface','Comparator Interface','sealed Classes (Java 17)','Records','Pattern Matching','Abstraction vs Encapsulation','When to Use What','Interfaces Checkpoint']],
+      [10,'Collections Framework',['ArrayList','LinkedList','HashMap','HashSet','TreeMap & TreeSet','Stack & Queue','Deque','PriorityQueue','Iterator','Iterable Interface','Collections Utility','Generic Types in Collections','Choosing the Right Collection','Immutable Collections','Collections Checkpoint']],
+      [11,'Generics',['What Are Generics?','Generic Classes','Generic Methods','Bounded Type Parameters','Wildcards ?','Upper Bounds extends','Lower Bounds super','Type Erasure','Generic Constraints','Generic Interfaces','Comparable<T>','Generic Inheritance','Heap Pollution','Real-World Generics','Generics Checkpoint']],
+      [12,'Exception Handling',['Exception Hierarchy','try-catch','Multi-catch','finally Block','try-with-resources','throw vs throws','Checked vs Unchecked','Custom Exceptions','RuntimeException','NullPointerException','Optional<T>','Stack Trace Reading','Error vs Exception','Best Practices','Exception Checkpoint']],
+      [13,'Strings',['String Immutability','Common String Methods','equals vs ==','String.format','StringBuilder','StringBuffer','String.join','String.split','indexOf & replace','Regex with String','Character Class','Text Blocks (Java 15+)','String Pool Internals','intern() Method','Strings Checkpoint']],
+      [14,'File I/O',['File Class','FileReader & FileWriter','BufferedReader','BufferedWriter','NIO.2 — Path & Files','Reading All Lines','Writing All Lines','Streams over Files','FileInputStream','FileOutputStream','Serialization','ObjectInputStream','CSV Reading','JSON with Jackson','File I/O Checkpoint']],
+      [15,'Streams API',['What Are Streams?','Creating Streams','filter & map','reduce','collect & Collectors','Collectors.toList','Stream.of','IntStream','Stream Sorting','distinct & limit','flatMap','Parallel Streams','groupingBy','Common Stream Patterns','Streams Checkpoint']],
+      [16,'Lambdas & Functional Interfaces',['Lambda Syntax','Functional Interfaces','Function<T,R>','Consumer<T>','Supplier<T>','Predicate<T>','BiFunction','Method References ::','Lambdas vs Anonymous Classes','Effectively Final','Capturing Local Variables','Currying','Closures in Java','Functional Style','Lambdas Checkpoint']],
+      [17,'Concurrency',['Thread Class','Runnable Interface','start vs run','sleep & join','synchronized Keyword','Race Conditions','volatile Keyword','wait & notify','ExecutorService','ThreadPool','Callable & Future','CompletableFuture','ReentrantLock','Atomic Classes','Concurrency Checkpoint']],
+      [18,'JVM & Memory',['What Is the JVM?','JIT Compilation','Heap vs Stack','Garbage Collection','Memory Leaks','Reading Bytecode (javap)','Class Loading','Reflection API','JVM Tuning Flags','Profiling with VisualVM','JVM vs JRE vs JDK','Modules (Java 9+)','GraalVM','Native Image','JVM Checkpoint']],
+      [19,'JDBC & Databases',['JDBC Overview','Connection Setup','DriverManager','Statement vs PreparedStatement','ResultSet','Executing Queries','Transactions','Connection Pooling','SQL Injection Prevention','Batch Updates','Stored Procedures','JPA Preview','Hibernate Basics','H2 Database','JDBC Checkpoint']],
+      [20,'Web with Java',['Servlet Basics','HTTP Methods','Tomcat Server','Annotations @WebServlet','JSP','RESTful APIs','JSON Processing','Java HTTP Client (Java 11+)','URL Class','Cookies & Sessions','WebSockets','MVC Pattern','Filters & Listeners','Frameworks Overview','Web Checkpoint']],
+      [21,'Spring Framework',['What Is Spring?','Dependency Injection','@Component & @Autowired','Spring Boot Intro','application.properties','REST Controllers','@GetMapping & @PostMapping','Spring Data JPA','Repositories','Validation @Valid','Spring Security Basics','Profiles','Actuator','Spring Boot Project','Spring Checkpoint']],
+      [22,'Build Tools',['Maven Overview','pom.xml','Maven Lifecycle','Dependencies','Repositories','Plugins']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'java-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('java');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('java');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

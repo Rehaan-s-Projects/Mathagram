@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Space Bar — 5-Key Middle Lane — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh; color: #f1f5f9;
+  }
+  .page { max-width: 1000px; margin: 0 auto; padding: 56px 16px 80px; }
+  .head { text-align: center; margin-bottom: 12px; }
+  .badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fde68a; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; margin-bottom: 10px; }
+  .head h1 { font-size: 2rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+  .head .sub { color: #cbd5e1; font-size: 0.95rem; }
+
+  /* Level strip */
+  .level-strip { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 14px 0 12px; }
+  .level-strip .chip {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    color: #cbd5e1; font-weight: 800; font-size: 0.8rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.08s, background 0.15s;
+    text-decoration: none;
+  }
+  .level-strip .chip:hover { background: rgba(255,255,255,0.12); }
+  .level-strip .chip.active { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b1b; border-color: #f59e0b; transform: scale(1.08); }
+
+  /* HUD */
+  .hud { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 6px 0 14px; flex-wrap: wrap; }
+  .pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 0.85rem; color: #f1f5f9; }
+  .pill strong { color: #fde68a; }
+  .pill.perfect strong { color: #86efac; }
+  .pill.miss strong    { color: #fca5a5; }
+  .btn { padding: 10px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #f1f5f9; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit; }
+  .btn:hover:not(:disabled) { background: rgba(255,255,255,0.12); }
+  .btn.primary { background: linear-gradient(135deg, #fbbf24, #f59e0b); border: none; color: #1e1b1b; }
+
+  /* Arena */
+  .arena {
+    position: relative; margin: 12px auto 0;
+    width: 100%; max-width: 620px; height: 520px;
+    background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(15,23,42,1));
+    border: 2px solid rgba(255,255,255,0.10); border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 18px 38px rgba(0,0,0,0.4), inset 0 0 60px rgba(0,0,0,0.4);
+  }
+
+  /* Lane targets at top — FIVE lanes including a center "space" lane */
+  .targets {
+    position: absolute; top: 18px; left: 0; right: 0;
+    display: grid; grid-template-columns: 1fr 1fr 1.4fr 1fr 1fr; gap: 6px; padding: 0 14px;
+    z-index: 5;
+  }
+  .target {
+    height: 70px;
+    border: 3px dashed rgba(255,255,255,0.35);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; color: rgba(255,255,255,0.5);
+    transition: transform 0.08s, border-color 0.12s, background 0.12s, color 0.12s;
+  }
+  .target.center {
+    /* Wider, slightly different look — this is the spacebar target */
+    border-style: solid;
+    border-color: rgba(251,191,36,0.45);
+    color: rgba(251,191,36,0.6);
+    font-size: 0.95rem; font-weight: 800; letter-spacing: 0.06em;
+  }
+  .target.hit { transform: scale(1.10); border-color: #86efac; background: rgba(34,197,94,0.18); color: #86efac; }
+  .target.hit.bad { border-color: #fbbf24; background: rgba(251,191,36,0.18); color: #fde68a; }
+
+  /* Falling arrows — 5 lanes (use percentage layout to mirror the grid) */
+  .arrow {
+    position: absolute; height: 70px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem; font-weight: 900;
+    border-radius: 12px;
+    will-change: transform; pointer-events: none;
+    text-shadow: 0 0 10px currentColor;
+  }
+  /* Lane left edges + widths (must match the grid template above) — total
+     fractions: 1 + 1 + 1.4 + 1 + 1 = 5.4. Gap is 6px; padding 14px each side.
+     For simplicity, we'll compute lane geometry in JS rather than hard-code. */
+  .arrow.l { color: #ef4444; }
+  .arrow.d { color: #3b82f6; }
+  .arrow.c { color: #fbbf24; font-size: 1rem; font-weight: 800; letter-spacing: 0.1em; }
+  .arrow.u { color: #22c55e; }
+  .arrow.r { color: #fb923c; }
+  .arrow.hit { animation: ka-pow 0.25s ease-out forwards; }
+  @keyframes ka-pow { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.7); opacity: 0; } }
+
+  /* Hit text feedback */
+  .judge {
+    position: absolute; left: 50%; top: 55%; transform: translate(-50%, -50%);
+    font-size: 2.2rem; font-weight: 900; pointer-events: none;
+    opacity: 0;
+    text-shadow: 0 0 22px currentColor;
+  }
+  .judge.show { opacity: 1; animation: judge-pop 0.45s ease-out; }
+  @keyframes judge-pop {
+    0%   { transform: translate(-50%, -30%) scale(0.6); opacity: 0; }
+    30%  { opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+  .judge.perfect { color: #86efac; }
+  .judge.good    { color: #fde68a; }
+  .judge.miss    { color: #fca5a5; }
+
+  .controls-hint {
+    text-align: center; margin: 14px auto 0; max-width: 700px;
+    background: rgba(251,191,36,0.06); border: 1px dashed rgba(251,191,36,0.3);
+    border-radius: 14px; padding: 12px 18px;
+    font-size: 0.88rem; color: #fde68a; line-height: 1.55;
+  }
+  .controls-hint kbd {
+    display: inline-block; padding: 2px 8px; margin: 0 2px;
+    background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20);
+    border-radius: 5px; font-family: 'SF Mono', Menlo, monospace; font-size: 0.85em;
+    color: #fff;
+  }
+  .controls-hint kbd.space {
+    padding: 2px 22px; background: rgba(251,191,36,0.2); border-color: rgba(251,191,36,0.5);
+  }
+
+  .end-card {
+    max-width: 540px; margin: 22px auto 0; padding: 22px;
+    background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.40);
+    border-radius: 16px; text-align: center; display: none;
+  }
+  .end-card.show { display: block; }
+  .end-card h2 { color: #fde68a; margin: 0 0 6px; font-size: 1.4rem; }
+  .end-card p { color: #fef3c7; margin: 0 0 10px; }
+  .end-card .score { font-size: 2.1rem; font-weight: 900; margin: 6px 0 8px; color: #fff; }
+  .end-card .stars { font-size: 1.6rem; margin-bottom: 6px; }
+  .end-card a, .end-card button {
+    display: inline-block; margin: 6px 4px 0; padding: 12px 22px;
+    border-radius: 999px; font-weight: 800; text-decoration: none; font-size: 0.95rem;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b1b; border: none; cursor: pointer; font-family: inherit;
+  }
+  .end-card a.alt, .end-card button.alt { background: rgba(255,255,255,0.08); color: #f1f5f9; }
+
+  .footer-nav { text-align: center; margin-top: 22px; }
+  .footer-nav a { color: #fbbf24; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+  @media (max-width: 560px) {
+    .arena { max-width: 100%; height: 460px; }
+    .target { height: 56px; font-size: 1.5rem; }
+    .arrow { height: 56px; font-size: 1.7rem; }
+    .arrow.c { font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container">
+    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+  </div></nav>
+
+  <main class="page">
+    <header class="head">
+      <span class="badge" id="badge">⌨️ Unit 2 · Space Bar · Lesson 1 of 15</span>
+      <h1 id="lessonTitle">Meet the Space Bar — Single Center Notes</h1>
+      <div class="sub">5-key FNF-style — the <strong>middle lane</strong> is hit with <kbd style="padding:1px 8px; background:rgba(255,255,255,0.1); border-radius:4px;">Space</kbd>.</div>
+    </header>
+
+    <div class="level-strip" id="levelStrip"></div>
+
+    <div class="hud">
+      <span class="pill perfect">PERFECT: <strong id="perfectCount">0</strong></span>
+      <span class="pill">GOOD: <strong id="goodCount">0</strong></span>
+      <span class="pill miss">MISS: <strong id="missCount">0</strong></span>
+      <span class="pill">Combo: <strong id="combo">0</strong></span>
+      <button type="button" class="btn primary" id="startBtn">▶ Start</button>
+      <button type="button" class="btn" id="restartBtn">⟲ Restart</button>
+    </div>
+
+    <div class="arena" id="arena">
+      <div class="targets" id="targets">
+        <div class="target"        data-lane="0">◀</div>
+        <div class="target"        data-lane="1">▼</div>
+        <div class="target center" data-lane="2">SPACE</div>
+        <div class="target"        data-lane="3">▲</div>
+        <div class="target"        data-lane="4">▶</div>
+      </div>
+      <div class="judge" id="judge"></div>
+    </div>
+
+    <div class="controls-hint">
+      Five lanes — use <kbd>←</kbd> <kbd>↓</kbd> <kbd class="space">Space</kbd> <kbd>↑</kbd> <kbd>→</kbd>
+      (the <strong>middle</strong> lane is hit with the <strong>space bar</strong>).
+      <br><strong>PERFECT</strong> (±18 px) · <strong>GOOD</strong> (±48 px) · <strong>MISS</strong> otherwise.
+    </div>
+
+    <section class="end-card" id="endCard">
+      <h2 id="endHeading">⌨️ Level cleared!</h2>
+      <div class="stars" id="endStars">★★★</div>
+      <div class="score" id="endScore">0 / 0</div>
+      <p id="endMsg">Nice combo. Onward to the next level.</p>
+      <a id="nextLevelLink" href="space.html?level=2">Next Level →</a>
+      <a class="alt" href="index.html">Back to Learning Path</a>
+      <button class="alt" id="retryBtn">Retry</button>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Dance Arrows</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ─── 15 lesson levels, escalating density. `centerBias` is the chance a
+    // spawned arrow lands in the middle (space-bar) lane — so early lessons
+    // get a heavy dose of space hits, later ones mix all 5 lanes.
+    const LEVELS = [
+      { name: 'Meet the Space Bar — Single Center Notes', spawnMs: 900, target: 14, centerBias: 1.00 },
+      { name: 'Space Bar + Arrows — Easy Mix',            spawnMs: 820, target: 16, centerBias: 0.50 },
+      { name: 'Center Lane Jacks — Repeated Space',       spawnMs: 700, target: 18, centerBias: 0.70, jacks: true },
+      { name: 'Space + Cross Streams — 100 BPM',          spawnMs: 660, target: 20, centerBias: 0.30 },
+      { name: '120 BPM — 5 Lanes',                        spawnMs: 600, target: 22, centerBias: 0.25 },
+      { name: 'Spacebar Burst — Triple Center',           spawnMs: 540, target: 22, centerBias: 0.55, burst: true },
+      { name: '140 BPM — Mixed Streams',                  spawnMs: 500, target: 24, centerBias: 0.20 },
+      { name: 'Space + Trill (Outer Lanes Alt)',          spawnMs: 470, target: 24, centerBias: 0.30, trill: true },
+      { name: '160 BPM — All 5 Lanes',                    spawnMs: 440, target: 26, centerBias: 0.20 },
+      { name: 'Space-Cross Streams — 180 BPM',            spawnMs: 410, target: 28, centerBias: 0.25 },
+      { name: '200 BPM — Speed Run',                      spawnMs: 380, target: 28, centerBias: 0.20 },
+      { name: 'Stamina — Sustained 200 BPM',              spawnMs: 360, target: 32, centerBias: 0.20 },
+      { name: 'Spacebar Spam Section — 220 BPM',          spawnMs: 340, target: 30, centerBias: 0.50, burst: true },
+      { name: 'Supersonic — 240 BPM',                     spawnMs: 320, target: 32, centerBias: 0.20 },
+      { name: '5-Key Mastery — Final Boss',               spawnMs: 290, target: 36, centerBias: 0.25, boss: true }
+    ];
+
+    const params = new URLSearchParams(location.search);
+    let levelNum = Math.max(1, Math.min(LEVELS.length, parseInt(params.get('level') || '1', 10)));
+    const level  = LEVELS[levelNum - 1];
+
+    document.getElementById('lessonTitle').textContent = level.name;
+    document.getElementById('badge').textContent = `⌨️ Unit 2 · Space Bar · Lesson ${levelNum} of 15`;
+
+    // Level strip
+    const strip = document.getElementById('levelStrip');
+    for (let i = 1; i <= LEVELS.length; i++) {
+      const chip = document.createElement('a');
+      chip.className = 'chip' + (i === levelNum ? ' active' : '');
+      chip.textContent = i;
+      chip.href = `space.html?level=${i}`;
+      strip.appendChild(chip);
+    }
+
+    // ─── Game state ────────────────────────────────────────────────────
+    // 5 lanes: 0=Left, 1=Down, 2=SPACE (center), 3=Up, 4=Right
+    const ARROW_SYM   = ['◀', '▼', '␣', '▲', '▶'];
+    const ARROW_CLASS = ['l', 'd', 'c', 'u', 'r'];
+    const KEY_LANE = {
+      'ArrowLeft':0,  'a':0, 'A':0,
+      'ArrowDown':1,  's':1, 'S':1,
+      ' ':2,
+      'ArrowUp':3,    'w':3, 'W':3,
+      'ArrowRight':4, 'd':4, 'D':4
+    };
+    const PERFECT_DELTA = 18;
+    const GOOD_DELTA    = 48;
+    const TARGET_TOP_PX = 18;
+
+    const arena = document.getElementById('arena');
+    const targets = arena.querySelectorAll('.target');
+    const judgeEl = document.getElementById('judge');
+    const perfectEl = document.getElementById('perfectCount');
+    const goodEl    = document.getElementById('goodCount');
+    const missEl    = document.getElementById('missCount');
+    const comboEl   = document.getElementById('combo');
+    const startBtn  = document.getElementById('startBtn');
+    const restartBtn= document.getElementById('restartBtn');
+    const endCard   = document.getElementById('endCard');
+    const endHeading= document.getElementById('endHeading');
+    const endStars  = document.getElementById('endStars');
+    const endScore  = document.getElementById('endScore');
+    const endMsg    = document.getElementById('endMsg');
+    const nextLink  = document.getElementById('nextLevelLink');
+    const retryBtn  = document.getElementById('retryBtn');
+
+    let running = false;
+    let arrows = [];
+    let raf = null, spawnTimer = null, lastFrame = 0;
+    let perfectCount = 0, goodCount = 0, missCount = 0, combo = 0;
+    let totalArrows = 0;
+    let lastLane = -1;
+    let burstQueue = []; // for burst patterns
+
+    const SPEED_PX_PER_MS = 0.45;
+
+    function reset() {
+      arrows.forEach(a => a.el.remove());
+      arrows = [];
+      running = false;
+      perfectCount = goodCount = missCount = combo = 0;
+      totalArrows = 0;
+      burstQueue = [];
+      perfectEl.textContent = goodEl.textContent = missEl.textContent = comboEl.textContent = 0;
+      endCard.classList.remove('show');
+    }
+
+    function pickLane() {
+      // Burst pattern: pre-queue 2-3 center hits in a row.
+      if (level.burst && burstQueue.length === 0 && Math.random() < 0.25) {
+        const n = Math.random() < 0.6 ? 2 : 3;
+        for (let i = 0; i < n; i++) burstQueue.push(2);
+      }
+      if (burstQueue.length) return burstQueue.shift();
+      // Trill: alternate left↔right
+      if (level.trill && lastLane === 0) return 4;
+      if (level.trill && lastLane === 4) return 0;
+      // Jacks: chance of repeating same lane
+      if (level.jacks && lastLane !== -1 && Math.random() < 0.4) return lastLane;
+      // centerBias: chance of picking the spacebar (center) lane
+      if (Math.random() < (level.centerBias || 0.2)) return 2;
+      // Otherwise, random outer lane (0, 1, 3, 4)
+      const outer = [0, 1, 3, 4];
+      let l = outer[Math.floor(Math.random() * outer.length)];
+      if (l === lastLane && Math.random() < 0.6) {
+        l = outer[(outer.indexOf(l) + 1) % outer.length];
+      }
+      return l;
+    }
+
+    // Compute lane geometry from the targets row so arrows align perfectly.
+    function laneRect(lane) {
+      const t = targets[lane];
+      const a = arena.getBoundingClientRect();
+      const r = t.getBoundingClientRect();
+      return { left: r.left - a.left, width: r.width };
+    }
+
+    function spawnArrow() {
+      if (totalArrows >= level.target) { stopSpawning(); return; }
+      totalArrows++;
+      const lane = pickLane();
+      lastLane = lane;
+      const el = document.createElement('div');
+      el.className = 'arrow ' + ARROW_CLASS[lane];
+      el.textContent = lane === 2 ? 'SPACE' : ARROW_SYM[lane];
+      const geom = laneRect(lane);
+      el.style.left  = geom.left + 'px';
+      el.style.width = geom.width + 'px';
+      const arenaH = arena.clientHeight;
+      el.style.top = (arenaH + 10) + 'px';
+      arena.appendChild(el);
+      arrows.push({ lane, el, y: arenaH + 10 });
+    }
+    function startSpawning() {
+      if (spawnTimer) return;
+      spawnArrow();
+      spawnTimer = setInterval(spawnArrow, level.spawnMs);
+    }
+    function stopSpawning() {
+      if (spawnTimer) { clearInterval(spawnTimer); spawnTimer = null; }
+    }
+
+    function tick(now) {
+      const dt = lastFrame ? (now - lastFrame) : 16;
+      lastFrame = now;
+      if (running) {
+        for (let i = arrows.length - 1; i >= 0; i--) {
+          const a = arrows[i];
+          a.y -= SPEED_PX_PER_MS * dt;
+          a.el.style.top = a.y + 'px';
+          if (a.y < TARGET_TOP_PX - 60) {
+            a.el.remove();
+            arrows.splice(i, 1);
+            registerMiss();
+          }
+        }
+        if (!spawnTimer && arrows.length === 0 && totalArrows >= level.target) {
+          finishLevel();
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    function showJudge(kind, label) {
+      judgeEl.className = 'judge ' + kind + ' show';
+      judgeEl.textContent = label;
+      clearTimeout(showJudge._t);
+      showJudge._t = setTimeout(() => judgeEl.className = 'judge', 420);
+    }
+    function flashTarget(lane, bad) {
+      const t = targets[lane];
+      t.classList.add('hit'); if (bad) t.classList.add('bad');
+      setTimeout(() => { t.classList.remove('hit', 'bad'); }, 140);
+    }
+
+    function onKey(e) {
+      const lane = KEY_LANE[e.key];
+      if (lane === undefined) return;
+      // Prevent the spacebar from scrolling the page when used as a game key.
+      e.preventDefault();
+      if (!running) return;
+      // Find the nearest arrow in this lane to the target zone
+      let nearest = null, nearestIdx = -1, nearestDist = Infinity;
+      for (let i = 0; i < arrows.length; i++) {
+        const a = arrows[i];
+        if (a.lane !== lane) continue;
+        const dist = Math.abs(a.y - TARGET_TOP_PX);
+        if (dist < nearestDist) { nearestDist = dist; nearest = a; nearestIdx = i; }
+      }
+      if (!nearest) { flashTarget(lane, true); return; }
+      if (nearestDist <= PERFECT_DELTA) {
+        perfectCount++; combo++;
+        nearest.el.classList.add('hit'); setTimeout(() => nearest.el.remove(), 240);
+        arrows.splice(nearestIdx, 1);
+        flashTarget(lane, false);
+        showJudge('perfect', 'PERFECT!');
+        beep(lane === 2 ? 1320 : 880, 0.06);
+      } else if (nearestDist <= GOOD_DELTA) {
+        goodCount++; combo++;
+        nearest.el.classList.add('hit'); setTimeout(() => nearest.el.remove(), 240);
+        arrows.splice(nearestIdx, 1);
+        flashTarget(lane, true);
+        showJudge('good', 'GOOD');
+        beep(lane === 2 ? 990 : 660, 0.05);
+      } else {
+        registerMiss();
+        flashTarget(lane, true);
+      }
+      perfectEl.textContent = perfectCount;
+      goodEl.textContent = goodCount;
+      missEl.textContent = missCount;
+      comboEl.textContent = combo;
+    }
+    function registerMiss() {
+      missCount++; combo = 0;
+      missEl.textContent = missCount;
+      comboEl.textContent = combo;
+      showJudge('miss', 'MISS');
+    }
+
+    // Tiny Web Audio click for hit feedback
+    let audioCtx;
+    function beep(freq, durSec) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator(); o.type = 'square'; o.frequency.value = freq;
+        const g = audioCtx.createGain();
+        const t0 = audioCtx.currentTime;
+        g.gain.setValueAtTime(0.001, t0);
+        g.gain.exponentialRampToValueAtTime(0.10, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + durSec);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t0); o.stop(t0 + durSec + 0.02);
+      } catch {}
+    }
+
+    function start() {
+      if (running) return;
+      reset();
+      running = true;
+      lastFrame = performance.now();
+      startSpawning();
+      if (!raf) raf = requestAnimationFrame(tick);
+      startBtn.disabled = true;
+    }
+    function finishLevel() {
+      running = false;
+      stopSpawning();
+      const hits = perfectCount + goodCount;
+      const total = perfectCount + goodCount + missCount;
+      const pct = total ? hits / total : 0;
+      const score = perfectCount * 3 + goodCount * 1;
+      const maxScore = total * 3;
+      const stars = (pct === 1 && goodCount === 0) ? 3 : pct >= 0.85 ? 3 : pct >= 0.65 ? 2 : pct > 0 ? 1 : 0;
+      endStars.innerHTML = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+      endScore.textContent = `${score} / ${maxScore}`;
+      endHeading.textContent = stars === 3 ? '⌨️ Perfect Run!' : stars === 2 ? '🟡 Good Flight' : stars === 1 ? '🟢 You Made It!' : '🔴 Try Again';
+      endMsg.textContent =
+        stars === 3 ? 'Locked in. Onward to the next level.' :
+        stars === 2 ? 'Solid — chase 3 stars next time.' :
+        stars === 1 ? 'You survived. Replay to climb the score.' :
+                       'Take a breath and try again — you got this.';
+      nextLink.href = levelNum < LEVELS.length
+        ? `space.html?level=${levelNum + 1}`
+        : 'index.html';
+      nextLink.textContent = levelNum < LEVELS.length ? 'Next Level →' : 'Back to Course →';
+      endCard.classList.add('show');
+      if (stars >= 1) markComplete(stars);
+      startBtn.disabled = false;
+    }
+
+    startBtn.addEventListener('click', start);
+    restartBtn.addEventListener('click', () => { reset(); start(); });
+    retryBtn.addEventListener('click', () => { reset(); start(); });
+    window.addEventListener('keydown', onKey, { passive: false });
+
+    // Keep ticking idle frames so the layout stays responsive
+    raf = requestAnimationFrame(tick);
+
+    // Firestore: mark complete on first solve
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return; alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'dance-arrows'),
+          { ['dance-space-' + levelNum]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch {}
+    }
+  </script>
+</body>
+</html>

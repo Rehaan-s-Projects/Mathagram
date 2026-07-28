@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burmese — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Burmese</h1>
+    <p>Learn Burmese — the official language of Myanmar, written in beautiful circular script. 810 lessons across 55 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Burmese Script',['Consonants Overview','Consonant Groups 1-5','Basic Vowels','Complex Vowels','Tone Marks (Low Creaky High)','Medial Consonants','Stacked Consonants','Asat & Virama','Burmese Numerals 0-9','Numbers 10-100','Writing Circles & Curves','Syllable Structure','Reading Practice','Writing Practice','Script Review']],
+      [2,'Greetings & Basics',['Mingalaba (Hello)','Kyei zu tin ba de (Thank You)','Houq ke / Ma houq pa bu (Yes/No)','Ne kaung la? (How Are You?)','My Name Is','Where Are You From?','Good Morning / Good Night','Excuse Me / Sorry','Please (Kyei zu pyu pi)','Polite Particles (kha-mya / shin)','Formal vs Informal','Emergency Phrases','Basic Phrases Practice','Conversation Starters','Greetings Review']],
+      [3,'Grammar Basics',['SOV Word Order','Subject Particles (ka/ga)','Object Particle (ko)','Topic Marker (ha)','Classifiers & Counters','Adjectives (Before Noun)','Demonstratives (This/That)','Possessives','Negation with Ma...Bu','Question Particle (la)','Conjunctions','Postpositions','Sentence Building','Grammar Practice','Grammar Review']],
+      [4,'Present & Past Tense',['Verb Stems','Present Marker (ne de)','Habitual Actions (ta/da)','Progressive Aspect','Completed Action (pi/bi)','Past Tense Marker (khe)','Recent Past','Remote Past','Experiential Past','Common Verbs 1 (go come eat)','Common Verbs 2 (see hear speak)','Common Verbs 3 (give take buy)','Negative Past','Tense Practice','Present & Past Review']],
+      [5,'Future & Modal',['Future Marker (me)','Planned Future','Predictions','Can/Able (ta/naing)','Should (thin)','Must (ya me)','Want (chin de)','Need (lo de)','May/Might','Conditional (ya in)','If...Then Sentences','Permission & Requests','Obligations','Modal Practice','Future & Modal Review']],
+      [6,'Family & People',['Father (A-phei)','Mother (A-mei)','Older Brother (A-ko)','Older Sister (A-ma)','Younger Sibling (Nyi/Nyi-ma)','Grandparents','Uncle & Aunt','Husband & Wife','Son & Daughter','Describing Appearance','Describing Personality','Age & Relationships','Kinship Terms','Family Conversations','Family Review']],
+      [7,'Food & Dining',['Mohinga (Fish Noodle Soup)','Tea Leaf Salad (Lahpet Thoke)','Shan Noodles','Curries (Hin)','Rice (Htamin)','Samosas & Snacks','Burmese Tea Shop Culture','Ordering at a Restaurant','Street Food','Fruits & Vegetables','Cooking Vocabulary','Taste Descriptions','Dietary Needs','Food Conversations','Food Review']],
+      [8,'Travel & Myanmar',['Yangon City','Shwedagon Pagoda','Mandalay','Bagan Temples','Inle Lake','Ngapali Beach','Mrauk U','Kyaiktiyo (Golden Rock)','At the Airport','Bus & Train Travel','River Boats','Hotel Check-In','Asking Directions','Tourist Conversations','Travel Review']],
+      [9,'Culture & History',['Buddhism in Myanmar','Pagoda Etiquette','Thingyan Water Festival','Thadingyut Light Festival','Thanaka & Longyi','Chinlone (Cane Ball)','Traditional Music','Marionette Theatre','Myanmar History Overview','Colonial Period','Independence & Modern Era','Ethnic Diversity','Proverbs & Sayings','Cultural Etiquette','Culture Review']],
+      [10,'Shopping & Numbers',['Counting System','Large Numbers','Ordinal Numbers','Currency (Kyat)','Prices & Bargaining','At the Market (Zei)','Clothing Shopping','Jewelry & Gems','Weights & Measures','Time Expressions','Days & Dates','Calculating & Comparing','Shopping Conversations','Money Matters','Shopping Review']],
+      [11,'Advanced Grammar',['Particle Combinations','Relative Clauses','Passive Constructions','Causative Verbs','Reported Speech','Complex Conjunctions','Formal Register','Literary Burmese','Written vs Spoken','Honorific System','Loan Words (Pali English)','Dialectal Differences','Error Correction','Advanced Practice','Advanced Grammar Review']],
+      [12,'Fluency & Mastery',['Conversation Practice 1','Conversation Practice 2','Storytelling','Expressing Opinions','Reading Practice','Writing Practice','Listening Practice','Idioms & Expressions','Burmese Mastery!']]
+    ,
+      [13,"Burmese at the Market",["Shopping for Food","Clothing Store","Electronics Shop","Bargaining & Prices","Asking for Sizes","Comparing Products","Payment Methods","Returns & Exchanges","Online Shopping Vocabulary","Market Culture","Street Vendors","Gift Shopping","Window Shopping","Shopping Phrases","Market Checkpoint"]],
+      [14,"Burmese Travel & Tourism",["At the Airport","At the Hotel","Public Transportation","Asking Directions","Booking Reservations","At the Restaurant Abroad","Emergency Phrases","Sightseeing Vocabulary","Taking Photos","Currency Exchange","Customs & Immigration","Travel Insurance","Packing Vocabulary","Travel Blog Writing","Travel Checkpoint"]],
+      [15,"Burmese Sports & Fitness",["Football & Soccer","Basketball","Swimming","Running & Jogging","Gym Vocabulary","Traditional Sports","Olympic Sports","Team Sports","Individual Sports","Watching Sports","Sports Commentary","Fitness Goals","Exercise Routine","Competition Vocabulary","Sports Checkpoint"]],
+      [16,"Burmese Technology",["Computer Basics","Smartphone Vocabulary","Internet & Social Media","Email & Messaging","Apps & Software","Video Games","Streaming & Media","Online Safety","Tech Support Phrases","Programming Terms","AI & Robots","Smart Home","Photography","Digital Vocabulary","Technology Checkpoint"]],
+      [17,"Burmese Nature & Environment",["Trees & Forests","Rivers & Lakes","Mountains & Valleys","Ocean & Beach","Weather Patterns","Animals — Wild","Animals — Domestic","Birds & Insects","Flowers & Plants","Seasons Detailed","Environmental Issues","Recycling & Conservation","Climate Change","Nature Vocabulary","Nature Checkpoint"]],
+      [18,"Burmese Music & Entertainment",["Musical Instruments","Singing & Songs","Traditional Music","Modern Music","Concerts & Festivals","Movies & Cinema","Television Shows","Theater & Drama","Dancing","Art & Painting","Photography","Entertainment Vocabulary","Reviews & Opinions","Celebrity Culture","Entertainment Checkpoint"]],
+      [19,"Burmese History & Heritage",["Ancient History","Medieval Period","Colonial Era","Modern History","Independence & Revolution","Famous Leaders","Cultural Heritage","Archaeological Sites","Museums","Historical Events","Wars & Conflicts","Peace & Diplomacy","National Symbols","Heritage Preservation","History Checkpoint"]],
+      [20,"Burmese Food Deep Dive",["Breakfast Traditions","Lunch Culture","Dinner Customs","Street Food","Desserts & Sweets","Beverages — Hot & Cold","Spices & Herbs","Cooking Methods","Kitchen Utensils","Regional Dishes","Holiday Foods","Food Etiquette","Diet & Nutrition","Recipe Writing","Food Deep Dive Checkpoint"]],
+      [21,"Burmese Family & Relationships",["Extended Family","Parenting Vocabulary","Children & Babies","Marriage & Wedding","Dating & Romance","Friendship","Neighbors & Community","Elderly Care","Family Traditions","Family Conflicts","Celebrations Together","Family Values","Describing People","Relationship Advice","Family Checkpoint"]],
+      [22,"Burmese Education & School",["Primary School","Secondary School","University","Teachers & Professors","Exams & Tests","Homework & Assignments","School Supplies","Subjects Deep Dive","Graduation","Libraries","Online Learning","Study Abroad","Scholarships","Student Life","Education Checkpoint"]],
+      [23,"Burmese Health & Medicine",["Doctor Visit","Hospital Vocabulary","Pharmacy","Mental Health","Dental Care","Eye Care","First Aid","Chronic Illness","Healthy Eating","Exercise & Wellness","Sleep & Rest","Allergies","Medical Tests","Health Insurance","Health Checkpoint"]],
+      [24,"Burmese Work & Career",["Job Titles","Office Life","Job Interview","Resume & CV","Salary & Benefits","Meetings","Email at Work","Phone Calls","Presentations","Teamwork","Deadlines & Projects","Promotion","Retirement","Freelancing","Career Checkpoint"]],
+      [25,"Burmese Emotions & Feelings",["Happy & Excited","Sad & Disappointed","Angry & Frustrated","Scared & Nervous","Surprised & Shocked","Love & Affection","Jealousy & Envy","Pride & Confidence","Shame & Embarrassment","Boredom & Tiredness","Hope & Optimism","Nostalgia","Describing Moods","Emotional Expression","Emotions Checkpoint"]],
+      [26,"Burmese Weather & Climate",["Sunny Days","Rainy Weather","Snow & Winter","Wind & Storms","Fog & Mist","Hot & Humid","Cold & Freezing","Weather Forecast","Seasons Detailed","Natural Disasters","Climate Zones","Weather Idioms","Dressing for Weather","Weather Conversations","Weather Checkpoint"]],
+      [27,"Burmese Idioms & Proverbs",["Common Proverbs","Wisdom Sayings","Animal Idioms","Food Idioms","Weather Idioms","Work Idioms","Family Proverbs","Love Proverbs","Humorous Expressions","Poetic Phrases","Using Idioms in Speech","Regional Expressions","Comparing with English Idioms","Creating Sentences","Idioms Checkpoint"]],
+      [28,"Burmese Pronunciation Drills",["The Three Tones in Detail","Low Tone Practice","Creaky Tone Practice","High Tone Practice","Tone-Pair Minimal Pairs","Aspirated vs Unaspirated Stops","Voiced vs Voiceless Consonants","Nasal Consonants","Glottal Stop (Final ʔ)","Vowel Length","Diphthongs","Consonant Clusters & Medials","Word-Level Stress","Sandhi (Sound Changes)","Pronunciation Checkpoint"]],
+      [29,"Burmese Calligraphy",["Origins of Burmese Script","Tools of Calligraphy","The Round-Letter Aesthetic","Stroke Order Basics","Practicing the Circle Strokes","Letter Spacing","Writing Numerals 0-9","Writing Common Greetings","Writing Names","Palm-Leaf Manuscripts (Parabaik)","Modern Burmese Fonts","Calligraphy Styles","Beautiful Handwriting Tips","Practice: Copy a Quote","Calligraphy Checkpoint"]],
+      [30,"Burmese Dialects",["Standard Burmese (Yangon)","Mandalay Dialect","Rakhine (Arakanese)","Tavoyan (Dawei)","Intha (Inle Lake)","Yaw Dialect","Mergui (Myeik) Dialect","Beik Dialect Notes","Tonal Differences Across Dialects","Vocabulary Differences","Grammatical Differences","When to Use Standard","Mutual Intelligibility","Practice: Identify the Dialect","Dialects Checkpoint"]],
+      [31,"Burmese Daily Routines",["Waking Up Vocabulary","Morning Routine","Breakfast Conversations","Going to Work or School","Commuting in Yangon","Workday Vocabulary","Lunch Break Phrases","Afternoon Routine","Evening Activities","Dinner Conversations","Bedtime Routine","Weekend Routines","Holiday Routines","Practice: My Day in Burmese","Daily Routines Checkpoint"]],
+      [32,"Burmese in Business",["Business Card Vocabulary","Greeting a Client","Job Titles","Business Hours","Banking Basics","Negotiating Prices","Closing a Deal","Contracts & Agreements","Email & Business Letters","Phone Etiquette","Networking Events","Industry Vocabulary","Burmese Economy Overview","Practice: Business Dialogue","Business Checkpoint"]],
+      [33,"Burmese Etiquette & Manners",["Honorifics & Address","Greeting Elders","Temple Etiquette","Dining Etiquette","Gift Giving","Speaking Politely","Body Language","Public Behavior","Conversational Topics: OK","Conversational Topics: Avoid","Apology & Forgiveness","Saying No Politely","Compliments & Reactions","Practice: Polite Conversation","Etiquette Checkpoint"]],
+      [34,"Burmese Negotiation",["When to Negotiate","Opening the Negotiation","Counter-Offers","Asking for a Better Deal","Closing the Sale","Cultural Norms in Bargaining","Negotiating Salary","Negotiating Rent","Bulk Discounts","Refusing Politely","Negotiating in Burmese vs English","Money Particles & Numbers","Documenting the Deal","Practice: Bargain a Longyi","Negotiation Checkpoint"]],
+      [35,"Burmese Real Estate",["Apartments vs Houses","Buying vs Renting","Rooms of a House","Furnishings","Lease Terms","Utilities","Neighborhood Vocabulary","Brokers & Agents","Property Inspection","Signing the Lease","Roommate Vocabulary","Apartment Problems","Moving In & Out","Practice: House Hunting","Real Estate Checkpoint"]],
+      [36,"Burmese Cooking & Recipes",["Kitchen Tools","Cooking Verbs","Spices & Flavorings","Common Ingredients","Mohinga Recipe","Tea Leaf Salad (Lahpet Thoke)","Curry Basics","Shan Noodles","Cooking Methods","Recipe Reading","Eating Vocabulary","Tea Shop Culture","Street Food","Practice: Order a Meal","Cooking Checkpoint"]],
+      [37,"Burmese Buddhism in Detail",["Theravada Buddhism Overview","The Buddha (ဗုဒ္ဓ)","The Four Noble Truths","The Eightfold Path","The Five Precepts","Karma & Rebirth","The Sangha (Monks)","Pagodas & Stupas (ဘုရား)","Meditation Practices","Buddhist Holidays","Offering Vocabulary","Common Buddhist Phrases","Buddhism & Daily Life","Practice: Visit a Pagoda","Buddhism Checkpoint"]],
+      [38,"Burmese Buddhist Texts",["The Tipitaka","Pali in Burmese Buddhism","The Three Refuges","The Mangala Sutta","The Metta Sutta","The Karaniya Sutta","The Dhammapada","Jataka Tales","The Burmese Pali Tradition","Reading Pali in Burmese Script","Common Pali Phrases","Vipassana & Texts","Devotional Practice","Practice: Recite a Short Sutta","Buddhist Texts Checkpoint"]],
+      [39,"Burmese Folk Tales",["The Tortoise & the Eagle","The Clever Rabbit","The Greedy Crocodile","The Wise Mongoose","The Magic Mango Tree","The Foolish Donkey","The Princess & the Naga","The Forest Hermit","Folktale Structure","Common Animal Characters","Moral Lessons","Storytelling Phrases","Comparing with Western Tales","Practice: Tell a Story","Folk Tales Checkpoint"]],
+      [40,"Burmese Children's Stories",["What Children's Stories Teach","The Little Frog","The Boy Who Cried Tiger","The Helpful Elephant","The Stolen Drum","The Twelve Friends","Min Min the Naughty Boy","The Magic Pot","Reading Skills","Rhymes & Songs","Common Vocabulary in Children's Books","Moral Through Story","Modern Children's Authors","Practice: Read a Short Story","Children's Stories Checkpoint"]],
+      [41,"Burmese Newspaper Reading",["Major Burmese Newspapers","Newspaper Layout","Headline Conventions","Reading the Lead Paragraph","Quoting Sources","Date & Place Bylines","Common News Topics","Politics Vocabulary","Economy Vocabulary","Disaster & Crisis Vocabulary","International Vocabulary","Editorial Style","Reading Tips","Practice: Read a Headline","Newspaper Reading Checkpoint"]],
+      [42,"Burmese News Vocabulary",["News Reporting Verbs","Time Expressions in News","Quantity & Statistics","Reporting Numbers","Geographic Terms","Health News","Sports News","Weather Reports","Crime & Justice","Technology News","Education News","Environment News","Culture & Arts","Practice: Match Topics to Vocabulary","News Vocabulary Checkpoint"]],
+      [43,"Burmese Politics & Government",["Government Structure","Branches of Government","Elections","Political Parties","Politics Phrases","Military Vocabulary","Civil Society","Diplomacy","Public Policy","Sensitive Topics","Reading Political News","Local Government","Constitutional Vocabulary","Practice: Decode a Headline","Politics Checkpoint"]],
+      [44,"Burmese Law & Legal Vocabulary",["Legal System Overview","Court Hierarchy","Lawyer Vocabulary","Criminal Procedure","Civil Procedure","Common Crimes","Punishments","Property Law","Contracts","Family Law","Constitutional Rights","Police Interaction","Legal Documents","Practice: Legal Terms","Law Checkpoint"]],
+      [45,"Burmese Banking & Finance",["Banking System Overview","Account Types","Common Transactions","Currency","ATM & Mobile Banking","Loans","Investment","Insurance","Tax","Salary & Payroll","Budgeting","Hyperinflation Vocabulary","Foreign Exchange","Practice: At the Bank","Banking Checkpoint"]],
+      [46,"Burmese Doctor-Patient Dialogues",["Making an Appointment","Describing Symptoms","Body Parts","Pain Description","When Did It Start?","Medical Vocabulary","Common Conditions","Tests & Procedures","Prescriptions","Allergies","Pediatrics","Mental Health","Emergency Phrases","Practice: At the Doctor","Doctor-Patient Checkpoint"]],
+      [47,"Burmese Teacher-Student Dialogues",["Classroom Vocabulary","Greeting the Teacher","Asking Questions","Answering","Subjects","Schedule & Time","Homework","Tests & Grades","Praise & Encouragement","Discipline","Group Activities","Library Vocabulary","Graduation","Practice: A Class Day","Teacher-Student Checkpoint"]],
+      [48,"Burmese Driver-Passenger",["Hailing a Taxi","Giving Directions","Bus Vocabulary","At the Train Station","On the Plane","Boat Travel","Driver Conversations","Bargaining a Fare","Road Conditions","Drivers' Slang","Vehicle Types","Driver's License","Asking About Distance","Practice: Hail a Taxi","Driver-Passenger Checkpoint"]],
+      [49,"Burmese Tourism Operators",["Welcoming Tourists","Hotel Check-In","Booking a Tour","Famous Sites","Tour Guide Vocabulary","Photography Etiquette","Souvenir Shopping","Cultural Performance","Visa & Immigration","Traveler Health","Travel Itineraries","Best Times to Visit","Tourist Complaints","Practice: Greet a Tourist","Tourism Checkpoint"]],
+      [50,"Burmese Films",["Burmese Cinema History","Genres","Movie Theater","Film Vocabulary","Famous Burmese Actors","Watching at Home","Reviewing a Film","Film Festivals","Subtitles & Dubbing","Children's Films","Documentary Films","Foreign Films Influence","Awards","Practice: Recommend a Film","Films Checkpoint"]],
+      [51,"Burmese TV Shows",["Burmese TV Channels","TV Show Genres","Soap Operas","Game Shows","Reality TV","TV News","Korean Drama Influence","Streaming Services","TV Schedules","TV Commercials","Sports Broadcasting","Talk Shows","Children's TV","Practice: Talking About TV","TV Shows Checkpoint"]],
+      [52,"Burmese Songs & Lyrics",["Burmese Music Overview","Traditional Instruments","Folk Songs","Kaba Ma Kyei — National Anthem","Modern Burmese Pop Stars","Karaoke Culture","Lyric Themes","Reading Lyrics","Hip-Hop & Rap","Album Vocabulary","Religious Music","Concert Vocabulary","Music Apps","Practice: A Famous Lyric","Songs Checkpoint"]],
+      [53,"Burmese Comedy & Humor",["Burmese Sense of Humor","Wordplay (Pun)","Slapstick & Visual Comedy","Famous Comedians","Comedy in Films & TV","Burmese Jokes","Children's Humor","Sarcasm in Burmese","Memes & Internet Humor","Humor in Storytelling","Cultural Sensitivities","Funny Phrases","Comedy at Festivals","Practice: A Burmese Joke","Comedy Checkpoint"]],
+      [54,"Burmese Formal Letters",["When to Write Formal Letters","Letter Structure","Salutations","Opening Lines","Stating Purpose","Body Vocabulary","Closing Phrases","Cover Letters","Complaint Letters","Application Letters","Invitation Letters","Email vs Paper","Common Errors","Practice: Sample Application","Formal Letters Checkpoint"]],
+      [55,"Burmese Grand Mastery",["Script Mastery","Vocabulary Mastery","Grammar Mastery","Cultural Mastery","Conversation Mastery","Burmese Grand Mastery"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'bu-'+n, title: t, href: n >= 400 ? 'lesson-'+n+'.html' : '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('burmese');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('burmese');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

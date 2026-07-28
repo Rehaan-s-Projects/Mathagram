@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 1 — At the Beach — Where's Waldo — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+    .lesson-page { max-width: 1000px; margin: 0 auto; padding: 56px 16px 80px; }
+    .lesson-header { text-align: center; margin-bottom: 18px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fde68a; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; margin-bottom: 12px; }
+    .lesson-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; color: #fff; }
+    .lesson-header .book-name { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 0; }
+
+    .target-card {
+      max-width: 720px; margin: 14px auto 18px;
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+    }
+    .target-card .portrait {
+      width: 56px; height: 80px; flex-shrink: 0;
+      position: relative;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+    }
+    .target-card .copy { flex: 1; }
+    .target-card h2 { font-size: 1.05rem; font-weight: 800; margin: 0 0 4px; color: #fde68a; }
+    .target-card p { font-size: 0.88rem; color: #cbd5e1; margin: 0; line-height: 1.45; }
+    .target-card .status {
+      font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 6px 12px; border-radius: 999px;
+      background: rgba(251,191,36,0.12); color: #fde68a; border: 1px solid rgba(251,191,36,0.3);
+      white-space: nowrap;
+    }
+    .target-card .status.found { background: rgba(34,197,94,0.18); color: #86efac; border-color: rgba(34,197,94,0.45); }
+
+    .scene-toolbar {
+      max-width: 960px; margin: 0 auto 8px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px; padding: 0 4px; flex-wrap: wrap;
+    }
+    .timer-pill {
+      font-family: 'SF Mono', monospace; font-size: 0.9rem; font-weight: 700;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      color: #f1f5f9;
+    }
+    .toolbar-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      padding: 9px 18px; border-radius: 999px;
+      font-weight: 700; font-size: 0.88rem; cursor: pointer; border: none;
+      font-family: inherit; transition: transform 0.1s, background 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #f1f5f9; border: 1px solid rgba(255,255,255,0.12); }
+    .btn.primary {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b1b;
+      box-shadow: 0 6px 18px rgba(245,158,11,0.4);
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* The scene */
+    .scene-frame {
+      max-width: 960px; margin: 8px auto 16px;
+      border-radius: 18px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      background: #0b1a26;
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .scene {
+      position: relative;
+      width: 920px; height: 620px;
+      /* Sky → sea → wet sand → dry sand gradient */
+      background:
+        linear-gradient(180deg,
+          #7dd3fc 0%,
+          #38bdf8 22%,
+          #0891b2 36%,
+          #fcd34d 48%,
+          #fde68a 100%);
+      overflow: hidden;
+      user-select: none;
+      cursor: crosshair;
+    }
+    /* Subtle sea waves at the horizon */
+    .scene::before {
+      content: ''; position: absolute;
+      top: 30%; left: 0; right: 0; height: 22px;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 8px,
+        rgba(255,255,255,0.4) 8px 12px,
+        transparent 12px 22px,
+        rgba(255,255,255,0.3) 22px 28px
+      );
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    /* Sand specks */
+    .scene::after {
+      content: ''; position: absolute;
+      top: 48%; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle, rgba(146,64,14,0.18) 1px, transparent 1px),
+        radial-gradient(circle, rgba(120,53,15,0.14) 1px, transparent 1px);
+      background-size: 8px 8px, 13px 13px;
+      background-position: 0 0, 4px 6px;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* A "beach umbrella" — random decorative element */
+    .umbrella {
+      position: absolute;
+      width: 38px; height: 44px;
+      pointer-events: none;
+    }
+    .umbrella .top {
+      width: 38px; height: 18px;
+      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+      background: var(--u, #ef4444);
+      border: 1.5px solid rgba(0,0,0,0.3);
+    }
+    .umbrella .pole {
+      width: 2px; height: 26px; margin: 0 auto;
+      background: #44403c;
+    }
+    /* Towel */
+    .towel {
+      position: absolute; width: 32px; height: 14px;
+      border-radius: 3px;
+      pointer-events: none;
+      background: var(--t, #fb7185);
+      border: 1px solid rgba(0,0,0,0.25);
+      transform: rotate(var(--r, 0deg));
+    }
+
+    /* A generic person figure */
+    .person {
+      position: absolute;
+      width: 22px; height: 38px;
+      cursor: pointer;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+    }
+    .person .head {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      margin: 0 auto 0;
+      background: var(--skin, #fcd34d);
+      position: relative;
+      z-index: 2;
+    }
+    /* Hair: a tiny strip at the top of the head */
+    .person .head.hair::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px; right: -1px;
+      height: 4px;
+      border-radius: 50% 50% 30% 30% / 80% 80% 30% 30%;
+      background: var(--hair, #1f2937);
+    }
+    .person .shirt {
+      width: 22px; height: 16px;
+      margin-top: -1px;
+      background: var(--shirt, #2563eb);
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    /* Some shirts are striped */
+    .person .shirt.stripes-h {
+      background: repeating-linear-gradient(
+        0deg,
+        var(--shirt, #2563eb) 0 3px,
+        var(--shirt2, #fff) 3px 6px
+      );
+    }
+    .person .shirt.stripes-v {
+      background: repeating-linear-gradient(
+        90deg,
+        var(--shirt, #2563eb) 0 3px,
+        var(--shirt2, #fff) 3px 6px
+      );
+    }
+    .person .pants {
+      width: 22px; height: 12px;
+      background: var(--pants, #1e40af);
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Two little leg notches at the bottom */
+    .person .pants::after {
+      content: '';
+      position: absolute; bottom: 0;
+      left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px;
+      background: var(--bg, #0891b2);
+    }
+    /* Some people have a hat */
+    .person .hat {
+      position: absolute;
+      top: -5px; left: 50%; transform: translateX(-50%);
+      width: 13px; height: 6px;
+      background: var(--hat, #b91c1c);
+      border-radius: 4px 4px 1px 1px;
+      z-index: 3;
+    }
+    /* Some hats are striped */
+    .person .hat.striped {
+      background: repeating-linear-gradient(
+        90deg,
+        var(--hat, #b91c1c) 0 2.5px,
+        var(--hat2, #fff) 2.5px 5px
+      );
+    }
+    /* The bobble on a beanie */
+    .person .hat .bobble {
+      position: absolute;
+      top: -3px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--hat2, #fff);
+    }
+
+    /* Waldo — same dimensions, distinctive outfit */
+    .person.waldo .shirt {
+      background: repeating-linear-gradient(
+        0deg,
+        #dc2626 0 3px,
+        #ffffff 3px 6px
+      );
+    }
+    .person.waldo .pants { background: #1d4ed8; }
+    .person.waldo .hat {
+      background: repeating-linear-gradient(
+        90deg,
+        #dc2626 0 2.5px,
+        #ffffff 2.5px 5px
+      );
+      width: 14px;
+    }
+    /* Waldo's glasses — a tiny mark on the head */
+    .person.waldo .head::after {
+      content: '';
+      position: absolute;
+      top: 4px; left: 50%; transform: translateX(-50%);
+      width: 8px; height: 2px;
+      border-top: 1px solid #1f2937;
+      border-bottom: 1px solid #1f2937;
+    }
+    /* Once found, Waldo pulses */
+    .person.waldo.found { animation: waldo-pulse 1.6s ease infinite; z-index: 999 !important; }
+    @keyframes waldo-pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(251,191,36,0)); }
+      50% { transform: scale(1.4); filter: drop-shadow(0 0 14px rgba(251,191,36,0.95)); }
+    }
+    /* Hint glow */
+    .person.waldo.hint { animation: hint-glow 0.9s ease 3; }
+    @keyframes hint-glow {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(251,191,36,0)); }
+      50% { transform: scale(1.25); filter: drop-shadow(0 0 18px rgba(251,191,36,1)); }
+    }
+
+    /* Miss particle ("nope" puff) */
+    .miss-puff {
+      position: absolute;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(248,113,113,0.7) 0%, rgba(248,113,113,0) 70%);
+      pointer-events: none;
+      animation: miss-fade 0.6s ease forwards;
+      transform: translate(-50%, -50%);
+      z-index: 998;
+    }
+    @keyframes miss-fade {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.4); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(2.2); }
+    }
+
+    .complete-card {
+      max-width: 480px; margin: 22px auto 0;
+      padding: 22px; text-align: center;
+      background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45);
+      border-radius: 16px; display: none;
+    }
+    .complete-card.show { display: block; }
+    .complete-card h2 { color: #86efac; margin: 0 0 6px; font-size: 1.4rem; }
+    .complete-card p { color: #d1fae5; margin: 0 0 14px; }
+    .complete-actions { display: flex; gap: 10px; justify-content: center; }
+
+    .footer-nav { text-align: center; margin-top: 22px; }
+    .footer-nav a { color: #fbbf24; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    @media (max-width: 720px) {
+      .lesson-header h1 { font-size: 1.5rem; }
+      .target-card { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Where's Waldo</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">📖 Book 1 · Page 1 · Where's Waldo? (1987)</span>
+      <h1>At the Beach</h1>
+      <p class="book-name">Find Waldo somewhere in the crowd.</p>
+    </header>
+
+    <section class="target-card">
+      <!-- Mini reference portrait of Waldo (built from the same .person primitive) -->
+      <div class="portrait">
+        <div class="person waldo" style="position:relative; transform: scale(1.6); transform-origin: top left; pointer-events:none;">
+          <div class="head"></div>
+          <div class="shirt"></div>
+          <div class="pants"></div>
+          <div class="hat"></div>
+        </div>
+      </div>
+      <div class="copy">
+        <h2>Your target: Waldo</h2>
+        <p>Red &amp; white striped shirt, blue trousers, matching red-and-white beanie, round black glasses. He's hiding somewhere among the beachgoers.</p>
+      </div>
+      <span class="status" id="status">Looking...</span>
+    </section>
+
+    <div class="scene-toolbar">
+      <span class="timer-pill" id="timer">⏱ 00:00</span>
+      <div class="toolbar-buttons">
+        <button class="btn secondary" id="hint-btn" disabled>✨ Hint (in 30s)</button>
+        <button class="btn secondary" id="reset-btn">🔀 Reshuffle</button>
+      </div>
+    </div>
+
+    <div class="scene-frame">
+      <div class="scene" id="scene"></div>
+    </div>
+
+    <section class="complete-card" id="complete-card">
+      <h2>🎉 You found Waldo!</h2>
+      <p>Nicely done. He never makes it easy. Ready for <strong>Page 2</strong>?</p>
+      <div class="complete-actions">
+        <button class="btn primary" id="continue-btn">Continue → Page 2</button>
+        <a class="btn secondary" href="index.html" style="text-decoration:none; display:inline-flex; align-items:center;">Back to book</a>
+      </div>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Where's Waldo</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ─── The crowd-scene game ──────────────────────────────────────────
+    const SCENE_W = 920, SCENE_H = 620;
+    // No people in the sea/sky band (top 32% of scene)
+    const PERSON_MIN_Y = SCENE_H * 0.34;
+    const PERSON_MAX_Y = SCENE_H - 44;
+    const PERSON_MIN_X = 4;
+    const PERSON_MAX_X = SCENE_W - 26;
+
+    const SKIN = ['#fde68a','#fcd34d','#f59e0b','#d97706','#92400e','#fed7aa','#fb923c','#ffedd5'];
+    const HAIR = ['#1f2937','#451a03','#78350f','#a16207','#f59e0b','#fef3c7','#9a3412','#71717a','#0f172a'];
+    const SHIRT = ['#2563eb','#16a34a','#eab308','#9333ea','#ea580c','#ec4899','#0891b2','#854d0e','#6b7280','#f3f4f6','#1f2937','#a16207','#7c3aed','#15803d','#b45309','#0e7490'];
+    const PANTS = ['#1e40af','#7c2d12','#374151','#000000','#581c87','#0f766e','#3f3f46','#365314','#9a3412','#1e3a8a'];
+    const HAT_COLORS = ['#b91c1c','#15803d','#7c3aed','#1e40af','#92400e','#475569','#a16207','#000000'];
+    const UMBRELLA_COLORS = ['#ef4444','#22c55e','#3b82f6','#a855f7','#f97316','#ec4899','#eab308'];
+    const TOWEL_COLORS = ['#fb7185','#60a5fa','#34d399','#facc15','#a78bfa','#fda4af','#f97316'];
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+    function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+
+    const sceneEl = document.getElementById('scene');
+    const statusEl = document.getElementById('status');
+    const timerEl = document.getElementById('timer');
+    const hintBtn = document.getElementById('hint-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const continueBtn = document.getElementById('continue-btn');
+    const completeCard = document.getElementById('complete-card');
+
+    let waldoEl = null;
+    let found = false;
+    let startTime = 0;
+    let timerInterval = null;
+    let hintTimeout = null;
+
+    function makePerson(opts = {}) {
+      const isWaldo = !!opts.isWaldo;
+      const person = document.createElement('div');
+      person.className = 'person' + (isWaldo ? ' waldo' : '');
+
+      const head = document.createElement('div');
+      head.className = 'head';
+      const skinColor = pick(SKIN);
+      head.style.setProperty('--skin', skinColor);
+      // Some have visible hair
+      const hasHair = Math.random() < 0.78;
+      if (hasHair) {
+        head.classList.add('hair');
+        head.style.setProperty('--hair', pick(HAIR));
+      }
+      person.appendChild(head);
+
+      const shirt = document.createElement('div');
+      shirt.className = 'shirt';
+      if (!isWaldo) {
+        const shirtColor = pick(SHIRT);
+        shirt.style.setProperty('--shirt', shirtColor);
+        // 18% horizontal stripes — these are Waldo-style decoys (different colors)
+        const stripeRoll = Math.random();
+        if (stripeRoll < 0.10) {
+          shirt.classList.add('stripes-h');
+          // Avoid red+white combo (that's only Waldo)
+          let second;
+          do { second = pick(SHIRT); } while (second === shirtColor || (shirtColor === '#1f2937' && second === '#f3f4f6'));
+          // Force a non-red base to keep red+white unique to Waldo
+          if (shirtColor === '#b91c1c') shirt.style.setProperty('--shirt', pick(['#2563eb','#16a34a','#9333ea']));
+          shirt.style.setProperty('--shirt2', second);
+        } else if (stripeRoll < 0.18) {
+          shirt.classList.add('stripes-v');
+          shirt.style.setProperty('--shirt2', pick(SHIRT));
+        }
+      }
+      person.appendChild(shirt);
+
+      const pants = document.createElement('div');
+      pants.className = 'pants';
+      if (!isWaldo) pants.style.setProperty('--pants', pick(PANTS));
+      pants.style.setProperty('--bg', '#fde68a'); // sand
+      person.appendChild(pants);
+
+      // Some people wear hats (about 18% — Waldo always has one)
+      if (isWaldo) {
+        const hat = document.createElement('div');
+        hat.className = 'hat';
+        person.appendChild(hat);
+      } else if (Math.random() < 0.18) {
+        const hat = document.createElement('div');
+        hat.className = 'hat';
+        const c = pick(HAT_COLORS);
+        // Never red — keep that to Waldo
+        hat.style.setProperty('--hat', c === '#b91c1c' ? '#1e40af' : c);
+        // 25% striped (non-red-white)
+        if (Math.random() < 0.25) {
+          hat.classList.add('striped');
+          hat.style.setProperty('--hat2', pick(SHIRT));
+        }
+        // 30% have a bobble
+        if (Math.random() < 0.30) {
+          const bobble = document.createElement('div');
+          bobble.className = 'bobble';
+          hat.appendChild(bobble);
+        }
+        person.appendChild(hat);
+      }
+
+      // Position
+      const x = opts.x != null ? opts.x : rand(PERSON_MIN_X, PERSON_MAX_X);
+      const y = opts.y != null ? opts.y : rand(PERSON_MIN_Y, PERSON_MAX_Y);
+      person.style.left = x + 'px';
+      person.style.top = y + 'px';
+
+      person.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handlePersonClick(person);
+      });
+
+      return person;
+    }
+
+    function makeUmbrella(x, y) {
+      const u = document.createElement('div');
+      u.className = 'umbrella';
+      u.style.left = x + 'px';
+      u.style.top = y + 'px';
+      u.style.setProperty('--u', pick(UMBRELLA_COLORS));
+      u.innerHTML = '<div class="top"></div><div class="pole"></div>';
+      return u;
+    }
+    function makeTowel(x, y) {
+      const t = document.createElement('div');
+      t.className = 'towel';
+      t.style.left = x + 'px';
+      t.style.top = y + 'px';
+      t.style.setProperty('--t', pick(TOWEL_COLORS));
+      t.style.setProperty('--r', rand(-25, 25) + 'deg');
+      return t;
+    }
+
+    function showMissPuff(clientX, clientY) {
+      const rect = sceneEl.getBoundingClientRect();
+      const x = clientX - rect.left + sceneEl.scrollLeft;
+      const y = clientY - rect.top + sceneEl.scrollTop;
+      const puff = document.createElement('div');
+      puff.className = 'miss-puff';
+      puff.style.left = x + 'px';
+      puff.style.top = y + 'px';
+      sceneEl.appendChild(puff);
+      setTimeout(() => puff.remove(), 700);
+    }
+
+    function handlePersonClick(person) {
+      if (found) return;
+      if (person.classList.contains('waldo')) {
+        winGame(false);
+      } else {
+        const rect = person.getBoundingClientRect();
+        showMissPuff(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      }
+    }
+
+    sceneEl.addEventListener('click', (e) => {
+      if (found) return;
+      // Only fires if the click missed all .person elements
+      if (e.target === sceneEl) {
+        showMissPuff(e.clientX, e.clientY);
+      }
+    });
+
+    function fmtTime(ms) {
+      const s = Math.floor(ms / 1000);
+      const mm = String(Math.floor(s / 60)).padStart(2, '0');
+      const ss = String(s % 60).padStart(2, '0');
+      return `${mm}:${ss}`;
+    }
+
+    function startTimer() {
+      startTime = performance.now();
+      timerInterval = setInterval(() => {
+        const ms = performance.now() - startTime;
+        timerEl.textContent = '⏱ ' + fmtTime(ms);
+      }, 200);
+    }
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function winGame(usedHint) {
+      if (found) return;
+      found = true;
+      stopTimer();
+      const elapsedMs = performance.now() - startTime;
+      waldoEl.classList.add('found');
+      // Scroll Waldo into view
+      const wRect = waldoEl.getBoundingClientRect();
+      const sRect = sceneEl.getBoundingClientRect();
+      sceneEl.scrollLeft += (wRect.left + wRect.width / 2) - (sRect.left + sRect.width / 2);
+      sceneEl.scrollTop  += (wRect.top  + wRect.height / 2) - (sRect.top  + sRect.height / 2);
+      statusEl.textContent = 'Found!';
+      statusEl.classList.add('found');
+      hintBtn.disabled = true;
+      const card = completeCard;
+      const tag = usedHint ? ' (with a hint)' : '';
+      card.querySelector('h2').textContent = `🎉 You found Waldo in ${fmtTime(elapsedMs)}${tag}!`;
+      card.classList.add('show');
+      try { localStorage.setItem('ww-completed-ww-1', '1'); } catch {}
+      try {
+        // Mark complete in the same shape used by getCompletedLessons
+        const key = 'completedLessons:wheres-waldo';
+        const prev = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!prev.includes('ww-1')) prev.push('ww-1');
+        localStorage.setItem(key, JSON.stringify(prev));
+      } catch {}
+    }
+
+    function useHint() {
+      if (found || !waldoEl) return;
+      waldoEl.classList.add('hint');
+      const wRect = waldoEl.getBoundingClientRect();
+      const sRect = sceneEl.getBoundingClientRect();
+      sceneEl.scrollLeft += (wRect.left + wRect.width / 2) - (sRect.left + sRect.width / 2);
+      sceneEl.scrollTop  += (wRect.top  + wRect.height / 2) - (sRect.top  + sRect.height / 2);
+      hintBtn.disabled = true;
+      hintBtn.textContent = '✨ Hint used';
+      setTimeout(() => waldoEl && waldoEl.classList.remove('hint'), 2700);
+    }
+    hintBtn.addEventListener('click', useHint);
+
+    function build() {
+      // Reset
+      sceneEl.innerHTML = '';
+      waldoEl = null;
+      found = false;
+      statusEl.textContent = 'Looking...';
+      statusEl.classList.remove('found');
+      completeCard.classList.remove('show');
+
+      // A handful of beach umbrellas + towels for decoration
+      const umbrellaY = SCENE_H * 0.50;
+      for (let i = 0; i < 7; i++) {
+        sceneEl.appendChild(makeUmbrella(rand(20, SCENE_W - 60), umbrellaY + rand(-20, 60)));
+      }
+      for (let i = 0; i < 18; i++) {
+        sceneEl.appendChild(makeTowel(rand(10, SCENE_W - 40), rand(PERSON_MIN_Y + 10, PERSON_MAX_Y - 4)));
+      }
+
+      // Generate ~145 generic beachgoers plus 1 Waldo, randomize the DOM order
+      // so Waldo isn't always on top.
+      const people = [];
+      for (let i = 0; i < 150; i++) people.push(makePerson({}));
+      const waldo = makePerson({ isWaldo: true });
+      people.push(waldo);
+      // Fisher-Yates shuffle
+      for (let i = people.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [people[i], people[j]] = [people[j], people[i]];
+      }
+      people.forEach(p => sceneEl.appendChild(p));
+      waldoEl = waldo;
+
+      // Timer + hint countdown
+      stopTimer();
+      clearTimeout(hintTimeout);
+      timerEl.textContent = '⏱ 00:00';
+      hintBtn.disabled = true;
+      hintBtn.textContent = '✨ Hint (in 30s)';
+      startTimer();
+      let remaining = 30;
+      const countdown = setInterval(() => {
+        remaining--;
+        if (found) { clearInterval(countdown); return; }
+        if (remaining <= 0) {
+          hintBtn.textContent = '✨ Show me Waldo';
+          hintBtn.disabled = false;
+          clearInterval(countdown);
+        } else {
+          hintBtn.textContent = `✨ Hint (in ${remaining}s)`;
+        }
+      }, 1000);
+    }
+
+    resetBtn.addEventListener('click', () => {
+      if (!found) {
+        if (!confirm('Reshuffle the beach? The timer will reset.')) return;
+      }
+      build();
+    });
+
+    continueBtn.addEventListener('click', () => {
+      window.location.href = 'lesson-2.html';
+    });
+
+    build();
+  </script>
+</body>
+</html>

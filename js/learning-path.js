@@ -52,9 +52,10 @@ export function renderPath(container, lessons, completedIds = new Set()) {
       const categoryLabel = categoryLabels[lesson.category] || lesson.category || '';
       const header = document.createElement('div');
       header.className = 'path-unit-header';
+      const unitLabel = lesson.unitLabel || 'Unit';
       header.innerHTML = `
         <span class="path-unit-badge ${lesson.category || ''}">${categoryLabel}</span>
-        <div class="path-unit-name">Unit ${lesson.unit}: ${lesson.unitName || ''}</div>
+        <div class="path-unit-name">${unitLabel} ${lesson.unit}: ${lesson.unitName || ''}</div>
       `;
       container.appendChild(header);
     }
@@ -133,8 +134,12 @@ function flushRow(container, nodes, rowIndex) {
       icon = ''; // completed — CSS ::after handles it
     }
 
-    // Lessons with a real page (href !== '#') are always clickable, even if locked.
-    const hasRealPage = n.type !== 'practice' && n.type !== 'reading' && n.href && n.href !== '#';
+    // Auto-injected practice & reading nodes have no static page — they get a
+    // generated URL (practice.html / reading.html). Manually-wired practice &
+    // reading nodes (e.g. calculus lesson-13.html / reading-1.html) keep their
+    // real, always-clickable page.
+    const generated = (n.type === 'practice' || n.type === 'reading') && (!n.href || n.href === '#');
+    const hasRealPage = !generated && n.href && n.href !== '#';
 
     if (n.state === 'locked' && !hasRealPage) {
       nodeEl.innerHTML = `
@@ -143,8 +148,10 @@ function flushRow(container, nodes, rowIndex) {
       `;
     } else {
       let href;
-      if (n.type === 'practice') {
+      if (n.type === 'practice' && generated) {
         href = buildPracticeUrl(n);
+      } else if (n.type === 'reading' && generated) {
+        href = buildReadingUrl(n);
       } else if (n.href && n.href !== '#') {
         href = n.href;
       } else {
@@ -228,11 +235,19 @@ export async function getCompletedLessons(courseId) {
   // Also check Firebase if logged in — but never let it block rendering
   const firebaseFetch = (async () => {
     const { auth, db } = await import('./firebase-config.js');
-    const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const { collection, getDocs, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const user = auth.currentUser;
     if (!user) return;
     const snap = await getDocs(collection(db, 'users', user.uid, 'progress', courseId, 'lessons'));
-    snap.forEach(doc => ids.add(doc.id));
+    snap.forEach(d => ids.add(d.id));
+    // Mark the course as "started" so it shows up in profile progress even
+    // before any lesson is completed. Fire-and-forget — never blocks the
+    // path render. Stores courseId for slug recovery on profile reads.
+    setDoc(
+      doc(db, 'users', user.uid, 'progress', courseId),
+      { courseId, lastViewedAt: new Date().toISOString() },
+      { merge: true }
+    ).catch(() => {});
   })();
   const timeout = new Promise((resolve) => setTimeout(resolve, 4000));
   try { await Promise.race([firebaseFetch, timeout]); } catch (e) {}
@@ -242,11 +257,11 @@ export async function getCompletedLessons(courseId) {
 
 /**
  * Build a URL for the dedicated listening-practice page for this practice node.
- * Derives the course slug from the current page path (/course/<slug>/...)
+ * Derives the course slug from the current page path (/courses/<slug>/...)
  * and the depth-appropriate path prefix to practice.html.
  */
 function buildPracticeUrl(practiceNode) {
-  const m = window.location.pathname.match(/\/course\/([^/]+)\//);
+  const m = window.location.pathname.match(/\/courses?\/([^/]+)\//);
   const slug = m ? m[1] : '';
   const depth = (window.location.pathname.match(/\//g) || []).length - 1;
   const prefix = depth >= 2 ? '../../' : depth === 1 ? '../' : '';
@@ -256,6 +271,21 @@ function buildPracticeUrl(practiceNode) {
   const after = idMatch ? idMatch[1] : '';
   const qs = `course=${encodeURIComponent(slug)}&unit=${encodeURIComponent(practiceNode.unit)}${after ? `&after=${after}` : ''}`;
   return `${prefix}practice.html?${qs}`;
+}
+
+/**
+ * Build the URL for an auto-injected reading node, mirroring buildPracticeUrl
+ * but pointing at the shared reading.html generator.
+ */
+function buildReadingUrl(readingNode) {
+  const m = window.location.pathname.match(/\/courses?\/([^/]+)\//);
+  const slug = m ? m[1] : '';
+  const depth = (window.location.pathname.match(/\//g) || []).length - 1;
+  const prefix = depth >= 2 ? '../../' : depth === 1 ? '../' : '';
+  const idMatch = /reading-(\d+)/.exec(readingNode.id || '');
+  const after = idMatch ? idMatch[1] : '';
+  const qs = `course=${encodeURIComponent(slug)}&unit=${encodeURIComponent(readingNode.unit)}${after ? `&after=${after}` : ''}`;
+  return `${prefix}reading.html?${qs}`;
 }
 
 /**

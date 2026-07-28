@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Engineering — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-data)">Data Analysis</span>
+    <h1>Data Engineering</h1>
+    <p>Build the pipelines that feed the analysts. The data-engineering lifecycle (generate → ingest → store → transform → serve), batch vs streaming, ETL vs ELT, the modern data stack (Fivetran, Airbyte, dbt, Snowflake, Looker / Hex / Mode), orchestration (Apache Airflow, Dagster, Prefect, AWS Step Functions, GitHub Actions), idempotency &amp; retries, DAG design, dbt fundamentals (models, sources, refs, tests, snapshots, macros, packages), data warehousing concepts (star vs snowflake schema, slowly changing dimensions, Kimball vs Inmon), data lakes &amp; the lakehouse, file formats (CSV, JSON, Avro, Parquet, ORC, Delta, Iceberg, Hudi), CDC (change data capture — Debezium, log-based vs trigger-based), event-driven architectures, Kafka in data pipelines, message queues (SQS, RabbitMQ, Pub/Sub), data quality &amp; observability (Great Expectations, Monte Carlo, Soda, dbt tests), data contracts &amp; schema evolution, lineage (OpenLineage, Marquez, DataHub), data catalogs (Atlan, Collibra, Unity Catalog), governance, privacy &amp; PII (tokenization, masking, GDPR/CCPA), real-time pipelines (Flink, Materialize, Tinybird), cloud data platforms (AWS, GCP, Azure), serverless data (Athena, BigQuery, Snowpark), cost optimization, monitoring &amp; on-call for data, SLAs &amp; SLOs, and a capstone end-to-end pipeline. 34 units, 510 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "What Is Data Engineering?",
+      "The Data Lifecycle — Generate → Serve",
+      "Batch vs Streaming",
+      "ETL vs ELT",
+      "The Modern Data Stack",
+      "Ingestion — Fivetran, Airbyte",
+      "Apache Airflow — DAGs & Operators",
+      "Dagster — Software-Defined Assets",
+      "Prefect & Cloud Orchestration",
+      "Idempotency & Retries",
+      "dbt — Models, Sources, refs",
+      "dbt — Tests, Snapshots, Macros",
+      "Star Schema & SCD Types",
+      "Kimball vs Inmon Warehousing",
+      "Data Lake & Lakehouse",
+      "File Formats — Parquet, Avro, ORC",
+      "Delta, Iceberg & Hudi",
+      "Change Data Capture (Debezium)",
+      "Event-Driven Architectures",
+      "Kafka in Data Pipelines",
+      "Data Quality — Great Expectations",
+      "Observability — Monte Carlo, Soda",
+      "Data Contracts & Schema Evolution",
+      "Lineage — OpenLineage & DataHub",
+      "Data Catalogs — Atlan, Unity Catalog",
+      "Governance & PII",
+      "Real-Time — Flink, Materialize, Tinybird",
+      "Cloud Platforms — AWS, GCP, Azure",
+      "Cost Optimization",
+      "SLAs, SLOs & On-Call for Data",
+      "Message Queues — SQS, RabbitMQ, Pub/Sub",
+      "Serverless Data — Athena, BigQuery, Snowpark",
+      "Apache Spark & PySpark",
+      "Capstone — End-to-End Pipeline"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'de-'+n, title: t, href: 'quiz.html?unit=' + u + '&lesson=' + (i + 1), unit: u, unitName: name, category: 'data', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('data-engineering');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('data-engineering');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

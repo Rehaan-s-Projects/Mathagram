@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robotics — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-programming)">Programming</span>
+    <h1>Robotics</h1>
+    <p>Build & program robots — Arduino, Raspberry Pi, motors, sensors, kinematics, computer vision, ROS, and competitive robotics challenges. 7 units, 35 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Hardware Basics",["Microcontroller Choices","Motors (DC, Stepper, Servo)","Sensors (IR, Ultrasonic, IMU)","Power & Batteries","Hardware Checkpoint"]],
+      [2,"Arduino Programming",["setup() and loop()","Digital & Analog I/O","PWM Motor Control","Serial Debugging","Arduino Checkpoint"]],
+      [3,"Raspberry Pi",["Pi OS Install","GPIO with Python","Camera Module","Network Connectivity","Pi Checkpoint"]],
+      [4,"Kinematics",["Forward Kinematics","Inverse Kinematics","PID Control","Path Planning","Kinematics Checkpoint"]],
+      [5,"Computer Vision",["OpenCV Basics","Object Tracking","Color Filtering","Edge Detection","CV Checkpoint"]],
+      [6,"ROS (Robot OS)",["Nodes & Topics","Publishers & Subscribers","RViz Visualization","URDF Models","ROS Checkpoint"]],
+      [7,"Competitions",["FIRST Robotics","VEX","Sumo Robots","Line-Following Race","Competition Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'robotics-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('robotics');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('robotics');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

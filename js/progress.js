@@ -131,6 +131,17 @@ export async function saveLessonResult(courseId, lessonId, score, quizXP) {
     completedAt: new Date().toISOString()
   }, { merge: true });
 
+  // Upsert the parent course-progress doc so getDocs(collection('progress'))
+  // returns this course in the user's profile. Without this, the doc only
+  // exists as an implicit path-parent and Firestore Web SDK collection
+  // queries won't list it. courseId is also stored so we can recover the
+  // slug from a snapshot's data even if the doc id is missing.
+  const courseProgRef = doc(db, 'users', user.uid, 'progress', courseId);
+  await setDoc(courseProgRef, {
+    courseId,
+    lastActivityAt: new Date().toISOString()
+  }, { merge: true });
+
   // Update total XP on user document
   const userRef = doc(db, 'users', user.uid);
 

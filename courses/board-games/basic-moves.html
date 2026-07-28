@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Moves — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .lesson-content ul li { margin-bottom: 6px; }
+    .checker { display: inline-block; width: 28px; height: 28px; border-radius: 50%; border: 3px solid #1e293b; vertical-align: middle; margin: 0 2px; }
+    .checker.black { background: #1e293b; }
+    .checker.red   { background: #ef4444; }
+
+    /* Mini 4×4 diagram showing how the pieces move diagonally */
+    .move-diagram {
+      display: grid; grid-template-columns: repeat(4, 56px); gap: 0;
+      max-width: 224px; margin: 18px auto 22px; border: 2px solid #1e293b;
+    }
+    .move-diagram .sq { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .move-diagram .sq.dark  { background: #475569; }
+    .move-diagram .sq.light { background: #f1f5f9; }
+    .move-diagram .sq .piece { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #0f172a; }
+    .move-diagram .sq .piece.black { background: #1e293b; }
+    .move-diagram .sq .piece.red   { background: #ef4444; }
+    .move-diagram .sq.target::after {
+      content: ''; position: absolute; inset: 18%; border-radius: 50%;
+      border: 3px dashed #22c55e; box-sizing: border-box;
+    }
+    .move-diagram .sq.arrow::before {
+      content: '↗'; position: absolute; top: 4px; right: 6px;
+      color: #22c55e; font-size: 1.25rem; font-weight: 900;
+    }
+    .move-diagram .sq.arrow-left::before {
+      content: '↖'; position: absolute; top: 4px; left: 6px;
+      color: #22c55e; font-size: 1.25rem; font-weight: 900;
+    }
+    .diagram-caption { text-align: center; color: var(--color-text-muted); font-size: 0.85rem; margin-top: -6px; margin-bottom: 18px; }
+
+    /* Coach card with character-voice button */
+    .coach-card {
+      display: flex; align-items: center; gap: 16px;
+      max-width: 640px; margin: 20px auto 8px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-left: 5px solid #8b5cf6;
+      border-radius: 14px; padding: 14px 18px;
+    }
+    .coach-card .avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(139,92,246,0.10); border: 3px solid #8b5cf6;
+      padding: 3px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .coach-card .avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .coach-card .coach-text { flex: 1; }
+    .coach-card .coach-name { font-size: 0.78rem; font-weight: 800; color: #7c3aed; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+    .coach-card .coach-line { font-size: 0.95rem; color: var(--color-text); line-height: 1.4; }
+    .coach-card .voice-btn {
+      flex-shrink: 0;
+      background: #8b5cf6; color: #fff;
+      border: none; border-radius: 12px;
+      padding: 12px 18px; font-weight: 800; font-size: 0.92rem;
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s, transform 0.08s;
+    }
+    .coach-card .voice-btn:hover { background: #7c3aed; }
+    .coach-card .voice-btn:active { transform: translateY(1px); }
+    .coach-card .voice-btn.speaking { background: #ef4444; }
+
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Board Games</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Checkers (Draughts)</div>
+    <h1>Basic Moves</h1>
+    <p>Both the <span class="checker black"></span> <strong>black</strong> and <span class="checker red"></span> <strong>red</strong> pieces follow the same rule for a basic (non-capture) move: one square diagonally <strong>forward</strong>, onto an <strong>empty dark square</strong>. Sideways or straight-ahead moves are not allowed.</p>
+
+    <div class="move-diagram" aria-label="A black checker moving one square diagonally forward">
+      <div class="sq light"></div>
+      <div class="sq dark target arrow"></div>
+      <div class="sq light"></div>
+      <div class="sq dark target arrow-left"></div>
+      <div class="sq dark"></div>
+      <div class="sq light"></div>
+      <div class="sq dark"></div>
+      <div class="sq light"></div>
+      <div class="sq light"></div>
+      <div class="sq dark"><div class="piece black"></div></div>
+      <div class="sq light"></div>
+      <div class="sq dark"></div>
+      <div class="sq dark"></div>
+      <div class="sq light"></div>
+      <div class="sq dark"></div>
+      <div class="sq light"></div>
+    </div>
+    <p class="diagram-caption">A black piece can move to either dashed square — diagonally forward, one square.</p>
+
+    <ul>
+      <li>Move <strong>diagonally</strong> only — never straight or sideways.</li>
+      <li>Move <strong>forward</strong> only (until you become a king).</li>
+      <li>Move <strong>one square</strong> per turn, unless you're jumping a capture.</li>
+      <li>Land only on an <strong>empty dark</strong> square — never on a light square or on top of another piece.</li>
+      <li><span class="checker black"></span> <strong>Black</strong> usually moves up the board; <span class="checker red"></span> <strong>red</strong> moves down. (Direction depends on which side each player chose, but each side always moves <em>forward</em>.)</li>
+    </ul>
+
+    <div class="coach-card">
+      <div class="avatar"><img src="../../assets/characters/william.svg" alt="William the Old Man"></div>
+      <div class="coach-text">
+        <div class="coach-name">William · Your Coach</div>
+        <div class="coach-line">Press the button to hear me explain how the black and red pieces move.</div>
+      </div>
+      <button type="button" class="voice-btn" id="voice-btn">🔊 Hear it</button>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../'); initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { speak, speakAsync, showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter('william', '../../');
+
+    // ── Character voice: William explains the basic moves out loud ──
+    const COACH_SCRIPT = [
+      "Welcome, scholar. I'm William, and I will teach you how the black and red pieces move in checkers.",
+      "Both colors move the same way: one square diagonally forward, onto an empty dark square.",
+      "Black moves up the board toward red's side; red moves down toward black's side.",
+      "A regular piece can never move backward, never move sideways, and never land on a light square.",
+      "Until you become a king, the rule is simple: one square, diagonally forward, every turn."
+    ];
+    const voiceBtn = document.getElementById('voice-btn');
+    let isSpeaking = false;
+    voiceBtn.addEventListener('click', async () => {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        voiceBtn.classList.remove('speaking');
+        voiceBtn.textContent = '🔊 Hear it';
+        return;
+      }
+      isSpeaking = true;
+      voiceBtn.classList.add('speaking');
+      voiceBtn.textContent = '⏹ Stop';
+      try {
+        for (const line of COACH_SCRIPT) {
+          if (!isSpeaking) break;
+          await speakAsync(line, 'william');
+        }
+      } catch {}
+      isSpeaking = false;
+      voiceBtn.classList.remove('speaking');
+      voiceBtn.textContent = '🔊 Hear it';
+    });
+    // Web-Speech voices on some browsers (Chrome, Safari) load asynchronously
+    // — touch them once so the first speak() has voices ready.
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: 'How do black and red pieces move on a basic (non-capture) move?',
+        options: [
+          'Diagonally, one square forward at a time',
+          'By bouncing like a kangaroo across the whole board',
+          'Sideways in a conga line',
+          'Only when the cat sneezes'
+        ],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'A regular (un-kinged) checker piece can move backward.',
+        correctAnswer: false },
+      { type: 'multiple-choice',
+        question: 'On a normal move (not a jump), a piece moves how far?',
+        options: [
+          'One square',
+          'Seventeen squares',
+          'As far as the wind takes it',
+          'All the way to the fridge'
+        ],
+        correctIndex: 0 },
+      { type: 'multiple-choice',
+        question: 'Checker pieces are played only on which color squares?',
+        options: [
+          'The dark squares',
+          'Pink squares with sprinkles',
+          'Whichever square is closest to the moon',
+          'Only the light squares'
+        ],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'Both black and red pieces move ONLY diagonally on a basic move.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'Each player starts the game with ___ checker pieces.',
+        answer: '12' },
+      { type: 'multiple-choice',
+        question: 'It is your turn and you have at least one legal move. You must:',
+        options: [
+          'Make a move',
+          'Skip your turn and watch TV',
+          'Eat a cookie first',
+          'Pass the turn to your dog'
+        ],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'Black moves toward red’s end of the board, and red moves toward black’s end. They never move backward as regular pieces.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'Can a regular piece land on a square that already has another piece?',
+        options: [
+          'No — the destination must be empty',
+          'Yes — pieces can stack to the ceiling',
+          'Only if they are best friends',
+          'Yes, but only on full moons'
+        ],
+        correctIndex: 0 },
+      { type: 'fill-blank',
+        question: 'A basic move covers ___ square(s) of the board.',
+        answer: '1' }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    let buddyTick = 0;
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      // index is -1 on retry attempts; cycle through characters either way
+      // so the voice still fires (otherwise showBuddy(undefined) returns silently).
+      const i = index >= 0 ? index : (buddyTick++);
+      const c = chars[i % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, {
+      xp,
+      courseId: 'board-games',
+      lessonId: 'basic-moves',
+      nextHref: 'index.html',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

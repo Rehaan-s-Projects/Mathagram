@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story: Diego's Pizza Optimization — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="../../css/story.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 720px; margin: 0 auto; padding: 48px 24px 8px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-content .intro { font-size: 1rem; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 24px; }
+    .exercise-section { max-width: 720px; margin: 0 auto; padding: 0 24px 24px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+
+    /* Story scene styling */
+    .story-scene { background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 2px solid #fb923c; border-radius: 18px; padding: 22px 24px; margin: 16px auto 0; max-width: 720px; box-shadow: 0 2px 8px rgba(251, 146, 60, 0.15); animation: fadeUp 0.4s ease-out; }
+    .scene-label { display: inline-block; background: #fb923c; color: #fff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 14px; border-radius: 999px; margin-bottom: 14px; }
+    .narration { font-style: italic; color: #57534e; font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+    .narration:last-child { margin-bottom: 0; }
+    .dialogue { display: flex; gap: 12px; align-items: flex-start; margin: 12px 0; }
+    .avatar { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+    .avatar.diego { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .avatar.rita { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+    .avatar.sam { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .speech { flex: 1; background: #fff; padding: 12px 16px; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); position: relative; }
+    .speech::before { content: ''; position: absolute; left: -7px; top: 14px; width: 0; height: 0; border-style: solid; border-width: 7px 8px 7px 0; border-color: transparent #fff transparent transparent; }
+    .speaker { font-weight: 800; font-size: 0.85rem; margin-bottom: 4px; }
+    .speaker.diego { color: #dc2626; }
+    .speaker.rita { color: #0f766e; }
+    .speaker.sam { color: #d97706; }
+    .line { color: #1c1917; font-size: 1rem; line-height: 1.6; }
+    .math-callout { background: rgba(20, 184, 166, 0.08); border-left: 4px solid #14b8a6; padding: 10px 14px; margin: 10px 0; border-radius: 8px; font-size: 1.05rem; }
+    .scene-hidden { display: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Story Mode</div>
+    <h1>🍕 Diego's Pizza Optimization</h1>
+    <p class="intro">Diego owns a pizza shop and has a pricing problem. Read along with him and Rita as they use calculus to find the perfect price. Answer the questions in each scene to advance the story.</p>
+  </section>
+
+  <!-- ━━━ Scene 1: The Problem ━━━ -->
+  <div id="scene-1" class="story-scene scene-hidden">
+    <span class="scene-label">📖 Scene 1 · The Problem</span>
+    <p class="narration">It's a slow Tuesday at Slice Lighthouse Pizza. Diego stares at his sales spreadsheet and sighs. His friend Rita walks in.</p>
+    <div class="dialogue">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">Rita, help! I can't figure out what to charge per pizza. If the price is too low, I lose money on each pie. If it's too high, customers go elsewhere.</div>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="avatar rita">R</div>
+      <div class="speech">
+        <div class="speaker rita">Rita</div>
+        <div class="line">Classic optimization problem. Tell me your numbers — how does the number of pizzas you sell depend on the price?</div>
+      </div>
+    </div>
+    <div class="dialogue" data-speak="At price p dollars per pizza, I sell about 50 minus 2 p pizzas. So my revenue is the price times the number sold: R of p equals open paren 50 minus 2 p close paren times p.">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">At price <em>p</em> dollars per pizza, I sell about \((50 - 2p)\) pizzas. So my revenue is the price times the number sold: \(R(p) = (50 - 2p) \cdot p\).</div>
+      </div>
+    </div>
+    <div class="math-callout">
+      <strong>Revenue function:</strong> \(R(p) = (50 - 2p)\,p = 50p - 2p^2\)
+    </div>
+  </div>
+  <section class="exercise-section"><div id="quiz-1"></div></section>
+
+  <!-- ━━━ Scene 2: Setting Up the Optimization ━━━ -->
+  <div id="scene-2" class="story-scene scene-hidden">
+    <span class="scene-label">📖 Scene 2 · The Setup</span>
+    <div class="dialogue">
+      <div class="avatar rita">R</div>
+      <div class="speech">
+        <div class="speaker rita">Rita</div>
+        <div class="line">Perfect. Now to find the maximum revenue, take the derivative and set it equal to zero. That gives you the critical points — the candidates for the peak.</div>
+      </div>
+    </div>
+    <div class="dialogue" data-speak="Okay. R of p equals 50 p minus 2 p squared. The derivative of 50 p is 50, and the derivative of negative 2 p squared is negative 4 p. So R prime of p equals 50 minus 4 p.">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">Okay. \(R(p) = 50p - 2p^2\). The derivative of \(50p\) is 50, and the derivative of \(-2p^2\) is \(-4p\). So \(R'(p) = 50 - 4p\).</div>
+      </div>
+    </div>
+    <div class="math-callout">
+      <strong>Derivative:</strong> \(R'(p) = 50 - 4p\)
+    </div>
+    <div class="dialogue" data-speak="Great. Now set R prime of p equal to zero and solve for p. That's where the slope of the revenue curve is flat — the top of the hill.">
+      <div class="avatar rita">R</div>
+      <div class="speech">
+        <div class="speaker rita">Rita</div>
+        <div class="line">Great. Now set \(R'(p) = 0\) and solve for <em>p</em>. That's where the slope of the revenue curve is flat — the top of the hill.</div>
+      </div>
+    </div>
+  </div>
+  <section class="exercise-section"><div id="quiz-2"></div></section>
+
+  <!-- ━━━ Scene 3: Solving ━━━ -->
+  <div id="scene-3" class="story-scene scene-hidden">
+    <span class="scene-label">📖 Scene 3 · The Solution</span>
+    <div class="dialogue" data-speak="50 minus 4 p equals zero. So 4 p equals 50. Which means p equals 12 point 5. So... the magic price is twelve dollars and fifty cents?">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">\(50 - 4p = 0\) → \(4p = 50\) → \(p = 12.5\). So… the magic price is <strong>$12.50</strong>?</div>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="avatar rita">R</div>
+      <div class="speech">
+        <div class="speaker rita">Rita</div>
+        <div class="line">Almost! We have a critical point, but we need to check if it's actually a <em>maximum</em>, not a minimum. Compute the second derivative and look at its sign.</div>
+      </div>
+    </div>
+    <div class="dialogue" data-speak="R prime of p equals 50 minus 4 p, so R double prime of p equals negative 4. That's negative everywhere — the curve is concave down.">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">\(R'(p) = 50 - 4p\), so \(R''(p) = -4\). That's negative everywhere — the curve is concave down.</div>
+      </div>
+    </div>
+    <div class="math-callout">
+      <strong>Second derivative test:</strong> \(R''(p) = -4 &lt; 0\) → the critical point \(p = 12.5\) is a local <em>maximum</em>. ✅
+    </div>
+    <div class="dialogue" data-speak="Confirmed! p equals twelve dollars and fifty cents maximizes your revenue. Now plug it back in to see how much money you actually make.">
+      <div class="avatar rita">R</div>
+      <div class="speech">
+        <div class="speaker rita">Rita</div>
+        <div class="line">Confirmed! \(p = 12.50\) maximizes your revenue. Now plug it back in to see how much money you actually make.</div>
+      </div>
+    </div>
+  </div>
+  <section class="exercise-section"><div id="quiz-3"></div></section>
+
+  <!-- ━━━ Scene 4: The Result ━━━ -->
+  <div id="scene-4" class="story-scene scene-hidden">
+    <span class="scene-label">📖 Scene 4 · The Payoff</span>
+    <div class="dialogue" data-speak="R of 12 point 5 equals 50 times 12 point 5, minus 2 times 12 point 5 squared. That equals 625 minus 312 point 5, which equals 312 dollars and 50 cents. I'll make 312 dollars and 50 cents every day at the optimal price!">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">\(R(12.5) = 50(12.5) - 2(12.5)^2 = 625 - 312.5 = \$312.50\). I'll make $312.50 every day at the optimal price!</div>
+      </div>
+    </div>
+    <div class="math-callout">
+      <strong>Maximum daily revenue:</strong> \(R(12.5) = \$312.50\)
+    </div>
+    <p class="narration">Sam, a regular customer, walks in, sniffs the air, and grins.</p>
+    <div class="dialogue">
+      <div class="avatar sam">S</div>
+      <div class="speech">
+        <div class="speaker sam">Sam</div>
+        <div class="line">Wait — you raised the price to $12.50 and your <em>total</em> revenue went up? That's wild.</div>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="avatar rita">R</div>
+      <div class="speech">
+        <div class="speaker rita">Rita</div>
+        <div class="line">That's the whole point of calculus optimization, Sam. Sometimes you sell <em>fewer</em> units but make <em>more</em> total revenue. The derivative finds the sweet spot.</div>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="avatar diego">D</div>
+      <div class="speech">
+        <div class="speaker diego">Diego</div>
+        <div class="line">Math just paid for my new pizza oven. 🍕📈</div>
+      </div>
+    </div>
+  </div>
+  <section class="exercise-section"><div id="quiz-4"></div><div id="completion" style="display:none;"></div></section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter, speakAsync } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const scene1Questions = [
+      { type: 'multiple-choice',
+        question: '📖 What does \\(R(p)\\) represent in Diego\'s story?',
+        options: ['The number of pizzas sold', 'The total revenue at price \\(p\\)', 'The cost of cheese', 'The oven temperature'],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: '📖 At price \\(p\\), Diego sells \\((50 - 2p)\\) pizzas. So \\(R(p) = (50 - 2p) \\cdot \\) ___ .',
+        answer: 'p' }
+    ];
+
+    const scene2Questions = [
+      { type: 'multiple-choice',
+        question: '📖 Rita says to find the maximum, take the derivative and set it equal to what?',
+        options: ['One', 'Zero', 'Infinity', 'A pepperoni'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: '📖 What is \\(R\'(p)\\) for \\(R(p) = 50p - 2p^2\\)?',
+        options: ['\\(50 - 4p\\)', '\\(50 - 2p\\)', '\\(100 - 4p\\)', '\\(p^2 + 50\\)'],
+        correctIndex: 0 }
+    ];
+
+    const scene3Questions = [
+      { type: 'fill-blank',
+        question: '📖 Solving \\(50 - 4p = 0\\) gives \\(p =\\) ___ .',
+        answer: '12.5' },
+      { type: 'multiple-choice',
+        question: '📖 Why does \\(R\'\'(p) = -4\\) confirm that \\(p = 12.5\\) is a maximum?',
+        options: ['It is a whole number', 'It is negative, so the curve is concave down (a hilltop)', 'It is divisible by 2', 'It matches Diego\'s shoe size'],
+        correctIndex: 1 }
+    ];
+
+    const scene4Questions = [
+      { type: 'fill-blank',
+        question: '📖 \\(R(12.5) = 50(12.5) - 2(12.5)^2 = \\) $___ .',
+        answer: '312.5' },
+      { type: 'multiple-choice',
+        question: '📖 What is the main lesson of Diego\'s pizza story?',
+        options: ['Always charge the highest price possible', 'Use calculus optimization — the derivative finds the price that maximizes total revenue, even if you sell fewer units', 'Pizza is the best food for math problems', 'Customers don\'t care about price'],
+        correctIndex: 1 }
+    ];
+
+    const onAnswer = (isCorrect, index) => {
+      showBuddy(randomCharacterId(), isCorrect ? 'correct' : 'wrong');
+    };
+
+    /* ─── Voice playback for story dialogue ─── */
+    function getCharId(dialogue) {
+      const speaker = dialogue.querySelector('.speaker');
+      if (!speaker) return null;
+      return Array.from(speaker.classList).find(c => c !== 'speaker');
+    }
+    function getSpokenText(dialogue) {
+      const explicit = dialogue.dataset.speak;
+      if (explicit) return explicit;
+      const line = dialogue.querySelector('.line');
+      if (!line) return '';
+      const clone = line.cloneNode(true);
+      clone.querySelectorAll('.katex-mathml').forEach(el => el.remove());
+      return clone.textContent.replace(/\s+/g, ' ').trim();
+    }
+    // Per-story voice overrides — gentler/clearer than global defaults
+    // (global VOICE_SETTINGS still drive quizzes; this only affects story narration)
+    const STORY_VOICES = {
+      narrator:{ pitch: 0.95, rate: 0.95, volume: 0.95 }, // neutral storyteller
+      diego:   { pitch: 1.0,  rate: 0.95, volume: 0.95 }, // calm researcher, slightly slower
+      rita:    { pitch: 1.45, rate: 1.0,  volume: 0.95 }, // still high but listenable
+      sam:     { pitch: 1.5,  rate: 1.05, volume: 0.95 }, // kid, slightly slower
+      steve:   { pitch: 1.15, rate: 1.05, volume: 0.95 },
+      william: { pitch: 0.7,  rate: 0.85, volume: 0.95 },
+      gosia:   { pitch: 1.3,  rate: 1.0,  volume: 0.95 },
+      james:   { pitch: 0.75, rate: 0.9,  volume: 0.95 }
+    };
+
+    async function speakDialogue(dialogue) {
+      const charId = getCharId(dialogue);
+      const text = getSpokenText(dialogue);
+      if (!text || !charId) return;
+      const btn = dialogue.querySelector('.play-btn');
+      if (btn) btn.classList.add('speaking');
+      try { await speakAsync(text, charId, STORY_VOICES[charId] || null); }
+      finally { if (btn) btn.classList.remove('speaking'); }
+    }
+    async function speakNarration(narration) {
+      const explicit = narration.dataset.speak;
+      let text;
+      if (explicit) {
+        text = explicit;
+      } else {
+        // Clone to avoid mutating original, strip the play button before reading text
+        const clone = narration.cloneNode(true);
+        clone.querySelectorAll('.play-btn, .katex-mathml').forEach(el => el.remove());
+        text = clone.textContent.replace(/\s+/g, ' ').trim();
+      }
+      if (!text) return;
+      const btn = narration.querySelector('.play-btn');
+      if (btn) btn.classList.add('speaking');
+      narration.classList.add('narrating');
+      try { await speakAsync(text, 'narrator', STORY_VOICES.narrator); }
+      finally {
+        if (btn) btn.classList.remove('speaking');
+        narration.classList.remove('narrating');
+      }
+    }
+    function addPlayButton(dialogue) {
+      if (dialogue.querySelector('.play-btn')) return;
+      const speech = dialogue.querySelector('.speech');
+      if (!speech) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'play-btn';
+      btn.setAttribute('aria-label', 'Play voice');
+      btn.textContent = '🔊';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); speakDialogue(dialogue); });
+      speech.appendChild(btn);
+    }
+    function addNarrationPlayButton(narration) {
+      if (narration.querySelector('.play-btn')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'play-btn';
+      btn.setAttribute('aria-label', 'Play narration');
+      btn.textContent = '🔊';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); speakNarration(narration); });
+      narration.appendChild(btn);
+    }
+
+    /* ─── Tap-to-advance scene presentation (Duolingo Stories style) ─── */
+    function getStoryItems(scene) {
+      // Sequence of revealable items in document order
+      return Array.from(scene.querySelectorAll(':scope > .dialogue, :scope > .math-callout, :scope > .narration'));
+    }
+
+    function buildProgressDots(scene, total) {
+      const dots = document.createElement('div');
+      dots.className = 'progress-dots';
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement('span');
+        d.className = 'progress-dot';
+        if (i === 0) d.classList.add('active');
+        dots.appendChild(d);
+      }
+      scene.appendChild(dots);
+      return dots;
+    }
+
+    function presentScene(sceneId) {
+      return new Promise((resolve) => {
+        const scene = document.getElementById(sceneId);
+        if (!scene) { resolve(); return; }
+
+        const items = getStoryItems(scene);
+        // Hide every item except the first BEFORE showing the scene (prevents flash)
+        items.forEach((item, i) => {
+          if (i > 0) item.classList.add('bubble-hidden');
+          if (item.classList.contains('dialogue')) addPlayButton(item);
+          else if (item.classList.contains('narration')) addNarrationPlayButton(item);
+        });
+
+        scene.classList.remove('scene-hidden');
+        setTimeout(() => scene.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+
+        const dots = buildProgressDots(scene, items.length);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'next-btn-wrapper';
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'next-btn';
+        nextBtn.innerHTML = 'Next <span aria-hidden="true">→</span>';
+        wrapper.appendChild(nextBtn);
+        scene.parentNode.insertBefore(wrapper, scene.nextSibling);
+
+        let idx = 0;
+        const speakItem = async (item) => {
+          if (item.classList.contains('dialogue')) {
+            await speakDialogue(item);
+          } else if (item.classList.contains('narration')) {
+            await speakNarration(item);
+          }
+          // math-callout: silent reveal
+        };
+
+        // Speak the first item after a short delay (let voices load + give user time to read)
+        setTimeout(() => speakItem(items[0]), 1000);
+
+        nextBtn.addEventListener('click', async () => {
+          idx++;
+          if (idx >= items.length) {
+            wrapper.remove();
+            dots.remove();
+            resolve();
+            return;
+          }
+          const item = items[idx];
+          item.classList.remove('bubble-hidden');
+          item.classList.add('bubble-reveal');
+          setTimeout(() => item.classList.remove('bubble-reveal'), 400);
+          dots.querySelectorAll('.progress-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+          item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (idx === items.length - 1) {
+            nextBtn.innerHTML = 'Continue to quiz <span aria-hidden="true">→</span>';
+          }
+          await speakItem(item);
+        });
+      });
+    }
+
+    async function runStory() {
+      await presentScene('scene-1');
+      const r1 = await runExerciseSet(document.getElementById('quiz-1'), scene1Questions, onAnswer);
+      await presentScene('scene-2');
+      const r2 = await runExerciseSet(document.getElementById('quiz-2'), scene2Questions, onAnswer);
+      await presentScene('scene-3');
+      const r3 = await runExerciseSet(document.getElementById('quiz-3'), scene3Questions, onAnswer);
+      await presentScene('scene-4');
+      const r4 = await runExerciseSet(document.getElementById('quiz-4'), scene4Questions, onAnswer);
+
+      const allQuizzes = [r1, r2, r3, r4];
+      const sizes = [scene1Questions.length, scene2Questions.length, scene3Questions.length, scene4Questions.length];
+      const totalQs = sizes.reduce((a, b) => a + b, 0);
+      const combinedScore = Math.round(
+        allQuizzes.reduce((sum, r, i) => sum + (r.score || 0) * sizes[i], 0) / totalQs
+      );
+      const totalXp = allQuizzes.reduce((sum, r) => sum + (r.xp || 0), 0);
+
+      await showLessonComplete(document.getElementById('quiz-4'), document.getElementById('completion'),
+        combinedScore, { xp: totalXp,
+          courseId: 'calculus', lessonId: 'story-1',
+          nextHref: 'index.html', backHref: 'index.html'
+        }
+      );
+    }
+
+    runStory();
+  </script>
+</body>
+</html>

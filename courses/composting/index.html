@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Composting — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Composting</h1>
+    <p>Backyard composting, vermicomposting (worms), bokashi, and large-scale — C:N ratio, hot vs cold piles, turning, troubleshooting, and applying finished compost. 7 units, 37 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,"Why Compost?",["Reducing Landfill","Healthier Soil","Carbon Sequestration","Backyard Sustainability","Why Compost Checkpoint"]],
+      [2,"Compost Science",["Microorganisms","Carbon-to-Nitrogen Ratio","Moisture","Aeration","Heat Stages","Science Checkpoint"]],
+      [3,"Backyard Pile",["Choosing a Bin or Tumbler","Greens vs Browns","Layering","Turning Schedule","Backyard Checkpoint"]],
+      [4,"Vermicomposting",["Red Wigglers","Bin Setup","Bedding","Feeding the Worms","Harvesting Castings","Vermi Checkpoint"]],
+      [5,"Bokashi",["Anaerobic Fermentation","EM Bran","Sealed Bucket Method","Burying Pre-Compost","Bokashi Checkpoint"]],
+      [6,"Troubleshooting",["Smelly Pile","Slow Pile","Pests","Hot Spots","Troubleshooting Checkpoint"]],
+      [7,"Using Finished Compost",["Top Dressing","Compost Tea","Potting Mix Blend","Mulching","Application Checkpoint"]]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'composting-'+n, title: t, href: 'quiz.html?unit=' + u + '&lesson=' + (i + 1), unit: u, unitName: name, category: 'science', checkpoint: i===titles.length-1 });
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('composting');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('composting');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

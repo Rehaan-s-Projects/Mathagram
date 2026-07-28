@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git &amp; Version Control — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Git &amp; Version Control</h1>
+    <p>Master Git — commits, branches, merging, rebasing, remotes, pull requests, conflict resolution, history rewriting, workflows, GitHub, and team collaboration. 381 lessons across 26 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Version Control','What Is Git?','Git vs Other VCS','Installing Git','Configuring Git — user.name & email','The Terminal Basics','git --version','Git GUIs Overview','How Git Thinks — Snapshots','The Three Areas','Online Sandboxes','Getting Help — git help','First Repository','Foundations Checkpoint','Foundations Review']],
+      [2,'Your First Repository',['git init','The .git Folder','Working Directory','Staging Area','git status','git add','git add Patterns','git commit','Commit Messages','git log','Viewing a Commit','Removing Files — git rm','Moving Files — git mv','Ignoring Files — .gitignore','First Repo Checkpoint']],
+      [3,'Commits in Depth',['What Is a Commit?','Commit Hashes (SHA)','The HEAD Pointer','Parent Commits','Author vs Committer','Atomic Commits','Writing Good Messages','Conventional Commits','Amending Commits','Empty Commits','Signing Commits (GPG)','Commit Best Practices','Inspecting with git show','git log Formatting','Commits Checkpoint']],
+      [4,'Branching',['What Is a Branch?','Creating Branches','Switching — git switch','git checkout (Legacy)','Listing Branches','Renaming Branches','Deleting Branches','Branches as Pointers','HEAD & Detached HEAD','Fast-Forward','Branch Naming Conventions','Visualizing Branches','Branch Strategy Intro','Common Branch Mistakes','Branching Checkpoint']],
+      [5,'Merging',['What Is a Merge?','Fast-Forward Merge','Three-Way Merge','git merge','Merge Commits','No-Fast-Forward Merges','Aborting a Merge','Merge vs Rebase Preview','Merging Strategy','Squash Merges','Octopus Merges','Reading Merge History','Common Merge Mistakes','Merge Best Practices','Merging Checkpoint']],
+      [6,'Merge Conflicts',['Why Conflicts Happen','Anatomy of a Conflict','Conflict Markers','Resolving Conflicts Manually','Choosing Ours or Theirs','Merge Tools','git mergetool','Aborting During a Conflict','Conflicts in Rebase','Preventing Conflicts','Communicating with Your Team','Re-resolving with rerere','Practice Conflict 1','Practice Conflict 2','Conflicts Checkpoint']],
+      [7,'Undoing Changes',['Discarding Working Changes','Unstaging Files','git restore','git reset --soft','git reset --mixed','git reset --hard','git revert','Reset vs Revert vs Checkout','Recovering Lost Work','git reflog','Cleaning Untracked Files','Amending vs Reverting','Safe Undo Practices','Undo Cheat Sheet','Undoing Checkpoint']],
+      [8,'Inspecting History',['git log Deep Dive','Filtering Commits','git log --graph','git diff','Diff Between Commits','Diff Between Branches','git show','git blame','Finding Bugs — git bisect','Searching History — git log -S','git shortlog','Comparing Files','Tagged Versions','History Best Practices','History Checkpoint']],
+      [9,'Remotes',['What Is a Remote?','git remote','Adding Remotes','origin Convention','git clone','git fetch','git pull','git push','Tracking Branches','Upstream Branches','Pushing New Branches','Deleting Remote Branches','Multiple Remotes','Remote Pruning','Remotes Checkpoint']],
+      [10,'Working with GitHub',['What Is GitHub?','Creating a Repository','Cloning from GitHub','SSH vs HTTPS','SSH Key Setup','Personal Access Tokens','README & Repo Files','GitHub Issues','Labels & Milestones','GitHub Projects','Stars Forks & Watches','GitHub CLI — gh','GitHub Desktop','Repository Settings','GitHub Checkpoint']],
+      [11,'Pull Requests',['What Is a Pull Request?','Creating a PR','PR Descriptions','Requesting Reviews','Reviewing Code','Inline Comments','Approving & Requesting Changes','Resolving Review Threads','Draft PRs','Merging a PR','Merge vs Squash vs Rebase Merge','Linking Issues','PR Templates','PR Best Practices','Pull Requests Checkpoint']],
+      [12,'Forking Workflow',['What Is a Fork?','Forking a Repository','Cloning Your Fork','The upstream Remote','Syncing a Fork','Feature Branches on Forks','Opening PRs from Forks','Keeping in Sync','Contributing to Open Source','First-Time Contributor Tips','CONTRIBUTING.md','Code of Conduct','Handling Feedback','Fork Cleanup','Forking Checkpoint']],
+      [13,'Rebasing',['What Is Rebase?','git rebase','Rebase vs Merge','Linear History','Rebasing Onto a Branch','Continuing & Aborting','Resolving Conflicts in Rebase','The Golden Rule of Rebase','Pull with Rebase','Updating Feature Branches','When Not to Rebase','Force-Pushing After Rebase','Rebase Workflow','Common Rebase Mistakes','Rebasing Checkpoint']],
+      [14,'Interactive Rebase',['git rebase -i','pick','reword','edit','squash','fixup','drop','Reordering Commits','Splitting a Commit','Combining Commits','Cleaning Up Before a PR','autosquash','Editing Old Commits','Interactive Rebase Safety','Interactive Rebase Checkpoint']],
+      [15,'Stashing',['What Is the Stash?','git stash','git stash list','git stash pop','git stash apply','Stashing Untracked Files','Naming Stashes','Partial Stashing','git stash branch','Dropping Stashes','Clearing the Stash','Stash Use Cases','Stash vs Commit','Stash Best Practices','Stashing Checkpoint']],
+      [16,'Tags & Releases',['What Is a Tag?','Lightweight Tags','Annotated Tags','Tagging a Commit','Pushing Tags','Listing & Deleting Tags','Semantic Versioning','GitHub Releases','Release Notes','Changelogs','Pre-Releases','Release Automation','Tag Workflow','Versioning Strategy','Tags & Releases Checkpoint']],
+      [17,'Branching Strategies',['Why Strategy Matters','Git Flow','GitHub Flow','GitLab Flow','Trunk-Based Development','Release Branches','Hotfix Branches','Long-Lived vs Short-Lived Branches','Feature Flags vs Branches','Environment Branches','Choosing a Strategy','Branch Protection Rules','Naming Conventions','Team Agreements','Strategies Checkpoint']],
+      [18,'Collaboration Workflows',['Centralized Workflow','Feature Branch Workflow','Forking Workflow Recap','Code Review Culture','Keeping PRs Small','Continuous Integration Basics','Merge Queues','Pair & Mob Programming with Git','Handling Large Teams','Monorepos vs Polyrepos','Communication Norms','Avoiding Merge Hell','Onboarding New Devs','Workflow Trade-offs','Collaboration Checkpoint']],
+      [19,'GitHub Actions & CI',['What Is CI/CD?','GitHub Actions Overview','Workflow Files','Triggers — on','Jobs & Steps','Runners','Actions Marketplace','Running Tests on Push','Status Checks','Required Checks','Caching Dependencies','Matrix Builds','Secrets in Actions','Deploying with Actions','CI Checkpoint']],
+      [20,'Rewriting History',['Why Rewrite History?','Amending Recap','Interactive Rebase Recap','git filter-repo','Removing a File from History','Removing Secrets from History','Changing Author Info','Splitting a Repository','Joining Repositories','BFG Repo-Cleaner','Dangers of Rewriting','Coordinating with the Team','Recovering with reflog','History Rewrite Checklist','Rewriting Checkpoint']],
+      [21,'Advanced Git',['git cherry-pick','git worktree','Submodules','Subtrees','Sparse Checkout','Shallow Clones','git bisect Deep Dive','Hooks — Client-Side','Hooks — Server-Side','Aliases','git config Deep Dive','Attributes — .gitattributes','Large Files — Git LFS','Patches — format-patch & am','Advanced Git Checkpoint']],
+      [22,'Git Internals',['The Object Model','Blobs','Trees','Commit Objects','Tag Objects','References','The Index File','Packfiles','git cat-file','git hash-object','Garbage Collection','How Branches Really Work','How Merges Compute','Content-Addressable Storage','Internals Checkpoint']],
+      [23,'Troubleshooting',['Detached HEAD Recovery','Recovering Deleted Branches','Recovering Deleted Commits','Fixing a Bad Merge','Fixing a Bad Rebase','Undoing a Force Push','Resolving Push Rejections','Diagnosing Conflicts','Corrupted Repository','Line Ending Issues','Large Repository Cleanup','Authentication Problems','Diagnostic Commands','Asking for Help Effectively','Troubleshooting Checkpoint']],
+      [24,'Git Best Practices',['Commit Often, Push Regularly','Atomic Commits','Meaningful Messages','Keeping Branches Short-Lived','Reviewing Before Pushing','Protecting Main','Never Commit Secrets','Using .gitignore Well','Documenting Workflows','Consistent Conventions','Automating with Hooks','Backups & Mirrors','Security Practices','Team Etiquette','Best Practices Checkpoint']],
+      [25,'Projects & Mastery',['Set Up a New Project Repo','Simulate a Team Workflow','Resolve a Complex Conflict','Clean Up Messy History','Contribute to an Open-Source Repo','Build a CI Pipeline','Recover a Lost Branch','Bisect a Bug','Release with Tags','Migrate a Project to Git','Write Git Hooks','Audit a Repo for Secrets','Career & Resources','Final Review','Git Grand Mastery!']],
+      [26,'Git in the Real World',['Onboarding to a Repo','Reading Project History','Large-Scale Refactors','Release Engineering','Hotfix Under Pressure','Bisecting a Production Bug']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'git-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('git-version-control');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('git-version-control');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

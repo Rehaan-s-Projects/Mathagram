@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lighting — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 660px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-science)">Science</span>
+    <h1>Lighting</h1>
+    <p>💡 From photons to chandeliers — the physics of light AND the craft of lighting design. Reflection, refraction, diffraction, the EM spectrum, the human eye and color, incandescent &amp; fluorescent &amp; LED &amp; laser, photometry, stage &amp; film &amp; architectural lighting, smart lighting, light pollution, fiber optics, and the future of illumination.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, 'Foundations of Light',
+        ['What Is Light?', 'Wave–Particle Duality', 'Speed of Light (c)', 'Frequency, Wavelength & Energy', 'The Inverse-Square Law', 'Luminous Sources vs Illuminated Objects', 'Rays, Beams & Wavefronts', 'Shadows — Umbra & Penumbra', 'How We See Light (the Eye, Briefly)', 'Light vs Sound — Key Differences', 'Foundations Checkpoint']],
+      [2, 'The Electromagnetic Spectrum',
+        ['EM Spectrum Overview', 'Radio Waves', 'Microwaves', 'Infrared (IR)', 'Visible Light', 'Ultraviolet (UV)', 'X-Rays', 'Gamma Rays', 'Cosmic Background Radiation', 'Why "Visible" Light Is a Narrow Slice', 'EM Spectrum Checkpoint']],
+      [3, 'Reflection & Mirrors',
+        ['Law of Reflection', 'Specular vs Diffuse Reflection', 'Plane Mirrors — Image Formation', 'Concave (Converging) Mirrors', 'Convex (Diverging) Mirrors', 'Focal Length & Curvature', 'The Mirror Equation', 'Real vs Virtual Images', 'Magnification', 'Funhouse & Curved Reflectors', 'Reflection & Mirrors Checkpoint']],
+      [4, 'Refraction & Lenses',
+        ["Snell's Law", 'Index of Refraction', 'Total Internal Reflection', 'Critical Angle', 'Apparent Depth & Mirages', 'Convex (Converging) Lenses', 'Concave (Diverging) Lenses', 'The Thin-Lens Equation', 'Chromatic Aberration', 'Spherical Aberration', 'Prisms & White-Light Dispersion', 'Refraction Checkpoint']],
+      [5, 'Color & the Human Eye',
+        ['Newton & the Prism', 'Additive Color (RGB)', 'Subtractive Color (CMY)', 'Color Mixing in Light vs Pigment', 'The Human Eye — Anatomy', 'Rods, Cones & Trichromacy', 'Color Blindness', 'After-Images & Adaptation', 'Visible-Light Wavelengths in nm', 'Why the Sky Is Blue (Rayleigh)', 'Why Sunsets Are Red', 'Color & Vision Checkpoint']],
+      [6, 'Diffraction, Interference & Polarization',
+        ["Huygens' Principle", 'Single-Slit Diffraction', 'Double-Slit Interference (Young)', 'Diffraction Gratings', 'Thin-Film Interference (Soap, Oil)', 'Iridescence in Nature', 'Polarized Light Basics', 'Polarizing Filters', 'Brewster Angle', 'Liquid-Crystal Displays', 'Wave Phenomena Checkpoint']],
+      [7, 'The Photon — Quantum Light',
+        ["Planck's Quantum Hypothesis", 'Einstein & the Photoelectric Effect', 'Photon Energy E = hf', 'Wave–Particle Duality Revisited', 'Compton Scattering', 'Black-Body Radiation', "Wien's Displacement Law", 'Quantum vs Classical Light', 'Single-Photon Detectors', 'Quantum Entanglement (Brief Intro)', 'Quantum Light Checkpoint']],
+      [8, 'Natural Light Sources',
+        ['The Sun — Our Primary Source', 'Sunlight Composition', 'Daylight Across the Day', 'The Moon — Reflected Light', 'Stars & Stellar Classification', 'Aurora Borealis & Australis', 'Lightning — Atmospheric Discharge', 'Bioluminescence — Fireflies & Deep-Sea', 'Cherenkov Radiation', 'Sonoluminescence', 'Natural Light Checkpoint']],
+      [9, 'Fire & Incandescent Light',
+        ['Fire as a Chemical Reaction', 'Color Temperature of Flames', 'Candles — A 14,000-Year History', 'Whale-Oil & Gas Lamps', 'The Incandescent Bulb — Edison & Swan', 'Tungsten Filaments', 'Halogen Lamps', 'Color Rendering of Incandescent Light', 'Energy Inefficiency of Incandescent', 'Why Incandescent Bulbs Were Banned', 'Incandescent Light Checkpoint']],
+      [10, 'Fluorescent & Discharge Lamps',
+        ['Gas-Discharge Physics', 'Mercury-Vapor Lamps', 'Fluorescent Tubes — How Phosphor Works', 'Compact Fluorescent Lamps (CFL)', 'Neon Lights', 'Sodium-Vapor Lamps (the Orange Streetlight)', 'Metal-Halide Lamps', 'Black Lights & UV Fluorescence', 'Mercury Disposal & Hazards', 'Fluorescent Color Rendering', 'Discharge Lamps Checkpoint']],
+      [11, 'LEDs — Solid-State Lighting',
+        ['Semiconductors & PN Junctions', 'Electroluminescence', 'Red LEDs (the First Ones)', 'The Blue-LED Revolution (Nobel 2014)', 'Phosphor-Converted White LEDs', 'RGB LEDs & Color Mixing', 'LED Drivers & Current Regulation', 'LED Efficacy (lm/W)', 'LED Color Temperature Tuning', 'LED Dimming — PWM', 'LED Lifespan & Failure Modes', 'OLEDs — Organic LEDs', 'Micro-LED Displays', 'LEDs Checkpoint']],
+      [12, 'Lasers — Coherent Light',
+        ['Stimulated Emission', 'Population Inversion', 'Laser Cavity & Mirrors', 'Gas Lasers (HeNe, CO₂)', 'Solid-State Lasers (Ruby, Nd:YAG)', 'Semiconductor Lasers', 'Continuous-Wave vs Pulsed', 'Q-Switching & Mode-Locking', 'Laser Safety Classes', 'Laser Applications — Surgery, Cutting, Cinema', 'Lasers Checkpoint']],
+      [13, 'Photometry & Measurement',
+        ['Radiometry vs Photometry', 'Luminous Flux (Lumen)', 'Luminous Intensity (Candela)', 'Illuminance (Lux & Foot-Candle)', 'Luminance (cd/m²)', 'Color Temperature (Kelvin)', 'Color Rendering Index (CRI)', 'TM-30 — Modern Color Quality', 'Efficacy (Lumens per Watt)', 'Photometers & Lux Meters', 'IES Files & Photometric Diagrams', 'Photometry Checkpoint']],
+      [14, 'Interior & Architectural Lighting Design',
+        ['The Three Layers — Ambient, Task, Accent', 'Daylighting Strategies', 'Glare & Visual Comfort', 'Lighting Color Temperature by Room', 'Recessed, Pendant, Track & Cove', 'Wall Washers & Grazing', 'Kitchen Lighting Best Practices', 'Bathroom & Vanity Lighting', 'Living Room Layering', 'Lighting for Offices & WELL Standard', 'Hospitality & Restaurant Lighting', 'Museum & Gallery Lighting (UV Concerns)', 'Outdoor Architectural Lighting', 'Interior Design Checkpoint']],
+      [15, 'Stage, Film & Photography Lighting',
+        ['Three-Point Lighting (Key, Fill, Back)', 'Hard vs Soft Light', 'High-Key vs Low-Key', 'Spotlights, Fresnels & Ellipsoidals', 'Pars & Wash Lights', 'Moving Heads & Intelligent Fixtures', 'Gels & Color Mixing', 'Gobos & Patterns', 'DMX-512 Control', 'Cyclorama & Backdrop Lighting', 'Practicals on Set', 'HMI & Tungsten Cinema Lights', 'Lighting Diagrams', 'Cinematography & Mood', 'Stage & Film Checkpoint']],
+      [16, 'Smart Lighting & IoT',
+        ['Dimmable LEDs & Phase Control', 'Smart Bulbs — Wi-Fi, Zigbee, Matter', 'Color-Changing Tunable White', 'Hue, LIFX & WLED Ecosystems', 'Lighting Automation Scenes', 'Circadian Lighting', 'Daylight Harvesting', 'Occupancy & Vacancy Sensors', 'Voice Control — Alexa, Google, Siri', 'DALI for Commercial Spaces', 'Smart Lighting Checkpoint']],
+      [17, 'Light Pollution & Dark Skies',
+        ['What Is Light Pollution?', 'Sky Glow, Glare & Light Trespass', 'Effects on Astronomy', 'Effects on Wildlife — Birds, Turtles, Insects', 'Effects on Human Circadian Rhythm', 'The Bortle Scale', 'Dark Sky Reserves & Parks', 'Full Cutoff Fixtures', 'Color Temperature & Wildlife', 'International Dark-Sky Association', 'Dark Skies Checkpoint']],
+      [18, 'Light in Medicine & Biology',
+        ['Photosynthesis — Powering Life', 'Vitamin D & UV Sunlight', 'Phototherapy — Bilirubin in Newborns', 'Seasonal Affective Disorder (SAD) Lamps', 'Lasers in Surgery', 'Endoscopy & Fiber Optics in Medicine', 'Photodynamic Therapy', 'Optogenetics', 'X-Rays in Imaging', 'PET & SPECT Imaging', 'Medicine & Biology Checkpoint']],
+      [19, 'Optical Technology',
+        ['Telescopes — Refracting vs Reflecting', 'The Hubble & James Webb Space Telescopes', 'Microscopes — Optical & Electron', 'Cameras — From Pinhole to Mirrorless', 'Image Sensors — CCD & CMOS', 'Fiber Optics — Total Internal Reflection at Work', 'Holography', 'Optical Coatings & Anti-Reflection', 'Adaptive Optics', 'Spectroscopy', 'Quantum Optics & Photonics', 'Optical Tech Checkpoint']],
+      [20, 'Mastery — Lighting Across History & Future',
+        ['Pre-Electric Lighting — Fire, Oil, Gas', 'The Electric-Light Revolution', "Edison vs Tesla — The Light Bulb's Politics", 'World Wars & Blackout Culture', 'Neon & 20th-Century Cities', 'The LED Era (2000s–today)', 'OLED Walls & Flexible Displays', 'Li-Fi — Data Through Light', 'Quantum-Dot Lighting', 'Sustainable & Net-Zero Lighting', 'Designing for the Next 100 Years', 'Lighting Grand Mastery!']]
+    ];
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({
+          id: 'light-' + n,
+          title: t,
+          href: '#',
+          unit: u,
+          unitName: name,
+          category: 'science',
+          checkpoint: i === titles.length - 1
+        });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('lighting');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('lighting');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /profile.html
+Disallow: /school-google.html
+Disallow: /school-account.html
+Disallow: /banned.html
+Disallow: /violation.html
+
+Sitemap: https://mathagram.org/sitemap.xml

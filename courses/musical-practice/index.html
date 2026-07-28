@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musical Practice — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+
+    /* Full 88-key interactive piano widget in the course header */
+    .piano-section { max-width: 1280px; margin: 28px auto 8px; padding: 0 16px; text-align: center; }
+    .piano-section .now-playing {
+      display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: #92400e;
+      background: #fef3c7; border-radius: 999px; margin-bottom: 10px; min-width: 110px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .piano-section .now-playing.playing { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b1b; }
+    .home-piano-scroll {
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #1f2937, #111827);
+      border: 1px solid rgba(0,0,0,0.15);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+      padding: 14px 12px 18px;
+      scrollbar-color: #475569 transparent;
+    }
+    .home-piano-scroll::-webkit-scrollbar { height: 10px; }
+    .home-piano-scroll::-webkit-scrollbar-track { background: transparent; }
+    .home-piano-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 999px; }
+    .home-piano {
+      position: relative; user-select: none;
+      display: inline-block; min-width: max-content;
+    }
+    .home-piano .white-keys { display: flex; gap: 2px; position: relative; }
+    .home-piano .white-key {
+      flex: 0 0 auto; width: 30px; height: 150px;
+      background: linear-gradient(180deg, #fafafa, #e5e7eb);
+      border: 1px solid #cbd5e1; border-bottom: 4px solid #94a3b8;
+      border-radius: 0 0 8px 8px; cursor: pointer; position: relative;
+      transition: transform 0.05s, background 0.1s;
+      display: flex; align-items: flex-end; justify-content: center;
+      font-family: 'SF Mono', monospace; font-size: 0.62rem;
+      color: #64748b; font-weight: 700; padding-bottom: 6px;
+    }
+    .home-piano .white-key:active, .home-piano .white-key.active {
+      background: linear-gradient(180deg, #fef3c7, #fde68a); transform: translateY(2px); border-bottom-width: 2px;
+    }
+    .home-piano .white-key.lit { background: linear-gradient(180deg, #fef08a, #f59e0b); box-shadow: 0 0 24px rgba(245,158,11,0.6); z-index: 2; }
+    .home-piano .white-key.middle-c {
+      background: linear-gradient(180deg, #fef9c3, #fef08a);
+      border-bottom-color: #f59e0b;
+    }
+    .home-piano .white-key.middle-c::after {
+      content: 'Middle C'; position: absolute; top: 6px; left: 50%; transform: translateX(-50%) rotate(-90deg);
+      transform-origin: center;
+      font-size: 0.52rem; font-weight: 800; color: #92400e; letter-spacing: 0.04em;
+      background: rgba(254,243,199,0.92); padding: 2px 6px; border-radius: 999px;
+      white-space: nowrap;
+    }
+    .home-piano .black-keys { position: absolute; top: 0; left: 0; height: 92px; pointer-events: none; }
+    .home-piano .black-key {
+      position: absolute; top: 0; width: 18px; height: 100%;
+      background: linear-gradient(180deg, #1f2937, #0f172a);
+      border: 1px solid #000; border-radius: 0 0 5px 5px;
+      cursor: pointer; pointer-events: auto; transition: transform 0.05s, background 0.1s;
+    }
+    .home-piano .black-key:active, .home-piano .black-key.active {
+      background: linear-gradient(180deg, #4c1d95, #1e1b4b); transform: translateY(2px);
+    }
+    .home-piano .black-key.lit { background: linear-gradient(180deg, #fbbf24, #ea580c); box-shadow: 0 0 18px rgba(245,158,11,0.6); z-index: 3; }
+    .piano-hint { font-size: 0.82rem; color: var(--color-text-muted, #94a3b8); margin-top: 10px; }
+    .piano-hint kbd { display: inline-block; padding: 2px 6px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 0.78rem; color: #475569; }
+    @media (max-width: 540px) {
+      .home-piano .white-key { height: 120px; width: 24px; font-size: 0.56rem; padding-bottom: 4px; }
+      .home-piano .black-keys { height: 76px; }
+      .home-piano .black-key { width: 14px; }
+      .home-piano .white-key.middle-c::after { font-size: 0.46rem; padding: 1px 4px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-music)">Music</span>
+    <h1>Musical Practice</h1>
+    <p>🎵 Learn music the Duolingo Music way. Start with <strong>Unit 1: Basics Piano</strong> — find middle C, white &amp; black keys, finger numbers, posture, dynamics, intervals, the C major 5-finger position, and reading the treble &amp; bass clefs. Then each song is its own unit; lessons walk you through the melody phrase by phrase, teach the notes on the staff, drill the rhythm, then build to a full performance. From "Twinkle, Twinkle Little Star" to "Clair de Lune", "Bohemian Rhapsody", "Vivir Mi Vida", "Despacito", "Bésame Mucho", "Gasolina", "Mi Gente", "Tusa", "Chan Chan", "Corazón Partío" and dozens more. 1 basics unit + 600 songs across 60+ cultures and every continent — 6 lessons per unit · 3,606 lessons.</p>
+  </header>
+
+  <section class="piano-section" aria-label="Interactive piano keyboard">
+    <div class="now-playing" id="home-now-playing">🎹 Click any key</div>
+    <div class="home-piano-scroll" id="home-piano-scroll">
+      <div class="home-piano" id="home-piano">
+        <div class="white-keys" id="home-white-keys"></div>
+        <div class="black-keys" id="home-black-keys"></div>
+      </div>
+    </div>
+    <p class="piano-hint">A full <strong>88-key piano</strong> — tap or click any key to hear it. <strong>Middle C</strong> is marked in the middle. Scroll the keyboard left/right to reach the lowest notes (A0) or the highest (C8).</p>
+  </section>
+
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 🎵 Each "unit" is a SONG (Duolingo Music style).
+    // Lessons inside a song teach it phrase by phrase, then rhythm, then the full piece.
+    const songs = [
+      // Beginner kids' songs (21)
+      "Twinkle, Twinkle, Little Star","Mary Had a Little Lamb","Hot Cross Buns","Old MacDonald Had a Farm","Row, Row, Row Your Boat","Itsy Bitsy Spider","London Bridge Is Falling Down","The Wheels on the Bus","Frère Jacques","Three Blind Mice","Are You Sleeping (Brother John)","B-I-N-G-O","If You're Happy and You Know It","Head, Shoulders, Knees and Toes","Yankee Doodle","ABC Song","This Old Man","Pop Goes the Weasel","Eensy Weensy Spider","Rain, Rain, Go Away","Finger Family — Daddy Finger",
+
+      // Holiday & seasonal (10)
+      "Jingle Bells","Silent Night","Deck the Halls","We Wish You a Merry Christmas","The First Noel","O Christmas Tree","Joy to the World","Hark! The Herald Angels Sing","Auld Lang Syne","The Twelve Days of Christmas",
+
+      // Classical beginner pieces (20)
+      "Ode to Joy — Beethoven","Für Elise — Beethoven","Minuet in G — Bach","Canon in D — Pachelbel","Eine kleine Nachtmusik — Mozart","Pomp and Circumstance — Elgar","Wedding March — Mendelssohn","The Entertainer — Joplin","Maple Leaf Rag — Joplin","The Swan — Saint-Saëns","Habanera (from Carmen) — Bizet","Blue Danube — Strauss","Hungarian Dance No. 5 — Brahms","Prelude in C — Bach","Greensleeves","William Tell Overture — Rossini","Flight of the Bumblebee — Rimsky-Korsakov","Toccata in D Minor — Bach","Clair de Lune — Debussy","Rondo Alla Turca — Mozart",
+
+      // Hymns & spirituals (5)
+      "Amazing Grace","When the Saints Go Marching In","Swing Low, Sweet Chariot","Go Tell It on the Mountain","Down by the Riverside",
+
+      // Folk & traditional (10) + Charlie Brown theme inserted at Unit 61
+      "Oh! Susanna","Camptown Races","Home on the Range",
+      // 🎵 Charlie Brown / Peanuts theme — Unit 61
+      "Linus and Lucy — Charlie Brown Theme (Vince Guaraldi)",
+      "Loch Lomond","Danny Boy","Scarborough Fair","House of the Rising Sun","Drunken Sailor","My Bonnie Lies Over the Ocean","Shenandoah",
+
+      // Movie & TV themes (10)
+      "Let It Go — Frozen","Star Wars Main Theme","Imperial March — Star Wars","Game of Thrones Theme","Hedwig's Theme — Harry Potter","He's a Pirate — Pirates of the Caribbean","Jurassic Park Theme","James Bond Theme","Mission: Impossible Theme","Circle of Life — The Lion King",
+
+      // Patriotic & national (4)
+      "Star-Spangled Banner","America the Beautiful","God Save the King","La Marseillaise",
+
+      // Birthday & misc (3)
+      "Happy Birthday to You","For He's a Jolly Good Fellow","The Hokey Pokey",
+
+      // Lullabies (3)
+      "Brahms' Lullaby","Rock-a-Bye Baby","Hush, Little Baby",
+
+      // Pop & rock landmarks (7)
+      "Imagine — John Lennon","Hey Jude — The Beatles","Let It Be — The Beatles","Yesterday — The Beatles","Bohemian Rhapsody — Queen","Stairway to Heaven — Led Zeppelin","Hotel California — Eagles",
+
+      // Jazz standards (5)
+      "Autumn Leaves","Take Five","Summertime — Gershwin","Fly Me to the Moon","The Girl from Ipanema",
+
+      // Popular Spanish-language songs (30)
+      "Vivir Mi Vida — Marc Anthony",
+      "Despacito — Luis Fonsi & Daddy Yankee",
+      "Bailando — Enrique Iglesias",
+      "La Bamba — Ritchie Valens",
+      "Macarena — Los del Río",
+      "Oye Como Va — Santana",
+      "Bésame Mucho — Consuelo Velázquez",
+      "Cielito Lindo — Traditional",
+      "La Cucaracha — Traditional",
+      "Guantanamera — Traditional Cuban",
+      "Bamboléo — Gipsy Kings",
+      "Suavemente — Elvis Crespo",
+      "Livin' la Vida Loca — Ricky Martin",
+      "Hijo de la Luna — Mecano",
+      "La Vida Es un Carnaval — Celia Cruz",
+      "Burbujas de Amor — Juan Luis Guerra",
+      "Eres Tú — Mocedades",
+      "Como la Flor — Selena",
+      "Bidi Bidi Bom Bom — Selena",
+      "Amor Eterno — Rocío Dúrcal",
+      "El Rey — Vicente Fernández",
+      "Volver, Volver — Vicente Fernández",
+      "Quizás, Quizás, Quizás — Osvaldo Farrés",
+      "La Tortura — Shakira",
+      "Waka Waka — Shakira",
+      "Bachata Rosa — Juan Luis Guerra",
+      "La Camisa Negra — Juanes",
+      "Color Esperanza — Diego Torres",
+      "Las Mañanitas — Traditional",
+      "Feliz Navidad — José Feliciano",
+
+      // More popular Spanish-language songs (35)
+      "Gasolina — Daddy Yankee",
+      "Mi Gente — J Balvin & Willy William",
+      "Hawái — Maluma",
+      "Tusa — Karol G ft. Nicki Minaj",
+      "Calma — Pedro Capó & Farruko",
+      "Felices los 4 — Maluma",
+      "La Bicicleta — Carlos Vives & Shakira",
+      "La Gozadera — Gente de Zona ft. Marc Anthony",
+      "Súbeme la Radio — Enrique Iglesias",
+      "Loco — Enrique Iglesias ft. Romeo Santos",
+      "Mayores — Becky G & Bad Bunny",
+      "Sin Pijama — Becky G & Natti Natasha",
+      "Provenza — Karol G",
+      "La Bilirrubina — Juan Luis Guerra",
+      "Ojalá Que Llueva Café — Juan Luis Guerra",
+      "La Llorona — Traditional Mexican",
+      "Te Amo — Franco De Vita",
+      "Limón y Sal — Julieta Venegas",
+      "Si No Te Hubieras Ido — Marco Antonio Solís",
+      "La Pollera Colorá — Wilson Choperena",
+      "Me Gustas Tú — Manu Chao",
+      "Clandestino — Manu Chao",
+      "La Negra Tomasa — Compay Segundo",
+      "Chan Chan — Compay Segundo",
+      "Dos Gardenias — Antonio Machín",
+      "La Gota Fría — Carlos Vives",
+      "Eres — Café Tacvba",
+      "Oye Mi Amor — Maná",
+      "Rayando el Sol — Maná",
+      "Me Voy — Julieta Venegas",
+      "La Flaca — Jarabe de Palo",
+      "Si Tú No Estás Aquí — Rosana",
+      "Corazón Partío — Alejandro Sanz",
+      "Amor Prohibido — Selena",
+      "Me Enamoré — Shakira",
+
+      // 🌍 ─────────────────────────────────────────────────────────────────────
+      // SONGS FROM AROUND THE WORLD — every continent, dozens of cultures.
+      // Each entry becomes its own unit with the same 15-lesson template.
+      // ───────────────────────────────────────────────────────────────────────
+
+      // 🇫🇷 French / Francophone (15)
+      "La Vie en Rose — Édith Piaf","Non, Je Ne Regrette Rien — Édith Piaf","Sous le Ciel de Paris — Édith Piaf","Hymne à l'Amour — Édith Piaf","Aux Champs-Élysées — Joe Dassin","Et Si Tu N'existais Pas — Joe Dassin","Tous les Garçons et les Filles — Françoise Hardy","La Mer — Charles Trenet","Comme d'Habitude — Claude François","Voyage Voyage — Desireless","Joe le Taxi — Vanessa Paradis","Pour Que Tu M'aimes Encore — Céline Dion","Alouette — Traditional","Au Clair de la Lune — Traditional","Sur le Pont d'Avignon — Traditional",
+
+      // 🇮🇹 Italian (12)
+      "O Sole Mio — Eduardo di Capua","Volare — Domenico Modugno","Funiculì, Funiculà — Luigi Denza","Tu Vuò Fà l'Americano — Renato Carosone","Bella Ciao — Traditional","Santa Lucia — Traditional","La Donna È Mobile — Verdi","Nessun Dorma — Puccini","Caruso — Lucio Dalla","Con Te Partirò — Andrea Bocelli","L'Italiano — Toto Cutugno","Tarantella Napoletana — Traditional",
+
+      // 🇩🇪 German / Austrian (12)
+      "99 Luftballons — Nena","Lili Marleen — Lale Andersen","Über den Wolken — Reinhard Mey","Atemlos Durch die Nacht — Helene Fischer","Major Tom — Peter Schilling","Hänschen Klein — Traditional","Alle Meine Entchen — Traditional","Edelweiss — Rodgers & Hammerstein","Stille Nacht — Franz Gruber","Du Hast — Rammstein","Schwarzbraun ist die Haselnuss — Traditional","Die Gedanken Sind Frei — Traditional",
+
+      // 🇵🇹 Portuguese / Brazilian (15)
+      "Garota de Ipanema — Tom Jobim","Águas de Março — Tom Jobim","Mas Que Nada — Sergio Mendes","Chega de Saudade — Tom Jobim","Asa Branca — Luiz Gonzaga","Aquarela do Brasil — Ary Barroso","Lambada — Kaoma","Tristeza — Haroldo Lobo","Uma Casa Portuguesa — Amália Rodrigues","Lágrima — Amália Rodrigues","Magalenha — Sergio Mendes","Construção — Chico Buarque","Mas Que Nada (Reprise) — Jorge Ben Jor","Ipanema Beach Suite — Traditional Bossa Nova","Saudade — Traditional Fado",
+
+      // 🇷🇺 Russian (10)
+      "Katyusha — Matvey Blanter","Kalinka — Ivan Larionov","Korobeiniki — Traditional","Moscow Nights — Vasily Solovyov-Sedoi","Black Eyes (Ochi Chyornye) — Traditional","Polyushko Polye — Lev Knipper","Vladimirskii Tsentral — Mikhail Krug","Belovezhskaya Pushcha — Traditional","Cossack Lullaby — Mikhail Lermontov","Beriozka — Traditional",
+
+      // 🇬🇷 Greek (8)
+      "Zorba's Dance — Mikis Theodorakis","Misirlou — Traditional","Never on Sunday — Manos Hatzidakis","Children of Piraeus — Manos Hatzidakis","Sirtaki — Mikis Theodorakis","Ena Vrady — Stelios Kazantzidis","Theos San Ki Esena — Pyx Lax","Tha Spaso Koupes — Traditional Rebetiko",
+
+      // 🇵🇱 Polish (6)
+      "Hej Sokoły — Traditional","Szła Dzieweczka — Traditional","Mazurek Dąbrowskiego — Polish Anthem","Sto Lat — Traditional","Krakowiaczek — Traditional","Kukułeczka — Traditional",
+
+      // 🇨🇿 Czech (4)
+      "Škoda Lásky (Beer Barrel Polka) — Jaromír Vejvoda","Holka Modrooká — Traditional","Kde Domov Můj — Czech Anthem","Ach Synku, Synku — Traditional",
+
+      // 🇭🇺 Hungarian (5)
+      "Hungarian Rhapsody No. 2 — Franz Liszt","Czárdás — Vittorio Monti","Tavaszi Szél — Traditional","Erdő, Erdő, Erdő — Traditional","Boci Boci Tarka — Traditional",
+
+      // 🇷🇴 Romanian (4)
+      "Dragostea Din Tei — O-Zone","Hora Staccato — Grigoraș Dinicu","Ciocârlia — Traditional","Sârba Pe Loc — Traditional",
+
+      // 🇧🇬 Bulgarian (3)
+      "Izlel Ye Delyo Haydutin — Traditional","Yovo Malka Moma — Traditional","Dilmano Dilbero — Traditional",
+
+      // 🇸🇪 Nordic — Swedish, Norwegian, Finnish, Danish (15)
+      "Mamma Mia — ABBA","Dancing Queen — ABBA","Waterloo — ABBA","The Winner Takes It All — ABBA","Take On Me — a-ha","Helan Går — Traditional Swedish","Idas Sommarvisa — Astrid Lindgren","Pippi Longstocking Theme — Traditional Swedish","Säkkijärven Polkka — Traditional Finnish","Finlandia — Sibelius","Den Glade Vandrer — Traditional Danish","Per Spelmann — Traditional Norwegian","Lille Måltrost — Traditional Norwegian","I Skogen Skall Vi Bo — Traditional Swedish","Jeg Er Hawaiimand — Traditional Danish",
+
+      // 🇳🇱 Dutch / Belgian (5)
+      "Tulpen uit Amsterdam — Herman Emmink","Het Dorp — Wim Sonneveld","Hand in Hand — André Hazes","Ne Me Quitte Pas — Jacques Brel","Mijn Vlakke Land — Jacques Brel",
+
+      // 🇹🇷 Turkish (8)
+      "Üsküdar'a Gider İken — Traditional","Çanakkale Türküsü — Traditional","Şımarık — Tarkan","Sevenler Ağlarmış — Sezen Aksu","Kuzu Kuzu — Tarkan","Eyvallah — Athena","Karayel — Traditional","Beni Aşka İnandır — Sertab Erener",
+
+      // 🇸🇦 Arabic / Middle Eastern (12)
+      "Habibi Ya Nour El Ain — Amr Diab","Tamally Maak — Amr Diab","Ya Habibi Taala — Asmahan","Al Atlal — Umm Kulthum","Inta Omri — Umm Kulthum","Daret Al Ayam — Umm Kulthum","Ya Rayah — Dahmane El Harrachi","Aïcha — Khaled","Didi — Khaled","Lambada Arabic — Traditional","Ya Mustafa — Bob Azzam","Foug El Nakhal — Traditional Iraqi",
+
+      // 🇮🇱 Hebrew / Israeli (8)
+      "Hava Nagila — Traditional","Hevenu Shalom Aleichem — Traditional","Tum Balalaika — Traditional Yiddish","Hatikvah — Naphtali Herz Imber","Eli, Eli — Hannah Szenes","Jerusalem of Gold — Naomi Shemer","Bashana Haba'ah — Nurit Hirsh","Erev Shel Shoshanim — Yosef Hadar",
+
+      // 🇮🇷 Persian / Iranian (6)
+      "Soltane Ghalbha — Aref","Gole Yakh — Kourosh Yaghmaei","Mara Beboos — Heidar Reqabi","Niavaran — Traditional","Boro Boro — Arash","Jaaneman — Traditional",
+
+      // 🇮🇳 Indian / Bollywood (20)
+      "Jai Ho — A. R. Rahman","Lagaan Title Track — A. R. Rahman","Chaiyya Chaiyya — Sukhwinder Singh","Tum Hi Ho — Arijit Singh","Kal Ho Naa Ho — Sonu Nigam","Tujhe Dekha To — Lata Mangeshkar","Lag Ja Gale — Lata Mangeshkar","Pyar Hua Iqrar Hua — Lata Mangeshkar","Mere Sapno Ki Rani — Kishore Kumar","Roop Tera Mastana — Kishore Kumar","Yeh Dosti — R.D. Burman","Awara Hoon — Mukesh","Vande Mataram — Bankim Chandra","Saare Jahan Se Achcha — Iqbal","Aayega Aane Wala — Lata Mangeshkar","Dil Diwana — Lata Mangeshkar","Senorita — Farhan Akhtar","Mehndi Laga Ke Rakhna — Lata Mangeshkar","Sajda — Sukhwinder Singh & Richa Sharma","Tum Hi Ho Bandhu — Neeraj Shridhar",
+
+      // 🇵🇰 Pakistani / Urdu (6)
+      "Dil Dil Pakistan — Vital Signs","Sayonee — Junoon","Tajdar-e-Haram — Sabri Brothers","Afreen Afreen — Nusrat Fateh Ali Khan","Aankhon Ka Tara — Traditional","Lambi Judaai — Reshma",
+
+      // 🇧🇩 Bengali (5)
+      "Amar Sonar Bangla — Rabindranath Tagore","Ekla Cholo Re — Rabindranath Tagore","Tagore Geeti — Rabindranath Tagore","Krishnachura — Traditional","Mone Pore Ruby Roy — Tony Hoffman",
+
+      // 🇳🇵 Nepali (3)
+      "Resham Firiri — Traditional","Lakhe Dance Tune — Traditional","Phulko Aankhama — Traditional",
+
+      // 🇱🇰 Sri Lankan / Sinhala (3)
+      "Sri Lanka Matha — National Anthem","Kandyan Dance — Traditional","Surangani — Traditional",
+
+      // 🇨🇳 Mandarin / Chinese (12)
+      "The Moon Represents My Heart — Teresa Teng","Sweet Honey (Tian Mi Mi) — Teresa Teng","Mo Li Hua (Jasmine Flower) — Traditional","Liang Zhu (Butterfly Lovers) — He Zhanhao","Ye Lai Xiang — Li Xianglan","Qing Hua Ci — Jay Chou","Friends — Wakin Chau","Tonight Won't Cry — Andy Lau","Xiao Cheng Gu Shi — Teresa Teng","Gong Xi Gong Xi — Traditional Chinese New Year","Tian Mi Mi (Reprise) — Teresa Teng","Wo De Ge Sheng Li — Qu Wanting",
+
+      // 🇭🇰 Cantonese / Hong Kong (6)
+      "Below the Lion Rock — Roman Tam","Monica — Leslie Cheung","Wind Continues to Blow — Leslie Cheung","Wandering Songstress — Anita Mui","Kowloon Hong Kong — Reynaldo Hahn","Under Vermilion Skies — Sam Hui",
+
+      // 🇰🇷 K-Pop / Korean (15)
+      "Gangnam Style — PSY","Dynamite — BTS","Butter — BTS","Spring Day — BTS","Boy with Luv — BTS","How You Like That — BLACKPINK","Kill This Love — BLACKPINK","Lovesick Girls — BLACKPINK","Nobody — Wonder Girls","Sorry Sorry — Super Junior","Gee — Girls' Generation","Arirang — Traditional","Mountain Rabbit — Traditional Children's","Doraji — Traditional","Three Bears — Traditional Children's",
+
+      // 🇯🇵 Japanese / J-Pop / Enka (12)
+      "Sukiyaki (Ue o Muite Arukou) — Kyu Sakamoto","Sakura Sakura — Traditional","Furusato — Tatsuyuki Takano","Akatombo — Kosaku Yamada","Lemon — Kenshi Yonezu","Pretender — Official HIGE DANdism","Tsunami — Southern All Stars","First Love — Hikaru Utada","Linda Linda — The Blue Hearts","Subaru — Shinji Tanimura","Mata Au Hi Made — Kiyohiko Ozaki","Kimi No Na Wa Theme — RADWIMPS",
+
+      // 🇻🇳 Vietnamese (5)
+      "Diễm Xưa — Trịnh Công Sơn","Tiến Quân Ca — Văn Cao","Bèo Dạt Mây Trôi — Traditional","Lý Cây Đa — Traditional","Tình Yêu Mãi Đợi — Phạm Duy",
+
+      // 🇹🇭 Thai (5)
+      "Loy Krathong — Traditional","Ramwong Loy Krathong — Traditional","Sao Chao Rai — Traditional","Tahsanai — Thai Folk","Kong Krai Lae — Thai Folk",
+
+      // 🇮🇩 Indonesian / Malay (6)
+      "Bengawan Solo — Gesang Martohartono","Rasa Sayang — Traditional","Bagimu Negeri — Traditional","Halo Halo Bandung — Traditional","Burung Kakatua — Traditional","Rayuan Pulau Kelapa — Traditional",
+
+      // 🇵🇭 Filipino / Tagalog (6)
+      "Anak — Freddie Aguilar","Bayan Ko — José Corazón de Jesús","Magtanim Ay Di Biro — Traditional","Leron Leron Sinta — Traditional","Bahay Kubo — Traditional","Lupang Hinirang — Filipino Anthem",
+
+      // 🇲🇳 Mongolian / Tibetan (3)
+      "Long Song (Urtiin Duu) — Traditional Mongolian","Mongol Khuvi Tavilang — Traditional","Tibetan Throat Singing — Traditional",
+
+      // 🇪🇬 Egyptian (5)
+      "Salma Ya Salama — Dalida","Ahwak — Abdel Halim Hafez","Sawah — Abdel Halim Hafez","Kan Ya Makan — Abdel Halim Hafez","Ahla Eyoun — Mohamed Fouad",
+
+      // 🇲🇦 Moroccan / North African (3)
+      "Yamma Mwali El Ghozlane — Traditional Andalusi","Daoudi — Cheb Khaled","Hidi Hidi — Najat Aatabou",
+
+      // 🇸🇳 Senegalese (3)
+      "7 Seconds — Youssou N'Dour","Soldats — Youssou N'Dour","Birima — Youssou N'Dour",
+
+      // 🇳🇬 Nigerian / Afrobeats (8)
+      "Sweet Mother — Prince Nico Mbarga","Lady — Fela Kuti","Water No Get Enemy — Fela Kuti","Zombie — Fela Kuti","If — Davido","Ye! — Burna Boy","Last Last — Burna Boy","Essence — Wizkid",
+
+      // 🇰🇪 East African (5)
+      "Malaika — Fadhili William","Jambo Bwana — Them Mushrooms","Pole Pole — Traditional","Sukuma — Traditional","Songa Mbele — Traditional",
+
+      // 🇪🇹 Ethiopian (4)
+      "Tizita — Mahmoud Ahmed","Tezeta — Mulatu Astatke","Ene Negn Bay Manesh — Mahmoud Ahmed","Yene Habesha Konjo — Aster Aweke",
+
+      // 🇿🇦 South African (8)
+      "Click Song (Qongqothwane) — Miriam Makeba","Pata Pata — Miriam Makeba","Mbube (Lion Sleeps Tonight) — Solomon Linda","Wimoweh — Solomon Linda","Shosholoza — Traditional","Asimbonanga — Johnny Clegg","Stimela — Hugh Masekela","Bring Him Back Home — Hugh Masekela",
+
+      // 🇲🇽 Mexican Mariachi / Ranchera (8)
+      "Mexico Lindo y Querido — Jorge Negrete","Si Nos Dejan — José Alfredo Jiménez","La Charreada — Traditional","Cucurrucucú Paloma — Tomás Méndez","Allá en el Rancho Grande — Silvano Ramos","El Mariachi Loco — Traditional","Las Mañanitas (Mariachi Version) — Traditional","Hermoso Cariño — Vicente Fernández",
+
+      // 🇦🇷 Argentine Tango (6)
+      "La Cumparsita — Gerardo Matos Rodríguez","El Choclo — Ángel Villoldo","Por Una Cabeza — Carlos Gardel","Adiós Muchachos — Sanders & Vedani","Caminito — Juan de Dios Filiberto","Volver — Carlos Gardel",
+
+      // 🇨🇴 Colombian Cumbia (5)
+      "Cumbia del Caribe — Lucho Bermúdez","Yo Me Llamo Cumbia — Mario Gareña","Soy Colombiano — Rafael Godoy","La Múcura — Antonio Fuentes","Las Cuatro Estaciones del Carnaval — Joe Arroyo",
+
+      // 🇵🇪 Andean / Peruvian (4)
+      "El Cóndor Pasa — Daniel Alomía Robles","Valicha — Miguel Ángel Hurtado","Vasija de Barro — Traditional Andean","Yaraví — Traditional Quechua",
+
+      // 🇨🇱 Chilean (3)
+      "Gracias a la Vida — Violeta Parra","Volver a los Diecisiete — Violeta Parra","El Pueblo Unido — Quilapayún",
+
+      // 🇨🇺 Cuban (5)
+      "La Bayamesa — Pedro Figueredo","El Manisero — Moisés Simons","Lágrimas Negras — Miguel Matamoros","Hasta Siempre Comandante — Carlos Puebla","Yolanda — Pablo Milanés",
+
+      // 🇩🇴 Dominican (5)
+      "Compadre Pedro Juan — Luis Alberti","Mi Niña Veneno — Wilfrido Vargas","La Cosquillita — Juan Luis Guerra","El Niágara en Bicicleta — Juan Luis Guerra","Bandida — Juan Luis Guerra",
+
+      // 🇯🇲 Jamaican Reggae (10)
+      "No Woman No Cry — Bob Marley","One Love — Bob Marley","Three Little Birds — Bob Marley","Redemption Song — Bob Marley","Buffalo Soldier — Bob Marley","Get Up, Stand Up — Bob Marley","Stir It Up — Bob Marley","Could You Be Loved — Bob Marley","Is This Love — Bob Marley","I Shot the Sheriff — Bob Marley",
+
+      // 🇹🇹 Trinidadian Calypso & Soca (4)
+      "Yellow Bird — Norman Luboff","Day-O (Banana Boat Song) — Harry Belafonte","Hot Hot Hot — Arrow","Soca Tribe — Traditional",
+
+      // 🇮🇪 Irish (10)
+      "Whiskey in the Jar — Traditional","Wild Rover — Traditional","The Fields of Athenry — Pete St. John","Dirty Old Town — Ewan MacColl","Galway Girl — Steve Earle","Molly Malone — Traditional","The Foggy Dew — Traditional","Auld Triangle — Brendan Behan","The Parting Glass — Traditional","Carrickfergus — Traditional",
+
+      // 🏴 Scottish (6)
+      "Scotland the Brave — Traditional","Flower of Scotland — Roy Williamson","Highland Cathedral — Roever / Korb","Skye Boat Song — Traditional","Caledonia — Dougie MacLean","Auld Lang Syne (Scottish) — Robert Burns",
+
+      // 🏴 Welsh (3)
+      "Hen Wlad Fy Nhadau — Evan James","Calon Lân — John Hughes","Suo Gân — Traditional Welsh",
+
+      // 🇦🇺 Australian (5)
+      "Waltzing Matilda — Banjo Paterson","Click Go the Shears — Traditional","Down Under — Men at Work","I Am Australian — Bruce Woodley","Tie Me Kangaroo Down Sport — Rolf Harris",
+
+      // 🇳🇿 Maori / New Zealand (3)
+      "Pokarekare Ana — Traditional Maori","Tutira Mai Nga Iwi — Traditional Maori","Now Is the Hour — Maewa Kaihau",
+
+      // 🌺 Hawaiian (6)
+      "Aloha 'Oe — Queen Lili'uokalani","Hawai'i Pono'ī — Henri Berger","Tiny Bubbles — Don Ho","Hawaiian Wedding Song — Charles E. King","Pearly Shells — Webley Edwards","Somewhere Over the Rainbow — Israel Kamakawiwo'ole",
+
+      // 🦅 Indigenous North American (3)
+      "Eagle Dance — Traditional","Round Dance Song — Traditional","Honor Song — Traditional",
+
+      // 🎬 Disney (12)
+      "A Whole New World — Aladdin","Beauty and the Beast — Beauty and the Beast","Under the Sea — Little Mermaid","Part of Your World — Little Mermaid","When You Wish Upon a Star — Pinocchio","Hakuna Matata — Lion King","Can You Feel the Love Tonight — Lion King","Colors of the Wind — Pocahontas","Reflection — Mulan","How Far I'll Go — Moana","Do You Want to Build a Snowman — Frozen","We Don't Talk About Bruno — Encanto",
+
+      // 🎭 Broadway / Musicals (10)
+      "Memory — Cats","Don't Cry for Me Argentina — Evita","Music of the Night — Phantom of the Opera","Tomorrow — Annie","Defying Gravity — Wicked","Popular — Wicked","I Dreamed a Dream — Les Misérables","One Day More — Les Misérables","Tradition — Fiddler on the Roof","Cabaret — Cabaret",
+
+      // 🌸 Anime Themes (6)
+      "Cruel Angel's Thesis — Neon Genesis Evangelion","We Are! — One Piece","Tank! — Cowboy Bebop","Pokémon Theme — Pokémon","Dragon Ball Z Theme — Dragon Ball Z","Sailor Moon Theme — Sailor Moon",
+
+      // 🎮 Video Game Themes (8)
+      "Super Mario Bros. Theme — Koji Kondo","The Legend of Zelda Theme — Koji Kondo","Megalovania — Toby Fox","To Zanarkand — Final Fantasy X","Halo Theme — Halo","Bloody Tears — Castlevania","Green Hill Zone — Sonic the Hedgehog","Pokémon Center Theme — Junichi Masuda",
+
+      // 🌙 World Lullabies (10)
+      "Schlaf, Kindlein, Schlaf — German Lullaby","Ninna Nanna — Italian Lullaby","Dodo l'Enfant Do — French Lullaby","A la Nanita Nana — Spanish Lullaby","Bayushki Bayu — Russian Lullaby","Edelweiss Lullaby — Swiss-German Traditional","Asadoya Yunta — Okinawan Lullaby","Tula Tu Hijo Hermoso — Argentine Lullaby","Olho Aberto — Brazilian Lullaby","Hush Little Baby (Variation) — Traditional African American",
+
+      // 👶 Children's Songs From Around the World (10)
+      "Aram Sam Sam — Moroccan Children's","Boom Chika Boom — American Camp","Kumbaya — Traditional Spiritual","Skinnamarink — Sharon Lois & Bram","There's a Hole in My Bucket — Traditional","Ten in the Bed — Traditional","The Muffin Man — Traditional","Five Little Monkeys — Traditional Counting","Baa Baa Black Sheep — Traditional","Penny in My Pocket — Traditional",
+
+      // Recital sets / mastery (3)
+      "Recital Set: Beginner","Recital Set: Intermediate","Grand Performance — Songbook Mastery"
+    ];
+
+    // 6 distinct Duolingo-Music-style lessons per unit — each teaches a
+    // different skill, no two feel the same.
+    const LESSON_TITLES = [
+      "Listen",
+      "Rhythm Tap",
+      "First Phrase",
+      "Second Phrase",
+      "Read the Staff",
+      "Performance"
+    ];
+    function lessonsFor(_songName) { return LESSON_TITLES.slice(); }
+
+    // Unit 1: Basics Piano — true beginner unit, no song yet. The songs that
+    // follow build on these fundamentals. 6 lessons (Duolingo Music style).
+    const BASICS_PIANO_LESSONS = [
+      "Meet the Piano",
+      "Find Middle C",
+      "White & Black Keys",
+      "Finger Numbers 1–5",
+      "The C Major 5-Finger Position",
+      "Basics Piano Checkpoint"
+    ];
+
+    // Build units: Basics Piano first, then every song as its own unit.
+    const units = [
+      [1, "Basics Piano", BASICS_PIANO_LESSONS.slice()],
+      ...songs.map((name, idx) => [idx + 2, name, lessonsFor(name)])
+    ];
+
+    let n = 0;
+    const lessons = [];
+    // Interactive lessons:
+    //   Basics Piano has 6 lessons (positions 1–6).
+    //   Song 1 ("Twinkle, Twinkle, Little Star") starts at position 7.
+    //   Basics 1 — Meet the Piano (basics-1.html) is interactive.
+    //   Basics 2 — Find Middle C (basics-2.html) is interactive.
+    //   Twinkle's "Listen" (lesson-1.html) is interactive.
+    const playable = { 1: 'basics-1.html', 2: 'basics-2.html', 7: 'lesson-1.html' };
+    // Cache the unit-name map so quiz.html can show the real song title
+    // ("Twinkle, Twinkle, Little Star") instead of a generic "Song 1".
+    const unitNames = {};
+    units.forEach(([u, name]) => { unitNames[u] = name; });
+    try { localStorage.setItem('mp-unit-names', JSON.stringify(unitNames)); } catch {}
+
+    units.forEach(([u, name, titles]) => {
+      const isBasics = u === 1;
+      titles.forEach((t, i) => {
+        n++;
+        // Lesson position within its unit (1..6) — used to build the URL.
+        // Unit 1 (Basics Piano) uses quiz.html (concept lessons).
+        // Units 2+ (songs) use the clean song-<unit>-<lesson> URL, rewritten
+        // to practice.html by _redirects (Duolingo-Music-style clean URLs).
+        const lessonInUnit = i + 1;
+        const fallbackHref = isBasics
+          ? `quiz.html?u=${u}&l=${lessonInUnit}`
+          : `song-${u}-${lessonInUnit}`;
+        lessons.push({
+          id: 'mp-'+n,
+          title: t,
+          href: playable[n] || fallbackHref,
+          unit: u,
+          unitName: name,
+          unitLabel: isBasics ? 'Unit' : 'Song',
+          category: 'music',
+          checkpoint: i===titles.length-1,
+          skipSkillNodes: true
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('musical-practice');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('musical-practice');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+
+  <script>
+    // ─── Full 88-key interactive piano keyboard (course header) ───────────
+    // Generates A0 → C8 (52 white keys, 36 black keys) and computes the
+    // equal-temperament frequency for each note from its MIDI number.
+    // Auto-scrolls to Middle C on load so it's centered in view.
+    (function () {
+      // Build the white-key list for a full 88-key piano (A0 to C8).
+      const WHITE_LETTERS = ['C','D','E','F','G','A','B'];
+      function buildWhiteNotes() {
+        const out = ['A0','B0'];
+        for (let oct = 1; oct <= 7; oct++) {
+          for (const l of WHITE_LETTERS) out.push(l + oct);
+        }
+        out.push('C8');
+        return out;
+      }
+      // Which white keys have a black key immediately to their right?
+      // Pattern: A→A#, C→C#, D→D#, F→F#, G→G#  (B and E never have one).
+      function blackNoteAfter(whiteNote) {
+        const letter = whiteNote[0];
+        const oct = whiteNote.slice(1);
+        if (letter === 'B' || letter === 'E') return null;
+        // C8 is the very top key — nothing above it on the piano.
+        if (whiteNote === 'C8') return null;
+        return letter + '#' + oct;
+      }
+      // MIDI number for a note, then frequency.
+      const NOTE_OFFSET_FROM_C = { C:0, 'C#':1, D:2, 'D#':3, E:4, F:5, 'F#':6, G:7, 'G#':8, A:9, 'A#':10, B:11 };
+      function midi(note) {
+        const m = note.match(/^([A-G]#?)(-?\d+)$/);
+        if (!m) return 60;
+        return (parseInt(m[2], 10) + 1) * 12 + NOTE_OFFSET_FROM_C[m[1]];
+      }
+      function freqOf(note) {
+        return 440 * Math.pow(2, (midi(note) - 69) / 12);
+      }
+
+      const WHITE_NOTES = buildWhiteNotes();
+      const scrollEl = document.getElementById('home-piano-scroll');
+      const whitesEl = document.getElementById('home-white-keys');
+      const blacksEl = document.getElementById('home-black-keys');
+      const nowPlaying = document.getElementById('home-now-playing');
+      if (!whitesEl || !blacksEl) return;
+      const keyEls = {};
+
+      // Detect actual rendered white-key width from CSS (so black-key positioning matches).
+      // We'll measure after the first white key is appended.
+      let whiteW = 30; // matches CSS default; remeasure below
+
+      WHITE_NOTES.forEach((note) => {
+        const k = document.createElement('div');
+        k.className = 'white-key' + (note === 'C4' ? ' middle-c' : '');
+        k.dataset.note = note;
+        // Show octave number only on each C (octave landmark) to reduce clutter.
+        const showLabel = note[0] === 'C' || note === 'A0';
+        k.textContent = showLabel ? note : note[0];
+        k.addEventListener('mousedown', () => onKeyPress(note));
+        k.addEventListener('touchstart', (e) => { e.preventDefault(); onKeyPress(note); }, { passive: false });
+        whitesEl.appendChild(k);
+        keyEls[note] = k;
+      });
+
+      // Re-measure actual white-key width after layout for accurate black-key positioning.
+      requestAnimationFrame(() => {
+        const firstWhite = whitesEl.firstElementChild;
+        if (firstWhite) whiteW = firstWhite.getBoundingClientRect().width + 2; // +2 for flex gap
+        renderBlackKeys();
+        scrollToMiddleC();
+      });
+
+      function renderBlackKeys() {
+        blacksEl.innerHTML = '';
+        // Position the black-keys layer to align with the start of the white keys.
+        blacksEl.style.left = '0px';
+        blacksEl.style.right = '0px';
+        const blackKeyWidth = Math.max(14, Math.floor(whiteW * 0.6));
+        WHITE_NOTES.forEach((wn, idx) => {
+          const bn = blackNoteAfter(wn);
+          if (!bn) return;
+          const k = document.createElement('div');
+          k.className = 'black-key';
+          k.dataset.note = bn;
+          // Position: between this white key (idx) and the next (idx+1).
+          // Black key is centered on the boundary between the two whites.
+          const leftPx = (idx + 1) * whiteW - blackKeyWidth / 2;
+          k.style.left = leftPx + 'px';
+          k.style.width = blackKeyWidth + 'px';
+          k.addEventListener('mousedown', () => onKeyPress(bn));
+          k.addEventListener('touchstart', (e) => { e.preventDefault(); onKeyPress(bn); }, { passive: false });
+          blacksEl.appendChild(k);
+          keyEls[bn] = k;
+        });
+      }
+
+      function scrollToMiddleC() {
+        const mc = keyEls['C4'];
+        if (!mc || !scrollEl) return;
+        const target = mc.offsetLeft - (scrollEl.clientWidth / 2) + (mc.offsetWidth / 2);
+        scrollEl.scrollLeft = Math.max(0, target);
+      }
+
+      // Reposition black keys on resize (white-key width may change responsively).
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const firstWhite = whitesEl.firstElementChild;
+          if (firstWhite) whiteW = firstWhite.getBoundingClientRect().width + 2;
+          renderBlackKeys();
+        }, 100);
+      });
+
+      let audioCtx = null;
+      function ensureAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+      }
+      function onKeyPress(note) {
+        const freq = freqOf(note);
+        if (!Number.isFinite(freq)) return;
+        const ctx = ensureAudio();
+        const t0 = ctx.currentTime, t1 = t0 + 0.6;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0, t0);
+        gain.gain.linearRampToValueAtTime(0.22, t0 + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, t1);
+        gain.connect(ctx.destination);
+        [{type:'triangle',detune:0,gain:1.0},{type:'sine',detune:0,gain:0.5},{type:'sine',detune:1200,gain:0.18}].forEach(spec => {
+          const osc = ctx.createOscillator();
+          osc.type = spec.type;
+          osc.frequency.setValueAtTime(freq, t0);
+          osc.detune.setValueAtTime(spec.detune, t0);
+          const sub = ctx.createGain();
+          sub.gain.value = spec.gain;
+          osc.connect(sub).connect(gain);
+          osc.start(t0);
+          osc.stop(t1 + 0.05);
+        });
+        const el = keyEls[note];
+        if (el) { el.classList.add('lit'); setTimeout(() => el.classList.remove('lit'), 500); }
+        if (nowPlaying) {
+          const isMiddleC = note === 'C4';
+          nowPlaying.textContent = isMiddleC ? '🎵 Middle C (C4)' : '🎵 ' + note;
+          nowPlaying.classList.add('playing');
+          clearTimeout(nowPlaying._clear);
+          nowPlaying._clear = setTimeout(() => {
+            nowPlaying.classList.remove('playing');
+            nowPlaying.textContent = '🎹 Click any key';
+          }, 1400);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

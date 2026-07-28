@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listen — Twinkle, Twinkle, Little Star — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+    .lesson-page { max-width: 880px; margin: 0 auto; padding: 56px 16px 80px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fde68a; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; margin-bottom: 12px; }
+    .lesson-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 6px; color: #fff; }
+    .lesson-header .song-name { font-size: 1.05rem; color: #cbd5e1; margin-bottom: 0; }
+
+    .teacher-row { display: flex; align-items: flex-end; justify-content: center; gap: 18px; margin: 24px 0 18px; min-height: 130px; }
+    .william-avatar {
+      width: 110px; height: 110px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #fff;
+      padding: 6px;
+      box-shadow: 0 6px 24px rgba(251,191,36,0.32);
+      border: 3px solid #fde68a;
+      display: block;
+      animation: bob 2s ease infinite;
+    }
+    .william-avatar.playing { animation: bob-fast 0.8s ease infinite; box-shadow: 0 0 32px rgba(251,191,36,0.7); }
+    .william-avatar.listening { animation: bob 2s ease infinite; box-shadow: 0 0 32px rgba(56,189,248,0.55); border-color: #7dd3fc; }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes bob-fast { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+    .speech {
+      max-width: 380px; padding: 14px 18px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; font-size: 0.95rem; line-height: 1.5; color: #e2e8f0;
+      position: relative;
+    }
+    .speech::before {
+      content: ''; position: absolute; left: -10px; bottom: 16px; width: 0; height: 0;
+      border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+      border-right: 10px solid rgba(255,255,255,0.06);
+    }
+    .speech strong { color: #fde68a; }
+    .speaker-name { display: block; font-weight: 800; color: #fbbf24; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+
+    /* Phrase progress pips: one row of dots, one per phrase */
+    .phrase-pips { display: flex; justify-content: center; gap: 8px; margin: 10px 0 6px; flex-wrap: wrap; }
+    .phrase-pip {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .phrase-pip.current {
+      background: rgba(251,191,36,0.35);
+      border-color: rgba(251,191,36,0.6);
+      animation: pip-pulse 1.1s ease infinite;
+    }
+    .phrase-pip.done {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #f59e0b;
+      box-shadow: 0 0 8px rgba(245,158,11,0.55);
+    }
+    @keyframes pip-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+
+    /* Per-note pips inside the current phrase */
+    .note-pips { display: flex; justify-content: center; gap: 6px; margin: 6px 0 12px; min-height: 12px; }
+    .note-pip {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .note-pip.done { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+    .note-pip.next { background: rgba(251,191,36,0.45); transform: scale(1.3); }
+
+    /* Piano */
+    .piano {
+      max-width: 720px; margin: 18px auto 16px;
+      position: relative; user-select: none;
+      background: linear-gradient(180deg, #1f2937, #111827);
+      padding: 16px 14px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.4);
+    }
+    .white-keys { display: flex; gap: 2px; position: relative; }
+    .white-key {
+      flex: 1; min-width: 40px; height: 180px;
+      background: linear-gradient(180deg, #fafafa, #e5e7eb);
+      border: 1px solid #cbd5e1;
+      border-bottom: 4px solid #94a3b8;
+      border-radius: 0 0 8px 8px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.05s, background 0.1s;
+      display: flex; align-items: flex-end; justify-content: center;
+      font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #64748b; font-weight: 700;
+      padding-bottom: 8px;
+    }
+    .white-key:active, .white-key.active {
+      background: linear-gradient(180deg, #fef3c7, #fde68a);
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+    .white-key.lit {
+      background: linear-gradient(180deg, #fef08a, #f59e0b);
+      box-shadow: 0 0 24px rgba(245,158,11,0.7);
+    }
+    .white-key.correct {
+      background: linear-gradient(180deg, #bbf7d0, #4ade80);
+      box-shadow: 0 0 22px rgba(34,197,94,0.65);
+    }
+    .white-key.wrong {
+      background: linear-gradient(180deg, #fecaca, #f87171);
+      box-shadow: 0 0 22px rgba(239,68,68,0.7);
+      animation: shake 0.42s ease;
+    }
+    .black-keys { position: absolute; top: 16px; left: 14px; right: 14px; height: 110px; pointer-events: none; }
+    .black-key {
+      position: absolute; top: 0;
+      width: 7%; height: 100%;
+      background: linear-gradient(180deg, #1f2937, #0f172a);
+      border: 1px solid #000;
+      border-radius: 0 0 6px 6px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: transform 0.05s, background 0.1s;
+    }
+    .black-key:active, .black-key.active {
+      background: linear-gradient(180deg, #4c1d95, #1e1b4b);
+      transform: translateY(2px);
+    }
+    .black-key.lit {
+      background: linear-gradient(180deg, #fbbf24, #ea580c);
+      box-shadow: 0 0 18px rgba(245,158,11,0.6);
+    }
+    .black-key.correct {
+      background: linear-gradient(180deg, #22c55e, #15803d);
+      box-shadow: 0 0 18px rgba(34,197,94,0.6);
+    }
+    .black-key.wrong {
+      background: linear-gradient(180deg, #ef4444, #991b1b);
+      box-shadow: 0 0 18px rgba(239,68,68,0.7);
+      animation: shake 0.42s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .controls { text-align: center; margin: 22px 0 12px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      padding: 12px 28px; border-radius: 999px;
+      font-weight: 800; font-size: 1rem; cursor: pointer; border: none;
+      font-family: inherit; transition: transform 0.1s, background 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1b1b;
+      box-shadow: 0 8px 24px rgba(245,158,11,0.4);
+    }
+    .btn.primary:hover { box-shadow: 0 10px 28px rgba(245,158,11,0.55); }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #f1f5f9; border: 1px solid rgba(255,255,255,0.12); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .status-label {
+      text-align: center; font-size: 0.95rem; color: #cbd5e1; margin: 8px auto 4px;
+      max-width: 520px; min-height: 22px;
+    }
+    .status-label .lyric { color: #fde68a; font-weight: 700; }
+
+    .complete-card {
+      max-width: 480px; margin: 24px auto 0;
+      padding: 24px; text-align: center;
+      background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45);
+      border-radius: 16px; display: none;
+    }
+    .complete-card.show { display: block; }
+    .complete-card h2 { color: #86efac; margin: 0 0 6px; font-size: 1.4rem; }
+    .complete-card p { color: #d1fae5; margin: 0 0 14px; }
+
+    .footer-nav { text-align: center; margin-top: 28px; }
+    .footer-nav a { color: #fbbf24; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    @media (max-width: 540px) {
+      .white-key { height: 140px; min-width: 32px; font-size: 0.7rem; }
+      .black-keys { height: 88px; }
+      .lesson-header h1 { font-size: 1.6rem; }
+      .william-avatar { width: 80px; height: 80px; }
+      .speech { font-size: 0.88rem; padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Musical Practice</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">🎵 Song 1 · Lesson 1 · Listen</span>
+      <h1>Listen &amp; Play Back</h1>
+      <p class="song-name">Twinkle, Twinkle, Little Star</p>
+    </header>
+
+    <div class="teacher-row">
+      <img src="../../assets/characters/william.svg" alt="William" class="william-avatar" id="william">
+      <div class="speech">
+        <span class="speaker-name">William</span>
+        <span id="speech-text">I'll play a short phrase. Then <strong>you play it back</strong> on the piano. Press <strong>▶ Start</strong> when you're ready.</span>
+      </div>
+    </div>
+
+    <div class="phrase-pips" id="phrase-pips" aria-hidden="true"></div>
+    <div class="note-pips" id="note-pips" aria-hidden="true"></div>
+
+    <div class="piano" id="piano" aria-hidden="true">
+      <div class="white-keys" id="white-keys"></div>
+      <div class="black-keys" id="black-keys"></div>
+    </div>
+
+    <p class="status-label" id="status-label">Press <strong style="color:#fbbf24;">▶ Start</strong> to begin.</p>
+
+    <div class="controls">
+      <button class="btn primary" id="start-btn">▶ Start the Lesson</button>
+      <button class="btn secondary" id="replay-btn" style="display:none;">🔁 Hear phrase again</button>
+      <button class="btn secondary" id="continue-btn" disabled>Continue →</button>
+    </div>
+
+    <section class="complete-card" id="complete-card">
+      <h2>🎉 You played the whole melody!</h2>
+      <p>You heard it, then you played it back — every phrase. Ready for Lesson 2 — <strong>identifying the first note?</strong></p>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Musical Practice</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ─── Build the piano (one octave + a bit, C4–G5) ───────────────────
+    const WHITE_NOTES = ['C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5'];
+    const BLACK_NOTES_BY_WHITE_INDEX = {
+      0: 'C#4', 1: 'D#4', 3: 'F#4', 4: 'G#4', 5: 'A#4',
+      7: 'C#5', 8: 'D#5', 10: 'F#5', 11: 'G#5'
+    };
+    const NOTE_FREQ = {
+      'C4': 261.63,'C#4':277.18,'D4':293.66,'D#4':311.13,'E4':329.63,'F4':349.23,'F#4':369.99,
+      'G4': 392.00,'G#4':415.30,'A4':440.00,'A#4':466.16,'B4':493.88,
+      'C5': 523.25,'C#5':554.37,'D5':587.33,'D#5':622.25,'E5':659.25,'F5':698.46,'F#5':739.99,
+      'G5': 783.99,'G#5':830.61,'A5':880.00
+    };
+    const whitesEl = document.getElementById('white-keys');
+    const blacksEl = document.getElementById('black-keys');
+    const keyEls = {};
+
+    WHITE_NOTES.forEach((note, i) => {
+      const k = document.createElement('div');
+      k.className = 'white-key';
+      k.dataset.note = note;
+      k.textContent = note.replace(/\d/, '');
+      const handler = (e) => { e.preventDefault?.(); handleUserTap(note); };
+      k.addEventListener('mousedown', handler);
+      k.addEventListener('touchstart', handler, { passive: false });
+      whitesEl.appendChild(k);
+      keyEls[note] = k;
+    });
+
+    const totalWhites = WHITE_NOTES.length;
+    Object.entries(BLACK_NOTES_BY_WHITE_INDEX).forEach(([wIdxStr, note]) => {
+      const wIdx = parseInt(wIdxStr, 10);
+      const k = document.createElement('div');
+      k.className = 'black-key';
+      k.dataset.note = note;
+      const widthPct = 100 / totalWhites;
+      const leftPct = (wIdx + 1) * widthPct - (7 / 2);
+      k.style.left = leftPct + '%';
+      const handler = (e) => { e.preventDefault?.(); handleUserTap(note); };
+      k.addEventListener('mousedown', handler);
+      k.addEventListener('touchstart', handler, { passive: false });
+      blacksEl.appendChild(k);
+      keyEls[note] = k;
+    });
+
+    // ─── Audio: piano-ish synth + wrong-answer buzz ────────────────────
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+    function playNote(note, duration = 0.5) {
+      const freq = NOTE_FREQ[note];
+      if (!freq) return;
+      const ctx = ensureAudio();
+      const t0 = ctx.currentTime;
+      const t1 = t0 + duration;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.22, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t1);
+      gain.connect(ctx.destination);
+      [{type:'triangle',detune:0,gain:1.0},{type:'sine',detune:0,gain:0.5},{type:'sine',detune:1200,gain:0.18}].forEach(spec => {
+        const osc = ctx.createOscillator();
+        osc.type = spec.type;
+        osc.frequency.setValueAtTime(freq, t0);
+        osc.detune.setValueAtTime(spec.detune, t0);
+        const sub = ctx.createGain();
+        sub.gain.value = spec.gain;
+        osc.connect(sub).connect(gain);
+        osc.start(t0);
+        osc.stop(t1 + 0.05);
+      });
+    }
+    function playWrongBuzz() {
+      const ctx = ensureAudio();
+      const t0 = ctx.currentTime, t1 = t0 + 0.32;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.16, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t1);
+      gain.connect(ctx.destination);
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(140, t0);
+      osc.frequency.linearRampToValueAtTime(70, t1);
+      osc.connect(gain);
+      osc.start(t0);
+      osc.stop(t1);
+    }
+
+    function flashKey(note, cls, ms) {
+      const el = keyEls[note];
+      if (!el) return;
+      el.classList.add(cls);
+      setTimeout(() => el.classList.remove(cls), ms);
+    }
+
+    // ─── Twinkle Twinkle phrases (Duolingo-Music call-and-response) ────
+    const PHRASES = [
+      { notes: ['C4','C4','G4','G4'], lyric: 'Twinkle twinkle' },
+      { notes: ['A4','A4','G4'],      lyric: 'little star' },
+      { notes: ['F4','F4','E4','E4'], lyric: 'How I wonder' },
+      { notes: ['D4','D4','C4'],      lyric: 'what you are' },
+      { notes: ['G4','G4','F4','F4'], lyric: 'Up above' },
+      { notes: ['E4','E4','D4'],      lyric: 'the world so high' },
+      { notes: ['G4','G4','F4','F4'], lyric: 'Like a diamond' },
+      { notes: ['E4','E4','D4'],      lyric: 'in the sky' }
+    ];
+
+    const startBtn = document.getElementById('start-btn');
+    const replayBtn = document.getElementById('replay-btn');
+    const continueBtn = document.getElementById('continue-btn');
+    const statusEl = document.getElementById('status-label');
+    const speechEl = document.getElementById('speech-text');
+    const williamEl = document.getElementById('william');
+    const completeCard = document.getElementById('complete-card');
+    const phrasePipsEl = document.getElementById('phrase-pips');
+    const notePipsEl = document.getElementById('note-pips');
+
+    // Build phrase pips (one per phrase)
+    PHRASES.forEach((_, i) => {
+      const pip = document.createElement('div');
+      pip.className = 'phrase-pip';
+      pip.dataset.idx = i;
+      phrasePipsEl.appendChild(pip);
+    });
+
+    let phraseIdx = 0;
+    let noteIdx = 0;
+    let awaiting = false; // true while we wait for the user's taps
+    let locked = false;   // true during audio playback (block user input)
+    let lessonDone = false;
+
+    function setSpeech(html) { speechEl.innerHTML = html; }
+    function setStatus(html) { statusEl.innerHTML = html; }
+    function setWilliamState(state) {
+      williamEl.classList.remove('playing', 'listening');
+      if (state) williamEl.classList.add(state);
+    }
+
+    function renderPhrasePips() {
+      [...phrasePipsEl.children].forEach((pip, i) => {
+        pip.classList.remove('current', 'done');
+        if (i < phraseIdx) pip.classList.add('done');
+        else if (i === phraseIdx && !lessonDone) pip.classList.add('current');
+      });
+    }
+    function renderNotePips() {
+      notePipsEl.innerHTML = '';
+      if (lessonDone) return;
+      const phrase = PHRASES[phraseIdx];
+      if (!phrase) return;
+      phrase.notes.forEach((_, i) => {
+        const pip = document.createElement('div');
+        pip.className = 'note-pip';
+        if (i < noteIdx) pip.classList.add('done');
+        else if (i === noteIdx && awaiting) pip.classList.add('next');
+        notePipsEl.appendChild(pip);
+      });
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    async function playPhraseAudio() {
+      const phrase = PHRASES[phraseIdx];
+      locked = true;
+      awaiting = false;
+      setWilliamState('playing');
+      setSpeech(`Listen — <strong>"${phrase.lyric}"</strong>.`);
+      setStatus(`<span class="lyric">"${phrase.lyric}"</span> — listening...`);
+      renderNotePips();
+      const beatMs = 420;
+      for (const note of phrase.notes) {
+        playNote(note, 0.48);
+        flashKey(note, 'lit', 420);
+        await sleep(beatMs);
+      }
+      await sleep(180);
+      locked = false;
+      awaiting = true;
+      setWilliamState('listening');
+      setSpeech(`Now <strong>you</strong> play <strong>"${phrase.lyric}"</strong>.`);
+      setStatus(`Your turn — tap the keys for <span class="lyric">"${phrase.lyric}"</span>.`);
+      renderNotePips();
+    }
+
+    async function startPhrase() {
+      noteIdx = 0;
+      renderPhrasePips();
+      renderNotePips();
+      replayBtn.style.display = '';
+      replayBtn.disabled = false;
+      await sleep(250);
+      await playPhraseAudio();
+    }
+
+    function handleUserTap(note) {
+      // Always allow audible click outside lesson flow only after the lesson starts
+      // and only when we're awaiting the user.
+      if (lessonDone || locked || !awaiting) return;
+      const phrase = PHRASES[phraseIdx];
+      const expected = phrase.notes[noteIdx];
+      if (note === expected) {
+        playNote(note, 0.5);
+        flashKey(note, 'correct', 380);
+        noteIdx++;
+        renderNotePips();
+        if (noteIdx >= phrase.notes.length) {
+          awaiting = false;
+          onPhraseComplete();
+        } else {
+          setStatus(`Note <strong>${noteIdx + 1}</strong> of ${phrase.notes.length} — keep going!`);
+        }
+      } else {
+        awaiting = false;
+        playNote(note, 0.25);
+        playWrongBuzz();
+        flashKey(note, 'wrong', 450);
+        setWilliamState(null);
+        setSpeech('Not quite — listen one more time.');
+        setStatus('Replaying the phrase...');
+        noteIdx = 0;
+        renderNotePips();
+        setTimeout(playPhraseAudio, 850);
+      }
+    }
+
+    async function onPhraseComplete() {
+      setSpeech('Beautiful!');
+      setStatus(`<span class="lyric">"${PHRASES[phraseIdx].lyric}"</span> ✓`);
+      setWilliamState('playing');
+      await sleep(700);
+      phraseIdx++;
+      if (phraseIdx >= PHRASES.length) {
+        finishLesson();
+        return;
+      }
+      await startPhrase();
+    }
+
+    function finishLesson() {
+      lessonDone = true;
+      awaiting = false;
+      locked = false;
+      renderPhrasePips();
+      notePipsEl.innerHTML = '';
+      setSpeech('You played the whole melody back to me — every phrase. <strong>Beautiful!</strong>');
+      setStatus('🎉 Lesson complete!');
+      setWilliamState('playing');
+      startBtn.style.display = 'none';
+      replayBtn.style.display = 'none';
+      continueBtn.disabled = false;
+      continueBtn.textContent = 'Continue → Lesson 2';
+      completeCard.classList.add('show');
+    }
+
+    startBtn.addEventListener('click', async () => {
+      ensureAudio();
+      startBtn.style.display = 'none';
+      replayBtn.style.display = '';
+      phraseIdx = 0;
+      noteIdx = 0;
+      lessonDone = false;
+      await startPhrase();
+    });
+
+    replayBtn.addEventListener('click', async () => {
+      if (lessonDone || locked) return;
+      noteIdx = 0;
+      renderNotePips();
+      await playPhraseAudio();
+    });
+
+    continueBtn.addEventListener('click', () => {
+      window.location.href = 'lesson-2.html';
+    });
+
+    // Keyboard support: A=C, S=D, D=E, F=F, G=G, H=A, J=B, K=C5, L=D5, ;=E5
+    const KEYBOARD_MAP = { a:'C4', s:'D4', d:'E4', f:'F4', g:'G4', h:'A4', j:'B4', k:'C5', l:'D5', ';':'E5' };
+    document.addEventListener('keydown', (e) => {
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+      const n = KEYBOARD_MAP[e.key.toLowerCase()];
+      if (n) {
+        e.preventDefault();
+        handleUserTap(n);
+      }
+    });
+
+    // Initial render
+    renderPhrasePips();
+  </script>
+</body>
+</html>

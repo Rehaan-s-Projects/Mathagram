@@ -94,20 +94,180 @@
     .lesson-list {
       list-style: none;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     .lesson-list li {
+      display: block;
+      padding: 14px 16px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .lesson-list li:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .lesson-list li.no-progress {
+      border-left-color: var(--color-border);
+      background: transparent;
+      padding: 16px 0;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+    }
+    .lesson-list li.no-progress:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .lesson-list li.cp-total {
+      border-left-color: #94a3b8;
+      background: #f8fafc;
+      font-weight: 700;
+    }
+    .lesson-list li[data-cat="math"] { border-left-color: var(--color-math); }
+    .lesson-list li[data-cat="science"] { border-left-color: var(--color-science); }
+    .lesson-list li[data-cat="data"] { border-left-color: var(--color-data); }
+    .lesson-list li[data-cat="logic"] { border-left-color: var(--color-logic); }
+    .lesson-list li[data-cat="language"] { border-left-color: var(--color-language); }
+    .lesson-list li[data-cat="programming"] { border-left-color: #8b5cf6; }
+    .lesson-list li[data-cat="others"] { border-left-color: var(--color-others); }
+    .cp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .cp-title {
+      font-weight: 700;
+      color: var(--color-text);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .cp-when {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cp-bar {
+      width: 100%;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .cp-bar > div {
+      height: 100%;
+      background: linear-gradient(90deg, #00e5c8, #00b89f);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+    .cp-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--color-border);
-      font-size: 0.9rem;
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .cp-xp {
+      color: var(--color-xp);
+      font-weight: 700;
     }
     .lesson-grade {
       font-weight: 600;
     }
     .lesson-stars {
       color: var(--color-xp);
+    }
+    /* ── Recent Learning Posts ─────────────────────────────────── */
+    .post-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .post-list li {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .post-list li:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .post-list li.no-posts {
+      border: none;
+      background: transparent;
+      padding: 14px 0;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      text-align: left;
+    }
+    .post-list li.no-posts:hover { transform: none; box-shadow: none; }
+    .post-list a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .pp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .pp-cat {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+      border-radius: 999px;
+    }
+    .pp-when {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+    .pp-text {
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: var(--color-text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin: 0 0 6px;
+    }
+    .pp-foot {
+      display: flex;
+      gap: 14px;
+      font-size: 0.74rem;
+      color: var(--color-text-muted);
+      align-items: center;
+    }
+    .pp-stat { display: inline-flex; align-items: center; gap: 4px; }
+    .pp-thumb {
+      width: 100%;
+      max-height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 4px 0 6px;
     }
     .profile-actions {
       display: flex;
@@ -362,9 +522,22 @@
         </ul>
       </div>
 
+      <!-- Recent Learning Posts -->
+      <div class="course-progress-section">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+          <h3 style="margin:0;">Recent Learning Posts</h3>
+          <a href="learning-post.html" style="font-size:0.82rem;font-weight:700;color:var(--color-primary-dark);text-decoration:none;">View all →</a>
+        </div>
+        <ul id="post-list" class="post-list">
+          <li class="no-posts">No posts yet. <a href="learning-post.html" style="color:var(--color-primary-dark);font-weight:700;text-decoration:none;">Share what you're learning →</a></li>
+        </ul>
+      </div>
+
       <!-- Actions -->
       <div class="profile-actions">
+        <button id="btn-switch-account" class="btn btn-outline">Switch Account</button>
         <button id="btn-signout" class="btn btn-outline">Sign Out</button>
+        <p id="switch-error" style="display:none;color:#ef4444;font-size:0.85rem;margin-top:10px;"></p>
       </div>
     </div>
   </div>
@@ -384,6 +557,8 @@
     import { calculateLevel, LEVELS, getCourseProgress } from './js/progress.js';
     import { doc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
     import { db, auth as fbAuth } from './js/firebase-config.js';
+    import { GoogleAuthProvider, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { doc as fdoc, getDoc as fgetDoc, setDoc as fsetDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
     document.getElementById('year').textContent = new Date().getFullYear();
 
     function getColorValue(colorName) {
@@ -400,6 +575,50 @@
     }
 
     // Redirect if not logged in
+    // Full-page block shown when the signed-in account has no linked Google
+    // account. A linked Google account is mandatory; the only ways out are to
+    // link one or to sign out. The page (and site) stays blocked otherwise.
+    function showLinkRequiredBlock() {
+      if (document.getElementById('link-required-overlay')) return;
+      const ov = document.createElement('div');
+      ov.id = 'link-required-overlay';
+      ov.innerHTML = `
+        <style>
+          #link-required-overlay {
+            position: fixed; inset: 0; z-index: 100000;
+            background: var(--color-bg, #f8f9fa);
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+          }
+          #link-required-overlay .lr-card {
+            background: var(--color-white, #fff); border: 1px solid var(--color-border, #e2e8f0);
+            border-radius: 16px; max-width: 440px; width: 100%; padding: 40px 32px; text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+          }
+          #link-required-overlay .lr-icon { font-size: 3rem; margin-bottom: 12px; }
+          #link-required-overlay h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; color: #b45309; }
+          #link-required-overlay p { font-size: 0.95rem; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+          #link-required-overlay .lr-btn {
+            display: block; width: 100%; padding: 12px 24px; margin-top: 10px; font-size: 1rem; font-weight: 700;
+            border-radius: 12px; border: none; cursor: pointer; text-decoration: none; box-sizing: border-box;
+          }
+          #link-required-overlay .lr-primary { background: #00e5c8; color: #fff; }
+          #link-required-overlay .lr-primary:hover { background: #00b89f; }
+          #link-required-overlay .lr-secondary { background: transparent; color: #64748b; border: 2px solid var(--color-border, #e2e8f0); }
+        </style>
+        <div class="lr-card">
+          <div class="lr-icon">&#9888;&#65039;</div>
+          <h2>Link your Google account to continue</h2>
+          <p>For your security, a linked Google account is required to use Mathagram. Link your Google account now, or sign out.</p>
+          <a href="link-google.html" class="lr-btn lr-primary">Link Google account</a>
+          <button type="button" id="lr-signout" class="lr-btn lr-secondary">Sign out</button>
+        </div>`;
+      document.body.appendChild(ov);
+      document.getElementById('lr-signout').addEventListener('click', async () => {
+        try { await logOut(); } catch (_) {}
+        window.location.href = 'login.html';
+      });
+    }
+
     onAuthChange(async (user) => {
       if (!user) {
         window.location.href = 'login.html';
@@ -409,8 +628,37 @@
       try {
       // Load profile
       const profile = await getUserProfile();
+
+      // Ban / suspension gate — moved here from login.html so a transient
+      // Firestore permission blip right after sign-in can't cancel the
+      // redirect. If the user is banned/suspended, sign them out and bounce
+      // back to login with an explanation in localStorage.
+      if (profile && profile.banned) {
+        try { sessionStorage.setItem('mga_ban_msg', 'banned'); } catch(_) {}
+        await logOut();
+        window.location.href = 'login.html?banned=1';
+        return;
+      }
+      if (profile && profile.suspended && profile.suspendedUntil) {
+        const until = new Date(profile.suspendedUntil.seconds ? profile.suspendedUntil.seconds * 1000 : profile.suspendedUntil);
+        if (until > new Date()) {
+          try { sessionStorage.setItem('mga_ban_msg', 'suspended:' + until.toISOString()); } catch(_) {}
+          await logOut();
+          window.location.href = 'login.html?suspended=1';
+          return;
+        }
+      }
+
+      // ─── Linked-account requirement ──────────────────────────────────
+      // Block the profile (and the site) until a Google account is linked.
+      const hasGoogle = (user.providerData || []).some(p => p.providerId === 'google.com');
+      if (!hasGoogle) {
+        showLinkRequiredBlock();
+        return;
+      }
+
       const userColor = (profile && profile.color) || 'blue';
-      const displayName = (profile && profile.displayName) || user.displayName || 'New Learner';
+      const displayName = (profile && profile.displayName) || user.displayName || 'Learner';
 
       // Avatar image
       const avatarEl = document.getElementById('profile-avatar');
@@ -438,7 +686,13 @@
       // Display name input
       const nameInput = document.getElementById('profile-name-input');
       const nameSave = document.getElementById('nameSaveStatus');
-      nameInput.value = displayName;
+      // Sanitize the pre-filled name before showing it. Google sign-in
+      // display names (e.g. "John Smith") and any legacy default contain
+      // spaces, which fail the A-Z-only save validation — so the profile
+      // would refuse to save until the user manually deleted the space.
+      let prefillName = (displayName || '').replace(/[^A-Za-z]/g, '').slice(0, 13);
+      if (prefillName.length < 3) prefillName = 'Learner';
+      nameInput.value = prefillName;
 
       // Filter to A-Z a-z only, max 13
       function updateNameCount() {
@@ -513,52 +767,251 @@
         document.getElementById('stat-streak').textContent = profile.streak || 0;
         document.getElementById('stat-focusers').textContent = profile.focusers || 0;
 
-        // Course progress — all courses
+        // Course progress — every course the user has started, with a real
+        // progress bar (lessons completed / total in course), category color,
+        // and last-activity timestamp. Sorted by most recently active first.
         try {
           const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
           const progressCol = collection(db, 'users', fbAuth.currentUser.uid, 'progress');
           const coursesSnap = await getDocs(progressCol);
           const lessonList = document.getElementById('lesson-list');
-          let totalCompleted = 0;
-          const courseEntries = [];
 
-          let totalXPAll = 0;
+          const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+          const prettifySlug = (s) => s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+          const relativeTime = (ms) => {
+            if (!ms) return '';
+            const diff = Date.now() - ms;
+            if (diff < 60_000) return 'Just now';
+            const min = Math.floor(diff / 60_000);
+            if (min < 60) return min + 'm ago';
+            const hr = Math.floor(min / 60);
+            if (hr < 24) return hr + 'h ago';
+            const days = Math.floor(hr / 24);
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return days + 'd ago';
+            const wk = Math.floor(days / 7);
+            if (wk < 4) return wk + 'w ago';
+            const mo = Math.floor(days / 30);
+            if (mo < 12) return mo + 'mo ago';
+            return Math.floor(days / 365) + 'y ago';
+          };
 
-          for (const courseDoc of coursesSnap.docs) {
-            const courseId = courseDoc.id;
-            const lessonsSnap = await getDocs(collection(db, 'users', fbAuth.currentUser.uid, 'progress', courseId, 'lessons'));
-            if (lessonsSnap.size > 0) {
-              const courseName = courseId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-              let courseXP = 0;
-              lessonsSnap.forEach(d => { courseXP += (d.data().xpEarned || 0); });
-              courseEntries.push({ name: courseName, id: courseId, count: lessonsSnap.size, xp: courseXP });
-              totalCompleted += lessonsSnap.size;
-              totalXPAll += courseXP;
+          // Fetch the course's index.html once to extract its real display
+          // title, category, and total lesson count (so we can compute a real
+          // X / Y progress bar instead of guessing).
+          const courseMetaCache = new Map();
+          async function getCourseMeta(slug) {
+            if (courseMetaCache.has(slug)) return courseMetaCache.get(slug);
+            try {
+              const resp = await fetch(`courses/${slug}/index.html`);
+              if (!resp.ok) throw new Error('404');
+              const text = await resp.text();
+              const titleMatch = text.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
+              const title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').trim() : prettifySlug(slug);
+              let totalLessons = null;
+              const pushArr = text.match(/lessons\.push\(/g);
+              if (pushArr) totalLessons = pushArr.length;
+              if (!totalLessons) {
+                const um = text.match(/const unitNames = \[([\s\S]*?)\];/);
+                if (um) {
+                  const count = (um[1].match(/"[^"]+"/g) || []).length;
+                  if (count) totalLessons = count * 15;
+                }
+              }
+              if (!totalLessons) {
+                const ua = text.match(/const units = \[([\s\S]*?)\];/);
+                if (ua) {
+                  const inner = ua[1];
+                  const titleStrings = inner.match(/"[^"]+"/g) || [];
+                  const unitCount = (inner.match(/\[\d+\s*,/g) || []).length;
+                  totalLessons = Math.max(0, titleStrings.length - unitCount);
+                }
+              }
+              const cat = (text.match(/data-category="([^"]+)"/) || [])[1] || 'others';
+              const meta = { title, totalLessons, category: cat };
+              courseMetaCache.set(slug, meta);
+              return meta;
+            } catch (e) {
+              const fb = { title: prettifySlug(slug), totalLessons: null, category: 'others' };
+              courseMetaCache.set(slug, fb);
+              return fb;
             }
           }
 
-          if (courseEntries.length > 0) {
-            lessonList.innerHTML = '';
-            courseEntries.sort((a, b) => b.count - a.count);
-            courseEntries.forEach(({ name, id, count, xp: cxp }) => {
-              const li = document.createElement('li');
-              li.innerHTML = `
-                <a href="course/${id}/index.html" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; width:100%;">
-                  <span>${name}</span>
-                  <span><span class="lesson-grade">${count} lesson${count !== 1 ? 's' : ''}</span> <span class="lesson-stars" style="margin-left:8px;">${cxp} XP</span></span>
-                </a>
-              `;
-              lessonList.appendChild(li);
+          const promises = coursesSnap.docs.map(async (courseDoc) => {
+            const courseId = courseDoc.id;
+            const lessonsSnap = await getDocs(collection(db, 'users', fbAuth.currentUser.uid, 'progress', courseId, 'lessons'));
+            if (lessonsSnap.size === 0) return null;
+            let courseXP = 0, lastActivity = 0;
+            lessonsSnap.forEach(d => {
+              const data = d.data();
+              courseXP += (data.xpEarned || 0);
+              const ms = data.completedAt ? new Date(data.completedAt).getTime() : 0;
+              if (ms > lastActivity) lastActivity = ms;
             });
-            // Total row
+            const meta = await getCourseMeta(courseId);
+            return {
+              id: courseId,
+              title: meta.title,
+              category: meta.category,
+              count: lessonsSnap.size,
+              total: meta.totalLessons,
+              xp: courseXP,
+              lastActivity
+            };
+          });
+          const courseEntries = (await Promise.all(promises)).filter(Boolean);
+
+          if (courseEntries.length > 0) {
+            courseEntries.sort((a, b) => b.lastActivity - a.lastActivity);
+            // Totals are computed from EVERY course (not just the visible 5)
+            // so the summary row still reflects full lifetime progress.
+            const totalCompleted = courseEntries.reduce((s, c) => s + c.count, 0);
+            const totalXPAll = courseEntries.reduce((s, c) => s + c.xp, 0);
+            const totalLessonsAll = courseEntries.reduce((s, c) => s + (c.total || 0), 0);
+            const overallPct = totalLessonsAll ? Math.round((totalCompleted / totalLessonsAll) * 100) : 0;
+            // Cap the visible progress bars at the 5 most recently active.
+            const VISIBLE_LIMIT = 5;
+            const hidden = Math.max(0, courseEntries.length - VISIBLE_LIMIT);
+            const visibleEntries = courseEntries.slice(0, VISIBLE_LIMIT);
+
+            lessonList.innerHTML = '';
+            for (const c of visibleEntries) {
+              const pct = c.total ? Math.min(100, Math.round((c.count / c.total) * 100)) : 0;
+              const li = document.createElement('li');
+              li.dataset.cat = c.category;
+              const a = document.createElement('a');
+              a.href = `courses/${c.id}/index.html`;
+              a.style.cssText = 'text-decoration:none;color:inherit;display:block;';
+              a.innerHTML = `
+                <div class="cp-top">
+                  <span class="cp-title">${escapeHtml(c.title)}</span>
+                  <span class="cp-when">${escapeHtml(relativeTime(c.lastActivity))}</span>
+                </div>
+                <div class="cp-bar"><div style="width:${pct}%"></div></div>
+                <div class="cp-meta">
+                  <span>${c.count}${c.total ? ' / ' + c.total : ''} lesson${c.count === 1 ? '' : 's'}${c.total ? ' · ' + pct + '%' : ''}</span>
+                  <span class="cp-xp">${c.xp} XP</span>
+                </div>
+              `;
+              li.appendChild(a);
+              lessonList.appendChild(li);
+            }
+            // "+N more" hint if some courses were clipped by the 5-bar limit.
+            if (hidden > 0) {
+              const moreLi = document.createElement('li');
+              moreLi.className = 'no-progress';
+              moreLi.style.cssText = 'text-align:center;font-size:0.82rem;';
+              moreLi.textContent = `+${hidden} more course${hidden === 1 ? '' : 's'} (showing 5 most recent)`;
+              lessonList.appendChild(moreLi);
+            }
+            // Total summary row — same card style for visual cohesion.
             const totalLi = document.createElement('li');
-            totalLi.style.borderTop = '2px solid var(--color-border)';
-            totalLi.style.fontWeight = '700';
-            totalLi.innerHTML = `<span>Total</span><span>${totalCompleted} lessons &middot; ${totalXPAll} XP</span>`;
+            totalLi.className = 'cp-total';
+            totalLi.innerHTML = `
+              <div class="cp-top">
+                <span class="cp-title">Total</span>
+                <span class="cp-when">${courseEntries.length} course${courseEntries.length === 1 ? '' : 's'}</span>
+              </div>
+              ${totalLessonsAll ? `<div class="cp-bar"><div style="width:${overallPct}%"></div></div>` : ''}
+              <div class="cp-meta">
+                <span>${totalCompleted}${totalLessonsAll ? ' / ' + totalLessonsAll : ''} lesson${totalCompleted === 1 ? '' : 's'}${totalLessonsAll ? ' · ' + overallPct + '%' : ''}</span>
+                <span class="cp-xp">${totalXPAll} XP</span>
+              </div>
+            `;
             lessonList.appendChild(totalLi);
           }
         } catch (err) {
           // Progress not available yet
+        }
+
+        // ── Recent Learning Posts (own posts, latest 5) ────────────
+        try {
+          const { collection, getDocs, query, where, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+          const postList = document.getElementById('post-list');
+
+          const CATEGORY_COLORS = { question: '#3b82f6', tip: '#22c55e', progress: '#f97316', discussion: '#8b5cf6' };
+          const CATEGORY_LABELS = { question: 'Question', tip: 'Study Tip', progress: 'Progress', discussion: 'Discussion' };
+          const escapeHtmlP = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+          const relTime = (ms) => {
+            if (!ms) return '';
+            const diff = Date.now() - ms;
+            if (diff < 60_000) return 'Just now';
+            const min = Math.floor(diff / 60_000);
+            if (min < 60) return min + 'm ago';
+            const hr = Math.floor(min / 60);
+            if (hr < 24) return hr + 'h ago';
+            const days = Math.floor(hr / 24);
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return days + 'd ago';
+            const wk = Math.floor(days / 7);
+            if (wk < 4) return wk + 'w ago';
+            const mo = Math.floor(days / 30);
+            if (mo < 12) return mo + 'mo ago';
+            return Math.floor(days / 365) + 'y ago';
+          };
+
+          // Firestore composite query: where(uid) + orderBy(createdAt) needs
+          // a single-field index OR a composite one. To keep this resilient
+          // even if the composite index hasn't been built yet, we fall back
+          // to a plain where() query and sort client-side.
+          let postDocs = [];
+          try {
+            const q = query(
+              collection(db, 'posts'),
+              where('uid', '==', fbAuth.currentUser.uid),
+              orderBy('createdAt', 'desc'),
+              limit(5)
+            );
+            const snap = await getDocs(q);
+            postDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          } catch (idxErr) {
+            const q2 = query(
+              collection(db, 'posts'),
+              where('uid', '==', fbAuth.currentUser.uid)
+            );
+            const snap2 = await getDocs(q2);
+            postDocs = snap2.docs
+              .map(d => ({ id: d.id, ...d.data() }))
+              .sort((a, b) => {
+                const am = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+                const bm = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+                return bm - am;
+              })
+              .slice(0, 5);
+          }
+
+          if (postDocs.length > 0) {
+            postList.innerHTML = '';
+            const displayName = (profile && profile.displayName) || user.displayName || 'Learner';
+            const profileURL = `/learning-post/profile/${encodeURIComponent(displayName.replace(/ /g, '_'))}`;
+            for (const p of postDocs) {
+              const cat = p.category || 'discussion';
+              const catLbl = CATEGORY_LABELS[cat] || cat;
+              const catCol = CATEGORY_COLORS[cat] || '#6b7280';
+              const ms = p.createdAt?.toMillis ? p.createdAt.toMillis() : 0;
+              const likes = p.likes || 0;
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = profileURL;
+              a.innerHTML = `
+                <div class="pp-top">
+                  <span class="pp-cat" style="background:${catCol}">${escapeHtmlP(catLbl)}</span>
+                  <span class="pp-when">${escapeHtmlP(relTime(ms))}</span>
+                </div>
+                ${p.image ? `<img class="pp-thumb" src="${escapeHtmlP(p.image)}" alt="">` : ''}
+                <p class="pp-text">${escapeHtmlP(p.text || '')}</p>
+                <div class="pp-foot">
+                  <span class="pp-stat">❤ ${likes}</span>
+                  ${p.quizChoices ? `<span class="pp-stat">📝 Quiz</span>` : ''}
+                </div>
+              `;
+              li.appendChild(a);
+              postList.appendChild(li);
+            }
+          }
+        } catch (postErr) {
+          // Posts not available — leave the empty-state in place
         }
       }
 
@@ -573,6 +1026,37 @@
     document.getElementById('btn-signout').addEventListener('click', async () => {
       await logOut();
       window.location.href = 'login.html';
+    });
+
+    // Switch account (Google chooser)
+    document.getElementById('btn-switch-account').addEventListener('click', async () => {
+      const errEl = document.getElementById('switch-error');
+      errEl.style.display = 'none'; errEl.textContent = '';
+      try {
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        const { user } = await signInWithPopup(fbAuth, provider);
+        if (!/@gmail\.com$/i.test(user.email || '')) {
+          await signOut(fbAuth);
+          errEl.textContent = 'Mathagram requires a @gmail.com Google account.';
+          errEl.style.display = 'block';
+          return;
+        }
+        const ref = fdoc(db, 'users', user.uid);
+        const snap = await fgetDoc(ref);
+        if (!snap.exists()) {
+          await fsetDoc(ref, {
+            displayName: user.displayName || 'New Learner',
+            email: user.email, color: 'blue', xp: 0, createdAt: serverTimestamp()
+          });
+        }
+        window.location.assign('/profile.html');
+      } catch (err) {
+        const c = String(err?.code || '');
+        if (/popup-closed-by-user|cancelled-popup-request/.test(c)) return;
+        errEl.textContent = (err?.message || 'Could not switch account.').replace(/^Firebase:\s*/, '');
+        errEl.style.display = 'block';
+      }
     });
 
     // Camera for Brain Scan

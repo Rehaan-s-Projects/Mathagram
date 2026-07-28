@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL &amp; Databases — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>SQL &amp; Databases</h1>
+    <p>Master databases — SQL queries, joins, aggregation, schema design, normalization, indexing, transactions, NoSQL, performance tuning, and real data projects. 388 lessons across 26 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Databases','What Is SQL?','Relational vs NoSQL','Installing PostgreSQL','SQLite Quick Start','GUI Clients — DBeaver','Your First Query','Comments in SQL','SQL Dialects Overview','Online SQL Sandboxes','Database vs Schema vs Table','Connecting to a Database','Reading Query Errors','psql Basics','Foundations Checkpoint']],
+      [2,'SELECT Basics',['SELECT Statement','Selecting Columns','SELECT *','Column Aliases','DISTINCT','LIMIT & OFFSET','ORDER BY','Sorting Multiple Columns','Literal Values','Calculated Columns','Concatenation','CASE Expressions','COALESCE & NULLIF','Reading Result Sets','SELECT Checkpoint']],
+      [3,'Filtering with WHERE',['The WHERE Clause','Comparison Operators','AND OR NOT','BETWEEN','IN','LIKE & Wildcards','ILIKE & Case Sensitivity','IS NULL','Operator Precedence','Filtering Dates','Filtering Text','Combining Conditions','Common Filter Mistakes','WHERE vs HAVING Preview','Filtering Checkpoint']],
+      [4,'Data Types',['Integer Types','Decimal & Numeric','Floating-Point','CHAR VARCHAR TEXT','BOOLEAN','DATE TIME TIMESTAMP','Intervals','UUID','JSON & JSONB','Arrays','Enumerated Types','Binary Data','Type Casting','Choosing the Right Type','Data Types Checkpoint']],
+      [5,'Working with NULL',['What Is NULL?','NULL vs Zero vs Empty','IS NULL & IS NOT NULL','NULL in Comparisons','Three-Valued Logic','COALESCE','NULLIF','NULL in Aggregates','NULL in Joins','NULL in ORDER BY','Default Values','NOT NULL Constraint','Handling Missing Data','Common NULL Bugs','NULL Checkpoint']],
+      [6,'Aggregate Functions',['COUNT','SUM','AVG','MIN & MAX','GROUP BY','Grouping Multiple Columns','HAVING Clause','WHERE vs HAVING','Aggregates with NULL','STRING_AGG / GROUP_CONCAT','Filtered Aggregates — FILTER','ROLLUP & CUBE','GROUPING SETS','Common Aggregation Patterns','Aggregates Checkpoint']],
+      [7,'Joins',['What Is a Join?','INNER JOIN','LEFT JOIN','RIGHT JOIN','FULL OUTER JOIN','CROSS JOIN','Self Joins','Joining Multiple Tables','Join Conditions — ON vs USING','Joins & NULL','Anti-Joins','Semi-Joins','Join Performance Basics','Common Join Mistakes','Joins Checkpoint']],
+      [8,'Subqueries',['What Is a Subquery?','Scalar Subqueries','Subqueries in WHERE','Subqueries in SELECT','Subqueries in FROM','Correlated Subqueries','EXISTS & NOT EXISTS','IN with Subqueries','ANY & ALL','Derived Tables','Subqueries vs Joins','Performance Considerations','Refactoring Subqueries','Nested Subqueries','Subqueries Checkpoint']],
+      [9,'Common Table Expressions',['What Is a CTE?','WITH Clause','Multiple CTEs','CTEs vs Subqueries','Readable Query Structure','Recursive CTEs','Hierarchical Data','Generating Series','Materialized CTEs','CTE Performance','CTEs for Refactoring','Chaining CTEs','Real-World Examples','Best Practices','CTE Checkpoint']],
+      [10,'Window Functions',['What Are Window Functions?','OVER Clause','PARTITION BY','ORDER BY in Windows','ROW_NUMBER','RANK & DENSE_RANK','NTILE','LAG & LEAD','FIRST_VALUE & LAST_VALUE','Running Totals','Moving Averages','Window Frames','Window vs GROUP BY','Practical Patterns','Window Functions Checkpoint']],
+      [11,'Modifying Data',['INSERT','Inserting Multiple Rows','INSERT from SELECT','UPDATE','Updating with Joins','DELETE','TRUNCATE','UPSERT — ON CONFLICT','RETURNING Clause','Bulk Loading — COPY','Soft Deletes','Auditing Changes','Transactions Preview','Safe Data Modification','Modifying Data Checkpoint']],
+      [12,'Creating Tables',['CREATE TABLE','Column Definitions','Primary Keys','Foreign Keys','UNIQUE Constraints','CHECK Constraints','DEFAULT Values','NOT NULL','Auto-Increment / SERIAL / IDENTITY','ALTER TABLE','DROP TABLE','Temporary Tables','Generated Columns','Table Design Basics','Creating Tables Checkpoint']],
+      [13,'Schema Design',['What Is a Schema?','Entities & Attributes','Relationships','One-to-One','One-to-Many','Many-to-Many','Junction Tables','Entity-Relationship Diagrams','Primary Key Strategies','Natural vs Surrogate Keys','Naming Conventions','Schema Documentation','Evolving a Schema','Schema Design Checkpoint','Design Review']],
+      [14,'Normalization',['Why Normalize?','Functional Dependencies','First Normal Form','Second Normal Form','Third Normal Form','Boyce-Codd Normal Form','Fourth & Fifth Normal Form','Denormalization','When to Denormalize','Update Anomalies','Insertion & Deletion Anomalies','Normalization Walkthrough','Trade-offs','Real-World Schemas','Normalization Checkpoint']],
+      [15,'Indexes',['What Is an Index?','B-Tree Indexes','Creating Indexes','Composite Indexes','Unique Indexes','Partial Indexes','Covering Indexes','Hash Indexes','GIN & GiST Indexes','When Indexes Help','When Indexes Hurt','Index Maintenance','Index-Only Scans','Choosing Indexes','Indexes Checkpoint']],
+      [16,'Query Performance',['EXPLAIN','EXPLAIN ANALYZE','Reading Query Plans','Sequential vs Index Scans','Join Algorithms','Statistics & ANALYZE','Slow Query Logs','Avoiding SELECT *','Sargable Predicates','Caching','Query Refactoring','N+1 Query Problem','Pagination Performance','Profiling Tools','Performance Checkpoint']],
+      [17,'Transactions',['What Is a Transaction?','BEGIN COMMIT ROLLBACK','ACID Properties','Atomicity','Consistency','Isolation','Durability','Isolation Levels','Read Phenomena','Locking','Deadlocks','Savepoints','Optimistic vs Pessimistic','MVCC','Transactions Checkpoint']],
+      [18,'Views & Stored Logic',['Creating Views','Updatable Views','Materialized Views','Refreshing Materialized Views','Stored Procedures','Functions','Triggers','Trigger Use Cases','Cursors','When to Use Stored Logic','Business Logic Placement','Maintainability','Security with Views','Stored Logic Checkpoint','Logic Review']],
+      [19,'Database Security',['Users & Roles','GRANT & REVOKE','Row-Level Security','Column Permissions','SQL Injection','Parameterized Queries','Least Privilege','Encryption at Rest','Encryption in Transit','Auditing Access','Secrets Management','Backup Security','Compliance Basics','Security Best Practices','Security Checkpoint']],
+      [20,'Backups & Reliability',['Why Back Up?','Logical Backups — pg_dump','Physical Backups','Point-in-Time Recovery','Restore Testing','Replication Basics','Primary & Replica','Streaming Replication','Failover','High Availability','Disaster Recovery Plans','Connection Pooling','Monitoring','Reliability Checkpoint','Reliability Review']],
+      [21,'NoSQL Databases',['What Is NoSQL?','Document Stores — MongoDB','MongoDB Queries','Key-Value — Redis','Redis Data Structures','Wide-Column — Cassandra','Graph Databases — Neo4j','Search — Elasticsearch','CAP Theorem','Eventual Consistency','When to Use NoSQL','Polyglot Persistence','SQL vs NoSQL Trade-offs','NewSQL','NoSQL Checkpoint']],
+      [22,'Advanced SQL',['LATERAL Joins','JSON Functions','JSONB Operators & Indexing','Array Operations','Full-Text Search','Pattern Matching with Regex','Pivoting Data','Date & Time Functions','Generate Series','DISTINCT ON','Set Operations — UNION INTERSECT EXCEPT','Conditional Aggregation','Advanced Window Tricks','Recursive Query Patterns','Advanced SQL Checkpoint']],
+      [23,'Working with SQL in Code',['Database Drivers','Connecting from Python','Connecting from JavaScript','ORMs Overview','SQLAlchemy','Prisma','Query Builders','Migrations','Seeding Data','Connection Pools','Preventing SQL Injection','Handling Errors','Testing Database Code','Repository Pattern','SQL in Code Checkpoint']],
+      [24,'Data Engineering Basics',['OLTP vs OLAP','Data Warehouses','Star & Snowflake Schemas','ETL vs ELT','Batch vs Streaming','Partitioning','Sharding','Column-Oriented Databases','Analytics with SQL','dbt Overview','Data Pipelines','BigQuery & Snowflake','Data Lakes','Scaling Strategies','Data Engineering Checkpoint']],
+      [25,'Projects & Mastery',['Library Catalog Schema','E-Commerce Database','Blog Platform Queries','Analytics Dashboard Queries','Movie Recommendation Data','Banking Transactions System','Inventory Management','Social Network Schema','Time-Series Data','Reporting Queries','Performance Tuning a Slow Query','Designing for Scale','Career Path & Resources','Database Review','SQL Grand Mastery!']],
+      [26,'Cloud & Modern Databases',['Managed Databases','Amazon RDS','Aurora','Cloud SQL','Serverless Databases','Connection Pooling at Scale','Cloud Read Replicas','Migrations in CI','Schema Versioning','Observability','Cost Optimization','Vector Databases','Choosing a Cloud DB']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'sql-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('sql-databases');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('sql-databases');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

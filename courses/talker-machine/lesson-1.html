@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Talker Machine? — Talker Machine — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+    .lesson-page { max-width: 880px; margin: 0 auto; padding: 56px 16px 80px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #86efac; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); border-radius: 999px; margin-bottom: 12px; }
+    .lesson-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; color: #fff; }
+    .lesson-header .subtitle { font-size: 1.05rem; color: #cbd5e1; }
+
+    .teacher-row { display: flex; align-items: flex-end; justify-content: center; gap: 18px; margin: 24px 0 18px; min-height: 130px; }
+    .buddy-avatar { width: 110px; height: 110px; flex-shrink: 0; border-radius: 50%; background: #fff; padding: 6px; box-shadow: 0 6px 24px rgba(34,197,94,0.32); border: 3px solid #86efac; display: block; animation: bob 2s ease infinite; }
+    .buddy-avatar.correct { border-color: #22c55e; box-shadow: 0 0 32px rgba(34,197,94,0.7); }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .speech { max-width: 460px; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; font-size: 0.95rem; line-height: 1.5; color: #e2e8f0; position: relative; }
+    .speech::before { content: ''; position: absolute; left: -10px; bottom: 16px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 10px solid rgba(255,255,255,0.06); }
+    .speech.right { border-color: rgba(34,197,94,0.5); }
+    .speech.right .speaker-name { color: #22c55e; }
+    .speech strong { color: #86efac; }
+    .speaker-name { display: block; font-weight: 800; color: #4ade80; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+
+    .progress { display: flex; gap: 6px; justify-content: center; max-width: 320px; margin: 0 auto 8px; }
+    .progress .dot { width: 38px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.10); }
+    .progress .dot.done { background: linear-gradient(90deg, #22c55e, #15803d); box-shadow: 0 0 10px rgba(34,197,94,0.6); }
+    .progress .dot.active { background: linear-gradient(90deg, #86efac, #4ade80); }
+
+    .step-card { max-width: 620px; margin: 8px auto 18px; padding: 18px 22px; background: rgba(34,197,94,0.06); border: 1px dashed rgba(74,222,128,0.35); border-radius: 14px; text-align: left; }
+    .step-card .step-label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.16em; color: #4ade80; text-transform: uppercase; margin-bottom: 6px; text-align: center; }
+    .step-card h2 { font-size: 1.15rem; color: #d1fae5; margin: 0 0 8px; text-align: center; }
+    .step-card p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.55; margin: 0 0 8px; }
+    .step-card p:last-child { margin-bottom: 0; }
+    .famous-users { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 10px 0 4px; }
+    .famous-users .user-card { padding: 10px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); border-radius: 10px; font-size: 0.86rem; color: #f1f5f9; line-height: 1.45; }
+    .famous-users .user-card strong { color: #86efac; display: block; margin-bottom: 2px; font-size: 0.92rem; }
+
+    /* ─── Talker device on the lesson ─── */
+    .lesson-talker {
+      max-width: 620px; margin: 14px auto 6px;
+      background: linear-gradient(180deg, #111827, #0a0f1d);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.30);
+    }
+    .lesson-talker .screen {
+      background: #060912; border: 1px solid #1e293b;
+      border-radius: 10px; padding: 14px 14px;
+      min-height: 64px; font-family: 'SF Mono', 'Courier New', monospace;
+      font-size: 1.05rem; color: #4ade80; line-height: 1.4;
+      box-shadow: inset 0 0 18px rgba(74,222,128,0.18);
+      letter-spacing: 0.04em; text-align: left;
+    }
+    .lesson-talker .screen.placeholder { color: #475569; font-style: italic; }
+    .lesson-talker .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(86px, 1fr)); gap: 6px; margin: 10px 0 8px; }
+    .lesson-talker .word {
+      padding: 11px 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+      color: #f1f5f9; border-radius: 9px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 0.92rem;
+      transition: transform 0.06s, background 0.1s;
+    }
+    .lesson-talker .word:hover { background: rgba(255,255,255,0.12); }
+    .lesson-talker .word:active { transform: scale(0.95); background: #f59e0b; color: #1e1b1b; }
+    .lesson-talker .actions { display: flex; gap: 8px; }
+    .lesson-talker .actions button {
+      flex: 1; padding: 10px; border: none; border-radius: 9px; font-weight: 800; cursor: pointer; font-family: inherit;
+    }
+    .lesson-talker .actions .speak { background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; }
+    .lesson-talker .actions .clear { background: #334155; color: #f1f5f9; }
+
+    .controls { text-align: center; margin: 22px 0 12px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 12px 28px; border-radius: 999px; font-weight: 800; font-size: 1rem; cursor: pointer; border: none; font-family: inherit; transition: transform 0.1s, background 0.15s, box-shadow 0.15s; letter-spacing: 0.02em; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; box-shadow: 0 8px 24px rgba(34,197,94,0.4); }
+    .btn.primary:hover { box-shadow: 0 10px 28px rgba(34,197,94,0.55); }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #f1f5f9; border: 1px solid rgba(255,255,255,0.12); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .check-row { display: flex; gap: 8px; margin: 10px 0 4px; flex-wrap: wrap; justify-content: center; }
+    .check-row .choice {
+      padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      color: #f1f5f9; border-radius: 999px; cursor: pointer; font-weight: 700; font-family: inherit; font-size: 0.92rem;
+    }
+    .check-row .choice:hover { background: rgba(255,255,255,0.12); }
+    .check-row .choice.right { background: linear-gradient(135deg, #22c55e, #15803d); border-color: #22c55e; color: #fff; }
+    .check-row .choice.wrong { background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444; color: #fff; }
+
+    .complete-card { max-width: 480px; margin: 24px auto 0; padding: 24px; text-align: center; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45); border-radius: 16px; display: none; }
+    .complete-card.show { display: block; }
+    .complete-card h2 { color: #86efac; margin: 0 0 6px; font-size: 1.4rem; }
+    .complete-card p { color: #d1fae5; margin: 0 0 14px; }
+
+    .footer-nav { text-align: center; margin-top: 28px; }
+    .footer-nav a { color: #4ade80; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    @media (max-width: 540px) {
+      .lesson-header h1 { font-size: 1.5rem; }
+      .buddy-avatar { width: 80px; height: 80px; }
+      .speech { font-size: 0.88rem; padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Talker Machine</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">🗣️ Unit 1 · Lesson 1</span>
+      <h1>What Is a Talker Machine?</h1>
+      <p class="subtitle">Augmentative &amp; Alternative Communication (AAC)</p>
+    </header>
+
+    <div class="teacher-row">
+      <img src="../../assets/characters/rita.svg" alt="Rita" class="buddy-avatar" id="buddy">
+      <div class="speech" id="speech">
+        <span class="speaker-name">Rita</span>
+        <span id="speech-text">Hi! I'm Rita. Some people can't use their voice to speak — so they use a <strong>talker machine</strong>. It's a device that turns button presses, eye gaze, or typing into spoken words. Let's learn how one works!</span>
+      </div>
+    </div>
+
+    <div class="progress" aria-label="Lesson progress">
+      <div class="dot active" id="dot-0"></div>
+      <div class="dot" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+    </div>
+
+    <!-- Step 1: Definition -->
+    <section class="step-card" id="step-1">
+      <div class="step-label">Step 1 of 4</div>
+      <h2>What is a Talker Machine?</h2>
+      <p>A <strong>talker machine</strong> — formally called an <strong>AAC device</strong> (Augmentative and Alternative Communication) — is any tool that helps a person who has trouble speaking. They can be:</p>
+      <p>• <strong>Low-tech</strong> (paper letter boards, picture binders)<br>
+         • <strong>Mid-tech</strong> (single-button voice recorders)<br>
+         • <strong>High-tech</strong> (tablets running Proloquo2Go, TouchChat, LAMP, or full speech-generating devices with eye-tracking)</p>
+      <div class="controls">
+        <button class="btn primary" data-next="2">Got it →</button>
+      </div>
+    </section>
+
+    <!-- Step 2: Who uses them -->
+    <section class="step-card" id="step-2" style="display:none;">
+      <div class="step-label">Step 2 of 4</div>
+      <h2>Who uses a talker machine?</h2>
+      <p>People of all ages — anyone whose voice doesn't work the way they need it to.</p>
+      <div class="famous-users">
+        <div class="user-card"><strong>Stephen Hawking</strong>Famous physicist; ALS left him unable to speak. Used a single cheek-switch + DECtalk synthesizer for 30+ years.</div>
+        <div class="user-card"><strong>Children with autism</strong>~30% are minimally verbal. Apps like Proloquo2Go give them a voice.</div>
+        <div class="user-card"><strong>People with ALS</strong>Lose speech as the disease progresses. Eye-tracking AAC keeps them communicating.</div>
+        <div class="user-card"><strong>Stroke survivors</strong>Aphasia can take away words. Symbol boards rebuild bridges.</div>
+        <div class="user-card"><strong>Cerebral palsy</strong>Speech can be hard to produce; switches &amp; symbol grids work around it.</div>
+        <div class="user-card"><strong>Many more</strong>Down syndrome, brain injury, Rett syndrome — AAC is for anyone who needs another way to talk.</div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" data-next="3">Next →</button>
+      </div>
+    </section>
+
+    <!-- Step 3: Try it -->
+    <section class="step-card" id="step-3" style="display:none;">
+      <div class="step-label">Step 3 of 4</div>
+      <h2>Try a digital talker</h2>
+      <p>This is exactly how a real AAC device works: <strong>tap a word</strong> to add it to the message, then press <strong>🔊 Speak</strong> to hear it. Try saying "I want water please."</p>
+      <div class="lesson-talker">
+        <div class="screen placeholder" id="t-screen">Tap a word, then press Speak…</div>
+        <div class="grid" id="t-grid"></div>
+        <div class="actions">
+          <button type="button" class="speak" id="t-speak">🔊 Speak</button>
+          <button type="button" class="clear" id="t-clear">Clear</button>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" data-next="4" id="step3-next" disabled>I tried it →</button>
+      </div>
+    </section>
+
+    <!-- Step 4: Quick check -->
+    <section class="step-card" id="step-4" style="display:none;">
+      <div class="step-label">Step 4 of 4 · Quick Check</div>
+      <h2 id="quiz-q">A talker machine is mostly used by people who…</h2>
+      <div class="check-row" id="quiz-choices">
+        <button class="choice" data-correct="true">Have trouble using their voice to speak</button>
+        <button class="choice">Refuse to talk to pigeons</button>
+        <button class="choice">Can hear sandwiches from across the street</button>
+        <button class="choice">Are training a goldfish to read</button>
+      </div>
+      <p id="quiz-feedback" style="text-align:center; color:#94a3b8; margin-top:10px;"></p>
+    </section>
+
+    <section class="complete-card" id="complete-card">
+      <h2>🎉 You finished Lesson 1!</h2>
+      <p>You now know what a talker machine is, who uses one, and how a real AAC device speaks your words. Up next: <strong>Lesson 2 — Aided vs Unaided</strong>.</p>
+      <a class="btn primary" href="index.html">Back to the Learning Path →</a>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Talker Machine</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ─── Step navigation ──────────────────────────────────────────────────
+    const dots = [0,1,2,3].map(i => document.getElementById('dot-'+i));
+    const speechEl = document.getElementById('speech');
+    const speechText = document.getElementById('speech-text');
+    const buddyEl = document.getElementById('buddy');
+    const stepMsg = [
+      'Hi! I\'m Rita. Some people can\'t use their voice to speak — so they use a <strong>talker machine</strong>. It\'s a device that turns button presses, eye gaze, or typing into spoken words. Let\'s learn how one works!',
+      'A talker machine isn\'t just one thing — it\'s any tool from a paper letter board all the way to a tablet that speaks for you.',
+      'Many famous people use AAC! <strong>Stephen Hawking</strong> "spoke" his entire later career through a talker — controlled by a tiny twitch in his cheek.',
+      'Your turn — tap words to build a sentence, then press <strong>Speak</strong>. Your computer will actually say it out loud!',
+      'Last one — a quick check. <strong>Who uses a talker machine?</strong>'
+    ];
+    function goToStep(n) {
+      [1,2,3,4].forEach(i => {
+        const el = document.getElementById('step-'+i);
+        if (el) el.style.display = i === n ? 'block' : 'none';
+      });
+      dots.forEach((d, i) => {
+        d.classList.toggle('done', i < n - 1);
+        d.classList.toggle('active', i === n - 1);
+      });
+      speechText.innerHTML = stepMsg[n] || stepMsg[stepMsg.length - 1];
+      speechEl.classList.add('right');
+      buddyEl.classList.add('correct');
+      setTimeout(() => buddyEl.classList.remove('correct'), 700);
+    }
+    document.querySelectorAll('[data-next]').forEach(b => {
+      b.addEventListener('click', () => goToStep(parseInt(b.dataset.next, 10)));
+    });
+
+    // ─── Mini talker (step 3) ─────────────────────────────────────────────
+    const T_WORDS = ['I','you','want','need','help','more','please','thank you','water','food','rest','stop','hello','goodbye'];
+    const tScreen = document.getElementById('t-screen');
+    const tGrid   = document.getElementById('t-grid');
+    const tSpeak  = document.getElementById('t-speak');
+    const tClear  = document.getElementById('t-clear');
+    const step3Next = document.getElementById('step3-next');
+    const tokens = [];
+    function renderTalker() {
+      if (tokens.length === 0) {
+        tScreen.classList.add('placeholder');
+        tScreen.textContent = 'Tap a word, then press Speak…';
+      } else {
+        tScreen.classList.remove('placeholder');
+        tScreen.textContent = tokens.join(' ');
+      }
+    }
+    T_WORDS.forEach(w => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'word'; b.textContent = w;
+      b.addEventListener('click', () => { tokens.push(w); renderTalker(); step3Next.disabled = false; });
+      tGrid.appendChild(b);
+    });
+    tClear.addEventListener('click', () => { tokens.length = 0; renderTalker(); });
+    tSpeak.addEventListener('click', () => {
+      if (!window.speechSynthesis || tokens.length === 0) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(tokens.join(' '));
+      window.speechSynthesis.speak(u);
+      step3Next.disabled = false;
+    });
+
+    // ─── Quiz (step 4) ────────────────────────────────────────────────────
+    const quizFeedback = document.getElementById('quiz-feedback');
+    let quizDone = false;
+    document.querySelectorAll('#quiz-choices .choice').forEach(c => {
+      c.addEventListener('click', () => {
+        if (quizDone) return;
+        const ok = c.dataset.correct === 'true';
+        c.classList.add(ok ? 'right' : 'wrong');
+        if (ok) {
+          quizDone = true;
+          quizFeedback.textContent = 'Exactly! AAC is for people whose voice doesn\'t work the way they need.';
+          quizFeedback.style.color = '#86efac';
+          dots.forEach(d => { d.classList.remove('active'); d.classList.add('done'); });
+          document.getElementById('complete-card').classList.add('show');
+          markLessonComplete();
+        } else {
+          quizFeedback.textContent = 'Not quite — try another option.';
+          quizFeedback.style.color = '#fca5a5';
+        }
+      });
+    });
+
+    // ─── Progress tracking ────────────────────────────────────────────────
+    async function markLessonComplete() {
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'talker-machine'),
+          { 'talker-1': { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent fail */ }
+    }
+  </script>
+</body>
+</html>

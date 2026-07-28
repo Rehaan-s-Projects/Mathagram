@@ -1,0 +1,85 @@
+/* Mathagram Story Mode — Duolingo-style narrative calculus lessons */
+
+.story-lesson-content { max-width: 720px; margin: 0 auto; padding: 48px 24px 8px; }
+.story-lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+.story-lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+.story-lesson-content .intro { font-size: 1rem; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 24px; }
+
+.story-exercise-section { max-width: 720px; margin: 0 auto; padding: 0 24px 24px; }
+
+.story-scene { background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 2px solid #fb923c; border-radius: 18px; padding: 22px 24px; margin: 16px auto 0; max-width: 720px; box-shadow: 0 2px 8px rgba(251, 146, 60, 0.15); animation: storyFadeUp 0.4s ease-out; }
+.scene-label { display: inline-block; background: #fb923c; color: #fff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 14px; border-radius: 999px; margin-bottom: 14px; }
+.narration { font-style: italic; color: #57534e; font-size: 1rem; line-height: 1.7; margin-bottom: 14px; position: relative; padding-right: 40px; }
+.narration:last-child { margin-bottom: 0; }
+.narration .play-btn { right: 0; top: 0; background: rgba(100, 116, 139, 0.12); color: #475569; }
+.narration .play-btn:hover { background: #64748b; color: #fff; }
+.narration .play-btn.speaking { background: #64748b; color: #fff; animation: pulse 0.8s ease-in-out infinite; box-shadow: 0 0 0 0 rgba(100, 116, 139, 0.5); }
+.narration.narrating { color: #1c1917; }
+.dialogue { display: flex; gap: 12px; align-items: flex-start; margin: 12px 0; }
+.avatar { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+.avatar.diego { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.avatar.rita { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+.avatar.sam { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.avatar.steve { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.avatar.william { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.avatar.gosia { background: linear-gradient(135deg, #ec4899, #db2777); }
+.avatar.james { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.avatar.narrator { background: linear-gradient(135deg, #64748b, #475569); }
+.speech { flex: 1; background: #fff; padding: 12px 16px; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); position: relative; }
+.speech::before { content: ''; position: absolute; left: -7px; top: 14px; width: 0; height: 0; border-style: solid; border-width: 7px 8px 7px 0; border-color: transparent #fff transparent transparent; }
+.play-btn { position: absolute; right: 10px; top: 10px; width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(20, 184, 166, 0.12); color: #14b8a6; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s; padding: 0; }
+.play-btn:hover { background: #14b8a6; color: #fff; transform: scale(1.1); }
+.play-btn.speaking { background: #14b8a6; color: #fff; animation: pulse 0.8s ease-in-out infinite; }
+.speech { padding-right: 48px; }
+.scene-controls { display: flex; gap: 10px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(251, 146, 60, 0.4); }
+.play-all-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid #fb923c; background: #fff; color: #c2410c; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; }
+.play-all-btn:hover { background: #fb923c; color: #fff; }
+.play-all-btn.playing { background: #fb923c; color: #fff; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(20, 184, 166, 0); }
+}
+
+/* ─── Tap-to-advance bubble flow (Duolingo Stories pattern) ─── */
+.bubble-hidden { display: none !important; }
+.bubble-reveal { animation: bubbleFadeIn 0.35s ease-out; }
+@keyframes bubbleFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.next-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 18px auto 0; padding: 14px 36px;
+  border: none; border-radius: 999px;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  color: #fff; font-weight: 800; font-size: 1rem;
+  letter-spacing: 0.02em; cursor: pointer;
+  box-shadow: 0 4px 0 #0f766e, 0 6px 12px rgba(20,184,166,0.25);
+  transition: all 0.12s ease-out;
+  font-family: inherit;
+}
+.next-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 0 #0f766e, 0 8px 14px rgba(20,184,166,0.32); }
+.next-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0f766e; }
+.next-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: 0 4px 0 #0f766e; }
+.next-btn-wrapper { display: flex; justify-content: center; max-width: 720px; margin: 8px auto 0; padding: 0 24px; }
+.progress-dots { display: flex; gap: 6px; justify-content: center; margin-top: 14px; }
+.progress-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(251,146,60,0.25); transition: background 0.2s; }
+.progress-dot.active { background: #fb923c; width: 18px; border-radius: 999px; }
+.speaker { font-weight: 800; font-size: 0.85rem; margin-bottom: 4px; }
+.speaker.diego { color: #dc2626; }
+.speaker.rita { color: #0f766e; }
+.speaker.sam { color: #d97706; }
+.speaker.steve { color: #4f46e5; }
+.speaker.william { color: #7c3aed; }
+.speaker.gosia { color: #db2777; }
+.speaker.james { color: #0891b2; }
+.speaker.narrator { color: #475569; }
+.line { color: #1c1917; font-size: 1rem; line-height: 1.6; }
+.math-callout { background: rgba(20, 184, 166, 0.08); border-left: 4px solid #14b8a6; padding: 10px 14px; margin: 10px 0; border-radius: 8px; font-size: 1.05rem; }
+.scene-hidden { display: none; }
+
+@keyframes storyFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listening Voices Demo — lesson-6 (Edam &amp; Diego)</title>
+<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="/css/characters.css">
+<style>
+  body { font-family:-apple-system,'Helvetica Neue',sans-serif; max-width:760px; margin:0 auto; padding:32px 20px 80px; background:#f8f9fa; }
+  h1 { font-size:1.5rem; font-weight:800; }
+  .note { background:#fff8e1; border:1px solid #ffe08a; border-radius:12px; padding:14px 18px; font-size:.92rem; line-height:1.5; margin:16px 0 28px; }
+  .card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:22px; margin-bottom:22px; box-shadow:0 6px 16px rgba(0,0,0,.06); }
+  .who { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .who img { width:52px; height:52px; border-radius:50%; background:#fff; border:3px solid #00b89f; }
+  .who .label { font-weight:800; font-size:1.05rem; }
+  .who .voice { font-size:.8rem; color:#64748b; }
+  .exercise-container { margin-top:6px; }
+  .big-hint { font-size:.85rem; color:#475569; margin-top:6px; }
+</style>
+</head>
+<body>
+  <h1>🎧 Listening voices — the lesson-6 fix</h1>
+  <div class="note">
+    This runs the <strong>real <code>js/exercises.js</code></strong> with the fix applied, using
+    lesson-6's actual listening questions tagged <strong>Edam</strong> and <strong>Diego</strong>.
+    Each card auto-plays once; tap the <strong>🔊 speaker</strong> to replay.
+    You should hear two clearly different voices — Edam is deep (Daniel, en-GB), Diego is calm/even (Ralph, en-US).
+  </div>
+
+  <div class="card">
+    <div class="who">
+      <img src="/assets/characters/edam.svg" alt="Edam">
+      <div><div class="label">Edam reads question 1</div><div class="voice">voice: Daniel · pitch 0.8 · rate 0.9</div></div>
+    </div>
+    <div id="ex-edam" class="exercise-container"></div>
+  </div>
+
+  <div class="card">
+    <div class="who">
+      <img src="/assets/characters/diego.svg" alt="Diego" style="border-color:#3b82f6;">
+      <div><div class="label">Diego reads question 2</div><div class="voice">voice: Ralph · pitch 1.0 · rate 1.0</div></div>
+    </div>
+    <div id="ex-diego" class="exercise-container"></div>
+  </div>
+
+  <script type="module">
+    import { renderExercise } from '/js/exercises.js';
+
+    // Lesson-6's first two listening exercises, tagged with their reader.
+    const edamEx = {
+      type: 'listening',
+      question: 'What is the amplitude of y equals 3 sine x?',
+      spokenText: 'What is the amplitude of y equals three sine x?',
+      options: ['1', '2', '3', '6'], correctIndex: 2,
+      character: 'edam',
+    };
+    const diegoEx = {
+      type: 'listening',
+      question: 'What is the minimum value of y equals 2 sine x minus 1?',
+      spokenText: 'What is the minimum value of y equals two sine x minus one?',
+      options: ['-3', '-2', '-1', '1'], correctIndex: 0,
+      character: 'diego',
+    };
+
+    renderExercise(document.getElementById('ex-edam'), edamEx, () => {});
+    // Stagger Diego so the two auto-plays don't overlap.
+    setTimeout(() => renderExercise(document.getElementById('ex-diego'), diegoEx, () => {}), 4500);
+  </script>
+</body>
+</html>

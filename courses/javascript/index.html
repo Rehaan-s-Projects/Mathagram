@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>JavaScript</h1>
+    <p>Master JavaScript — variables, async, promises, ES2024, the DOM, modules, fetch, classes, Node.js, testing, bundlers, and real frontend &amp; backend projects. 482 lessons across 32 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why JavaScript','JS in the Browser','Node.js Quick Start','Hello World','Comments','JS vs TS vs Java','REPL & DevTools','Modules vs Scripts','ES Version History','Strict Mode','Online Editors — CodePen','Project Structure','console.log Tricks','Debugging with Breakpoints','Foundations Checkpoint']],
+      [2,'Variables & Types',['var let const','Primitive Types','typeof Operator','Numbers & NaN','BigInt','Strings & Template Literals','Booleans & Truthy/Falsy','null vs undefined','Symbol','Implicit Conversions','Strict vs Loose Equality','Boxing & Unboxing','Object Type','Memory Model Basics','Variables Checkpoint']],
+      [3,'Operators',['Arithmetic + - * /','Exponent **','Comparison ===','Logical && || ??','Nullish Coalescing','Optional Chaining ?.','Ternary ?:','Spread & Rest ...','Destructuring','Operator Precedence','Bitwise Operators','String Concatenation','Comma Operator','Object Spread','Operators Checkpoint']],
+      [4,'Control Flow',['if-else','switch Statement','while & do-while','for Loop','for...of','for...in','break & continue','Labeled Statements','Iterables','Generators yield','Async Generators','Match-like Patterns','Pattern Printing','FizzBuzz','Control Flow Checkpoint']],
+      [5,'Functions',['Function Declarations','Function Expressions','Arrow Functions =>','Parameters & Defaults','Rest Parameters','Return Values','this in Functions','Closures','IIFEs','Higher-Order Functions','Pure Functions','Recursion','Tail-Call Optimization','Currying & Partial Application','Functions Checkpoint']],
+      [6,'Arrays',['Array Literals','Indexing & length','push pop shift unshift','map filter reduce','find & findIndex','every & some','includes & indexOf','sort & reverse','slice & splice','flat & flatMap','Array.from','Array.of','Iterating with forEach','Mutable vs Immutable Patterns','Arrays Checkpoint']],
+      [7,'Objects',['Object Literals','Property Access','Computed Properties','Shorthand Properties','Methods on Objects','Object.keys/values/entries','Object.assign','Object Spread','Freezing Objects','Optional Chaining ?.','Nullish Coalescing ??','Deep vs Shallow Copy','JSON.stringify & parse','Object Destructuring','Objects Checkpoint']],
+      [8,'Strings',['String Methods','Template Literals','Tagged Templates','split & join','replace & replaceAll','trim & padStart','Unicode & Surrogate Pairs','String.raw','String Coercion','matchAll & Regex','normalize','toLocaleUpperCase','Repeating Strings','String Builders','Strings Checkpoint']],
+      [9,'Regex',['Regex Literals','Flags g i m s u y','Character Classes','Anchors & Boundaries','Quantifiers','Groups & Backreferences','Lookahead & Lookbehind','Named Groups','Unicode Categories','test & exec','String.match','Common Regex Pitfalls','Catastrophic Backtracking','Regex Tools','Regex Checkpoint']],
+      [10,'Classes & OOP',['class Keyword','Constructor','Methods','Static Methods','Getters & Setters','Private Fields #','Inheritance with extends','super Keyword','Mixins','Prototypes Explained','Object.create','instanceof','Class Expressions','Decorators (Stage 3)','OOP Checkpoint']],
+      [11,'Prototype Chain',['Every Object Has a Prototype','__proto__ vs prototype','Setting Prototypes','Reading the Chain','Modifying Built-in Prototypes (Don\'t)','Prototype Methods','hasOwnProperty','Inheritance Without Class','Constructor Functions','new Operator','Mixin Patterns','Object.setPrototypeOf','Prototype-Based Programming','Pitfalls','Prototype Checkpoint']],
+      [12,'Async — Callbacks, Promises, Async/Await',['Synchronous vs Async','setTimeout & setInterval','Callbacks','Callback Hell','Promises','Promise.resolve & reject','Chaining .then','Promise.all','Promise.race','Promise.allSettled','async Functions','await Keyword','Error Handling try-catch','Top-Level await','Async Checkpoint']],
+      [13,'Event Loop & Microtasks',['What Is the Event Loop?','Call Stack','Web APIs','Task Queue','Microtask Queue','Promises vs setTimeout','Animation Frames','queueMicrotask','Blocking the Main Thread','Long Tasks','Web Workers Preview','process.nextTick (Node)','Visualizing the Loop','Common Async Bugs','Event Loop Checkpoint']],
+      [14,'DOM Manipulation',['What Is the DOM?','querySelector','Creating Elements','Appending & Removing','innerHTML vs textContent','Attributes vs Properties','Class Manipulation','Data Attributes','Inline Styles','Event Listeners','Event Bubbling','Event Delegation','Form Inputs','Custom Events','DOM Checkpoint']],
+      [15,'Browser APIs',['Fetch API','Headers & CORS','FormData','Storage — localStorage','sessionStorage','IndexedDB Basics','Cookies','Geolocation API','Notifications API','Clipboard API','History API','Intersection Observer','Mutation Observer','ResizeObserver','Browser APIs Checkpoint']],
+      [16,'Modules & Bundling',['import & export','Default vs Named Exports','Dynamic import()','CommonJS Compatibility','Bundlers Overview','Webpack Basics','Vite','Rollup','esbuild','Tree-Shaking','Source Maps','Hot Module Replacement','Code Splitting','Polyfills','Modules Checkpoint']],
+      [17,'Node.js Basics',['Why Node.js','REPL & Scripts','node Command','package.json','npm install','npm scripts','node_modules','CommonJS require','ESM in Node','Built-in Modules — fs path os','Reading Files','Writing Files','Streams','EventEmitter','Node Basics Checkpoint']],
+      [18,'HTTP & APIs',['HTTP Methods','Status Codes','Headers','JSON APIs','Fetch GET','Fetch POST','Authentication Headers','Bearer Tokens','CORS Pitfalls','Express.js Hello World','Routing Basics','Middleware','Body Parsing','REST Conventions','HTTP Checkpoint']],
+      [19,'State Management Patterns',['Local Component State','Reactive Updates','Pub/Sub Pattern','Observable Pattern','Redux Basics','Reducer Functions','Selectors','Zustand Overview','Signals','Immer & Immutability','Persisting State','Optimistic Updates','Server State vs UI State','Local Storage Sync','State Checkpoint']],
+      [20,'Testing',['Jest Basics','describe & it','Expect Matchers','Mocking with jest.fn','Async Tests','Vitest','Testing Library Intro','Snapshot Tests','Coverage Reports','Playwright Overview','Cypress Overview','TDD Workflow','Test Doubles','Continuous Testing','Testing Checkpoint']],
+      [21,'TypeScript Preview',['Why TypeScript?','Adding Types in JS','tsconfig.json','Inference','Interfaces vs Types','Generics in Brief','Type Narrowing','Migration Strategies','JSDoc Types','any & unknown','Strict Mode','Type Guards','Build with tsc','TS Checkpoint','TS Preview Checkpoint']],
+      [22,'Frameworks Overview',['React Hello World','Vue Hello World','Svelte Hello World','Solid Hello World','Angular Hello World','Lit & Web Components','Preact Lightweight','Astro & Islands','Qwik & Resumability','Choosing a Framework','JSX Basics','Reactive Stores','SSR vs SPA vs SSG','Hydration','Frameworks Checkpoint']],
+      [23,'Performance & Best Practices',['Bundle Size Audits','Lazy Loading','Memoization','requestIdleCallback','Image Optimization','Critical Rendering Path','Avoiding Layout Thrash','Lighthouse Audits','Core Web Vitals','Service Workers Basics','Caching Strategies','Memory Leaks','Debouncing & Throttling','Profiling in DevTools','Performance Checkpoint']],
+      [24,'Modern JavaScript Features',['Array.findLast','Object.hasOwn','Top-Level await','Logical Assignment ??= ||= &&=','WeakRef','Records & Tuples (Proposal)','Pipeline Operator (Proposal)','Iterator Helpers','Set & Map Improvements','Error.cause','Temporal API (Proposal)','Decorators (Stage 3)','ArrayBuffer & Typed Arrays','Web Streams','Modern JS Checkpoint']],
+      [25,'Projects & Mastery',['To-Do App (Vanilla JS)','Markdown Note Editor','Drum Kit','Weather App with Fetch','Quote Generator','Chat App with WebSockets','Photo Gallery','Calculator','Pomodoro Timer','Memory Card Game','Express REST API','Discord-Style Bot','Snake Game','Career Paths & Resources','JavaScript Grand Mastery!']],
+      [26,'Advanced Functions',['Generators Deep Dive','Iterator Protocol','Async Iterators','Tagged Templates','Function Composition','Memoization','Partial Application','Currying','Recursion Patterns','Trampolining','Lazy Sequences','Pure Functions','Point-Free Style','Higher-Order Patterns','Advanced Functions Checkpoint']],
+      [27,'Metaprogramming',['Property Descriptors','defineProperty','Getters & Setters','Proxy Objects','Proxy Traps','Reflect API','Well-Known Symbols','Symbol.iterator','Dynamic Properties','Object Sealing','Object.freeze Deep Dive','Reflection Patterns','Code Generation','Metaprogramming Risks','Metaprogramming Checkpoint']],
+      [28,'Browser Deep Dive',['Rendering Pipeline','Reflow & Repaint','requestAnimationFrame','Web Components','Shadow DOM','Custom Elements','HTML Templates','Canvas API','SVG Scripting','Web Audio API','WebGL Basics','Drag & Drop API','Pointer Events','Storage Deep Dive','Browser Checkpoint']],
+      [29,'Workers & Performance',['Web Workers','Worker Messaging','SharedArrayBuffer','Service Workers Deep Dive','Caching Strategies','Offline-First Apps','requestIdleCallback','Performance API','Long Tasks','Code Splitting Advanced','Lazy Loading Modules','Memory Profiling','Avoiding Leaks','Performance Budgets','Performance Checkpoint']],
+      [30,'Web Security',['XSS Attacks','Content Security Policy','CSRF Protection','CORS Deep Dive','Sanitizing Input','Safe innerHTML','Clickjacking','Secure Cookies','JWT Handling','OAuth Flows','Subresource Integrity','Dependency Auditing','HTTPS & Mixed Content','Security Headers','Security Checkpoint']],
+      [31,'Node.js Deep Dive',['Event Loop in Node','Streams Deep Dive','Buffers','Cluster Module','Child Processes','Worker Threads','File Watching','HTTP Server Internals','Express Middleware Deep','Error Handling','Environment Config','Process Signals','npm Publishing','Native Addons','Node Deep Dive Checkpoint']],
+      [32,'Testing & Quality',['Unit Testing Deep Dive','Integration Testing','E2E with Playwright','Visual Regression','Mocking Strategies','Coverage Goals','Snapshot Testing','Property-Based Testing','Linting Rules','Prettier Config','Pre-Commit Hooks','CI Pipelines','Code Review Practices','Refactoring Safely','Testing Checkpoint','Immutability Patterns','Immutable Libraries']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'js-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('javascript');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('javascript');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

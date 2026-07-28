@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading Practice — Mathagram</title>
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/exercises.css">
+  <link rel="stylesheet" href="css/characters.css">
+  <link rel="stylesheet" href="css/story.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content .intro { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .reading-passage { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b; border-radius: 16px; padding: 24px; margin: 20px 0; line-height: 1.9; font-size: 1.05rem; color: #1c1917; }
+    .reading-passage p { color: #1c1917; margin-bottom: 14px; }
+    .reading-passage p:last-child { margin-bottom: 0; }
+    .reading-label { display: inline-block; background: #f59e0b; color: #fff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 6px; margin-bottom: 12px; }
+    .passage-segment { position: relative; padding-right: 40px; }
+    .passage-segment .play-btn { position: absolute; right: 0; top: -2px; width: 28px; height: 28px; border: none; border-radius: 50%; cursor: pointer; background: rgba(245, 158, 11, 0.18); color: #c2410c; font-size: 0.8rem; }
+    .passage-segment .play-btn:hover { background: #f59e0b; color: #fff; }
+    .passage-segment .play-btn.speaking { background: #f59e0b; color: #fff; }
+    .reading-fallback { text-align: center; color: var(--color-text-secondary); padding: 40px 24px; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="courses.html">Courses</a>
+        <a href="login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label" id="chapter-label">Reading Practice</div>
+    <h1 id="reading-title">📖 Reading Practice</h1>
+    <p class="intro">Read the short summary below — tap 🔊 to hear any paragraph — then answer the comprehension questions.</p>
+    <div class="reading-passage" id="reading-passage">
+      <div class="reading-label">📖 Reading Passage</div>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <h2>📝 Reading Comprehension</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    import { runExerciseSet, showLessonComplete } from './js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter, speakAsync } from './js/characters.js';
+
+    initNav('');
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '');
+
+    const params = new URLSearchParams(window.location.search);
+    const courseSlug = params.get('course') || '';
+    const unitNum = parseInt(params.get('unit') || '1', 10);
+    const afterLesson = parseInt(params.get('after') || '0', 10);
+    const backHref = courseSlug ? `courses/${courseSlug}/index.html` : 'courses.html';
+
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+    const clean = t => String(t).replace(/\s+/g, ' ').trim();
+    function joinList(arr) {
+      if (arr.length === 0) return '';
+      if (arr.length === 1) return arr[0];
+      if (arr.length === 2) return `${arr[0]} and ${arr[1]}`;
+      return `${arr.slice(0, -1).join(', ')}, and ${arr[arr.length - 1]}`;
+    }
+
+    // --- CSP-safe parser for the compact `units` array literal ---
+    // The site's CSP has no 'unsafe-eval', so `new Function(...)` is blocked in
+    // the browser. This recursive-descent parser reads the same literal without
+    // eval: nested arrays, numbers, single/double-quoted strings with escapes,
+    // // and /* */ comments, plus trailing commas and sparse holes.
+    function parseUnitsLiteral(src) {
+      let i = 0; const n = src.length;
+      function ws() { for (;;) { const c = src[i];
+        if (c === ' ' || c === '\t' || c === '\n' || c === '\r') { i++; continue; }
+        if (c === '/' && src[i + 1] === '/') { i += 2; while (i < n && src[i] !== '\n') i++; continue; }
+        if (c === '/' && src[i + 1] === '*') { i += 2; while (i < n && !(src[i] === '*' && src[i + 1] === '/')) i++; i += 2; continue; }
+        break; } }
+      function val() { ws(); const c = src[i];
+        if (c === '[') return arr();
+        if (c === "'" || c === '"') return str();
+        return num(); }
+      function arr() { i++; const a = [];
+        for (;;) { ws();
+          if (src[i] === ',') { a.push(undefined); i++; continue; } // sparse hole
+          if (src[i] === ']') { i++; break; }                       // end / trailing comma
+          a.push(val()); ws();
+          if (src[i] === ',') { i++; continue; }
+          if (src[i] === ']') { i++; break; }
+          throw new Error('array sep @' + i); }
+        return a; }
+      function str() { const q = src[i]; i++; let s = '';
+        while (i < n) { const c = src[i];
+          if (c === '\\') { const x = src[i + 1];
+            if (x === 'u') { s += String.fromCharCode(parseInt(src.substr(i + 2, 4), 16)); i += 6; continue; }
+            s += x === q ? q : x === '\\' ? '\\' : x === 'n' ? '\n' : x === 't' ? '\t'
+               : x === 'r' ? '\r' : x === 'b' ? '\b' : x === 'f' ? '\f' : x;
+            i += 2; continue; }
+          if (c === q) { i++; return s; }
+          s += c; i++; }
+        throw new Error('unterminated string'); }
+      function num() { let s = '';
+        while (i < n && /[0-9.\-+eE]/.test(src[i])) { s += src[i]; i++; }
+        if (s === '') throw new Error('bad number @' + i);
+        return Number(s); }
+      ws(); return val();
+    }
+
+    // --- Load the course's units + the `playable` lesson map in one fetch ---
+    // `playable` (when present, e.g. calculus) maps a global lesson number to the
+    // real lesson file ('lesson-14.html', 'reading-1.html', …). Courses without it
+    // (scaffolds) fall back to lesson-<n>.html + a live existence check.
+    async function loadCourseData() {
+      if (!courseSlug) return { units: [], playable: {} };
+      try {
+        const res = await fetch(`courses/${courseSlug}/index.html`, { cache: 'no-store' });
+        if (!res.ok) return { units: [], playable: {} };
+        const html = await res.text();
+        let units = [];
+        const um = html.match(/const units = (\[[\s\S]*?\]);/);
+        if (um) { try { units = parseUnitsLiteral(um[1]); } catch (e) { units = []; } }
+        const playable = {};
+        const pm = html.match(/const playable = \{([\s\S]*?)\};/);
+        if (pm) { const re = /(\d+)\s*:\s*['"]([^'"]*)['"]/g; let mm; while ((mm = re.exec(pm[1]))) playable[+mm[1]] = mm[2]; }
+        return { units, playable };
+      } catch (e) { return { units: [], playable: {} }; }
+    }
+
+    // Escape text for safe innerHTML, and build a prompt with one lesson title
+    // turned into a link (used for the true/false comprehension questions).
+    function escapeHtml(s) { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+    function linkifyQuestion(question, title, href) {
+      const escT = escapeHtml(title);
+      const anchor = `<a class="lesson-q-link" href="${escapeHtml(href).replace(/"/g, '&quot;')}" target="_blank" rel="noopener">${escT}</a>`;
+      return escapeHtml(question).replace(escT, () => anchor);
+    }
+
+    // --- Build the reading passage from the unit's lesson titles ---
+    function buildPassage(unitName, titles) {
+      const paras = [];
+      const n = titles.length;
+      paras.push(
+        `Welcome to a short reading review of Unit ${unitNum}: ${unitName}. ` +
+        `In this unit you work through ${n} lesson${n === 1 ? '' : 's'}, each one building on the last.`
+      );
+      const body = [];
+      if (titles[0]) body.push(`The unit opens with "${titles[0]}".`);
+      if (titles[1]) body.push(titles[2]
+        ? `From there it moves into "${titles[1]}", then "${titles[2]}".`
+        : `From there it moves into "${titles[1]}".`);
+      const rest = titles.slice(3);
+      if (rest.length) body.push(`You will also explore ${joinList(rest.map(t => `"${t}"`))}.`);
+      if (body.length) paras.push(body.join(' '));
+      paras.push(
+        `By the end of Unit ${unitNum}, you'll have a solid grasp of ${unitName.toLowerCase()}. ` +
+        `Read it over once more, then check what you remember below.`
+      );
+      return paras;
+    }
+
+    // --- Build comprehension questions from the titles ---
+    function buildExercises(titles, otherTitles) {
+      const ex = [];
+      const focus = titles.filter(Boolean);
+      const others = shuffle(otherTitles.filter(Boolean));
+
+      // Q1: which topic IS in this unit (distractors from other units)
+      if (focus.length && others.length >= 3) {
+        const correct = pick(focus);
+        const opts = shuffle([correct, ...others.slice(0, 3)]);
+        ex.push({ type: 'multiple-choice',
+          question: '📖 Which of these is a topic covered in this unit?',
+          options: opts, correctIndex: opts.indexOf(correct) });
+      }
+
+      // Q2: how many lessons in this unit
+      {
+        const real = focus.length;
+        const cand = new Set([real]);
+        [real + 1, real - 1, real + 2, real + 3].forEach(v => { if (v > 0) cand.add(v); });
+        const opts = shuffle(Array.from(cand).slice(0, 4));
+        ex.push({ type: 'multiple-choice',
+          question: '📖 How many lessons does this unit contain?',
+          options: opts.map(String), correctIndex: opts.indexOf(real) });
+      }
+
+      // Q3: true statement about a real topic
+      if (focus.length) {
+        const t = pick(focus);
+        ex.push({ type: 'true-false',
+          question: `📖 This unit includes the lesson "${t}".`,
+          correctAnswer: true, lessonTitle: t });
+      }
+
+      // Q4: false statement using another unit's topic
+      if (others.length) {
+        const t = pick(others);
+        ex.push({ type: 'true-false',
+          question: `📖 This unit includes the lesson "${t}".`,
+          correctAnswer: false, lessonTitle: t });
+      }
+
+      // Q5: which was NOT covered (3 real + 1 foreign)
+      if (focus.length >= 3 && others.length) {
+        const foreign = pick(others);
+        const opts = shuffle([...shuffle(focus).slice(0, 3), foreign]);
+        ex.push({ type: 'multiple-choice',
+          question: '📖 Which of these was NOT part of this unit?',
+          options: opts, correctIndex: opts.indexOf(foreign) });
+      }
+
+      // Q6: another "is in this unit" with fresh picks
+      if (focus.length >= 2 && others.length >= 3) {
+        const correct = pick(focus);
+        const opts = shuffle([correct, ...shuffle(others).slice(0, 3)]);
+        ex.push({ type: 'multiple-choice',
+          question: '📖 Pick a topic that belongs to this unit.',
+          options: opts, correctIndex: opts.indexOf(correct) });
+      }
+
+      return ex;
+    }
+
+    // --- Narration buttons for each paragraph ---
+    const READING_VOICE = { pitch: 0.95, rate: 0.95, volume: 0.95 };
+    function addSegment(parent, text) {
+      const p = document.createElement('p');
+      p.className = 'passage-segment';
+      p.textContent = text;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'play-btn';
+      btn.setAttribute('aria-label', 'Play narration');
+      btn.textContent = '🔊';
+      btn.addEventListener('click', async () => {
+        btn.classList.add('speaking');
+        try { await speakAsync(text, 'narrator', READING_VOICE); }
+        finally { btn.classList.remove('speaking'); }
+      });
+      p.appendChild(btn);
+      parent.appendChild(p);
+    }
+
+    function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    }
+
+    async function run() {
+      const { units, playable } = await loadCourseData();
+      const passageEl = document.getElementById('reading-passage');
+      if (!units.length) {
+        document.querySelector('.lesson-content').innerHTML =
+          `<div class="reading-fallback">Couldn't load reading practice for this course.<br><br>` +
+          `<a class="btn btn-primary" href="${backHref}">← Back to course</a></div>`;
+        document.querySelector('.exercise-section').style.display = 'none';
+        return;
+      }
+
+      const focusUnit = units.find(u => u[0] === unitNum) || units[0];
+      const unitName = clean(focusUnit[1] || `Unit ${unitNum}`);
+      const titles = (focusUnit[2] || []).map(clean).filter(Boolean);
+      const otherTitles = units.flatMap(u => (u === focusUnit ? [] : (u[2] || []))).map(clean).filter(Boolean);
+
+      // --- Lesson-link resolver: map a lesson title to its real page (if any) ---
+      // Global lesson number per title (first occurrence), matching the course
+      // index's `n++` over every title across units in order.
+      const titleToN = new Map();
+      { let gn = 0; units.forEach(u => (u[2] || []).forEach(t => { gn++; const k = clean(t); if (k && !titleToN.has(k)) titleToN.set(k, gn); })); }
+      const hasPlayable = Object.keys(playable).length > 0;
+      function candidateUrl(title) {
+        const gn = titleToN.get(clean(title));
+        if (!gn) return null;
+        if (hasPlayable) { const f = playable[gn]; return (f && f !== '#') ? `courses/${courseSlug}/${f}` : null; }
+        return `courses/${courseSlug}/lesson-${gn}.html`; // fallback — must verify
+      }
+      const existCache = new Map();
+      function pageExists(url) {
+        if (!existCache.has(url)) existCache.set(url, fetch(url, { method: 'HEAD' }).then(r => r.ok).catch(() => false));
+        return existCache.get(url);
+      }
+      // Resolve a list of titles → Map(cleanTitle → href) for those with a real page.
+      async function resolveLinks(list) {
+        const map = new Map();
+        const uniq = [...new Set(list.map(clean).filter(Boolean))];
+        await Promise.all(uniq.map(async t => {
+          const url = candidateUrl(t);
+          if (!url) return;
+          if (hasPlayable) { map.set(t, url); }          // declared & deployed — trust
+          else if (await pageExists(url)) map.set(t, url); // scaffold course — verify live
+        }));
+        return map;
+      }
+
+      document.getElementById('chapter-label').textContent = `Unit ${focusUnit[0]} — Reading Practice`;
+      document.getElementById('reading-title').textContent = `📖 ${unitName}`;
+
+      buildPassage(unitName, titles).forEach(p => addSegment(passageEl, p));
+      renderMath();
+      setTimeout(() => speakAsync(passageEl.querySelector('.passage-segment').textContent, 'narrator', READING_VOICE), 900);
+
+      const exercises = buildExercises(titles, otherTitles);
+
+      // Wire lesson links into the questions: MC options that are real lessons get
+      // a "↗" opener; true/false prompts get their lesson title linked.
+      const referenced = [];
+      exercises.forEach(ex => {
+        if (ex.type === 'multiple-choice' && ex.options) referenced.push(...ex.options);
+        if (ex.type === 'true-false' && ex.lessonTitle) referenced.push(ex.lessonTitle);
+      });
+      const linkMap = await resolveLinks(referenced);
+      exercises.forEach(ex => {
+        if (ex.type === 'multiple-choice' && ex.options) {
+          const links = ex.options.map(o => linkMap.get(clean(o)) || null);
+          if (links.some(Boolean)) ex.optionLinks = links;
+        } else if (ex.type === 'true-false' && ex.lessonTitle) {
+          const href = linkMap.get(clean(ex.lessonTitle));
+          if (href) ex.questionHTML = linkifyQuestion(ex.question, ex.lessonTitle, href);
+        }
+      });
+
+      if (!exercises.length) {
+        document.querySelector('.exercise-section').innerHTML =
+          `<div class="reading-fallback"><a class="btn btn-primary" href="${backHref}">← Back to course</a></div>`;
+        return;
+      }
+
+      const container = document.getElementById('exercises');
+      const completionDiv = document.getElementById('completion');
+      const chars = ['diego', 'rita', 'sam', 'steve', 'william', 'gosia', 'james'];
+      const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+        const c = chars[index % chars.length];
+        initSideCharacter(c, '');
+        showBuddy(c, isCorrect ? 'correct' : 'wrong');
+      });
+      await showLessonComplete(container, completionDiv, score, {
+        xp, courseId: courseSlug, lessonId: `reading-${afterLesson || unitNum}`,
+        nextHref: backHref, backHref, basePath: ''
+      });
+    }
+    run();
+  </script>
+</body>
+</html>

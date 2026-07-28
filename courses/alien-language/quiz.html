@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz — Alien Language — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+    .lesson-page { max-width: 760px; margin: 0 auto; padding: 56px 16px 80px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #c4b5fd; background: rgba(139,92,246,0.14); border: 1px solid rgba(139,92,246,0.35); border-radius: 999px; margin-bottom: 12px; }
+    .lesson-header h1 { font-size: 1.75rem; font-weight: 800; margin-bottom: 6px; color: #fff; }
+    .lesson-header .subtitle { font-size: 0.95rem; color: #cbd5e1; }
+
+    .teacher-row { display: flex; align-items: flex-end; justify-content: center; gap: 18px; margin: 16px 0 14px; min-height: 110px; }
+    .buddy-avatar { width: 90px; height: 90px; flex-shrink: 0; border-radius: 50%; background: #fff; padding: 5px; box-shadow: 0 6px 24px rgba(139,92,246,0.32); border: 3px solid #c4b5fd; display: block; }
+    .buddy-avatar.correct { border-color: #22c55e; box-shadow: 0 0 28px rgba(34,197,94,0.6); }
+    .buddy-avatar.wrong   { border-color: #ef4444; box-shadow: 0 0 22px rgba(239,68,68,0.55); animation: shake 0.35s; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    .speech { max-width: 420px; padding: 12px 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; font-size: 0.92rem; line-height: 1.5; color: #e2e8f0; position: relative; }
+    .speech.right { border-color: rgba(34,197,94,0.5); }
+    .speech.wrong { border-color: rgba(239,68,68,0.5); }
+    .speech strong { color: #c4b5fd; }
+    .speaker-name { display: block; font-weight: 800; color: #a78bfa; font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+
+    .progress { display: flex; gap: 6px; justify-content: center; max-width: 320px; margin: 6px auto 16px; }
+    .progress .dot { width: 38px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.10); }
+    .progress .dot.done { background: linear-gradient(90deg, #8b5cf6, #6d28d9); box-shadow: 0 0 10px rgba(139,92,246,0.6); }
+    .progress .dot.active { background: linear-gradient(90deg, #c4b5fd, #a78bfa); }
+
+    .stats { display: flex; gap: 12px; justify-content: center; max-width: 360px; margin: 0 auto 16px; }
+    .stat { flex: 1; padding: 10px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; text-align: center; }
+    .stat .label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 4px; }
+    .stat .value { font-size: 1.3rem; font-weight: 800; color: #fff; }
+
+    .q-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 22px;
+      margin: 12px 0;
+    }
+    .q-card h2 { font-size: 1.1rem; color: #fff; margin: 0 0 14px; line-height: 1.45; }
+    .choices { display: flex; flex-direction: column; gap: 8px; }
+    .choice {
+      padding: 14px 16px; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12); color: #f1f5f9;
+      border-radius: 10px; cursor: pointer; font-weight: 600;
+      font-family: inherit; font-size: 0.96rem; text-align: left;
+      transition: background 0.1s, border-color 0.1s, transform 0.05s;
+    }
+    .choice:hover { background: rgba(255,255,255,0.10); }
+    .choice.right { background: linear-gradient(135deg, #22c55e, #15803d); border-color: #22c55e; color: #fff; }
+    .choice.wrong { background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444; color: #fff; }
+    .choice:disabled { cursor: default; opacity: 0.85; }
+    .explain { margin-top: 12px; padding: 10px 14px; background: rgba(139,92,246,0.10); border: 1px dashed rgba(139,92,246,0.4); border-radius: 10px; font-size: 0.9rem; color: #ede9fe; display: none; }
+    .explain.show { display: block; }
+    .explain strong { color: #c4b5fd; }
+
+    .controls { text-align: center; margin: 20px 0 8px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 12px 28px; border-radius: 999px; font-weight: 800; font-size: 1rem; cursor: pointer; border: none; font-family: inherit; transition: transform 0.1s, box-shadow 0.15s; letter-spacing: 0.02em; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #fff; box-shadow: 0 8px 24px rgba(139,92,246,0.4); }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #f1f5f9; border: 1px solid rgba(255,255,255,0.12); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .complete-card { max-width: 520px; margin: 24px auto 0; padding: 26px; text-align: center; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45); border-radius: 16px; display: none; }
+    .complete-card.show { display: block; }
+    .complete-card h2 { color: #86efac; margin: 0 0 6px; font-size: 1.45rem; }
+    .complete-card p { color: #d1fae5; margin: 0 0 14px; }
+    .complete-card .score { font-size: 2.2rem; font-weight: 800; color: #fff; margin: 6px 0; }
+
+    .footer-nav { text-align: center; margin-top: 28px; }
+    .footer-nav a { color: #a78bfa; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Alien Language</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge" id="badge">👽 Quiz</span>
+      <h1 id="lesson-title">Lesson Quiz</h1>
+      <p class="subtitle" id="unit-title"></p>
+    </header>
+
+    <div class="teacher-row">
+      <img src="../../assets/characters/rita.svg" alt="Teacher" class="buddy-avatar" id="buddy">
+      <div class="speech" id="speech">
+        <span class="speaker-name">Your Guide</span>
+        <span id="speech-text">Pick the right answer. I'll explain after each one!</span>
+      </div>
+    </div>
+
+    <div class="progress" id="progress"></div>
+
+    <div class="stats">
+      <div class="stat"><div class="label">Correct</div><div class="value" id="correct-num">0</div></div>
+      <div class="stat"><div class="label">Question</div><div class="value" id="q-num">1 / 4</div></div>
+    </div>
+
+    <div id="q-host"></div>
+
+    <section class="complete-card" id="complete-card">
+      <h2 id="complete-title">🎉 Quiz Complete!</h2>
+      <div class="score" id="final-score">0 / 4</div>
+      <p id="final-msg">Great work on this lesson.</p>
+      <a class="btn primary" href="index.html">Back to the Learning Path →</a>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Alien Language</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { QUIZ_BANK } from './quizzes.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const TOTAL_UNITS = 44;
+    const COURSE_SLUG = 'alien-language';
+    const ID_PREFIX = 'alien-';
+
+    // Lessons per unit (variable — 15 per unit across all 44 units)
+    const UNIT_SIZES = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,16,15];
+
+    // Cumulative offsets so globalNum = cumOffset[unitIdx] + lessonNum
+    const CUM_OFFSET = [];
+    let cum = 0;
+    for (let i = 0; i < UNIT_SIZES.length; i++) {
+      CUM_OFFSET.push(cum);
+      cum += UNIT_SIZES[i];
+    }
+
+    const UNIT_NAMES = {
+      1: 'What Is an Alien Language?',
+      2: 'Klingon (tlhIngan Hol)',
+      3: 'Star Trek Federation Tongues',
+      4: 'Star Wars Galaxy of Tongues',
+      5: "Mando'a — Mandalorian Tongue",
+      6: "Goa'uld & Stargate Tongues",
+      7: 'Heptapod B (Arrival)',
+      8: 'Atlantean, Na\'vi & Cinematic Tongues',
+      9: 'Constructing Your Own Alien Language',
+      10: "Vulcan — Star Trek's Logical Tongue",
+      11: 'Romulan & Klingon Empire Tongues',
+      12: 'Bajoran, Cardassian & DS9 Tongues',
+      13: 'Ferengi & Trade Languages',
+      14: 'Star Trek Alphabets & Scripts',
+      15: 'Sith Languages — Ancient & Imperial',
+      16: 'Huttese — The Galactic Underworld',
+      17: 'Jawa, Tusken & Tatooine Tongues',
+      18: 'Wookiee Shyriiwook & Pyke',
+      19: 'Ewok, Gungan & Galactic Pidgins',
+      20: 'Droid Speak — Binary, Tin Talk & Aurebesh',
+      21: "Doctor Who — Gallifreyan & Time Lord Speech",
+      22: 'Doctor Who — Daleks, Cybermen & Companion Aliens',
+      23: 'Babylon 5 — Minbari, Centauri & Narn',
+      24: 'Battlestar Galactica — Cylon Speak',
+      25: 'Mass Effect I — Asari, Krogan, Salarian, Turian',
+      26: 'Mass Effect II — Geth, Quarian, Volus, Hanar',
+      27: 'Halo Covenant — Sangheili, Jiralhanae & Forerunner',
+      28: 'Destiny — Hive, Vex, Cabal, Fallen',
+      29: 'Marvel Cinematic Alien Tongues',
+      30: 'DC Universe — Kryptonian, Thanagarian, Martian',
+      31: 'Transformers — Cybertronian',
+      32: 'Predator (Yautja) & Alien (Xenomorph) Communication',
+      33: 'Cinema Sci-Fi — Arrival, Contact, Independence Day',
+      34: '2001, Stalker & The Ineffable Tongue',
+      35: 'Sci-Fi Literature — Niven, Le Guin, Banks',
+      36: 'Speculative Biology — Children of Time, Octopus',
+      37: "Whale Song & Real Animal 'Languages'",
+      38: 'SETI & METI — Listening for Aliens',
+      39: 'Arecibo, Voyager & The Cosmic Bottle',
+      40: 'Lincos — A Math-Based Universal Language',
+      41: 'CETI Theories — How First Contact Might Sound',
+      42: 'Telepathy & Non-Verbal in Sci-Fi',
+      43: 'Building Your Own Alien Language Studio',
+      44: 'Alien Language Mastery'
+    };
+
+    // ─── Parse params ─────────────────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+    const unitNum = Math.max(1, Math.min(TOTAL_UNITS, parseInt(params.get('unit') || '1', 10)));
+    const unitIdx = unitNum - 1;
+    const unitSize = UNIT_SIZES[unitIdx];
+    const lessonNum = Math.max(1, Math.min(unitSize, parseInt(params.get('lesson') || '1', 10)));
+    const globalNum = CUM_OFFSET[unitIdx] + lessonNum;
+    const isCheckpoint = lessonNum === unitSize;
+
+    // ─── Pick questions from the unit's bank ──────────────────────────────
+    const bank = QUIZ_BANK[unitNum] || QUIZ_BANK[1];
+    const numQuestions = isCheckpoint ? Math.min(bank.length, 6) : 4;
+    const offset = (lessonNum - 1) % bank.length;
+    const questions = [];
+    for (let i = 0; i < numQuestions; i++) {
+      questions.push(bank[(offset + i) % bank.length]);
+    }
+
+    // ─── Render header ────────────────────────────────────────────────────
+    const unitName = UNIT_NAMES[unitNum] || ('Unit ' + unitNum);
+    document.getElementById('badge').textContent = `👽 Unit ${unitNum} · Lesson ${lessonNum}${isCheckpoint ? ' · Checkpoint' : ''}`;
+    document.getElementById('lesson-title').textContent = isCheckpoint ? `${unitName} — Checkpoint Quiz` : `Quiz — ${unitName}`;
+    document.getElementById('unit-title').textContent = `Lesson ${lessonNum} of ${unitSize}`;
+
+    const progressEl = document.getElementById('progress');
+    for (let i = 0; i < numQuestions; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      progressEl.appendChild(d);
+    }
+    const dots = progressEl.querySelectorAll('.dot');
+
+    // ─── Quiz state ───────────────────────────────────────────────────────
+    const qHost = document.getElementById('q-host');
+    const correctNumEl = document.getElementById('correct-num');
+    const qNumEl = document.getElementById('q-num');
+    const buddyEl = document.getElementById('buddy');
+    const speechEl = document.getElementById('speech');
+    const speechText = document.getElementById('speech-text');
+    let idx = 0;
+    let correct = 0;
+
+    function renderQuestion() {
+      qHost.innerHTML = '';
+      const q = questions[idx];
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.innerHTML = `
+        <h2>${idx + 1}. ${q.q}</h2>
+        <div class="choices"></div>
+        <div class="explain" id="explain-${idx}"></div>
+        <div class="controls" id="ctrl-${idx}"></div>
+      `;
+      qHost.appendChild(card);
+      const choicesEl = card.querySelector('.choices');
+      q.choices.forEach((text, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'choice';
+        b.textContent = text;
+        b.addEventListener('click', () => onChoice(i, q, b, card));
+        choicesEl.appendChild(b);
+      });
+      qNumEl.textContent = `${idx + 1} / ${numQuestions}`;
+      dots.forEach((d, i) => {
+        d.classList.toggle('done', i < idx);
+        d.classList.toggle('active', i === idx);
+      });
+    }
+
+    function onChoice(chosenIdx, q, btn, card) {
+      card.querySelectorAll('.choice').forEach((c, i) => {
+        c.disabled = true;
+        if (i === q.correct) c.classList.add('right');
+        else if (i === chosenIdx && i !== q.correct) c.classList.add('wrong');
+      });
+      const explain = card.querySelector('.explain');
+      explain.innerHTML = `<strong>${chosenIdx === q.correct ? '✅ Correct!' : '❌ Not quite.'}</strong> ${q.why}`;
+      explain.classList.add('show');
+
+      if (chosenIdx === q.correct) {
+        correct++; correctNumEl.textContent = correct;
+        speechText.textContent = 'Nice — that\'s right!';
+        speechEl.classList.remove('wrong'); speechEl.classList.add('right');
+        buddyEl.classList.remove('wrong'); buddyEl.classList.add('correct');
+      } else {
+        speechText.textContent = 'No worries — the green one is the answer.';
+        speechEl.classList.remove('right'); speechEl.classList.add('wrong');
+        buddyEl.classList.remove('correct'); buddyEl.classList.add('wrong');
+      }
+      setTimeout(() => buddyEl.classList.remove('correct', 'wrong'), 700);
+
+      const ctrl = card.querySelector('.controls');
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn primary';
+      const isLast = idx === numQuestions - 1;
+      next.textContent = isLast ? 'See Score →' : 'Next Question →';
+      next.addEventListener('click', () => {
+        if (isLast) finish();
+        else { idx++; renderQuestion(); }
+      });
+      ctrl.appendChild(next);
+    }
+
+    function finish() {
+      qHost.innerHTML = '';
+      dots.forEach(d => { d.classList.remove('active'); d.classList.add('done'); });
+      const card = document.getElementById('complete-card');
+      const pct = correct / numQuestions;
+      let title, msg;
+      if (pct === 1)        { title = '🎉 Perfect Score!'; msg = 'You aced this lesson. Onward!'; }
+      else if (pct >= 0.75) { title = '🌟 Great Work!';   msg = 'You\'ve got the core idea.'; }
+      else if (pct >= 0.5)  { title = '👍 Nice Try';       msg = 'A solid pass — review the missed ones if you want.'; }
+      else                  { title = '📚 Keep Learning'; msg = 'Tough quiz! Replay the lesson and try again — every miss teaches you something.'; }
+      document.getElementById('complete-title').textContent = title;
+      document.getElementById('final-score').textContent = `${correct} / ${numQuestions}`;
+      document.getElementById('final-msg').textContent = msg;
+      card.classList.add('show');
+
+      if (pct >= 0.75) markLessonComplete();
+    }
+
+    async function markLessonComplete() {
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', COURSE_SLUG),
+          { [ID_PREFIX + globalNum]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>

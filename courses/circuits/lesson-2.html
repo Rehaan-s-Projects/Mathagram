@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electric Charge — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+  <link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Circuits</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Electricity Basics</div>
+    <h1>Electric Charge</h1>
+
+    <p><strong>Electric charge</strong> is the fundamental property of matter that creates electrical forces. Every proton carries a <strong>positive</strong> charge, every electron carries a <strong>negative</strong> charge, and neutrons carry no charge at all.</p>
+
+    <p><strong>Two rules that govern every electrical interaction in the universe:</strong></p>
+    <ul>
+      <li><strong>Like charges repel.</strong> Two positives push each other apart; two negatives push each other apart.</li>
+      <li><strong>Opposite charges attract.</strong> A positive and a negative pull toward each other.</li>
+    </ul>
+
+    <p>The strength of that force was measured by Charles-Augustin de Coulomb in 1785. <strong>Coulomb's Law</strong> says the force between two point charges \(q_1\) and \(q_2\) separated by distance \(r\) is:</p>
+
+    <div class="math-block">$$F = k\,\frac{q_1\,q_2}{r^2}$$</div>
+
+    <p>where \(k \approx 8.99 \times 10^{9}\ \text{N·m}^2/\text{C}^2\) is <strong>Coulomb's constant</strong>. Doubling the distance cuts the force to a <em>quarter</em> — it's an inverse-square law, just like gravity.</p>
+
+    <p><strong>The smallest unit — the elementary charge.</strong> Every electron carries a charge of exactly</p>
+    <div class="math-block">$$e \approx 1.602 \times 10^{-19}\ \text{C}$$</div>
+    <p>and every proton carries \(+e\). Charge is <strong>quantized</strong> — it only ever comes in whole-number multiples of \(e\). You can have one electron's worth, two electrons' worth, a billion electrons' worth — but never half an electron's worth. One coulomb is roughly <strong>6.24 × 10¹⁸ electrons</strong> — that's a <em>lot</em>.</p>
+
+    <p><strong>Charge is conserved.</strong> You cannot create or destroy net charge — only move it around. Rub a balloon on your hair and the balloon steals electrons from the hair. The balloon becomes negative, the hair becomes positive, but the total charge of (balloon + hair) is exactly what it was before.</p>
+
+    <p><strong>Three ways to charge an object:</strong></p>
+    <ul>
+      <li><strong>Friction</strong> — rubbing two materials together transfers electrons. The <em>triboelectric series</em> ranks materials by how strongly they grab electrons (human hair gives them up easily; rubber and PVC grab them eagerly).</li>
+      <li><strong>Conduction</strong> — touch a charged object to a neutral one. Charge spreads until both share it.</li>
+      <li><strong>Induction</strong> — bring a charged object <em>near</em> a neutral one without touching. The neutral object's own charges rearrange — opposites pulled close, likes pushed away. Ground the far side and you can leave it permanently charged of the opposite sign.</li>
+    </ul>
+
+    <p><strong>Why this matters for circuits.</strong> Every voltage, every current, every spark in every device on Earth is just <em>this</em> happening at scale — charge being separated by a power source, then driven through a wire to recombine. Electric charge is the currency electricity spends.</p>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: 'How many kinds of electric charge are there?',
+        options: ['One — only negative', 'Two — positive and negative', 'Seventeen pancakes', 'Whichever way Tuesday is feeling'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'Like charges ___ each other and opposite charges ___ each other.',
+        options: ['attract / repel', 'repel / attract', 'ignore / nod politely at', 'gossip about / write poetry about'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'Electric charge is conserved — it can be moved around but cannot be created or destroyed.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'The charge of a single electron is approximately:',
+        options: ['\\(1.602 \\times 10^{-19}\\ \\text{C}\\)', '\\(6.24 \\times 10^{18}\\ \\text{C}\\)', 'A confused walrus', 'Whatever the cat decides'],
+        correctIndex: 0 },
+      { type: 'multiple-choice',
+        question: 'The SI unit of electric charge is the:',
+        options: ['Volt (V)', 'Ampere (A)', 'Coulomb (C)', 'Pickle'],
+        correctIndex: 2 },
+      { type: 'multiple-choice',
+        question: "Coulomb's Law gives the force between two point charges. The force is proportional to:",
+        options: ['the product of the charges divided by the distance squared',
+                  'the sum of the charges times the distance',
+                  'the number of cats in the room',
+                  "whichever direction the wind disagrees with"],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: "Coulomb's Law is an inverse-square law: doubling the distance between two charges reduces the force to one quarter.",
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: "Coulomb's constant is approximately \\(k \\approx\\) ___ \\(\\times\\, 10^9\\ \\text{N·m}^2/\\text{C}^2\\). (Round to two digits.)",
+        answer: '8.99' },
+      { type: 'multiple-choice',
+        question: 'Electric charge is "quantized." This means:',
+        options: ['Charge only ever comes in whole-number multiples of the elementary charge \\(e\\)',
+                  'Charge is always measured in litres',
+                  'Charge is randomly assigned each morning',
+                  'A polite chicken decides how much you get'],
+        correctIndex: 0 },
+      { type: 'fill-blank',
+        question: 'One coulomb is approximately ___ \\(\\times\\, 10^{18}\\) electrons. (Round to two digits.)',
+        answer: '6.24' },
+      { type: 'multiple-choice',
+        question: 'When you rub a balloon on your hair, the balloon usually becomes:',
+        options: ['neutral', 'positively charged because hair gives it protons', 'negatively charged because it pulls electrons off the hair', 'whatever flavour the room is'],
+        correctIndex: 2 },
+      { type: 'multiple-choice',
+        question: 'Charging by ___ requires no contact — just bringing a charged object near a neutral one rearranges the neutral object\'s charges.',
+        options: ['friction', 'conduction', 'induction', 'extreme parallel parking'],
+        correctIndex: 2 },
+      { type: 'true-false',
+        question: 'A neutral object has zero net charge, but it still contains equal numbers of protons and electrons inside.',
+        correctAnswer: true },
+      { type: 'matching',
+        question: 'Match each charging method to its description.',
+        pairs: [
+          { left: 'Friction',   right: 'Rubbing two materials transfers electrons' },
+          { left: 'Conduction', right: 'Direct contact spreads charge between objects' },
+          { left: 'Induction',  right: 'A nearby charge rearranges charges without contact' },
+          { left: 'Grounding',  right: 'Connecting to Earth drains excess charge away' }
+        ] },
+      { type: 'fill-blank',
+        question: 'Two charges of \\(+1\\ \\text{C}\\) each, held \\(1\\ \\text{m}\\) apart, feel a repulsive force of about ___ \\(\\times\\, 10^9\\) newtons. (Round to two digits — use \\(k = 8.99\\times 10^9\\).)',
+        answer: '8.99' }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'circuits', lessonId: 'lesson-2', nextHref: 'index.html', backHref: 'index.html'
+    });
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
+</body>
+</html>

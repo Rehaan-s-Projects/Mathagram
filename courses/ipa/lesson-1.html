@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is the IPA? — International Phonetic Alphabet</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    .lesson-content { max-width: 720px; margin: 0 auto; padding: 48px 24px 16px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 14px; }
+
+    /* AI IPA Sound Lab */
+    .ipa-lab { max-width: 760px; margin: 12px auto 32px; padding: 0 24px; }
+    .ipa-lab .card {
+      background: linear-gradient(135deg, #0ea5e9 0%, #0f172a 100%);
+      border-radius: 22px; padding: 24px;
+      color: #fff; box-shadow: 0 18px 40px rgba(14,165,233,0.25);
+    }
+    .ipa-lab h2 { font-size: 1.4rem; font-weight: 800; margin: 0 0 4px; color: #fff; }
+    .ipa-lab .lede { color: #bae6fd; font-size: 0.92rem; line-height: 1.55; margin-bottom: 16px; }
+
+    /* In-lab Edam tour strip — dark theme to match the Sound Lab card */
+    .lab-edam-row {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 14px; padding: 12px 14px; margin-bottom: 14px;
+    }
+    .lab-edam-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(56,189,248,0.18); border: 2px solid #38bdf8;
+      padding: 3px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lab-edam-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .lab-edam-info { flex: 1; min-width: 0; }
+    .lab-edam-who { font-size: 0.72rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+    .lab-edam-line { font-size: 0.85rem; color: #bae6fd; line-height: 1.45; }
+    .lab-edam-row .btn { flex-shrink: 0; }
+    @media (max-width: 600px) {
+      .lab-edam-row { flex-wrap: wrap; }
+      .lab-edam-info { flex: 1 1 100%; order: 2; }
+      .lab-edam-row .btn { order: 3; }
+    }
+
+    .ipa-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .ipa-section-head {
+      grid-column: 1 / -1;
+      font-size: 0.72rem; font-weight: 800;
+      color: #bae6fd; text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 10px 4px 2px;
+      border-bottom: 1px solid rgba(186,230,253,0.20);
+    }
+    .ipa-section-head:first-child { padding-top: 0; }
+    .ipa-cell {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 14px; padding: 12px;
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, transform 0.05s, border-color 0.15s;
+      display: flex; align-items: center; gap: 10px;
+      font-family: inherit;
+    }
+    .ipa-cell:hover { background: rgba(255,255,255,0.16); }
+    .ipa-cell:active { transform: translateY(1px); }
+    .ipa-cell.playing { background: rgba(56,189,248,0.32); border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.25); }
+    .ipa-cell .sym { font-size: 1.7rem; font-weight: 800; line-height: 1; min-width: 38px; text-align: center; color: #fff; font-family: 'SF Mono', 'Segoe UI', serif; }
+    .ipa-cell .meta { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .ipa-cell .word { font-size: 0.78rem; font-weight: 700; color: #fff; line-height: 1.1; }
+    .ipa-cell .gloss { font-size: 0.7rem; color: #bae6fd; line-height: 1.1; }
+    .ipa-cell .spkr { font-size: 1rem; opacity: 0.7; }
+    .ipa-cell.playing .spkr { opacity: 1; animation: pulse 0.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.25);} }
+
+    .wave-stage {
+      position: relative;
+      background: rgba(15,23,42,0.55);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px; padding: 14px;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .wave-stage .live-sym { font-size: 2rem; font-weight: 800; min-width: 56px; text-align: center; color: #38bdf8; font-family: 'SF Mono', 'Segoe UI', serif; }
+    .wave-stage .live-info { flex: 1; min-width: 0; }
+    .wave-stage .live-info .row1 { font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .wave-stage .live-info .row2 { font-size: 0.78rem; color: #bae6fd; }
+    .wave-stage canvas { width: 100%; height: 42px; display: block; background: rgba(0,0,0,0.25); border-radius: 8px; }
+    .wave-stage.empty .live-sym { color: #475569; }
+    .wave-stage.empty .live-info .row1 { color: #94a3b8; }
+
+    .mic-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .ipa-lab .btn {
+      padding: 11px 22px; border-radius: 12px; border: none;
+      background: rgba(255,255,255,0.10); color: #fff;
+      font-weight: 800; font-size: 0.9rem; cursor: pointer;
+      transition: background 0.15s, transform 0.05s;
+      font-family: inherit;
+    }
+    .ipa-lab .btn:hover:not(:disabled) { background: rgba(255,255,255,0.18); }
+    .ipa-lab .btn:active:not(:disabled) { transform: translateY(1px); }
+    .ipa-lab .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .ipa-lab .btn.primary {
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #0f172a; box-shadow: 0 4px 12px rgba(56,189,248,0.35);
+    }
+    .ipa-lab .btn.primary:hover:not(:disabled) { filter: brightness(1.08); }
+    .ipa-lab .btn.listening { background: #ef4444; }
+
+    .mic-feedback {
+      margin-top: 10px; padding: 12px 16px;
+      background: rgba(56,189,248,0.10); border-left: 4px solid #38bdf8;
+      border-radius: 10px; font-size: 0.92rem; color: #f0f9ff;
+      display: none;
+    }
+    .mic-feedback.show { display: block; }
+    .mic-feedback.great { background: rgba(34,197,94,0.15); border-left-color: #22c55e; }
+    .mic-feedback.miss  { background: rgba(251,191,36,0.12); border-left-color: #fbbf24; }
+    .mic-feedback strong { color: #fff; }
+
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+
+    /* Edam coach card */
+    .edam-coach { max-width: 760px; margin: 18px auto 4px; padding: 0 24px; }
+    .edam-coach .row {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-left: 5px solid #0ea5e9;
+      border-radius: 14px; padding: 14px 18px;
+    }
+    .edam-coach .avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(14,165,233,0.10); border: 3px solid #0ea5e9;
+      padding: 3px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .edam-coach .avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .edam-coach .info { flex: 1; }
+    .edam-coach .who { font-size: 0.78rem; font-weight: 800; color: #0369a1; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+    .edam-coach .line { font-size: 0.95rem; color: var(--color-text); line-height: 1.4; }
+    .edam-coach .voice-btn {
+      flex-shrink: 0;
+      background: #0ea5e9; color: #fff;
+      border: none; border-radius: 12px;
+      padding: 12px 18px; font-weight: 800; font-size: 0.92rem;
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s, transform 0.08s;
+    }
+    .edam-coach .voice-btn:hover { background: #0284c7; }
+    .edam-coach .voice-btn:active { transform: translateY(1px); }
+    .edam-coach .voice-btn.speaking { background: #ef4444; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">IPA</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; IPA Foundations</div>
+    <h1>What Is the IPA?</h1>
+    <p>The <strong>International Phonetic Alphabet</strong> (IPA) is a single, universal system for writing down the sounds of <em>any</em> spoken language. Created by the International Phonetic Association in <strong>1888</strong>, it gives every distinct sound its own symbol &mdash; no matter what alphabet the language uses.</p>
+    <p>English spelling alone is famously unreliable. The letter <strong>"a"</strong> sounds different in <em>cat, father, gate, sofa</em>. The IPA fixes that: those four sounds get four different symbols &mdash; <strong>/&aelig;/, /ɑ/, /eɪ/, /ə/</strong> &mdash; and they mean exactly the same thing whether you're transcribing English, Mandarin, Swahili, or Quechua.</p>
+    <p>Today you'll meet the <strong>AI IPA Sound Lab</strong> — every one of English's <strong>43 phonemes</strong>: 24 consonants (plosives, fricatives, affricates, nasals, approximants), 11 monophthong vowels, and 8 diphthongs. Tap any symbol to hear the AI pronounce it inside a real English word, then press <strong>🎤 Repeat It</strong> and let the AI listen to <em>you</em>.</p>
+  </section>
+
+  <section class="edam-coach" aria-label="Edam IPA coach">
+    <div class="row">
+      <div class="avatar"><img src="../../assets/characters/edam.svg" alt="Edam"></div>
+      <div class="info">
+        <div class="who">Edam &middot; Your IPA Coach</div>
+        <div class="line">Tap to hear me introduce the IPA and walk through the Sound Lab.</div>
+      </div>
+      <button type="button" class="voice-btn" id="edam-voice-btn">🔊 Hear Edam</button>
+    </div>
+  </section>
+
+  <section class="ipa-lab" aria-label="AI IPA Sound Lab">
+    <div class="card">
+      <h2>🔊 AI IPA Sound Lab</h2>
+      <p class="lede">Tap any symbol — Edam will pronounce it inside an English word. Then press <strong>🎤 Repeat It</strong> and try saying the word back. The AI listener will tell you if it heard the right sound.</p>
+
+      <div class="lab-edam-row" aria-label="Edam — Tour the Full English Alphabet">
+        <div class="lab-edam-avatar"><img src="../../assets/characters/edam.svg" alt="Edam"></div>
+        <div class="lab-edam-info">
+          <div class="lab-edam-who">Edam &middot; Tour the 43-Sound Alphabet</div>
+          <div class="lab-edam-line">Walk through every plosive, fricative, affricate, nasal, approximant, monophthong &amp; diphthong with Edam&rsquo;s voice.</div>
+        </div>
+        <button type="button" class="btn primary" id="edam-tour-btn">🔊 Tour the Alphabet</button>
+      </div>
+
+      <div class="ipa-grid" id="ipaGrid"></div>
+
+      <div class="wave-stage empty" id="waveStage">
+        <div class="live-sym" id="liveSym">–</div>
+        <div class="live-info">
+          <div class="row1" id="liveWord">Tap an IPA symbol above</div>
+          <div class="row2" id="liveGloss">The AI will speak and visualize the sound</div>
+          <canvas id="waveCanvas" width="600" height="42"></canvas>
+        </div>
+      </div>
+
+      <div class="mic-row">
+        <button type="button" class="btn" id="btn-replay" disabled>🔁 Play Again</button>
+        <button type="button" class="btn primary" id="btn-mic" disabled>🎤 Repeat It</button>
+      </div>
+
+      <div class="mic-feedback" id="micFeedback"></div>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Quick Check-in</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../'); initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { speak, speakAsync, showBuddy, initSideCharacter } from '../../js/characters.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter('edam', '../../');
+
+    // ── Edam introduction — browser voice with recorded fallback ──────
+    const EDAM_SCRIPT = [
+      "Welcome! I'm Edam, your IPA coach.",
+      "The International Phonetic Alphabet gives every sound in every language its own symbol.",
+      "Below is the AI Sound Lab. Tap any IPA symbol, and I'll say a word that contains that sound.",
+      "Then press the microphone, repeat the word, and the AI will listen to check your pronunciation.",
+      "Let's begin!"
+    ];
+    const EDAM_INTRO_FILES = ['intro0.m4a', 'intro1.m4a', 'intro2.m4a', 'intro3.m4a', 'intro4.m4a'];
+    const edamBtn = document.getElementById('edam-voice-btn');
+    let edamSpeaking = false;
+    edamBtn.addEventListener('click', async () => {
+      if (edamSpeaking) {
+        try { window.speechSynthesis.cancel(); } catch {}
+        try { player.pause(); player.currentTime = 0; } catch {}
+        edamSpeaking = false;
+        edamBtn.classList.remove('speaking');
+        edamBtn.textContent = '🔊 Hear Edam';
+        return;
+      }
+      edamSpeaking = true;
+      edamBtn.classList.add('speaking');
+      edamBtn.textContent = '⏹ Stop';
+      try {
+        for (let i = 0; i < EDAM_SCRIPT.length; i++) {
+          if (!edamSpeaking) break;
+          const spoke = await speakBrowser(EDAM_SCRIPT[i], 'edam');
+          if (!edamSpeaking) break;
+          if (!spoke) await playAudio(AUDIO_BASE + EDAM_INTRO_FILES[i]);
+        }
+      } catch {}
+      edamSpeaking = false;
+      edamBtn.classList.remove('speaking');
+      edamBtn.textContent = '🔊 Hear Edam';
+    });
+
+    // ── IPA sound bank ────────────────────────────────────────────────
+    // `file` is a pre-recorded m4a clip (Daniel UK English voice via macOS `say`).
+    // We use <audio> playback rather than Web Speech API — Chrome's TTS engine
+    // hangs after long sessions and silently drops utterances; audio playback
+    // works regardless of the speech engine's state.
+    const AUDIO_BASE = '../../assets/audio/ipa/';
+    const SOUNDS = [
+      { section: 'Consonants · Plosives (Stops)' },
+      { sym: 'p',  word: 'pen',     gloss: 'voiceless bilabial stop',         file: 'p.m4a' },
+      { sym: 'b',  word: 'bat',     gloss: 'voiced bilabial stop',            file: 'b.m4a' },
+      { sym: 't',  word: 'top',     gloss: 'voiceless alveolar stop',         file: 't.m4a' },
+      { sym: 'd',  word: 'day',     gloss: 'voiced alveolar stop',            file: 'd.m4a' },
+      { sym: 'k',  word: 'cat',     gloss: 'voiceless velar stop',            file: 'k.m4a' },
+      { sym: 'g',  word: 'go',      gloss: 'voiced velar stop',               file: 'g.m4a' },
+      { section: 'Consonants · Fricatives' },
+      { sym: 'f',  word: 'fish',    gloss: 'voiceless labiodental fricative', file: 'f.m4a' },
+      { sym: 'v',  word: 'voice',   gloss: 'voiced labiodental fricative',    file: 'v.m4a' },
+      { sym: 'θ',  word: 'think',   gloss: 'voiceless dental fricative',      file: 'th.m4a' },
+      { sym: 'ð',  word: 'this',    gloss: 'voiced dental fricative',         file: 'dh.m4a' },
+      { sym: 's',  word: 'sun',     gloss: 'voiceless alveolar fricative',    file: 's.m4a' },
+      { sym: 'z',  word: 'zoo',     gloss: 'voiced alveolar fricative',       file: 'z.m4a' },
+      { sym: 'ʃ',  word: 'ship',    gloss: 'voiceless postalveolar fricative',file: 'sh.m4a' },
+      { sym: 'ʒ',  word: 'measure', gloss: 'voiced postalveolar fricative',   file: 'zh.m4a' },
+      { sym: 'h',  word: 'hat',     gloss: 'voiceless glottal fricative',     file: 'h.m4a' },
+      { section: 'Consonants · Affricates' },
+      { sym: 'tʃ', word: 'church',  gloss: 'voiceless postalveolar affricate',file: 'ch.m4a' },
+      { sym: 'dʒ', word: 'judge',   gloss: 'voiced postalveolar affricate',   file: 'j.m4a' },
+      { section: 'Consonants · Nasals' },
+      { sym: 'm',  word: 'mom',     gloss: 'bilabial nasal',                  file: 'm.m4a' },
+      { sym: 'n',  word: 'no',      gloss: 'alveolar nasal',                  file: 'n.m4a' },
+      { sym: 'ŋ',  word: 'sing',    gloss: 'velar nasal',                     file: 'ng.m4a' },
+      { section: 'Consonants · Approximants' },
+      { sym: 'l',  word: 'look',    gloss: 'alveolar lateral approximant',    file: 'l.m4a' },
+      { sym: 'r',  word: 'red',     gloss: 'alveolar approximant',            file: 'r.m4a' },
+      { sym: 'j',  word: 'yes',     gloss: 'palatal approximant',             file: 'y.m4a' },
+      { sym: 'w',  word: 'wet',     gloss: 'labio-velar approximant',         file: 'w.m4a' },
+      { section: 'Vowels · Monophthongs' },
+      { sym: 'i',  word: 'see',     gloss: 'close front unrounded vowel',     file: 'i.m4a' },
+      { sym: 'ɪ',  word: 'sit',     gloss: 'near-close front unrounded vowel',file: 'ih.m4a' },
+      { sym: 'ɛ',  word: 'bed',     gloss: 'open-mid front unrounded vowel',  file: 'eh.m4a' },
+      { sym: 'æ',  word: 'cat',     gloss: 'near-open front unrounded vowel', file: 'ae.m4a' },
+      { sym: 'ə',  word: 'sofa',    gloss: 'mid-central schwa',               file: 'schwa.m4a' },
+      { sym: 'ʌ',  word: 'cup',     gloss: 'open-mid back unrounded vowel',   file: 'uh.m4a' },
+      { sym: 'ɑ',  word: 'father',  gloss: 'open back unrounded vowel',       file: 'ah.m4a' },
+      { sym: 'ɔ',  word: 'saw',     gloss: 'open-mid back rounded vowel',     file: 'aw.m4a' },
+      { sym: 'ʊ',  word: 'book',    gloss: 'near-close near-back rounded vowel',file: 'oo.m4a' },
+      { sym: 'u',  word: 'blue',    gloss: 'close back rounded vowel',        file: 'u.m4a' },
+      { sym: 'ɜ',  word: 'bird',    gloss: 'open-mid central vowel (RP /ɜː/, GA /ɝ/)', file: 'er.m4a' },
+      { section: 'Vowels · Diphthongs' },
+      { sym: 'eɪ', word: 'gate',    gloss: 'closing diphthong (front)',       file: 'ay.m4a' },
+      { sym: 'aɪ', word: 'my',      gloss: 'closing diphthong (wide)',        file: 'ai.m4a' },
+      { sym: 'ɔɪ', word: 'boy',     gloss: 'closing diphthong (rounded)',     file: 'oy.m4a' },
+      { sym: 'aʊ', word: 'now',     gloss: 'closing diphthong (rising)',      file: 'ow.m4a' },
+      { sym: 'oʊ', word: 'go',      gloss: 'closing diphthong (back, GA)',    file: 'oh.m4a' },
+      { sym: 'ɪə', word: 'here',    gloss: 'centring diphthong (RP)',         file: 'ear.m4a' },
+      { sym: 'ɛə', word: 'air',     gloss: 'centring diphthong (RP)',         file: 'air.m4a' },
+      { sym: 'ʊə', word: 'tour',    gloss: 'centring diphthong (RP)',         file: 'oor.m4a' }
+    ];
+    const PLAYABLE = SOUNDS.filter(s => !s.section);
+
+    // Single shared <audio> element — reused for every sound + intro line.
+    const player = new Audio();
+    player.preload = 'auto';
+    function playAudio(src) {
+      return new Promise((resolve) => {
+        try {
+          player.pause();
+          player.currentTime = 0;
+          player.src = src;
+          let settled = false;
+          const done = () => { if (!settled) { settled = true; resolve(); } };
+          player.onended = done;
+          player.onerror = done;
+          const p = player.play();
+          if (p && p.catch) p.catch(done);
+          // Safety: resolve after 8 seconds in case onended never fires.
+          setTimeout(done, 8000);
+        } catch { resolve(); }
+      });
+    }
+
+    const grid       = document.getElementById('ipaGrid');
+    const liveSym    = document.getElementById('liveSym');
+    const liveWord   = document.getElementById('liveWord');
+    const liveGloss  = document.getElementById('liveGloss');
+    const waveStage  = document.getElementById('waveStage');
+    const waveCanvas = document.getElementById('waveCanvas');
+    const waveCtx    = waveCanvas.getContext('2d');
+    const btnReplay  = document.getElementById('btn-replay');
+    const btnMic     = document.getElementById('btn-mic');
+    const micFb      = document.getElementById('micFeedback');
+    let current = null;          // selected SOUNDS entry
+    let waveAnimId = null;
+    let playToken = 0;           // increments each playSym call; older calls' cleanup is ignored
+
+    let playableIdx = 0;
+    SOUNDS.forEach((s) => {
+      if (s.section) {
+        const head = document.createElement('div');
+        head.className = 'ipa-section-head';
+        head.textContent = s.section;
+        grid.appendChild(head);
+        return;
+      }
+      const i = playableIdx++;
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'ipa-cell';
+      cell.dataset.idx = i;
+      cell.innerHTML = `
+        <div class="sym">${s.sym}</div>
+        <div class="meta">
+          <div class="word">/${s.sym}/ as in ${s.word}</div>
+          <div class="gloss">${s.gloss}</div>
+        </div>
+        <div class="spkr">🔊</div>`;
+      cell.addEventListener('click', () => playSym(i));
+      grid.appendChild(cell);
+    });
+
+    async function playSym(i) {
+      const myToken = ++playToken;
+      current = PLAYABLE[i];
+      grid.querySelectorAll('.ipa-cell').forEach((c) => c.classList.toggle('playing', Number(c.dataset.idx) === i));
+      waveStage.classList.remove('empty');
+      liveSym.textContent  = current.sym;
+      liveWord.textContent = `/${current.sym}/ as in "${current.word}"`;
+      liveGloss.textContent = current.gloss;
+      micFb.classList.remove('show');
+      btnReplay.disabled = false;
+      btnMic.disabled = !('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+      if (btnMic.disabled) btnMic.title = 'Speech recognition not supported in this browser';
+      drawWaveAnimation();
+      // Prefer the browser's built-in voice (Web Speech API) — same engine in
+      // Chrome and Safari on Mac (both expose the local macOS voices). If the
+      // browser engine is hung or unsupported, fall back to the pre-recorded
+      // clip so the user always hears something.
+      const spoke = await speakBrowser(`${current.word}. ${current.word}.`, 'edam');
+      if (myToken !== playToken) return;
+      if (!spoke) await playAudio(AUDIO_BASE + current.file);
+      if (myToken !== playToken) return;
+      stopWaveAnimation();
+      grid.querySelectorAll('.ipa-cell').forEach(c => c.classList.remove('playing'));
+    }
+
+    // ── Browser voice — Web Speech API with cross-browser local voice picker ──
+    function speakBrowser(text, characterId) {
+      return new Promise((resolve) => {
+        if (!('speechSynthesis' in window)) { resolve(false); return; }
+        try {
+          if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+            window.speechSynthesis.cancel();
+          }
+          window.speechSynthesis.resume();
+        } catch {}
+        const u = new SpeechSynthesisUtterance(text);
+        // Edam settings — warm, low, steady. Same pitch/rate in every browser.
+        u.pitch = 0.8; u.rate = 0.9; u.volume = 1.0;
+        u.lang = 'en-US';
+        // Pick a localService voice (macOS-installed). Both Chrome and Safari
+        // expose the same set on Mac, so the user hears the same voice.
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length) {
+          const local = voices.filter(v => v.localService);
+          const pool = local.length ? local : voices;
+          const named = pool.find(v => /daniel|alex|tom|aaron|fred/i.test(v.name))
+                     || pool.find(v => v.lang.startsWith('en'))
+                     || pool[0];
+          if (named) u.voice = named;
+        }
+        let started = false;
+        let settled = false;
+        const done = (ok) => { if (settled) return; settled = true; resolve(ok); };
+        u.onstart = () => { started = true; };
+        u.onend = () => done(true);
+        u.onerror = () => done(false);
+        window.speechSynthesis.speak(u);
+        // If the browser engine never actually starts within 900ms, treat as
+        // hung and resolve(false) so caller falls back to recorded audio.
+        setTimeout(() => {
+          if (!started) {
+            try { window.speechSynthesis.cancel(); } catch {}
+            done(false);
+          }
+        }, 900);
+      });
+    }
+
+    function drawWaveAnimation() {
+      stopWaveAnimation();
+      const W = waveCanvas.width = waveCanvas.clientWidth * devicePixelRatio;
+      const H = waveCanvas.height = waveCanvas.clientHeight * devicePixelRatio;
+      let t = 0;
+      const draw = () => {
+        waveCtx.clearRect(0, 0, W, H);
+        waveCtx.strokeStyle = '#38bdf8';
+        waveCtx.lineWidth = 2 * devicePixelRatio;
+        waveCtx.beginPath();
+        for (let x = 0; x < W; x++) {
+          const phase = (x / W) * Math.PI * 14 + t;
+          const env   = Math.sin((x / W) * Math.PI);     // amplitude envelope
+          const wob   = 0.65 + 0.35 * Math.sin(t * 0.7); // breathing
+          const y = H/2 + Math.sin(phase) * (H * 0.42) * env * wob;
+          if (x === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
+        }
+        waveCtx.stroke();
+        t += 0.22;
+        waveAnimId = requestAnimationFrame(draw);
+      };
+      draw();
+    }
+    function stopWaveAnimation() {
+      if (waveAnimId) cancelAnimationFrame(waveAnimId);
+      waveAnimId = null;
+      const W = waveCanvas.width, H = waveCanvas.height;
+      waveCtx.clearRect(0, 0, W, H);
+      // flat baseline
+      waveCtx.strokeStyle = 'rgba(56,189,248,0.45)';
+      waveCtx.lineWidth = 2 * devicePixelRatio;
+      waveCtx.beginPath();
+      waveCtx.moveTo(0, H/2); waveCtx.lineTo(W, H/2);
+      waveCtx.stroke();
+    }
+
+    btnReplay.addEventListener('click', () => {
+      if (!current) return;
+      const idx = PLAYABLE.indexOf(current);
+      if (idx >= 0) playSym(idx);
+    });
+
+    // ── 🎤 AI Listener (Web Speech Recognition) ──────────────────────
+    let recognizer = null, listening = false;
+    btnMic.addEventListener('click', () => {
+      if (!current) return;
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        micFb.className = 'mic-feedback show miss';
+        micFb.innerHTML = '<strong>🎤 Mic not supported.</strong> Try this lesson in Chrome or Edge for the AI listener.';
+        return;
+      }
+      if (listening) { recognizer && recognizer.stop(); return; }
+      try {
+        recognizer = new SR();
+        recognizer.lang = 'en-US';
+        recognizer.interimResults = false;
+        recognizer.maxAlternatives = 4;
+        recognizer.onstart = () => {
+          listening = true;
+          btnMic.classList.add('listening');
+          btnMic.textContent = '⏹ Listening… speak now';
+          micFb.classList.remove('show');
+          drawWaveAnimation();
+        };
+        recognizer.onresult = (ev) => {
+          const heard = [...ev.results[0]].map(r => (r.transcript || '').trim().toLowerCase());
+          const target = current.word.toLowerCase();
+          const hit = heard.some(h => h.includes(target) || levenshtein(h, target) <= 1);
+          micFb.className = 'mic-feedback show ' + (hit ? 'great' : 'miss');
+          if (hit) {
+            micFb.innerHTML = `<strong>🎉 The AI heard "${heard[0]}".</strong> Nice pronunciation of /${current.sym}/!`;
+            showBuddy('edam', 'correct');
+          } else {
+            micFb.innerHTML = `<strong>The AI heard "${heard[0] || '(silence)'}".</strong> Try again — aim for "${target}", with a clear /${current.sym}/ sound.`;
+            showBuddy('edam', 'wrong');
+          }
+        };
+        recognizer.onerror = (e) => {
+          micFb.className = 'mic-feedback show miss';
+          micFb.innerHTML = `<strong>Listener error.</strong> ${e.error === 'not-allowed' ? 'Allow microphone permission in your browser settings.' : 'Try again.'}`;
+        };
+        recognizer.onend = () => {
+          listening = false;
+          btnMic.classList.remove('listening');
+          btnMic.textContent = '🎤 Repeat It';
+          stopWaveAnimation();
+        };
+        recognizer.start();
+      } catch (err) {
+        micFb.className = 'mic-feedback show miss';
+        micFb.innerHTML = '<strong>Mic unavailable.</strong> ' + (err.message || '');
+      }
+    });
+
+    function levenshtein(a, b) {
+      if (a === b) return 0;
+      const m = a.length, n = b.length;
+      if (!m) return n; if (!n) return m;
+      const dp = Array.from({length: m+1}, (_,i) => [i, ...Array(n).fill(0)]);
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+        dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+      return dp[m][n];
+    }
+
+    stopWaveAnimation();
+    window.addEventListener('beforeunload', () => {
+      if (recognizer) try { recognizer.stop(); } catch {}
+      window.speechSynthesis.cancel();
+    });
+
+    // ── 2nd Edam voice box — full alphabet tour ────────────────────────
+    const tourBtn = document.getElementById('edam-tour-btn');
+    let tourPlaying = false;
+    tourBtn.addEventListener('click', async () => {
+      if (tourPlaying) {
+        tourPlaying = false;
+        try { window.speechSynthesis.cancel(); } catch {}
+        try { player.pause(); player.currentTime = 0; } catch {}
+        tourBtn.classList.remove('speaking');
+        tourBtn.textContent = '🔊 Tour the Alphabet';
+        grid.querySelectorAll('.ipa-cell').forEach(c => c.classList.remove('playing'));
+        stopWaveAnimation();
+        return;
+      }
+      tourPlaying = true;
+      tourBtn.classList.add('speaking');
+      tourBtn.textContent = '⏹ Stop Tour';
+
+      // Build a guided script: section heading → each phoneme in that group.
+      const groups = [];
+      let cur = null;
+      SOUNDS.forEach(s => {
+        if (s.section) { cur = { intro: s.section, items: [] }; groups.push(cur); return; }
+        if (cur) cur.items.push(s);
+      });
+
+      const introLines = {
+        'Consonants · Plosives (Stops)':
+          "Let's start with plosives — the six stops in English. Air builds behind your lips, teeth, or the back of your tongue, then bursts free.",
+        'Consonants · Fricatives':
+          "Fricatives. Air keeps flowing but squeezes through a tight gap, making a hiss or buzz.",
+        'Consonants · Affricates':
+          "Affricates — a stop and a fricative joined together, like a t and a sh becoming ch.",
+        'Consonants · Nasals':
+          "Nasals. Your mouth closes off and the air comes out through your nose.",
+        'Consonants · Approximants':
+          "Approximants. Your tongue or lips get close to a spot in the mouth, but never touch.",
+        'Vowels · Monophthongs':
+          "Now the vowels. Eleven pure vowels in English — each one a single, steady mouth shape.",
+        'Vowels · Diphthongs':
+          "And finally diphthongs — two vowel sounds glided together inside one syllable."
+      };
+
+      try {
+        await speakBrowser("Let's tour the full English phonetic alphabet, one sound at a time.", 'edam');
+        for (const g of groups) {
+          if (!tourPlaying) break;
+          await speakBrowser(introLines[g.intro] || g.intro, 'edam');
+          for (const s of g.items) {
+            if (!tourPlaying) break;
+            const idx = PLAYABLE.indexOf(s);
+            if (idx >= 0) {
+              current = s;
+              grid.querySelectorAll('.ipa-cell').forEach(c => c.classList.toggle('playing', Number(c.dataset.idx) === idx));
+              waveStage.classList.remove('empty');
+              liveSym.textContent = s.sym;
+              liveWord.textContent = `/${s.sym}/ as in "${s.word}"`;
+              liveGloss.textContent = s.gloss;
+              drawWaveAnimation();
+            }
+            const phrase = `${s.sym}, as in ${s.word}. ${s.word}.`;
+            const spoke = await speakBrowser(phrase, 'edam');
+            if (!tourPlaying) break;
+            if (!spoke) await playAudio(AUDIO_BASE + s.file);
+            stopWaveAnimation();
+          }
+        }
+        if (tourPlaying) {
+          await speakBrowser("That's all forty-three English phonemes. Pick any symbol above to practice it, or press the microphone to hear yourself.", 'edam');
+        }
+      } catch {}
+
+      tourPlaying = false;
+      tourBtn.classList.remove('speaking');
+      tourBtn.textContent = '🔊 Tour the Alphabet';
+      grid.querySelectorAll('.ipa-cell').forEach(c => c.classList.remove('playing'));
+      stopWaveAnimation();
+    });
+
+    // ── Quick check-in quiz ───────────────────────────────────────────
+    const exercises = [
+      { type: 'multiple-choice', question: 'What does IPA stand for?',
+        options: ['International Phonetic Alphabet', 'Indian Pop Album', 'Internet Picture Atlas', 'Indo-Pacific Anthem'], correctIndex: 0 },
+      { type: 'multiple-choice', question: 'In what year was the International Phonetic Association founded?',
+        options: ['1888', '1492', '1066', '2008'], correctIndex: 0 },
+      { type: 'true-false', question: 'Every IPA symbol represents exactly one distinct speech sound, the same way in every language.', correctAnswer: true },
+      { type: 'multiple-choice', question: 'Which IPA symbol matches the "th" sound in "think"?',
+        options: ['θ', 'ʃ', 'ŋ', 'ð'], correctIndex: 0 },
+      { type: 'multiple-choice', question: 'Which IPA symbol is the schwa — the most common vowel in English?',
+        options: ['ə', 'æ', 'i', 'u'], correctIndex: 0 },
+      { type: 'true-false', question: 'The IPA can be used to transcribe languages that have no alphabet of their own.', correctAnswer: true }
+    ];
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['edam','william','rita','diego','sam'];
+    let buddyTick = 0;
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const i = index >= 0 ? index : (buddyTick++);
+      const c = chars[i % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, {
+      xp,
+      courseId: 'ipa',
+      lessonId: 'lesson-1',
+      nextHref: 'index.html',
+      backHref: 'index.html'
+    });
+  </script>
+</body>
+</html>

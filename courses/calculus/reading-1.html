@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading: Imagine the Speed — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="../../css/story.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content .intro { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+    .reading-passage { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b; border-radius: 16px; padding: 24px; margin: 20px 0; line-height: 1.9; font-size: 1.05rem; color: #1c1917; }
+    .reading-passage p { color: #1c1917; margin-bottom: 14px; }
+    .reading-passage p:last-child { margin-bottom: 0; }
+    .reading-label { display: inline-block; background: #f59e0b; color: #fff; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 6px; margin-bottom: 12px; }
+    /* Passage-segment styling — tap-to-advance pattern */
+    .passage-segment { position: relative; padding-right: 40px; transition: color 0.25s, font-weight 0.25s; }
+    .passage-segment .play-btn { right: 0; top: -2px; background: rgba(245, 158, 11, 0.18); color: #c2410c; }
+    .passage-segment .play-btn:hover { background: #f59e0b; color: #fff; }
+    .passage-segment .play-btn.speaking { background: #f59e0b; color: #fff; animation: pulse 0.8s ease-in-out infinite; box-shadow: 0 0 0 0 rgba(245,158,11,0.5); }
+    .passage-segment.narrating { color: #0c0a09; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Calculus</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Reading Practice</div>
+    <h1>📖 Imagine the Speed</h1>
+    <p class="intro">Read the passage carefully one paragraph at a time, then answer the 8 questions that follow. Tap <strong>Next →</strong> to advance.</p>
+
+    <div class="reading-passage" id="reading-passage">
+      <div class="reading-label">📖 Reading Passage</div>
+
+      <p class="passage-segment" data-speak="Imagine you are driving on a long highway. You glance at your speedometer and it reads 55 miles per hour. A minute later it says 60. Then 63. Then 64 point 5. Then 64 point 9. You are getting closer and closer to 65 miles per hour, the speed limit posted on the sign ahead. Even if your foot never pushes the car all the way to 65, the number your speed is approaching is 65. In mathematics, we call that number the limit.">
+        Imagine you are driving on a long highway. You glance at your speedometer and it reads <strong>55 mph</strong>. A minute later it says <strong>60</strong>. Then <strong>63</strong>. Then <strong>64.5</strong>. Then <strong>64.9</strong>. You are getting closer and closer to <strong>65 mph</strong> &mdash; the speed limit posted on the sign ahead. Even if your foot never pushes the car all the way to 65, the number your speed is <em>approaching</em> is 65. In mathematics, we call that number the <strong>limit</strong>.
+      </p>
+
+      <p class="passage-segment" data-speak="A limit does not care whether you actually reach the value. It only cares what value you are heading toward. Your speedometer could read 64 point 99 and then 64 point 999 and never quite hit 65, but mathematicians would still say the limit of your speed is 65.">
+        A limit does not care whether you actually <em>reach</em> the value. It only cares what value you are <em>heading toward</em>. Your speedometer could read 64.99 and then 64.999 and never quite hit 65, but mathematicians would still say the limit of your speed is 65.
+      </p>
+
+      <p class="passage-segment" data-speak="Now imagine something different. Two cars are heading toward the same intersection from opposite directions. The car coming from the west is traveling at 40 miles per hour. The car coming from the east is traveling at 60 miles per hour. Both cars are approaching the same point, but they are approaching it at different speeds.">
+        Now imagine something different. Two cars are heading toward the <strong>same intersection</strong> from opposite directions. The car coming from the <strong>west</strong> is traveling at <strong>40 mph</strong>. The car coming from the <strong>east</strong> is traveling at <strong>60 mph</strong>. Both cars are approaching the same point, but they are approaching it at <em>different speeds</em>.
+      </p>
+
+      <p class="passage-segment" data-speak="In calculus, this situation is called a jump discontinuity. The left-hand limit, from the west, is 40, and the right-hand limit, from the east, is 60. Because 40 is not equal to 60, the two sides do not agree, and so the overall limit at the intersection does not exist.">
+        In calculus, this situation is called a <strong>jump discontinuity</strong>. The <strong>left-hand limit</strong> (from the west) is 40, and the <strong>right-hand limit</strong> (from the east) is 60. Because <strong>40 &ne; 60</strong>, the two sides do not agree, and so the overall limit at the intersection <strong>does not exist</strong>.
+      </p>
+
+      <p class="passage-segment" data-speak="However, if both cars approached the intersection at exactly 50 miles per hour, then the left-hand limit and the right-hand limit would be the same. In that case, the limit does exist and it equals 50. A limit only exists when both sides agree on the same value.">
+        However, if both cars approached the intersection at exactly <strong>50 mph</strong>, then the left-hand limit and the right-hand limit would be the same. In that case, the limit <strong>does exist</strong> and it equals <strong>50</strong>. A limit only exists when <em>both sides agree on the same value</em>.
+      </p>
+    </div>
+  </section>
+
+  <section class="exercise-section">
+    <h2>📝 Reading Comprehension Quiz</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter, speakAsync } from '../../js/characters.js';
+
+    initNav('../../');
+    initRitaChat('../../');
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    // Narrator voice for the passage — same preset as story-1
+    const READING_VOICE = { pitch: 0.95, rate: 0.95, volume: 0.95 };
+
+    async function speakSegment(seg) {
+      const text = seg.dataset.speak || (() => {
+        const clone = seg.cloneNode(true);
+        clone.querySelectorAll('.play-btn, .katex-mathml').forEach(el => el.remove());
+        return clone.textContent.replace(/\s+/g, ' ').trim();
+      })();
+      if (!text) return;
+      const btn = seg.querySelector('.play-btn');
+      if (btn) btn.classList.add('speaking');
+      seg.classList.add('narrating');
+      try { await speakAsync(text, 'narrator', READING_VOICE); }
+      finally {
+        if (btn) btn.classList.remove('speaking');
+        seg.classList.remove('narrating');
+      }
+    }
+
+    function addSegmentPlayButton(seg) {
+      if (seg.querySelector('.play-btn')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'play-btn';
+      btn.setAttribute('aria-label', 'Play narration');
+      btn.textContent = '🔊';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); speakSegment(seg); });
+      seg.appendChild(btn);
+    }
+
+    function buildProgressDots(parent, total) {
+      const dots = document.createElement('div');
+      dots.className = 'progress-dots';
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement('span');
+        d.className = 'progress-dot';
+        if (i === 0) d.classList.add('active');
+        dots.appendChild(d);
+      }
+      parent.appendChild(dots);
+      return dots;
+    }
+
+    function presentPassage() {
+      return new Promise((resolve) => {
+        const passage = document.getElementById('reading-passage');
+        const segments = Array.from(passage.querySelectorAll('.passage-segment'));
+        if (segments.length === 0) { resolve(); return; }
+
+        // Hide every segment except the first BEFORE the passage paints
+        segments.forEach((seg, i) => {
+          if (i > 0) seg.classList.add('bubble-hidden');
+          addSegmentPlayButton(seg);
+        });
+
+        const dots = buildProgressDots(passage, segments.length);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'next-btn-wrapper';
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'next-btn';
+        nextBtn.innerHTML = 'Next <span aria-hidden="true">→</span>';
+        wrapper.appendChild(nextBtn);
+        passage.parentNode.insertBefore(wrapper, passage.nextSibling);
+
+        // Auto-narrate the first paragraph
+        setTimeout(() => speakSegment(segments[0]), 1000);
+
+        let idx = 0;
+        nextBtn.addEventListener('click', async () => {
+          idx++;
+          if (idx >= segments.length) {
+            wrapper.remove();
+            dots.remove();
+            resolve();
+            return;
+          }
+          const seg = segments[idx];
+          seg.classList.remove('bubble-hidden');
+          seg.classList.add('bubble-reveal');
+          setTimeout(() => seg.classList.remove('bubble-reveal'), 400);
+          dots.querySelectorAll('.progress-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+          seg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (idx === segments.length - 1) {
+            nextBtn.innerHTML = 'Continue to quiz <span aria-hidden="true">→</span>';
+          }
+          await speakSegment(seg);
+        });
+      });
+    }
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: '📖 In the passage, the driver\'s speedometer reads 55, 60, 63, 64.5, and 64.9. What number is the speed approaching?',
+        options: ['64.9', '65', '70', '100'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: '📖 According to the passage, a limit requires you to actually reach the value.',
+        correctAnswer: false },
+      { type: 'fill-blank',
+        question: '📖 The passage says: "Even if your foot never pushes the car all the way to 65, the number your speed is ___ is 65."',
+        answer: 'approaching' },
+      { type: 'multiple-choice',
+        question: '📖 In the two-cars scenario, how fast is the car from the west traveling?',
+        options: ['50 mph', '55 mph', '40 mph', '60 mph'],
+        correctIndex: 2 },
+      { type: 'multiple-choice',
+        question: '📖 Why does the limit NOT exist at the intersection in the two-cars example?',
+        options: ['The cars are too slow', 'The left-hand limit (40) does not equal the right-hand limit (60)', 'The intersection is closed', 'Both cars stop'],
+        correctIndex: 1 },
+      { type: 'fill-blank',
+        question: '📖 The passage states that the two-cars situation is called a "jump ___" in calculus.',
+        answer: 'discontinuity' },
+      { type: 'true-false',
+        question: '📖 According to the passage, if both cars approached at 50 mph, the limit would exist and equal 50.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: '📖 What is the main idea of this passage?',
+        options: ['Speed limits are important for safety', 'A limit is the value a quantity approaches, and it exists only when both sides agree', 'Cars should not drive too fast', 'Mathematics is about driving'],
+        correctIndex: 1 }
+    ];
+
+    async function runLesson() {
+      await presentPassage();
+      const container = document.getElementById('exercises');
+      const completionDiv = document.getElementById('completion');
+      const chars = ['diego','rita','sam','steve','william','gosia','james'];
+      const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+        const c = chars[index % chars.length];
+        initSideCharacter(c, '../../');
+        showBuddy(c, isCorrect ? 'correct' : 'wrong');
+      });
+      await showLessonComplete(container, completionDiv, score, { xp,
+        courseId: 'calculus', lessonId: 'reading-1', nextHref: 'lesson-13.html', backHref: 'index.html'
+      });
+    }
+    runLesson();
+  </script>
+</body>
+</html>

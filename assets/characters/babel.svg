@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Owl: Babel — wise polyglot mascot -->
+  <!-- Ear tufts -->
+  <polygon points="26,16 22,30 36,28" fill="#6B4F3A"/>
+  <polygon points="74,16 78,30 64,28" fill="#6B4F3A"/>
+  <!-- Body -->
+  <ellipse cx="50" cy="62" rx="28" ry="26" fill="#8B6B4F"/>
+  <!-- Belly with feather pattern -->
+  <ellipse cx="50" cy="66" rx="18" ry="18" fill="#E8D4B8"/>
+  <path d="M40 62 Q44 66 48 62 Q52 66 56 62 Q60 66 64 62" stroke="#8B6B4F" stroke-width="1" fill="none"/>
+  <path d="M42 70 Q46 74 50 70 Q54 74 58 70" stroke="#8B6B4F" stroke-width="1" fill="none"/>
+  <!-- Wings -->
+  <path d="M22 52 Q14 64 24 80 Q26 70 30 60 Z" fill="#6B4F3A"/>
+  <path d="M78 52 Q86 64 76 80 Q74 70 70 60 Z" fill="#6B4F3A"/>
+  <!-- Head -->
+  <circle cx="50" cy="40" r="24" fill="#8B6B4F"/>
+  <!-- Eye discs (large owl eyes) -->
+  <circle cx="40" cy="38" r="9" fill="#E8D4B8"/>
+  <circle cx="60" cy="38" r="9" fill="#E8D4B8"/>
+  <circle cx="40" cy="38" r="6" fill="#fff"/>
+  <circle cx="60" cy="38" r="6" fill="#fff"/>
+  <!-- Pupils with sparkles (knowledge/wisdom) -->
+  <circle cx="40" cy="38" r="3.5" fill="#1a1a2e"/>
+  <circle cx="60" cy="38" r="3.5" fill="#1a1a2e"/>
+  <circle cx="41" cy="36" r="1.2" fill="#fff"/>
+  <circle cx="61" cy="36" r="1.2" fill="#fff"/>
+  <!-- Beak -->
+  <polygon points="50,42 46,49 54,49" fill="#FFB347"/>
+  <polygon points="50,46 47,50 53,50" fill="#E59320"/>
+  <!-- Feet -->
+  <line x1="44" y1="86" x2="44" y2="92" stroke="#FFB347" stroke-width="2" stroke-linecap="round"/>
+  <line x1="56" y1="86" x2="56" y2="92" stroke="#FFB347" stroke-width="2" stroke-linecap="round"/>
+  <!-- Tiny graduation cap (scholarly) -->
+  <rect x="40" y="14" width="20" height="3" fill="#1a1a2e"/>
+  <polygon points="36,17 64,17 50,22" fill="#1a1a2e"/>
+  <line x1="60" y1="14" x2="66" y2="20" stroke="#FFD93D" stroke-width="1.2"/>
+  <circle cx="66" cy="21" r="1.6" fill="#FFD93D"/>
+</svg>

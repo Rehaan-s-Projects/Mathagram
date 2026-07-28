@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Catalan Quiz — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  /* Original Mathagram quiz — bright theme */
+  body { background: var(--color-bg, #f8f9fa); min-height: 100vh; color: var(--color-text, #1a1a2e); }
+  .quiz-page { max-width: 720px; margin: 0 auto; padding: 56px 16px 80px; }
+  .quiz-head { text-align: center; margin-bottom: 18px; }
+  .quiz-badge {
+    display: inline-block; padding: 5px 16px;
+    font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+    color: #fff; background: var(--color-language, #92400e);
+    border-radius: 999px; margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(146,64,14,0.25);
+  }
+  .quiz-head h1 { font-size: 1.9rem; font-weight: 800; color: var(--color-text, #1a1a2e); margin-bottom: 6px; }
+  .quiz-head p { font-size: 0.95rem; color: var(--color-text-secondary, #64748b); }
+
+  .progress { display: flex; gap: 6px; justify-content: center; margin: 18px 0 22px; }
+  .progress .dot {
+    width: 32px; height: 8px; border-radius: 4px;
+    background: #e5e7eb; border: 1px solid #d1d5db;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .progress .dot.active { background: linear-gradient(90deg, #00e5c8, #00b89f); border-color: #00b89f; }
+  .progress .dot.done   { background: linear-gradient(90deg, #22c55e, #15803d); border-color: #22c55e; }
+  .progress .dot.miss   { background: linear-gradient(90deg, #ef4444, #b91c1c); border-color: #ef4444; }
+
+  .qcard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px; padding: 28px 26px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.04);
+  }
+  .qcard .qtext {
+    font-size: 1.15rem; font-weight: 700; line-height: 1.5;
+    margin-bottom: 20px; color: var(--color-text, #1a1a2e);
+  }
+
+  .answers { display: grid; gap: 12px; }
+  .answer {
+    text-align: left; padding: 15px 18px; border-radius: 14px;
+    background: #ffffff; border: 2px solid #e5e7eb;
+    color: var(--color-text, #1a1a2e); font-weight: 600; font-size: 0.98rem; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.08s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .answer:hover:not(:disabled) {
+    background: #f8fafc; border-color: var(--color-primary, #00e5c8);
+    box-shadow: 0 4px 14px rgba(0, 229, 200, 0.12);
+  }
+  .answer:active:not(:disabled) { transform: scale(0.98); }
+  .answer.correct { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+  .answer.wrong   { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+  .answer:disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 16px; padding: 14px 16px; border-radius: 12px;
+    font-size: 0.94rem; font-weight: 600; display: none;
+  }
+  .feedback.good { display: block; background: #dcfce7; border: 1px solid #86efac; color: #166534; }
+  .feedback.bad  { display: block; background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; }
+
+  .actions { display: flex; gap: 12px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+  .btn {
+    padding: 12px 24px; border-radius: 999px; border: none;
+    font-weight: 800; font-size: 0.95rem; cursor: pointer;
+    text-decoration: none; display: inline-block; font-family: inherit;
+    transition: transform 0.08s, box-shadow 0.15s, background 0.15s;
+  }
+  .btn.primary {
+    background: linear-gradient(135deg, #00e5c8, #00b89f); color: #0a3f37;
+    box-shadow: 0 6px 18px rgba(0, 229, 200, 0.35);
+  }
+  .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0, 229, 200, 0.45); }
+  .btn.alt {
+    background: #ffffff; color: var(--color-text, #1a1a2e);
+    border: 1.5px solid #d1d5db;
+  }
+  .btn.alt:hover { background: #f3f4f6; border-color: #9ca3af; }
+
+  .end-card {
+    text-align: center; padding: 28px;
+    background: #ffffff;
+    border: 2px solid #86efac;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(34,197,94,0.10);
+  }
+  .end-card h2 { color: #15803d; font-size: 1.5rem; margin-bottom: 6px; }
+  .end-card p { color: var(--color-text-secondary, #64748b); margin-bottom: 14px; }
+  .end-card .score { font-size: 2.4rem; font-weight: 900; margin: 8px 0; color: var(--color-text, #1a1a2e); }
+
+  .footer-nav { text-align: center; margin-top: 28px; }
+  .footer-nav a { color: var(--color-primary-dark, #00b89f); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+  .footer-nav a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container">
+    <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
+    <div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div>
+  </div></nav>
+
+  <main class="quiz-page">
+    <header class="quiz-head">
+      <span class="quiz-badge" id="badge">🇪🇸 Catalan — Unit 1</span>
+      <h1 id="title">Loading…</h1>
+      <p id="subtitle">Alphabet & Pronunciation</p>
+    </header>
+
+    <div class="progress" id="progress"></div>
+
+    <section class="qcard" id="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions" id="actions" style="display:none;">
+        <button type="button" class="btn primary" id="nextBtn">Next →</button>
+      </div>
+    </section>
+
+    <section class="end-card" id="endCard" style="display:none;">
+      <h2>🎉 Lesson complete!</h2>
+      <div class="score" id="endScore">0 / 0</div>
+      <p id="endMsg">Great work — you've earned XP for this lesson.</p>
+      <div class="actions">
+        <a class="btn primary" id="nextLessonLink" href="index.html">Next Lesson →</a>
+        <a class="btn alt" href="index.html">Back to Learning Path</a>
+        <button type="button" class="btn alt" id="retryBtn">Retry</button>
+      </div>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Catalan</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script type="module">
+    import { UNIT1 } from './quizzes.js';
+
+    const params = new URLSearchParams(location.search);
+    const unit   = parseInt(params.get('u') || '1', 10);
+    const lesson = parseInt(params.get('l') || '0', 10);
+
+    const LESSON_TITLES = ['',
+      'The Catalan Alphabet','Vowel System — Open & Closed','Unstressed Vowel Reduction','Consonants Overview',
+      'The Catalan L·L (ela geminada)','The NY & LL Sounds','TX, IG, & TJ Sounds','Silent H & Other Silent Letters',
+      'Stress Rules & Accents','Pronunciation of B/V','Liaison & Elision','Eastern vs Western Pronunciation',
+      'Catalan Diacritics — À, É, È, Í, Ò, Ó, Ú','Reading Catalan Aloud','Numbers 1-20','Numbers 21-100',
+      'Numbers 100-1000 & Beyond','Ordinal Numbers','Days, Months & Seasons','Colors in Catalan',
+      'Telling Time','Basic Spelling Rules','Apostrophe & Contractions','Practice: Pronunciation Drills',
+      'Alphabet & Pronunciation Checkpoint'];
+
+    document.getElementById('title').textContent = LESSON_TITLES[lesson] || `Lesson ${lesson}`;
+    document.getElementById('badge').textContent = `🇪🇸 Catalan · Unit 1 · Lesson ${lesson} of 25`;
+
+    const bank = UNIT1[lesson];
+    let questions = bank || [];
+    if (!questions.length) showError(`No quiz exists for Unit 1 Lesson ${lesson}.`);
+
+    let i = 0, correctCount = 0, shuffled = [];
+
+    function shuffleAnswers(arr) {
+      const correct = arr[0];
+      const a = arr.slice();
+      for (let j = a.length - 1; j > 0; j--) {
+        const k = Math.floor(Math.random() * (j + 1));
+        [a[j], a[k]] = [a[k], a[j]];
+      }
+      return { answers: a, correctIdx: a.indexOf(correct) };
+    }
+
+    function renderProgress() {
+      const host = document.getElementById('progress');
+      host.innerHTML = '';
+      for (let j = 0; j < questions.length; j++) {
+        const d = document.createElement('div');
+        d.className = 'dot' +
+          (j < i ? (shuffled[j] && shuffled[j].got ? ' done' : ' miss') : '') +
+          (j === i ? ' active' : '');
+        host.appendChild(d);
+      }
+    }
+
+    function renderQuestion() {
+      if (i >= questions.length) return showEnd();
+      const Q = questions[i];
+      shuffled[i] = shuffled[i] || shuffleAnswers(Q.a);
+      const { answers, correctIdx } = shuffled[i];
+      document.getElementById('qtext').textContent = Q.q;
+      const aHost = document.getElementById('answers');
+      aHost.innerHTML = '';
+      answers.forEach((text, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'answer'; btn.textContent = text;
+        btn.addEventListener('click', () => onAnswer(idx, correctIdx));
+        aHost.appendChild(btn);
+      });
+      document.getElementById('feedback').className = 'feedback';
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('actions').style.display = 'none';
+      renderProgress();
+    }
+
+    function onAnswer(chosen, correctIdx) {
+      const buttons = document.querySelectorAll('.answer');
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === correctIdx) b.classList.add('correct');
+        else if (idx === chosen) b.classList.add('wrong');
+      });
+      const ok = chosen === correctIdx;
+      shuffled[i].got = ok;
+      if (ok) correctCount++;
+      const fb = document.getElementById('feedback');
+      fb.className = 'feedback ' + (ok ? 'good' : 'bad');
+      fb.textContent = ok ? '✅ Correcte — molt bé!' : '❌ Not quite — see the green answer above.';
+      document.getElementById('actions').style.display = 'flex';
+      document.getElementById('nextBtn').textContent =
+        (i === questions.length - 1) ? 'See Results →' : 'Next →';
+      renderProgress();
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      i++;
+      if (i >= questions.length) showEnd();
+      else renderQuestion();
+    });
+
+    function showEnd() {
+      document.getElementById('qcard').style.display = 'none';
+      document.getElementById('progress').style.display = 'none';
+      const end = document.getElementById('endCard');
+      end.style.display = 'block';
+      document.getElementById('endScore').textContent = correctCount + ' / ' + questions.length;
+      const pct = correctCount / questions.length;
+      let msg;
+      if (pct === 1)       msg = 'Perfect run! XP banked. 🎉';
+      else if (pct >= 0.75) msg = 'Great job — XP banked.';
+      else if (pct >= 0.5)  msg = 'Solid effort — XP banked. Replay to top your score.';
+      else                  msg = 'Worth another try — replay the lesson and aim higher.';
+      document.getElementById('endMsg').textContent = msg;
+
+      // Pre-built file pages for lessons 1-5 take precedence; the rest go to quiz.
+      const realFiles = { 1: 'lesson-1.html', 2: 'lesson-2.html', 3: 'lesson-3.html', 4: 'lesson-4.html', 5: 'lesson-5.html' };
+      const nextLesson = lesson + 1;
+      const nextHref = nextLesson > 25
+        ? 'index.html'
+        : (realFiles[nextLesson] || `quiz.html?u=1&l=${nextLesson}`);
+      document.getElementById('nextLessonLink').href = nextHref;
+
+      if (pct >= 0.5) markComplete();
+    }
+
+    document.getElementById('retryBtn').addEventListener('click', () => {
+      i = 0; correctCount = 0; shuffled = [];
+      document.getElementById('endCard').style.display = 'none';
+      document.getElementById('qcard').style.display = '';
+      document.getElementById('progress').style.display = '';
+      renderQuestion();
+    });
+
+    function showError(msg) {
+      document.getElementById('title').textContent = 'Quiz unavailable';
+      document.getElementById('subtitle').textContent = msg;
+      document.getElementById('qcard').style.display = 'none';
+      document.getElementById('progress').style.display = 'none';
+    }
+
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return;
+      alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        // Global position so it lines up with the learning path's `cat-N` IDs.
+        // Unit 1 lesson L is the L-th lesson overall.
+        const pos = lesson;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'catalan'),
+          { ['cat-' + pos]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    if (questions.length) renderQuestion();
+  </script>
+</body>
+</html>

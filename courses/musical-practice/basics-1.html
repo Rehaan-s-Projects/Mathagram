@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet the Piano — Basics Piano — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; color: #f1f5f9; }
+    .lesson-page { max-width: 880px; margin: 0 auto; padding: 56px 16px 80px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fde68a; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; margin-bottom: 12px; }
+    .lesson-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; color: #fff; }
+    .lesson-header .song-name { font-size: 1.05rem; color: #cbd5e1; }
+
+    .teacher-row { display: flex; align-items: flex-end; justify-content: center; gap: 18px; margin: 24px 0 18px; min-height: 130px; }
+    .william-avatar { width: 110px; height: 110px; flex-shrink: 0; border-radius: 50%; background: #fff; padding: 6px; box-shadow: 0 6px 24px rgba(251,191,36,0.32); border: 3px solid #fde68a; display: block; animation: bob 2s ease infinite; }
+    .william-avatar.correct { border-color: #22c55e; box-shadow: 0 0 32px rgba(34,197,94,0.7); }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .speech { max-width: 460px; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; font-size: 0.95rem; line-height: 1.5; color: #e2e8f0; position: relative; }
+    .speech::before { content: ''; position: absolute; left: -10px; bottom: 16px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 10px solid rgba(255,255,255,0.06); }
+    .speech.right { border-color: rgba(34,197,94,0.5); }
+    .speech.right .speaker-name { color: #22c55e; }
+    .speech strong { color: #fde68a; }
+    .speaker-name { display: block; font-weight: 800; color: #fbbf24; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+
+    .step-card { max-width: 560px; margin: 8px auto 18px; padding: 14px 18px; background: rgba(251,191,36,0.06); border: 1px dashed rgba(251,191,36,0.35); border-radius: 14px; text-align: center; }
+    .step-card .step-label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.16em; color: #fbbf24; text-transform: uppercase; margin-bottom: 4px; }
+    .step-card .step-task { font-size: 1.05rem; font-weight: 700; color: #fef3c7; }
+
+    .progress { display: flex; gap: 6px; justify-content: center; max-width: 320px; margin: 0 auto 8px; }
+    .progress .dot { width: 38px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.10); }
+    .progress .dot.done { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 10px rgba(245,158,11,0.6); }
+    .progress .dot.active { background: linear-gradient(90deg, #fef08a, #fbbf24); }
+
+    /* Piano */
+    .piano { max-width: 720px; margin: 16px auto 16px; position: relative; user-select: none; background: linear-gradient(180deg, #1f2937, #111827); padding: 16px 14px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 16px 32px rgba(0,0,0,0.4); }
+    .white-keys { display: flex; gap: 2px; position: relative; }
+    .white-key { flex: 1; min-width: 40px; height: 180px; background: linear-gradient(180deg, #fafafa, #e5e7eb); border: 1px solid #cbd5e1; border-bottom: 4px solid #94a3b8; border-radius: 0 0 8px 8px; cursor: pointer; position: relative; transition: transform 0.05s, background 0.1s; display: flex; align-items: flex-end; justify-content: center; font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #64748b; font-weight: 700; padding-bottom: 8px; }
+    .white-key:active, .white-key.active { background: linear-gradient(180deg, #fef3c7, #fde68a); transform: translateY(2px); border-bottom-width: 2px; }
+    .white-key.lit { background: linear-gradient(180deg, #fef08a, #f59e0b); box-shadow: 0 0 24px rgba(245,158,11,0.7); }
+    .white-key.target {
+      background: linear-gradient(180deg, #fef08a, #facc15);
+      box-shadow: 0 0 24px rgba(250,204,21,0.85);
+      animation: targetPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes targetPulse { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    .white-key.correct { background: linear-gradient(180deg, #bbf7d0, #22c55e); box-shadow: 0 0 28px rgba(34,197,94,0.6); color: #14532d; }
+    .black-keys { position: absolute; top: 16px; left: 14px; right: 14px; height: 110px; pointer-events: none; }
+    .black-key { position: absolute; top: 0; width: 7%; height: 100%; background: linear-gradient(180deg, #1f2937, #0f172a); border: 1px solid #000; border-radius: 0 0 6px 6px; cursor: pointer; pointer-events: auto; transition: transform 0.05s, background 0.1s; }
+    .black-key:active, .black-key.active { background: linear-gradient(180deg, #4c1d95, #1e1b4b); transform: translateY(2px); }
+    .black-key.lit { background: linear-gradient(180deg, #fbbf24, #ea580c); box-shadow: 0 0 18px rgba(245,158,11,0.6); }
+
+    .legend { text-align: center; font-size: 0.78rem; color: #94a3b8; margin: 10px auto 0; max-width: 720px; }
+
+    .controls { text-align: center; margin: 22px 0 12px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 12px 28px; border-radius: 999px; font-weight: 800; font-size: 1rem; cursor: pointer; border: none; font-family: inherit; transition: transform 0.1s, background 0.15s, box-shadow 0.15s; letter-spacing: 0.02em; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; box-shadow: 0 8px 24px rgba(34,197,94,0.4); }
+    .btn.primary:hover { box-shadow: 0 10px 28px rgba(34,197,94,0.55); }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #f1f5f9; border: 1px solid rgba(255,255,255,0.12); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .complete-card { max-width: 480px; margin: 24px auto 0; padding: 24px; text-align: center; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.45); border-radius: 16px; display: none; }
+    .complete-card.show { display: block; }
+    .complete-card h2 { color: #86efac; margin: 0 0 6px; font-size: 1.4rem; }
+    .complete-card p { color: #d1fae5; margin: 0 0 14px; }
+
+    .footer-nav { text-align: center; margin-top: 28px; }
+    .footer-nav a { color: #fbbf24; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    @media (max-width: 540px) {
+      .white-key { height: 140px; min-width: 32px; font-size: 0.7rem; }
+      .black-keys { height: 88px; }
+      .lesson-header h1 { font-size: 1.5rem; }
+      .william-avatar { width: 80px; height: 80px; }
+      .speech { font-size: 0.88rem; padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Musical Practice</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">🎹 Unit 1 · Lesson 1 · Meet the Piano</span>
+      <h1>Meet the Piano</h1>
+      <p class="song-name">Basics Piano</p>
+    </header>
+
+    <div class="teacher-row">
+      <img src="../../assets/characters/william.svg" alt="William" class="william-avatar" id="william">
+      <div class="speech" id="speech">
+        <span class="speaker-name">William</span>
+        <span id="speech-text">Hi! I'm William. This is a <strong>piano</strong>. It has white keys and black keys. Let's meet it together — follow each step below!</span>
+      </div>
+    </div>
+
+    <div class="progress" aria-label="Lesson progress">
+      <div class="dot active" id="dot-0"></div>
+      <div class="dot" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+    </div>
+
+    <div class="step-card" id="step-card">
+      <div class="step-label">Step <span id="step-num">1</span> of 4</div>
+      <div class="step-task" id="step-task">Tap any <strong>white key</strong> to hear it.</div>
+    </div>
+
+    <div class="piano" id="piano" aria-label="Interactive piano">
+      <div class="white-keys" id="white-keys"></div>
+      <div class="black-keys" id="black-keys"></div>
+    </div>
+    <p class="legend">White keys are the natural notes <strong>C D E F G A B</strong>. Black keys are sharps (♯) and flats (♭).</p>
+
+    <div class="controls">
+      <a class="btn secondary" href="index.html">← Back to Course</a>
+      <button class="btn primary" id="continue-btn" disabled>Continue → Lesson 2</button>
+    </div>
+
+    <section class="complete-card" id="complete-card">
+      <h2>🎉 You've met the piano!</h2>
+      <p>You explored white keys, black keys, and even found <strong>Middle C</strong> — the most important reference note on the piano. In Lesson 2, you'll <strong>find Middle C</strong> on your own, without any hints.</p>
+      <a class="btn primary" href="basics-2.html">Go to Lesson 2 →</a>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Musical Practice</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#64748b;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // ─── Build piano (same engine as Twinkle lessons) ─────────────────────
+    const WHITE_NOTES = ['C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5'];
+    const BLACK_NOTES_BY_WHITE_INDEX = { 0:'C#4',1:'D#4',3:'F#4',4:'G#4',5:'A#4',7:'C#5',8:'D#5',10:'F#5',11:'G#5' };
+    const NOTE_FREQ = {
+      'C4':261.63,'C#4':277.18,'D4':293.66,'D#4':311.13,'E4':329.63,'F4':349.23,'F#4':369.99,
+      'G4':392.00,'G#4':415.30,'A4':440.00,'A#4':466.16,'B4':493.88,
+      'C5':523.25,'C#5':554.37,'D5':587.33,'D#5':622.25,'E5':659.25,'F5':698.46,'F#5':739.99,
+      'G5':783.99,'G#5':830.61
+    };
+
+    const whitesEl = document.getElementById('white-keys');
+    const blacksEl = document.getElementById('black-keys');
+    const keyEls = {};
+
+    WHITE_NOTES.forEach((note) => {
+      const k = document.createElement('div');
+      k.className = 'white-key';
+      k.dataset.note = note;
+      k.textContent = note.replace(/\d/, '');
+      k.addEventListener('mousedown', () => onKeyPress(note));
+      k.addEventListener('touchstart', (e) => { e.preventDefault(); onKeyPress(note); }, { passive: false });
+      whitesEl.appendChild(k);
+      keyEls[note] = k;
+    });
+    const totalWhites = WHITE_NOTES.length;
+    Object.entries(BLACK_NOTES_BY_WHITE_INDEX).forEach(([wIdxStr, note]) => {
+      const wIdx = parseInt(wIdxStr, 10);
+      const k = document.createElement('div');
+      k.className = 'black-key';
+      k.dataset.note = note;
+      const widthPct = 100 / totalWhites;
+      const leftPct = (wIdx + 1) * widthPct - (7 / 2);
+      k.style.left = leftPct + '%';
+      k.addEventListener('mousedown', () => onKeyPress(note));
+      k.addEventListener('touchstart', (e) => { e.preventDefault(); onKeyPress(note); }, { passive: false });
+      blacksEl.appendChild(k);
+      keyEls[note] = k;
+    });
+
+    // ─── Audio synth (same as Twinkle lessons) ────────────────────────────
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+    function playNote(note, duration = 0.6) {
+      const freq = NOTE_FREQ[note];
+      if (!freq) return;
+      const ctx = ensureAudio();
+      const t0 = ctx.currentTime, t1 = t0 + duration;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.22, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t1);
+      gain.connect(ctx.destination);
+      [{type:'triangle',detune:0,gain:1.0},{type:'sine',detune:0,gain:0.5},{type:'sine',detune:1200,gain:0.18}].forEach(spec => {
+        const osc = ctx.createOscillator();
+        osc.type = spec.type;
+        osc.frequency.setValueAtTime(freq, t0);
+        osc.detune.setValueAtTime(spec.detune, t0);
+        const sub = ctx.createGain();
+        sub.gain.value = spec.gain;
+        osc.connect(sub).connect(gain);
+        osc.start(t0);
+        osc.stop(t1 + 0.05);
+      });
+      const el = keyEls[note];
+      if (el) { el.classList.add('lit'); setTimeout(() => el.classList.remove('lit'), Math.min(duration * 1000, 500)); }
+    }
+
+    // ─── Step-by-step lesson flow ─────────────────────────────────────────
+    const STEPS = [
+      { task: 'Tap any <strong>white key</strong> to hear it.', accept: (note) => !note.includes('#') },
+      { task: 'Nice! Now tap any <strong>black key</strong> — hear how it sounds different.', accept: (note) => note.includes('#') },
+      { task: 'Find <strong>Middle C</strong> — the highlighted yellow key. It\'s your home base on the piano.', accept: (note) => note === 'C4', highlight: 'C4' },
+      { task: 'One more — tap any other key you like to finish exploring!', accept: () => true }
+    ];
+    const speechMessages = [
+      'You played a white key! White keys are the natural notes — <strong>C D E F G A B</strong>. They repeat across the whole piano.',
+      'Black keys are <strong>sharps (♯)</strong> or <strong>flats (♭)</strong>. They sit between the white keys in groups of 2 and 3.',
+      'That\'s <strong>Middle C</strong>! It\'s the C just left of the pair of black keys nearest the middle of the piano. Pianists use it as their home base.',
+      'You\'ve met the piano! 🎹  You know white keys, black keys, and Middle C. Ready for Lesson 2!'
+    ];
+
+    let stepIdx = 0;
+    const stepNum = document.getElementById('step-num');
+    const stepTask = document.getElementById('step-task');
+    const speechText = document.getElementById('speech-text');
+    const williamEl = document.getElementById('william');
+    const continueBtn = document.getElementById('continue-btn');
+    const completeCard = document.getElementById('complete-card');
+    const dots = [0,1,2,3].map(i => document.getElementById('dot-'+i));
+
+    function renderStep() {
+      const step = STEPS[stepIdx];
+      stepNum.textContent = stepIdx + 1;
+      stepTask.innerHTML = step.task;
+      // Highlight target key if specified
+      document.querySelectorAll('.white-key.target, .black-key.target').forEach(el => el.classList.remove('target'));
+      if (step.highlight) {
+        const tgt = keyEls[step.highlight];
+        if (tgt) tgt.classList.add('target');
+      }
+      // Update progress dots
+      dots.forEach((d, i) => {
+        d.classList.toggle('done', i < stepIdx);
+        d.classList.toggle('active', i === stepIdx);
+      });
+    }
+
+    function onKeyPress(note) {
+      playNote(note);
+      const step = STEPS[stepIdx];
+      if (!step.accept(note)) return; // play sound, but don't advance
+      // Step satisfied → advance
+      const completedIdx = stepIdx;
+      speechText.innerHTML = speechMessages[completedIdx];
+      document.getElementById('speech').classList.add('right');
+      williamEl.classList.add('correct');
+      setTimeout(() => williamEl.classList.remove('correct'), 700);
+      stepIdx++;
+      if (stepIdx >= STEPS.length) {
+        // Lesson complete
+        document.getElementById('step-card').style.display = 'none';
+        completeCard.classList.add('show');
+        continueBtn.disabled = false;
+        continueBtn.classList.remove('secondary');
+        dots.forEach(d => { d.classList.remove('active'); d.classList.add('done'); });
+        markLessonComplete();
+      } else {
+        setTimeout(renderStep, 350);
+      }
+    }
+
+    continueBtn.addEventListener('click', () => { window.location.href = 'basics-2.html'; });
+
+    // ─── Firestore progress tracking (best-effort) ────────────────────────
+    async function markLessonComplete() {
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        const lessonId = 'mp-1'; // global lesson #1
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'musical-practice'),
+          { [lessonId]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent fail — UI already shows complete */ }
+    }
+
+    renderStep();
+  </script>
+</body>
+</html>

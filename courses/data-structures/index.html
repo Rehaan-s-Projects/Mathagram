@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Structures — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>Data Structures</h1>
+    <p>Master data structures — arrays, linked lists, stacks, queues, trees, heaps, hash tables, graphs, tries, with Big-O analysis and interview-ready problems. 691 lessons across 46 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why Data Structures Matter','Abstract Data Types','Data Structure vs Algorithm','Memory — Stack & Heap','Pointers & References','Mutability','Choosing a Data Structure','Language-Agnostic Thinking','Implementing vs Using','Pseudocode','Visualizing Structures','Interview Context','Setup & Tools','Foundations Checkpoint','Foundations Review']],
+      [2,'Complexity Analysis',['Why Analyze Complexity?','Big-O Notation','Big-Omega & Big-Theta','Constant Time O(1)','Logarithmic Time O(log n)','Linear Time O(n)','Linearithmic O(n log n)','Quadratic O(n^2)','Exponential & Factorial','Space Complexity','Best, Average, Worst Case','Amortized Analysis','Dropping Constants','Analyzing Loops','Complexity Checkpoint']],
+      [3,'Arrays',['What Is an Array?','Static vs Dynamic Arrays','Indexing & Access','Insertion','Deletion','Searching an Array','Traversal','Dynamic Array Resizing','Amortized Append','Multi-Dimensional Arrays','Array Slicing','In-Place Operations','Arrays in Memory','Common Array Problems','Arrays Checkpoint']],
+      [4,'Strings',['Strings as Data Structures','Character Encoding','Immutability of Strings','String Builders','Substring Operations','String Searching','Pattern Matching — Naive','Knuth-Morris-Pratt','Rabin-Karp','Anagram Problems','Palindrome Problems','String Compression','Sliding Window on Strings','Common String Problems','Strings Checkpoint']],
+      [5,'Linked Lists',['What Is a Linked List?','Nodes & Pointers','Singly Linked Lists','Traversal','Insertion at Head','Insertion at Tail','Insertion in Middle','Deletion','Searching','Doubly Linked Lists','Circular Linked Lists','Reversing a Linked List','Detecting Cycles — Floyd\'s','Linked List vs Array','Linked Lists Checkpoint']],
+      [6,'Stacks',['What Is a Stack?','LIFO Principle','Push & Pop','Peek & isEmpty','Array-Based Stack','Linked-List-Based Stack','Stack Overflow & Underflow','Balanced Parentheses','Reverse Polish Notation','Function Call Stack','Undo/Redo with Stacks','Monotonic Stacks','Min Stack','Common Stack Problems','Stacks Checkpoint']],
+      [7,'Queues',['What Is a Queue?','FIFO Principle','Enqueue & Dequeue','Array-Based Queue','Circular Queue','Linked-List-Based Queue','Deques','Priority Queue Preview','Queue with Two Stacks','Stack with Two Queues','Sliding Window Maximum','BFS Uses Queues','Producer-Consumer','Common Queue Problems','Queues Checkpoint']],
+      [8,'Recursion',['What Is Recursion?','Base Case & Recursive Case','The Call Stack & Recursion','Factorial & Fibonacci','Recursion vs Iteration','Tail Recursion','Tree Recursion','Mutual Recursion','Backtracking Intro','Stack Overflow Risks','Converting Recursion to Iteration','Memoization Preview','Visualizing Recursion','Common Recursion Problems','Recursion Checkpoint']],
+      [9,'Hash Tables',['What Is a Hash Table?','Hash Functions','Properties of Good Hashes','Buckets & Slots','Collisions','Chaining','Open Addressing','Linear & Quadratic Probing','Double Hashing','Load Factor & Resizing','Hash Maps vs Hash Sets','Hash Table Complexity','Hashing Strings','Common Hashing Problems','Hash Tables Checkpoint']],
+      [10,'Sets & Maps',['The Set ADT','The Map ADT','Hash-Based Sets','Tree-Based Sets','Ordered vs Unordered','Set Operations','Multisets','Frequency Counting','Two-Sum with Maps','Grouping with Maps','Caching with Maps','Map Iteration','Choosing Set vs Map','Common Set/Map Problems','Sets & Maps Checkpoint']],
+      [11,'Trees',['What Is a Tree?','Tree Terminology','Binary Trees','Tree Representation','Tree Height & Depth','Full, Complete & Perfect Trees','Pre-Order Traversal','In-Order Traversal','Post-Order Traversal','Level-Order Traversal','Recursive vs Iterative Traversal','Counting Nodes & Leaves','Tree Diameter','Common Tree Problems','Trees Checkpoint']],
+      [12,'Binary Search Trees',['What Is a BST?','BST Property','Searching a BST','Insertion','Deletion','Finding Min & Max','Successor & Predecessor','In-Order Gives Sorted Order','Validating a BST','BST Complexity','Degenerate Trees','Range Queries','Kth Smallest Element','Common BST Problems','BST Checkpoint']],
+      [13,'Balanced Trees',['Why Balance?','Tree Rotations','AVL Trees','AVL Insertion & Balancing','Red-Black Trees','Red-Black Properties','Red-Black Operations','B-Trees','B-Tree Use in Databases','Splay Trees','2-3 Trees','Treaps','Self-Balancing Trade-offs','When to Use Which','Balanced Trees Checkpoint']],
+      [14,'Heaps & Priority Queues',['What Is a Heap?','Min-Heap & Max-Heap','Heap as an Array','Insertion — Sift Up','Extraction — Sift Down','Building a Heap — Heapify','Heap Complexity','Priority Queues','Heap Sort','Kth Largest Element','Merge K Sorted Lists','Median of a Stream','D-ary Heaps','Common Heap Problems','Heaps Checkpoint']],
+      [15,'Tries',['What Is a Trie?','Trie Nodes','Inserting Words','Searching Words','Prefix Search','Deletion in a Trie','Autocomplete','Spell Checkers','Trie Space Complexity','Compressed Tries','Radix Trees','Suffix Tries','Trie vs Hash Table','Common Trie Problems','Tries Checkpoint']],
+      [16,'Graphs — Fundamentals',['What Is a Graph?','Vertices & Edges','Directed vs Undirected','Weighted Graphs','Adjacency Matrix','Adjacency List','Edge List','Graph Density','Connected Components','Cycles in Graphs','Bipartite Graphs','Self-Loops & Multigraphs','Representing Graphs in Code','Choosing a Representation','Graph Fundamentals Checkpoint']],
+      [17,'Graph Traversal',['Depth-First Search','DFS — Recursive','DFS — Iterative','Breadth-First Search','BFS with a Queue','Tracking Visited Nodes','Finding Paths','Shortest Path in Unweighted Graphs','Connected Components via Traversal','Cycle Detection','Topological Sort','Flood Fill','Traversal Complexity','Common Traversal Problems','Traversal Checkpoint']],
+      [18,'Shortest Paths',['The Shortest Path Problem','Dijkstra\'s Algorithm','Dijkstra with a Heap','Bellman-Ford Algorithm','Negative Weight Edges','Floyd-Warshall','All-Pairs Shortest Paths','A* Search','Heuristics in A*','Path Reconstruction','Shortest Path in DAGs','Comparing Algorithms','Real-World Routing','Common Shortest-Path Problems','Shortest Paths Checkpoint']],
+      [19,'Minimum Spanning Trees & Union-Find',['What Is a Spanning Tree?','Minimum Spanning Tree','Kruskal\'s Algorithm','Prim\'s Algorithm','The Union-Find Structure','Find Operation','Union Operation','Path Compression','Union by Rank','Union-Find Complexity','Cycle Detection with Union-Find','Connectivity Queries','MST Applications','Common MST Problems','MST Checkpoint']],
+      [20,'Sorting Algorithms',['Why Sorting Matters','Bubble Sort','Selection Sort','Insertion Sort','Merge Sort','Quick Sort','Quick Sort Pivots','Heap Sort','Counting Sort','Radix Sort','Bucket Sort','Stability in Sorting','Comparison vs Non-Comparison','Choosing a Sort','Sorting Checkpoint']],
+      [21,'Searching Algorithms',['Linear Search','Binary Search','Binary Search on Answers','Search in Rotated Arrays','Finding Boundaries','Ternary Search','Exponential Search','Interpolation Search','Search in 2D Matrices','Search in Infinite Arrays','Searching Linked Structures','Search Complexity Summary','When Binary Search Fails','Common Search Problems','Searching Checkpoint']],
+      [22,'Dynamic Programming',['What Is Dynamic Programming?','Overlapping Subproblems','Optimal Substructure','Memoization (Top-Down)','Tabulation (Bottom-Up)','Fibonacci with DP','Climbing Stairs','Coin Change','0/1 Knapsack','Longest Common Subsequence','Longest Increasing Subsequence','Edit Distance','DP on Grids','DP State Design','DP Checkpoint']],
+      [23,'Advanced Structures',['Segment Trees','Range Sum Queries','Lazy Propagation','Fenwick Trees (BIT)','Sparse Tables','LRU Cache Design','LFU Cache Design','Skip Lists','Bloom Filters','Disjoint Interval Trees','Suffix Arrays','K-D Trees','Quadtrees','Choosing Advanced Structures','Advanced Structures Checkpoint']],
+      [24,'Problem-Solving Patterns',['Two Pointers','Sliding Window','Fast & Slow Pointers','Merge Intervals','Cyclic Sort','In-Place Reversal','Top-K Elements','K-Way Merge','Backtracking','Greedy Algorithms','Divide & Conquer','Bit Manipulation','Matrix Traversal','Choosing a Pattern','Patterns Checkpoint']],
+      [25,'Projects & Interview Mastery',['Implement a Dynamic Array','Implement a Linked List','Implement a Hash Map','Implement a Binary Search Tree','Implement a Min-Heap','Implement a Graph','Implement an LRU Cache','Build a Trie-Based Autocomplete','Solve a Classic DP Problem','Mock Interview — Easy','Mock Interview — Medium','Mock Interview — Hard','Whiteboard Strategy','Career & Resources','Data Structures Grand Mastery!']],
+      [26,'String Algorithms',['Z-Algorithm','KMP Deep Dive','Boyer-Moore','Aho-Corasick','Suffix Array Construction','LCP Array','Suffix Automaton','Manacher\'s Algorithm','Rolling Hash','String Hashing Pitfalls','Edit Distance Variants','Longest Common Substring','Palindromic Trees','String DP','String Algorithms Checkpoint']],
+      [27,'Advanced Trees',['Segment Tree Beats','Persistent Segment Trees','Merge Sort Tree','Wavelet Trees','Cartesian Trees','Link-Cut Trees','Euler Tour Trees','Centroid Decomposition','Heavy-Light Decomposition','Auxiliary Trees','KD-Trees Deep Dive','Interval Trees','Range Trees','Tree Isomorphism','Advanced Trees Checkpoint']],
+      [28,'Balanced BST Variants',['Scapegoat Trees','Weight-Balanced Trees','AA Trees','Left-Leaning Red-Black','Finger Trees','Order-Statistic Trees','Interval BSTs','Augmented BSTs','Rope Data Structure','Implicit Treaps','Splay Tree Applications','Persistent BSTs','Concurrent BSTs','Choosing a BST','Balanced BST Checkpoint']],
+      [29,'Heaps Deep Dive',['Binary Heap Recap','D-ary Heaps','Binomial Heaps','Fibonacci Heaps','Pairing Heaps','Leftist Heaps','Skew Heaps','Soft Heaps','Double-Ended Heaps','Indexed Priority Queues','Mergeable Heaps','Heap Applications','Heap Complexity Comparison','Lazy Deletion','Heaps Checkpoint']],
+      [30,'Hashing Advanced',['Universal Hashing','Perfect Hashing','Cuckoo Hashing','Hopscotch Hashing','Robin Hood Hashing','Consistent Hashing','Rendezvous Hashing','Bloom Filters Deep Dive','Counting Bloom Filters','Cuckoo Filters','HyperLogLog','Count-Min Sketch','MinHash','Locality-Sensitive Hashing','Hashing Advanced Checkpoint']],
+      [31,'Probabilistic Structures',['Randomization Basics','Skip Lists Deep Dive','Treaps Deep Dive','Bloom Filter Tuning','Quotient Filters','HyperLogLog Internals','Count-Min Sketch Internals','t-Digest','Reservoir Sampling','Random Projection','Probabilistic Counting','Sketching Streams','Error Bounds','Use Cases','Probabilistic Checkpoint']],
+      [32,'Persistent Structures',['What Is Persistence','Partial Persistence','Full Persistence','Confluent Persistence','Persistent Arrays','Persistent Linked Lists','Persistent Stacks & Queues','Path Copying','Fat Nodes','Persistent Segment Trees','Persistent BSTs','Functional Data Structures','Immutability & Persistence','Versioned Data','Persistent Checkpoint']],
+      [33,'Concurrent Structures',['Concurrency Challenges','Locks & Mutexes','Lock-Free Stacks','Lock-Free Queues','Compare-And-Swap','The ABA Problem','Hazard Pointers','Read-Copy-Update','Concurrent Hash Maps','Concurrent Skip Lists','Work-Stealing Deques','Memory Models','Linearizability','Scaling Structures','Concurrent Checkpoint']],
+      [34,'Spatial Structures',['Points & Regions','Quadtrees','Octrees','KD-Trees Deep Dive','Range Trees','R-Trees','R*-Trees','BSP Trees','Bounding Volume Hierarchies','Grid-Based Indexing','Space-Filling Curves','Nearest Neighbor Search','Spatial Joins','Geohashing','Spatial Checkpoint']],
+      [35,'Graph Representations',['Adjacency Structures Recap','Compressed Sparse Row','Edge-List Variants','Incidence Matrix','Implicit Graphs','Graph Compression','Dynamic Graphs','Streaming Graphs','Hypergraphs','Multigraphs','Planar Graphs','Graph Storage at Scale','Memory Trade-offs','Choosing a Representation','Graph Representation Checkpoint']],
+      [36,'Advanced Graph Algorithms',['Strongly Connected Components','Tarjan\'s Algorithm','Kosaraju\'s Algorithm','Articulation Points','Bridges','Biconnected Components','2-SAT','Eulerian Paths','Hamiltonian Paths','Graph Coloring','Chromatic Number','Independent Sets','Vertex Cover','Dominator Trees','Advanced Graph Checkpoint']],
+      [37,'Network Flow',['Flow Networks','Max-Flow Min-Cut','Ford-Fulkerson','Edmonds-Karp','Dinic\'s Algorithm','Push-Relabel','Min-Cost Max-Flow','Bipartite Matching via Flow','Hopcroft-Karp','Hungarian Algorithm','Circulation Problems','Flow with Lower Bounds','Applications of Flow','Modeling with Flow','Network Flow Checkpoint']],
+      [38,'Matching & Assignment',['Bipartite Matching','Augmenting Paths','Konig\'s Theorem','Hall\'s Theorem','Stable Marriage','Gale-Shapley','Weighted Matching','General Graph Matching','Blossom Algorithm','Assignment Problem','Online Matching','Matching Applications','Approximate Matching','Matching Complexity','Matching Checkpoint']],
+      [39,'Range Query Structures',['Prefix Sums','Sparse Tables Deep Dive','Sqrt Decomposition','Mo\'s Algorithm','Fenwick Tree 2D','Segment Tree 2D','Wavelet Tree Queries','Persistent Range Queries','Offline Queries','Range Updates','Range Min & Max','Range GCD','Distinct Values in Range','Query Optimization','Range Query Checkpoint']],
+      [40,'Advanced Dynamic Programming',['DP Optimization Overview','Bitmask DP','Digit DP','DP on Trees','DP on Graphs','Interval DP','Knuth Optimization','Divide & Conquer DP','Convex Hull Trick','Li Chao Tree','Sum-over-Subsets DP','DP with Data Structures','Profile DP','Memory Optimization in DP','Advanced DP Checkpoint']],
+      [41,'Greedy & Exchange Arguments',['Greedy Strategy','Exchange Arguments','Matroid Theory','Activity Selection Deep Dive','Huffman Revisited','Interval Scheduling','Minimizing Lateness','Fractional Problems','Greedy on Graphs','When Greedy Fails','Proving Greedy Correct','Greedy vs DP','Approximation via Greedy','Greedy Patterns','Greedy Checkpoint']],
+      [42,'Randomized Algorithms',['Randomization Basics','Las Vegas vs Monte Carlo','Randomized QuickSort','Randomized Selection','Reservoir Sampling Deep Dive','Random Pivots','Karger\'s Min Cut','Randomized Primality','Hashing & Randomness','Skip List Analysis','Probabilistic Analysis','Derandomization','Expected Complexity','Use Cases','Randomized Checkpoint']],
+      [43,'Approximation Algorithms',['Why Approximate','Approximation Ratios','Vertex Cover Approximation','TSP Approximation','Set Cover Greedy','Knapsack FPTAS','Bin Packing','Load Balancing','LP Relaxation','Rounding Techniques','Primal-Dual Method','Hardness of Approximation','PTAS & FPTAS','Practical Approximation','Approximation Checkpoint']],
+      [44,'Computational Geometry',['Points, Lines & Segments','Orientation Test','Segment Intersection','Convex Hull — Graham Scan','Convex Hull — Andrew\'s','Closest Pair of Points','Line Sweep','Polygon Area','Point in Polygon','Rotating Calipers','Delaunay Triangulation','Voronoi Diagrams','Geometric Predicates','Robustness Issues','Geometry Checkpoint']],
+      [45,'Amortized & Lazy Techniques',['Amortized Analysis Deep Dive','Aggregate Method','Accounting Method','Potential Method','Lazy Propagation Deep Dive','Lazy Deletion','Union-Find Amortization','Dynamic Arrays Amortized','Splay Tree Amortization','Persistence & Amortization','Rebuilding Techniques','Sqrt Rebuilding','Batch Processing','Amortized Pitfalls','Amortized Checkpoint']],
+      [46,'Systems Data Structures',['Memory Hierarchy','Cache-Aware Structures','Cache-Oblivious Structures','B-Trees in Databases','LSM Trees','Write-Ahead Logs','Skip Lists in Databases','Page Tables','Buddy Allocator','Slab Allocation','Ring Buffers','Lock-Free Ring Buffers','Memory-Mapped Structures','Data Structure Tuning','Systems Checkpoint','Pattern Recognition']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ds-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('data-structures');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('data-structures');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

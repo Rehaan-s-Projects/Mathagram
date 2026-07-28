@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>International Sign — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 660px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>International Sign</h1>
+    <p>The pidgin/lingua-franca used at Deaflympics, World Federation of the Deaf congresses, and cross-border Deaf meetings. Draws on ASL, BSL, JSL, KSL, CSL, Taiwan Sign, Auslan, NZSL, ISN, LSF, DGS, LSE, LIS, NGT &amp; many others. Iconic visual-spatial grammar, classifiers, role-shift, non-manual markers, brow-raise grammar &mdash; plus a deep <strong>Interrogative Questions in Sign</strong> sweep: WH-handshapes, brow-furrow vs brow-raise NMM, yes/no, tag, choice, indirect, echo &amp; rhetorical Q, with side-by-side comparisons across 13+ sign languages.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "Welcome to International Sign — What IS Is",
+      "Handshapes — The Building Blocks (A, B, C, 5, 1, O…)",
+      "Fingerspelling — One-Handed (ASL/IS) vs Two-Handed (BSL)",
+      "Numbers — Cardinal, Ordinal, Multi-Digit",
+      "Greetings — HELLO, NICE-MEET-YOU, GOODBYE",
+      "Pronouns & Indexing — POINT as Grammar",
+      "Family — MOTHER, FATHER, SIBLING, FAMILY",
+      "Common Verbs — GO, COME, EAT, DRINK, WORK",
+      "Common Nouns — HOUSE, WATER, FOOD, PERSON",
+      "Colors & Visual Description",
+      "Time, Days & Calendar in IS",
+      "Locations & Spatial Grammar — The Sign Space",
+      "Classifiers — CL:1, CL:3, CL:B, CL:V, CL:5",
+      "Non-Manual Markers — Facial Grammar (Brows, Mouth, Head Tilt)",
+      "Role-Shift & Constructed Action — Becoming the Character",
+      "Negation & Affirmation — Head Shake, Head Nod",
+      "WH-Questions — WHAT, WHERE, WHO, WHEN, WHY, HOW",
+      "Yes/No Questions — Brow Raise as Grammar",
+      "Topicalization — Topic-Comment Structure",
+      "Conditionals — IF + topic + comment",
+      "Comparing ASL vs BSL vs Auslan vs NZSL",
+      "Comparing JSL vs KSL vs Taiwan Sign vs Auslan",
+      "European Sign Family — LSF, DGS, LSE, LIS, NGT",
+      "ISN (Nicaraguan) — How Languages Are Born",
+      "Deaf Culture — Identity, Deaf Gain, Audism",
+      "Famous Deaf People — Helen Keller, Marlee Matlin, Nyle DiMarco",
+      "Deaflympics, WFD Congress & International Events",
+      "Reading Sign — Watching IS Vlogs & Interpreters",
+      "Producing Sign — Building Your Own IS Vocabulary",
+      "Mastery — Converse in International Sign"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+
+    // ─── Interrogative Questions in Sign — Deep Sweep (Units 31-37) ────────
+    const interrogativeUnits = [
+      ['Wh-Questions in Sign — The Six Cores Deep Dive', [
+        'WHAT — 5-Handshape, Palm Shake',
+        'WHERE — Index Finger, Side-to-Side',
+        'WHO — L-Handshape at Chin',
+        'WHEN — 1-Handshape Touch (Cross-Wrist)',
+        'WHY — Y-Handshape at Forehead',
+        'HOW — Bent-V Twist (or Open-B Roll)',
+        'Sign-Space Placement for Wh-Signs',
+        'Wh + Brow Furrow (Negative NMM)',
+        'Wh-at-Sentence-Start vs Wh-at-End',
+        'Wh + Head Tilt Forward',
+        'Wh + Body Lean',
+        'Multiple-Wh in One Utterance',
+        'Wh-NMM Endurance Drill',
+        'Wh-Q Conversation Practice',
+        'Wh-Q Checkpoint'
+      ]],
+      ['Yes/No Q & Brow-Raise Grammar in Sign', [
+        'Brow Raise = Yes/No Marker',
+        'Brow Raise Duration & Onset',
+        'Eye-Widening Variant',
+        'Head Tilt Forward in Yes/No Q',
+        '"Do you…?" Pattern',
+        '"Are you…?" Pattern',
+        '"Have you…?" Pattern',
+        '"Will you…?" Pattern',
+        'Mini Yes/No Q ("You?")',
+        'Echo Yes/No Q',
+        'Polite Yes/No Q',
+        'Brow-Raise Speed Drill',
+        'NMM Endurance — Long Yes/No',
+        'Yes/No Conversation Practice',
+        'Yes/No Q Checkpoint'
+      ]],
+      ['Wh-Comparative: ASL · BSL · Auslan · NZSL', [
+        'WHAT — ASL vs BSL vs Auslan vs NZSL',
+        'WHERE — Side-by-Side',
+        'WHO — Side-by-Side',
+        'WHEN — Side-by-Side',
+        'WHY — Side-by-Side',
+        'HOW — Side-by-Side',
+        'Brow-Raise Conventions Across Four',
+        'Wh-at-Sentence-End Conventions',
+        'Two-Handed (BSL) vs One-Handed (ASL) Wh',
+        'Regional Variants Within ASL',
+        'Fingerspelled Wh Backups',
+        'Code-Switching Wh Between Languages',
+        'Wh in IS vs ASL — Choices',
+        'Wh in IS vs BSL — Choices',
+        'Wh-Comparative Checkpoint'
+      ]],
+      ['Wh-Comparative: JSL · KSL · CSL · Taiwan Sign', [
+        'WHAT in JSL (Japanese)',
+        'WHAT in KSL (Korean)',
+        'WHAT in CSL (Mainland China)',
+        'WHAT in Taiwan Sign',
+        'WHERE in JSL',
+        'WHERE in KSL',
+        'WHO in CSL',
+        'WHEN in JSL',
+        'WHY in KSL',
+        'HOW in JSL',
+        'HOW in CSL',
+        'Brow-Raise vs Mouthing in Asian SLs',
+        'Wh-Position in JSL Sentences',
+        'Cross-Asian Wh Drill',
+        'Asia-Wh Checkpoint'
+      ]],
+      ['Wh-Comparative European: LSF · DGS · LSE · LIS · NGT', [
+        'WHAT in LSF (French)',
+        'WHAT in DGS (German)',
+        'WHAT in LSE (Spanish)',
+        'WHAT in LIS (Italian)',
+        'WHAT in NGT (Dutch)',
+        'WHERE in LSF',
+        'WHERE in DGS',
+        'WHO in LSE',
+        'WHEN in LIS',
+        'WHY in NGT',
+        'HOW in LSF',
+        'European Brow Conventions',
+        'Sign-Space Differences Across Europe',
+        'Cross-European Wh Drill',
+        'Euro-Wh Checkpoint'
+      ]],
+      ['Tag, Choice & Indirect Q in Sign', [
+        'Tag Q — Head Nod + Brow Raise',
+        '"…right?" Tag in IS',
+        'Choice Q — "A or B?" Two-Hand Alternation',
+        'Indirect Q — "Do you know WHERE…?"',
+        'Embedded Q in IS',
+        '"I wonder…" in IS (THINK + Wh)',
+        'Polite Indirect Q with Soft NMM',
+        'Reported Q in IS',
+        '"What did she ask?" — Role-Shift',
+        'Restatement Drills',
+        'Topic-Comment + Q Combination',
+        'Conditional + Q ("If yes, when?")',
+        'Mixed Indirect Drill',
+        'IS Conversation — Indirect Q',
+        'Tag/Indirect Checkpoint'
+      ]],
+      ['Echo, Rhetorical & Wh-Movement in Sign', [
+        'Echo Q — "He signed WHAT?"',
+        'Surprise Echo via Wide-Eye NMM',
+        'Sarcastic Echo Q',
+        'Rhetorical Q — Set + Answer Pattern',
+        'Wh-Q as Rhetorical Set-Up',
+        '"Of course!" Reply Pattern',
+        'Wh-Movement in IS (Topic-Wh Order)',
+        'Wh-at-Start vs Wh-at-End — Pragmatics',
+        'Double Wh ("Who Where?")',
+        'Multiple-Wh Drill',
+        'Rhetorical Q in Deaf Storytelling',
+        'Rhetorical Q in IS Vlogs',
+        'Cross-SL Rhetorical Q',
+        'Echo + Rhetorical Drill',
+        'Interrogative-in-Sign Mastery!'
+      ]],
+    ];
+    interrogativeUnits.forEach((u, idx) => {
+      units.push([units.length + 1, u[0], u[1]]);
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'is-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('international-sign');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('international-sign');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

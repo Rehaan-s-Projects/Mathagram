@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yoruba — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Èdè Yorùbá</h1>
+    <p>A major Niger-Congo language spoken by 45+ million across southwestern Nigeria, Benin, Togo &amp; the diaspora (Brazil, Cuba, Caribbean — Lucumí/Santería). Three tones (high, mid, low), nasalized vowels, rich oral literature, and Ifá divination tradition. Not taught by Duolingo. 30 units, 450 lessons.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const unitNames = [
+      "Yoruba Alphabet — 25 Letters with Diacritics",
+      "Tone System — High, Mid, Low (Crucial!)",
+      "Greetings — Ẹ Káàárọ̀, Báwo Ni",
+      "Numbers — Vigesimal System (Base 20)",
+      "Ìdílé — Family in Yoruba Culture",
+      "Common Verbs — Lọ, Wá, Jẹ, Sọ",
+      "Common Nouns — Ilé, Omi, Oúnjẹ, Ọmọ",
+      "Pronouns — Mo, O, Ó, Àwa, Ẹyín",
+      "Adjectives & Color Words",
+      "Time, Days & Months",
+      "Yoruba Food — Jollof, Egusi, Pounded Yam",
+      "Travel — Lagos, Ibadan, Osogbo",
+      "Body Parts & Health Vocabulary",
+      "Clothing — Agbada, Iro & Buba, Gele",
+      "Weather & Seasons in West Africa",
+      "Animals — Domestic & Wild",
+      "Colours, Shapes & Adire Patterns",
+      "Past Tense — Aspect Markers",
+      "Future Tense — Yóò & Á",
+      "Conditional & Subjunctive",
+      "Everyday Phrases & Pleasantries",
+      "Market Conversations — Ọjà",
+      "Hotel & Travel Conversations",
+      "Directions & Public Transport",
+      "Yoruba History — Ifẹ̀, Ọ̀yọ́, Ìjẹ̀bú Kingdoms",
+      "Music & Drums — Jùjú, Apala, Talking Drums",
+      "News, Nollywood & Yoruba Films",
+      "Òwe — Proverbs & Wisdom Sayings",
+      "Reading & Writing Yoruba",
+      "Mastery — Hold a Conversation in Yoruba"
+    ];
+    const units = unitNames.map((name, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= 14; j++) lessons.push(`${name} — Lesson ${j}`);
+      lessons.push(`${name} Checkpoint`);
+      return [idx + 1, name, lessons];
+    });
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'yo-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('yoruba');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('yoruba');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

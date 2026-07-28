@@ -1,24 +1,149 @@
 /learning-post/learner/*  /learning-post/learner/index.html  200
 /learning-post/profile/*  /learning-post/learner/index.html  200
-/course/english-words-oed/*  /courses.html  301!
-/course/english-words-oed  /courses.html  301!
-/course/spanish-words-rae/*  /courses.html  301!
-/course/spanish-words-rae  /courses.html  301!
-/course/difficult-colors/*  /course/colour/:splat  301!
-/course/difficult-colors  /course/colour/  301!
-# /course/color and /course/colour are the same URL — rewrite (200), not redirect (301).
-# The user's URL stays unchanged; the content from /course/colour/ is served either way.
-/course/color/*  /course/colour/:splat  200
-/course/color  /course/colour/index.html  200
+
+# Musical Practice — clean song-lesson URLs (Duolingo-Music style).
+# /courses/musical-practice/song-<unit>-<lesson> rewrites (200 — URL stays clean)
+# to the practice page, which reads the unit & lesson from the path. The rule is
+# un-forced, so real files in the folder (index.html, practice.html, melodies.js,
+# quiz.html, quizzes.js, basics-1.html, basics-2.html, lesson-1.html) still win.
+/courses/musical-practice/:song  /courses/musical-practice/practice.html  200
+
+# Time Management & Productivity course merged into Study Skills & Learning on 2026-05-07.
+/courses/time-management/*  /courses/study-skills/index.html  301!
+/course/time-management/*   /courses/study-skills/index.html  301!
+
+# Chess Mastery removed 2026-05-12 — bounce any old links to the catalog.
+/courses/chess-mastery/*  /courses.html  301!
+/course/chess-mastery/*   /courses.html  301!
+
+# Sign Language courses (ASL/BSL/JSL/KSL) removed 2026-07-15 — bounce old links to
+# the catalog rather than letting the generic /course/* rule land them on a 404.
+/courses/asl/*  /courses.html  301!
+/courses/asl    /courses.html  301!
+/course/asl/*   /courses.html  301!
+/course/asl     /courses.html  301!
+/courses/bsl/*  /courses.html  301!
+/courses/bsl    /courses.html  301!
+/course/bsl/*   /courses.html  301!
+/course/bsl     /courses.html  301!
+/courses/jsl/*  /courses.html  301!
+/courses/jsl    /courses.html  301!
+/course/jsl/*   /courses.html  301!
+/course/jsl     /courses.html  301!
+/courses/ksl/*  /courses.html  301!
+/courses/ksl    /courses.html  301!
+/course/ksl/*   /courses.html  301!
+/course/ksl     /courses.html  301!
+
+# Duplicate "Critical Thinking" (7-unit version) removed 2026-05-12 — its
+# topics are fully covered by the comprehensive "Critical Thinking & Problem-Solving".
+/courses/critical-thinking/*  /courses/critical-thinking-problem-solving/index.html  301!
+/courses/critical-thinking    /courses/critical-thinking-problem-solving/index.html  301!
+/course/critical-thinking/*   /courses/critical-thinking-problem-solving/index.html  301!
+
+# Legacy URL → new URL (renamed /course/ to /courses/ on 2026-05-05).
+# Catch every old /course/<slug>/... link and 301 it to the new /courses/<slug>/...
+# path. Handles bookmarks, search results, social shares, and old emails.
+# Also treats /courses/ (trailing slash) as the catalog page (200 rewrite).
+/course/*  /courses/:splat  301!
+/course    /courses          301!
+/courses/  /courses.html     200
+
+# Mathagram doesn't host a "Brilliant" course — these aliases just bounce out to
+# the real Brilliant.org so users typing the URL or scanning catalog space land
+# on the right site instead of a 404.
+/courses/brilliant/*  https://brilliant.org/  301!
+/courses/brilliant    https://brilliant.org/  301!
+/brilliant/*          https://brilliant.org/  301!
+/brilliant            https://brilliant.org/  301!
+
+# High Valyrian — also not hosted here; bounce to Duolingo's course.
+# Both hyphenated (high-valyrian) and concatenated (highvalyrian) spellings.
+/courses/high-valyrian/*  https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/courses/high-valyrian    https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/courses/highvalyrian/*   https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/courses/highvalyrian     https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/high-valyrian/*          https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/high-valyrian            https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/highvalyrian/*           https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+/highvalyrian             https://www.duolingo.com/course/hv/en/Learn-High%20Valyrian  301!
+
+# Klingon — also not hosted here; bounce to Duolingo's course.
+/courses/klingon/*  https://www.duolingo.com/course/tlh/en/Learn-Klingon  301!
+/courses/klingon    https://www.duolingo.com/course/tlh/en/Learn-Klingon  301!
+/klingon/*          https://www.duolingo.com/course/tlh/en/Learn-Klingon  301!
+/klingon            https://www.duolingo.com/course/tlh/en/Learn-Klingon  301!
+
+# Secret release-date URL — 3/13/2026 is Mathagram's founding date, so the
+# hidden /3132026 path links to the About Rehaan founder page as an easter egg.
+/3132026/*  /courses/about-rehaan/index.html  301!
+/3132026    /courses/about-rehaan/index.html  301!
+
+# Generic Duolingo alias — bounce to the Duolingo homepage. Both capitalizations
+# (Netlify _redirects path matching is case-sensitive) and both with and without
+# /courses/ prefix.
+/courses/Duolingo/*  https://www.duolingo.com/  301!
+/courses/Duolingo    https://www.duolingo.com/  301!
+/courses/duolingo/*  https://www.duolingo.com/  301!
+/courses/duolingo    https://www.duolingo.com/  301!
+/Duolingo/*          https://www.duolingo.com/  301!
+/Duolingo            https://www.duolingo.com/  301!
+/duolingo/*          https://www.duolingo.com/  301!
+/duolingo            https://www.duolingo.com/  301!
+
+# Rehaan / RehaanRashid — bounce to the founder's DeviantArt profile.
+# Covers both short and full handle, both capitalizations (Netlify path
+# matching is case-sensitive), and both with/without /courses/ prefix.
+/courses/Rehaan/*         https://www.deviantart.com/rehaanrashid  301!
+/courses/Rehaan           https://www.deviantart.com/rehaanrashid  301!
+/courses/rehaan/*         https://www.deviantart.com/rehaanrashid  301!
+/courses/rehaan           https://www.deviantart.com/rehaanrashid  301!
+/courses/RehaanRashid/*   https://www.deviantart.com/rehaanrashid  301!
+/courses/RehaanRashid     https://www.deviantart.com/rehaanrashid  301!
+/courses/rehaanrashid/*   https://www.deviantart.com/rehaanrashid  301!
+/courses/rehaanrashid     https://www.deviantart.com/rehaanrashid  301!
+/Rehaan/*                 https://www.deviantart.com/rehaanrashid  301!
+/Rehaan                   https://www.deviantart.com/rehaanrashid  301!
+/rehaan/*                 https://www.deviantart.com/rehaanrashid  301!
+/rehaan                   https://www.deviantart.com/rehaanrashid  301!
+/RehaanRashid/*           https://www.deviantart.com/rehaanrashid  301!
+/RehaanRashid             https://www.deviantart.com/rehaanrashid  301!
+/rehaanrashid/*           https://www.deviantart.com/rehaanrashid  301!
+/rehaanrashid             https://www.deviantart.com/rehaanrashid  301!
+
+/courses/english-words-oed/*  /courses.html  301!
+/courses/english-words-oed  /courses.html  301!
+/courses/spanish-words-rae/*  /courses.html  301!
+/courses/spanish-words-rae  /courses.html  301!
+/courses/baking/*  /courses/cooking-nutrition/index.html  301!
+/courses/baking  /courses/cooking-nutrition/index.html  301!
+/courses/knife-skills/*  /courses/cooking-nutrition/index.html  301!
+/courses/knife-skills  /courses/cooking-nutrition/index.html  301!
+/courses/coffee-brewing/*  /courses/coffee-tea/index.html  301!
+/courses/coffee-brewing  /courses/coffee-tea/index.html  301!
+/courses/sushi-making/*  /courses/cooking-nutrition/index.html  301!
+/courses/sushi-making  /courses/cooking-nutrition/index.html  301!
+/courses/coffee-espresso/*  /courses/coffee-tea/index.html  301!
+/courses/coffee-espresso  /courses/coffee-tea/index.html  301!
+/courses/difficult-colors/*  /courses/colour/:splat  301!
+/courses/difficult-colors  /courses/colour/  301!
+/courses/falconry/*  /courses/art/index.html  301!
+/courses/falconry  /courses/art/index.html  301!
+/courses/goods-and-services/*  /courses/financial-literacy/index.html  301!
+/courses/goods-and-services  /courses/financial-literacy/index.html  301!
+# /courses/color and /courses/colour are the same URL — rewrite (200), not redirect (301).
+# The user's URL stays unchanged; the content from /courses/colour/ is served either way.
+/courses/color/*  /courses/colour/:splat  200
+/courses/color  /courses/colour/index.html  200
 
 # Hate-slur troll URL traps — redirect to the existing strike-system warning page.
 # Slurs appear here in Netlify's redirect config only; never rendered as content.
 # violation.html reads ?strike= and ?reason= and shows Edam's Strike 1 warning UI,
 # auto-logs the user out at strikes 2/3, and clears local data at strike 3.
-/course/nigga/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
-/course/nigga    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
-/course/nigger/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
-/course/nigger    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/courses/nigga/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/courses/nigga    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/courses/nigger/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
+/courses/nigger    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
 /nigga/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
 /nigga    /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!
 /nigger/*  /violation.html?strike=1&reason=Hate%20speech%20%E2%80%94%20racial%20slur%20typed%20in%20a%20Mathagram%20URL  301!

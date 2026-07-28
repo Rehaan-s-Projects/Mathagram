@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Western Armenian — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-language)">Language</span>
+    <h1>Western Armenian</h1>
+    <p>Speak Western Armenian — the diaspora dialect of Lebanon, Syria, Istanbul, Los Angeles, Paris and beyond. Mesropian alphabet, distinct pronunciation from Eastern Armenian, grammar, diaspora culture, history of the Genocide, and the resilience of a stateless tongue. 385 lessons across 32 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Mesropian Alphabet',['Mesrop Mashtots — 405 AD','The 38 Letters','Vowels Ա Ե Է Ի Ո Ու','Consonants P / T / K vs B / D / G','Voiced vs Voiceless — Western Sound Shift','Western vs Eastern Pronunciation Map','Reading Practice — Words','Reading Practice — Sentences','Writing the Letters','Typing Armenian — Western Keymap','Pronunciation Drills','Alphabet Checkpoint']],
+      [2,'Greetings',['Parev — Hello','Inchbes es? — How Are You?','Shnorhagalutyun — Thank You','Ayo & Voch — Yes & No','Tsedesutyun — Goodbye','Introducing Yourself','Where Are You From?','Diaspora Greetings — Beirut Style','Diaspora Greetings — Los Angeles','Polite Forms — Tooke','Hyetsetsek — Speak Slower','Greetings Checkpoint']],
+      [3,'Grammar Basics',['Definite Article — -ı (Suffix)','Indefinite — Mı','Nouns & Cases','Subject Pronouns','Possessive Pronouns','Adjectives — Position','Demonstratives — Ays Ayd Ayn','Word Order — SOV','Negation — Ch- Prefix','Yes-No Questions','Question Words','Grammar Checkpoint']],
+      [4,'Verb System',['The Verb Em — To Be','The Verb Unim — To Have','The Verb Ertal — To Go','The Verb Gal — To Come','The Verb Enel — To Do','Present Tense','Imperfect Past','Aorist Past','Future — Bedi','Imperative — Commands','Negation in Verbs','Verbs Checkpoint']],
+      [5,'Numbers & Time',['Meg — One','Yergu — Two','Yerek — Three','Chors — Four','Hink — Five','6-10','11-20','Tens to 100','Telling Time','Days of the Week','Months & Seasons','Numbers Checkpoint']],
+      [6,'Family & Diaspora',['Entanik — Family','Mayrig — Mother','Hayrig — Father','Yegpayr & Kuyr — Brother & Sister','Mets Mayrig — Grandmother','Mets Hayrig — Grandfather','Diaspora Communities — Lebanon','Diaspora Communities — Syria','Diaspora Communities — France','Diaspora Communities — Argentina','Diaspora Communities — California','Family Checkpoint']],
+      [7,'Food & Cuisine',['Lahmajun','Manti','Sou Beoreg','Cheoreg — Easter Bread','Topig','Boereg','Yalanchi','Anoushabour — New Year Pudding','Coffee — Soorj','Armenian Wine & Mahleb','At the Restaurant','Food Checkpoint']],
+      [8,'History — Pre-1915',['Cilician Armenia','Western Armenian Provinces','Sasun, Van, Mush, Erzerum','Education — Mekhitarist Monks','Constantinople Armenian Literature','Komitas Vardapet','Armenian Press in Istanbul','Daniel Varoujan','Krikor Zohrab','Siamanto','Pre-1915 Cultural Life','Pre-1915 History Checkpoint']],
+      [9,'The Genocide & Diaspora Birth',['April 24, 1915','Deportations','Concentration in Aleppo','Survivors Reaching Beirut','Survivors Reaching France','Armenia Quarter — Los Angeles','Recognition Worldwide','Hai Tahd — The Armenian Cause','Memorial — Tsitsernakaberd','Remembrance Day Vocabulary','Genocide Recognition Today','Genocide Checkpoint']],
+      [10,'Cultural Heritage',['Komitas\'s Music','Aram Khachaturian — Sabre Dance','Charles Aznavour','System of a Down','Atom Egoyan — Filmmaker','William Saroyan','Western Armenian Theatre','Diaspora Newspapers','Armenian Day Schools','Hadig — Children\'s Tradition','Easter & Christmas — Diaspora Style','Heritage Checkpoint']],
+      [11,'Western vs Eastern',['Sound Shift — Voiced/Voiceless','Letter ר vs ϋ','Different Vocabulary — Time','Different Vocabulary — Family','Different Vocabulary — Food','Eastern Standard Tehran/Yerevan','Western Standard Beirut/Diaspora','Mutual Intelligibility','Reading Each Other\'s News','Code-Switching','Picking a Dialect to Learn','Comparison Checkpoint']],
+      [12,'Western Armenian Mastery',['Alphabet Final','Pronunciation Final','Grammar Review','Conversation — Diaspora Greetings','Conversation — At the Bakery','Conversation — Family','Reading a Beirut Headline','Writing a Letter','Listening — Aznavour Song','Cultural Knowledge','Eastern vs Western Final','Western Armenian Mastery!']],
+      [13,'Beirut — Bourj Hammoud',['Bourj Hammoud Neighborhood','Armenian Shops in Beirut','Souk al-Tayyeb','Mar Mkhayel','Lebanese Civil War Memory','Anjar — Cilician Refugees','ARF in Lebanon','Armenian Schools — Beirut','Beirut Newspapers — Aztag','Cilician Catholicos','Beirut Cuisine — Armenian Twist','Beirut Checkpoint']],
+      [14,'Aleppo Armenians',['Aleppo Armenian Quarter','Vakif Holding','Aleppo Newspapers — Gantsasar','Schools of Aleppo','Forty Martyrs Church','Armenian Trades in Aleppo','Aleppo Cuisine — Armenian','Syrian Civil War Impact','Aleppo Diaspora Today','Online Aleppo Communities','Aleppo Slang','Aleppo Checkpoint']],
+      [15,'Istanbul Armenians',['Mkhitarist Order','Patriarchate of Constantinople','Armenian Schools in Istanbul','Pancaldi Quarter','Kumkapı Quarter','Agos — Hrant Dink\'s Newspaper','Hrant Dink\'s Legacy','Armenian Hospitals','Armenian Sports Clubs','Karagöz — Shadow Plays','Istanbul Vocabulary','Istanbul Checkpoint']],
+      [16,'Argentina Diaspora',['Buenos Aires Community','Palermo Quarter','Armenia 2 (Coronel Pringles)','Schools in Argentina','Iglesia Apostólica','Soccer Clubs','Tango y Armenia','Argentine-Armenian Authors','La Nación Armenia','Asado y Khorovats','Argentine Spanish + Armenian','Argentina Checkpoint']],
+      [17,'France Diaspora',['Marseille — Belsunce','Paris — Issy-les-Moulineaux','French Schools — Armenian','French Recognition of Genocide','Charles Aznavour Legacy','Sevak Mansurian','Le Cri du Peuple','Armenian Cinema in France','Armenian Bakeries in Paris','Festivals in France','French Slang for Armenians','France Checkpoint']],
+      [18,'USA — Glendale & Watertown',['Glendale, California','Watertown, Massachusetts','Armenian Schools — California','Armenian Schools — East Coast','Armenian Festivals in LA','Asbarez Newspaper','Armenian-American Authors','Armenian-American Athletes','Kim Kardashian Connection','System of a Down','Armenian YouTube Channels','USA Checkpoint']],
+      [19,'Western Armenian Literature',['Mekhitarist Press','Mkhitar Sebastatsi','Hagop Baronian','Krikor Zohrab','Daniel Varoujan','Siamanto','Misak Medzarents','Vahan Tekeyan','Modern Diaspora Poetry','Translating Western Armenian','Reading Aloud Verse','Literature Checkpoint']],
+      [20,'Komitas Vardapet — In Depth',['Early Life & Education','Sacred Music Reform','Folk Song Collection','Berlin & Paris','Tragedy of 1915','Komitas in Paris Asylum','His Influence Today','Komitas Choir','Recording Heritage','Komitas Museum-Institute','Komitas in Pop','Komitas Checkpoint']],
+      [21,'Armenian Apostolic Church',['Saint Gregory the Illuminator','Echmiadzin','Cilician Catholicate','Liturgy in Classical Armenian','Khachkar — Cross-Stone','Saints\' Days','Easter Vocabulary','Christmas (January 6)','Hidden Bread Tradition','Godparents — Knkahayr','Praying in Armenian','Church Checkpoint']],
+      [22,'Diaspora Schools & AGBU',['AGBU — Armenian General Benevolent Union','Hamazkayin','ARS — Armenian Relief Society','Mekhitarian Schools','Tekeyan Schools','Hovnanian School (NJ)','Tutoring & Sunday Schools','Online Armenian Schools','Heritage Language Learners','Scholarships & Grants','Diaspora Education Today','Schools Checkpoint']],
+      [23,'Hye Tahd — Armenian Cause',['Recognition by Country','Hye Tahd History','ARF & ADL & SDHP','Genocide Education in US','Resolution 296','Turkey\'s Denial','Justice for Armenia','Reparations Discourse','Memorials Worldwide','Activism Vocabulary','April 24 Marches','Hye Tahd Checkpoint']],
+      [24,'Sports — Wrestling & Football',['Armenian Wrestling Tradition','Chess in Armenia','Football Clubs — Diaspora','Pyunik','Ararat-Armenia','Henrikh Mkhitaryan','Olympic Heroes','Boxing Stars','Tennis','Sports Vocabulary','Talking About Matches','Sports Checkpoint']],
+      [25,'Cuisine — Beyond Dolma',['Anoushabour — New Year','Topig — Lent Special','Khorovats — BBQ Deep','Lahmajun Recipes','Manti Variations','Cheoreg — Easter Bread','Boereg Types','Tan & Madzun','Coffee Reading','Sou Beoreg','Sweet Boereg','Cuisine Deep Checkpoint']],
+      [26,'Easter Traditions',['Tsaghkazard — Palm Sunday','Holy Thursday','Good Friday','Saturday Vigil','Easter Sunday','Easter Eggs — Color','Cheoreg Baking','Easter Lunch','Egg Tapping Game','Easter Vocabulary','Easter Songs','Easter Checkpoint']],
+      [27,'Christmas — January 6',['Why January 6?','Theophany','Christmas Eve','Andznateh Beer','Christmas Lunch','Caroling Tradition','Family Visits','Gift Giving','Christmas Cards','Christmas Vocabulary','Christmas Songs','Christmas Checkpoint']],
+      [28,'Western Armenian Online',['Facebook Groups','Instagram Accounts','YouTube Channels','Podcast — Armenian','TikTok Armenian','Online Dating','Online Newspapers','Forums & Reddit','Encyclopedia Wiki','Translation Apps','Texting in Armenian','Online Checkpoint']],
+      [29,'Conversation — Diaspora Greetings',['Diaspora Greetings','Asking Origin (City)','Asking School','Asking Profession','Compliments','Inviting to Coffee','Family Updates','Marriage & Children','Hospitality Phrases','Saying Goodbye','Polite Forms','Greetings Checkpoint']],
+      [30,'Conversation — Family Gathering',['Hello to Relatives','Introducing Spouse','Asking About Grandparents','Sharing News','Stories from Childhood','Discussing Politics Carefully','Eating Together','Drinks & Toasts','Photos & Memories','Saying Goodbye','Pasalubong / Gifts','Gathering Checkpoint']],
+      [31,'Western Armenian Mastery II',['Vocabulary Test','Alphabet Final 2','Pronunciation Final 2','Verb Drills','Reading a News Article','Writing a Letter','Translation Practice','Conversation — Diaspora','Conversation — Family','Cultural Knowledge','Diaspora History Test','Mastery II!']],
+      [32,'Practice Lab — Western Armenian Conversation',['Western Armenian Conversation Drill 1','Western Armenian Conversation Drill 2','Western Armenian Conversation Drill 3','Western Armenian Conversation Drill 4','Western Armenian Conversation Speaking Practice','Western Armenian Conversation Listening Practice','Western Armenian Conversation Reading Practice','Western Armenian Conversation Writing Practice','Western Armenian Conversation Pair Dialogue','Western Armenian Conversation Role-Play','Western Armenian Conversation Self-Test','Western Armenian Conversation Lab Checkpoint','Western Armenian Reading Drill 1']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'hyw-'+n, title: t, href: '#', unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('western-armenian');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('western-armenian');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

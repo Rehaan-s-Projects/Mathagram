@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conductors vs Insulators — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/exercises.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    .lesson-content { max-width: 700px; margin: 0 auto; padding: 48px 24px 32px; }
+    .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+    .lesson-content p { font-size: 1.05rem; line-height: 1.75; color: var(--color-text-secondary); margin-bottom: 16px; }
+    .lesson-content .math-block { text-align: center; margin: 24px 0; font-size: 1.3rem; }
+    .lesson-content ul { margin: 12px 0 20px 20px; color: var(--color-text-secondary); line-height: 1.75; }
+    .compare-table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 0.95rem; }
+    .compare-table th, .compare-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--color-border, #e5e7eb); }
+    .compare-table thead th { background: rgba(14,165,233,0.08); font-weight: 800; color: var(--color-text, #0f172a); }
+    .compare-table tbody td:first-child { font-weight: 700; color: var(--color-text, #0f172a); }
+    .exercise-section { max-width: 700px; margin: 0 auto; padding: 0 24px 48px; }
+    .exercise-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+    .lesson-complete { text-align: center; padding: 40px 24px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); max-width: 480px; margin: 32px auto; box-shadow: var(--shadow-md); }
+    .lesson-complete h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .lesson-complete .grade-display { font-size: 4rem; font-weight: 800; line-height: 1; margin: 16px 0; }
+    .lesson-complete .stars { font-size: 2rem; letter-spacing: 4px; margin-bottom: 12px; }
+    .lesson-complete .xp-earned { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 1rem; font-weight: 700; color: var(--color-xp); background: rgba(234,179,8,0.1); border-radius: var(--radius); margin-bottom: 16px; }
+    .lesson-complete .score-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px; }
+    .lesson-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  </style>
+  <link rel="stylesheet" href="../../css/calculator.css">
+</head>
+<body>
+  <script type="module" src="../../js/lesson-loader.js"></script>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Circuits</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="lesson-content">
+    <div class="chapter-label">Unit 1 &mdash; Electricity Basics</div>
+    <h1>Conductors vs Insulators</h1>
+
+    <p>Every circuit is a partnership between two opposite kinds of material: <strong>conductors</strong> that let charge flow through them, and <strong>insulators</strong> that refuse to let it through. Without conductors, current would have nowhere to go. Without insulators, it would go <em>everywhere</em> — including straight into you.</p>
+
+    <p><strong>What makes a material conductive?</strong> In conductors, the outermost electrons of each atom are only loosely bound. They form what physicists call a <em>"sea of electrons"</em> that drifts freely from atom to atom whenever a voltage is applied. In insulators, those same electrons are tightly locked into chemical bonds and refuse to budge.</p>
+
+    <p><strong>Common conductors</strong> (best to worst at room temperature):</p>
+    <ul>
+      <li><strong>Silver</strong> — the very best conductor, but too expensive for most wires.</li>
+      <li><strong>Copper</strong> — almost as good as silver, far cheaper. Used in nearly all household and electronic wiring.</li>
+      <li><strong>Gold</strong> — slightly worse than copper, but never tarnishes — used on connector pins and high-end audio plugs.</li>
+      <li><strong>Aluminum</strong> — lighter and cheaper than copper. Used in overhead power lines and many large-scale grid cables.</li>
+      <li><strong>Saltwater &amp; the human body</strong> — yes, you are a conductor. Not a great one, but more than enough to carry a lethal current.</li>
+    </ul>
+
+    <p><strong>Common insulators:</strong></p>
+    <ul>
+      <li><strong>Rubber and plastic</strong> — the colored sheathing around every wire in your home.</li>
+      <li><strong>Glass and ceramic</strong> — the dish-shaped objects you see on high-voltage power-line towers.</li>
+      <li><strong>Dry wood and dry air</strong> — surprisingly good insulators when truly dry; both fail spectacularly when wet.</li>
+      <li><strong>PVC, Teflon, polyethylene</strong> — the modern plastics that wrap nearly every cable you own.</li>
+    </ul>
+
+    <p><strong>Semiconductors</strong> sit between the two extremes. Materials like <strong>silicon</strong> and <strong>germanium</strong> conduct only weakly on their own, but their conductivity can be tuned by adding tiny amounts of impurities (a process called <em>doping</em>). That tunability is what makes every transistor, diode, microchip, and solar cell on Earth possible.</p>
+
+    <p><strong>Resistivity (ρ)</strong> measures how strongly a material opposes current. It's an intrinsic property — independent of shape — measured in ohm-metres (Ω·m). The resistance of a piece of wire follows:</p>
+
+    <div class="math-block">$$R = \rho \, \frac{L}{A}$$</div>
+
+    <p>where \(L\) is the wire's length and \(A\) is its cross-sectional area. A long, thin wire resists more than a short, fat one made of the same material. Doubling the length doubles the resistance; doubling the area halves it.</p>
+
+    <table class="compare-table">
+      <thead><tr><th>Material</th><th>Resistivity ρ (Ω·m)</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td>Silver</td><td>\(1.59 \times 10^{-8}\)</td><td>Conductor</td></tr>
+        <tr><td>Copper</td><td>\(1.68 \times 10^{-8}\)</td><td>Conductor</td></tr>
+        <tr><td>Aluminum</td><td>\(2.65 \times 10^{-8}\)</td><td>Conductor</td></tr>
+        <tr><td>Silicon (pure)</td><td>\(\approx 6.4 \times 10^{2}\)</td><td>Semiconductor</td></tr>
+        <tr><td>Glass</td><td>\(10^{10} – 10^{14}\)</td><td>Insulator</td></tr>
+        <tr><td>Rubber (hard)</td><td>\(\approx 10^{13}\)</td><td>Insulator</td></tr>
+      </tbody>
+    </table>
+
+    <p>Notice the staggering range — copper is roughly <strong>10²¹ times</strong> more conductive than rubber. That enormous gap is what makes safe electrical engineering possible: tiny strands of copper carry the current exactly where you want it, while the rubber jacket guarantees it goes nowhere else.</p>
+
+    <p><strong>Why both matter in every circuit.</strong> Look at any wire in your house: a copper core (conductor) wrapped in a plastic jacket (insulator). The conductor provides the highway for charge; the insulator builds the guardrails so it stays on the road.</p>
+  </section>
+
+  <section class="exercise-section">
+    <h2>Practice Exercises</h2>
+    <div id="exercises"></div>
+    <div id="completion" style="display:none;"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { initRitaChat } from '../../js/rita-chat.js';
+    initNav('../../');
+    initRitaChat('../../');
+    import { runExerciseSet, showLessonComplete } from '../../js/exercises.js';
+    import { showBuddy, randomCharacterId, initSideCharacter } from '../../js/characters.js';
+
+    (function renderMath() {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }],
+          throwOnError: false
+        });
+      } else { setTimeout(renderMath, 80); }
+    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initSideCharacter(randomCharacterId(), '../../');
+
+    const exercises = [
+      { type: 'multiple-choice',
+        question: 'A conductor lets charge flow easily because:',
+        options: ['its outermost electrons are loosely bound and free to drift',
+                  'its atoms are pre-arranged in tiny salsa lines',
+                  'a polite chicken inside is constantly delivering electrons',
+                  'whichever direction the wind disagrees with'],
+        correctIndex: 0 },
+      { type: 'multiple-choice',
+        question: 'Which of these is the BEST electrical conductor at room temperature?',
+        options: ['Copper', 'Silver', 'Aluminum', 'A pickle in a tiny crown'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'Most household wiring uses copper instead of silver primarily because:',
+        options: ['copper conducts better than silver',
+                  'copper costs far less per metre',
+                  'copper smells nicer in walls',
+                  'silver refuses to work on weekends'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'Dry air is a fairly good insulator, but wet air or fog conducts much more easily — that\'s why power lines are spaced far apart.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'Which of these is an INSULATOR?',
+        options: ['Aluminum', 'Saltwater', 'Rubber', 'Gold'],
+        correctIndex: 2 },
+      { type: 'multiple-choice',
+        question: 'Silicon and germanium are classified as:',
+        options: ['conductors', 'semiconductors', 'magnetors', 'pancakeors'],
+        correctIndex: 1 },
+      { type: 'true-false',
+        question: 'Adding tiny amounts of impurities to silicon (a process called doping) tunes its conductivity — that\'s what makes transistors and microchips possible.',
+        correctAnswer: true },
+      { type: 'multiple-choice',
+        question: 'The intrinsic property that tells you how strongly a material opposes current — independent of shape — is called:',
+        options: ['resistance', 'resistivity', 'reluctance', 'a confused walrus'],
+        correctIndex: 1 },
+      { type: 'multiple-choice',
+        question: 'For a wire of length \\(L\\) and cross-sectional area \\(A\\) made of material with resistivity \\(\\rho\\), the resistance is:',
+        options: ['\\(R = \\rho L / A\\)', '\\(R = \\rho A / L\\)', '\\(R = \\rho + L + A\\)', '\\(R =\\) whatever Tuesday allows'],
+        correctIndex: 0 },
+      { type: 'true-false',
+        question: 'A long, thin copper wire has more resistance than a short, fat copper wire of the same material.',
+        correctAnswer: true },
+      { type: 'fill-blank',
+        question: 'Doubling the length of a wire (with everything else equal) ___ its resistance. (Answer: doubles, halves, or unchanged?)',
+        answer: 'doubles' },
+      { type: 'fill-blank',
+        question: 'Doubling the cross-sectional area of a wire (everything else equal) ___ its resistance.',
+        answer: 'halves' },
+      { type: 'multiple-choice',
+        question: 'Why are high-voltage overhead power lines often made of ALUMINUM rather than copper?',
+        options: ['Aluminum conducts better than copper',
+                  'Aluminum is much lighter than copper, so it sags less over long spans',
+                  'Aluminum gives the towers good vibes',
+                  'It was on sale that Tuesday'],
+        correctIndex: 1 },
+      { type: 'matching',
+        question: 'Sort each material into its category.',
+        pairs: [
+          { left: 'Copper',         right: 'Conductor' },
+          { left: 'Silicon (pure)', right: 'Semiconductor' },
+          { left: 'Rubber',         right: 'Insulator' },
+          { left: 'Glass',          right: 'Insulator' }
+        ] },
+      { type: 'fill-blank',
+        question: 'A copper wire is 2 m long with a cross-section of \\(1 \\times 10^{-6}\\) m². Using \\(\\rho_{Cu} = 1.68 \\times 10^{-8}\\) Ω·m, its resistance is approximately ___ Ω. (Round to two digits.)',
+        answer: '0.034' }
+    ];
+
+    const container = document.getElementById('exercises');
+    const completionDiv = document.getElementById('completion');
+    const chars = ['diego','rita','sam','steve','william','gosia','james'];
+    const { score, xp } = await runExerciseSet(container, exercises, (isCorrect, index) => {
+      const c = chars[index % chars.length];
+      initSideCharacter(c, '../../');
+      showBuddy(c, isCorrect ? 'correct' : 'wrong');
+    });
+    await showLessonComplete(container, completionDiv, score, { xp,
+      courseId: 'circuits', lessonId: 'lesson-3', nextHref: 'index.html', backHref: 'index.html'
+    });
+    import { createCalculator } from "../../js/calculator.js"; createCalculator();
+  </script>
+</body>
+</html>

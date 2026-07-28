@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Anatomy of the Tongue — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  :root {
+    --paper: #fffaf7;
+    --coral: #ec5c5c; --coral-d: #b73b3b;
+    --pink: #fbb4b4;
+    --plum: #6f2a4a;
+    --ink: #3b2030; --ink-soft: #7a5b6d; --ink-mute: #a98da0;
+    --good: #16a34a; --bad: #ef4444; --gold: #facc15;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink); min-height: 100vh; margin: 0;
+    font-family: 'Fredoka', -apple-system, sans-serif;
+  }
+
+  .topbar { display: flex; gap: 14px; align-items: center; padding: 18px 22px 8px; max-width: 760px; margin: 0 auto; }
+  .exit {
+    flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; border: none;
+    background: #fff; color: var(--ink-soft); font-size: 1.3rem; cursor: pointer;
+    text-decoration: none; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(160,40,60,0.10);
+    transition: color 0.15s;
+  }
+  .exit:hover { color: var(--coral); }
+  .progress-track { flex: 1; height: 14px; background: rgba(236,92,92,0.14); border-radius: 999px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--pink), var(--coral));
+    transition: width 0.4s cubic-bezier(.34,1.3,.64,1);
+  }
+
+  .stage { max-width: 760px; margin: 0 auto; padding: 8px 22px 40px; }
+
+  .meta { text-align: center; margin: 8px 0 18px; }
+  .meta .tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    color: var(--coral); background: rgba(236,92,92,0.10);
+    padding: 5px 12px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .meta h1 { font-size: 1.7rem; font-weight: 700; margin: 10px 0 4px; }
+
+  /* Anatomy intro card */
+  .card {
+    background: #fff; border-radius: 18px; padding: 22px 24px; margin-bottom: 16px;
+    border: 1.5px solid rgba(236,92,92,0.16);
+    box-shadow: 0 8px 22px rgba(160,40,60,0.06);
+  }
+  .card h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 8px; color: var(--coral-d); }
+  .card p { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.6; margin: 0 0 8px; }
+  .card .anatomy-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;
+    margin-top: 12px;
+  }
+  .card .anatomy-item {
+    background: rgba(236,92,92,0.06); border-radius: 12px; padding: 10px 12px;
+    font-size: 0.85rem; line-height: 1.4; color: var(--ink);
+  }
+  .card .anatomy-item strong { color: var(--coral-d); display: block; margin-bottom: 2px; }
+
+  /* Challenge */
+  .challenge-title {
+    text-align: center; font-size: 1rem; font-weight: 700; color: var(--plum);
+    text-transform: uppercase; letter-spacing: 0.08em; margin: 24px 0 10px;
+  }
+  .slots {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+    margin: 0 0 16px;
+  }
+  .slot {
+    aspect-ratio: 1; border-radius: 16px;
+    background: #fff; border: 2.5px dashed rgba(236,92,92,0.35);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.05s;
+    position: relative;
+  }
+  .slot:hover { border-color: var(--coral); }
+  .slot .slot-num {
+    position: absolute; top: 4px; left: 8px; font-size: 0.7rem; font-weight: 700; color: var(--ink-mute);
+  }
+  .slot .slot-emoji { font-size: 2.1rem; line-height: 1; }
+  .slot.filled { background: rgba(251,180,180,0.18); border-style: solid; border-color: var(--coral); }
+  .slot.correct { background: rgba(22,163,74,0.12); border-color: var(--good); }
+  .slot.wrong   { background: rgba(239,68,68,0.10); border-color: var(--bad); }
+  @media (max-width: 480px) { .slot .slot-emoji { font-size: 1.6rem; } }
+
+  .tiles {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px;
+  }
+  .tile {
+    aspect-ratio: 1; border-radius: 16px;
+    background: #fff; border: 2px solid rgba(236,92,92,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.1rem; cursor: pointer;
+    box-shadow: 0 4px 0 rgba(236,92,92,0.16);
+    transition: transform 0.06s, opacity 0.15s, box-shadow 0.06s;
+    user-select: none;
+  }
+  .tile:hover { transform: translateY(-2px); }
+  .tile:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(236,92,92,0.16); }
+  .tile.used { opacity: 0.25; pointer-events: none; }
+  @media (max-width: 480px) { .tile { font-size: 1.6rem; } }
+
+  .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 0 0 14px; }
+  .btn {
+    padding: 11px 22px; border-radius: 14px; font-family: inherit;
+    font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none;
+    transition: transform 0.05s, box-shadow 0.05s;
+  }
+  .btn:active:not(:disabled) { transform: translateY(2px); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--coral), var(--coral-d)); color: #fff;
+    box-shadow: 0 4px 0 #8a2a2a;
+  }
+  .btn-primary:active:not(:disabled) { box-shadow: 0 1px 0 #8a2a2a; }
+  .btn-ghost {
+    background: #fff; color: var(--ink); border: 2px solid rgba(236,92,92,0.25);
+    box-shadow: 0 4px 0 rgba(236,92,92,0.16);
+  }
+  .btn-ghost:active:not(:disabled) { box-shadow: 0 1px 0 rgba(236,92,92,0.16); }
+
+  .feedback {
+    text-align: center; padding: 12px 16px; border-radius: 12px;
+    font-size: 0.95rem; font-weight: 600; display: none;
+    margin-top: 6px;
+  }
+  .feedback.show { display: block; }
+  .feedback.good { background: rgba(22,163,74,0.12); color: var(--good); }
+  .feedback.bad  { background: rgba(239,68,68,0.10); color: var(--bad); }
+
+  /* End overlay */
+  .end-overlay {
+    position: fixed; inset: 0; z-index: 60; display: none;
+    align-items: center; justify-content: center; padding: 24px;
+    background: rgba(255,250,247,0.82); backdrop-filter: blur(3px);
+  }
+  .end-overlay.show { display: flex; }
+  .end-card {
+    background: #fff; border-radius: 22px; padding: 30px 26px;
+    max-width: 420px; width: 100%; text-align: center;
+    border-top: 6px solid var(--coral);
+    box-shadow: 0 22px 50px rgba(160,40,60,0.18);
+    animation: rise 0.4s cubic-bezier(.34,1.4,.64,1);
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .end-card .emoji-burst { font-size: 2.4rem; margin-bottom: 4px; }
+  .end-card h2 { margin: 4px 0 8px; font-size: 1.4rem; font-weight: 800; }
+  .end-card p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.55; margin: 0 0 18px; }
+  .end-card .end-actions { display: flex; flex-direction: column; gap: 10px; }
+  .end-card .btn { width: 100%; text-decoration: none; display: block; line-height: 1.2; }
+
+  /* ── Challenge 2: Match the Food to the Right Pile ── */
+  .challenge-2 { display: none; margin-top: 28px; padding-top: 24px; border-top: 1.5px dashed rgba(236,92,92,0.22); }
+  .challenge-2.unlocked { display: block; animation: rise 0.45s cubic-bezier(.34,1.4,.64,1); }
+  .piles {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 0 0 16px;
+  }
+  .pile {
+    background: #fff; border: 2px solid rgba(236,92,92,0.22); border-radius: 14px;
+    padding: 10px 6px 8px; min-height: 130px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    transition: border-color 0.15s, background 0.15s, transform 0.05s;
+    position: relative;
+  }
+  .pile:hover { border-color: var(--coral); }
+  .pile.target { border-color: var(--coral); background: rgba(251,180,180,0.16); }
+  .pile .pile-head { font-size: 1.45rem; line-height: 1; }
+  .pile .pile-name { font-size: 0.62rem; font-weight: 700; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.07em; }
+  .pile .pile-stack { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 4px; min-height: 28px; }
+  .pile .pile-stack .food { font-size: 1.4rem; line-height: 1; cursor: pointer; transition: transform 0.05s; }
+  .pile .pile-stack .food:hover { transform: scale(1.12); }
+  .pile.correct { background: rgba(22,163,74,0.12); border-color: var(--good); }
+  .pile.wrong   { background: rgba(239,68,68,0.10); border-color: var(--bad); }
+
+  .food-rack {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 0 0 14px;
+  }
+  .food-tile {
+    aspect-ratio: 1; border-radius: 14px;
+    background: #fff; border: 2px solid rgba(236,92,92,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.9rem; cursor: pointer; user-select: none;
+    box-shadow: 0 3px 0 rgba(236,92,92,0.14);
+    transition: transform 0.06s, opacity 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .food-tile:hover { transform: translateY(-2px); }
+  .food-tile.selected { border-color: var(--coral); background: rgba(251,180,180,0.24); transform: translateY(-3px); }
+  .food-tile.used { opacity: 0.25; pointer-events: none; }
+  @media (max-width: 480px) {
+    .pile { min-height: 104px; padding: 7px 4px 5px; }
+    .pile .pile-head { font-size: 1.1rem; }
+    .pile .pile-name { font-size: 0.52rem; }
+    .pile .pile-stack .food { font-size: 1.1rem; }
+    .food-tile { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div class="topbar">
+    <a class="exit" href="index.html" aria-label="Exit lesson">&times;</a>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="meta">
+      <span class="tag">Unit 18 · Lesson 257</span>
+      <h1>Anatomy of the Tongue</h1>
+    </div>
+
+    <section class="card">
+      <h3>Muscles, Frenulum &amp; Papillae</h3>
+      <p>Your tongue is a <strong>muscular hydrostat</strong> — eight muscles working without a single bone. Tiny bumps called <strong>papillae</strong> cover its surface; most are mechanical, but a few thousand carry <strong>taste buds</strong>. A thin membrane underneath, the <strong>frenulum</strong>, tethers it to the floor of your mouth.</p>
+      <div class="anatomy-grid">
+        <div class="anatomy-item"><strong>Muscles</strong>4 intrinsic shape it, 4 extrinsic anchor & move it.</div>
+        <div class="anatomy-item"><strong>Frenulum</strong>Thin membrane on the underside — keeps the tongue tethered.</div>
+        <div class="anatomy-item"><strong>Papillae</strong>Fungiform, filiform, foliate, circumvallate.</div>
+        <div class="anatomy-item"><strong>Taste Buds</strong>~2,000–8,000 of them — every region detects every taste.</div>
+      </div>
+    </section>
+
+    <h2 class="challenge-title">🧩 Match the Order — The 5 Tastes</h2>
+    <p style="text-align:center;color:var(--ink-soft);font-size:0.9rem;margin:-6px 0 14px;line-height:1.5;">Drop the emojis into the right order: <strong>Sweet → Sour → Salty → Bitter → Umami.</strong></p>
+
+    <div class="slots" id="slots"></div>
+    <div class="tiles" id="tiles"></div>
+
+    <div class="controls">
+      <button type="button" class="btn btn-ghost" id="hintBtn">Hint</button>
+      <button type="button" class="btn btn-ghost" id="resetBtn">Reset</button>
+      <button type="button" class="btn btn-primary" id="checkBtn" disabled>Check Order</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <section class="challenge-2" id="ch2">
+      <h2 class="challenge-title">🍽️ Match the Food to the Right Pile</h2>
+      <p style="text-align:center;color:var(--ink-soft);font-size:0.9rem;margin:-6px 0 14px;line-height:1.5;">Tap a food, then tap the taste pile it belongs to. Tap a placed food to send it back.</p>
+      <div class="piles" id="piles"></div>
+      <div class="food-rack" id="foodRack"></div>
+      <div class="controls">
+        <button type="button" class="btn btn-ghost" id="ch2Reset">Reset Piles</button>
+        <button type="button" class="btn btn-primary" id="ch2Check" disabled>Check Piles</button>
+      </div>
+      <div class="feedback" id="ch2Feedback"></div>
+    </section>
+  </main>
+
+  <div class="end-overlay" id="endCard">
+    <div class="end-card">
+      <div class="emoji-burst">👅✨</div>
+      <h2>Lesson 257 cleared!</h2>
+      <p>You ordered the five tastes <em>and</em> sorted every food into the right pile — Sweet, Sour, Salty, Bitter, and <strong>Umami</strong> (identified by Kikunae Ikeda in 1908). On to the taste buds themselves.</p>
+      <div class="end-actions">
+        <a class="btn btn-primary" id="nextLessonLink" href="lesson-258.html">Next Lesson →</a>
+        <a class="btn btn-ghost" href="index.html">Back to Course</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+  </script>
+
+  <script type="module">
+    // ─── The five tastes in canonical order ──────────────────────────────
+    const TASTES = [
+      { id: 'sweet',  emoji: '🍬', name: 'Sweet'  },
+      { id: 'sour',   emoji: '🍋', name: 'Sour'   },
+      { id: 'salty',  emoji: '🧂', name: 'Salty'  },
+      { id: 'bitter', emoji: '☕', name: 'Bitter' },
+      { id: 'umami',  emoji: '🍄', name: 'Umami'  }
+    ];
+
+    // ─── State ──────────────────────────────────────────────────────────
+    const slotsEl = document.getElementById('slots');
+    const tilesEl = document.getElementById('tiles');
+    const checkBtn = document.getElementById('checkBtn');
+    const hintBtn  = document.getElementById('hintBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const fb = document.getElementById('feedback');
+
+    let placed = [null, null, null, null, null];   // taste-id per slot
+    let shuffled = [];                              // tile order
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function render() {
+      // Slots
+      slotsEl.innerHTML = '';
+      placed.forEach((id, i) => {
+        const slot = document.createElement('div');
+        slot.className = 'slot' + (id ? ' filled' : '');
+        slot.dataset.idx = i;
+        slot.innerHTML = `<span class="slot-num">${i + 1}</span>`
+          + (id ? `<span class="slot-emoji">${TASTES.find(t => t.id === id).emoji}</span>`
+                : `<span class="slot-emoji" style="opacity:0.25;">▢</span>`);
+        slot.addEventListener('click', () => {
+          // Remove from slot back to the tile rack
+          if (placed[i]) { placed[i] = null; render(); }
+        });
+        slotsEl.appendChild(slot);
+      });
+
+      // Tiles
+      tilesEl.innerHTML = '';
+      shuffled.forEach(t => {
+        const tile = document.createElement('div');
+        const used = placed.includes(t.id);
+        tile.className = 'tile' + (used ? ' used' : '');
+        tile.textContent = t.emoji;
+        tile.title = t.name;
+        tile.addEventListener('click', () => {
+          if (used) return;
+          const empty = placed.findIndex(x => x === null);
+          if (empty === -1) return;
+          placed[empty] = t.id;
+          render();
+        });
+        tilesEl.appendChild(tile);
+      });
+
+      // Check button enabled only when all 5 placed
+      checkBtn.disabled = placed.some(x => x === null);
+      // Reset feedback when changing
+      if (!fb.classList.contains('persistent')) fb.classList.remove('show', 'good', 'bad');
+    }
+
+    function reset() {
+      placed = [null, null, null, null, null];
+      shuffled = shuffle(TASTES);
+      fb.classList.remove('show', 'good', 'bad', 'persistent');
+      // Update progress bar back to 25%
+      document.getElementById('progressFill').style.width = '25%';
+      // Clear any per-slot correctness highlight
+      render();
+    }
+
+    function check() {
+      const target = TASTES.map(t => t.id);
+      const correct = placed.every((id, i) => id === target[i]);
+      // Highlight each slot
+      [...slotsEl.children].forEach((slot, i) => {
+        slot.classList.remove('correct', 'wrong');
+        slot.classList.add(placed[i] === target[i] ? 'correct' : 'wrong');
+      });
+      if (correct) {
+        fb.className = 'feedback good show persistent';
+        fb.innerHTML = '✓ Perfect order — now sort the foods into the right piles ↓';
+        document.getElementById('progressFill').style.width = '60%';
+        setTimeout(() => unlockCh2(), 450);
+      } else {
+        const hits = placed.filter((id, i) => id === target[i]).length;
+        fb.className = 'feedback bad show';
+        fb.innerHTML = `✗ ${hits} of 5 in place. Try again — order is <strong>Sweet → Sour → Salty → Bitter → Umami</strong>.`;
+        document.getElementById('progressFill').style.width = (25 + hits * 7) + '%';
+      }
+    }
+
+    function hint() {
+      fb.className = 'feedback good show';
+      fb.innerHTML = 'Hint: the original four (ancient Greek) were Sweet, Sour, Salty, Bitter — Umami came last (Ikeda, 1908).';
+    }
+
+    checkBtn.addEventListener('click', check);
+    hintBtn.addEventListener('click', hint);
+    resetBtn.addEventListener('click', reset);
+
+    // ─── Challenge 2: Match the Food to the Right Pile ──────────────────
+    const FOODS = [
+      { id: 'honey',    emoji: '🍯', name: 'Honey',       taste: 'sweet'  },
+      { id: 'cake',     emoji: '🍰', name: 'Cake',        taste: 'sweet'  },
+      { id: 'apple',    emoji: '🍏', name: 'Green Apple', taste: 'sour'   },
+      { id: 'pickle',   emoji: '🥒', name: 'Pickle',      taste: 'sour'   },
+      { id: 'fries',    emoji: '🍟', name: 'Fries',       taste: 'salty'  },
+      { id: 'bacon',    emoji: '🥓', name: 'Bacon',       taste: 'salty'  },
+      { id: 'broccoli', emoji: '🥦', name: 'Broccoli',    taste: 'bitter' },
+      { id: 'matcha',   emoji: '🍵', name: 'Matcha',      taste: 'bitter' },
+      { id: 'cheese',   emoji: '🧀', name: 'Cheese',      taste: 'umami'  },
+      { id: 'steak',    emoji: '🥩', name: 'Steak',       taste: 'umami'  }
+    ];
+
+    const ch2El      = document.getElementById('ch2');
+    const pilesEl    = document.getElementById('piles');
+    const foodRackEl = document.getElementById('foodRack');
+    const ch2CheckBtn= document.getElementById('ch2Check');
+    const ch2ResetBtn= document.getElementById('ch2Reset');
+    const ch2Fb      = document.getElementById('ch2Feedback');
+
+    let pile = { sweet: [], sour: [], salty: [], bitter: [], umami: [] };
+    let foodShuffled = [];
+    let selectedFood = null;
+
+    function renderCh2() {
+      // Piles
+      pilesEl.innerHTML = '';
+      TASTES.forEach(t => {
+        const p = document.createElement('div');
+        p.className = 'pile' + (selectedFood ? ' target' : '');
+        p.dataset.taste = t.id;
+        const stack = pile[t.id].map(fid => {
+          const f = FOODS.find(x => x.id === fid);
+          return `<span class="food" data-food-id="${fid}" title="${f.name}">${f.emoji}</span>`;
+        }).join('');
+        p.innerHTML =
+          `<span class="pile-head">${t.emoji}</span>` +
+          `<span class="pile-name">${t.name}</span>` +
+          `<span class="pile-stack">${stack}</span>`;
+        p.addEventListener('click', (e) => {
+          const foodSpan = e.target.closest('.food');
+          if (foodSpan) {
+            const fid = foodSpan.dataset.foodId;
+            pile[t.id] = pile[t.id].filter(x => x !== fid);
+            selectedFood = null;
+            renderCh2();
+            return;
+          }
+          if (selectedFood) {
+            pile[t.id].push(selectedFood);
+            selectedFood = null;
+            renderCh2();
+          }
+        });
+        pilesEl.appendChild(p);
+      });
+      // Food rack
+      foodRackEl.innerHTML = '';
+      foodShuffled.forEach(f => {
+        const used = Object.values(pile).some(arr => arr.includes(f.id));
+        const tile = document.createElement('div');
+        tile.className = 'food-tile' + (used ? ' used' : '') + (selectedFood === f.id ? ' selected' : '');
+        tile.textContent = f.emoji;
+        tile.title = f.name;
+        tile.addEventListener('click', () => {
+          if (used) return;
+          selectedFood = (selectedFood === f.id) ? null : f.id;
+          renderCh2();
+        });
+        foodRackEl.appendChild(tile);
+      });
+      // Enable check only when all foods placed somewhere
+      ch2CheckBtn.disabled = foodShuffled.some(f => !Object.values(pile).some(arr => arr.includes(f.id)));
+      ch2Fb.classList.remove('show', 'good', 'bad');
+    }
+
+    function unlockCh2() {
+      if (ch2El.classList.contains('unlocked')) return;
+      ch2El.classList.add('unlocked');
+      foodShuffled = shuffle(FOODS);
+      renderCh2();
+      setTimeout(() => ch2El.scrollIntoView({ behavior: 'smooth', block: 'start' }), 220);
+    }
+
+    function resetCh2() {
+      pile = { sweet: [], sour: [], salty: [], bitter: [], umami: [] };
+      selectedFood = null;
+      foodShuffled = shuffle(FOODS);
+      [...pilesEl.children].forEach(p => p.classList.remove('correct','wrong'));
+      renderCh2();
+    }
+
+    function checkCh2() {
+      // Per-pile highlight
+      [...pilesEl.children].forEach(p => {
+        const t = p.dataset.taste;
+        const items = pile[t];
+        const expected = FOODS.filter(f => f.taste === t).map(f => f.id);
+        const allRight = items.length > 0 && items.every(fid => FOODS.find(x => x.id === fid).taste === t);
+        const allPresent = expected.every(id => items.includes(id));
+        p.classList.remove('correct','wrong');
+        p.classList.add((allRight && allPresent) ? 'correct' : 'wrong');
+      });
+      // Tally
+      const correctCount = FOODS.filter(f => pile[f.taste].includes(f.id)).length;
+      const total = FOODS.length;
+      if (correctCount === total) {
+        ch2Fb.className = 'feedback good show';
+        ch2Fb.innerHTML = '✓ All sorted — every food landed in its taste pile!';
+        document.getElementById('progressFill').style.width = '100%';
+        setTimeout(() => {
+          document.getElementById('endCard').classList.add('show');
+          markComplete();
+        }, 700);
+      } else {
+        ch2Fb.className = 'feedback bad show';
+        ch2Fb.innerHTML = `✗ ${correctCount} of ${total} foods in the right pile. Move the mismatches and try again.`;
+        document.getElementById('progressFill').style.width = (60 + Math.round((correctCount / total) * 40)) + '%';
+      }
+    }
+
+    ch2CheckBtn.addEventListener('click', checkCh2);
+    ch2ResetBtn.addEventListener('click', resetCh2);
+
+    // ─── Firestore: mark complete ───────────────────────────────────────
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return; alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } =
+          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'anatomy-physiology'),
+          { 'ap-257': { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    // ─── Init ───────────────────────────────────────────────────────────
+    reset();
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Skills & Learning — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Study Skills &amp; Learning</h1>
+    <p>Master how to learn — from note-taking to digital tools, plus a full Time Management &amp; Productivity track (GTD, Pomodoro, Time Blocking, Deep Work, OKRs, Atomic Habits, Indistractable, Eat That Frog, 7 Habits, 12-Week Year, Make Time, Flow, Energy &amp; Sleep, Mindfulness for Productivity, Procrastination Science, Saying No, Meeting &amp; Notification Hygiene). 1093 lessons across 74 units.</p>
+  </header>
+
+  <div id="learning-path" class="path-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const units = [
+      [1, "How to Learn", ["What Is Metacognition?","The Growth Mindset","Fixed vs Growth Thinking","Visual Learning Strategies","Auditory Learning Strategies","Kinesthetic Learning Strategies","Setting Learning Goals","Self-Assessment Techniques","Building Study Habits","The Science of Learning","Active vs Passive Learning","Bloom's Taxonomy","Learning from Mistakes","Teaching Others to Learn","How to Learn Review"]],
+      [2, "Note-Taking Methods", ["Why Take Notes?","The Cornell Method","Cornell Method Practice","Mind Mapping Basics","Creating Effective Mind Maps","Sketch Notes Introduction","Visual Note-Taking","Outline Method","Charting Method","Sentence Method","Digital vs Handwritten Notes","Annotating Textbooks","Summarizing Key Ideas","Organizing Your Notes","Note-Taking Review"]],
+      [3, "Memory & Recall", ["How Memory Works","Short-Term vs Long-Term Memory","Spaced Repetition Explained","Building a Spaced Repetition Schedule","Introduction to Mnemonics","Acronym & Acrostic Mnemonics","The Memory Palace Technique","Building Your First Memory Palace","Chunking Information","The Forgetting Curve","Active Recall Practice","Retrieval Practice Strategies","Interleaving Topics","Sleep & Memory","Memory & Recall Review"]],
+      [4, "Focus & Productivity", ["Understanding Attention","The Pomodoro Technique","Customizing Pomodoro Sessions","Deep Work Principles","Creating a Deep Work Environment","Eliminating Distractions","Managing Digital Distractions","Time Blocking","Prioritization with Eisenhower Matrix","The Two-Minute Rule","Batching Similar Tasks","Energy Management","Overcoming Procrastination","Building a Daily Routine","Focus & Productivity Review"]],
+      [5, "Reading & Comprehension", ["Active Reading Strategies","Previewing a Text","The SQ3R Method","Survey & Question Steps","Read & Recite Steps","Review & Reflect","Speed Reading Basics","Skimming & Scanning","Identifying Main Ideas","Making Inferences","Vocabulary in Context","Annotating While Reading","Summarizing What You Read","Critical Reading Skills","Reading & Comprehension Review"]],
+      [6, "Writing & Communication", ["The Writing Process","Brainstorming & Outlining","Writing Strong Thesis Statements","Paragraph Structure","Essay Introduction Techniques","Body Paragraph Development","Writing Conclusions","Revising & Editing","Presentation Skills Basics","Designing Effective Slides","Public Speaking Tips","Professional Email Writing","Peer Review & Feedback","Citation & Avoiding Plagiarism","Writing & Communication Review"]],
+      [7, "Exam Strategies", ["Creating a Study Plan","Reviewing Effectively","Practice Testing","Multiple Choice Strategies","Process of Elimination","True/False Strategies","Short Answer Techniques","Essay Exam Strategies","Managing Test Anxiety","Breathing & Relaxation Techniques","Time Management During Exams","Reading Questions Carefully","Showing Your Work","Post-Exam Reflection","Exam Strategies Review"]],
+      [8, "Digital Learning Tools", ["Introduction to Anki","Building Anki Decks","Spaced Repetition with Anki","Notion for Students","Building a Study Dashboard","Organizing Notes in Notion","Flashcard Apps Compared","Quizlet & Alternatives","Study Timer Apps","Mind Mapping Software","Digital Annotation Tools","Online Study Groups","Video Learning Strategies","Choosing the Right Tools","Digital Learning Tools Review"]],
+      [9, "Critical Thinking Foundations", ["What Is Critical Thinking?","Identifying Assumptions","Evaluating Evidence","Logical Fallacies Overview","Ad Hominem & Straw Man","Appeal to Authority & Emotion","False Dilemma & Slippery Slope","Correlation vs Causation","Distinguishing Fact from Opinion","Analyzing Arguments","Constructing Sound Arguments","Bias Awareness","Confirmation Bias in Study","Perspective-Taking","Critical Thinking Foundations Review"]],
+      [10, "Logical Arguments", ["What Is an Argument?","Premises & Conclusions","Identifying Arguments in Text","Deductive Reasoning","Inductive Reasoning","Abductive Reasoning","Validity vs Soundness","Strong vs Weak Arguments","Evaluating Argument Structure","Counterarguments","Syllogisms","Conditional Statements","Necessary vs Sufficient Conditions","Logical Arguments Review"]],
+      [11, "Logical Fallacies", ["What Is a Fallacy?","Ad Hominem","Straw Man","False Dichotomy","Appeal to Authority","Appeal to Emotion","Red Herring","Slippery Slope","Circular Reasoning","Hasty Generalization","Post Hoc Ergo Propter Hoc","Bandwagon Fallacy","Tu Quoque","Logical Fallacies Review"]],
+      [12, "Evidence & Sources", ["What Counts as Evidence?","Primary vs Secondary Sources","Evaluating Source Credibility","Author Expertise & Bias","Peer-Reviewed Research","Understanding Statistics in Claims","Sample Size & Representation","Correlation vs Causation Deep Dive","Fact-Checking Methods","Cross-Referencing Sources","Recognizing Misinformation","Evaluating Websites","Citation & Attribution","Evidence & Sources Review"]],
+      [13, "Media Literacy", ["What Is Media Literacy?","How Media Shapes Perception","News vs Opinion","Clickbait & Sensationalism","Identifying Bias in Reporting","Left vs Right Media Bias","Propaganda Techniques","Social Media & Echo Chambers","Algorithms & Filter Bubbles","Deepfakes & AI-Generated Content","Advertising & Persuasion","Evaluating Visual Media","Media Ownership & Influence","Media Literacy Review"]],
+      [14, "Decision Making", ["Cognitive Biases Overview","Anchoring Bias","Availability Heuristic","Dunning-Kruger Effect","Sunk Cost Fallacy","Framing Effects","Groupthink","Decision Matrices","Cost-Benefit Analysis","Risk Assessment","Ethical Decision Making","Decision Making Under Uncertainty","Reflection & Metacognition","Decision Making Review"]],
+      [15, "Applied Critical Thinking", ["Critical Thinking in Science","Critical Thinking in History","Critical Thinking in Politics","Evaluating Health Claims","Consumer Critical Thinking","Critical Thinking in Technology","Debate & Argumentation Skills","Persuasive Writing with Logic","Socratic Seminar Techniques","Critical Thinking in Math","Ethical Reasoning","Systems Thinking","Building a Critical Thinking Habit","Applied Critical Thinking Review"]],
+      [16, "Research Skills", ["Introduction to Research","Choosing a Research Topic","Formulating Research Questions","Primary vs Secondary Sources","Evaluating Source Credibility","Using Academic Databases","Google Scholar Techniques","Library Research Skills","Reading Academic Papers","Identifying Key Findings","Synthesizing Multiple Sources","Avoiding Plagiarism","Paraphrasing & Quoting","Annotated Bibliographies","Research Skills Review"]],
+      [17, "Math Study Strategies", ["Overcoming Math Anxiety","Building Number Sense","Problem-Solving Frameworks","Reading Math Textbooks","Working Through Examples","Practice Problem Strategies","Error Analysis in Math","Showing Work Clearly","Using Diagrams & Visuals","Formula Memorization Techniques","Word Problem Strategies","Estimation & Checking Answers","Study Groups for Math","Math Review Sessions","Math Study Strategies Review"]],
+      [18, "Science Study Strategies", ["The Scientific Method Review","Reading Science Textbooks","Lab Report Writing","Understanding Graphs & Data","Memorizing Scientific Terms","Concept Mapping in Science","Hypothesis Formation","Experimental Design Basics","Interpreting Results","Science Journal Reading","Connecting Theory to Practice","Science Fair Preparation","Collaborative Science Study","Staying Current in Science","Science Study Strategies Review"]],
+      [19, "Language Learning", ["How Languages Are Learned","Immersion Techniques","Vocabulary Acquisition Methods","Flashcards for Language","Grammar Study Approaches","Listening Comprehension Practice","Speaking Practice Strategies","Reading in a New Language","Writing in a New Language","Language Exchange Partners","Using Language Apps Effectively","Cultural Context in Language","Pronunciation Techniques","Building Daily Language Habits","Language Learning Review"]],
+      [20, "Group Study & Collaboration", ["Benefits of Group Study","Forming Effective Study Groups","Setting Group Ground Rules","Collaborative Note-Taking","Peer Teaching Methods","The Jigsaw Technique","Think-Pair-Share","Group Problem Solving","Handling Group Conflicts","Online Collaboration Tools","Study Group Scheduling","Accountability Partners","Group Exam Review Sessions","Reflecting on Group Work","Group Study & Collaboration Review"]],
+      [21, "Motivation & Mindset", ["Intrinsic vs Extrinsic Motivation","Setting SMART Goals","Breaking Big Goals into Steps","Reward Systems for Study","Overcoming Burnout","Dealing with Failure","Building Resilience","Self-Compassion in Learning","Visualization Techniques","Positive Self-Talk","Finding Your Why","Motivation During Hard Times","Celebrating Progress","Building Long-Term Discipline","Motivation & Mindset Review"]],
+      [22, "Time Management", ["Auditing Your Time","Weekly Planning Systems","Daily Scheduling Techniques","The 80/20 Rule for Study","Deadline Management","Avoiding Last-Minute Cramming","Balancing School & Life","Saying No to Distractions","Using Calendars Effectively","Buffer Time & Flexibility","Semester Planning","Project Timeline Creation","Tracking Time Spent Studying","Reviewing & Adjusting Plans","Time Management Review"]],
+      [23, "Health & Wellness for Learners", ["Sleep & Academic Performance","Creating a Sleep Routine","Nutrition for Brain Power","Hydration & Focus","Exercise & Cognitive Function","Stress Management Basics","Mindfulness for Students","Breathing Exercises","Stretching & Study Breaks","Screen Time Management","Eye Care for Readers","Ergonomic Study Setup","Mental Health Awareness","When to Seek Help","Health & Wellness Review"]],
+      [24, "Creative Thinking", ["What Is Creative Thinking?","Brainstorming Techniques","SCAMPER Method","Lateral Thinking Puzzles","Mind Mapping for Ideas","Six Thinking Hats","Reverse Thinking","Analogical Reasoning","Combining Unrelated Ideas","Creative Problem Solving","Overcoming Creative Blocks","Journaling for Creativity","Visual Thinking Strategies","Innovation in Learning","Creative Thinking Review"]],
+      [25, "Study Environment", ["Designing Your Study Space","Lighting & Comfort","Noise & Music for Focus","Organizing Your Desk","Digital Workspace Setup","Library vs Home Study","Café & Alternative Spaces","Minimizing Visual Clutter","Temperature & Airflow","Study Materials Organization","Creating a Portable Study Kit","Rotating Study Locations","Shared Spaces & Boundaries","Seasonal Adjustments","Study Environment Review"]],
+      [26, "Technology & Learning", ["Digital Literacy Basics","Evaluating Online Information","Bookmarking & Saving Resources","Cloud Storage for Students","Typing Speed & Efficiency","Keyboard Shortcuts for Productivity","Using Spreadsheets for Study","Presentation Software Mastery","Screen Recording for Review","Podcast & Audiobook Learning","AI Tools for Study","Coding as a Learning Tool","Digital Security for Students","Tech Detox Strategies","Technology & Learning Review"]],
+      [27, "Self-Directed Learning", ["What Is Self-Directed Learning?","Setting Your Own Curriculum","Finding Free Online Courses","MOOCs & Open Courseware","YouTube as a Learning Tool","Learning from Books Independently","Building a Reading List","Tracking Self-Study Progress","Creating Personal Projects","Learning Journals","Seeking Feedback Without a Teacher","Building a Portfolio of Learning","Connecting with Online Communities","Lifelong Learning Mindset","Self-Directed Learning Review"]],
+      [28, "Emotional Intelligence in Learning", ["What Is Emotional Intelligence?","Self-Awareness in Study","Recognizing Your Emotions","Managing Frustration","Empathy in Group Work","Social Skills for Collaboration","Handling Academic Pressure","Coping with Comparison","Building Confidence","Assertive Communication","Conflict Resolution","Emotional Regulation Techniques","Gratitude & Positivity","Emotional Intelligence at School","Emotional Intelligence Review"]],
+      [29, "Productivity Foundations", ["Why Productivity Matters","Productivity vs Busyness","Output vs Activity","The 80/20 Principle","Parkinson's Law","Work Expansion","Energy Management vs Time Management","Common Productivity Mistakes","The Psychology of Procrastination","Famous Productivity Books","Productivity Mythology","Joining Productivity Communities","Setting Productivity Goals","Maintaining Balance","Foundations Checkpoint"]],
+      [30, "Goal Setting", ["SMART Goals","OKRs — Objectives & Key Results","BHAGs","Quarterly Goals","Annual Goals","3-Year Vision","10-Year Vision","Daily Goals","Weekly Goals","Goal Tracking","Goal Visualization","Vision Boards","Accountability Partners","Goal Reviews","Goal Setting Checkpoint"]],
+      [31, "GTD — Getting Things Done", ["David Allen","Capture Everything","Inbox Processing","2-Minute Rule","Next Action Step","Project vs Task","Contexts","Waiting For List","Someday/Maybe","Reference Files","Weekly Review","Monthly Review","Trigger Lists","GTD Apps — Things, OmniFocus","GTD Checkpoint"]],
+      [32, "Pomodoro Technique", ["Francesco Cirillo","25 Minutes Work + 5 Minutes Break","Long Breaks Every 4 Pomodoros","Pomodoro Tracker Apps","Tomato Timer","Forest App","Be Focused","Marinara Timer","Pomodoro for Studying","Pomodoro for Coding","Pomodoro for Writing","Variations — 50/10","When Pomodoro Doesn't Work","Pomodoro & ADHD","Pomodoro Checkpoint"]],
+      [33, "Time Blocking", ["What Is Time Blocking?","Cal Newport's Approach","Calendar as Source of Truth","Theme Days","Maker vs Manager Schedules","Deep Work Blocks","Shallow Work Blocks","Buffer Time","Daily Highlights","Email Time Blocks","Meeting Time Blocks","Color-Coding Calendars","Time Block Templates","Avoiding Block Drift","Time Blocking Checkpoint"]],
+      [34, "Calendar Mastery", ["Google Calendar","Apple Calendar","Outlook Calendar","Fantastical","Notion Calendar (formerly Cron)","Reclaim.ai","Sunsama","Cal.com","Calendly","Recurring Events","All-Day Events","Calendar Sharing","Booking Links","Calendar Etiquette","Calendar Mastery Checkpoint"]],
+      [35, "Task Manager Apps", ["Todoist","Things 3","OmniFocus","TickTick","Microsoft To Do","Apple Reminders","Notion Tasks","Linear","Asana for Personal","Trello — Personal Boards","Obsidian Tasks","Logseq","TaskPaper","Plain Text Todo","Task App Checkpoint"]],
+      [36, "Email Management", ["Inbox Zero","Touch It Once Rule","Email Filters & Rules","Snoozing Email","Templates & Canned Responses","SaneBox & Spike","Hey Email","Newsletter Subscriptions — Stoop, Substack","Email at Set Times","Vacation Auto-Replies","Email Etiquette","Subject Line Best Practices","Bcc & Reply-All Rules","Group Emails","Email Mastery Checkpoint"]],
+      [37, "Eisenhower Matrix", ["Urgent vs Important","Quadrant 1 — Urgent & Important","Quadrant 2 — Important Not Urgent","Quadrant 3 — Urgent Not Important","Quadrant 4 — Neither","Doing Q1 First","Investing in Q2","Delegating Q3","Eliminating Q4","Stephen Covey","7 Habits Connection","Apps That Use Matrix","Daily Matrix Habit","Matrix for Email","Eisenhower Matrix Checkpoint"]],
+      [38, "Deep Work", ["Cal Newport — Deep Work","Shallow Work Definition","4-Hour Deep Work Limit","Schedule Deep Work","Eliminate Distractions","Phone in Another Room","Website Blockers — Cold Turkey, Freedom","Deep Work Cafés","Library Deep Work","Pomodoro for Deep Work","Deep Work Journal","Counting Deep Work Hours","Deep Work for Knowledge Workers","Deep Work for Students","Deep Work Checkpoint"]],
+      [39, "Focus Apps & Tools", ["Forest — Plant Trees","Cold Turkey Blocker","Freedom","RescueTime","Toggl Track","Time Tracking Honesty","Browser Extensions — One Tab","News Feed Eradicator","Newsfeed Eradicator for Twitter","Focus Mode in Apple","Do Not Disturb","iPhone Focus Modes","Mac Focus","Pixel/Android Focus","Focus Apps Checkpoint"]],
+      [40, "Eliminating Distractions", ["Phone Distraction Tactics","Notification Audit","Greyscale Phone","Social Media Schedule","Deleting Apps","Browser Lockdown","Office Door Closed","Open Office Strategies","Headphones as Signal","Pomodoro to Reset Focus","Saying No","Meeting Free Days","Focus Hours at Work","Communicating Boundaries","Distractions Checkpoint"]],
+      [41, "Energy Management", ["Tony Schwartz","Physical Energy","Emotional Energy","Mental Energy","Spiritual Energy","Ultradian Rhythms","90-Minute Cycles","Energy Audit","Morning Energy Peak","Afternoon Energy Slump","Coffee Strategy","Naps — 20 vs 90 Minute","Exercise & Energy","Sugar Crash Avoidance","Energy Management Checkpoint"]],
+      [42, "Sleep Optimization", ["Why Sleep Matters for Productivity","7-9 Hours Recommended","Consistent Sleep Schedule","No Caffeine After 2pm","No Screens Before Bed","Blue Light Glasses","Cool Bedroom Temp — 65°F","Mattress Selection","Sleep Tracker — Oura, Whoop, Apple Watch","Sleep Hygiene","Bedtime Routine","Wake-Up Routine","Power Naps","Sleep Apnea & CPAP","Sleep Optimization Checkpoint"]],
+      [43, "Weekly & Daily Reviews", ["What Is a Weekly Review?","Friday Afternoon Review","Sunday Planning","Daily Shutdown Routine","Inbox Zero Each Day","Review What Worked","Review What Didn't","Adjust Calendar for Next Week","Project Status Reviews","Goal Progress Check","Habit Review","Mood Review","Win Logs","Lessons Learned","Reviews Checkpoint"]],
+      [44, "Habit Formation", ["Atomic Habits — James Clear","Cue, Craving, Response, Reward","Habit Stacking","2-Minute Rule","Streaks — Don't Break the Chain","Habit Tracker Apps","HabitBull","Streaks App","Way of Life","Notion Habit Tracker","Bullet Journal Habits","Identity-Based Habits","Keystone Habits","Breaking Bad Habits","Habit Formation Checkpoint"]],
+      [45, "Project Management Personal", ["Kanban Boards","Scrum for One","Project Triage","Milestones","Critical Path","Buffer Days","Trello Personal Boards","Notion Projects","GitHub Projects for Personal","Color-Coded Status","Project Templates","Reviews on Projects","When to Quit a Project","Wrap-Up Reports","PM Checkpoint"]],
+      [46, "Saying No & Boundaries", ["Why Saying No Is Hard","Saying No Politely","The Power of No","Boundaries at Work","Boundaries in Relationships","Boundaries with Family","Email Auto-Replies","Office Hours","Vacation Boundaries","Slack Status","Out of Office Norms","Difficult Conversations","When to Quit a Job","Burnout Recognition","Boundaries Checkpoint"]],
+      [47, "Famous Productivity Frameworks", ["Stephen Covey — 7 Habits","Cal Newport — Deep Work","David Allen — GTD","Tim Ferriss — 4-Hour Workweek","James Clear — Atomic Habits","Greg McKeown — Essentialism","Jocko Willink — Discipline Equals Freedom","Naval Ravikant — Almanack","Charles Duhigg — Power of Habit","Mihaly Csikszentmihalyi — Flow","Anders Ericsson — Deliberate Practice","Daniel Pink — Drive","Carol Dweck — Mindset","Angela Duckworth — Grit","Famous Frameworks Checkpoint"]],
+      [48, "Pomodoro Deep Dive", ["Cirillo's Tomato Timer","25/5 Original Recipe","50/10 Variation","90/20 Ultradian","Pomodoro Notation","Pomodoro Apps Compared","Pomodoro for Studying","Pomodoro for Coding","Pomodoro for Writing","When Pomodoro Fails","Adapting Block Length","Tracking Pomos","Pomodoro Team Versions","Resisting Interruptions","Pomodoro Checkpoint"]],
+      [49, "Time Blocking Workshop", ["What Is Time Blocking?","Newport's Daily Block","Day Theming","Task Batching","Recurring Blocks","Migrating Blocks","Buffer Time","Theme Days vs Hours","Calendar-First vs List-First","Time Boxing vs Blocking","Visual Calendars","Color-Coding Blocks","Reviewing Yesterday's Blocks","Tools: Sunsama, Notion","Time Blocking Checkpoint"]],
+      [50, "Eisenhower Matrix Mastery", ["History of the Matrix","Q1: Urgent + Important","Q2: Important Not Urgent","Q3: Urgent Not Important","Q4: Neither","Living in Q2","Identifying False Urgency","Delegating Q3","Eliminating Q4","Weekly Matrix Review","Digital Eisenhower Apps","Personal Matrix","Eisenhower for Email","Eisenhower for Projects","Eisenhower Checkpoint"]],
+      [51, "Kanban for Personal Use", ["Origins of Kanban","Personal Kanban (Benson)","Three Columns: Todo, Doing, Done","WIP Limits","Adding Backlog","Adding Waiting Column","Card Aging","Cumulative Flow","Trello Setup","Notion Kanban","Asana Boards","GitHub Projects","Family Kanban","Kanban for Job Hunt","Kanban Checkpoint"]],
+      [52, "GTD Implementation", ["GTD 5 Steps Recap","Capture Everywhere","Inbox Zero (Allen Style)","Clarify the Capture","Two-Minute Rule","Project Definition","Next Action Lists","Contexts (@home, @phone)","Waiting For List","Someday/Maybe","Tickler 43 Folders","Weekly Review Checklist","OmniFocus, Things, Todoist","GTD with Email","GTD Checkpoint"]],
+      [53, "Bullet Journal Method", ["Origins (Carroll)","Rapid Logging Notation","Index Page","Future Log","Monthly Log","Daily Log","Migrating Tasks","Collections & Trackers","Threading Pages","BuJo Apps Debate","Minimalist BuJo","Decorative BuJo","BuJo for ADHD","BuJo for Anxiety","Bullet Journal Checkpoint"]],
+      [54, "Deep Work (Newport)", ["What Is Deep Work?","Shallow vs Deep","Monastic Philosophy","Bimodal Philosophy","Rhythmic Philosophy","Journalistic Philosophy","Deep Work Hour Quota","Distraction Workbook","Quitting Social Media","Embrace Boredom","Drain the Shallows","Productive Meditation","Memorize a Deck","Becoming Indispensable","Deep Work Checkpoint"]],
+      [55, "Atomic Habits (Clear)", ["1% Improvements","Identity-Based Habits","Habit Loop Four Laws","Make It Obvious","Make It Attractive","Make It Easy","Make It Satisfying","Habit Stacking","Two-Minute Rule (Habits)","Implementation Intentions","Habit Tracker Templates","Breaking Bad Habits","Plateau of Latent Potential","Goldilocks Rule","Atomic Habits Checkpoint"]],
+      [56, "The 4-Hour Workweek", ["DEAL Framework","Definition (Lifestyle)","Elimination (80/20)","Automation (Outsourcing)","Liberation (Geographic)","Mini-Retirements","Income Autopilot","Muse Concept","Dreamlining","Eliminating Email","Batching Work","Outsourcing Your Life","Critique of Ferriss","Modern Take on 4HWW","4HWW Checkpoint"]],
+      [57, "7 Habits of Highly Effective People", ["Stephen Covey Bio","Be Proactive","Begin with the End in Mind","Put First Things First","Think Win-Win","Seek First to Understand","Synergize","Sharpen the Saw","Circle of Influence vs Concern","Personal Mission Statement","Quadrant II Living","Emotional Bank Account","Critique of 7 Habits","7 Habits in Practice","7 Habits Checkpoint"]],
+      [58, "Eat That Frog (Tracy)", ["The Frog Metaphor","ABCDE Method","80/20 Rule for Tasks","Single Handling","Slice & Dice Big Tasks","Plan Tomorrow Tonight","21-Day Habit","Apply Pareto","Identify Constraints","Prepare Thoroughly","One Bite at a Time","Be Hungry to Win","Lifelong Learner","Push Yourself","Eat That Frog Checkpoint"]],
+      [59, "Indistractable (Eyal)", ["Internal Triggers","External Triggers","Make Time for Traction","Schedule Values","Time-Box Personal Time","Time-Box Family Time","Pacts: Effort, Price, Identity","Hack Back Tech","Cut Bad Meetings","Group Chat Hygiene","Email Pact","Phone Hacking","Workplace Distraction","Children & Distraction","Indistractable Checkpoint"]],
+      [60, "Make Time (Knapp & Zeratsky)", ["Highlight Methodology","Laser (Stay Focused)","Energize (Body)","Reflect (Improve)","Identify Daily Highlight","Burner Phone","Distraction-Free iPhone","No Email Til 11am","Read News Weekly","Fake Wins to Avoid","Hourglass for Time","Cave Schedule Sleep","Move Daily","Make Time for Loved Ones","Make Time Checkpoint"]],
+      [61, "The 12-Week Year", ["Why 12 Weeks (Moran)","Annualized Thinking","Vision First","12-Week Goals","Tactics & Plans","Weekly Plan","Score Card","Lead vs Lag Indicators","Commitment & Accountability","Accountability Meeting","Greatness Zone","13th Week Off","Push Through Resistance","Pre-Week Reflection","12WY Checkpoint"]],
+      [62, "OKRs for Individuals", ["What Are OKRs","Andy Grove History","Google Adoption","Setting Objectives","Key Results 3-5","Aspirational vs Committed","Quarterly OKRs","Personal OKR Examples","OKR Apps & Tools","Weekly OKR Reviews","Scoring 0-1.0","Stretch Goals","Common OKR Mistakes","OKRs vs KPIs","OKRs Checkpoint"]],
+      [63, "Energy Management", ["Energy vs Time","Loehr & Schwartz","4 Energy Quadrants","Physical Energy","Emotional Energy","Mental Energy","Spiritual Energy","Ultradian Rhythms","90-Minute Cycles","Strategic Naps","Caffeine Strategy","Recovery Rituals","Energy Audit","Burnout Prevention","Energy Mgmt Checkpoint"]],
+      [64, "Sleep Optimization", ["Why We Sleep (Walker)","Sleep Stages Refresher","Circadian Hygiene","Sleep Pressure","8 Hours Myth","Wind-Down Routine","Bedroom Environment","Light Exposure","Caffeine Half-Life","Alcohol & Sleep","Naps Done Right","Jet Lag Strategies","Shift Work Sleep","Trackers (Oura, Whoop)","Sleep Checkpoint"]],
+      [65, "Mindfulness for Productivity", ["Mindfulness Defined","Kabat-Zinn MBSR","Box Breathing","5-4-3-2-1 Senses","Mindful Transitions","Single-Tasking","Mindful Email","Mindful Meetings","Headspace & Calm","Insight Timer","Mindful Walking","Mindfulness Backlash","RAIN Technique","Mindful Eating","Mindfulness Checkpoint"]],
+      [66, "Procrastination Science", ["What Is Procrastination","Hyperbolic Discounting","Steel's Equation","Tim Pychyl Research","Self-Compassion Helps","Implementation Intentions","Just Get Started","Tomato Trick","Pre-Commitment Devices","StickK & Beeminder","Public Accountability","Anti-Procrastination Apps","Two-Minute Variant","Reward Pairing","Procrastination Checkpoint"]],
+      [67, "Decision Fatigue & Defaults", ["Baumeister Research","Ego Depletion Replication","Decision Fatigue Real Life","Reduce Decisions","Steve Jobs Wardrobe","Default Choices","Pre-Decisions","Reduce Choice","Apple Pay & Friction","Choice Architecture (Thaler)","Productivity Nudges","Standardize Lunch","Standardize Workouts","Sleep & Decisions","Decision Fatigue Checkpoint"]],
+      [68, "Flow State", ["Csikszentmihalyi","8 Conditions of Flow","Flow Channel","Skill vs Challenge","Triggers of Flow","Steven Kotler Flow Genome","Macro vs Micro Flow","Flow at Work","Flow at Home","Flow Killers","Group Flow","Flow & Sports","Flow & Creativity","Engineering Flow Daily","Flow Checkpoint"]],
+      [69, "Saying No & Boundaries", ["Why We Say Yes","The Cost of Yes","Power of No","Essentialism (McKeown)","Energy Boundaries","Time Boundaries","Saying No Politely","24-Hour Rule","Letting People Down","Renegotiating Commitments","Boundary at Work","Boundary at Home","Tech Boundaries","Communicating Limits","Boundaries Checkpoint"]],
+      [70, "Meeting Hygiene", ["Why Meetings Suck","Meeting Brief 1-Pager","Meeting-Free Days","Async First Default","30-Minute Default","15-Minute Standups","Walking Meetings","No-Tech Meetings","Two-Pizza Rule","DACI Roles","Action Items Discipline","Meeting Costing","Recap Email Template","Calendar Defenses","Meeting Hygiene Checkpoint"]],
+      [71, "Notification Hygiene", ["Notification Audit","iPhone Focus Modes","Android Focus Modes","Slack DND","Email Notifications Off","Mobile-Only Apps","One Inbox to Rule Them","Daily Triage Window","Phone in Other Room","Greyscale Mode","App Limits Screen Time","Sleep Mode Schedules","Notification Bankruptcy","Family Tech Charter","Notification Hygiene Checkpoint"]],
+      [72, "Productivity Capstone", ["Putting It All Together","Choosing Your Stack","Building a Personal System","The Weekly Review Ritual","The Quarterly Review Ritual","Annual Review Ritual","Avoiding Productivity Porn","Sustainable Routines","Productivity Capstone Final"]],
+      [73, "Productivity Mastery", ["Goal Setting Review","GTD Review","Pomodoro Review","Time Blocking Review","Calendar Review","Task App Review","Email Review","Eisenhower Review","Deep Work Review","Energy & Sleep Review","Reviews Process Review","Habit Review","Project Review","Boundaries Review","Productivity Grand Mastery!"]],
+      [74, "Review & Mastery", ["Cumulative Review Strategies","Spaced Practice Across Units","Interleaving All Subjects","Building a Personal Study System","Creating Your Study Playbook","Teaching What You've Learned","Reflecting on Growth","Identifying Remaining Gaps","Setting Future Learning Goals","Final Comprehensive Review"]]
+    ];
+
+    let lessonNum = 0;
+    const lessons = [];
+    units.forEach(([unitNum, unitName, titles]) => {
+      titles.forEach((title, i) => {
+        lessonNum++;
+        lessons.push({
+          id: 'ss-' + lessonNum,
+          title: title,
+          href: '#',
+          unit: unitNum,
+          unitName: unitName,
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('study-skills');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('study-skills');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

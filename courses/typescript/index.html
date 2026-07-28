@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeScript — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:#8b5cf6">Programming &amp; CS</span>
+    <h1>TypeScript</h1>
+    <p>Add static types to JavaScript — interfaces, generics, narrowing, utility types, declaration files, decorators, modern TS, and real-world full-stack projects. 118 lessons across 8 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Foundations',['Why TypeScript','Installing tsc','tsconfig.json Basics','Strict Mode','Hello World','tsc --watch','ts-node & tsx','VS Code Setup','TS vs JS vs JSDoc','Online Playgrounds','Project Structure','Build Output Targets','Source Maps','Reading Compiler Errors','Foundations Checkpoint']],
+      [2,'Basic Types',['number','string','boolean','bigint & symbol','Array Types','Tuple Types','any','unknown','void','never','Literal Types','Type Aliases','Inference vs Annotation','Type Assertions as','Basic Types Checkpoint']],
+      [3,'Functions & Signatures',['Parameter Types','Return Types','Optional Parameters','Default Parameters','Rest Parameters','Function Type Aliases','Call Signatures','Construct Signatures','Overloads','this Parameter','Arrow Functions Typed','Higher-Order Function Types','Predicate Types','Generic Functions','Functions Checkpoint']],
+      [4,'Objects & Interfaces',['Object Type Annotations','interface Keyword','Required vs Optional Properties','readonly Properties','Index Signatures','Extending Interfaces','Interface vs Type Alias','Method Signatures','Hybrid Types','Recursive Types','Object Spread Typed','Excess Property Checks','Structural Typing','Real-World Models','Interfaces Checkpoint']],
+      [5,'Union & Intersection Types',['Union Types A | B','Intersection Types A & B','Discriminated Unions','Tag Properties','Exhaustiveness Checks','Type Narrowing with typeof','Narrowing with instanceof','in Operator Narrowing','Equality Narrowing','Mixing Union & Intersection','Distributing Conditional Types','Practical Patterns','Anti-Patterns','Modeling State Machines','Unions Checkpoint']],
+      [6,'Generics',['What Are Generics?','Generic Functions','Multiple Type Parameters','Generic Interfaces','Generic Classes','Constraints with extends','Default Generic Parameters','Generic Type Aliases','Inference in Generics','keyof Operator','Generic Components','Variance Basics','Phantom Types','Real-World Generics','Generics Checkpoint']],
+      [7,'Advanced Types',['typeof Type Operator','keyof Type Operator','Indexed Access Types','Mapped Types','Conditional Types','infer Keyword','Template Literal Types','Distributive Conditional','Recursive Conditional Types','Type Manipulation Examples','Branded Types','Opaque Types','Type-Level Programming','When to Stop','Advanced Types Checkpoint']],
+      [8,'Utility Types',['Partial<T>','Required<T>','Readonly<T>','Record<K,V>','Pick<T,K>','Omit<T,K>','Exclude<T,U>','Extract<T,U>','NonNullable<T>','ReturnType<F>','Parameters<F>','Awaited<T>','ConstructorParameters<T>']]
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'ts-'+n, title: t, href: '#', unit: u, unitName: name, category: 'programming', checkpoint: i===titles.length-1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('typescript');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('typescript');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

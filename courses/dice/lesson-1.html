@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1 · What Is a Die? — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <!-- Required auth gate (google-required-auth). -->
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div id="lesson"></div>
+
+  <script type="module">
+    import '../../js/nav.js';                       // side-effect: GA4 analytics
+    import { renderLesson } from '../../js/lesson-engine.js';
+
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Chapter 1 · Meet the die',
+        title: 'What is a die?',
+        html: `<p>A <strong>die</strong> (plural: <em>dice</em>) is a small cube with a
+               number marked on each of its six faces. Those little dots are called
+               <span class="le-term">pips</span>, and they run from <strong>1 to 6</strong>.</p>
+               <p>Roll it, and one face lands up — seemingly at random. That simple act is the
+               doorway into all of <strong>probability</strong>.</p>`,
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A little history',
+        title: 'From astragali to modern dice',
+        html: `<p>Long before plastic, people rolled <span class="le-term">astragali</span> —
+               the ankle knucklebones of sheep and goats. They tumbled to rest on one of four
+               uneven sides, and ancient Egyptians, Greeks, and Romans used them for games and
+               fortune-telling.</p>
+               <p>Over centuries they were carved into fair, symmetric cubes. Today,
+               <strong>casino-grade</strong> dice are machined so precisely that no face is
+               favored — accurate to within a few thousandths of an inch.</p>`
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'Try it',
+        title: 'Give it a roll',
+        html: `<p>Tap the die a few times and watch the tally build. Notice something:
+               there's no way to know the next result before it lands — yet over
+               <em>many</em> rolls, a pattern quietly appears.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Fairness',
+        title: 'Every face is equally likely',
+        html: `<p>On a <em>fair</em> die, no face is favored over another. There are
+               <strong>6 possible outcomes</strong>, and each is <strong>equally likely</strong>.</p>
+               <p>That's the key idea behind probability: when outcomes are equally likely,
+               the chance of any one of them is simply
+               <strong>1 &divide; (number of outcomes)</strong>.</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'What is the probability of rolling a 4?',
+        options: ['1⁄4', '1⁄6', '4⁄6', '1 (it always happens)'],
+        answer: 1,
+        explain: `There are 6 equally likely faces and exactly <strong>one</strong> of them is a 4,
+                  so the probability is <strong>1⁄6 ≈ 16.7%</strong>. Every single face shares that
+                  same 1-in-6 chance.`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A hidden rule',
+        title: 'Opposite faces sum to 7',
+        html: `<p>Pick up any standard Western die and look at the pairs of opposite faces:
+               <strong>1 &amp; 6</strong>, <strong>2 &amp; 5</strong>, <strong>3 &amp; 4</strong>.</p>
+               <p>Every pair adds up to the same number. This isn't a coincidence — it's a
+               manufacturing standard that keeps the die balanced.</p>`,
+        visual: 'die:3'
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'Opposite faces of a standard die always add up to…',
+        options: ['6', '7', '8', '12'],
+        answer: 1,
+        explain: `1+6, 2+5, and 3+4 all equal <strong>7</strong> — the standardized rule
+                  for Western dice, which also helps keep the cube balanced.`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Recap',
+        title: "You've got the basics",
+        html: `<p>In one lesson you learned that a die:</p>
+               <p>• has <strong>6 equally likely faces</strong> numbered with pips 1–6,<br>
+               • traces back to ancient <span class="le-term">astragali</span>,<br>
+               • gives each face a <strong>1⁄6</strong> chance on a fair roll,<br>
+               • and always has <strong>opposite faces summing to 7</strong>.</p>
+               <p>Next up: the whole family of dice — d4, d8, d20 and beyond.</p>`
+      }
+    ];
+
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice',
+      lessonId: 'dice-1',
+      backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

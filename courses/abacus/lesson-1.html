@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abacus Practice — Lesson 1 — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/characters.css">
+  <style>
+    body { background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%); min-height: 100vh; color: #1f1108; }
+    .lesson-page { max-width: 880px; margin: 0 auto; padding: 56px 16px 80px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #92400e; background: rgba(146,64,14,0.1); border: 1px solid rgba(146,64,14,0.3); border-radius: 999px; margin-bottom: 12px; }
+    .lesson-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 6px; color: #422006; }
+    .lesson-header p { font-size: 1.02rem; color: #78350f; max-width: 620px; margin: 0 auto; line-height: 1.55; }
+
+    /* Soroban frame */
+    .soroban {
+      max-width: 720px; margin: 28px auto 16px;
+      background: linear-gradient(180deg, #92400e, #6b3410);
+      padding: 14px;
+      border-radius: 14px;
+      box-shadow: 0 14px 32px rgba(120,53,15,0.4);
+      position: relative;
+    }
+    .soroban-inner {
+      background: #fef3c7;
+      border-radius: 8px;
+      padding: 14px 8px;
+      position: relative;
+    }
+    .rods { display: flex; gap: 14px; justify-content: center; padding: 8px 4px; }
+    .rod {
+      flex: 0 0 auto;
+      width: 50px;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .rod-stem {
+      position: absolute; left: 50%; top: 4px; bottom: 4px;
+      width: 2px; background: #78350f; transform: translateX(-50%);
+      z-index: 0;
+    }
+    .heaven, .earth { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+    .heaven { height: 64px; justify-content: flex-start; }
+    .earth { height: 192px; justify-content: flex-end; }
+    .bar {
+      height: 8px;
+      background: linear-gradient(90deg, #422006, #92400e, #422006);
+      margin: 4px -8px;
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .bead {
+      width: 44px; height: 28px;
+      background: radial-gradient(ellipse at 30% 30%, #fde68a, #d97706 65%, #78350f);
+      border: 2px solid #422006;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+    .bead:hover { transform: scale(1.06); box-shadow: 0 4px 8px rgba(0,0,0,0.35); }
+    /* Heaven bead — translates DOWN toward the bar when active */
+    .heaven .bead { transform: translateY(0); }
+    .heaven .bead.active { transform: translateY(28px); }
+    .heaven .bead.active:hover { transform: translateY(28px) scale(1.06); }
+    /* Earth beads — sit at the bottom by default; active = translates UP toward bar */
+    .earth .bead + .bead { margin-top: 2px; }
+    .earth .bead { transform: translateY(0); }
+    .earth .bead.active { transform: translateY(-2px); /* per-bead offset is added by the calculator below */ }
+
+    /* Place value labels under each rod */
+    .rod-label { font-size: 0.68rem; font-weight: 800; color: #78350f; margin-top: 10px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    .read-out {
+      max-width: 320px; margin: 8px auto 22px;
+      padding: 14px 18px;
+      background: #fff;
+      border: 2px solid #78350f;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(120,53,15,0.18);
+    }
+    .read-out .label { font-size: 0.7rem; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 0.1em; }
+    .read-out .value { font-family: 'SF Mono', Monaco, monospace; font-size: 2.4rem; font-weight: 800; color: #422006; line-height: 1.1; }
+
+    .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0 24px; }
+    .btn {
+      padding: 10px 22px; border-radius: 999px;
+      font-weight: 800; font-size: 0.95rem; cursor: pointer; border: none;
+      font-family: inherit; transition: transform 0.1s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: linear-gradient(135deg, #d97706, #92400e); color: #fff; box-shadow: 0 6px 18px rgba(146,64,14,0.4); }
+    .btn.secondary { background: #fff; color: #92400e; border: 2px solid #d97706; }
+
+    /* Practice challenge card */
+    .challenge {
+      max-width: 520px; margin: 24px auto;
+      background: #fff;
+      border: 2px solid #d97706;
+      border-radius: 14px;
+      padding: 20px 22px;
+      box-shadow: 0 6px 20px rgba(146,64,14,0.18);
+    }
+    .challenge h2 { font-size: 1.15rem; font-weight: 800; color: #422006; margin: 0 0 6px; }
+    .challenge p { font-size: 0.92rem; color: #78350f; margin: 0 0 12px; }
+    .challenge .target {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 2rem; font-weight: 800; color: #b45309;
+      text-align: center; margin: 8px 0 12px;
+    }
+    .challenge .feedback { min-height: 1.4em; font-weight: 700; text-align: center; font-size: 0.95rem; margin-top: 10px; }
+    .challenge .feedback.right { color: #166534; }
+    .challenge .feedback.wrong { color: #b91c1c; }
+
+    .progress-row { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 6px 0 12px; flex-wrap: wrap; }
+    .progress-row .stat { font-size: 0.82rem; color: #78350f; font-weight: 700; }
+    .progress-row .stat.score { color: #166534; }
+
+    .footer-nav { text-align: center; margin-top: 28px; }
+    .footer-nav a { color: #92400e; text-decoration: none; font-weight: 700; }
+
+    @media (max-width: 540px) {
+      .rods { gap: 8px; }
+      .rod { width: 40px; }
+      .bead { width: 36px; height: 22px; }
+      .heaven .bead.active { transform: translateY(22px); }
+      .lesson-header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="index.html">Abacus</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">Unit 1 · Lesson 1 · Practice</span>
+      <h1>Slide the Beads</h1>
+      <p>This is a Japanese <strong>soroban</strong>. Each rod has 1 heaven bead (worth <strong>5</strong>) on top and 4 earth beads (worth <strong>1</strong> each) on the bottom. A bead <strong>counts</strong> when it touches the bar in the middle.</p>
+    </header>
+
+    <div class="read-out">
+      <div class="label">Reading on the soroban</div>
+      <div class="value" id="readout">0</div>
+    </div>
+
+    <div class="soroban">
+      <div class="soroban-inner">
+        <div class="rods" id="rods"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn secondary" id="reset-btn">↻ Clear Soroban</button>
+      <button class="btn primary" id="check-btn">Check Answer</button>
+      <button class="btn secondary" id="hint-btn">💡 Hint</button>
+    </div>
+
+    <section class="challenge">
+      <h2>🎯 Practice</h2>
+      <p>Set the soroban to show this number, then press <strong>Check Answer</strong>:</p>
+      <div class="target" id="target">7</div>
+      <div class="progress-row">
+        <span class="stat">Round <span id="round-num">1</span> of <span id="round-total">6</span></span>
+        <span class="stat score">Correct: <span id="correct-count">0</span></span>
+      </div>
+      <div class="feedback" id="feedback"></div>
+    </section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Abacus</a>
+      &nbsp;·&nbsp;
+      <a href="lesson-2.html" style="background:linear-gradient(135deg,#d97706,#92400e);color:#fff;padding:8px 22px;border-radius:999px;text-decoration:none;font-weight:800;display:inline-block;margin-top:4px;box-shadow:0 4px 12px rgba(146,64,14,0.3);">Next: Read the Soroban →</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy" style="color:#78350f;">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    import { showBuddy, initSideCharacter } from '../../js/characters.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const ABACUS_BUDDIES = ['edam','steve','james','diego','rita','sam','william','gosia'];
+    const pickBuddy = () => ABACUS_BUDDIES[Math.floor(Math.random() * ABACUS_BUDDIES.length)];
+    initSideCharacter(pickBuddy(), '../../');
+
+    // Cheer (or commiserate) with a random buddy each time the user checks.
+    document.getElementById('check-btn').addEventListener('click', () => {
+      // Re-read the soroban value and compare to current target.
+      const target = parseInt(document.getElementById('target').textContent.replace(/[^0-9]/g, ''), 10);
+      const readout = parseInt(document.getElementById('readout').textContent.replace(/[^0-9]/g, ''), 10);
+      const ok = readout === target;
+      const buddyId = pickBuddy();
+      showBuddy(buddyId, ok ? 'correct' : 'wrong');
+      if (ok) setTimeout(() => initSideCharacter(pickBuddy(), '../../'), 1300);
+    }, true); // capture-phase so it fires alongside the existing handler
+  </script>
+
+  <script>
+    // ─── Build a 5-rod soroban (10,000s, 1,000s, 100s, 10s, 1s) ─────────────
+    const NUM_RODS = 5;
+    const ROD_LABELS = ['10,000s', '1,000s', '100s', '10s', '1s'];
+    const rods = [];
+    const rodsEl = document.getElementById('rods');
+
+    for (let r = 0; r < NUM_RODS; r++) {
+      const rodEl = document.createElement('div');
+      rodEl.className = 'rod';
+
+      const stem = document.createElement('div');
+      stem.className = 'rod-stem';
+      rodEl.appendChild(stem);
+
+      const heaven = document.createElement('div');
+      heaven.className = 'heaven';
+      const heavenBead = document.createElement('div');
+      heavenBead.className = 'bead';
+      heavenBead.dataset.rod = r;
+      heavenBead.dataset.role = 'heaven';
+      heaven.appendChild(heavenBead);
+      rodEl.appendChild(heaven);
+
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      rodEl.appendChild(bar);
+
+      const earth = document.createElement('div');
+      earth.className = 'earth';
+      const earthBeads = [];
+      for (let i = 0; i < 4; i++) {
+        const eb = document.createElement('div');
+        eb.className = 'bead';
+        eb.dataset.rod = r;
+        eb.dataset.role = 'earth';
+        eb.dataset.idx = i; // 0 = top-most earth bead, 3 = bottom
+        earth.appendChild(eb);
+        earthBeads.push(eb);
+      }
+      rodEl.appendChild(earth);
+
+      const label = document.createElement('div');
+      label.className = 'rod-label';
+      label.textContent = ROD_LABELS[r];
+      rodEl.appendChild(label);
+
+      rodsEl.appendChild(rodEl);
+
+      rods.push({ heavenBead, earthBeads, heavenActive: false, earthCount: 0 });
+    }
+
+    // ─── Bead click handlers — natural soroban physics ─────────────────────
+    // Heaven bead toggles between “up” (zero) and “down at the bar” (5).
+    // Earth beads: clicking the n-th bead from the bar pushes the top n beads
+    // up to the bar (or, if all those beads are already up, pulls them down).
+    function setRod(r, heavenActive, earthCount) {
+      const { heavenBead, earthBeads } = rods[r];
+      rods[r].heavenActive = heavenActive;
+      rods[r].earthCount   = earthCount;
+      heavenBead.classList.toggle('active', heavenActive);
+      // earth beads: index 3 = bottom bead, index 0 = top-most.
+      // earthCount = number that should touch the bar (from the top).
+      // The TOP earthCount beads (indices 0..earthCount-1) move up.
+      earthBeads.forEach((b, i) => {
+        const shouldActivate = i < earthCount;
+        b.classList.toggle('active', shouldActivate);
+        // Stack effect: each "active" bead nudges up
+        if (shouldActivate) {
+          // Distance from the bottom: bead i sits at height i*30 below the bar
+          // when active. Use translateY = -(rest distance).
+          const rest = (3 - i) * 30; // px each bead lifts to touch the bar
+          b.style.transform = `translateY(-${rest}px)`;
+        } else {
+          b.style.transform = '';
+        }
+      });
+      updateReadout();
+    }
+
+    rods.forEach((rod, r) => {
+      // Heaven bead toggles
+      rod.heavenBead.addEventListener('click', () => {
+        setRod(r, !rod.heavenActive, rod.earthCount);
+      });
+      // Each earth bead click sets that many to be "up"
+      rod.earthBeads.forEach((b, i) => {
+        b.addEventListener('click', () => {
+          // i goes 0 (top-most) to 3 (bottom). Click on bead i means we want
+          // earthCount = (4 - i) beads to be up. If already that count, pull
+          // back to (4 - i - 1) — toggle behavior.
+          const desired = 4 - i;
+          const next = (rod.earthCount === desired) ? desired - 1 : desired;
+          setRod(r, rod.heavenActive, next);
+        });
+      });
+    });
+
+    function updateReadout() {
+      let total = 0;
+      rods.forEach((rod, r) => {
+        const placeValue = Math.pow(10, NUM_RODS - 1 - r);
+        const digit = (rod.heavenActive ? 5 : 0) + rod.earthCount;
+        total += digit * placeValue;
+      });
+      document.getElementById('readout').textContent = total.toLocaleString();
+      return total;
+    }
+
+    function clearSoroban() { rods.forEach((_, r) => setRod(r, false, 0)); }
+
+    // ─── Practice challenges ──────────────────────────────────────────────
+    const CHALLENGES = [3, 7, 12, 25, 49, 86];
+    let challengeIdx = 0;
+    let correctCount = 0;
+    document.getElementById('round-total').textContent = CHALLENGES.length;
+
+    function showChallenge() {
+      document.getElementById('target').textContent = CHALLENGES[challengeIdx];
+      document.getElementById('round-num').textContent = challengeIdx + 1;
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('feedback').className = 'feedback';
+      clearSoroban();
+    }
+
+    document.getElementById('check-btn').addEventListener('click', () => {
+      const total = updateReadout();
+      const target = CHALLENGES[challengeIdx];
+      const fb = document.getElementById('feedback');
+      if (total === target) {
+        correctCount++;
+        document.getElementById('correct-count').textContent = correctCount;
+        fb.textContent = `🎉 Correct! ${target} is shown perfectly on the soroban.`;
+        fb.className = 'feedback right';
+        challengeIdx++;
+        if (challengeIdx >= CHALLENGES.length) {
+          fb.textContent = `🏆 Practice complete! ${correctCount} of ${CHALLENGES.length} correct. Try Lesson 2 next.`;
+          return;
+        }
+        setTimeout(showChallenge, 1200);
+      } else {
+        fb.textContent = `Not quite — your soroban shows ${total.toLocaleString()}, but the target is ${target.toLocaleString()}. Try again.`;
+        fb.className = 'feedback wrong';
+      }
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      clearSoroban();
+      document.getElementById('feedback').textContent = '';
+    });
+
+    document.getElementById('hint-btn').addEventListener('click', () => {
+      const target = CHALLENGES[challengeIdx];
+      const fb = document.getElementById('feedback');
+      // Walk through digits left-to-right
+      const padded = target.toString().padStart(NUM_RODS, '0');
+      const parts = [];
+      for (let r = 0; r < NUM_RODS; r++) {
+        const d = parseInt(padded[r], 10);
+        if (d === 0) continue;
+        const heaven = d >= 5 ? 1 : 0;
+        const earth = d - heaven * 5;
+        parts.push(`${ROD_LABELS[r]}: ${heaven ? '5 (heaven)' : ''}${heaven && earth ? ' + ' : ''}${earth ? earth + ' (earth)' : ''} = ${d}`);
+      }
+      fb.textContent = '💡 ' + parts.join('  •  ');
+      fb.className = 'feedback';
+    });
+
+    // Initialize
+    showChallenge();
+  </script>
+</body>
+</html>

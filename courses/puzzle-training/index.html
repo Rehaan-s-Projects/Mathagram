@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle Training — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo">
+        <img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../courses.html">Courses</a>
+        <a href="../../learning-post.html">Posts</a>
+        <a href="../../login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Puzzle Training</h1>
+    <p>🧩 Learn jigsaw puzzles from your first 4-piece wooden board up to a 5,000-piece marathon. Edge strategy, color sorting, sky-handling, brand picks, and the canonical 1,000-piece adult puzzle — plus specialty puzzles (Wasgij, Krypt, 3D) and World Jigsaw Puzzle Championship speed-solving. 186 lessons across 15 units.</p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const units = [
+      [1,'Puzzle Foundations',['What Is a Jigsaw Puzzle?','A Brief History — John Spilsbury 1762','Anatomy of a Piece','Knobs (Tabs) vs Blanks (Sockets)','Edge vs Interior Pieces','Corner Pieces — Two Flat Sides','Reading the Box — Count, Size, Brand','Image vs Pattern Difficulty','Materials — Cardboard, Wood, Foam','Brands Overview — Ravensburger, Buffalo, Springbok','Setting Up Your Workspace','Foundations Checkpoint']],
+      [2,'4–12 Piece Beginner',['Toddler Wooden Puzzles','4-Piece Animal Puzzles','6-Piece Shape Puzzles','9-Piece Big-Picture Puzzles','12-Piece Board Puzzles','Picture-Matching Skills','Color Recognition','Frame-First (Outside-In)','Image-First (Inside-Out)','Reading the Box — Kid Edition','Storing Wooden Puzzles','Beginner Checkpoint']],
+      [3,'24–48 Piece Early Practice',['Jumping to 24 Pieces','24-Piece Strategy','Reading Color Clusters','Edge First — Building the Frame','Light vs Dark Sections','48-Piece Step-Up','Sorting Pieces Face-Up','Tracking Time on a Puzzle','Working with a Friend','Common 24–48 Mistakes','When to Walk Away & Come Back','Early Practice Checkpoint']],
+      [4,'100-Piece Puzzles',['The 100-Piece Milestone','Box Layout & Image Reference','Edges First — Always','Sorting by Color (3–4 Piles)','Identifying Distinct Features','Building Color Clusters','Connecting Clusters to Edges','Handling Sky / Background','Common 100-Piece Pitfalls','Average Solve Time at 100','Saving a Finished Puzzle','100-Piece Checkpoint']],
+      [5,'Edge & Corner Strategy',['Finding All 4 Corners First','Separating Edge Pieces','Sorting Edges by Color','Building Top vs Bottom Frame','The Closing-Frame Move','When You\'re Short an Edge','When You\'re "Long" an Edge — Recount','Diagonal Frames','Border-Only Puzzles','Edges on Round Puzzles','Edges on Shaped Puzzles','Edge Strategy Checkpoint']],
+      [6,'Color Sorting Techniques',['Setting Up Sort Trays','Sort by Dominant Color','Sort by Hue Family','Sort by Tonal Value (Light/Dark)','The "Looks Like Sky" Pile','The "Looks Like Grass" Pile','Saturated vs Muted','Pattern Sorts — Stripes, Dots','Edge Pieces — Separate Track','Hard-to-Sort — The Holding Pile','Photographing Sort Layouts','Color Sorting Checkpoint']],
+      [7,'250-Piece Puzzles',['Why 250 Pieces?','250-Piece Layout Strategy','Sorting into 6–8 Piles','Distinguishing Similar Colors','Working in Sub-Sections','Connecting Sub-Sections','Skipping the Hardest Section','Color-Block vs Detail-Block','Average Solve Time at 250','Family-Friendly 250s','Travel-Friendly 250s','250-Piece Checkpoint']],
+      [8,'500-Piece Puzzles',['The Workspace Upgrade','Mat or Board for Storage','Box-Lid Sorting Trays','Sorting Into 8–12 Piles','The Sky-First Approach','Distinct Features First','Saving Your Spot Mid-Build','Lighting for Long Sessions','Sessions vs Marathons','Average Solve Time at 500','Group Building at 500','500-Piece Checkpoint']],
+      [9,'750-Piece Puzzles',['Why Choose 750?','The 750 Sweet Spot','Sorting at 750','Color-Block by Color-Block','Patterned Areas — Strategy','Identifying Outliers Quickly','Common Layout Tricks','Photo Reference Strategy','Average Solve Time at 750','Storing Half-Done 750s','Brand Quality at 750','750-Piece Checkpoint']],
+      [10,'1,000-Piece Puzzles',['The 1,000-Piece Adult Standard','Choosing Your First 1,000','The Workspace at 1,000','Sorting 1,000 Pieces — 10–15 Piles','The 30-Minute Sort Rule','Edge Frame at 1,000','Tackling the Sky','Tackling Repetitive Patterns','Detail Areas First','Color-Wheel Sorts','The "Looks Different" Pile','Sessions Over Days','Saving Mid-Build Cleanly','Average 1,000-Piece Solve Time','1,000-Piece Checkpoint']],
+      [11,'1,500-Piece Puzzles',['Why 1,500?','Sorting at 1,500','Frame Strategy at 1,500','Image Selection Matters','Brands Doing 1,500s Well','Workspace Requirements','Multi-Day Strategy','Tracking Progress','Lighting for Detail Work','Eye Strain & Breaks','Average Solve Time at 1,500','1,500-Piece Checkpoint']],
+      [12,'2,000-Piece Puzzles',['2,000 — The Marathon Tier','The 1×2 Metre Workspace','Sorting at 2,000','Section-by-Section Method','Identifying "Unique" Pieces','Sky Strategies at 2,000','Photo-Realistic 2,000s','Famous 2,000-Piece Series','Multi-Week Builds','Group Builds at 2,000','Average Solve Time at 2,000','2,000-Piece Checkpoint']],
+      [13,'3,000–5,000 Piece Marathons',['Why People Do Mega Puzzles','3,000-Piece Strategy','4,000-Piece Strategy','5,000-Piece Strategy','9,000+ Famous Puzzles','The 18,000-Piece Beast','The 40,320-Piece Disney','The 54,000-Piece World Record','Storage of Mega Puzzles','Photographing Mega Puzzles','Displaying & Framing','Marathons Checkpoint']],
+      [14,'Specialty Puzzles',['Wasgij — The Mystery Puzzle','"Krypt" — All-One-Colour Puzzles','Double-Sided Puzzles','3D Puzzles','Globe Puzzles','Shaped Puzzles — Round & Star','Glow-in-the-Dark Puzzles','Wooden Stave Puzzles','Liberty Wood Puzzles','Custom Photo Puzzles','Difficult Theme — Stars & Galaxies','Specialty Checkpoint']],
+      [15,'Speed & Competition',['World Jigsaw Puzzle Championship','WJPC Format','Speed-Solving Techniques','Two-Hand Method','Memorisation Tricks','Famous Speed Solvers','Tetiana Lyubchenko — World Champion','WJPC Records','Online Apps — Jigsaw Explorer & Puzzly','Solo vs Team Speed','Training for WJPC','Best Practice Puzzles','Mental Stamina','Joining Online Communities','Speed & Competition Checkpoint']],
+    ];
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({ id: 'puz-' + n, title: t, href: '#', unit: u, unitName: name, category: 'others', checkpoint: i === titles.length - 1 });
+    if (lessons[0]) lessons[0].href = 'lesson-1.html';
+      });
+    });
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('puzzle-training');
+      renderPath(container, lessons, completed);
+      onAuthChange(async (user) => {
+        completed = await getCompletedLessons('puzzle-training');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

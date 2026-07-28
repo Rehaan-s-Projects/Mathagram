@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where's Waldo — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/learning-path.css">
+  <style>
+    .course-header { padding: 80px 24px 24px; text-align: center; }
+    .course-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; }
+    .course-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .course-header p { font-size: 1rem; color: var(--color-text-secondary); max-width: 720px; margin: 0 auto; line-height: 1.6; }
+    @media (max-width: 768px) { .course-header h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+  <header class="course-header">
+    <span class="course-badge" style="background:var(--color-others)">Others</span>
+    <h1>Where's Waldo</h1>
+    <p>🔍 The world's most famous striped-shirt traveler. Find Waldo (Wally in the UK) — and his friends Wenda, Wizard Whitebeard, Odlaw, and Woof — across all four classic Martin Handford books, page by page. Beachfronts, museums, train stations, ski slopes, the Stone Age, Egyptians, Romans, Vikings, Gobbling Gluttons, Battling Monks, Underwater Wars, the Land of Waldos, Robin Hood, swordfights, science-fiction sets, and the Hollywood future. <strong>4 units · 262 pages.</strong></p>
+  </header>
+  <div id="learning-path" class="path-container"></div>
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    import { renderPath, getCompletedLessons } from '../../js/learning-path.js';
+    import { onAuthChange } from '../../js/auth.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 📖 Each "unit" is one of the four original Where's Waldo books by Martin Handford.
+    // Each "lesson" is one page of that book — you find Waldo page by page.
+    const UNITS_CONFIG = [
+      { name: "Where's Waldo? (1987)",                pages: 172 },
+      { name: "Where's Waldo Now? (1988)",            pages:  32 },
+      { name: "The Great Waldo Search (1989)",        pages:  26 },
+      { name: "Where's Waldo in Hollywood (1993)",    pages:  32 }
+    ];
+
+    const units = UNITS_CONFIG.map((cfg, idx) => {
+      const lessons = [];
+      for (let j = 1; j <= cfg.pages; j++) lessons.push(`Page ${j}`);
+      return [idx + 1, cfg.name, lessons];
+    });
+
+    // Playable lesson pages: n -> filename. Pages without an entry stay as
+    // catalog placeholders ('#') until a real find-Waldo game is built for them.
+    // Page 1 of Book 1 (n=1) is the first interactive find-Waldo scene.
+    const playable = { 1: 'lesson-1.html' };
+
+    let n = 0;
+    const lessons = [];
+    units.forEach(([u, name, titles]) => {
+      titles.forEach((t, i) => {
+        n++;
+        lessons.push({
+          id: 'ww-' + n,
+          title: t,
+          href: playable[n] || '#',
+          unit: u,
+          unitName: name,
+          unitLabel: 'Book',
+          category: 'others',
+          checkpoint: i === titles.length - 1
+        });
+      });
+    });
+
+    async function loadPath() {
+      const container = document.getElementById('learning-path');
+      let completed = await getCompletedLessons('wheres-waldo');
+      renderPath(container, lessons, completed);
+      onAuthChange(async () => {
+        completed = await getCompletedLessons('wheres-waldo');
+        renderPath(container, lessons, completed);
+      });
+    }
+    loadPath();
+  </script>
+</body>
+</html>

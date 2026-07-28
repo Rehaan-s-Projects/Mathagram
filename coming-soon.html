@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon — More Brain Puzzles — Mathagram</title>
+  <meta name="description" content="More brain puzzles are coming to Mathagram — Water Sort, mazes, logic grids, sliding tiles and more. Soon on Google Play Store and IntelligentBucks.">
+  <link rel="icon" href="assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .cs-header {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      padding: 64px 24px 88px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .cs-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -40px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .cs-header::after {
+      content: '';
+      position: absolute;
+      bottom: -70px; left: -30px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .cs-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #fff;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .cs-header h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 10px; position: relative; }
+    .cs-header p { font-size: 1.05rem; opacity: 0.92; max-width: 560px; margin: 0 auto; line-height: 1.6; position: relative; }
+    @media (max-width: 768px) { .cs-header h1 { font-size: 1.9rem; } }
+
+    .cs-container { max-width: 960px; margin: -48px auto 56px; padding: 0 24px; position: relative; }
+
+    .cs-section-label {
+      text-align: center;
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--color-primary-dark);
+      margin: 40px 0 18px;
+    }
+
+    .cs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+    }
+    .cs-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 22px 20px;
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cs-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .cs-card .cs-icon {
+      font-size: 2rem; line-height: 1; margin-bottom: 10px; display: block;
+    }
+    .cs-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; color: var(--color-text); }
+    .cs-card p { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; }
+    .cs-soon {
+      position: absolute; top: 14px; right: 14px;
+      font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+      color: #7c3aed; background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.25);
+      padding: 3px 8px; border-radius: 999px;
+    }
+
+    .cs-stores {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 32px 28px;
+      text-align: center;
+      margin-top: 32px;
+    }
+    .cs-stores h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+    .cs-stores > p { font-size: 0.95rem; color: var(--color-text-secondary); max-width: 520px; margin: 0 auto 22px; line-height: 1.6; }
+    .cs-store-badges { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+    .cs-store-pill {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #0f172a; color: #fff;
+      border-radius: 12px; padding: 12px 20px;
+      font-weight: 700; font-size: 0.95rem;
+      position: relative; cursor: default;
+    }
+    .cs-store-pill .cs-store-emoji { font-size: 1.4rem; }
+    .cs-store-pill .cs-store-logo {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: #fff; padding: 3px; object-fit: contain; display: block;
+    }
+    .cs-store-pill .cs-store-sub { display: block; font-size: 0.65rem; font-weight: 500; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
+    .cs-store-pill .cs-store-main { display: block; line-height: 1.1; }
+    .cs-store-pill .cs-store-eta { display: block; margin-top: 3px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-primary); }
+    .cs-store-pill::after {
+      content: 'Soon'; position: absolute; top: -8px; right: -8px;
+      font-size: 0.55rem; font-weight: 800; text-transform: uppercase;
+      background: var(--color-primary); color: #06251f;
+      padding: 2px 7px; border-radius: 999px;
+    }
+
+    .cs-note { text-align: center; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 22px; }
+    .cs-cta { text-align: center; margin-top: 30px; }
+    .cs-cta a { margin: 0 6px; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="assets/lighthouse/logo.svg" alt="" width="32" height="32">
+        <span>Mathagram</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Courses</a>
+        <a href="learning-post.html">Posts</a>
+        <a href="login.html" data-auth="login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="cs-header">
+    <span class="cs-badge">🚧 Coming Soon</span>
+    <h1>More Brain Puzzles Are On the Way</h1>
+    <p>We're building dozens of new brain-puzzle games for Mathagram — and bringing them to more places to play. Here's a sneak peek at what's coming.</p>
+  </header>
+
+  <div class="cs-container">
+    <div class="cs-section-label">Upcoming Puzzle Packs</div>
+    <div class="cs-grid">
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🧪</span><h3>Water Sort</h3><p>Pour and sort the colors until every tube is pure.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🔧</span><h3>Pipe Connect</h3><p>Rotate the pipes to complete the flow, corner to corner.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🌀</span><h3>Maze Puzzles</h3><p>Find the one path out of ever-twistier labyrinths.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🧩</span><h3>Sliding Tiles</h3><p>Slide the scrambled tiles back into perfect order.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🔺</span><h3>Tangram &amp; Shapes</h3><p>Fit every piece to build the target silhouette.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🧠</span><h3>Logic Grids</h3><p>Cross-reference the clues to crack the whole grid.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🔍</span><h3>Spot the Difference</h3><p>Train your eye to catch every hidden change.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">👁️</span><h3>Optical Illusions</h3><p>Puzzles that trick the eye and stretch the mind.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🚪</span><h3>Escape Rooms</h3><p>Find the keys, beat the locks, and get out.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🔢</span><h3>Number Puzzles</h3><p>Sudoku, magic squares, and numeric brain-benders.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">💡</span><h3>Riddles &amp; Lateral Thinking</h3><p>Sideways puzzles where the obvious answer is wrong.</p></div>
+      <div class="cs-card"><span class="cs-soon">Soon</span><span class="cs-icon">🎓</span><h3>IQ Test Puzzles</h3><p>Pattern, sequence, and reasoning challenges.</p></div>
+    </div>
+
+    <div class="cs-stores">
+      <h2>Play Everywhere — Soon</h2>
+      <p>Mathagram's brain puzzles are coming beyond the web. Look for them on these platforms in the near future:</p>
+      <div class="cs-store-badges">
+        <span class="cs-store-pill">
+          <svg class="cs-store-logo" viewBox="0 0 512 512" role="img" aria-label="Google Play" width="30" height="30">
+            <path fill="#00d3ff" d="M47 30C42 34 39 41 39 51v410c0 10 3 17 8 21l2 2 230-230v-5L49 29z"/>
+            <path fill="#ffce00" d="M355 335l-77-77v-5l77-77 2 1 91 52c26 15 26 39 0 54l-91 52z"/>
+            <path fill="#ff3b30" d="M357 334l-79-79L47 486c9 9 23 10 39 1z"/>
+            <path fill="#00e676" d="M357 178L86 25c-16-9-30-8-39 1l231 231z"/>
+          </svg>
+          <span><span class="cs-store-sub">Get it on</span><span class="cs-store-main">Google Play Store</span><span class="cs-store-eta">Early 2027</span></span>
+        </span>
+        <span class="cs-store-pill">
+          <img src="assets/stores/intelligentbucks.jpg" alt="IntelligentBucks logo" class="cs-store-logo" width="30" height="30">
+          <span><span class="cs-store-sub">Available on</span><span class="cs-store-main">IntelligentBucks</span></span>
+        </span>
+      </div>
+      <p class="cs-note">Store availability is not live yet — these are planned releases. Names shown for reference only.</p>
+    </div>
+
+    <div class="cs-cta">
+      <a href="courses/brain-puzzles/index.html" class="btn btn-primary">Play Brain Puzzles Now</a>
+      <a href="/" class="btn btn-outline">Back to Courses</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="school.html">Virtual School</a>
+        <a href="help.html">Help</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://linktr.ee/Rehaan_rashid">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved. Built by Rehaan Rashid</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initNav } from './js/nav.js';
+    initNav('./');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

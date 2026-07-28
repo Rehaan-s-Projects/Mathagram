@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is Machine Learning? — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    /* Brilliant-style light quiz — clean whites, soft borders, teal accents */
+    body { background: #f8fafc; color: #0f172a; }
+    .quiz-page { max-width: 760px; margin: 0 auto; padding: 64px 16px 96px; }
+    .quiz-header { text-align: center; margin-bottom: 28px; }
+    .quiz-badge {
+      display: inline-block; padding: 4px 14px;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: #fff; border-radius: 999px;
+      margin-bottom: 12px;
+      background: #00b89f;
+    }
+    .quiz-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; color: #0f172a; }
+    .quiz-header p { color: #64748b; max-width: 560px; margin: 4px auto 0; line-height: 1.6; }
+
+    .progress-bar {
+      height: 8px; background: #e5e7eb;
+      border-radius: 999px; overflow: hidden; margin-bottom: 22px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00e5c8, #00b89f);
+      transition: width 0.4s ease;
+    }
+
+    .qcard {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .qprogress {
+      font-size: 0.74rem; color: #94a3b8;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .qtitle {
+      font-size: 1.2rem; font-weight: 700; line-height: 1.5;
+      margin: 0 0 22px; color: #0f172a;
+    }
+    .qopts { display: flex; flex-direction: column; gap: 10px; }
+    .qopt {
+      padding: 14px 18px;
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer; transition: all 0.15s ease;
+      font-family: inherit; font-size: 0.95rem;
+      color: #1f2937;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .qopt:hover:not(:disabled) {
+      border-color: #00b89f;
+      background: #f0fdfa;
+    }
+    .qopt:disabled { cursor: default; }
+    .qopt.correct {
+      border-color: #22c55e;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 600;
+    }
+    .qopt.wrong {
+      border-color: #ef4444;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    .qexplain {
+      margin-top: 16px; padding: 14px 18px;
+      border-radius: 12px; font-size: 0.92rem; line-height: 1.6;
+      display: none;
+    }
+    .qexplain.show { display: block; }
+    .qexplain.correct {
+      background: #ecfdf5; color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+    .qexplain.wrong {
+      background: #fef2f2; color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+    .qactions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+    .qbtn {
+      padding: 11px 26px; border-radius: 12px;
+      font-weight: 800; font-size: 0.95rem;
+      cursor: pointer; font-family: inherit;
+      border: none; transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .qbtn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 184, 159, 0.25);
+    }
+    .qbtn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+    .qbtn.primary {
+      background: linear-gradient(135deg, #00e5c8, #00b89f);
+      color: #fff;
+    }
+    .qbtn.secondary {
+      background: #fff;
+      color: #1f2937;
+      border: 1.5px solid #e2e8f0;
+    }
+    .qbtn.secondary:hover:not(:disabled) {
+      border-color: #00b89f;
+      color: #0f766e;
+      box-shadow: none;
+    }
+
+    .summary {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-top: 4px solid #00b89f;
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    }
+    .summary h2 {
+      font-size: 1.6rem; font-weight: 800;
+      margin: 0 0 8px; color: #0f172a;
+    }
+    .summary .score {
+      font-size: 2.8rem; font-weight: 800;
+      margin: 14px 0; color: #00b89f;
+      font-variant-numeric: tabular-nums;
+    }
+    .summary .score small { font-size: 1.1rem; color: #94a3b8; font-weight: 500; }
+    .summary p { color: #475569; line-height: 1.6; max-width: 480px; margin: 8px auto 16px; }
+    .summary .actions { display: flex; gap: 10px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+    .summary a, .summary button { text-decoration: none; display: inline-block; }
+
+    .footer-nav { text-align: center; margin-top: 32px; }
+    .footer-nav a { color: #0f766e; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+    .footer-nav a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="quiz-page">
+    <header class="quiz-header">
+      <span class="quiz-badge">Clustering &amp; Classification · Unit 1 · Lesson 1</span>
+      <h1>What is Machine Learning?</h1>
+      <p>Eight quick questions to anchor the core idea of ML. Pick the best answer — you'll see the explanation immediately.</p>
+    </header>
+
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width: 12.5%"></div></div>
+
+    <section id="qcard" class="qcard"></section>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to course</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    const QUESTIONS = [
+      {
+        q: "Which of these is the best definition of machine learning?",
+        opts: [
+          "Edam (The Bear): \"Hand-coding every rule a computer should follow.\"",
+          "Diego (The Researcher): \"A field where computers learn patterns from data instead of being programmed with explicit rules.\"",
+          "James (The Strong Man): \"A way to make computers run faster — crush it!\"",
+          "William (The Old Man): \"A subfield of databases focused on storage.\""
+        ],
+        correct: 1,
+        explain: {
+          ok: "Right. Diego nails it — ML is about learning patterns from examples. The rules emerge from the data, instead of being explicitly written by a programmer.",
+          no: "Listen to Diego the Researcher: ML is the discipline where models learn from data. Instead of writing if/else rules by hand, you show the model examples and it figures out the pattern."
+        }
+      },
+      {
+        q: "In TRADITIONAL programming you write rules; in MACHINE LEARNING you provide:",
+        opts: [
+          "Steve (The Fox): \"A faster CPU — sly move!\"",
+          "Rita (The Cat): \"A different programming language. Purrfect!\"",
+          "Diego (The Researcher): \"Examples (data) and a target — and the model learns the rule.\"",
+          "Sam (The Kid): \"More memory! Woohoo!\""
+        ],
+        correct: 2,
+        explain: {
+          ok: "Exactly — Diego's right. Traditional code: rules + data → answers. ML: data + answers → rules.",
+          no: "Diego had it: in traditional programming you give rules and data and get answers; in ML you give data and answers (labels) and the model learns the rules."
+        }
+      },
+      {
+        q: "Predicting house prices from features like square footage, bedrooms, and location is an example of:",
+        opts: [
+          "Gosia (The Girl): \"Classification — amazing work!\"",
+          "William (The Old Man): \"Regression, scholar.\"",
+          "James (The Strong Man): \"Clustering!\"",
+          "Steve (The Fox): \"Reinforcement learning — sly move!\""
+        ],
+        correct: 1,
+        explain: {
+          ok: "Yes — well done, scholar. William's right: predicting a continuous numeric value, like a price, is regression.",
+          no: "William called it: predicting a continuous number (price, temperature, weight) is regression. Classification predicts a category; clustering finds groups without labels."
+        }
+      },
+      {
+        q: "Why do we usually split data into a TRAINING set and a TEST set?",
+        opts: [
+          "Edam (The Bear): \"To use less memory — you got this!\"",
+          "Diego (The Researcher): \"Training data is for learning; test data measures how well the model handles unseen examples.\"",
+          "Rita (The Cat): \"Because the algorithm only works on small data. Purrfect!\"",
+          "Sam (The Kid): \"Test data is just a backup of training data — woohoo!\""
+        ],
+        correct: 1,
+        explain: {
+          ok: "Right. Diego's the researcher for a reason — test data is held out so we can estimate how the model will perform on data it has never seen. That's what 'generalization' means.",
+          no: "Diego had it: the test set is unseen data used to measure generalization. If you only checked accuracy on the training set, you'd just be measuring how well the model memorized."
+        }
+      },
+      {
+        q: "Grouping customers into segments WITHOUT predefined categories — letting the algorithm discover the groups — is:",
+        opts: [
+          "James (The Strong Man): \"Supervised learning — crush it!\"",
+          "Diego (The Researcher): \"Unsupervised learning (clustering).\"",
+          "William (The Old Man): \"Linear regression, scholar.\"",
+          "Steve (The Fox): \"Reinforcement learning — sly move!\""
+        ],
+        correct: 1,
+        explain: {
+          ok: "Correct — Diego knows. Clustering is the textbook unsupervised task: you have no labels, and the algorithm groups similar items together (e.g. K-Means).",
+          no: "Diego had it: when there are no labels and the model finds groups itself, that's unsupervised clustering. Supervised would require predefined categories with labeled examples."
+        }
+      },
+      {
+        q: "A 'feature' in machine learning is:",
+        opts: [
+          "Sam (The Kid): \"The model's prediction — woohoo!\"",
+          "Diego (The Researcher): \"An individual input variable — a column in the data.\"",
+          "Rita (The Cat): \"A type of optimizer. Purrfect!\"",
+          "Gosia (The Girl): \"The loss function — amazing work!\""
+        ],
+        correct: 1,
+        explain: {
+          ok: "Yes. Diego nailed it: features are the inputs the model sees. For predicting price you might have square footage, bedrooms, and zip code as three features.",
+          no: "Listen to Diego: features are the input variables (columns). The model's output is the prediction (or label). Optimizers and loss functions are training mechanics, not features."
+        }
+      },
+      {
+        q: "A 'label' (in supervised learning) is:",
+        opts: [
+          "Steve (The Fox): \"Random noise added to the data — sly move!\"",
+          "William (The Old Man): \"The known correct answer for a training example, scholar.\"",
+          "Edam (The Bear): \"A name for the dataset file — you got this!\"",
+          "James (The Strong Man): \"The number of features — crush it!\""
+        ],
+        correct: 1,
+        explain: {
+          ok: "Right — well done, scholar. William's correct: the label is the ground-truth answer, what the model is trying to predict. Supervised learning needs labeled examples to train.",
+          no: "William had it: a label is the known correct answer attached to each training example. Without labels, you can't do supervised learning at all."
+        }
+      },
+      {
+        q: "A model gets 99% accuracy on training data but only 60% on data it hasn't seen. What's happening?",
+        opts: [
+          "James (The Strong Man): \"The model is perfect — it just needs more compute. Crush it!\"",
+          "Sam (The Kid): \"Underfitting — the model is too simple to learn the data. Woohoo!\"",
+          "Diego (The Researcher): \"Overfitting — the model memorized the training set instead of learning the general pattern.\"",
+          "Gosia (The Girl): \"There's a hardware bug — amazing work!\""
+        ],
+        correct: 2,
+        explain: {
+          ok: "That's Diego's classic signature of overfitting: great on data it has seen, poor on data it hasn't. The model memorized noise instead of learning the underlying rule.",
+          no: "Diego called it: when training accuracy is high but test accuracy is much lower, the model has overfit — it's memorized the training set instead of learning to generalize."
+        }
+      }
+    ];
+
+    const qcard = document.getElementById('qcard');
+    const progressFill = document.getElementById('progress-fill');
+    let idx = 0;
+    let score = 0;
+    let answered = false;
+
+    function render() {
+      const item = QUESTIONS[idx];
+      progressFill.style.width = `${((idx) / QUESTIONS.length) * 100}%`;
+      qcard.innerHTML = `
+        <div class="qprogress">Question ${idx + 1} of ${QUESTIONS.length}</div>
+        <h2 class="qtitle">${item.q}</h2>
+        <div class="qopts" id="qopts"></div>
+        <div class="qexplain" id="qexplain"></div>
+        <div class="qactions">
+          <button id="next-btn" class="qbtn primary" disabled>${idx === QUESTIONS.length - 1 ? 'Finish' : 'Next →'}</button>
+        </div>`;
+      const opts = document.getElementById('qopts');
+      const nextBtn = document.getElementById('next-btn');
+      const explain = document.getElementById('qexplain');
+      answered = false;
+
+      item.opts.forEach((text, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'qopt';
+        btn.type = 'button';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          if (answered) return;
+          answered = true;
+          const allBtns = opts.querySelectorAll('.qopt');
+          allBtns.forEach((b, j) => {
+            b.disabled = true;
+            if (j === item.correct) b.classList.add('correct');
+            if (j === i && i !== item.correct) b.classList.add('wrong');
+          });
+          const isCorrect = i === item.correct;
+          if (isCorrect) score++;
+          explain.className = 'qexplain show ' + (isCorrect ? 'correct' : 'wrong');
+          explain.textContent = isCorrect ? item.explain.ok : item.explain.no;
+          nextBtn.disabled = false;
+        });
+        opts.appendChild(btn);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if (idx < QUESTIONS.length - 1) {
+          idx++;
+          render();
+        } else {
+          finish();
+        }
+      });
+    }
+
+    function finish() {
+      progressFill.style.width = '100%';
+      const pct = Math.round((score / QUESTIONS.length) * 100);
+      const message = pct === 100 ? "Perfect score — you've nailed the foundations." :
+                      pct >= 80  ? "Strong work. The fundamentals are clearly clicking." :
+                      pct >= 60  ? "Solid attempt. Worth re-reading the lesson before moving on." :
+                                   "Keep going — review the lesson and try again.";
+      qcard.outerHTML = `
+        <section class="summary">
+          <h2>Quiz Complete</h2>
+          <div class="score">${score} / ${QUESTIONS.length} <small>(${pct}%)</small></div>
+          <p>${message}</p>
+          <div class="actions">
+            <button id="retry-btn" class="qbtn secondary">Try Again</button>
+            <a class="qbtn primary" href="lesson-2.html">Next Lesson →</a>
+            <a class="qbtn secondary" href="index.html">Back to Course</a>
+          </div>
+        </section>`;
+      document.getElementById('retry-btn').addEventListener('click', () => location.reload());
+    }
+
+    render();
+  </script>
+</body>
+</html>

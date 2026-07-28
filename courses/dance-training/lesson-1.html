@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Just Dance — Camera Lesson — Dance Training</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <style>
+    body { background: #0a0420; color: #f1f5f9; }
+    .lesson-page { max-width: 1100px; margin: 0 auto; padding: 64px 16px 96px; }
+    .lesson-header { text-align: center; margin-bottom: 24px; }
+    .lesson-badge { display: inline-block; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; border-radius: 999px; margin-bottom: 12px; background: linear-gradient(90deg, #ec4899, #8b5cf6); }
+    .lesson-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; background: linear-gradient(90deg, #fb7185, #c4b5fd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lesson-header p { color: #cbd5e1; max-width: 720px; margin: 4px auto 0; line-height: 1.55; }
+
+    .stage { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1000px; margin: 0 auto 24px; }
+    @media (max-width: 880px) { .stage { grid-template-columns: 1fr; } }
+
+    .panel { background: rgba(15,23,42,0.7); border: 2px solid rgba(139,92,246,0.35); border-radius: 18px; overflow: hidden; position: relative; box-shadow: 0 10px 40px rgba(139,92,246,0.15); }
+    .panel-label { position: absolute; top: 10px; left: 12px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800; color: #fff; background: rgba(0,0,0,0.55); padding: 4px 10px; border-radius: 999px; z-index: 10; }
+
+    /* Camera (mirror) */
+    #cam-wrap { aspect-ratio: 4/3; background: #0f172a; position: relative; }
+    #cam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+    #cam.off { display: none; }
+    .cam-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; padding: 20px; text-align: center; }
+    .cam-overlay.hidden { display: none; }
+    .cam-overlay h3 { margin: 0 0 8px; font-size: 1.2rem; }
+    .cam-overlay p { color: #cbd5e1; max-width: 320px; margin: 0 0 14px; line-height: 1.5; font-size: 0.92rem; }
+    .cam-msg { position: absolute; bottom: 12px; left: 12px; right: 12px; padding: 8px 14px; background: rgba(0,0,0,0.6); border-radius: 10px; color: #fde047; font-weight: 700; font-size: 0.85rem; text-align: center; pointer-events: none; }
+
+    /* Move demo panel */
+    #demo-wrap { aspect-ratio: 4/3; background: linear-gradient(135deg, #1e1b4b, #4c1d95); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; }
+    .demo-emoji { font-size: 8rem; line-height: 1; transition: transform 0.2s; user-select: none; }
+    .demo-emoji.bump { animation: demo-bump 0.4s ease; }
+    @keyframes demo-bump { 0% { transform: scale(1); } 50% { transform: scale(1.25) rotate(-8deg); } 100% { transform: scale(1) rotate(0); } }
+    .demo-move-name { margin-top: 14px; font-size: 1.4rem; font-weight: 800; color: #fff; text-align: center; }
+    .demo-instruction { margin-top: 6px; color: #fbcfe8; font-size: 0.95rem; text-align: center; max-width: 320px; line-height: 1.4; }
+
+    /* Beat indicator + score row */
+    .beat-bar { display: flex; gap: 8px; justify-content: center; margin: 0 auto 14px; max-width: 760px; }
+    .beat-dot { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: all 0.15s; }
+    .beat-dot.on { background: #fde047; box-shadow: 0 0 14px #fde047; transform: scale(1.4); }
+
+    .score-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 760px; margin: 0 auto 18px; }
+    .score-item { background: rgba(15,23,42,0.7); border: 1px solid rgba(139,92,246,0.3); border-radius: 12px; padding: 12px; text-align: center; }
+    .score-item .lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 4px; }
+    .score-item .val { font-size: 1.5rem; font-weight: 800; color: #fff; }
+    .score-item .val.streak { color: #fde047; }
+
+    .controls { display: flex; gap: 10px; justify-content: center; margin: 18px 0; flex-wrap: wrap; }
+    .btn { padding: 10px 22px; border-radius: 10px; font-weight: 800; font-size: 0.95rem; cursor: pointer; border: none; font-family: inherit; transition: transform 0.1s, opacity 0.2s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: linear-gradient(90deg, #ec4899, #8b5cf6); color: #fff; }
+    .btn.secondary { background: rgba(255,255,255,0.08); color: #fff; }
+    .btn.danger { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .energy-bar-wrap { max-width: 760px; margin: 0 auto 16px; }
+    .energy-bar-wrap .label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; margin-bottom: 4px; text-align: center; }
+    .energy-bar { height: 14px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+    .energy-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #fde047, #f97316, #ef4444); width: 0%; transition: width 0.1s; }
+
+    .toast { position: fixed; left: 50%; top: 80px; transform: translateX(-50%); padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1.4rem; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.4s; z-index: 100; }
+    .toast.show { opacity: 1; transform: translate(-50%, 8px); }
+    .toast.perfect { background: #fde047; color: #1a1a1a; box-shadow: 0 0 30px #fde047; }
+    .toast.good    { background: #22c55e; color: #fff; }
+    .toast.ok      { background: #3b82f6; color: #fff; }
+    .toast.miss    { background: #ef4444; color: #fff; }
+
+    .privacy { max-width: 760px; margin: 0 auto 18px; padding: 12px 18px; background: rgba(34,197,94,0.08); border-left: 3px solid #22c55e; border-radius: 8px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; }
+    .privacy strong { color: #86efac; }
+
+    .footer-nav { text-align: center; margin-top: 32px; }
+    .footer-nav a { color: #c4b5fd; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="container"><a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a><div class="nav-links"><a href="../../courses.html">Courses</a><a href="../../learning-post.html">Posts</a><a href="../../login.html" data-auth="login">Login</a></div></div></nav>
+
+  <main class="lesson-page">
+    <header class="lesson-header">
+      <span class="lesson-badge">Dance Training · Lesson 1 · Just Dance Camera</span>
+      <h1>Just Dance — Camera Calibration & Move Detection</h1>
+      <p>Turn on your webcam and dance along! Match the moves on the right. Your camera measures your <strong>motion energy</strong> — bigger moves on the beat = higher score. <strong>Solo only — your video never leaves your browser.</strong></p>
+    </header>
+
+    <div class="privacy">
+      <strong>Privacy:</strong> Your webcam feed is processed entirely in this browser tab — frames are never uploaded, recorded, or sent to any server. Click <strong>Stop Camera</strong> any time to end access.
+    </div>
+
+    <div class="stage">
+      <section class="panel">
+        <div class="panel-label">📷 Your Camera</div>
+        <div id="cam-wrap">
+          <video id="cam" class="off" autoplay playsinline muted></video>
+          <canvas id="diff-canvas" style="display:none;" width="160" height="120"></canvas>
+          <div id="cam-overlay" class="cam-overlay">
+            <h3>🕺 Ready to dance?</h3>
+            <p>Click <strong>Start Camera</strong> below — we'll ask permission, mirror your video here, and start the routine.</p>
+            <button id="start-cam-btn" class="btn primary">Start Camera</button>
+          </div>
+          <div id="cam-msg" class="cam-msg" style="display:none;"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-label">💃 Follow This</div>
+        <div id="demo-wrap">
+          <div id="demo-emoji" class="demo-emoji">🕺</div>
+          <div id="demo-move-name" class="demo-move-name">Get Ready</div>
+          <div id="demo-instruction" class="demo-instruction">Click "Start Camera" to begin.</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="beat-bar" id="beat-bar"></div>
+
+    <div class="energy-bar-wrap">
+      <div class="label">Your Motion Energy (move bigger = higher!)</div>
+      <div class="energy-bar"><div id="energy-fill" class="energy-fill"></div></div>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-item"><div class="lbl">Beats</div><div class="val" id="beat-num">0 / 32</div></div>
+      <div class="score-item"><div class="lbl">Score</div><div class="val" id="score-num">0</div></div>
+      <div class="score-item"><div class="lbl">Streak</div><div class="val streak" id="streak-num">0</div></div>
+      <div class="score-item"><div class="lbl">Stars</div><div class="val" id="stars-num">☆☆☆</div></div>
+    </div>
+
+    <div class="controls">
+      <button id="play-btn" class="btn primary" disabled>▶ Start Routine</button>
+      <button id="stop-cam-btn" class="btn danger" disabled>⏹ Stop Camera</button>
+      <button id="reset-btn" class="btn secondary">↻ Reset</button>
+    </div>
+
+    <div id="toast" class="toast">PERFECT</div>
+
+    <div class="footer-nav">
+      <a href="index.html">← Back to Dance Training</a>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="year"></span> Mathagram.org — All Rights Reserved.</p></div></footer>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  (function() {
+    // ---- Routine: 8 moves × 4 beats each = 32 beats ----
+    const ROUTINE = [
+      { emoji: '🕺', name: 'Side Step Right', cue: 'Step right, clap. Step right, clap.' },
+      { emoji: '💃', name: 'Side Step Left',  cue: 'Step left, clap. Step left, clap.' },
+      { emoji: '👆', name: 'Point Up',         cue: 'Point at the ceiling on every beat!' },
+      { emoji: '🙌', name: 'Hands Up High',    cue: 'Both hands up, push the sky.' },
+      { emoji: '🫷', name: 'Wave Right',       cue: 'Wave your right arm side-to-side.' },
+      { emoji: '🫸', name: 'Wave Left',        cue: 'Wave your left arm side-to-side.' },
+      { emoji: '🤸', name: 'Spin & Strike',    cue: 'Spin once, then strike a pose!' },
+      { emoji: '🎉', name: 'Free Style',       cue: 'Last 4 beats — go wild!' },
+    ];
+    const BEATS_PER_MOVE = 4;
+    const TOTAL_BEATS = ROUTINE.length * BEATS_PER_MOVE;
+    const BPM = 110; // beats per minute
+    const BEAT_MS = 60000 / BPM;
+
+    // ---- DOM ----
+    const cam = document.getElementById('cam');
+    const camOverlay = document.getElementById('cam-overlay');
+    const startCamBtn = document.getElementById('start-cam-btn');
+    const stopCamBtn = document.getElementById('stop-cam-btn');
+    const playBtn = document.getElementById('play-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const camMsg = document.getElementById('cam-msg');
+    const demoEmoji = document.getElementById('demo-emoji');
+    const demoMoveName = document.getElementById('demo-move-name');
+    const demoInstruction = document.getElementById('demo-instruction');
+    const beatBarEl = document.getElementById('beat-bar');
+    const energyFill = document.getElementById('energy-fill');
+    const beatNum = document.getElementById('beat-num');
+    const scoreNum = document.getElementById('score-num');
+    const streakNum = document.getElementById('streak-num');
+    const starsNum = document.getElementById('stars-num');
+    const toast = document.getElementById('toast');
+    const diffCanvas = document.getElementById('diff-canvas');
+    const dctx = diffCanvas.getContext('2d');
+
+    // ---- State ----
+    let stream = null;
+    let beat = 0;
+    let score = 0;
+    let streak = 0;
+    let routineHandle = null;
+    let prevFrame = null;
+    let currentEnergy = 0;
+    let peakEnergy = 0;
+    let routinePlaying = false;
+
+    // Build beat dots (8 visible, representing the current measure)
+    function buildBeatBar() {
+      beatBarEl.innerHTML = '';
+      for (let i = 0; i < BEATS_PER_MOVE; i++) {
+        const d = document.createElement('div');
+        d.className = 'beat-dot';
+        beatBarEl.appendChild(d);
+      }
+    }
+    buildBeatBar();
+
+    function setCamMsg(msg) {
+      if (!msg) { camMsg.style.display = 'none'; return; }
+      camMsg.textContent = msg;
+      camMsg.style.display = 'block';
+    }
+
+    function setStars(s) {
+      starsNum.textContent = '★'.repeat(s) + '☆'.repeat(3 - s);
+    }
+
+    function showToast(kind, text) {
+      toast.className = 'toast show ' + kind;
+      toast.textContent = text;
+      setTimeout(() => toast.classList.remove('show'), 700);
+    }
+
+    function setMove(idx) {
+      const m = ROUTINE[idx];
+      demoEmoji.textContent = m.emoji;
+      demoMoveName.textContent = m.name;
+      demoInstruction.textContent = m.cue;
+    }
+
+    // ---- Camera control ----
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+          audio: false,
+        });
+        cam.srcObject = stream;
+        cam.classList.remove('off');
+        camOverlay.classList.add('hidden');
+        playBtn.disabled = false;
+        stopCamBtn.disabled = false;
+        setCamMsg('Camera ready. Press ▶ Start Routine.');
+        // Begin sampling motion energy
+        sampleEnergy();
+      } catch (err) {
+        camOverlay.classList.remove('hidden');
+        camOverlay.querySelector('h3').textContent = '⚠️ Camera blocked';
+        camOverlay.querySelector('p').textContent = 'We couldn\'t access your camera: ' + (err && err.message ? err.message : 'Permission denied') + '. You can still watch the routine.';
+        playBtn.disabled = false;  // allow play without camera (no scoring)
+      }
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+      cam.srcObject = null;
+      cam.classList.add('off');
+      camOverlay.classList.remove('hidden');
+      camOverlay.querySelector('h3').textContent = '🕺 Camera off';
+      camOverlay.querySelector('p').textContent = 'Click Start Camera to turn it back on.';
+      stopCamBtn.disabled = true;
+      setCamMsg('');
+      stopRoutine();
+    }
+
+    // ---- Motion energy: frame-difference on a tiny downsampled canvas ----
+    function sampleEnergy() {
+      if (!stream) return;
+      try {
+        dctx.drawImage(cam, 0, 0, diffCanvas.width, diffCanvas.height);
+        const frame = dctx.getImageData(0, 0, diffCanvas.width, diffCanvas.height);
+        if (prevFrame) {
+          const a = frame.data, b = prevFrame.data;
+          let total = 0;
+          // Sample every 4th pixel to keep it fast
+          for (let i = 0; i < a.length; i += 16) {
+            total += Math.abs(a[i] - b[i]) + Math.abs(a[i+1] - b[i+1]) + Math.abs(a[i+2] - b[i+2]);
+          }
+          // Normalize: 0..1 (rough — depends on lighting). 30 ≈ idle, 200 = waving wildly.
+          currentEnergy = Math.min(1, total / (a.length / 16) / 90);
+          energyFill.style.width = (currentEnergy * 100) + '%';
+          if (currentEnergy > peakEnergy) peakEnergy = currentEnergy;
+        }
+        prevFrame = frame;
+      } catch (e) { /* video not ready yet */ }
+      if (stream) requestAnimationFrame(sampleEnergy);
+    }
+
+    // ---- Routine playback ----
+    function tickBeat() {
+      if (beat >= TOTAL_BEATS) { finishRoutine(); return; }
+      const moveIdx = Math.floor(beat / BEATS_PER_MOVE);
+      const beatInMeasure = beat % BEATS_PER_MOVE;
+      // New move? Set demo and bump
+      if (beatInMeasure === 0) setMove(moveIdx);
+      demoEmoji.classList.remove('bump');
+      void demoEmoji.offsetWidth;
+      demoEmoji.classList.add('bump');
+      // Light up beat dots
+      const dots = beatBarEl.querySelectorAll('.beat-dot');
+      dots.forEach((d, i) => d.classList.toggle('on', i === beatInMeasure));
+      // Score the previous beat using peak energy since last tick
+      scoreBeat();
+      // Reset peak for next beat
+      peakEnergy = 0;
+      // Update counters
+      beat++;
+      beatNum.textContent = `${beat} / ${TOTAL_BEATS}`;
+    }
+
+    function scoreBeat() {
+      // Skip scoring on the very first beat (warm-up)
+      if (beat === 0) return;
+      let kind, text, points;
+      if (!stream) {
+        // Camera off — give base points so the routine still feels alive
+        kind = 'ok'; text = 'WATCH'; points = 50;
+      } else if (peakEnergy >= 0.65) {
+        kind = 'perfect'; text = 'PERFECT'; points = 100;
+        streak++;
+      } else if (peakEnergy >= 0.4) {
+        kind = 'good'; text = 'GOOD'; points = 70;
+        streak++;
+      } else if (peakEnergy >= 0.2) {
+        kind = 'ok'; text = 'OK'; points = 40;
+        streak = 0;
+      } else {
+        kind = 'miss'; text = 'MISS'; points = 0;
+        streak = 0;
+      }
+      score += points + (streak >= 4 ? 20 : 0);
+      scoreNum.textContent = score;
+      streakNum.textContent = streak;
+      showToast(kind, text);
+      const maxScore = TOTAL_BEATS * 100;
+      const pct = score / maxScore;
+      setStars(pct >= 0.85 ? 3 : pct >= 0.6 ? 2 : pct >= 0.3 ? 1 : 0);
+    }
+
+    function startRoutine() {
+      if (routinePlaying) return;
+      routinePlaying = true;
+      beat = 0; score = 0; streak = 0; peakEnergy = 0;
+      scoreNum.textContent = 0; streakNum.textContent = 0; setStars(0);
+      setCamMsg(stream ? 'Routine playing — dance!' : 'No camera — just watch and follow along.');
+      playBtn.textContent = '⏸ Pause';
+      tickBeat();
+      routineHandle = setInterval(tickBeat, BEAT_MS);
+    }
+
+    function stopRoutine() {
+      routinePlaying = false;
+      if (routineHandle) { clearInterval(routineHandle); routineHandle = null; }
+      playBtn.textContent = '▶ Start Routine';
+    }
+
+    function finishRoutine() {
+      stopRoutine();
+      const maxScore = TOTAL_BEATS * 100;
+      const pct = Math.round((score / maxScore) * 100);
+      setMove(ROUTINE.length - 1);
+      demoEmoji.textContent = '🏆';
+      demoMoveName.textContent = `Done! ${pct}%`;
+      demoInstruction.textContent = pct >= 85 ? 'Three stars — incredible dancing!' : pct >= 60 ? 'Two stars — great work!' : pct >= 30 ? 'One star — keep practicing!' : 'Try again — bigger moves on the beat.';
+      setCamMsg(`Final score: ${score} / ${maxScore}`);
+    }
+
+    // ---- Buttons ----
+    startCamBtn.addEventListener('click', startCamera);
+    stopCamBtn.addEventListener('click', stopCamera);
+    playBtn.addEventListener('click', () => {
+      if (routinePlaying) stopRoutine();
+      else startRoutine();
+    });
+    resetBtn.addEventListener('click', () => {
+      stopRoutine();
+      beat = 0; score = 0; streak = 0;
+      scoreNum.textContent = 0; streakNum.textContent = 0; setStars(0);
+      beatNum.textContent = `0 / ${TOTAL_BEATS}`;
+      energyFill.style.width = '0%';
+      setMove(0);
+      demoEmoji.textContent = '🕺';
+      demoMoveName.textContent = 'Get Ready';
+      demoInstruction.textContent = 'Press ▶ Start Routine to begin.';
+      setCamMsg(stream ? 'Reset — press ▶ to start again.' : '');
+    });
+  })();
+  </script>
+</body>
+</html>

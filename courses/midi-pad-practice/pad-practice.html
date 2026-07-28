@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>MIDI Pad Practice — Mathagram</title>
+<link rel="icon" href="../../assets/lighthouse/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/global.css">
+<style>
+  :root {
+    --bg-1: #0f172a; --bg-2: #1e293b;
+    --violet: #a78bfa; --violet-d: #7c3aed; --violet-soft: rgba(124,58,237,0.18);
+    --teal: #2dd4bf; --teal-d: #14b8a6;
+    --ink: #f1f5f9; --ink-soft: #cbd5e1; --ink-mute: #94a3b8;
+    --good: #22c55e; --good-d: #15803d;
+    --bad: #ef4444; --bad-d: #b91c1c;
+    --gold: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    color: var(--ink); min-height: 100vh; margin: 0;
+    font-family: 'Fredoka', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* Topbar: exit + progress */
+  .topbar { display: flex; gap: 14px; align-items: center; padding: 16px 22px 6px; max-width: 1080px; margin: 0 auto; }
+  .exit {
+    flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%;
+    border: none; background: rgba(255,255,255,0.06); color: var(--ink-soft);
+    font-size: 1.4rem; line-height: 1; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .exit:hover { background: rgba(255,255,255,0.12); color: var(--ink); }
+  .progress-track { flex: 1; height: 14px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--violet), var(--violet-d));
+    transition: width 0.35s cubic-bezier(.34,1.3,.64,1);
+  }
+
+  .stage { max-width: 1080px; margin: 0 auto; padding: 4px 22px 40px; }
+  .meta { text-align: center; margin: 10px 0 14px; }
+  .meta .unit { font-size: 0.74rem; font-weight: 700; color: var(--violet); text-transform: uppercase; letter-spacing: 0.1em; }
+  .meta .lesson { font-size: 1.6rem; font-weight: 700; color: var(--ink); margin-top: 2px; }
+
+  /* Step sequencer */
+  .seq {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 14px 16px; margin: 0 auto 16px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  }
+  .seq-row { display: grid; grid-template-columns: 70px 1fr; align-items: center; gap: 12px; margin: 6px 0; }
+  .seq-label { font-size: 0.78rem; font-weight: 700; color: var(--ink-soft); text-align: right; }
+  .seq-cells { display: grid; grid-template-columns: repeat(var(--steps, 8), 1fr); gap: 5px; }
+  .cell {
+    height: 26px; border-radius: 6px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    transition: transform 0.06s, background 0.1s, box-shadow 0.1s;
+  }
+  .cell.hit { background: linear-gradient(180deg, var(--violet), var(--violet-d)); border-color: var(--violet-d); }
+  .cell.now { box-shadow: 0 0 0 2px var(--gold) inset, 0 0 12px rgba(251,191,36,0.6); }
+  .cell.hit.now { background: linear-gradient(180deg, #ffd84d, var(--gold)); border-color: var(--gold); }
+  .cell.played-good { background: linear-gradient(180deg, #34d399, var(--good)) !important; border-color: var(--good-d); }
+  .cell.played-bad  { background: linear-gradient(180deg, #fca5a5, var(--bad)) !important; border-color: var(--bad-d); }
+
+  /* 8×8 pad grid */
+  .pads-wrap { display: flex; justify-content: center; margin: 16px 0 4px; }
+  .pad-grid {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+    background: linear-gradient(180deg, #111827, #0a0f1d);
+    border-radius: 18px; padding: 12px;
+    box-shadow: 0 18px 32px rgba(0,0,0,0.45);
+    width: min(100%, 720px);
+  }
+  .pad {
+    aspect-ratio: 1; border-radius: 8px; cursor: pointer;
+    background: linear-gradient(180deg, #4b5563, #374151);
+    border: 1px solid rgba(0,0,0,0.4);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.08), 0 3px 5px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1px; user-select: none;
+    transition: transform 0.05s, background 0.08s, box-shadow 0.08s;
+  }
+  .pad .pad-num  { font-family: 'SF Mono', monospace; font-size: 0.48rem; font-weight: 700; color: #9ca3af; }
+  .pad .pad-name { font-size: 0.58rem; font-weight: 700; color: #e5e7eb; text-align: center; line-height: 1.05; padding: 0 2px; }
+  .pad .pad-key  { font-family: 'SF Mono', monospace; font-size: 0.46rem; color: #6b7280; }
+  /* Top 4 rows = synth/pitched pads — softer teal tone so they look distinct from kit */
+  .pad.synth { background: linear-gradient(180deg, #475569, #334155); }
+  .pad.synth .pad-name { color: #99f6e4; }
+  .pad:active, .pad.lit {
+    background: linear-gradient(180deg, var(--violet), var(--violet-d));
+    transform: translateY(2px) scale(0.97);
+    box-shadow: 0 0 16px rgba(124,58,237,0.55);
+  }
+  .pad.lit .pad-name, .pad.lit .pad-num, .pad.lit .pad-key { color: #fff; }
+  .pad.target {
+    background: linear-gradient(180deg, #ffd84d, var(--gold));
+    box-shadow: 0 0 18px rgba(251,191,36,0.65);
+  }
+  .pad.target .pad-name, .pad.target .pad-num, .pad.target .pad-key { color: #5a4500; }
+  .pad.flash-good { background: linear-gradient(180deg, #34d399, var(--good)) !important; }
+  .pad.flash-bad  { background: linear-gradient(180deg, #fca5a5, var(--bad)) !important; }
+
+  .controls { display: flex; gap: 10px; justify-content: center; margin: 18px 0 8px; flex-wrap: wrap; }
+  .btn {
+    padding: 11px 22px; border-radius: 14px; font-family: inherit;
+    font-weight: 700; font-size: 0.92rem; cursor: pointer; border: none;
+    transition: transform 0.05s, box-shadow 0.05s;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn-primary { background: linear-gradient(135deg, var(--violet), var(--violet-d)); color: #fff; box-shadow: 0 4px 0 #5b21b6; }
+  .btn-primary:active { box-shadow: 0 1px 0 #5b21b6; }
+  .btn-ghost   { background: rgba(255,255,255,0.06); color: var(--ink); border: 1.5px solid rgba(255,255,255,0.12); box-shadow: 0 4px 0 rgba(0,0,0,0.25); }
+  .btn-ghost:active { box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
+
+  .hud { display: flex; justify-content: center; gap: 10px; margin: 6px 0; flex-wrap: wrap; }
+  .pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); }
+  .pill strong { color: var(--gold); }
+
+  .hint { text-align: center; color: var(--ink-mute); font-size: 0.88rem; margin: 12px auto 0; max-width: 640px; line-height: 1.5; }
+  .hint strong { color: var(--violet); }
+
+  .end-overlay { position: fixed; inset: 0; z-index: 60; display: none;
+    align-items: center; justify-content: center; padding: 24px;
+    background: rgba(15,23,42,0.7); backdrop-filter: blur(3px); }
+  .end-overlay.show { display: flex; }
+  .end-card { background: var(--bg-2); border: 1px solid rgba(255,255,255,0.08);
+    border-top: 6px solid var(--violet); border-radius: 18px;
+    padding: 28px 26px; max-width: 420px; width: 100%; text-align: center;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5); animation: rise 0.4s cubic-bezier(.34,1.4,.64,1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .end-card h2 { margin: 0 0 4px; color: var(--ink); font-size: 1.4rem; font-weight: 800; }
+  .end-card .score { font-size: 2.4rem; font-weight: 900; color: var(--violet); margin: 8px 0; }
+  .end-card p { color: var(--ink-soft); margin: 0 0 18px; }
+  .end-card .end-actions { display: flex; flex-direction: column; gap: 10px; }
+  .end-card .btn { width: 100%; text-decoration: none; display: block; }
+
+  .countdown { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center;
+    background: rgba(15,23,42,0.55); backdrop-filter: blur(2px); pointer-events: none; opacity: 0; transition: opacity 0.12s; }
+  .countdown.show { opacity: 1; }
+  .countdown .num { font-size: 7.5rem; font-weight: 900; color: var(--violet);
+    text-shadow: 0 6px 0 rgba(91,33,182,0.4); animation: countpop 0.78s ease-out; }
+  @keyframes countpop {
+    0% { transform: scale(0.4); opacity: 0; }
+    18% { transform: scale(1.18); opacity: 1; }
+    72% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div class="topbar">
+    <a class="exit" id="exitBtn" href="index.html" title="Back to MIDI Pad Practice" aria-label="Exit lesson">&#10005;</a>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="stage">
+    <div class="meta">
+      <div class="unit" id="unitName">&nbsp;</div>
+      <div class="lesson" id="lessonName">Loading…</div>
+    </div>
+
+    <div class="seq" id="seq"></div>
+
+    <div class="pads-wrap">
+      <div class="pad-grid" id="padGrid"></div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="btn btn-ghost" id="listenBtn">&#128266; Play for me</button>
+      <button type="button" class="btn btn-primary" id="startBtn">&#9654; My Turn</button>
+      <button type="button" class="btn btn-ghost" id="restartBtn">&#8635; Restart</button>
+    </div>
+
+    <div class="hud">
+      <span class="pill">Step <strong id="stepLabel">0</strong> / <span id="stepTotal">0</span></span>
+      <span class="pill">Hits <strong id="hitsLabel">0</strong></span>
+      <span class="pill">Combo <strong id="comboLabel">0</strong></span>
+    </div>
+
+    <p class="hint" id="hint">Tap the glowing pad on each step.</p>
+  </div>
+
+  <div class="end-overlay" id="endCard">
+    <div class="end-card">
+      <h2 id="endTitle">Lesson complete!</h2>
+      <div class="score" id="endScore">0 / 0</div>
+      <p id="endMsg">Nice work — XP banked.</p>
+      <div class="end-actions">
+        <a class="btn btn-primary" id="nextLessonLink" href="index.html">Continue &rarr;</a>
+        <button type="button" class="btn btn-ghost" id="retryBtn">&#8635; Play again</button>
+        <a class="btn btn-ghost" href="index.html">Back to beats</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="countdown" id="countdown"><div class="num">3</div></div>
+
+  <script type="module">
+    import { initNav } from '../../js/nav.js';
+    initNav('../../');
+  </script>
+
+  <script type="module">
+    // ─── URL params ─────────────────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+    let unit   = parseInt(params.get('u') || '0', 10);
+    let lesson = parseInt(params.get('l') || '0', 10);
+    if (!unit || !lesson) {
+      const m = location.pathname.match(/\/beat-(\d+)-(\d+)\/?$/);
+      if (m) { unit = parseInt(m[1], 10); lesson = parseInt(m[2], 10); }
+    }
+    if (!unit)   unit = 1;
+    if (!lesson) lesson = 1;
+    const LESSONS_PER_UNIT = 6;
+
+    // ─── Unit + lesson titles ───────────────────────────────────────────
+    const PAD_BASICS_NAMES = ['', 'Meet the Pads', 'The 8×8 Grid', 'Velocity — Soft & Hard',
+                               'The Drum-Kit Sounds', 'Your First Tap Pattern', 'Pad Basics Checkpoint'];
+    const TEMPLATE_NAMES   = ['', 'Listen', 'The Pattern', 'Tap Along', 'Build the Loop',
+                               'Full Groove', 'Performance'];
+    function unitNameFromStorage(u) {
+      try {
+        const raw = localStorage.getItem('mpp-unit-names');
+        if (!raw) return null;
+        const map = JSON.parse(raw);
+        return map[String(u)] || null;
+      } catch { return null; }
+    }
+    const storedName = unitNameFromStorage(unit);
+    const unitNameStr = unit === 1 ? 'Pad Basics' : (storedName || `Beat ${unit - 1}`);
+    const lessonNameStr = unit === 1
+      ? (PAD_BASICS_NAMES[lesson] || `Lesson ${lesson}`)
+      : (TEMPLATE_NAMES[lesson] || `Lesson ${lesson}`);
+    document.getElementById('unitName').textContent =
+      (unit === 1 ? 'Unit 1' : `Beat ${unit - 1}`) + ' · ' + unitNameStr;
+    document.getElementById('lessonName').textContent = lessonNameStr;
+
+    // ─── Pattern (default 8-step beat) ──────────────────────────────────
+    const DEFAULT_PATTERN = {
+      bpm: 100,
+      steps: 8,
+      tracks: [
+        { id: 'kick',      label: 'Kick',   pad: 1, pattern: 'X...X...' },
+        { id: 'snare',     label: 'Snare',  pad: 2, pattern: '..X...X.' },
+        { id: 'closedhat', label: 'Hi-Hat', pad: 3, pattern: 'XXXXXXXX' }
+      ]
+    };
+    const PATTERN = DEFAULT_PATTERN;
+    const STEPS = PATTERN.steps;
+    const MODE = (() => {
+      if (lesson === 1) return { kind: 'listen',   bpm: PATTERN.bpm };
+      if (lesson === 2) return { kind: 'pattern',  bpm: 80 };
+      if (lesson === 3) return { kind: 'tap',      bpm: 70 };
+      if (lesson === 4) return { kind: 'build',    bpm: 90 };
+      if (lesson === 5) return { kind: 'tap',      bpm: PATTERN.bpm };
+      if (lesson === 6) return { kind: 'perform',  bpm: PATTERN.bpm + 10 };
+      return { kind: 'tap', bpm: PATTERN.bpm };
+    })();
+    const beatMs = 60000 / MODE.bpm / 2;
+
+    // ─── 8×8 PAD LAYOUT (top row first; pad #1 at bottom-left MPC-style) ─
+    // Rows 1–4 (top half)  = pitched synth pads, white-key notes C3..C7
+    // Rows 5–8 (bottom)    = drum kit (cymbals · toms · alt kit · main kit)
+    const LAYOUT = [
+      // Row 1 (top) — High synth C6–C7
+      [{n:57,s:'synth',name:'C6',pitch:'C6'},{n:58,s:'synth',name:'D6',pitch:'D6'},{n:59,s:'synth',name:'E6',pitch:'E6'},{n:60,s:'synth',name:'F6',pitch:'F6'},
+       {n:61,s:'synth',name:'G6',pitch:'G6'},{n:62,s:'synth',name:'A6',pitch:'A6'},{n:63,s:'synth',name:'B6',pitch:'B6'},{n:64,s:'synth',name:'C7',pitch:'C7'}],
+      // Row 2 — Mid-high synth C5–C6
+      [{n:49,s:'synth',name:'C5',pitch:'C5'},{n:50,s:'synth',name:'D5',pitch:'D5'},{n:51,s:'synth',name:'E5',pitch:'E5'},{n:52,s:'synth',name:'F5',pitch:'F5'},
+       {n:53,s:'synth',name:'G5',pitch:'G5'},{n:54,s:'synth',name:'A5',pitch:'A5'},{n:55,s:'synth',name:'B5',pitch:'B5'},{n:56,s:'synth',name:'C6',pitch:'C6'}],
+      // Row 3 — Mid synth C4–C5
+      [{n:41,s:'synth',name:'C4',pitch:'C4'},{n:42,s:'synth',name:'D4',pitch:'D4'},{n:43,s:'synth',name:'E4',pitch:'E4'},{n:44,s:'synth',name:'F4',pitch:'F4'},
+       {n:45,s:'synth',name:'G4',pitch:'G4'},{n:46,s:'synth',name:'A4',pitch:'A4'},{n:47,s:'synth',name:'B4',pitch:'B4'},{n:48,s:'synth',name:'C5',pitch:'C5'}],
+      // Row 4 — Bass synth C3–C4
+      [{n:33,s:'synth',name:'C3',pitch:'C3'},{n:34,s:'synth',name:'D3',pitch:'D3'},{n:35,s:'synth',name:'E3',pitch:'E3'},{n:36,s:'synth',name:'F3',pitch:'F3'},
+       {n:37,s:'synth',name:'G3',pitch:'G3'},{n:38,s:'synth',name:'A3',pitch:'A3'},{n:39,s:'synth',name:'B3',pitch:'B3'},{n:40,s:'synth',name:'C4',pitch:'C4'}],
+      // Row 5 — Cymbals & accents (keys 1–8)
+      [{n:25,s:'crash',name:'Crash',k:'1'},{n:26,s:'ride',name:'Ride',k:'2'},{n:27,s:'crash',name:'Splash',k:'3'},{n:28,s:'crash',name:'China',k:'4'},
+       {n:29,s:'cowbell',name:'Cowbell',k:'5'},{n:30,s:'rim',name:'Block',k:'6'},{n:31,s:'shaker',name:'Shaker',k:'7'},{n:32,s:'shaker',name:'Tamb',k:'8'}],
+      // Row 6 — Toms & congas (keys Q–I)
+      [{n:17,s:'hitom',name:'Hi Tom',k:'Q'},{n:18,s:'midtom',name:'Mid Tom',k:'W'},{n:19,s:'lowtom',name:'Low Tom',k:'E'},{n:20,s:'lowtom',name:'Floor',k:'R'},
+       {n:21,s:'midtom',name:'Conga Hi',k:'T'},{n:22,s:'lowtom',name:'Conga Lo',k:'Y'},{n:23,s:'hitom',name:'Bongo Hi',k:'U'},{n:24,s:'midtom',name:'Bongo Lo',k:'I'}],
+      // Row 7 — Alt main kit (keys A–K)
+      [{n:9,s:'kick',name:'Kick Sub',k:'A'},{n:10,s:'snare',name:'Snare 2',k:'S'},{n:11,s:'closedhat',name:'CH 2',k:'D'},{n:12,s:'openhat',name:'OH 2',k:'F'},
+       {n:13,s:'clap',name:'Clap 2',k:'G'},{n:14,s:'rim',name:'Rim 2',k:'H'},{n:15,s:'perc',name:'Perc 2',k:'J'},{n:16,s:'crash',name:'Crash 2',k:'K'}],
+      // Row 8 (bottom) — Main kit (keys Z–,)
+      [{n:1,s:'kick',name:'Kick',k:'Z'},{n:2,s:'snare',name:'Snare',k:'X'},{n:3,s:'closedhat',name:'CH',k:'C'},{n:4,s:'openhat',name:'OH',k:'V'},
+       {n:5,s:'clap',name:'Clap',k:'B'},{n:6,s:'rim',name:'Rim',k:'N'},{n:7,s:'perc',name:'Perc',k:'M'},{n:8,s:'crash',name:'Crash',k:','}]
+    ];
+
+    const padGrid = document.getElementById('padGrid');
+    const padByNum = {};          // num → element
+    const padByKey = {};          // keyboard key → element + meta
+    LAYOUT.forEach(row => row.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'pad' + (p.s === 'synth' ? ' synth' : '');
+      el.dataset.sound = p.s;
+      el.dataset.num = p.n;
+      if (p.pitch) el.dataset.pitch = p.pitch;
+      el.innerHTML = `<span class="pad-num">${p.n}</span><span class="pad-name">${p.name}</span><span class="pad-key">${p.k || ''}</span>`;
+      el.addEventListener('pointerdown', (e) => { e.preventDefault(); onPad(p.s, p.n, p.name, el, p.pitch); });
+      padGrid.appendChild(el);
+      padByNum[p.n] = el;
+      if (p.k) padByKey[p.k.toLowerCase()] = { s: p.s, n: p.n, name: p.name, el, pitch: p.pitch };
+    }));
+
+    // ─── Web Audio synth ────────────────────────────────────────────────
+    let ctx = null, noiseBuf = null;
+    function audio() {
+      if (!ctx) {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const len = ctx.sampleRate * 1.5;
+        noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+        const d = noiseBuf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    }
+    function noise(t, dur, hp, lp, peak) {
+      const src = ctx.createBufferSource(); src.buffer = noiseBuf;
+      let node = src;
+      if (hp) { const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp; node.connect(f); node = f; }
+      if (lp) { const f = ctx.createBiquadFilter(); f.type = 'lowpass';  f.frequency.value = lp; node.connect(f); node = f; }
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(peak, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      node.connect(g).connect(ctx.destination);
+      src.start(t); src.stop(t + dur + 0.02);
+    }
+    function tone(t, dur, f0, f1, type, peak) {
+      const osc = ctx.createOscillator(); osc.type = type || 'sine'; osc.frequency.setValueAtTime(f0, t);
+      if (f1 != null) osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(peak, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.connect(g).connect(ctx.destination);
+      osc.start(t); osc.stop(t + dur + 0.02);
+    }
+    // Pitched synth pad: triangle + sine octave above, ~600 ms decay.
+    const NOTE_OFFSETS = { C:0,'C#':1,D:2,'D#':3,E:4,F:5,'F#':6,G:7,'G#':8,A:9,'A#':10,B:11 };
+    function freqOf(note) {
+      const m = String(note || 'A4').match(/^([A-G]#?)(-?\d+)$/);
+      if (!m) return 440;
+      const midi = (parseInt(m[2],10)+1)*12 + NOTE_OFFSETS[m[1]];
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+    const SOUNDS = {
+      kick:      (t) => { tone(t, 0.42, 150, 48, 'sine', 0.9); noise(t, 0.03, 1200, null, 0.25); },
+      snare:     (t) => { tone(t, 0.18, 190, 120, 'triangle', 0.4); noise(t, 0.2, 1400, 7000, 0.55); },
+      clap:      (t) => { [0, 0.012, 0.024, 0.05].forEach(d => noise(t + d, 0.13, 1100, 6500, 0.4)); },
+      closedhat: (t) => noise(t, 0.045, 8000, null, 0.42),
+      openhat:   (t) => noise(t, 0.34, 7500, null, 0.34),
+      lowtom:    (t) => tone(t, 0.32, 150, 75, 'sine', 0.7),
+      midtom:    (t) => tone(t, 0.30, 220, 110, 'sine', 0.7),
+      hitom:     (t) => tone(t, 0.26, 320, 160, 'sine', 0.7),
+      rim:       (t) => { tone(t, 0.04, 1700, null, 'square', 0.4); noise(t, 0.04, 2500, null, 0.3); },
+      cowbell:   (t) => { tone(t, 0.28, 540, null, 'square', 0.3); tone(t, 0.28, 800, null, 'square', 0.22); },
+      crash:     (t) => noise(t, 1.2, 5000, null, 0.3),
+      ride:      (t) => noise(t, 0.55, 8500, null, 0.22),
+      shaker:    (t) => noise(t, 0.09, 9000, null, 0.3),
+      perc:      (t) => { tone(t, 0.16, 600, 300, 'triangle', 0.4); noise(t, 0.08, 3000, null, 0.2); },
+      synth:     (t, pitch) => {
+        const f = freqOf(pitch);
+        tone(t, 0.7, f, f, 'triangle', 0.32);
+        tone(t, 0.7, f * 2, f * 2, 'sine', 0.12);
+      }
+    };
+    function playSound(name, pitch) {
+      const c = audio();
+      const fn = SOUNDS[name] || SOUNDS.perc;
+      if (name === 'synth') fn(c.currentTime, pitch);
+      else fn(c.currentTime);
+    }
+    function flashPad(el, kind) {
+      if (!el) return;
+      const cls = kind === 'good' ? 'flash-good' : kind === 'bad' ? 'flash-bad' : 'lit';
+      el.classList.add(cls);
+      setTimeout(() => el.classList.remove(cls), 220);
+    }
+
+    // ─── Step-sequencer rendering ───────────────────────────────────────
+    const seq = document.getElementById('seq');
+    seq.style.setProperty('--steps', STEPS);
+    const cellEls = {};
+    PATTERN.tracks.forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'seq-row';
+      const lbl = document.createElement('div'); lbl.className = 'seq-label'; lbl.textContent = t.label;
+      const cells = document.createElement('div'); cells.className = 'seq-cells';
+      cellEls[t.id] = [];
+      for (let i = 0; i < STEPS; i++) {
+        const c = document.createElement('div');
+        c.className = 'cell' + (t.pattern[i] === 'X' ? ' hit' : '');
+        cells.appendChild(c);
+        cellEls[t.id].push(c);
+      }
+      row.appendChild(lbl); row.appendChild(cells);
+      seq.appendChild(row);
+    });
+
+    function activeTracksOnStep(s) {
+      return PATTERN.tracks.filter(t => t.pattern[s] === 'X');
+    }
+    function markStepCurrent(s) {
+      PATTERN.tracks.forEach(t => cellEls[t.id].forEach((c, i) => c.classList.toggle('now', i === s)));
+    }
+    function clearCellStates() {
+      Object.values(cellEls).flat().forEach(c => c.classList.remove('now', 'played-good', 'played-bad'));
+    }
+    function paintCellResult(trackId, stepIdx, ok) {
+      const c = cellEls[trackId][stepIdx];
+      if (c) c.classList.add(ok ? 'played-good' : 'played-bad');
+    }
+
+    // ─── Hint per lesson ────────────────────────────────────────────────
+    const hint = document.getElementById('hint');
+    if (MODE.kind === 'listen')
+      hint.innerHTML = '<strong>Listen.</strong> Watch the pads light up — feel the groove.';
+    else if (lesson === 2)
+      hint.innerHTML = '<strong>The Pattern.</strong> Study the grid. Tap <em>My Turn</em> to hear it slow.';
+    else if (lesson === 4)
+      hint.innerHTML = '<strong>Build the Loop.</strong> Kick first, then snare, then the full groove.';
+    else if (MODE.kind === 'perform')
+      hint.innerHTML = '<strong>Performance.</strong> Tap each glowing pad <em>as the playhead crosses it</em>. Miss the window → auto-fail.';
+    else
+      hint.innerHTML = '<strong>Tap Along.</strong> Hit the glowing pad on each step.';
+
+    // ─── State ──────────────────────────────────────────────────────────
+    let step = 0, hits = 0, misses = 0, combo = 0, bestCombo = 0;
+    let started = false, listenLock = false, perfRAF = null;
+    let bar = 1;  // for 'build' mode
+    const totalActiveHits = PATTERN.tracks.reduce(
+      (s, t) => s + [...t.pattern].filter(c => c === 'X').length, 0);
+    const expectedHits = MODE.kind === 'build' ? totalActiveHits * 3 : totalActiveHits;
+    document.getElementById('stepTotal').textContent = expectedHits;
+
+    function updateHud() {
+      document.getElementById('stepLabel').textContent = hits + misses;
+      document.getElementById('hitsLabel').textContent = hits;
+      document.getElementById('comboLabel').textContent = combo;
+      const pct = expectedHits ? Math.round(((hits + misses) / expectedHits) * 100) : 0;
+      document.getElementById('progressFill').style.width = Math.min(100, pct) + '%';
+    }
+    function clearTargetPads() {
+      Object.values(padByNum).forEach(el => el.classList.remove('target'));
+    }
+    function highlightTargetPads(stepIdx) {
+      clearTargetPads();
+      if (MODE.kind === 'listen' || MODE.kind === 'pattern') return;
+      activeTracksOnStep(stepIdx).forEach(t => {
+        const el = padByNum[t.pad];
+        if (el) el.classList.add('target');
+      });
+    }
+
+    // ─── Tap-along engine (lessons 3 / 4 / 5) ───────────────────────────
+    function nextActiveStep(from) {
+      let s = from;
+      while (s < STEPS && activeTracksOnStep(s).length === 0) s++;
+      return s;
+    }
+    function advanceTap() {
+      step = nextActiveStep(step + 1);
+      if (step >= STEPS) {
+        if (MODE.kind === 'build' && bar < 3) { bar++; step = nextActiveStep(0); }
+        else { endLesson(); return; }
+      }
+      markStepCurrent(step);
+      highlightTargetPads(step);
+    }
+    function onPadTap(soundId, padEl) {
+      const active = activeTracksOnStep(step);
+      if (active.length === 0) { flashPad(padEl, 'bad'); return; }
+      const allowedSounds = MODE.kind === 'build'
+        ? PATTERN.tracks.slice(0, bar).map(t => t.id)
+        : active.map(t => t.id);
+      const ok = allowedSounds.includes(soundId);
+      if (ok) {
+        hits++; combo++; bestCombo = Math.max(bestCombo, combo);
+        flashPad(padEl, 'good');
+        paintCellResult(soundId, step, true);
+      } else {
+        misses++; combo = 0;
+        flashPad(padEl, 'bad');
+      }
+      updateHud();
+      const struck = PATTERN.tracks.filter(t => t.pattern[step] === 'X')
+        .every(t => cellEls[t.id][step].classList.contains('played-good'));
+      if (struck) advanceTap();
+    }
+
+    // ─── Performance engine (lesson 6) ──────────────────────────────────
+    let perfStart = 0;
+    function perfTick() {
+      const E = performance.now() - perfStart;
+      const sIdx = Math.floor(E / beatMs);
+      while (step < sIdx && step < STEPS) {
+        PATTERN.tracks.forEach(t => {
+          if (t.pattern[step] === 'X' && !cellEls[t.id][step].classList.contains('played-good')) {
+            misses++; combo = 0; paintCellResult(t.id, step, false);
+          }
+        });
+        step++;
+      }
+      if (step < STEPS) { markStepCurrent(step); highlightTargetPads(step); }
+      updateHud();
+      if (E > STEPS * beatMs + 350) {
+        perfRAF = null; clearTargetPads(); endLesson();
+        return;
+      }
+      perfRAF = requestAnimationFrame(perfTick);
+    }
+    async function performanceStart() {
+      if (perfRAF) { cancelAnimationFrame(perfRAF); perfRAF = null; }
+      const overlay = document.getElementById('countdown');
+      for (const num of ['3','2','1','Go!']) {
+        overlay.querySelector('.num').textContent = num;
+        overlay.classList.add('show');
+        const n = overlay.querySelector('.num'); n.style.animation = 'none'; void n.offsetWidth; n.style.animation = '';
+        await new Promise(r => setTimeout(r, 720));
+        overlay.classList.remove('show');
+        await new Promise(r => setTimeout(r, 90));
+      }
+      started = true; step = 0; hits = 0; misses = 0; combo = 0;
+      clearCellStates(); updateHud();
+      perfStart = performance.now();
+      perfRAF = requestAnimationFrame(perfTick);
+    }
+    function onPadPerf(soundId, padEl) {
+      const E = performance.now() - perfStart;
+      const sIdx = Math.round(E / beatMs);
+      const sClamped = Math.max(0, Math.min(STEPS - 1, sIdx));
+      const active = activeTracksOnStep(sClamped);
+      const offFraction = Math.abs(E - sClamped * beatMs) / beatMs;
+      const inWindow = offFraction <= 0.6;
+      const ok = inWindow && active.some(t => t.id === soundId);
+      if (ok) {
+        hits++; combo++; bestCombo = Math.max(bestCombo, combo);
+        flashPad(padEl, 'good');
+        paintCellResult(soundId, sClamped, true);
+      } else {
+        misses++; combo = 0;
+        flashPad(padEl, 'bad');
+      }
+      updateHud();
+    }
+
+    // ─── Listen / auto-play (lessons 1 and 2) ───────────────────────────
+    async function playPatternAuto() {
+      if (listenLock) return; listenLock = true;
+      clearCellStates();
+      for (let s = 0; s < STEPS; s++) {
+        markStepCurrent(s);
+        activeTracksOnStep(s).forEach(t => {
+          playSound(t.id);
+          flashPad(padByNum[t.pad], 'lit');
+        });
+        await new Promise(r => setTimeout(r, beatMs));
+      }
+      markStepCurrent(-1);
+      listenLock = false;
+    }
+
+    // ─── Pad press router ───────────────────────────────────────────────
+    function onPad(soundId, padNum, name, el, pitch) {
+      playSound(soundId, pitch);
+      if (!started) { flashPad(el, ''); return; }
+      if (MODE.kind === 'listen' || MODE.kind === 'pattern') { flashPad(el, ''); return; }
+      if (MODE.kind === 'perform') onPadPerf(soundId, el);
+      else onPadTap(soundId, el);
+    }
+
+    // ─── Buttons ────────────────────────────────────────────────────────
+    document.getElementById('listenBtn').addEventListener('click', () => {
+      if (MODE.kind === 'perform') return;
+      playPatternAuto();
+    });
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if (MODE.kind === 'listen' || MODE.kind === 'pattern') { playPatternAuto(); return; }
+      if (MODE.kind === 'perform') { performanceStart(); return; }
+      started = true;
+      step = 0; hits = 0; misses = 0; combo = 0; bar = 1;
+      clearCellStates(); updateHud();
+      step = nextActiveStep(0);
+      markStepCurrent(step); highlightTargetPads(step);
+    });
+    function resetAll() {
+      if (perfRAF) { cancelAnimationFrame(perfRAF); perfRAF = null; }
+      started = false;
+      step = 0; hits = 0; misses = 0; combo = 0; bar = 1;
+      clearCellStates(); updateHud();
+      clearTargetPads();
+      document.getElementById('endCard').classList.remove('show');
+    }
+    document.getElementById('restartBtn').addEventListener('click', resetAll);
+    document.getElementById('retryBtn').addEventListener('click', resetAll);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+      const p = padByKey[e.key.toLowerCase()];
+      if (p) { onPad(p.s, p.n, p.name, p.el, p.pitch); e.preventDefault(); }
+    });
+
+    // ─── End of lesson ──────────────────────────────────────────────────
+    function endLesson() {
+      const pct = expectedHits ? hits / expectedHits : 1;
+      document.getElementById('endScore').textContent = `${hits} / ${expectedHits}`;
+      let msg;
+      if (pct === 1)        msg = 'Flawless groove! 🥁';
+      else if (pct >= 0.75) msg = 'Tight pocket — XP banked.';
+      else if (pct >= 0.5)  msg = 'Solid hits. Replay to top your combo.';
+      else                  msg = 'Loop it again — find the pocket.';
+      if (bestCombo >= 4) msg += ` Best combo: x${bestCombo}.`;
+      document.getElementById('endMsg').textContent = msg;
+      document.getElementById('endTitle').textContent =
+        lesson === LESSONS_PER_UNIT ? 'Performance complete!' : 'Lesson complete!';
+      const nextHref = lesson < LESSONS_PER_UNIT
+        ? `pad-practice.html?u=${unit}&l=${lesson + 1}`
+        : `pad-practice.html?u=${unit + 1}&l=1`;
+      document.getElementById('nextLessonLink').href = nextHref;
+      document.getElementById('endCard').classList.add('show');
+      if (pct >= 0.5) markComplete();
+    }
+
+    // ─── Firestore: mark complete ───────────────────────────────────────
+    let alreadyMarked = false;
+    async function markComplete() {
+      if (alreadyMarked) return; alreadyMarked = true;
+      try {
+        const { auth, db } = await import('../../js/firebase-config.js');
+        const { doc, setDoc, serverTimestamp } =
+          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        if (!auth.currentUser) return;
+        const pos = LESSONS_PER_UNIT * (unit - 1) + lesson;
+        await setDoc(
+          doc(db, 'users', auth.currentUser.uid, 'progress', 'midi-pad-practice'),
+          { ['mpp-' + pos]: { completed: true, at: serverTimestamp() } },
+          { merge: true }
+        );
+      } catch (e) { /* silent */ }
+    }
+
+    // ─── Initial ────────────────────────────────────────────────────────
+    updateHud();
+    if (MODE.kind === 'listen') setTimeout(playPatternAuto, 500);
+  </script>
+</body>
+</html>
