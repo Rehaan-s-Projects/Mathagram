@@ -44,6 +44,32 @@ function dieSVG(n, cls) {
   </svg>`;
 }
 
+/* -- Polyhedral die (d4..d100): a labelled gem shape with a value ---------- */
+function polygonPoints(cx, cy, r, sides, rot) {
+  const rot0 = rot == null ? -Math.PI / 2 : rot;
+  const pts = [];
+  for (let k = 0; k < sides; k++) {
+    const a = rot0 + (k * 2 * Math.PI) / sides;
+    pts.push((cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1));
+  }
+  return pts.join(' ');
+}
+// Shape is decorative (varies per die for character); the dN label + value carry the meaning.
+const POLY_SIDES = { 4: 3, 6: 4, 8: 6, 10: 7, 12: 5, 20: 6, 100: 12 };
+function polyDie(faces, value, cls) {
+  const sides = POLY_SIDES[faces] || 6;
+  const pts = polygonPoints(50, 54, 40, sides);
+  const gid = 'lePoly' + faces;
+  return `<svg class="le-die ${cls || ''}" viewBox="0 0 100 108" role="img" aria-label="d${faces} showing ${value == null ? faces : value}">
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/>
+    </linearGradient></defs>
+    <polygon points="${pts}" fill="url(#${gid})" stroke="#1d4ed8" stroke-width="2.5" stroke-linejoin="round"/>
+    <text x="50" y="58" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">${value == null ? faces : value}</text>
+    <text x="50" y="102" text-anchor="middle" font-size="12" font-weight="800" fill="#1d4ed8" letter-spacing="0.5">d${faces}</text>
+  </svg>`;
+}
+
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 
 /* -- Completion write ------------------------------------------------------ */
@@ -163,6 +189,42 @@ export function renderLesson(root, steps, opts) {
         if (rolls === 1) primeContinueButton(isLast); // encourage at least one roll
       });
       drawTally();
+    }
+    if (step.variant === 'dice-roller') {
+      const DICE = [4, 6, 8, 10, 12, 20, 100];
+      let cur = 20, rolled = null;
+      const wrap = document.createElement('div');
+      wrap.className = 'le-visual';
+      wrap.innerHTML = `<div class="le-chips" id="leChips"></div>
+        <div id="lePolyHost">${polyDie(cur, null)}</div>
+        <button class="le-roll-btn" type="button" id="leRoll">🎲 Roll the <b id="leRollLbl">d${cur}</b></button>
+        <p class="le-caption" id="leRollOut">Pick a die above, then roll it.</p>`;
+      stepEl.appendChild(wrap);
+      const chips = wrap.querySelector('#leChips');
+      const host = wrap.querySelector('#lePolyHost');
+      const rollLbl = wrap.querySelector('#leRollLbl');
+      const out = wrap.querySelector('#leRollOut');
+      let rolls = 0;
+      const drawChips = () => {
+        chips.innerHTML = DICE.map(d =>
+          `<button type="button" class="le-chip${d === cur ? ' is-on' : ''}" data-d="${d}">d${d}</button>`).join('');
+      };
+      chips.addEventListener('click', (e) => {
+        const b = e.target.closest('.le-chip'); if (!b) return;
+        cur = +b.dataset.d; rolled = null;
+        host.innerHTML = polyDie(cur, null);
+        rollLbl.textContent = 'd' + cur;
+        out.textContent = `A d${cur} has ${cur} equally likely faces. Roll it!`;
+        drawChips();
+      });
+      wrap.querySelector('#leRoll').addEventListener('click', () => {
+        rolled = 1 + Math.floor(Math.random() * cur);
+        rolls++;
+        host.innerHTML = polyDie(cur, rolled, 'is-rolling');
+        out.innerHTML = `You rolled <strong>${rolled}</strong> &mdash; one of ${cur} equally likely results (1&ndash;${cur}).`;
+        if (rolls === 1) primeContinueButton(isLast);
+      });
+      drawChips();
     }
     // Let them continue even without rolling, but nudge via the roll handler.
     primeContinueButton(isLast);

@@ -203,6 +203,28 @@ body.le-body {
 }
 .le-tally__cell b { display: block; font-size: 1rem; color: var(--le-ink); }
 
+/* Dice-type chips (dice-roller interactive) -------------------------------- */
+.le-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.le-chip {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--le-line);
+  background: #fff;
+  color: var(--le-ink-soft);
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease, color .12s ease;
+}
+.le-chip:hover { border-color: #b9c6de; transform: translateY(-1px); }
+.le-chip.is-on {
+  background: var(--le-accent);
+  border-color: var(--le-accent);
+  color: #fff;
+  box-shadow: 0 6px 14px -6px rgba(37, 99, 235, 0.7);
+}
+
 /* Question / options ------------------------------------------------------- */
 .le-options { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 12px; }
 .le-opt {

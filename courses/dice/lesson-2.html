@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2 · Types of Dice — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <!-- Required auth gate (google-required-auth). -->
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+
+  <div id="lesson"></div>
+
+  <script type="module">
+    import '../../js/nav.js';                       // side-effect: GA4 analytics
+    import { renderLesson } from '../../js/lesson-engine.js';
+
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Chapter 2 · The dice family',
+        title: 'Beyond the cube',
+        html: `<p>The familiar 6-sided cube is just <em>one</em> member of a whole family.
+               Tabletop games and role-playing games like <strong>Dungeons &amp; Dragons</strong>
+               use a set of <span class="le-term">polyhedral dice</span> — each with a different
+               number of faces.</p>
+               <p>They're named with a <strong>d</strong> and their face count: a
+               <strong>d6</strong> has 6 faces, a <strong>d20</strong> has 20.</p>`,
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Meet the family',
+        title: 'Seven dice you should know',
+        html: `<p>Here's the standard RPG set. Each face is equally likely on a fair die:</p>
+               <p>• <strong>d4</strong> — tetrahedron, 4 faces<br>
+               • <strong>d6</strong> — cube, 6 faces<br>
+               • <strong>d8</strong> — octahedron, 8 faces<br>
+               • <strong>d10</strong> — 10 faces (marked 0&ndash;9)<br>
+               • <strong>d12</strong> — dodecahedron, 12 faces<br>
+               • <strong>d20</strong> — icosahedron, 20 faces (the star of D&amp;D)<br>
+               • <strong>d100</strong> — "percentile," made from two d10s → 1&ndash;100</p>`
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'Try it',
+        title: 'Roll any die',
+        html: `<p>Tap a die to select it, then roll. Notice how a bigger die gives a
+               <em>wider</em> range of results — and each single face gets
+               <em>rarer</em> as the die grows.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'The pattern',
+        title: 'More faces, smaller chance',
+        html: `<p>A fair <strong>dN</strong> has <strong>N</strong> equally likely faces, so the
+               chance of any one specific result is <strong>1 &divide; N</strong>.</p>
+               <p>On a d6 that's 1⁄6 ≈ 16.7%. On a d20 it drops to 1⁄20 = 5%. Bigger die →
+               more outcomes → each single face is less likely.</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'On a fair d20, what is the probability of rolling exactly a 20?',
+        options: ['1⁄6', '1⁄20', '20⁄20 (guaranteed)', '1⁄2'],
+        answer: 1,
+        explain: `A d20 has 20 equally likely faces, and just one of them is a 20, so the
+                  probability is <strong>1⁄20 = 5%</strong>. That rare natural 20 is why it
+                  feels so exciting at the table!`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A clever pair',
+        title: 'The d10 and percentile (d100)',
+        html: `<p>A <strong>d10</strong> is usually marked <strong>0&ndash;9</strong>. Roll
+               <em>two</em> of them — one for the <strong>tens</strong> digit and one for the
+               <strong>ones</strong> — and you get a number from <strong>1 to 100</strong>.</p>
+               <p>That's a <span class="le-term">percentile</span> roll, or <strong>d100</strong>:
+               perfect any time a game needs a straight percent chance.</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'How is a d100 (percentile) roll usually made?',
+        options: [
+          'By rolling one giant 100-sided ball',
+          'By rolling two d10s — one for tens, one for ones',
+          'By rolling a d20 five times and adding',
+          'By rolling a d12 and adding 88'
+        ],
+        answer: 1,
+        explain: `You roll <strong>two d10s</strong> (a "tens" die and a "ones" die) to build a
+                  number from 1 to 100. True 100-sided balls (Zocchihedrons) exist, but the
+                  two-d10 method is the standard.`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Recap',
+        title: 'The dice family, unlocked',
+        html: `<p>You now know the standard set — <strong>d4, d6, d8, d10, d12, d20</strong> and
+               <strong>d100</strong> — and the key rule:</p>
+               <p>• a fair <strong>dN</strong> gives each face a <strong>1⁄N</strong> chance,<br>
+               • bigger dice mean a wider range and rarer single results,<br>
+               • <strong>d100</strong> is built from two d10s for percent chances.</p>
+               <p>Next up: digging deep into a single die — fair vs. <em>loaded</em>.</p>`
+      }
+    ];
+
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice',
+      lessonId: 'dice-2',
+      backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>
