@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 2 Checkpoint — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'UNIT 2 CHECKPOINT',
+        title: 'Time to Test Your Dice Knowledge',
+        html: '<p>Nice work reaching the checkpoint! In <span class="le-term">Unit 2</span> you explored the whole family of dice &ndash; from the humble six-sider to the mighty twenty-sided <strong>d20</strong>.</p><p>This is a quick <em>six-question</em> review. Take your time, trust what you have learned, and roll on!</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'question',
+        eyebrow: 'QUESTION 1',
+        title: 'How many faces does a d20 have?',
+        html: '<p>The name is a big hint.</p>',
+        options: ['24', '12', '20', '10'],
+        answer: 2,
+        explain: '<p>Correct &ndash; a <span class="le-term">d20</span> has exactly <strong>20 faces</strong>. The &ldquo;d&rdquo; means &ldquo;die&rdquo; and the number tells you the face count, so a d20 is a twenty-sided die.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'QUESTION 2',
+        title: 'A standard d10 is numbered how?',
+        options: ['1 through 10', '0 through 9', '1 through 9', '0 through 10'],
+        answer: 1,
+        explain: '<p>Exactly! A standard <span class="le-term">d10</span> is numbered <strong>0 through 9</strong> &ndash; ten faces in total. That zero is what makes it perfect for building percentile rolls.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'QUESTION 3',
+        title: 'How many Platonic solids are there?',
+        html: '<p>These are the perfectly symmetric shapes behind most classic dice.</p>',
+        options: ['3', '5', '6', '7'],
+        answer: 1,
+        explain: '<p>Right &ndash; there are exactly <strong>5</strong> <span class="le-term">Platonic solids</span>: the tetrahedron, cube, octahedron, dodecahedron, and icosahedron. They give us the d4, d6, d8, d12, and d20.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'QUESTION 4',
+        title: 'How is a percentile d100 roll usually made?',
+        options: ['Rolling one 100-sided ball', 'Rolling a d20 five times', 'Rolling two d10s (a tens die and a ones die)', 'Rolling a d50 twice'],
+        answer: 2,
+        explain: '<p>Yes! A <span class="le-term">d100</span> (percentile) result usually comes from <strong>rolling two d10s</strong> &ndash; one read as the tens digit and one as the ones digit &ndash; giving values from 00 to 99.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'QUESTION 5',
+        title: 'Which of these is NOT a standard polyhedral RPG die?',
+        options: ['a d8', 'a d12', 'a d7', 'a d20'],
+        answer: 2,
+        explain: '<p>Correct! The <strong>d7</strong> is not part of the standard polyhedral set. The classic RPG dice are the d4, d6, d8, d10, d12, and d20 &ndash; no seven-sided die among them.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'QUESTION 6',
+        title: 'On a fair dN, what is the probability of any one specific face?',
+        html: '<p>Think about how many equally likely faces there are.</p>',
+        options: ['1⁄2', '1⁄N', 'N⁄1', '1⁄6'],
+        answer: 1,
+        explain: '<p>Perfect! On a fair <span class="le-term">dN</span>, every face is equally likely, so the chance of any specific one is <strong>1⁄N</strong>. For a d6 that is 1⁄6, and for a d20 it is 1⁄20.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'CHECKPOINT COMPLETE',
+        title: 'You Know Your Dice!',
+        html: '<p>Fantastic rolling! You now understand the <span class="le-term">d20</span>, how a <span class="le-term">d10</span> is numbered, the <strong>5 Platonic solids</strong>, how percentile <span class="le-term">d100</span> rolls work, which dice are truly standard, and that any fair face has probability <strong>1⁄N</strong>.</p><p>That is Unit 2 in the bag. Onward to more probability adventures!</p>',
+        visual: 'die:6'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-30', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

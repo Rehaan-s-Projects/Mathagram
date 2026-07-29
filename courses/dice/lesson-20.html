@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 20 · The d10 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE DIE',
+        title: 'The d10',
+        html: '<p>Say hello to the <span class="le-term">d10</span>, the ten-sided die. It is not a familiar cube &mdash; it is a <span class="le-term">pentagonal trapezohedron</span>, a slightly alien-looking solid made of <strong>10 kite-shaped faces</strong>.</p><p>Five kites point up, five point down, and they meet at a sharp edge around the middle. It rolls with a satisfying tumble and settles with one flat face on top.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A STRANGE HABIT',
+        title: 'Numbered 0 through 9',
+        html: '<p>Here is the surprise: a standard d10 is <strong>not</strong> numbered 1 to 10. Its faces read <strong>0, 1, 2, 3, 4, 5, 6, 7, 8, 9</strong>.</p><p>When you need a result from 1 to 10, you simply treat a rolled <strong>0 as a 10</strong>. So the die still gives you ten outcomes &mdash; it just labels the tenth one with a <em>0</em>. That odd choice is not an accident, and the next steps reveal why.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE PROBABILITY',
+        title: 'Ten faces, all equal',
+        html: '<p>A fair d10 has <strong>10 faces</strong>, and each is equally likely to land on top. There is no favored kite.</p><p>So the chance of any single face is <strong>1&frasl;10</strong> &mdash; a clean <strong>10%</strong>. Rolling a 7 is exactly as likely as rolling a 0, or a 3, or any other number.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE BIG REVEAL',
+        title: 'Two d10s make a d100',
+        html: '<p>This is why the 0 matters. Take <strong>two</strong> d10s: call one the <em>tens</em> die and one the <em>ones</em> die. Roll both.</p><p>A tens die showing <strong>3</strong> and a ones die showing <strong>7</strong> reads as <strong>37</strong>. A double <strong>0</strong> is read as <strong>100</strong>. Together they produce every result from 1 to 100 &mdash; a <span class="le-term">d100</span>, also called <span class="le-term">percentile dice</span>. Numbering from 0 is exactly what makes this trick work.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d10',
+        html: '<p>Pick the <strong>d10</strong> and roll a few times. Watch the numbers land anywhere from 0 to 9 &mdash; and remember, that 0 stands in for 10 when you need it.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How is a standard d10 numbered?',
+        options: ['0 through 9', '1 through 10', '1 through 9', '0 through 10'],
+        answer: 0,
+        explain: '<p>A standard d10 shows the digits <strong>0 through 9</strong> &mdash; ten faces in all. When you want a 1&ndash;10 result, you read the 0 as a 10. This is also what lets two d10s combine into a d100.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'On a fair d10, what is the chance of any one specific number?',
+        html: '<p>Say you are hoping for a 4.</p>',
+        options: ['1&frasl;10', '1&frasl;9', '1&frasl;6', '1&frasl;100'],
+        answer: 0,
+        explain: '<p>There are 10 equally likely faces, so each has probability <strong>1&frasl;10</strong> (10%). The 1&frasl;6 would be a d6, and 1&frasl;100 is the chance of a specific result on the d100 you build from <em>two</em> d10s.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'What you learned',
+        html: '<p>The <span class="le-term">d10</span> is a <span class="le-term">pentagonal trapezohedron</span> with <strong>10 kite-shaped faces</strong>, numbered <strong>0 through 9</strong> &mdash; where a 0 counts as 10 when you need a 1&ndash;10 result.</p><p>Every face is equally likely, so each has probability <strong>1&frasl;10</strong>. And that 0-based numbering is the key that lets <strong>two d10s</strong> team up as <span class="le-term">percentile dice</span>, a full <span class="le-term">d100</span>.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-20', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

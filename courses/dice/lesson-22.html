@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 22 · The d20 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type:'concept',
+        eyebrow:'MEET THE DIE',
+        title:'Twenty triangles',
+        html:'<p>Set down a <span class="le-term">d20</span> and count its faces: <strong>twenty</strong> matching equilateral triangles, meeting at twelve sharp points. This shape has a name &mdash; the <span class="le-term">icosahedron</span>, the largest of the five perfect <em>Platonic solids</em>.</p><p>No other fair die packs more faces onto a single symmetric shape. It is the biggest workhorse in the standard dice bag.</p>'
+      },
+      {
+        type:'concept',
+        eyebrow:'THE HERO DIE',
+        title:'Why role-players love it',
+        html:'<p>The d20 is the beating heart of <strong>Dungeons &amp; Dragons</strong>. Nearly every important action &mdash; swinging a sword, picking a lock, persuading a guard, leaping a chasm &mdash; is resolved by a single <span class="le-term">d20 roll</span>.</p><p>Roll high and you succeed; roll low and you fail. One tumbling twenty-sided die decides the fate of heroes.</p>'
+      },
+      {
+        type:'concept',
+        eyebrow:'HIGH DRAMA',
+        title:'Natural 20, natural 1',
+        html:'<p>Two results are legendary. A <span class="le-term">natural 20</span> &mdash; the die landing squarely on 20 &mdash; is a <strong>critical success</strong>: the sword strikes true, the impossible becomes real.</p><p>Its opposite, a <span class="le-term">natural 1</span>, is a <strong>critical miss</strong>: the hero fumbles at the worst moment. Both are pure luck, and both make the table gasp.</p>'
+      },
+      {
+        type:'concept',
+        eyebrow:'THE PROBABILITY',
+        title:'Twenty equally likely faces',
+        html:'<p>A fair d20 has <strong>20 faces</strong>, and each is equally likely to land face-up. So the chance of any one specific number is one out of twenty.</p><p>As a fraction that is 1&frasl;20, and as a percent it is 1 &divide; 20 = <strong>5%</strong>. That single number &mdash; a <strong>5%</strong> chance &mdash; is why a natural 20 feels so rare and so sweet.</p>'
+      },
+      {
+        type:'interactive',
+        variant:'dice-roller',
+        eyebrow:'YOUR TURN',
+        title:'Roll the d20',
+        html:'<p>Choose the <strong>d20</strong> and roll it a few times. Every face has the same 5% chance, so a natural 20 will feel elusive &mdash; can you land one?</p>'
+      },
+      {
+        type:'question',
+        eyebrow:'CHECK',
+        title:'How many faces does a d20 have?',
+        options:['12 faces','20 faces','6 faces','100 faces'],
+        answer:1,
+        explain:'<p>A d20 is an <span class="le-term">icosahedron</span> &mdash; <strong>20</strong> equilateral-triangle faces. The twelve you might be tempted by is the number of its corner points, not its faces.</p>'
+      },
+      {
+        type:'question',
+        eyebrow:'CHECK',
+        title:'What is the probability of rolling a natural 20?',
+        html:'<p>One specific face out of twenty equally likely faces.</p>',
+        options:['1&frasl;6 &asymp; 17%','1&frasl;10 = 10%','1&frasl;20 = 5%','1&frasl;100 = 1%'],
+        answer:2,
+        explain:'<p>There are 20 equally likely faces, so P(20) = 1&frasl;20 = 1 &divide; 20 = <strong>5%</strong>. The same 5% holds for a natural 1 &mdash; or any single number you name.</p>'
+      },
+      {
+        type:'concept',
+        eyebrow:'RECAP',
+        title:'The twenty-sided legend',
+        html:'<p>The <span class="le-term">d20</span> is an <span class="le-term">icosahedron</span>: twenty equilateral-triangle faces, the largest Platonic solid and the iconic die of role-playing games.</p><p>Nearly every D&amp;D action is a d20 roll. A <span class="le-term">natural 20</span> is a critical success and a <span class="le-term">natural 1</span> a critical miss &mdash; and since every face is equally likely, each carries a probability of 1&frasl;20 = <strong>5%</strong>.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-22', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

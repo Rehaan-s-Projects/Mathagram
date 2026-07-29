@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 29 · Digital &amp; App Dice — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'NO SHAPE AT ALL',
+        title: 'A die with no faces',
+        html: '<p>When you roll dice in a video game, a dice-roller app, or the button in <em>this very lesson</em>, nothing physical tumbles. There is no cube, no corners, no weight. The computer simply <strong>computes a number</strong> from 1 to 6.</p><p>So if there is no shape to be fair, what makes a digital die trustworthy? The answer lives entirely inside the code.</p>',
+        visual: 'die:4'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE MACHINE INSIDE',
+        title: 'RNG, PRNG, and the seed',
+        html: '<p>Digital dice lean on a <span class="le-term">random number generator</span> (RNG) &mdash; the part of the program whose job is to produce unpredictable-looking numbers.</p><p>Most everyday RNGs are actually <span class="le-term">pseudo-random</span> (a PRNG): an <strong>algorithm</strong> that starts from a <span class="le-term">seed</span> value and grinds out a long stream of numbers that only <em>look</em> random. Same seed &rarr; same sequence. It is clever arithmetic wearing a disguise, not real chaos.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'TWO KINDS OF FAIR',
+        title: 'Symmetry vs. algorithm',
+        html: '<p>A physical die is fair because of its <strong>symmetry</strong> &mdash; six identical faces, evenly balanced, so no outcome is favored.</p><p>A digital die is fair because of a <strong>well-designed algorithm</strong> &mdash; math tuned so every value from 1 to 6 shows up equally often. Different sources of fairness, same goal: <span class="le-term">equally likely</span> outcomes.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE TRADE-OFF',
+        title: 'Pros and cons of going digital',
+        html: '<p><strong>Digital wins:</strong> a virtual die can never be chipped, weighted, or loaded, and it can roll thousands of times in an instant &mdash; perfect for simulations.</p><p><strong>Digital risks:</strong> its fairness lives or dies by the code. A sloppy or deliberately <em>rigged</em> PRNG can be biased, and squeezing out truly unpredictable randomness usually needs special hardware. Trust here means trusting the algorithm.</p>',
+        visual: 'die:1'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Tap a computed roll',
+        html: '<p>This button has no cube behind it. Each tap asks the <strong>browser&rsquo;s built-in random generator</strong> for a fresh number from 1 to 6. Roll a few times &mdash; you are watching an algorithm, not a tumbling object.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'What does a digital die rely on to pick a result?',
+        options: [
+          'A random number generator (an algorithm)',
+          'The balanced weight of its six faces',
+          'The way it bounces off the table',
+          'Air resistance as it falls'
+        ],
+        answer: 0,
+        explain: '<p>Correct &mdash; a digital die has no faces, weight, table, or air. It <strong>computes</strong> a value using a <span class="le-term">random number generator</span>, an algorithm (usually a PRNG). The other options all describe a <em>physical</em> die, which does not exist here.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'A well-made PHYSICAL die is fair mainly because of its&hellip;',
+        options: [
+          'Symmetry &mdash; six identical, balanced faces',
+          'Random number generator',
+          'Seed value',
+          'Fast rolling speed'
+        ],
+        answer: 0,
+        explain: '<p>Yes. A physical die earns its fairness from <strong>symmetry</strong>: evenly balanced, identical faces mean no outcome is favored. An RNG and a seed belong to the <em>digital</em> world, and rolling speed has nothing to do with fairness.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Same fairness, two engines',
+        html: '<p>Digital dice have <strong>no shape</strong> &mdash; they compute a number with a <span class="le-term">random number generator</span>. Most are <span class="le-term">pseudo-random</span>: an algorithm plus a <span class="le-term">seed</span>.</p><p>A <strong>physical</strong> die is fair through <strong>symmetry</strong>; a <strong>digital</strong> die is fair through a <strong>well-designed algorithm</strong>. Digital never chips or loads and rolls instantly, but its honesty depends on the code &mdash; and true randomness needs special hardware. Two very different machines, both chasing the same equally likely 1-through-6.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-29', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

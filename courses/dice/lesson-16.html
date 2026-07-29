@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 16 · The Polyhedral Family — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE FAMILY',
+        title: 'Seven Dice, One Set',
+        html: '<p>The little six-sided cube you know from board games has a big family. Tabletop games and role-playing games like <em>Dungeons &amp; Dragons</em> use a set of <strong>seven</strong> different dice.</p><p>Some are pointy pyramids, some are chunky gems, and one even looks like a golf ball. Together they are called the <span class="le-term">polyhedral dice</span> &mdash; a <em>polyhedron</em> is just a solid shape with flat faces.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE NAMING RULE',
+        title: 'What Does "dN" Mean?',
+        html: '<p>Each die has a short name that starts with a lowercase <strong>d</strong>. The rule is simple: a <span class="le-term">dN</span> is a die with <strong>N faces</strong>.</p><p>So a <strong>d6</strong> has 6 faces (the classic cube), a <strong>d20</strong> has 20 faces, and a <strong>d4</strong> has just 4. Once you know the rule, you can read any die&rsquo;s name at a glance.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WHY SO MANY?',
+        title: 'Different Ranges of Numbers',
+        html: '<p>Why not just use one die for everything? Because games need <strong>different ranges</strong> of random numbers.</p><p>Need a number from 1 to 4? Roll the d4. From 1 to 20? Roll the d20. Each die gives its own range, so having the whole set means you always have the right tool for the job. The standard seven are the <strong>d4, d6, d8, d10, d12, d20,</strong> and <strong>d100</strong>.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll the Whole Family',
+        html: '<p>Pick any die from the set and give it a roll. Notice how the <strong>biggest number</strong> you can get always matches the die&rsquo;s name &mdash; a d8 tops out at 8, a d20 tops out at 20. Explore all seven!</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'Which die has 20 faces?',
+        html: '<p>Use the naming rule you just learned.</p>',
+        options: ['The d6', 'The d12', 'The d20', 'The d4'],
+        answer: 2,
+        explain: '<p>Correct! A <strong>dN</strong> has N faces, so the die with 20 faces is the <span class="le-term">d20</span> &mdash; the iconic icosahedron that D&amp;D players roll for almost everything.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'On a fair dN, how likely is any one face?',
+        html: '<p>If every face is equally likely, what is the probability of rolling one specific face?</p>',
+        options: ['1&frasl;2', '1&frasl;6 for every die', 'N', '1&frasl;N'],
+        answer: 3,
+        explain: '<p>Yes! On a <strong>fair</strong> die every face is equally likely, and there are N faces to share the chance. So each specific face has probability <strong>1&frasl;N</strong>. For a d20 that&rsquo;s 1&frasl;20; for a d4 it&rsquo;s 1&frasl;4.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The Family Portrait',
+        html: '<p>You just toured the <span class="le-term">polyhedral dice</span> set. Three ideas to carry forward:</p><p><strong>1.</strong> The standard set has seven dice: d4, d6, d8, d10, d12, d20, and d100.<br><strong>2.</strong> A <strong>dN</strong> has N faces &mdash; the name tells you everything.<br><strong>3.</strong> On a fair dN, each face has probability <strong>1&frasl;N</strong>.</p><p>Next up, we&rsquo;ll meet each die up close, starting with the humble d4.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-16', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

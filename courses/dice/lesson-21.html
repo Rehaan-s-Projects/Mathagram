@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 21 · The d12 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE DIE',
+        title: 'The d12',
+        html: '<p>Pick up a <span class="le-term">d12</span> and you are holding a little jewel. It has twelve faces, and every one of them is a perfect <span class="le-term">pentagon</span> &mdash; a five-sided shape. Twelve pentagons, stitched together into a rounded, almost spherical solid.</p><p>Its proper name is a <span class="le-term">dodecahedron</span>, from the Greek for &ldquo;twelve faces.&rdquo; Roll it and one pentagon settles on top, showing a number from <strong>1</strong> to <strong>12</strong>.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'GEOMETRY',
+        title: 'A Platonic solid',
+        html: '<p>The dodecahedron is one of only five <span class="le-term">Platonic solids</span> &mdash; shapes where <em>every</em> face is the same regular polygon and every corner looks identical. The d4, d6, d8, and d20 are the others.</p><p>Because all twelve pentagons are perfectly interchangeable, no face is heavier, wider, or luckier than any other. The die&rsquo;s fairness is baked into its symmetry.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'PROBABILITY',
+        title: 'Naturally fair',
+        html: '<p>Twelve identical faces means twelve <span class="le-term">equally likely</span> outcomes. To find the chance of any single number, you split one whole roll evenly across all of them.</p><p>So each face &mdash; the 1, the 7, the 12, all of them &mdash; comes up with probability <strong>1&frasl;12</strong>, or about <strong>8.3%</strong>. No number is favored over any other.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'REAL-WORLD TWELVES',
+        title: 'Twelves everywhere',
+        html: '<p>The number 12 has a special charm in daily life. There are <strong>12 months</strong> in a year, <strong>12 numbers</strong> around the face of a clock, and 12 makes a tidy dozen.</p><p>In tabletop games the d12 is a bit of an underdog &mdash; but it has its moments. A mighty <em>greataxe</em> in Dungeons &amp; Dragons deals <strong>1d12</strong> damage, so the biggest single swings in the game ride on this twelve-sided jewel.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d12',
+        html: '<p>Choose the <strong>d12</strong> and give it a few rolls. Watch how the results scatter across 1 through 12 &mdash; over many throws, each face earns roughly its fair <strong>1&frasl;12</strong> share.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'How many faces does a d12 have?',
+        options: ['6 faces', '10 faces', '12 faces', '20 faces'],
+        answer: 2,
+        explain: '<p>A d12 has exactly <strong>12 faces</strong> &mdash; the &ldquo;12&rdquo; in the name gives it away. Each of those faces is a pentagon, and each shows a number from 1 to 12.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'What shape is a d12?',
+        html: '<p>Think about the name and the faces you have been rolling.</p>',
+        options: ['A cube of six squares', 'A dodecahedron of twelve pentagons', 'A sphere with painted numbers', 'An icosahedron of twenty triangles'],
+        answer: 1,
+        explain: '<p>A d12 is a <span class="le-term">dodecahedron</span> &mdash; twelve regular <strong>pentagon</strong> faces meeting in a symmetric solid. A cube (six squares) is the d6, and an icosahedron (twenty triangles) is the d20.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'What you learned',
+        html: '<p>The <span class="le-term">d12</span> is a <span class="le-term">dodecahedron</span>: twelve identical pentagon faces forming a Platonic solid. That perfect symmetry makes it <strong>naturally fair</strong>.</p><p>With twelve equally likely outcomes, every number from 1 to 12 rolls with probability <strong>1&frasl;12</strong>. It echoes the world&rsquo;s many twelves &mdash; months, clock hours, a dozen &mdash; and delivers the fearsome <strong>1d12</strong> of a greataxe swing.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-21', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

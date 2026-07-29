@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 25 · Beyond the Standard Set — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THE ZOO OF DICE',
+        title: 'Beyond the Standard Seven',
+        html: '<p>You already know the classic lineup: the d4, d6, d8, d10, d12, d20, and the percentile d100. But the world of dice is much stranger and wider than that.</p><p>Hobbyists, game designers, and collectors use all sorts of <span class="le-term">non-standard dice</span> — a d3, a d5, a d16, a d24, a d30, and even a 100-sided <em>ball</em>. Each exists to solve a very specific problem at the table.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE d3 TRICK',
+        title: 'Rolling a Die That Barely Exists',
+        html: '<p>A true three-sided die is awkward to build — a flat triangle has no clean way to land. So most players <em>fake</em> a <span class="le-term">d3</span> using a die they already own.</p><p>The trick: roll an ordinary d6 and halve the result. A <strong>1 or 2</strong> becomes <strong>1</strong>, a <strong>3 or 4</strong> becomes <strong>2</strong>, and a <strong>5 or 6</strong> becomes <strong>3</strong>. Two faces map to each outcome, so all three results stay equally likely.</p>',
+        visual: 'die:5'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE ODD ONES',
+        title: 'd5, d16, d24, d30 &amp; Friends',
+        html: '<p>Beyond the d3, plenty of unusual dice really are manufactured as solid shapes. There are d5, d7, and d14 dice, plus chunky d16, d24, and d30 dice used in niche games and specialty tables.</p><p>Why do they work? A die is <span class="le-term">fair</span> whenever its faces are symmetric — each face is interchangeable with every other. That symmetry, not the number of sides, is what guarantees every outcome has an equal chance.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Pick an Unusual Die and Roll',
+        html: '<p>Choose a die from the small d4 up to the giant d100 and give it a spin. Notice how the range of possible results grows as the face count climbs.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How do most players &quot;roll a d3&quot;?',
+        html: '<p>Nobody at the table actually owns a three-sided die. What is the common workaround?</p>',
+        options: [
+          'Roll a d6 and halve the result: 1–2→1, 3–4→2, 5–6→3',
+          'Roll a d6 and subtract 3, ignoring negatives',
+          'Roll two d6 and keep only the smaller die',
+          'Roll a d10 and divide the result by 3'
+        ],
+        answer: 0,
+        explain: '<p>Correct. Halving a d6 splits its six faces into three equal pairs — 1–2, 3–4, and 5–6 — so each of the three outcomes lands with probability 2/6 = 1/3. The other methods skew the odds or produce the wrong range.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE 100-SIDED BALL',
+        title: 'The Zocchihedron vs. Two d10s',
+        html: '<p>Does a real 100-sided die exist? Yes — it is called the <span class="le-term">Zocchihedron</span>, a rounded ball-shaped die with 100 tiny faces packed over a sphere.</p><p>It is a wonderful curiosity, but it is rare and notoriously <em>slow to settle</em>, rolling around long after a normal die would have stopped. That is why most players still prefer the practical method: roll <strong>two d10s</strong> — one for the tens digit, one for the ones — to generate a number from 1 to 100.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'What is the 100-sided spherical die called?',
+        options: [
+          'The Centahedron',
+          'The Zocchihedron',
+          'The Sphereodie',
+          'The Great Icosahedron'
+        ],
+        answer: 1,
+        explain: '<p>Correct. The <span class="le-term">Zocchihedron</span> — named after its inventor, Lou Zocchi — is the ball-shaped 100-sided die. Because it takes so long to stop rolling, two d10s remain the go-to way to produce a d100 result.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Fairness Comes From Symmetry',
+        html: '<p>The standard seven are just the beginning. A <span class="le-term">d3</span> is usually faked by halving a d6, and solid d5, d16, d24, and d30 dice exist for special games.</p><p>The 100-sided <span class="le-term">Zocchihedron</span> is real but slow, so two d10s remain the practical d100. Through all of it, one rule holds: a die is fair whenever its faces are <strong>symmetric</strong> — the shape can be as exotic as you like.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-25', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

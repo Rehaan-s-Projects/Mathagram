@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 28 · Reading Tricky Dice — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THE PERCENTILE SET',
+        title: 'Two dice, one number',
+        html: '<p>Open a fancy dice set and you will find two ten-sided dice that look almost the same &ndash; but read very differently. One is the <span class="le-term">tens die</span>, marked <strong>00, 10, 20, &hellip; 90</strong>. The other is the <span class="le-term">ones die</span>, marked <strong>0 through 9</strong>.</p><p>Together they are called a <span class="le-term">percentile set</span>, and rolling both at once gives you a number from 1 to 100. The trick is knowing how to read them.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'READING THEM TOGETHER',
+        title: 'Stack the tens and the ones',
+        html: '<p>You do not add the dice like normal &ndash; you <em>slot</em> them together. The tens die gives the left digit, the ones die gives the right digit.</p><p>Say the tens die lands on <strong>40</strong> and the ones die lands on <strong>3</strong>. Read it as forty-something, then drop the ones digit into place: 40 &plus; 3 = <strong>43</strong>. It is the same as writing the tens next to the ones, exactly like you would read any two-digit number.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE ONE WEIRD CASE',
+        title: 'Double zero means 100',
+        html: '<p>There is a single exception that trips everyone up. If the tens die shows <strong>00</strong> and the ones die shows <strong>0</strong>, you do <em>not</em> read this as zero.</p><p>By convention, a percentile roll runs from 1 to 100, so <strong>00 &plus; 0 is read as 100</strong> &ndash; the highest possible result, not the lowest. Every other combination (like 00 &plus; 7 = 7, or 90 &plus; 0 = 90) reads normally.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'NO SECOND DIE?',
+        title: 'One d10, rolled twice &mdash; or a spinner',
+        html: '<p>You do not actually need the special tens die. Grab a single <span class="le-term">d10</span> and roll it twice: the <strong>first roll is the tens digit</strong>, the <strong>second roll is the ones digit</strong>. A first roll of 4 then a 3 still gives 43, and two zeros still read as 100.</p><p>No dice at all? A <span class="le-term">number spinner</span> or a dice app on your phone does the very same job &ndash; they just pick a random digit for you.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d10 (or a d100)',
+        html: '<p>Pick the <strong>d10</strong> and roll it a couple of times to feel out tens-then-ones. Or jump straight to the <strong>d100</strong>, which does the whole percentile read for you in one throw.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'The tens die shows 70 and the ones die shows 5. The result is?',
+        html: '<p>Slot the ones digit into place.</p>',
+        options: ['12', '75', '85', '705'],
+        answer: 1,
+        explain: '<p>Seventy-something, with a 5 in the ones place: 70 &plus; 5 = <strong>75</strong>. You do not add to get 12, and you do not smash them into 705 &ndash; the tens die already <em>is</em> the tens place.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'THE TRICKY ONE',
+        title: 'The tens die shows 00 and the ones die shows 0. You read this as?',
+        html: '<p>Remember the one exception to the rule.</p>',
+        options: ['0', '1', '10', '100'],
+        answer: 3,
+        explain: '<p>Double zero is the special case: a percentile set runs 1 to 100, so <strong>00 &plus; 0 = 100</strong>, the highest roll &ndash; not zero. Every other pair reads as a plain two-digit number.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'You can read any tricky die now',
+        html: '<p>A <span class="le-term">percentile set</span> is a <span class="le-term">tens die</span> (00&ndash;90) plus a <span class="le-term">ones die</span> (0&ndash;9). Read them together by slotting the ones digit onto the tens: 40 &plus; 3 = <strong>43</strong>.</p><p>The lone exception: <strong>00 &plus; 0 = 100</strong>, not 0. And if you only have one d10, roll it twice (tens first, ones second) &ndash; or let a spinner or app do it. Same numbers, no confusion.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-28', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

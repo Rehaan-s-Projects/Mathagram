@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 23 · Percentile d100 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'THE PERCENT DIE',
+        title: 'Rolling a Percent Chance',
+        html: '<p>Lots of games ask a question like <em>&ldquo;is there a 37% chance this happens?&rdquo;</em> To answer it fairly, you need a die that rolls a number from <strong>1 to 100</strong>. That die is called a <span class="le-term">d100</span>, or a <span class="le-term">percentile</span> die.</p><p>If your roll lands at or below the target percent, the event happens. So a d100 turns any &ldquo;percent chance&rdquo; into a single, honest dice roll.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'A CLEVER TRICK',
+        title: 'Two d10s, Not One Giant Ball',
+        html: '<p>You might picture a d100 as a hundred-sided ball &mdash; but that would barely roll. Instead, a d100 is almost always <strong>two ten-sided dice</strong> read together.</p><p>One die is the <strong>tens</strong> digit, marked <em>00, 10, 20 &hellip; 90</em>. The other is the <strong>ones</strong> digit, marked <em>0&ndash;9</em>. Read them side by side to build one number.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WORKED EXAMPLES',
+        title: 'Stacking the Two Digits',
+        html: '<p>Line up the <strong>tens die</strong> and the <strong>ones die</strong>, then just read across:</p><p>Tens = <strong>40</strong>, ones = <strong>3</strong> &rarr; <strong>43</strong>. Tens = <strong>10</strong>, ones = <strong>7</strong> &rarr; <strong>17</strong>.</p><p>There is one special case: rolling <strong>00</strong> on the tens die and <strong>0</strong> on the ones die does <em>not</em> mean zero &mdash; it is read as <strong>100</strong>, the top of the range.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE PROBABILITY',
+        title: '100 Equally Likely Outcomes',
+        html: '<p>Each d10 has 10 equally likely faces, so together they make 10 &times; 10 = <strong>100</strong> equally likely results, covering every number from 1 to 100 exactly once.</p><p>That means every single outcome has probability <strong>1&frasl;100 = 1%</strong>. This is why the d100 is perfect for percent chances &mdash; each percentage point gets its own face.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d100',
+        html: '<p>Pick the <strong>d100</strong> and roll a few times. Notice how the result always lands between 1 and 100, with no value more likely than any other.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How is a d100 usually rolled?',
+        options: [
+          'By spinning one enormous 100-sided ball',
+          'With two d10s: a tens die and a ones die read together',
+          'By rolling a d10 twice and adding the two numbers',
+          'With a d50 rolled two times and multiplied'
+        ],
+        answer: 1,
+        explain: '<p>A d100 is normally <strong>two ten-sided dice</strong> &mdash; a <strong>tens</strong> die (00&ndash;90) and a <strong>ones</strong> die (0&ndash;9) &mdash; read side by side. Adding two d10s would only reach 20, and multiplying d50s would skip most numbers, so those cannot give a fair 1&ndash;100.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'Tens die shows 70, ones die shows 5 — the result?',
+        html: '<p>Read the tens digit and the ones digit together.</p>',
+        options: ['12', '75', '705', '57'],
+        answer: 1,
+        explain: '<p>The tens die contributes <strong>70</strong> and the ones die contributes <strong>5</strong>, so together they read <strong>75</strong>. You stack the digits &mdash; you don&rsquo;t add them (that would give 12) or glue them into 705.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The d100 in a Nutshell',
+        html: '<p>A <span class="le-term">d100</span> gives a fair number from <strong>1 to 100</strong>, built from <strong>two d10s</strong>: a <strong>tens</strong> die (00&ndash;90) plus a <strong>ones</strong> die (0&ndash;9). Read them together &mdash; and remember that double-zero means <strong>100</strong>.</p><p>With 10 &times; 10 = 100 equally likely outcomes, every result carries probability <strong>1&frasl;100 = 1%</strong>, making the d100 the go-to die for any percent chance in a game.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-23', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

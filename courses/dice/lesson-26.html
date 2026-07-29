@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 26 · Special Dice — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'NOT ALWAYS 1&ndash;6',
+        title: 'Dice don&rsquo;t have to be numbered',
+        html: '<p>You&rsquo;ve met the trusty <span class="le-term">d6</span> &mdash; six faces, numbered 1 through 6. But a die is really just a <em>fair randomizer</em>: any six things can live on those faces.</p><p>Some dice swap the numbers for <strong>symbols</strong>. Others keep numbers but choose them cleverly to change the <span class="le-term">spread</span> of results. Let&rsquo;s meet three special dice that break the 1&ndash;6 mold.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'FUDGE / FATE DICE',
+        title: 'Plus, minus, blank',
+        html: '<p>A <span class="le-term">Fudge die</span> (also called a <span class="le-term">Fate die</span>) is d6-shaped, but its faces show only three symbols: two <strong>plus</strong> (&plus;), two <strong>minus</strong> (&minus;), and two <strong>blank</strong> faces.</p><p>Each face is worth <strong>&plus;1</strong>, <strong>&minus;1</strong>, or <strong>0</strong>. Roll several and add them up. Because pluses and minuses cancel, the total is a <em>swingy</em> result centered right on <strong>zero</strong> &mdash; perfect for &ldquo;a little better or a little worse than average.&rdquo;</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'FEEL THE RANDOMNESS',
+        title: 'Give it a roll',
+        html: '<p>Tap to roll a normal d6. Picture a Fudge die instead: two faces would read &plus;, two &minus;, and two blank &mdash; a one-in-three chance of each outcome.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'AVERAGING DICE',
+        title: 'Same mean, calmer results',
+        html: '<p>An <span class="le-term">averaging die</span> is numbered <strong>2, 3, 3, 4, 4, 5</strong>. Add those and divide by six: the mean is <strong>3.5</strong> &mdash; exactly the same as an ordinary d6!</p><p>The difference is the <span class="le-term">spread</span>. There are no 1s and no 6s, and the middle values repeat, so results cluster tightly around 3.5. Same average, <strong>less variance</strong> &mdash; more consistent, less swingy.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'SPINDOWN DICE',
+        title: 'A counter, not a randomizer',
+        html: '<p>A <span class="le-term">spindown</span> d20 arranges its numbers <strong>in sequence</strong> &mdash; 1, 2, 3&hellip; winding around the die &mdash; so you can tick a life total down by simply rolling to the next-lower face.</p><p>Handy for keeping score, but that tidy layout is its flaw: because <strong>adjacent numbers sit physically close together</strong>, a small nudge or tilt lands on a nearby value. That makes a spindown a great <em>counter</em> but a <strong>poor fair randomizer</strong>.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'What do the faces of a Fudge / Fate die show?',
+        options: [
+          'The numbers 1 through 6, like a normal d6',
+          'Plus, minus, and blank faces (two of each)',
+          'Only pluses on every face',
+          'The numbers 2, 3, 3, 4, 4, 5'
+        ],
+        answer: 1,
+        explain: '<p>A Fudge die carries two <strong>&plus;</strong>, two <strong>&minus;</strong>, and two <strong>blank</strong> faces &mdash; worth &plus;1, &minus;1, and 0. (The 2,3,3,4,4,5 set belongs to the <em>averaging</em> die.)</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'Why is a spindown d20 a poor choice for fair random rolls?',
+        html: '<p>Think about how its numbers are laid out.</p>',
+        options: [
+          'It only has 6 faces, so it can&rsquo;t make 20 outcomes',
+          'Its numbers are arranged in sequence, so it&rsquo;s easy to tilt or nudge to a chosen value',
+          'Its faces show symbols instead of numbers',
+          'Its average is higher than a normal d20&rsquo;s'
+        ],
+        answer: 1,
+        explain: '<p>Because the numbers wind around <strong>in order</strong>, high and low values aren&rsquo;t scattered &mdash; adjacent numbers are physically close, so a gentle tilt lands on a neighbor. Great for counting life totals, bad for a <em>fair</em> roll.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Three dice that break the mold',
+        html: '<p><span class="le-term">Fudge / Fate dice</span>: faces of &plus;, &minus;, and blank (two each) &mdash; add them for a swingy result centered on <strong>zero</strong>.</p><p><span class="le-term">Averaging dice</span>: numbered 2, 3, 3, 4, 4, 5 &mdash; same mean of <strong>3.5</strong> as a d6 but with <strong>less variance</strong>.</p><p><span class="le-term">Spindown dice</span>: numbers in sequence make a fine <strong>life counter</strong> but a <strong>poor randomizer</strong>, since nearby faces are easy to nudge.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-26', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 17 · The d4 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE DIE',
+        title: 'The d4 &mdash; a Little Pyramid',
+        html: '<p>Most dice are cubes, but the <span class="le-term">d4</span> is different. It&rsquo;s a <span class="le-term">tetrahedron</span> &mdash; a pyramid built from <strong>4 triangular faces</strong>.</p><p>Give it a roll and it tumbles like a tiny caltrop, always coming to rest on one triangle with a sharp point sticking straight up.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'HOW YOU READ IT',
+        title: 'No Face Points Up',
+        html: '<p>Here&rsquo;s the tricky part. On a normal die you read the number on <em>top</em>. But when a d4 lands, a <strong>corner</strong> points up &mdash; no single face is on top!</p><p>So d4s use a clever trick. In one common style you read the number at the <strong>apex</strong> (the top point) of each visible face; in another you read the number along the <strong>bottom edge</strong> resting on the table. Either way, all three visible sides agree on the same result.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE PROBABILITY',
+        title: 'Four Equally Likely Outcomes',
+        html: '<p>A fair d4 has 4 faces, and it&rsquo;s just as happy to land on any one of them. The outcomes are <span class="le-term">1, 2, 3, 4</span> &mdash; each equally likely.</p><p>So the chance of any particular number is <strong>1 out of 4</strong>, or <strong>1&frasl;4</strong> (that&rsquo;s 25%).</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d4',
+        html: '<p>Pick the <strong>d4</strong> and roll it a bunch of times. Over many rolls, each number 1&ndash;4 should show up about a quarter of the time.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How many faces does a d4 have?',
+        options: ['3 faces', '4 faces', '6 faces', '8 faces'],
+        answer: 1,
+        explain: '<p>A d4 is a <span class="le-term">tetrahedron</span> &mdash; a pyramid with <strong>4</strong> triangular faces. (The &ldquo;4&rdquo; in d4 literally tells you the face count!)</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'On a fair d4, what is P(rolling a 3)?',
+        html: '<p>Every face is equally likely.</p>',
+        options: ['1&frasl;3', '1&frasl;4', '1&frasl;6', '3&frasl;4'],
+        answer: 1,
+        explain: '<p>There are 4 equally likely faces and exactly one of them is a 3, so P(3) = <strong>1&frasl;4</strong>. The same is true for rolling a 1, 2, or 4.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The Tricky Tetrahedron',
+        html: '<p>The <span class="le-term">d4</span> is a <span class="le-term">tetrahedron</span> with <strong>4 triangular faces</strong>. Because a corner points up when it lands, you read the result at the <strong>apex</strong> or the <strong>bottom edge</strong> instead of a top face.</p><p>It gives outcomes <strong>1&ndash;4</strong>, each with probability <strong>1&frasl;4</strong>. You&rsquo;ll meet it in role-playing games too &mdash; a dagger deals <strong>1d4</strong> damage.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-17', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

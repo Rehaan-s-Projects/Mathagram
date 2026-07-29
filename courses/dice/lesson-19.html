@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 19 · The d8 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE DIE',
+        title: 'The d8 &mdash; a New Shape',
+        html: '<p>So far you have spent most of your time with the humble cube. Now meet the <span class="le-term">d8</span>: a die with <strong>eight faces</strong>, each one an <em>equilateral triangle</em>.</p><p>Instead of the flat squares of a d6, the d8 comes to a sharp point at the top and bottom &mdash; a crystal-like gem you roll across the table.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE SHAPE',
+        title: 'Two Pyramids, Glued Together',
+        html: '<p>Picture two square pyramids. Now glue them together <strong>base to base</strong> &mdash; one pointing up, one pointing down. That is exactly the shape of a d8, a solid called an <span class="le-term">octahedron</span>.</p><p>The name comes from the Greek <em>okt&#333;</em> (eight) and <em>hedron</em> (face). Eight identical triangular faces meet along its edges.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WHY IT IS FAIR',
+        title: 'A Platonic Solid',
+        html: '<p>The octahedron is one of only five <span class="le-term">Platonic solids</span> &mdash; shapes where every face is the <strong>same regular polygon</strong> and every corner looks identical.</p><p>Because all eight faces are truly interchangeable, no side is favored over any other. The d8 is <em>naturally fair</em>: gravity has no reason to prefer one triangle to the next.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE PROBABILITY',
+        title: 'Eight Equally Likely Outcomes',
+        html: '<p>A fair d8 shows one of the numbers <strong>1 through 8</strong>. Since all eight faces are equally likely, the probability of any single result is</p><p><strong>1 &divide; 8 = 1&frasl;8</strong>, or <strong>12.5%</strong>.</p><p>In tabletop games the d8 rolls <em>medium</em> weapon damage &mdash; a longsword deals <strong>1d8</strong>, landing somewhere between 1 and 8 with every swing.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'TRY IT',
+        title: 'Roll a d8',
+        html: '<p>Set the widget to a <strong>d8</strong> and roll it a few times. Watch how the results scatter unpredictably across 1 to 8 &mdash; yet over many rolls, each face turns up about one-eighth of the time.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How many faces does a d8 have?',
+        html: '<p>Think about what the name of the shape is telling you.</p>',
+        options: ['6 faces', '8 faces', '10 faces', '12 faces'],
+        answer: 1,
+        explain: '<p>An <span class="le-term">octahedron</span> has <strong>8</strong> triangular faces &mdash; that is exactly what the &ldquo;8&rdquo; in d8 means. Six faces would be a d6 (a cube).</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'On a fair d8, what is P(rolling a 5)?',
+        html: '<p>Every face is equally likely. How many faces are there in total?</p>',
+        options: ['1&frasl;6', '1&frasl;5', '1&frasl;8', '5&frasl;8'],
+        answer: 2,
+        explain: '<p>There are 8 equally likely faces, and exactly one of them shows a 5. So <strong>P(5) = 1&frasl;8</strong>. The number on the face (5) does not change the odds &mdash; every result on a fair d8 has the same 1&frasl;8 chance.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'What You Learned',
+        html: '<p>The <span class="le-term">d8</span> is an <span class="le-term">octahedron</span>: eight equilateral-triangle faces, like two square pyramids joined base to base.</p><p>As a <span class="le-term">Platonic solid</span>, all its faces are identical, so it is <strong>naturally fair</strong> &mdash; outcomes 1&ndash;8 each occur with probability <strong>1&frasl;8</strong>. It is the classic die for medium weapon damage, such as a longsword&rsquo;s 1d8.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-19', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

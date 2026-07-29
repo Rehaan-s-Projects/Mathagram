@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 18 · The d6 — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'MEET THE CUBE',
+        title: 'The everyday die',
+        html: '<p>Pick up almost any board game and you&rsquo;ll find one: a small cube with dots on every side. This is the <span class="le-term">d6</span> &mdash; a die with <strong>six faces</strong> &mdash; and it is the most common die in the entire world.</p><p>From <em>Monopoly</em> to <em>backgammon</em> to the craps tables of a casino, when someone says &ldquo;roll the dice,&rdquo; they almost always mean these little cubes.</p>',
+        visual: 'die:5'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WHY THE CUBE',
+        title: 'Built to be fair',
+        html: '<p>The cube became the standard for a simple reason: it is <strong>easy to make fair</strong>. All six faces are <em>identical squares</em>, so no face is favored over any other.</p><p>A cube is also wonderfully <strong>stable</strong> &mdash; it tumbles, settles flat, and always lands with exactly one face pointing up. Every face gets the same treatment, which is exactly what you want from a fair die.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'PIPS &amp; NUMBERS',
+        title: 'Dots that add to seven',
+        html: '<p>The faces of a d6 show either <span class="le-term">pips</span> (the little dots) or the numerals <strong>1&ndash;6</strong>. Either way, the values are the same six numbers.</p><p>Here&rsquo;s the elegant part: on a standard d6, <strong>opposite faces always sum to 7</strong>. So 1 sits across from 6, 2 across from 5, and 3 across from 4. And since the faces are identical, each one has a probability of exactly <strong>1&frasl;6</strong>.</p>',
+        visual: 'die:1'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'YOUR TURN',
+        title: 'Roll the cube',
+        html: '<p>Tap to roll a fair d6 and watch the tally build. Each face &mdash; 1, 2, 3, 4, 5, 6 &mdash; should show up about equally often. Give it a good number of rolls and see how the counts even out.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How many faces does a d6 have?',
+        options: ['4 faces', '6 faces', '8 faces', '12 faces'],
+        answer: 1,
+        explain: '<p>The &ldquo;6&rdquo; in <strong>d6</strong> says it all: a d6 has <strong>6 faces</strong>, one for each number 1 through 6. Its cube shape is exactly why &mdash; a cube has six square sides.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'On a standard d6, opposite faces sum to&hellip;?',
+        html: '<p>Think about which number sits across from the 1.</p>',
+        options: ['6', '7', '8', '12'],
+        answer: 1,
+        explain: '<p>Opposite faces of a standard d6 always add to <strong>7</strong>: 1&amp;6, 2&amp;5, and 3&amp;4. So the face across from the 1 is the 6, since 1 &plus; 6 &equals; 7.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'The cube you already know',
+        html: '<p>The <span class="le-term">d6</span> is the classic cube: <strong>six identical square faces</strong>, which makes it stable and easy to make fair. Faces show <span class="le-term">pips</span> or numerals <strong>1&ndash;6</strong>, <strong>opposite faces sum to 7</strong>, and every face lands with probability <strong>1&frasl;6</strong>.</p><p>It powers most household games &mdash; <em>Monopoly, backgammon, Yahtzee, craps</em> &mdash; which is why it&rsquo;s the most common die on Earth. Next time you roll, you&rsquo;ll know exactly why the cube rules the table.</p>',
+        visual: 'die:6'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-18', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

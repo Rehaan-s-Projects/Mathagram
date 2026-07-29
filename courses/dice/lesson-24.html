@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 24 · Platonic Solids — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'WHAT MAKES A DIE FAIR',
+        title: 'Fairness lives in the shape',
+        html: '<p>A die is <span class="le-term">fair</span> when every face has an equal chance of landing up. But you can’t <em>promise</em> fairness by painting numbers on — you have to earn it with <strong>geometry</strong>.</p><p>The trick: make every face an <strong>identical</strong> shape, and make every corner look exactly the same as every other corner. If no face is special, no face can be favored. That perfect sameness is called <span class="le-term">symmetry</span>.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE ELITE FIVE',
+        title: 'The Platonic solids',
+        html: '<p>Exactly five 3D shapes pull off total symmetry — every face an identical regular polygon, every corner identical. These are the <span class="le-term">Platonic solids</span>, and each one is a natural die:</p><p><strong>Tetrahedron</strong> → 4 triangles → the <span class="le-term">d4</span>.<br><strong>Cube</strong> → 6 squares → the <span class="le-term">d6</span>.<br><strong>Octahedron</strong> → 8 triangles → the <span class="le-term">d8</span>.<br><strong>Dodecahedron</strong> → 12 pentagons → the <span class="le-term">d12</span>.<br><strong>Icosahedron</strong> → 20 triangles → the <span class="le-term">d20</span>.</p><p>Because each is flawlessly symmetric, it is <em>naturally fair</em> — no gluing tricks required.</p>'
+      },
+      {
+        type: 'interactive',
+        variant: 'dice-roller',
+        eyebrow: 'FEEL THE FAIRNESS',
+        title: 'Roll a Platonic die',
+        html: '<p>Pick a d4, d6, d8, d12, or d20 and roll away. Every one of these is a Platonic solid, so each face is equally likely — roll enough times and the outcomes even out.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'WHY NOT SIX? OR SIXTY?',
+        title: 'Geometry stops at five',
+        html: '<p>Why not a sixth Platonic solid? At every corner you must fit at least <strong>three</strong> faces, and their angles must add to <em>less</em> than 360&deg; — otherwise the corner flattens out and can’t fold into a solid.</p><p>Squeeze the math and only <strong>five</strong> arrangements survive. It’s not that nobody has found a sixth yet; it’s <em>provably impossible</em>. Five, forever.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE FAMOUS EXCEPTION',
+        title: 'The d10 breaks the pattern',
+        html: '<p>Reach into a dice bag and the ten-sided <span class="le-term">d10</span> is nobody’s Platonic solid — its faces are kite-shaped, not regular polygons. Its real name is a <span class="le-term">pentagonal trapezohedron</span>.</p><p>Yet the d10 is still <strong>fair!</strong> Its ten faces are all symmetric <em>to each other</em>, so no face is favored. Lesson: Platonic solids <em>guarantee</em> fairness, but they aren’t the <em>only</em> shapes that can achieve it.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'How many Platonic solids exist?',
+        html: '<p>The shapes with every face identical and every corner identical.</p>',
+        options: ['Exactly 5', 'Exactly 6', 'Infinitely many', 'It depends on the number of sides'],
+        answer: 0,
+        explain: '<p><strong>Exactly 5.</strong> Tetrahedron, cube, octahedron, dodecahedron, icosahedron — and geometry <em>proves</em> there can be no sixth. Corner angles simply run out of room.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK YOURSELF',
+        title: 'Which common RPG die is NOT a Platonic solid?',
+        html: '<p>Careful — it’s still a fair die, just not a Platonic one.</p>',
+        options: ['The d10', 'The d8', 'The d12', 'The d20'],
+        answer: 0,
+        explain: '<p>The <strong>d10</strong>. It’s a pentagonal trapezohedron with kite-shaped faces — not a Platonic solid. It stays fair because its ten faces are symmetric to one another, but it isn’t one of the elite five. The d8, d12, and d20 all <em>are</em> Platonic.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Fairness by symmetry',
+        html: '<p>A die is naturally fair when its faces are identical and its corners are all the same — pure <span class="le-term">symmetry</span>.</p><p>The <span class="le-term">Platonic solids</span> nail this perfectly, and there are exactly <strong>five</strong>: d4, d6, d8, d12, and d20. Geometry proves no sixth can exist.</p><p>The <strong>d10</strong> is the reminder that Platonic solids <em>guarantee</em> fairness but don’t <em>monopolize</em> it — a few other symmetric shapes roll fair too.</p>'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-24', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>

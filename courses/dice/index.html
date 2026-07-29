@@ -118,6 +118,32 @@
       lessons[k].href = 'lesson-' + (k + 1) + '.html';
       lessons[k].unitName = 'Foundations of Dice & Probability';
     });
+
+    // ── Unit 2 "Types of Dice": 15 built lessons (nodes 16–30 → lesson-16..30.html).
+    const unit2Titles = [
+      'The Polyhedral Family — A Tour',
+      'The d4 — The Tricky Tetrahedron',
+      'The d6 — The Everyday Cube',
+      'The d8 — The Octahedron',
+      'The d10 — Numbered 0 to 9',
+      'The d12 — The Dodecahedron',
+      'The d20 — The Icosahedron',
+      'Percentile — d100 from Two d10s',
+      'Platonic Solids — The Only Five Fair Shapes',
+      'Beyond the Standard Set — d3 to the d100 Ball',
+      'Special Dice — Fudge, Averaging and Spindown',
+      'How Dice Are Numbered — Balanced vs Sequential',
+      'Reading Tricky Dice — d10, d% and Spinners',
+      'Digital and App Dice — RNG vs Physical Fairness',
+      'Unit 2 Checkpoint — Types of Dice Review'
+    ];
+    unit2Titles.forEach((t, k) => {
+      const idx = 15 + k;            // unit-2 nodes start at the 16th lesson
+      if (!lessons[idx]) return;
+      lessons[idx].title = t;
+      lessons[idx].href = 'lesson-' + (16 + k) + '.html';
+      lessons[idx].unitName = 'Types of Dice — d4 to d100';
+    });
     async function loadPath() {
       const container = document.getElementById('learning-path');
       let completed = await getCompletedLessons('dice');

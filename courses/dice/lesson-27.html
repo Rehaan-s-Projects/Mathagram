@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 27 · How Dice Are Numbered — 🎲 Dice &amp; Probability — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'DESIGN CHOICE',
+        title: 'Numbering is not random',
+        html: '<p>A die has to <em>carry</em> its numbers somewhere, and where each number goes is a deliberate decision. The maker could scatter the pips any way at all &mdash; but they don’t. The <span class="le-term">arrangement</span> of numbers on the faces is engineered, and that engineering is what separates a fair randomizer from a handy counter.</p>',
+        visual: 'die:5'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE d6 RULE',
+        title: 'Opposite faces sum to 7',
+        html: '<p>Pick up any standard six-sided die and check: 1 is across from 6, 2 is across from 5, 3 is across from 4. Every pair of opposite faces adds to <strong>7</strong>. This is the classic balancing rule &mdash; the biggest number is always paired with the smallest, so no side of the cube is loaded with high values.</p>',
+        visual: 'die:6'
+      },
+      {
+        type: 'interactive',
+        variant: 'roll-die',
+        eyebrow: 'TRY IT',
+        title: 'Roll and picture the hidden face',
+        html: '<p>Tap to roll. Whatever lands face-up, the number hidden on the bottom is just <strong>7 &minus; (your roll)</strong>. Roll a few times and confirm the pattern in your head &mdash; that consistency is the balancing rule at work.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'THE d20 RULE',
+        title: 'Twenty faces, one balance point',
+        html: '<p>The same idea scales up. On a well-made twenty-sided die, opposite faces sum to <strong>21</strong>: 1 opposes 20, 2 opposes 19, 10 opposes 11. Beyond that, the highs and lows are deliberately <span class="le-term">spread</span> around the whole die rather than bunched together, so every region carries a mix of large and small numbers.</p>',
+        visual: 'die:1'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'BALANCED vs SEQUENTIAL',
+        title: 'Two very different layouts',
+        html: '<p>A <span class="le-term">balanced</span> layout scatters highs and lows all around the die. This distributes any tiny weight differences from the engraving so no region is systematically favored &mdash; and it makes bias easy to spot, since a lopsided die betrays itself quickly.</p><p>A <span class="le-term">sequential</span> (or <em>spindown</em>) layout runs 1, 2, 3, &hellip; in order around the die. Great for counting down life totals, but it <strong>clusters</strong> the low numbers on one side and the highs on the other, which can amplify any imbalance. That’s why spindowns are never used for fair rolling.</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'On a standard d20, opposite faces sum to&hellip;?',
+        html: '<p>Use the balancing rule that pairs the largest number with the smallest.</p>',
+        options: ['7', '20', '21', '40'],
+        answer: 2,
+        explain: '<p>Correct: <strong>21</strong>. Each face pairs with its opposite so 1&plus;20, 2&plus;19, 10&plus;11 all reach 21. (7 is the d6 rule; 20 is just the top face; 40 would be double the maximum.)</p>'
+      },
+      {
+        type: 'question',
+        eyebrow: 'CHECK',
+        title: 'Why do makers use a BALANCED number layout?',
+        html: '',
+        options: [
+          'To spread the numbers and any weight around the die so no region is favored, and bias is easier to spot',
+          'To make the die roll higher numbers more often',
+          'So players can count down life totals quickly',
+          'Because sequential numbering is impossible to manufacture'
+        ],
+        answer: 0,
+        explain: '<p>Right. A balanced layout <em>distributes</em> the numbers &mdash; and the tiny weight differences from engraving &mdash; all around the die, so no region is systematically favored and a biased die reveals itself faster. Counting down life totals is the job of a <span class="le-term">sequential</span> spindown, not a fair randomizer, and sequential dice are perfectly manufacturable &mdash; just not fair.</p>'
+      },
+      {
+        type: 'concept',
+        eyebrow: 'RECAP',
+        title: 'Arrangement equals fairness',
+        html: '<p>The numbers on a die are placed on purpose. On a d6, opposite faces sum to <strong>7</strong>; on a d20, they sum to <strong>21</strong>. A <span class="le-term">balanced</span> layout spreads highs and lows around the die so no region is favored and bias is easy to check &mdash; the mark of a fair randomizer. A <span class="le-term">sequential</span> spindown clusters its numbers in order: a fine counter, but never a fair roller. When fairness matters, the layout matters.</p>',
+        visual: 'die:4'
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'dice', lessonId: 'dice-27', backHref: 'index.html',
+    });
+  </script>
+</body>
+</html>
