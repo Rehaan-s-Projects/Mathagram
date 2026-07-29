@@ -97,7 +97,7 @@ async function writeCompletion(courseId, lessonId) {
 
 /* -- Main ------------------------------------------------------------------ */
 export function renderLesson(root, steps, opts) {
-  const { courseId, lessonId, backHref = 'index.html' } = opts || {};
+  const { courseId, lessonId, backHref = 'index.html', courseName = '' } = opts || {};
   const total = steps.length;
   let i = 0;
   const graded = new Array(total).fill(false); // question steps that are answered correctly
@@ -106,6 +106,7 @@ export function renderLesson(root, steps, opts) {
     <div class="le-app">
       <header class="le-top">
         <a class="le-close" href="${esc(backHref)}" aria-label="Close lesson and return to course">&times;</a>
+        ${courseName ? `<a class="le-course" href="${esc(backHref)}" title="${esc(courseName)}">${esc(courseName)}</a>` : ''}
         <div class="le-progress"><div class="le-progress__fill" id="leFill"></div></div>
         <span class="le-count" id="leCount"></span>
       </header>
@@ -315,7 +316,7 @@ export function renderLesson(root, steps, opts) {
       <div class="le-done__badge">🎉</div>
       <h1 class="le-title">Lesson complete!</h1>
       <div class="le-prose"><p>Nice work — you've unlocked the next step on your
-      <strong>Dice &amp; Probability</strong> path.</p></div>
+      ${courseName ? `<strong>${esc(courseName)}</strong> ` : ''}path.</p></div>
     </div>`;
     btn.disabled = false;
     btn.className = 'le-btn is-good';

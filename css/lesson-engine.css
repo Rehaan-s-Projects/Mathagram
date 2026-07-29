@@ -69,6 +69,22 @@ body.le-body {
   transition: transform .15s ease, background .15s ease, color .15s ease;
 }
 .le-close:hover { background: var(--le-panel); color: var(--le-ink); transform: scale(1.05); }
+.le-course {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 34vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--le-ink);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.le-course:hover { color: var(--le-accent); }
+@media (max-width: 520px) { .le-course { display: none; } }
 .le-progress {
   flex: 1 1 auto;
   height: 12px;
