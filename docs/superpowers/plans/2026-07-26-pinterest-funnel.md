@@ -16,6 +16,9 @@ Every task's requirements implicitly include this section.
 
 - **CSP lives in `_headers`, never in a `<meta>` tag.** A meta CSP is inherited by translate.goog and breaks translated views. Both the `/*.html` and `/` blocks must be kept in sync.
 - **No test framework exists and none is added.** Tests are `node --test` with `node:assert/strict`. There is no `package.json`; do not create one.
+- **Use the glob form for `node --test`, not a directory.** `node --test tests/pinterest/` fails on this Node build; `node --test 'tests/pinterest/*.test.mjs'` works. Quote the glob so Node expands it rather than the shell.
+- **Another session works in this repo concurrently.** Stage narrowly and explicitly — `git add courses/*/index.html`, never `git add courses/` or `git add -A` — or you will absorb someone else's in-progress work into your commit. Never stage `.claude/scheduled_tasks.lock`.
+- **Xcode polls this repo with `git status`**, intermittently holding `.git/index.lock`. On "Unable to create index.lock", wait two seconds and retry. Never delete the lock file.
 - **All Node scripts run from the repo root** (`/Users/dakotabrown/rehan-calculus-local`). `extractMeta()` resolves `courses/<slug>/index.html` relative to `process.cwd()`. A prior `cd` in the same shell session will break this — always `cd` to the repo root first.
 - **`rsvg-convert` cannot use web fonts and cannot wrap text.** Templates declare `font-family="Verdana, 'DejaVu Sans', sans-serif"` (matching `assets/lighthouse/og-card.svg`) and the generator emits one `<tspan>` per line.
 - **Brand values**, taken from `assets/lighthouse/og-card.svg`: background gradient `#141a2e` → `#0c1020`; teal gradient `#00e5c8` → `#22d3ee`; heading text `#ffffff`; body text `#cbd5e1`; muted text `#64748b`.
@@ -735,7 +738,7 @@ Expected: ~341 files changed, `failed=0`.
 
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local
-node --test tests/pinterest/
+node --test 'tests/pinterest/*.test.mjs'
 git add scripts/pinterest/add-course-meta.mjs courses/
 git commit -m "Add Rich Pin + SEO metadata to all course pages
 
@@ -1103,7 +1106,7 @@ Stop the server afterward.
 
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local
-node --test tests/
+node --test 'tests/*.test.mjs' 'tests/pinterest/*.test.mjs'
 git add js/video-embed.js css/global.css index.html courses/calculus/index.html courses/circuits/index.html courses/clustering-and-classification/index.html courses/algebra/index.html courses/social-media-rules/index.html
 git commit -m "Add click-to-play YouTube facade to mapped course pages
 
@@ -1454,7 +1457,7 @@ Open the `-v1`, `-v2`, `-v3` PNGs for one long-titled and one short-titled cours
 
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local
-node --test tests/pinterest/
+node --test 'tests/pinterest/*.test.mjs'
 git add scripts/pinterest/templates scripts/pinterest/top-courses.mjs scripts/pinterest/gen-pins.mjs assets/pins
 git commit -m "Add 2:3 Pinterest pin generation for top 40 courses
 
@@ -1861,7 +1864,7 @@ Stop the server afterward.
 
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local
-node --test tests/ tests/pinterest/
+node --test 'tests/*.test.mjs' 'tests/pinterest/*.test.mjs'
 git add js/subscribe.js js/subscribe-validate.js tests/subscribe.test.mjs css/global.css courses/calculus/index.html courses/circuits/index.html courses/clustering-and-classification/index.html courses/algebra/index.html courses/social-media-rules/index.html
 git commit -m "Add email capture form backed by Firestore
 
@@ -2045,7 +2048,7 @@ path (10M Shorts views in 90 days). See the design spec.
 
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local
-node --test tests/ tests/pinterest/
+node --test 'tests/*.test.mjs' 'tests/pinterest/*.test.mjs'
 ```
 Expected: all tests pass. Do not deploy on a red suite.
 
@@ -2362,7 +2365,7 @@ Pinterest domain before the click**.
 
 ```bash
 cd /Users/dakotabrown/rehan-calculus-local
-node --test tests/ tests/pinterest/
+node --test 'tests/*.test.mjs' 'tests/pinterest/*.test.mjs'
 git add scripts/pinterest/lib/meta-block.mjs tests/pinterest/meta-block.test.mjs css/global.css courses/
 git commit -m "Add Save to Pinterest button to pinned course pages
 
