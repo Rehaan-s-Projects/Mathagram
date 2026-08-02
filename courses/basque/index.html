@@ -91,8 +91,31 @@
       titles.forEach((t, i) => {
         n++;
         lessons.push({ id: 'eu-'+n, title: t, href: 'quiz.html?unit=' + u + '&lesson=' + (i + 1), unit: u, unitName: name, category: 'language', checkpoint: i===titles.length-1 });
-    if (lessons[0]) lessons[0].href = 'lesson-1.html';
       });
+    });
+    // ── Unit 1 "First Words in Basque": 15 built language lessons (js/lesson-engine.js).
+    const unit1Titles = [
+      'The Characters Speak Basque',
+      'Greetings & Farewells',
+      'Introducing Yourself',
+      'The Basque Alphabet',
+      'Pronunciation — Rolled R, tx, tz',
+      'Zenbakiak — Numbers 1 to 10',
+      'Numbers 11 to 20 & the Power of Twenty',
+      'Familia — Family',
+      'Etxea — Home',
+      'Koloreak — Colors',
+      'Astea — Days & Time',
+      'Janaria — Food & Drink',
+      'Aditzak — Common Verbs',
+      'Useful Phrases',
+      'Unit 1 Checkpoint — First Words'
+    ];
+    unit1Titles.forEach((t, k) => {
+      if (!lessons[k]) return;
+      lessons[k].title = t;
+      lessons[k].href = 'lesson-' + (k + 1) + '.html';
+      lessons[k].unitName = 'First Words in Basque';
     });
     async function loadPath() {
       const container = document.getElementById('learning-path');

@@ -3,54 +3,215 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson 1 — Euskara — Basque — Mathagram</title>
+  <title>Lesson 1 · The Characters Speak Basque — Euskara — Basque — Mathagram</title>
   <link rel="icon" href="../../assets/lighthouse/logo.svg">
   <link rel="stylesheet" href="../../css/global.css">
-  <style> .lesson-content { max-width: 720px; margin: 0 auto; padding: 56px 24px 12px; } .lesson-content .chapter-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0ea5e9; margin-bottom: 8px; } .lesson-content h1 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; line-height: 1.25; color: #0f172a; } .lesson-content p { font-size: 1.05rem; line-height: 1.7; color: #475569; margin-bottom: 14px; }
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+  <style>
+    /* Character speech bubbles for the Basque greeting cast. */
+    .eu-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; text-align: left; }
+    .eu-av { width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #fff;
+             padding: 4px; border: 2px solid #7dd3fc; box-shadow: 0 4px 14px rgba(14,165,233,0.22); }
+    .eu-bubble { position: relative; flex: 1; background: #f0f9ff; border: 1px solid #bae6fd;
+                 border-radius: 14px; padding: 10px 14px; }
+    .eu-bubble::before { content: ''; position: absolute; left: -8px; top: 22px; width: 0; height: 0;
+                 border: 8px solid transparent; border-right-color: #f0f9ff; border-left: 0; }
+    .eu-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #0284c7; }
+    .eu-eu { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 2px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .eu-pron { font-size: 0.82rem; color: #0ea5e9; font-style: italic; }
+    .eu-en { font-size: 0.95rem; color: #475569; }
+    .eu-say { border: none; background: #0ea5e9; color: #fff; border-radius: 999px;
+              width: 30px; height: 30px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+              box-shadow: 0 2px 6px rgba(14,165,233,0.35); }
+    .eu-say:hover { background: #0284c7; }
+    .eu-say:active { transform: scale(0.92); }
   </style>
 </head>
-<body>
+<body class="le-body">
+  <!-- Required auth gate (google-required-auth). -->
   <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
-  <nav class="nav">
-    <div class="container">
-      <a href="../../index.html" class="nav-logo"><img src="../../assets/lighthouse/logo.svg" alt="" width="32" height="32"><span>Mathagram</span></a>
-      <div class="nav-links">
-        <a href="index.html">Euskara — Basque</a>
-        <a href="../../learning-post.html">Posts</a>
-        <a href="../../login.html" data-auth="login">Login</a>
-      </div>
-    </div>
-  </nav>
 
-  <section class="lesson-content">
-    <div class="chapter-label">Lesson 1 — Basque Alphabet — Latin Script + Ñ</div>
-    <h1>Basque Alphabet — Latin Script + Ñ</h1>
-    <p>Welcome to <strong>Euskara — Basque</strong> on Mathagram. This is your starting lesson — read the welcome then mark the lesson complete to unlock the rest of the path.</p>
-  </section>
-<section style="max-width:720px;margin:8px auto 36px;padding:0 24px;text-align:center;">
-    <a href="index.html" id="mgMarkBtn" style="display:inline-block;padding:12px 28px;border-radius:14px;font-family:inherit;font-weight:700;font-size:0.95rem;cursor:pointer;border:none;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;text-decoration:none;box-shadow:0 4px 12px rgba(14,165,233,0.30);">Mark Lesson 1 Complete →</a>
-  </section>
-
-  <footer class="footer"><div class="container"><p class="footer-copy">&copy; <span id="mgYr"></span> Mathagram.org</p></div></footer>
+  <div id="lesson"></div>
 
   <script type="module">
-    import { initNav } from '../../js/nav.js';
-    initNav('../../');
-    document.getElementById('mgYr').textContent = new Date().getFullYear();
-    document.getElementById('mgMarkBtn').addEventListener('click', async (e) => {
-      e.preventDefault();
+    import '../../js/nav.js';                       // side-effect: GA4 analytics
+    import { renderLesson } from '../../js/lesson-engine.js';
+
+    /* One character saying one Basque line, with pronunciation, translation and 🔊.
+       data-voice carries the character key so each speaks in their own pitch. */
+    function say(avatar, name, eu, pron, en) {
+      return `<div class="eu-row">
+        <img class="eu-av" src="../../assets/characters/${avatar}.svg" alt="${name}">
+        <div class="eu-bubble">
+          <div class="eu-name">${name}</div>
+          <div class="eu-eu">${eu}
+            <button class="eu-say" type="button" data-say="${eu.replace(/"/g, '&quot;')}" data-voice="${avatar}" aria-label="Hear ${name} say it">🔊</button>
+          </div>
+          <div class="eu-pron">${pron}</div>
+          <div class="eu-en">${en}</div>
+        </div>
+      </div>`;
+    }
+
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Lesson 1 · Ongi etorri',
+        title: 'The whole cast speaks Basque',
+        html: `<p><strong>Euskara</strong> — Basque — is the language of the Basque Country,
+               spoken across northern Spain and southwestern France. It is a
+               <span class="le-term">language isolate</span>: unrelated to Spanish, French,
+               English, or any other living language on Earth.</p>
+               <p>In this lesson, every one of your Mathagram guides will step up and greet you
+               <em>in Basque</em>. Tap the <strong>🔊</strong> on any line to hear it. Ready?
+               <strong>Goazen!</strong> (Let's go!)</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Agurrak · Greetings',
+        title: 'Lingo opens the door',
+        html: say('lingo', 'Lingo', 'Kaixo!', 'KY-sho', 'Hello! — the everyday, any-time greeting.') +
+              say('rita', 'Rita', 'Egun on', 'EH-goon ohn', 'Good morning. (literally “day good”)')
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Agurrak · Greetings',
+        title: 'Afternoon and evening',
+        html: say('diego', 'Diego', 'Arratsalde on', 'ah-RRAHT-sahl-deh ohn', 'Good afternoon.') +
+              say('gosia', 'Gosia', 'Gabon', 'GAH-bohn', 'Good evening / good night.')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'Rita said “Egun on.” What did she wish you?',
+        options: ['Good morning', 'A basket of angry eels', 'Goodbye forever', 'A rainy Tuesday'],
+        answer: 0,
+        explain: `<strong>Egun on</strong> = “good morning,” literally “day good.” Basque puts the
+                  adjective <em>on</em> (good) after the noun <em>egun</em> (day).`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Elkarrizketa · Conversation',
+        title: 'How are you?',
+        html: say('james', 'James', 'Zer moduz?', 'sehr moh-DOOSS', 'How are you? / How’s it going?') +
+              say('sam', 'Sam', 'Ondo, eskerrik asko', 'OHN-doh, ehs-keh-RREEK AHS-koh', 'Fine, thank you.')
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Adeitasuna · Politeness',
+        title: 'The magic words',
+        html: say('william', 'William', 'Eskerrik asko', 'ehs-keh-RREEK AHS-koh', 'Thank you.') +
+              say('steve', 'Steve', 'Mesedez', 'meh-SEH-dehs', 'Please.') +
+              say('babel', 'Babel', 'Ez horregatik', 'ehs oh-rreh-GAH-teek', 'You’re welcome. (“not for that”)')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'You want to say “Thank you” in Basque. You say…',
+        options: ['Mesedez', 'Eskerrik asko', 'A waltzing refrigerator', 'Gabon'],
+        answer: 1,
+        explain: `<strong>Eskerrik asko</strong> is “thank you.” Careful — <em>Mesedez</em> means
+                  “please,” and <em>Gabon</em> is “good evening.”`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Norbera · Introducing yourself',
+        title: 'Saying who you are',
+        html: say('edam', 'Edam', 'Ni Edam naiz', 'nee EH-dahm nyze', 'I am Edam.') +
+              `<p>The pattern is simple: <strong>Ni + [name] + naiz</strong> = “I am [name].”
+               <em>Naiz</em> is “I am,” and it comes at the <em>end</em> — Basque loves to put
+               the verb last. Try it: <strong>Ni ______ naiz.</strong></p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Agur · Farewell',
+        title: 'Until tomorrow',
+        html: say('lingo', 'Lingo', 'Agur! Bihar arte', 'ah-GOOR! BEE-ar AHR-teh', 'Goodbye! See you tomorrow.')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Last check',
+        title: 'Lingo waves and says “Agur!” — that means…',
+        options: ['A screaming teapot', 'Please', 'Goodbye', 'Good morning'],
+        answer: 2,
+        explain: `<strong>Agur</strong> is “goodbye.” And <strong>bihar arte</strong> means
+                  “until tomorrow” (<em>bihar</em> = tomorrow, <em>arte</em> = until).`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Zorionak! · Recap',
+        title: 'You can already greet in Basque',
+        html: `<p>In one lesson, the whole cast taught you to:</p>
+               <p>• say hello — <strong>Kaixo</strong>, <strong>Egun on</strong>, <strong>Gabon</strong><br>
+               • ask and answer — <strong>Zer moduz?</strong> → <strong>Ondo, eskerrik asko</strong><br>
+               • be polite — <strong>Mesedez</strong>, <strong>Eskerrik asko</strong>, <strong>Ez horregatik</strong><br>
+               • introduce yourself — <strong>Ni … naiz</strong><br>
+               • and say goodbye — <strong>Agur! Bihar arte</strong>.</p>
+               <p>Not bad for a language that is unlike any other on the planet.
+               <strong>Bihar arte!</strong></p>`
+      }
+    ];
+
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'basque',
+      lessonId: 'eu-1',
+      backHref: 'index.html',
+      courseName: 'Euskara — Basque',
+    });
+
+    /* Each character has a distinct voice: their own pitch + rate, and (when the
+       browser offers several matching-language voices) a different actual voice. */
+    const VOICE = {
+      lingo:   { pitch: 1.05, rate: 0.90, vi: 0 },
+      rita:    { pitch: 1.55, rate: 0.95, vi: 1, gender: 'female' }, // Rita the cat — female voice
+      diego:   { pitch: 0.80, rate: 0.88, vi: 2 },
+      gosia:   { pitch: 1.35, rate: 0.92, vi: 3, gender: 'female' },
+      james:   { pitch: 0.68, rate: 0.85, vi: 4 },
+      sam:     { pitch: 1.20, rate: 0.98, vi: 5 },
+      william: { pitch: 0.92, rate: 0.87, vi: 6 },
+      steve:   { pitch: 1.70, rate: 1.00, vi: 7 },
+      babel:   { pitch: 1.10, rate: 0.90, vi: 8 },
+      edam:    { pitch: 0.60, rate: 0.82, vi: 9 },
+    };
+
+    /* Pick a voice matching a requested gender by name heuristics (no standard
+       gender API exists). Returns null if none in the pool clearly match. */
+    function pickGender(pool, gender) {
+      if (!gender || !pool.length) return null;
+      const F = /female|woman|mujer|\b(m[oó]nica|paulina|marisol|helena|elena|luc[ií]a|conchita|pen[eé]lope|sabina|elvira|laura|paloma|catalina|isabela|zira|samantha|karen|tessa|fiona)\b/i;
+      const M = /\bmale\b|hombre|\b(jorge|diego|carlos|pablo|enrique|miguel|juan|pedro|david|mark|daniel|fred)\b/i;
+      const rx = gender === 'female' ? F : M;
+      return pool.find(v => rx.test(v.name)) || null;
+    }
+
+    /* Tap-to-hear. Fresh utterance each click (never re-speak a used one).
+       Prefer Basque voices; fall back to Spanish phonetics, then the default. */
+    function speak(text, who) {
       try {
-        const { auth, db } = await import('../../js/firebase-config.js');
-        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        if (auth.currentUser) {
-          await setDoc(
-            doc(db, 'users', auth.currentUser.uid, 'progress', 'basque'),
-            { 'eu-1': { completed: true, at: serverTimestamp() } },
-            { merge: true }
-          );
-        }
-      } catch {}
-      window.location.href = 'index.html';
+        const synth = window.speechSynthesis;
+        if (!synth) return;
+        synth.cancel();
+        const prof = VOICE[who] || { pitch: 1, rate: 0.9, vi: 0 };
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'eu-ES';
+        u.pitch = prof.pitch;
+        u.rate = prof.rate;
+        const voices = synth.getVoices() || [];
+        // pool of usable voices for this language, in preference order
+        const pool = voices.filter(x => /^eu\b|^eu[-_]/i.test(x.lang));
+        const espool = voices.filter(x => /^es\b|^es[-_]/i.test(x.lang));
+        const chosen = pool.length ? pool : espool;
+        const voice = pickGender(chosen, prof.gender) ||
+                      (chosen.length ? chosen[prof.vi % chosen.length] : null);
+        if (voice) u.voice = voice;
+        synth.speak(u);
+      } catch { /* speech unavailable — silent, non-blocking */ }
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-say]');
+      if (!b) return;
+      e.preventDefault();
+      speak(b.getAttribute('data-say'), b.getAttribute('data-voice'));
     });
   </script>
 </body>

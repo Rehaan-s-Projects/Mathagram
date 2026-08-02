@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4 · The Basque Alphabet — Euskara — Basque — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+  <style>
+    .eu-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; text-align: left; }
+    .eu-av { width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #fff;
+             padding: 4px; border: 2px solid #7dd3fc; box-shadow: 0 4px 14px rgba(14,165,233,0.22); }
+    .eu-bubble { position: relative; flex: 1; background: #f0f9ff; border: 1px solid #bae6fd;
+                 border-radius: 14px; padding: 10px 14px; }
+    .eu-bubble::before { content: ''; position: absolute; left: -8px; top: 22px; width: 0; height: 0;
+                 border: 8px solid transparent; border-right-color: #f0f9ff; border-left: 0; }
+    .eu-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #0284c7; }
+    .eu-eu { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 2px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .eu-pron { font-size: 0.82rem; color: #0ea5e9; font-style: italic; }
+    .eu-en { font-size: 0.95rem; color: #475569; }
+    .eu-say { border: none; background: #0ea5e9; color: #fff; border-radius: 999px;
+              width: 30px; height: 30px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+              box-shadow: 0 2px 6px rgba(14,165,233,0.35); }
+    .eu-say:hover { background: #0284c7; }
+    .eu-say:active { transform: scale(0.92); }
+  </style>
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    function say(avatar, name, eu, pron, en) {
+      return `<div class="eu-row">
+        <img class="eu-av" src="../../assets/characters/${avatar}.svg" alt="${name}">
+        <div class="eu-bubble">
+          <div class="eu-name">${name}</div>
+          <div class="eu-eu">${eu}
+            <button class="eu-say" type="button" data-say="${eu.replace(/"/g, '&quot;')}" data-voice="${avatar}" aria-label="Hear ${name} say it">🔊</button>
+          </div>
+          <div class="eu-pron">${pron}</div>
+          <div class="eu-en">${en}</div>
+        </div>
+      </div>`;
+    }
+    const STEPS = [ {
+      type:'concept',
+      eyebrow:'The Basque Alphabet',
+      title:'Latin letters, plus ñ',
+      html:`<p>Good news: Basque is written with the <strong>Latin alphabet</strong> — the very same letters you are reading right now. There is one bonus letter borrowed from Spanish: <strong>ñ</strong>.</p>` +
+        `<p>So the moment you can read a word like <strong>andereño</strong>, you are already reading Basque. The tricky part is not the letters — it is knowing which ones truly belong.</p>`
+    },
+    {
+      type:'concept',
+      eyebrow:'The Basque Alphabet',
+      title:'The letters that are not really Basque',
+      html:`<p>Five Latin letters are <strong>not native</strong> to Basque. They only show up in loanwords and foreign names: <strong>c, q, v, w, y</strong>.</p>` +
+        `<p>You will still see them — in a name like "New York" or a borrowed brand — but a purely Basque word will not use them. Keep those five in mind; they come up in the quiz.</p>`
+    },
+    {
+      type:'concept',
+      eyebrow:'The Basque Alphabet',
+      title:'Digraphs: two letters, one sound',
+      html:`<p>Basque loves <strong>digraphs</strong> — pairs of letters that stand for a single sound: <strong>tx, ts, tz, dd, ll, rr</strong>. Treat each pair as one letter, not two.</p>` +
+        `<p>Here are two real Basque words (both showing off that special <strong>ñ</strong>) so you can hear the flow of the language:</p>` +
+        say('rita','Rita','andereño','an-deh-REH-nyo','female teacher') +
+        say('diego','Diego','Iruñea','ee-ROO-nyeh-ah','the Basque name of Pamplona')
+    },
+    {
+      type:'question',
+      eyebrow:'Check yourself',
+      title:'Which letters are NOT native to Basque?',
+      options:[
+        'c, q, v, w, y',
+        'tx, ts, tz (the digraphs)',
+        'The letters that a soggy penguin sneezes out during a snowstorm',
+        'Any letter written after Tuesday, since Basque letters clock off early'
+      ],
+      answer:0,
+      explain:`<p>Correct: <strong>c, q, v, w, y</strong> are not native to Basque and appear only in loanwords and foreign names. The digraphs tx, ts and tz are very much Basque, and penguins were never consulted about the alphabet.</p>`
+    },
+    {
+      type:'concept',
+      eyebrow:'The Basque Alphabet',
+      title:'The letter h: silent or breathy?',
+      html:`<p>The letter <strong>h</strong> plays by regional rules. In most <strong>southern</strong> (Spanish-side) dialects it is completely <strong>silent</strong>. In <strong>northern</strong> (French-side) dialects it is <strong>pronounced</strong> — aspirated, like a little puff of breath.</p>` +
+        say('gosia','Gosia','Iruñea','ee-ROO-nyeh-ah','the Basque name of Pamplona') +
+        `<p>Same spelling, two possible sounds — the h just depends on which side of the mountains you are standing on.</p>`
+    },
+    {
+      type:'question',
+      eyebrow:'Check yourself',
+      title:'In most southern (Spanish-side) dialects, the letter h is…',
+      options:[
+        'Silent — not pronounced at all',
+        'Rolled hard, like a strong r',
+        'Shouted by a mountain goat before every vowel',
+        'Turned into ñ whenever it starts raining indoors'
+      ],
+      answer:0,
+      explain:`<p>Correct: in most southern (Spanish-side) dialects the <strong>h is silent</strong>. Up north, on the French side, it is aspirated and you actually hear it. No goats or indoor weather are involved.</p>`
+    },
+    {
+      type:'concept',
+      eyebrow:'Recap',
+      title:'What you learned',
+      html:`<p>Quick review of the Basque alphabet:</p>` +
+        `<p>• Basque uses the <strong>Latin alphabet</strong> plus the extra letter <strong>ñ</strong>.<br>` +
+        `• <strong>c, q, v, w, y</strong> are not native — loanwords and foreign names only.<br>` +
+        `• <strong>Digraphs</strong> tx, ts, tz, dd, ll, rr are two letters that make one sound.<br>` +
+        `• <strong>h</strong> is silent in the south, but aspirated (pronounced) in the north.</p>` +
+        say('lingo','Lingo','andereño','an-deh-REH-nyo','female teacher') +
+        `<p>Zorionak — you can now spell your way around Euskara!</p>`
+    } ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'basque',
+      lessonId: 'eu-4',
+      backHref: 'index.html',
+      courseName: 'Euskara — Basque',
+    });
+    const VOICE = {
+      lingo:{pitch:1.05,rate:0.90,vi:0}, rita:{pitch:1.55,rate:0.95,vi:1}, diego:{pitch:0.80,rate:0.88,vi:2},
+      gosia:{pitch:1.35,rate:0.92,vi:3}, james:{pitch:0.68,rate:0.85,vi:4}, sam:{pitch:1.20,rate:0.98,vi:5},
+      william:{pitch:0.92,rate:0.87,vi:6}, steve:{pitch:1.70,rate:1.00,vi:7}, babel:{pitch:1.10,rate:0.90,vi:8},
+      edam:{pitch:0.60,rate:0.82,vi:9},
+    };
+    function speak(text, who) {
+      try {
+        const synth = window.speechSynthesis; if (!synth) return; synth.cancel();
+        const prof = VOICE[who] || { pitch: 1, rate: 0.9, vi: 0 };
+        const u = new SpeechSynthesisUtterance(text); u.lang = 'eu-ES'; u.pitch = prof.pitch; u.rate = prof.rate;
+        const voices = synth.getVoices() || [];
+        const pool = voices.filter(x => /^eu\b|^eu[-_]/i.test(x.lang));
+        const espool = voices.filter(x => /^es\b|^es[-_]/i.test(x.lang));
+        const chosen = pool.length ? pool : espool;
+        if (chosen.length) u.voice = chosen[prof.vi % chosen.length];
+        synth.speak(u);
+      } catch {}
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-say]'); if (!b) return; e.preventDefault();
+      speak(b.getAttribute('data-say'), b.getAttribute('data-voice'));
+    });
+  </script>
+</body>
+</html>

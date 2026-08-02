@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 11 · Astea — Days &amp; Time — Euskara — Basque — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+  <style>
+    .eu-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; text-align: left; }
+    .eu-av { width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #fff;
+             padding: 4px; border: 2px solid #7dd3fc; box-shadow: 0 4px 14px rgba(14,165,233,0.22); }
+    .eu-bubble { position: relative; flex: 1; background: #f0f9ff; border: 1px solid #bae6fd;
+                 border-radius: 14px; padding: 10px 14px; }
+    .eu-bubble::before { content: ''; position: absolute; left: -8px; top: 22px; width: 0; height: 0;
+                 border: 8px solid transparent; border-right-color: #f0f9ff; border-left: 0; }
+    .eu-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #0284c7; }
+    .eu-eu { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 2px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .eu-pron { font-size: 0.82rem; color: #0ea5e9; font-style: italic; }
+    .eu-en { font-size: 0.95rem; color: #475569; }
+    .eu-say { border: none; background: #0ea5e9; color: #fff; border-radius: 999px;
+              width: 30px; height: 30px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+              box-shadow: 0 2px 6px rgba(14,165,233,0.35); }
+    .eu-say:hover { background: #0284c7; }
+    .eu-say:active { transform: scale(0.92); }
+  </style>
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    function say(avatar, name, eu, pron, en) {
+      return `<div class="eu-row">
+        <img class="eu-av" src="../../assets/characters/${avatar}.svg" alt="${name}">
+        <div class="eu-bubble">
+          <div class="eu-name">${name}</div>
+          <div class="eu-eu">${eu}
+            <button class="eu-say" type="button" data-say="${eu.replace(/"/g, '&quot;')}" data-voice="${avatar}" aria-label="Hear ${name} say it">🔊</button>
+          </div>
+          <div class="eu-pron">${pron}</div>
+          <div class="eu-en">${en}</div>
+        </div>
+      </div>`;
+    }
+    const STEPS = [ { type:'concept', eyebrow:'Astea', title:'The Basque week', html:`<p>In Basque, <strong>astea</strong> means "week." Every day of the week has its own name — let's meet them one by one.</p>` + say('lingo','Lingo','astea','AHS-teh-ah','week') },
+    { type:'concept', eyebrow:'Astelehena → Asteazkena', title:'Monday to Wednesday', html:`<p>The first three days:</p>` + say('rita','Rita','astelehena','ahs-teh-leh-EH-nah','Monday') + say('diego','Diego','asteartea','ahs-teh-ar-TEH-ah','Tuesday') + say('gosia','Gosia','asteazkena','ahs-teh-ahs-KEH-nah','Wednesday') },
+    { type:'concept', eyebrow:'Osteguna → Igandea', title:'Thursday to Sunday', html:`<p>And the rest of the week:</p>` + say('james','James','osteguna','ohs-teh-GOO-nah','Thursday') + say('sam','Sam','ostirala','ohs-tee-RAH-lah','Friday') + say('william','William','larunbata','lah-roon-BAH-tah','Saturday') + say('steve','Steve','igandea','ee-gahn-DEH-ah','Sunday') },
+    { type:'question', eyebrow:'Check', title:'Which day is "larunbata"?', options:['Saturday','A hungry crocodile','Wednesday','A thunderstorm inside the toaster'], answer:0, explain:`<strong>larunbata</strong> (lah-roon-BAH-tah) is Saturday — a weekend day, not a crocodile. Wednesday is <strong>asteazkena</strong>.` },
+    { type:'concept', eyebrow:'Gaur · Bihar · Atzo', title:'Today, tomorrow, yesterday', html:`<p>Three time words tie the whole week together:</p>` + say('babel','Babel','gaur','gowr','today') + say('edam','Edam','bihar','BEE-ar','tomorrow') + say('lingo','Lingo','atzo','AH-tso','yesterday') },
+    { type:'question', eyebrow:'Check', title:'What does "bihar" mean?', options:['Yesterday','Tomorrow','A dancing bear','Soup that reads the newspaper'], answer:1, explain:`<strong>bihar</strong> (BEE-ar) means tomorrow. Yesterday is <strong>atzo</strong>, and today is <strong>gaur</strong>.` },
+    { type:'concept', eyebrow:'Errepasoa', title:'Week recap', html:`<p>You've learned the whole <strong>astea</strong> plus its time words. Listen once more:</p>` + say('rita','Rita','astelehena','ahs-teh-leh-EH-nah','Monday') + say('william','William','larunbata','lah-roon-BAH-tah','Saturday') + say('babel','Babel','gaur','gowr','today') + say('edam','Edam','bihar','BEE-ar','tomorrow') } ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'basque',
+      lessonId: 'eu-11',
+      backHref: 'index.html',
+      courseName: 'Euskara — Basque',
+    });
+    const VOICE = {
+      lingo:{pitch:1.05,rate:0.90,vi:0}, rita:{pitch:1.55,rate:0.95,vi:1}, diego:{pitch:0.80,rate:0.88,vi:2},
+      gosia:{pitch:1.35,rate:0.92,vi:3}, james:{pitch:0.68,rate:0.85,vi:4}, sam:{pitch:1.20,rate:0.98,vi:5},
+      william:{pitch:0.92,rate:0.87,vi:6}, steve:{pitch:1.70,rate:1.00,vi:7}, babel:{pitch:1.10,rate:0.90,vi:8},
+      edam:{pitch:0.60,rate:0.82,vi:9},
+    };
+    function speak(text, who) {
+      try {
+        const synth = window.speechSynthesis; if (!synth) return; synth.cancel();
+        const prof = VOICE[who] || { pitch: 1, rate: 0.9, vi: 0 };
+        const u = new SpeechSynthesisUtterance(text); u.lang = 'eu-ES'; u.pitch = prof.pitch; u.rate = prof.rate;
+        const voices = synth.getVoices() || [];
+        const pool = voices.filter(x => /^eu\b|^eu[-_]/i.test(x.lang));
+        const espool = voices.filter(x => /^es\b|^es[-_]/i.test(x.lang));
+        const chosen = pool.length ? pool : espool;
+        if (chosen.length) u.voice = chosen[prof.vi % chosen.length];
+        synth.speak(u);
+      } catch {}
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-say]'); if (!b) return; e.preventDefault();
+      speak(b.getAttribute('data-say'), b.getAttribute('data-voice'));
+    });
+  </script>
+</body>
+</html>

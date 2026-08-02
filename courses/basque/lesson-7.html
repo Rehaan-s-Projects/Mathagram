@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7 · Numbers 11 to 20 &amp; the Power of Twenty — Euskara — Basque — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+  <style>
+    .eu-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; text-align: left; }
+    .eu-av { width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #fff;
+             padding: 4px; border: 2px solid #7dd3fc; box-shadow: 0 4px 14px rgba(14,165,233,0.22); }
+    .eu-bubble { position: relative; flex: 1; background: #f0f9ff; border: 1px solid #bae6fd;
+                 border-radius: 14px; padding: 10px 14px; }
+    .eu-bubble::before { content: ''; position: absolute; left: -8px; top: 22px; width: 0; height: 0;
+                 border: 8px solid transparent; border-right-color: #f0f9ff; border-left: 0; }
+    .eu-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #0284c7; }
+    .eu-eu { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 2px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .eu-pron { font-size: 0.82rem; color: #0ea5e9; font-style: italic; }
+    .eu-en { font-size: 0.95rem; color: #475569; }
+    .eu-say { border: none; background: #0ea5e9; color: #fff; border-radius: 999px;
+              width: 30px; height: 30px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+              box-shadow: 0 2px 6px rgba(14,165,233,0.35); }
+    .eu-say:hover { background: #0284c7; }
+    .eu-say:active { transform: scale(0.92); }
+  </style>
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    function say(avatar, name, eu, pron, en) {
+      return `<div class="eu-row">
+        <img class="eu-av" src="../../assets/characters/${avatar}.svg" alt="${name}">
+        <div class="eu-bubble">
+          <div class="eu-name">${name}</div>
+          <div class="eu-eu">${eu}
+            <button class="eu-say" type="button" data-say="${eu.replace(/"/g, '&quot;')}" data-voice="${avatar}" aria-label="Hear ${name} say it">🔊</button>
+          </div>
+          <div class="eu-pron">${pron}</div>
+          <div class="eu-en">${en}</div>
+        </div>
+      </div>`;
+    }
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Base-20 counting',
+        title: 'Basque counts in twenties',
+        html: `<p>Most languages count in tens. Basque is different — its number system is <strong>vigesimal</strong> (base-20). That makes <strong>twenty</strong> a special building block for bigger numbers.</p>`
+          + `<p>Before we get there, let's master 11 through 20 — and you'll spot a neat pattern along the way.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Numbers 11–15',
+        title: 'From eleven to fifteen',
+        html: say('rita', 'Rita', 'hamaika', 'ah-MY-kah', 'eleven')
+          + say('diego', 'Diego', 'hamabi', 'HAH-mah-bee', 'twelve')
+          + say('gosia', 'Gosia', 'hamahiru', 'HAH-mah-EE-roo', 'thirteen')
+          + say('james', 'James', 'hamalau', 'HAH-mah-lau', 'fourteen')
+          + say('sam', 'Sam', 'hamabost', 'HAH-mah-bohst', 'fifteen')
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Numbers 16–20',
+        title: 'From sixteen to twenty',
+        html: say('william', 'William', 'hamasei', 'HAH-mah-say', 'sixteen')
+          + say('steve', 'Steve', 'hamazazpi', 'HAH-mah-SAHS-pee', 'seventeen')
+          + say('babel', 'Babel', 'hamazortzi', 'HAH-mah-SOR-tsee', 'eighteen')
+          + say('edam', 'Edam', 'hemeretzi', 'heh-meh-REH-tsee', 'nineteen')
+          + say('lingo', 'Lingo', 'hogei', 'HOH-gay', 'twenty')
+      },
+      {
+        type: 'concept',
+        eyebrow: 'The hama- pattern',
+        title: 'Ten plus a digit',
+        html: `<p>Numbers <strong>11–18</strong> are built on <strong>hamar</strong> (10): take <strong>hama-</strong> and add the ones digit.</p>`
+          + `<p>So <strong>hamaika</strong> = 11, <strong>hamabi</strong> = 12, <strong>hamahiru</strong> = 13 … all the way up to <strong>hamazortzi</strong> = 18. Then <strong>hemeretzi</strong> (19) and <strong>hogei</strong> (20) round things out.</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick check',
+        title: 'What number is "hogei"?',
+        options: [
+          'Ten',
+          'Twenty',
+          'A dozen angry bees packed in a jam jar',
+          'The weather forecast for next Tuesday'
+        ],
+        answer: 1,
+        explain: `<p><strong>hogei</strong> (HOH-gay) = <strong>20</strong>. It's the cornerstone of Basque's base-20 counting.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'The power of twenty',
+        title: 'Twenty as a building block',
+        html: `<p>Because Basque is <strong>vigesimal</strong>, twenty shows up inside bigger numbers. For example, <strong>berrogei</strong> = 40 — literally <em>"two twenties"</em> (2 × 20).</p>`
+          + say('diego', 'Diego', 'hogei', 'HOH-gay', 'twenty')
+          + say('rita', 'Rita', 'berrogei', 'beh-RROH-gay', 'forty ("two twenties")')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Base check',
+        title: 'Basque counting is based on groups of…',
+        options: [
+          'Ten',
+          'Twenty',
+          'Whatever the goat on the hill decides that morning',
+          'Matching pairs of woollen socks'
+        ],
+        answer: 1,
+        explain: `<p>Basque is <strong>vigesimal</strong> — base-<strong>20</strong>. That's why <strong>hogei</strong> (20) is a building block, as in <strong>berrogei</strong> (40).</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Recap',
+        title: 'You counted to twenty!',
+        html: `<p>Great work! Here's what stuck:</p>`
+          + `<p><strong>11–18</strong> use the <strong>hama-</strong> pattern (ten + a digit): hamaika (11), hamabi (12) … hamazortzi (18). Then <strong>hemeretzi</strong> (19) and <strong>hogei</strong> (20).</p>`
+          + `<p>And Basque is <strong>vigesimal</strong> — base-20 — so <strong>hogei</strong> (20) is a building block, as in <strong>berrogei</strong> (40 = "two twenties").</p>`
+          + say('lingo', 'Lingo', 'hogei', 'HOH-gay', 'twenty')
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'basque',
+      lessonId: 'eu-7',
+      backHref: 'index.html',
+      courseName: 'Euskara — Basque',
+    });
+    const VOICE = {
+      lingo:{pitch:1.05,rate:0.90,vi:0}, rita:{pitch:1.55,rate:0.95,vi:1}, diego:{pitch:0.80,rate:0.88,vi:2},
+      gosia:{pitch:1.35,rate:0.92,vi:3}, james:{pitch:0.68,rate:0.85,vi:4}, sam:{pitch:1.20,rate:0.98,vi:5},
+      william:{pitch:0.92,rate:0.87,vi:6}, steve:{pitch:1.70,rate:1.00,vi:7}, babel:{pitch:1.10,rate:0.90,vi:8},
+      edam:{pitch:0.60,rate:0.82,vi:9},
+    };
+    function speak(text, who) {
+      try {
+        const synth = window.speechSynthesis; if (!synth) return; synth.cancel();
+        const prof = VOICE[who] || { pitch: 1, rate: 0.9, vi: 0 };
+        const u = new SpeechSynthesisUtterance(text); u.lang = 'eu-ES'; u.pitch = prof.pitch; u.rate = prof.rate;
+        const voices = synth.getVoices() || [];
+        const pool = voices.filter(x => /^eu\b|^eu[-_]/i.test(x.lang));
+        const espool = voices.filter(x => /^es\b|^es[-_]/i.test(x.lang));
+        const chosen = pool.length ? pool : espool;
+        if (chosen.length) u.voice = chosen[prof.vi % chosen.length];
+        synth.speak(u);
+      } catch {}
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-say]'); if (!b) return; e.preventDefault();
+      speak(b.getAttribute('data-say'), b.getAttribute('data-voice'));
+    });
+  </script>
+</body>
+</html>

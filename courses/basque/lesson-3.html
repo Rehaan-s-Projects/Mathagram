@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3 · Introducing Yourself — Euskara — Basque — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+  <style>
+    .eu-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; text-align: left; }
+    .eu-av { width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #fff;
+             padding: 4px; border: 2px solid #7dd3fc; box-shadow: 0 4px 14px rgba(14,165,233,0.22); }
+    .eu-bubble { position: relative; flex: 1; background: #f0f9ff; border: 1px solid #bae6fd;
+                 border-radius: 14px; padding: 10px 14px; }
+    .eu-bubble::before { content: ''; position: absolute; left: -8px; top: 22px; width: 0; height: 0;
+                 border: 8px solid transparent; border-right-color: #f0f9ff; border-left: 0; }
+    .eu-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #0284c7; }
+    .eu-eu { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 2px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .eu-pron { font-size: 0.82rem; color: #0ea5e9; font-style: italic; }
+    .eu-en { font-size: 0.95rem; color: #475569; }
+    .eu-say { border: none; background: #0ea5e9; color: #fff; border-radius: 999px;
+              width: 30px; height: 30px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+              box-shadow: 0 2px 6px rgba(14,165,233,0.35); }
+    .eu-say:hover { background: #0284c7; }
+    .eu-say:active { transform: scale(0.92); }
+  </style>
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    function say(avatar, name, eu, pron, en) {
+      return `<div class="eu-row">
+        <img class="eu-av" src="../../assets/characters/${avatar}.svg" alt="${name}">
+        <div class="eu-bubble">
+          <div class="eu-name">${name}</div>
+          <div class="eu-eu">${eu}
+            <button class="eu-say" type="button" data-say="${eu.replace(/"/g, '&quot;')}" data-voice="${avatar}" aria-label="Hear ${name} say it">🔊</button>
+          </div>
+          <div class="eu-pron">${pron}</div>
+          <div class="eu-en">${en}</div>
+        </div>
+      </div>`;
+    }
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Lesson 3',
+        title: 'Say Who You Are',
+        html: `<p>You already know how to greet people. Now let's learn to tell them who <em>you</em> are — the heart of any conversation.</p>`
+          + say('lingo', 'Lingo', 'Kaixo!', 'KY-sho', 'Hello!')
+          + `<p>Lingo waves you over. Ready to introduce yourself in Euskara?</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Meet the Locals',
+        title: 'Ni ... naiz',
+        html: `<p>Watch how Diego introduces himself. The pattern is <strong>Ni</strong> (I) + your name + <strong>naiz</strong> (am).</p>`
+          + say('diego', 'Diego', 'Ni Diego naiz', 'nee DEE-eh-go nyze', 'I am Diego.')
+          + `<p>That's it! Three little words and you have introduced yourself.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Grammar',
+        title: 'The Verb Comes Last',
+        html: `<p>Here is the big idea in Basque: the <strong>verb goes at the very end</strong> of the sentence. This is called being <em>verb-final</em>.</p><p>So <em>naiz</em> (I am) always lands last:</p>`
+          + say('james', 'James', 'Ni James naiz', 'nee JAYMS nyze', 'I am James.')
+          + `<p>Word for word it reads "I James am." The name sits in the middle, and <em>naiz</em> anchors the end.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Conversation',
+        title: 'Nola duzu izena?',
+        html: `<p>To ask someone their name, use <strong>Nola duzu izena?</strong></p>`
+          + say('rita', 'Rita', 'Nola duzu izena?', 'NOH-lah DOO-soo ee-SEH-nah', 'What is your name?')
+          + say('gosia', 'Gosia', 'Nire izena Gosia da', 'NEE-reh ee-SEH-nah GOH-shah dah', 'My name is Gosia.')
+          + say('rita', 'Rita', 'Pozten naiz', 'POHTS-ten nyze', 'Pleased to meet you')
+          + `<p>Notice Gosia's answer: <strong>Nire izena ... da</strong> means "My name is ..."</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick Check',
+        title: 'Where does the verb go?',
+        options: [
+          'At the very end — Basque puts the verb (naiz = I am) last.',
+          'Right at the front, before the name.',
+          'It hops onto the nearest sheep and rides off into the hills.',
+          'It hides inside the dishwasher until dinnertime.'
+        ],
+        answer: 0,
+        explain: `<p><strong>Bai!</strong> Basque is verb-final. In <em>Ni Diego naiz</em>, the verb <em>naiz</em> (I am) sits at the very end: literally "I Diego am."</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Conversation',
+        title: 'Nongoa zara?',
+        html: `<p>Curious where someone is from? Ask <strong>Nongoa zara?</strong></p>`
+          + say('william', 'William', 'Nongoa zara?', 'NOHN-goh-ah SAH-rah', 'Where are you from?')
+          + `<p>And the handiest little word of all — <strong>Bai</strong> means "Yes."</p>`
+          + say('sam', 'Sam', 'Bai', 'buy', 'Yes')
+          + say('diego', 'Diego', 'Pozten naiz', 'POHTS-ten nyze', 'Pleased to meet you')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Quick Check',
+        title: 'What does "Pozten naiz" mean?',
+        options: [
+          'Pleased to meet you.',
+          'Where are you from?',
+          'My spoon has resigned and moved to the mountains.',
+          'A gentle rainstorm has moved into the toaster.'
+        ],
+        answer: 0,
+        explain: `<p><strong>Pozten naiz</strong> — <em>POHTS-ten nyze</em> — means "Pleased to meet you." Notice <em>naiz</em> (I am) shows up at the end here too!</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Recap',
+        title: 'You Can Introduce Yourself',
+        html: `<p>Great work! Look how much you can now say and understand:</p>`
+          + say('edam', 'Edam', 'Ni Edam naiz', 'nee EH-dam nyze', 'I am Edam.')
+          + say('babel', 'Babel', 'Nire izena Babel da', 'NEE-reh ee-SEH-nah BAH-bel dah', 'My name is Babel.')
+          + `<p>Remember the golden rule: the verb <strong>naiz</strong> (I am) always comes <strong>last</strong>. You have learned <em>Ni ... naiz</em>, <em>Nola duzu izena?</em>, <em>Nire izena ... da</em>, <em>Pozten naiz</em>, <em>Nongoa zara?</em>, and <em>Bai</em>. Agur!</p>`
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'basque',
+      lessonId: 'eu-3',
+      backHref: 'index.html',
+      courseName: 'Euskara — Basque',
+    });
+    const VOICE = {
+      lingo:{pitch:1.05,rate:0.90,vi:0}, rita:{pitch:1.55,rate:0.95,vi:1}, diego:{pitch:0.80,rate:0.88,vi:2},
+      gosia:{pitch:1.35,rate:0.92,vi:3}, james:{pitch:0.68,rate:0.85,vi:4}, sam:{pitch:1.20,rate:0.98,vi:5},
+      william:{pitch:0.92,rate:0.87,vi:6}, steve:{pitch:1.70,rate:1.00,vi:7}, babel:{pitch:1.10,rate:0.90,vi:8},
+      edam:{pitch:0.60,rate:0.82,vi:9},
+    };
+    function speak(text, who) {
+      try {
+        const synth = window.speechSynthesis; if (!synth) return; synth.cancel();
+        const prof = VOICE[who] || { pitch: 1, rate: 0.9, vi: 0 };
+        const u = new SpeechSynthesisUtterance(text); u.lang = 'eu-ES'; u.pitch = prof.pitch; u.rate = prof.rate;
+        const voices = synth.getVoices() || [];
+        const pool = voices.filter(x => /^eu\b|^eu[-_]/i.test(x.lang));
+        const espool = voices.filter(x => /^es\b|^es[-_]/i.test(x.lang));
+        const chosen = pool.length ? pool : espool;
+        if (chosen.length) u.voice = chosen[prof.vi % chosen.length];
+        synth.speak(u);
+      } catch {}
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-say]'); if (!b) return; e.preventDefault();
+      speak(b.getAttribute('data-say'), b.getAttribute('data-voice'));
+    });
+  </script>
+</body>
+</html>

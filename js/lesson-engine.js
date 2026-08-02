@@ -73,18 +73,29 @@ function polyDie(faces, value, cls) {
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 
 /* -- Completion write ------------------------------------------------------ */
+// XP granted for finishing a lesson (matches the quiz "passed" base in progress.js).
+const LESSON_XP = 10;
 async function writeCompletion(courseId, lessonId) {
   markLessonLocalComplete(courseId, lessonId);          // incognito / no-login
   try {
     const { auth, db } = await import('./firebase-config.js');
-    const { doc, setDoc, serverTimestamp } =
+    const { doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } =
       await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const u = auth.currentUser;
     if (!u) return;
+
+    // Award XP once per lesson. `xpEarned` (set here or by the quiz path in
+    // progress.js) is the marker that XP was already granted for this lesson —
+    // so we never double-award, and an old completion (completed but no
+    // xpEarned) still earns its XP on a revisit.
+    const lessonRef = doc(db, 'users', u.uid, 'progress', courseId, 'lessons', lessonId);
+    const prev = await getDoc(lessonRef);
+    const alreadyAwarded = prev.exists() && prev.data().xpEarned != null;
+
     // Subcollection doc — this is what getCompletedLessons() reads.
     await setDoc(
-      doc(db, 'users', u.uid, 'progress', courseId, 'lessons', lessonId),
-      { completed: true, at: serverTimestamp() },
+      lessonRef,
+      { completed: true, at: serverTimestamp(), ...(alreadyAwarded ? {} : { xpEarned: LESSON_XP }) },
       { merge: true }
     );
     setDoc(
@@ -92,6 +103,16 @@ async function writeCompletion(courseId, lessonId) {
       { courseId, lastViewedAt: new Date().toISOString() },
       { merge: true }
     ).catch(() => {});
+
+    if (!alreadyAwarded) {
+      const userRef = doc(db, 'users', u.uid);
+      // Migrate any legacy totalXP into the xp field the leaderboard reads.
+      const usnap = await getDoc(userRef);
+      if (usnap.exists() && usnap.data().totalXP && !usnap.data().xp) {
+        await updateDoc(userRef, { xp: usnap.data().totalXP, totalXP: 0 });
+      }
+      await updateDoc(userRef, { xp: increment(LESSON_XP) });
+    }
   } catch (e) { /* offline / blocked — local completion still stands */ }
 }
 

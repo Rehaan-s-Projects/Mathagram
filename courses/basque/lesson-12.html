@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12 · Janaria — Food &amp; Drink — Euskara — Basque — Mathagram</title>
+  <link rel="icon" href="../../assets/lighthouse/logo.svg">
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="../../css/lesson-engine.css">
+  <style>
+    .eu-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; text-align: left; }
+    .eu-av { width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #fff;
+             padding: 4px; border: 2px solid #7dd3fc; box-shadow: 0 4px 14px rgba(14,165,233,0.22); }
+    .eu-bubble { position: relative; flex: 1; background: #f0f9ff; border: 1px solid #bae6fd;
+                 border-radius: 14px; padding: 10px 14px; }
+    .eu-bubble::before { content: ''; position: absolute; left: -8px; top: 22px; width: 0; height: 0;
+                 border: 8px solid transparent; border-right-color: #f0f9ff; border-left: 0; }
+    .eu-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #0284c7; }
+    .eu-eu { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 2px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .eu-pron { font-size: 0.82rem; color: #0ea5e9; font-style: italic; }
+    .eu-en { font-size: 0.95rem; color: #475569; }
+    .eu-say { border: none; background: #0ea5e9; color: #fff; border-radius: 999px;
+              width: 30px; height: 30px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+              box-shadow: 0 2px 6px rgba(14,165,233,0.35); }
+    .eu-say:hover { background: #0284c7; }
+    .eu-say:active { transform: scale(0.92); }
+  </style>
+</head>
+<body class="le-body">
+  <script type="module" src="../../js/auth-gate.js" data-base="../../"></script>
+  <div id="lesson"></div>
+  <script type="module">
+    import '../../js/nav.js';
+    import { renderLesson } from '../../js/lesson-engine.js';
+    function say(avatar, name, eu, pron, en) {
+      return `<div class="eu-row">
+        <img class="eu-av" src="../../assets/characters/${avatar}.svg" alt="${name}">
+        <div class="eu-bubble">
+          <div class="eu-name">${name}</div>
+          <div class="eu-eu">${eu}
+            <button class="eu-say" type="button" data-say="${eu.replace(/"/g, '&quot;')}" data-voice="${avatar}" aria-label="Hear ${name} say it">🔊</button>
+          </div>
+          <div class="eu-pron">${pron}</div>
+          <div class="eu-en">${en}</div>
+        </div>
+      </div>`;
+    }
+    const STEPS = [
+      {
+        type: 'concept',
+        eyebrow: 'Janaria',
+        title: 'Food &amp; Drink in Euskara',
+        html: `<p>Welcome to the Basque table! The word for food is <strong>janaria</strong>. Basque cuisine is world-famous, and much of the fun happens standing up at a bar.</p>` +
+          say('lingo', 'Lingo', 'janaria', 'hah-NAH-ryah', 'food') +
+          `<p>A <strong>pintxo</strong> (PEEN-cho) is a small Basque bar snack — the Basque cousin of a tapa — and <strong>sagardoa</strong> (cider) is a Basque specialty served in cider houses called <em>sagardotegiak</em>.</p>`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Mahaian',
+        title: 'Bread &amp; Cheese',
+        html: `<p>Two staples you will meet at almost every meal:</p>` +
+          say('rita', 'Rita', 'ogia', 'oh-GEE-ah', 'bread') +
+          say('diego', 'Diego', 'gazta', 'GAHS-tah', 'cheese')
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Itsasotik',
+        title: 'Fish &amp; Water',
+        html: `<p>The Basque coast means seafood is everywhere — and always keep water nearby.</p>` +
+          say('gosia', 'Gosia', 'arraina', 'ah-RRY-nah', 'fish') +
+          say('james', 'James', 'ura', 'OO-rah', 'water')
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Edariak',
+        title: 'Drinks',
+        html: `<p>Time for the drinks (<em>edariak</em>):</p>` +
+          say('sam', 'Sam', 'ardoa', 'ar-DOH-ah', 'wine') +
+          say('william', 'William', 'sagardoa', 'sah-gar-DOH-ah', 'cider') +
+          say('steve', 'Steve', 'kafea', 'kah-FEH-ah', 'coffee')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Galdera',
+        title: 'What is "sagardoa"?',
+        options: ['A herd of goats doing arithmetic', 'Wine', 'Cider', 'A very polite hurricane'],
+        answer: 2,
+        explain: `<strong>Sagardoa</strong> (sah-gar-DOH-ah) is cider — a Basque specialty served in cider houses called <em>sagardotegiak</em>. <strong>Ardoa</strong> is wine, which is a tempting near-miss!`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Ohitura',
+        title: 'Enjoy Your Meal!',
+        html: `<p>Before everyone digs in, Basque speakers wish each other:</p>` +
+          say('babel', 'Babel', 'On egin!', 'ohn EH-gheen', 'Enjoy your meal!') +
+          `<p>It works just like the French "bon appétit" — say it as the food arrives.</p>`
+      },
+      {
+        type: 'question',
+        eyebrow: 'Galdera',
+        title: 'What does "ogia" mean?',
+        options: ['Bread', 'Cheese', 'A bicycle made of moonlight'],
+        answer: 0,
+        explain: `<strong>Ogia</strong> (oh-GEE-ah) means bread. <strong>Gazta</strong> (cheese) is a delicious companion on the plate, but it is not the same word.`
+      },
+      {
+        type: 'concept',
+        eyebrow: 'Laburpena',
+        title: 'Recap',
+        html: `<p>Zorionak! You can now order and enjoy <strong>janaria</strong> (food):</p>
+          <ul>
+            <li><strong>janaria</strong> — food</li>
+            <li><strong>ogia</strong> — bread</li>
+            <li><strong>gazta</strong> — cheese</li>
+            <li><strong>arraina</strong> — fish</li>
+            <li><strong>ura</strong> — water</li>
+            <li><strong>ardoa</strong> — wine</li>
+            <li><strong>sagardoa</strong> — cider</li>
+            <li><strong>kafea</strong> — coffee</li>
+          </ul>` +
+          say('edam', 'Edam', 'On egin!', 'ohn EH-gheen', 'Enjoy your meal!') +
+          `<p>Grab a <strong>pintxo</strong>, raise a glass of <strong>sagardoa</strong>, and you are ready for a Basque table!</p>`
+      }
+    ];
+    renderLesson(document.getElementById('lesson'), STEPS, {
+      courseId: 'basque',
+      lessonId: 'eu-12',
+      backHref: 'index.html',
+      courseName: 'Euskara — Basque',
+    });
+    const VOICE = {
+      lingo:{pitch:1.05,rate:0.90,vi:0}, rita:{pitch:1.55,rate:0.95,vi:1}, diego:{pitch:0.80,rate:0.88,vi:2},
+      gosia:{pitch:1.35,rate:0.92,vi:3}, james:{pitch:0.68,rate:0.85,vi:4}, sam:{pitch:1.20,rate:0.98,vi:5},
+      william:{pitch:0.92,rate:0.87,vi:6}, steve:{pitch:1.70,rate:1.00,vi:7}, babel:{pitch:1.10,rate:0.90,vi:8},
+      edam:{pitch:0.60,rate:0.82,vi:9},
+    };
+    function speak(text, who) {
+      try {
+        const synth = window.speechSynthesis; if (!synth) return; synth.cancel();
+        const prof = VOICE[who] || { pitch: 1, rate: 0.9, vi: 0 };
+        const u = new SpeechSynthesisUtterance(text); u.lang = 'eu-ES'; u.pitch = prof.pitch; u.rate = prof.rate;
+        const voices = synth.getVoices() || [];
+        const pool = voices.filter(x => /^eu\b|^eu[-_]/i.test(x.lang));
+        const espool = voices.filter(x => /^es\b|^es[-_]/i.test(x.lang));
+        const chosen = pool.length ? pool : espool;
+        if (chosen.length) u.voice = chosen[prof.vi % chosen.length];
+        synth.speak(u);
+      } catch {}
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-say]'); if (!b) return; e.preventDefault();
+      speak(b.getAttribute('data-say'), b.getAttribute('data-voice'));
+    });
+  </script>
+</body>
+</html>
